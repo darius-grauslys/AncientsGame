@@ -1,0 +1,56 @@
+build           -   the output directory for building with make
+core            -   platform independent game logic resides here
+include         -   all core header files.
+unix_opengl     -   implementation for unix opengl
+nds             -   implementation for the nintendo DS
+
+A few header files in core will not be implemented in core.
+This is the comprehensive list:
+    *   game.h
+    *   multiplayer/multiplayer.h
+    *   rendering/sprite.h
+    *   rendering/tile.h
+    *   world/chunk.h
+    *   world/chunk_manager.h
+
+-------
+
+Building:
+Only ever run make from the base directory.
+So, if your current directory doesn't have the directory
+"build" in it, do not run make.
+
+For each platform, there are the given make targets:
+make <platform name>
+make test_<platform name>
+
+Even if a platform doesn't have a test suite, it still has
+a test_<platform name> just to inform the user that it
+has no test suite.
+
+The base directory Makefile is to expose build targets as
+well as establishing some environment variables.
+
+Always be sure to check the platform directory's README
+before building.
+
+-------
+
+Contributing:
+Whenever you make a contribution to the project, make sure
+to test your contribution within unix_opengl/test/
+
+-------
+
+Testing:
+All game logic testing will occur in unix_opengl.
+All other platform directories will only have testing
+for platform specific logic (as seen in the above list.)
+
+unix_opengl should be considered as "the correct" implementation.
+Meaning, if your platform implementation doesn't work but unix_opengl
+does, then it's a you problem, not a game logic problem.
+
+unix_opengl must have a test suite. All other platform directories
+do not require a test suite, but should have one whenever possible.
+For example, nds will not have a test suite (for now anyways.)

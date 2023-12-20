@@ -1,0 +1,6 @@
+For building it is recommended to use
+the devkitpro docker image.
+
+1) pull the image.
+2) run the image with the base project directory mounted.
+3) run "make nds" within the docker image.

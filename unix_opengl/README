@@ -1,0 +1,7 @@
+It is recommended to download a unix opengl
+docker image with minimal dependencies, and to
+link the opengl libraries statically.
+
+from the docker image just run "make unix_opengl"
+or for testing, "make test_unix_opengl"
+
