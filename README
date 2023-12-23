@@ -54,3 +54,13 @@ does, then it's a you problem, not a game logic problem.
 unix_opengl must have a test suite. All other platform directories
 do not require a test suite, but should have one whenever possible.
 For example, nds will not have a test suite (for now anyways.)
+
+-------
+
+Notes:
+This project is my first serious attempt to learn and use Makefile.
+As a result the Makefiles will have a LOT of comments (maybe helpful to you
+if you are learning aswell.)
+
+In short, the libnds Makefile relies on recurison, and so will the Makefiles
+in this project. It works. That's all I'll say in advocation of a recursive build system. Personally, I think using recursion is a pretty poor idea for project maintenance but it is what it is. I think this is one reason why Cmake is a better option overall.
