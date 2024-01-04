@@ -13,7 +13,7 @@ export SOURCE_UNIX_OPENGL := $(CURDIR)/source
 
 export CFILES_UNIX_OPENGL != realpath --relative-to=$(SOURCE_UNIX_OPENGL) $$(find $(SOURCE_UNIX_OPENGL) -name *.c)
 export OFILES_UNIX_OPENGL := $(CFILES_UNIX_OPENGL:.c=.o)
-export OFILES := $(OFILES) $(OFILES_UNIX_OPENGL)
+export OFILES := $(OFILES_CORE) $(OFILES_UNIX_OPENGL)
 
 export INCLUDES := $(INCLUDES) $(CORE)/include $(CURDIR)/include
 export LIBS		:= -lGL -lGLU
@@ -60,11 +60,13 @@ endif
 else
 
 # I made this going off of /opt/devkitpro/devkitARM/base_rules
-ancients_game.exe: $(OFILES)
+ancients_game: $(OFILES) $(SPRITE_FILES)
 	$(SILENT)$(LD)  $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
 
 $(OFILES_UNIX_OPENGL):
 	$(SILENTCMD)mkdir -p $(BUILD)/$$(dirname $@)
 	$(SILENTCMD)$(CC) $(LIBS) $(INCLUDE) $(FLAGS) -o $(BUILD)/$@ -c $(SOURCE_UNIX_OPENGL)/$(@:.o=.c) 
+
+include $(BASE_DIR)/core/Makefile.build
 
 endif

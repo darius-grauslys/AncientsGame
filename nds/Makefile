@@ -60,12 +60,9 @@ export OUTPUT 	:= $(BUILD)/$(TARGET)
 
 export DEPSDIR 	:= $(BUILD)
 
-export CFILES_NDS	:= $(shell find $(SOURCE) -name *.c)
+export CFILES_NDS	!= realpath --relative-to=$(SOURCE) $$(find $(SOURCE) -name *.c)
 export CFILES 		:= $(CFILES_NDS) $(CFILES_CORE)
 export SFILES       := $(shell find $(SOURCE) -name *.s)
-export BINFILES     := soundbank.bin
-export SPRITE_FILES := $(shell find $(ASSETS) -name *.png)
-export AUDIO_FILES  := $(shell find $(ASSETS) -name *.wav)
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -85,6 +82,8 @@ export OFILES_NDS := \
   $(CFILES_NDS:.c=.o)
 
 export OFILES := \
+	$(SPRITE_FILES:.png=.o) \
+	$(addsuffix .o,$(BINFILES)) \
 	$(OFILES_NDS) $(OFILES_CORE)
 
 export INCLUDE := \
@@ -120,28 +119,12 @@ $(OUTPUT).nds : $(OUTPUT).elf
 $(OUTPUT).elf : $(OFILES)
 
 #---------------------------------------------------------------------------------
-$(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/$(file))
+$(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file))
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $(BASE_DIR)/nds/$(basename $@).c -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $(BASE_DIR)/nds/source/$(basename $@).c -o $@
 #---------------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------------
-$(SPRITE_FILES:.png=.o) : $(foreach file,$(SPRITE_FILES),../$(file))
-	@mkdir -p $(dir $@)
-	grit ../$(basename $@).png -ff../$(basename $@).grit -o$(basename $@)
-	$(CXX) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
-#---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-soundbank.bin soundbank.h : $(foreach file,$(AUDIO_FILES),../$(file))
-	@mmutil $^ -d -osoundbank.bin -hsoundbank.h
-#---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-%.bin.o %_bin.h : %.bin
-	@echo $(notdir $<)
-	@$(bin2o)
-#---------------------------------------------------------------------------------
+include $(BASE_DIR)/core/Makefile.build
 
 -include $(DEPSDIR)/*.d
 
