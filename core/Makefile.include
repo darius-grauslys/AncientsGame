@@ -1,4 +1,4 @@
-export INCLUDES += $(BASE_DIR)/core/include
+export INCLUDE_CORE += $(BASE_DIR)/core/include
 
 export SOURCE_CORE := $(BASE_DIR)/core/source
 

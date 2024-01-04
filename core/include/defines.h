@@ -30,6 +30,8 @@ typedef void (*m_update_scene)(Game* game, Scene* this_scene);
 typedef void (*m_render_scene)(Game* game, Scene* this_scene);
 typedef void (*m_unload_scene)(Game* game, Scene* this_scene);
 
+typedef struct Tile_t Tile;
+
 enum Tile_Kind {
     Tile_Kind__Void,
     Tile_Kind__Grass,

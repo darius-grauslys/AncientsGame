@@ -54,7 +54,7 @@ export TARGET  	:= $(shell basename $(BASE_DIR))
 export SOURCE   := source
 export DATA     := data
 
-export INCLUDES := $(INCLUDES) $(BASE_DIR)/nds/include
+export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/nds/include
 
 export OUTPUT 	:= $(BUILD)/$(TARGET)
 
@@ -89,8 +89,8 @@ export OFILES := \
 export INCLUDE := \
   $(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
   $(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-  -I$(CURDIR)/$(BUILD)/$(ASSETS)\
-  -I$(CURDIR)/$(BUILD)
+  -I$(BUILD)/$(ASSETS)\
+  -I$(BUILD)
 
 export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
@@ -121,7 +121,7 @@ $(OUTPUT).elf : $(OFILES)
 #---------------------------------------------------------------------------------
 $(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file))
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) -c $(BASE_DIR)/nds/source/$(basename $@).c -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDE) $(FLAGS) -c $(BASE_DIR)/nds/source/$(basename $@).c -o $@
 #---------------------------------------------------------------------------------
 
 include $(BASE_DIR)/core/Makefile.build

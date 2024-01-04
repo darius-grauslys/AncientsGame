@@ -15,8 +15,8 @@ export CFILES_UNIX_OPENGL != realpath --relative-to=$(SOURCE_UNIX_OPENGL) $$(fin
 export OFILES_UNIX_OPENGL := $(CFILES_UNIX_OPENGL:.c=.o)
 export OFILES := $(OFILES_CORE) $(OFILES_UNIX_OPENGL)
 
-export INCLUDES := $(INCLUDES) $(CORE)/include $(CURDIR)/include
-export LIBS		:= -lGL -lGLU
+export INCLUDES := $(INCLUDE_CORE) $(CURDIR)/include
+export LIBS		:= -lm -ldl -lGL -lGLU -lGLEW -lglfw
 
 export DEPSDIR := $(BUILD)
 
@@ -61,7 +61,7 @@ else
 
 # I made this going off of /opt/devkitpro/devkitARM/base_rules
 ancients_game: $(OFILES) $(SPRITE_FILES)
-	$(SILENT)$(LD)  $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
+	$(SILENT)$(LD) $(LDFLAGS) $(FLAGS_LINKER) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
 
 $(OFILES_UNIX_OPENGL):
 	$(SILENTCMD)mkdir -p $(BUILD)/$$(dirname $@)

@@ -64,3 +64,13 @@ if you are learning aswell.)
 
 In short, the libnds Makefile relies on recurison, and so will the Makefiles
 in this project. It works. That's all I'll say in advocation of a recursive build system. Personally, I think using recursion is a pretty poor idea for project maintenance but it is what it is. I think this is one reason why Cmake is a better option overall.
+
+-------
+
+Build Configuration:
+Use the FLAGS Makefile variable override to get the job done.
+For example, if we want to define NDEBUG for unix_opengl, do the following:
+make unix_opengl -e FLAGS="-DNDEBUG"
+
+Now, as a result any invocations of helpers defined in debug.h
+will be optimized out.
