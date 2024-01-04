@@ -1,0 +1,88 @@
+
+Everything is C style.
+The game is initially single thread, but designed with future multi threading in mind.
+The game is multiplayer. Before I begin coding I need to identify
+the pieces of the roadmap that must be handled for multiplayer (packets n shit)
+
+1) Render some tiles
+	This one isn't so simple btw. Load the entire tile-atlas into RAM and then
+	form a 4x4 chunk segment in RAM, then blit that segment to screen VRAM.
+	Randomly select from tiles.
+	!! temporary, rendering code will be called in main for now !!
+
+2) Make a utility struct for structure_tiles (wood, stone_brick, diamond, etc...)
+	The structure includes all it's variants.
+	The utility struct also comes with helper functions to reorientate tiles (rotate etc)
+
+3) Make an entity super struct. Have helper to load in player.
+	an animation sub-struct, char values for frame start and end.
+	** note don't do animation stuff yet **
+	an ai handler
+	max health, health, movespeed
+
+4) Make a scene struct
+	** note, for any scene struct, we have a base scene struct **
+	** note, extend by declaring base scene struct as first field of extending struct **
+	** note, scene is designed to be a mutex target **
+	** note, the following handlers take a scene as ptr **
+	load handler
+	early_update handler (nds, pre_vblank
+	late_update handler (nds, post_vblank)
+	unload handler
+	>> move rendering code to early_update <<
+	!! temporary, make a global scene as current scene !!
+	!! it's temporary, so don't design around it being global !!
+	update entity ai handler to include scene as argument
+
+5) Make a player AI that handles input.
+	limit player movement to a renderable zone.
+	take scene by ptr, cast to game_scene ptr and modify scroll_x, scroll_y
+
+6) Make a struct which contains all chunk segments we would want to render to the screen.
+	** note no terrain generation, just do all grass. **
+	everything is flat x,y
+
+7) Implement player animations.
+
+8) Make a struct which contains all chunks that would be near the player area.
+	** note no terrain generation, just do all grass. **
+	everything is flat x,y
+	
+9) Begin making UI, associated to a scene.
+
+10) Extend the chunk handling to scroll infinitely, still generates grass.
+
+11) Start making inventory UI, no items or item related code yet.
+
+12) Extend chunk space into the z axis.
+	** consider not even doing this actually **
+	** put this off for post-adventure **
+	** or, make a pre-adventure release that is flat-adventure **
+
+13) Consolidate chunk struct, and scene struct to a game struct.
+	Keep game struct on the heap.
+	
+14) Begin world generation:
+	** note, each handler takes a game ptr **
+	get_chunk handler
+	populate_chunk handler
+	
+15) Add items and inventory
+
+16) Add interactible tiles.
+
+17) Start adding in entities
+
+18) Begin random terrain generation
+
+19) Add loot tables
+
+20) Create starter house.
+
+21) Begin dungeon generation, simple dungeon
+
+22) Add an ancient into the game
+
+23) Make the ancient's dungeon.
+
+24) ... a bit more, but you're done for alpha-flat-adventure release.

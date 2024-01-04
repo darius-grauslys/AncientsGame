@@ -1,17 +1,24 @@
 
+.PHONY: COPY_CFILES
+
+ifneq ($(BUILD),$(CURDIR))
+
 # I pulled the majority of the following from
 # NDS Minicraft's makefile
-CC := gcc
-LD := $(CC)
+export CC := gcc
+export LD := $(CC)
 
-SOURCE := $(CORE) $(BACKEND)
+include $(BASE_DIR)/core/Makefile.include
+export SOURCE_UNIX_OPENGL := $(CURDIR)/source
 
-export CFILES        := $(shell find $(SOURCE) -name *.c)
-export OFILES := \
-  $(CFILES:.c=.o)
+export CFILES_UNIX_OPENGL != realpath --relative-to=$(SOURCE_UNIX_OPENGL) $$(find $(SOURCE_UNIX_OPENGL) -name *.c)
+export OFILES_UNIX_OPENGL := $(CFILES_UNIX_OPENGL:.c=.o)
+export OFILES := $(OFILES) $(OFILES_UNIX_OPENGL)
 
-INCLUDES 	:= $(CORE)/include $(BACKEND)/include
-LIBS		:= -lGL -lGLU
+export INCLUDES := $(INCLUDES) $(CORE)/include $(CURDIR)/include
+export LIBS		:= -lGL -lGLU
+
+export DEPSDIR := $(BUILD)
 
 # Syntax highlighting suggests that we're using the Makefile dir builtin
 # right here, but that's not the case. Notice, we have "foreach dir" so
@@ -22,21 +29,42 @@ LIBS		:= -lGL -lGLU
 # $(shell find ...) since we have subfolders in the includes.
 #
 # TODO: currently, we don't establish the $(LIBDIRS) either. For now
-# we will probably just put this after SOURCE above, and that will be
+# we will probably just put this after SOURCE_UNIX_OPENGL above, and that will be
 # where we add opengl libraries and etc.
 export INCLUDE := \
-  $(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+  $(foreach dir,$(INCLUDES),-I$(dir)) \
   $(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-  -I$(CURDIR)/$(BUILD)/$(ASSETS)\
-  -I$(CURDIR)/$(BUILD)
+  -I$(ASSETS) \
+  -I$(BUILD)
 
 export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
-# I made this going off of /opt/devkitpro/devkitARM/base_rules
-ancients_game.exe: $(OBJS)/$(notdir $(OFILES))
-	$(SILENT)$(LD)  $(LDFLAGS) $(OBJS)/$(notdir $(OFILES)) $(LIBPATHS) $(LIBS) -o $@
+ifneq ($(GENERATE_COMPILE_COMMANDS), 1)
+
+$(BUILD):
+	$(SILENTCMD)mkdir -p $(BUILD)
+	$(SILENTCMD)make -C $(BUILD) -f $(CURDIR)/Makefile
+
+else
+
+$(BUILD):
+	$(SILENTCMD)mkdir -p $(BUILD)
+	$(SILENTCMD)make -C $(BUILD) -f $(CURDIR)/Makefile \
+		-e GENERATE_COMPILE_COMMANDS=0 --always-make --dry-run \
+		| grep -wE 'cc|gcc' \
+		| grep -w '\-c' \
+		| jq -nR '[inputs|{directory:".", command:., file: match("(?<=-c).*").string[1:-1]}]' \
+		> $(BUILD)/compile_commands.json
+endif 
+
+else
 
 # I made this going off of /opt/devkitpro/devkitARM/base_rules
-%.o: %.c
-	$(SILENT)$(CC) -MMD -MP -MF $(OBJS)/$*.d $(CFLAGS) -c $< -o $@ $(ERROR_FILTER)
-	# $(ADD_COMPILE_COMMAND) add $(CC) "$(CPPFLAGS) $(CFLAGS) -c $< -o $@" $<
+ancients_game.exe: $(OFILES)
+	$(SILENT)$(LD)  $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
+
+$(OFILES_UNIX_OPENGL):
+	$(SILENTCMD)mkdir -p $(BUILD)/$$(dirname $@)
+	$(SILENTCMD)$(CC) $(LIBS) $(INCLUDE) $(FLAGS) -o $(BUILD)/$@ -c $(SOURCE_UNIX_OPENGL)/$(@:.o=.c) 
+
+endif

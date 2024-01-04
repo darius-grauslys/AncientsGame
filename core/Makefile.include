@@ -1,0 +1,13 @@
+export INCLUDES += $(BASE_DIR)/core/include
+export ASSETS := $(BASE_DIR)/core/assets
+
+export SOURCE_CORE := $(BASE_DIR)/core/source
+
+export CFILES_CORE != realpath --relative-to=$(BASE_DIR) $$(find $(SOURCE) -name *.c)
+export OFILES_CORE := $(CFILES:.c=.o)
+
+export OFILES := $(OFILES) $(OFILES_CORE)
+
+$(OFILES_CORE):
+	mkdir -p $(BUILD)/$$(dirname $@)
+	$(CC) $(LIBS) $(INCLUDE) $(FLAGS) -o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c) 
