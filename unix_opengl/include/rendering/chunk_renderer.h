@@ -3,6 +3,8 @@
 
 #include <world/chunk.h>
 
-void render_chunk(Chunk *chunk, void *framebuffer);
+void render_chunk(Chunk *chunk, 
+        void *framebuffer_source, 
+        void *framebuffer_target);
 
 #endif

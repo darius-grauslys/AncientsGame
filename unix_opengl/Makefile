@@ -16,7 +16,7 @@ export OFILES_UNIX_OPENGL := $(CFILES_UNIX_OPENGL:.c=.o)
 export OFILES := $(OFILES_CORE) $(OFILES_UNIX_OPENGL)
 
 export INCLUDES := $(INCLUDE_CORE) $(CURDIR)/include
-export LIBS		:= -lm -ldl -lGL -lGLU -lGLEW -lglfw
+export LIBS		:= -lm -ldl -lGL -lGLU -lGLEW -lglfw -lcglm
 
 export DEPSDIR := $(BUILD)
 

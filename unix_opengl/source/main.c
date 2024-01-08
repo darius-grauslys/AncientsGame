@@ -9,39 +9,15 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <rendering/stb_image.h>
-#include <rendering/shader.h>
+#include <rendering/shader_passthrough.h>
 
-const char *source_img_vert = "\n\
-#version 330 core\n\
-layout(location = 0) in vec3 position;\n\
-layout(location = 1) in vec2 uv;\n\
-\n\
-out vec2 TexCoord;\n\
-\n\
-void main()\n\
-{\n\
-    gl_Position = vec4(position, 1);\n\
-    TexCoord = uv;\n\
-}";
+#include <world/chunk.h>
+#include <rendering/chunk_renderer.h>
+#include <rendering/vertex_object.h>
+#include <rendering/framebuffer.h>
 
-const char *source_img_frag = " \n\
-#version 330 core\n\
-uniform sampler2D _sample;\n\
-\n\
-in vec2 TexCoord;\n\
-out vec4 color;\n\
-\n\
-void main()\n\
-{\n\
-    color = texture(_sample, TexCoord);\n\
-    color = vec4(color.xyz, 1);\n\
-    //if (color.x == color.y && color.y == color.z && color.z == 0)\n\
-    //    color = vec4(1, 0, 0, 1);\n\
-    //color = vec4(1,0,0,1);\n\
-}";
-
-void create_rect(unsigned int *vao, unsigned int *vbo, unsigned int *ebo)
-{
+void create_rect(Vertex_Object *vertex_object) {
+// void create_rect(unsigned int *vao, unsigned int *vbo, unsigned int *ebo)
     float rect_vertices[] = {
         -1.0f,  1.0f,  0.0f,        0.0f, 1.0f, // top left
          1.0f,  1.0f,  0.0f,        1.0f, 1.0f, // top right
@@ -50,20 +26,38 @@ void create_rect(unsigned int *vao, unsigned int *vbo, unsigned int *ebo)
     };
     unsigned int rect_indices[] = { 0, 1, 2, 0, 2, 3 };
 
-    glGenVertexArrays(1, vao);
-    glBindVertexArray(*vao);
-    glGenBuffers(1, vbo);
-    glGenBuffers(1, ebo);
-    glBindBuffer(GL_ARRAY_BUFFER, *vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(rect_vertices), rect_vertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(rect_indices), rect_indices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    uint32_t *vao = &vertex_object->handle__attribute_array;
+    uint32_t *vbo = &vertex_object->handle__vertex_buffer;
+    uint32_t *ebo = &vertex_object->handle__element_buffer;
+
+    init_vertex_object(vertex_object);
+
+    buffer_vertex_object(vertex_object, sizeof(rect_vertices),
+            sizeof(rect_vertices) / (sizeof(float) * 5), rect_vertices);
+    buffer_vertex_object__element_buffer(
+            vertex_object,
+            sizeof(rect_indices),
+            rect_indices);
+    set_attribute_vertex_object(vertex_object, 
+            0, 3, GL_FLOAT, false, 5 * sizeof(float), (void *)0);
+    set_attribute_vertex_object(vertex_object, 
+            1, 2, GL_FLOAT, false, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void GLAPIENTRY
+debug_callback( GLenum source,
+                 GLenum type,
+                 GLuint id,
+                 GLenum severity,
+                 GLsizei length,
+                 const GLchar* message,
+                 const void* userParam )
+{
+  fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+            type, severity, message );
 }
 
 int main(void) {
@@ -87,6 +81,9 @@ int main(void) {
         return 1;
     }
 
+    glEnable( GL_DEBUG_OUTPUT );
+    glDebugMessageCallback( debug_callback, 0 );
+
     // int code = glewInit();
     // bool err = code != GLEW_OK;
 
@@ -100,47 +97,48 @@ int main(void) {
     glfwGetFramebufferSize(window, &screen_width, &screen_height);
     glViewport(0, 0, screen_width, screen_height);
 
-    unsigned int rect_vao, rect_vbo, rect_ebo;
-    create_rect(&rect_vao, &rect_vbo, &rect_ebo);
+    Vertex_Object vertex_object;
+    create_rect(&vertex_object);
 
-    unsigned int texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    Texture texture;
+    Texture texture_chunk;
+    init_texture__with_size(&texture_chunk, 
+            TILE_PIXEL_WIDTH * CHUNK__WIDTH,
+            TILE_PIXEL_HEIGHT * CHUNK__HEIGHT);
+    init_texture__with_path(&texture, 
+            "/home/shalidor/Projects/AncientsGame/build/unix_opengl/assets/tiles.png");
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    Chunk chunk;
 
-    int width, height, channels;
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char *bytes = stbi_load(
-            "/home/shalidor/Projects/AncientsGame/build/unix_opengl/assets/tiles.png", 
-            &width, &height, &channels, 0);
-
-    if (bytes)
-    {
-        glTexImage2D
-        (
-            GL_TEXTURE_2D, 
-            0, 
-            GL_RGB, 
-            width, 
-            height, 
-            0, 
-            GL_RGB, 
-            GL_UNSIGNED_BYTE,
-            bytes
-        );
+    init_chunk(&chunk, 0, 0);
+    for (int i=0;i<CHUNK__QUANTITY_OF_TILES;i++) {
+        chunk.tiles[i].the_kind_of_tile__this_tile_is =
+            (enum Tile_Kind)(i / CHUNK__WIDTH);
+        chunk.tiles[i].flags = (i % CHUNK__WIDTH);
     }
-    else
-    {
-        debug_abort("failed to load image");
-    }
-    glBindTexture(GL_TEXTURE_2D, 0);
+
+    Framebuffer framebuffer_source;
+    Framebuffer framebuffer_target;
+
+    init_framebuffer(&framebuffer_source);
+    init_framebuffer(&framebuffer_target);
+
+    set_framebuffer__color_attachment__with_a_texture(
+            &framebuffer_source,
+            &texture);
+    set_framebuffer__color_attachment__with_a_texture(
+            &framebuffer_target,
+            &texture_chunk);
+    
+    render_chunk(&chunk, 
+            &framebuffer_source,
+            &framebuffer_target);
+
+    release_framebuffer(&framebuffer_source);
+    release_framebuffer(&framebuffer_target);
 
     Shader_2D shader;
-    init_shader_2d(&shader, source_img_vert, source_img_frag);
+    init_shader_2d_as__shader_passthrough(&shader);
 
     while(!glfwWindowShouldClose(window))
     {
@@ -156,8 +154,8 @@ int main(void) {
         use_shader_2d(&shader);
         // image_shader.use();
 
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glBindVertexArray(rect_vao);
+        use_texture(&texture_chunk);
+        use_vertex_object(&vertex_object);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -167,7 +165,6 @@ int main(void) {
     }
 
     release_shader_2d(&shader);
-    stbi_image_free(bytes);
     glfwDestroyWindow(window);
     glfwTerminate();
 
