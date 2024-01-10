@@ -1,6 +1,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include <platform_defines.h>
+
 typedef struct Console_t Console;
 
 typedef struct World_t World;
@@ -118,8 +120,8 @@ enum Direction {
 /// treat them as opaque pointers.
 ///
 
-typedef struct Sprite_t Sprite;
-typedef struct Texture_t Texture;
+typedef void* TextureAtlas;
+typedef void* RenderTarget;
 
 ///
 /// The reason Chunk is platform specific is for

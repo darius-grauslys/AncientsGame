@@ -51,6 +51,6 @@ static void inline set_tile__up_or_down_stairs(Tile *tile, bool value) {
     tile->flags &= (-1) ^ (value << TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN);
 }
 
-uint32_t get_tile_sheet_index(Tile *tile);
+uint32_t get_tile_texture_sheet_index(Tile *tile);
 
 #endif

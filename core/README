@@ -1,0 +1,14 @@
+
+In core source and header files, if you see:
+
+    PLATFORM_
+
+in header files:
+    This is a declaration without a definition
+    within the context of ./core .
+
+    The definition resides in a backend implementation.
+    that being unix_opengl, or nds.
+
+in source files:
+    invocation to a platform defined signature.

@@ -10,7 +10,7 @@ void init_tile(Tile *tile, enum Tile_Kind kind_of_tile,
         Tile_Cover_Kind__None;
 }
 
-uint32_t get_tile_sheet_index(Tile *tile) {
+uint32_t get_tile_texture_sheet_index(Tile *tile) {
     switch (tile->the_kind_of_tile__this_tile_is) {
         default:
             return 0;

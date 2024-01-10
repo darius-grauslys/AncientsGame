@@ -84,10 +84,10 @@ export OFILES_NDS := \
 export OFILES := \
 	$(SPRITE_FILES:.png=.o) \
 	$(addsuffix .o,$(BINFILES)) \
-	$(OFILES_NDS) $(OFILES_CORE)
+	$(OFILES_CORE) $(OFILES_NDS)
 
 export INCLUDE := \
-  $(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
+  $(foreach dir,$(INCLUDES),-I$(dir)) \
   $(foreach dir,$(LIBDIRS),-I$(dir)/include) \
   -I$(BUILD)/$(ASSETS)\
   -I$(BUILD)
@@ -98,6 +98,7 @@ export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
+	echo $(OFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
