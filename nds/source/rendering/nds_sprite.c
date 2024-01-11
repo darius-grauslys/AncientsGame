@@ -26,7 +26,7 @@ void PLATFORM_init_sprite(
         case Entity_Kind__Player:
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
-            dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
+            dmaCopy((u8*)playerTiles + 128, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME_WIDTH__ENTITY_HUMANOID
                     * SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID);
             return;

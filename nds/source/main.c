@@ -9,6 +9,8 @@
 #include <rendering/sprite.h>
 #include <entity/entity.h>
 
+#include <assets/entities/player.h>
+
 // 2bytes ppx, 8x8 pixel per tile, 8x8 tiles per chunk
 // thats 2x64x64, but we need to fit in 128x128, so *2*2
 unsigned short gfx_chunk[8 * 8 * 8 * 8 * 2 * 2] = { 0 };
@@ -47,6 +49,11 @@ int main(void) {
     source.target_row_stride = TILE_SHEET_WIDTH__IN_BYTES / 2;
 
     init_chunk(&chunk, 0, 0);
+
+	oamInit(&oamMain, SpriteMapping_1D_128, false);
+	oamInit(&oamSub, SpriteMapping_1D_128, false);
+
+	dmaCopy(playerPal, SPRITE_PALETTE, 512);
 
     Entity player;
 
