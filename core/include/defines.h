@@ -1,7 +1,19 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+/*
+ *
+ * The following comes from platform_defines.h:
+ * - RenderTarget
+ * - PLATFORM_Sprite
+ *
+ * */
 #include <platform_defines.h>
+#include <stdint.h>
+
+#ifndef PLATFORM_DEFINES_H
+#error Cannot build AncientsGame without a backend implementation.
+#endif
 
 typedef struct Console_t Console;
 
@@ -104,24 +116,110 @@ enum Tile_Cover_Kind {
 };
 
 enum Direction {
-    North,
-    North_East,
-    East,
-    South_East,
-    South,
-    South_West,
-    West,
-    North_West
+    Direction__North,
+    Direction__North_East,
+    Direction__East,
+    Direction__South_East,
+    Direction__South,
+    Direction__South_West,
+    Direction__West,
+    Direction__North_West
 };
+
+enum Entity_Kind {
+    Entity_Kind__Particle,
+    Entity_Kind__Item,
+    Entity_Kind__Player,
+    Entity_Kind__Skeleton,
+    Entity_Kind__Zombie
+};
+
+enum Entity_Armor_Kind {
+    Entity_Armor_Kind__None,
+    Entity_Armor_Kind__Cloth,
+    Entity_Armor_Kind__Iron,
+    Entity_Armor_Kind__Gold,
+};
+
+enum Entity_Armor_Modification_Kind {
+    Entity_Armor_Modification_Kind__None,
+    Entity_Armor_Modification_Kind__Diamond,
+    Entity_Armor_Modification_Kind__Amethyst
+};
+
+typedef struct Armor_Properties_t {
+    enum Entity_Armor_Kind                  
+        the_kind_of_armor__this_armor_is;
+    enum Entity_Armor_Modification_Kind     
+        the_kind_of_modification__this_armor_has;
+} Armor_Properties;
+
+enum Sprite_Animation_Kind {
+    Sprite_Animation_Kind__Idle,
+    Sprite_Animation_Kind__Humanoid__Walk,
+    Sprite_Animation_Kind__Humanoid__Use,
+    Sprite_Animation_Kind__Humanoid__Hurt,
+    Sprite_Animation_Kind__Humanoid__Die,
+    Sprite_Animation_Kind__Player__Sleep,
+};
+
+typedef struct Sprite_Wrapper_t {
+    PLATFORM_Sprite sprite;
+    enum Direction direction;
+    enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
+} Sprite_Wrapper;
+
+#define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID 16
+#define SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID 16
+
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__IDLE 0
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__WALK 1
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__USE 3
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__HURT 0
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__DIE 1
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__SLEEP 3
+
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__SIDE_FACING 0
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FORWARD_FACING 1
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__BACK_FACING 2
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FALLING 3
+
+#define SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID 6
+#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID 4
+
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__LAST_COL 15
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__LAST_ROW 15
+
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 0
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 1
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 0
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 2
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 0
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 3
+
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 0
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
+
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 2
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
+
+///
+/// The meaning of these flags is dependent on
+/// platform_defines.h
+///
+typedef uint32_t Texture_Flags;
+
+#define TEXTURE_FLAGS__NONE 0
 
 ///
 /// The following are platform specific.
 /// As a result, anything defined in core will
 /// treat them as opaque pointers.
 ///
-
-typedef void* TextureAtlas;
-typedef void* RenderTarget;
 
 ///
 /// The reason Chunk is platform specific is for

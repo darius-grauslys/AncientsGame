@@ -1,5 +1,5 @@
 
-.PHONY: COPY_CFILES
+.PHONY: $(BUILD) COPY_CFILES
 
 ifneq ($(BUILD),$(CURDIR))
 
@@ -15,7 +15,7 @@ export CFILES_UNIX_OPENGL != realpath --relative-to=$(SOURCE_UNIX_OPENGL) $$(fin
 export OFILES_UNIX_OPENGL := $(CFILES_UNIX_OPENGL:.c=.o)
 export OFILES := $(OFILES_CORE) $(OFILES_UNIX_OPENGL)
 
-export INCLUDES := $(INCLUDE_CORE) $(CURDIR)/include
+export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/unix_opengl/include
 export LIBS		:= -lm -ldl -lGL -lGLU -lGLEW -lglfw -lcglm
 
 export DEPSDIR := $(BUILD)

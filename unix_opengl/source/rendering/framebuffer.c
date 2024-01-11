@@ -1,3 +1,4 @@
+#include <defines.h>
 #include <rendering/framebuffer.h>
 #include <rendering/glad/glad.h>
 #include <debug/debug.h>
@@ -12,7 +13,7 @@ void init_framebuffer(Framebuffer *framebuffer) {
 }
 void set_framebuffer__color_attachment__with_a_texture(
         Framebuffer *framebuffer,
-        Texture *texture) {
+        PLATFORM_Texture *texture) {
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->handle);
 
     debug_info("gen framebuffer texture_id:%d, w:%d, h:%d",

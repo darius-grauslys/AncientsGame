@@ -5,7 +5,8 @@
 #include <GLFW/glfw3.h>
 #include <debug/debug.h>
 
-void init_texture(Texture *texture) {
+void init_texture(PLATFORM_Texture *texture,
+        Texture_Flags flags) {
     texture->handle = 0;
     texture->width = 0;
     texture->height = 0;
@@ -20,7 +21,8 @@ void init_texture(Texture *texture) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void init_texture__with_size(Texture *texture,
+void init_texture__with_size(PLATFORM_Texture *texture,
+        Texture_Flags flags,
         uint32_t width, uint32_t height) {
     glGenTextures(1, &texture->handle);
     texture->width = width;
@@ -47,7 +49,8 @@ void init_texture__with_size(Texture *texture,
     );
 }
 
-void init_texture__with_path(Texture *texture, 
+void init_texture__with_path(PLATFORM_Texture *texture, 
+        Texture_Flags flags,
         const char *path) {
     glGenTextures(1, &texture->handle);
     texture->channel_count = 0;
@@ -84,7 +87,7 @@ void init_texture__with_path(Texture *texture,
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void release_texture(Texture *texture) {
+void release_texture(PLATFORM_Texture *texture) {
     if (!texture->handle) {
         debug_warning("released texture without handle.");
         return;
@@ -93,7 +96,7 @@ void release_texture(Texture *texture) {
     glDeleteTextures(1, &texture->handle);
 }
 
-void use_texture(Texture *texture) {
+void use_texture(PLATFORM_Texture *texture) {
     if (!texture->handle) {
         debug_error("Cannot use uninitalized texture.");
         return;

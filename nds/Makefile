@@ -122,7 +122,7 @@ $(OUTPUT).elf : $(OFILES)
 #---------------------------------------------------------------------------------
 $(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file))
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDE) $(FLAGS) -c $(BASE_DIR)/nds/source/$(basename $@).c -o $@
+	$(CC) $(CFLAGS) $(INCLUDE) $(FLAGS) -c $(BASE_DIR)/nds/source/$(basename $@).c -o $@
 #---------------------------------------------------------------------------------
 
 include $(BASE_DIR)/core/Makefile.build

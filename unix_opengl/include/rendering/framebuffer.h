@@ -2,7 +2,8 @@
 #define FRAMEBUFFER_H
 
 #include <stdint.h>
-#include <rendering/texture.h>
+
+typedef struct PLATFORM_Texture_t PLATFORM_Texture;
 
 typedef struct Framebuffer_t {
     uint32_t handle;
@@ -12,7 +13,7 @@ typedef struct Framebuffer_t {
 void init_framebuffer(Framebuffer *framebuffer);
 void set_framebuffer__color_attachment__with_a_texture(
         Framebuffer *framebuffer,
-        Texture *texture);
+        PLATFORM_Texture *texture);
 void release_framebuffer(Framebuffer *framebuffer);
 void use_framebuffer_for__read_and_draw(Framebuffer *framebuffer);
 void use_framebuffer_for__read(Framebuffer *framebuffer);

@@ -15,7 +15,7 @@ void init_shader_2d_as__shader_passthrough(
 
 void inline render_with__shader_passthrough(
         Shader_2D_Passthrough *shader,
-        Texture *texture_source,
+        PLATFORM_Texture *texture_source,
         Vertex_Object *vertex_object
         ) {
     use_shader_2d(shader);

@@ -3,10 +3,17 @@
 
 #include <defines.h>
 
-void render_chunk(TextureAtlas textureAtlas,
-        RenderTarget target,
-        Chunk *chunk,
-        uint32_t offset,
-        uint32_t target_row_stride);
+/// 
+/// Render a chunk using a texture_atlas
+/// onto a given RenderTarget.
+///
+/// RenderTarget is an opaque pointer, which is defined
+/// via a backend implementation.
+///
+
+void PLATFORM_render_chunk(
+        RenderTarget *texture_atlas,
+        RenderTarget *target,
+        Chunk *chunk);
 
 #endif

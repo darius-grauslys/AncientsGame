@@ -12,7 +12,7 @@
 #include <rendering/shader_passthrough.h>
 
 #include <world/chunk.h>
-#include <rendering/chunk_renderer.h>
+#include <rendering/render_chunk.h>
 #include <rendering/vertex_object.h>
 #include <rendering/framebuffer.h>
 
@@ -100,12 +100,14 @@ int main(void) {
     Vertex_Object vertex_object;
     create_rect(&vertex_object);
 
-    Texture texture;
-    Texture texture_chunk;
+    PLATFORM_Texture texture;
+    PLATFORM_Texture texture_chunk;
     init_texture__with_size(&texture_chunk, 
+            TEXTURE_FLAGS__NONE,
             TILE_PIXEL_WIDTH * CHUNK__WIDTH,
             TILE_PIXEL_HEIGHT * CHUNK__HEIGHT);
     init_texture__with_path(&texture, 
+            TEXTURE_FLAGS__NONE,
             "/home/shalidor/Projects/AncientsGame/build/unix_opengl/assets/tiles.png");
 
     Chunk chunk;
@@ -117,25 +119,29 @@ int main(void) {
         chunk.tiles[i].flags = (i % CHUNK__WIDTH);
     }
 
-    Framebuffer framebuffer_source;
-    Framebuffer framebuffer_target;
+    RenderTarget source;
+    RenderTarget target;
 
-    init_framebuffer(&framebuffer_source);
-    init_framebuffer(&framebuffer_target);
+    source.x = source.y = 0;
+    target.x = target.y = 0;
+
+    init_framebuffer(&source.framebuffer);
+    init_framebuffer(&target.framebuffer);
 
     set_framebuffer__color_attachment__with_a_texture(
-            &framebuffer_source,
+            &source.framebuffer,
             &texture);
     set_framebuffer__color_attachment__with_a_texture(
-            &framebuffer_target,
+            &target.framebuffer,
             &texture_chunk);
     
-    render_chunk(&chunk, 
-            &framebuffer_source,
-            &framebuffer_target);
+    PLATFORM_render_chunk(
+            &source,
+            &target,
+            &chunk);
 
-    release_framebuffer(&framebuffer_source);
-    release_framebuffer(&framebuffer_target);
+    release_framebuffer(&source.framebuffer);
+    release_framebuffer(&target.framebuffer);
 
     Shader_2D shader;
     init_shader_2d_as__shader_passthrough(&shader);
@@ -155,6 +161,7 @@ int main(void) {
         // image_shader.use();
 
         use_texture(&texture_chunk);
+        // use_texture(&texture);
         use_vertex_object(&vertex_object);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
