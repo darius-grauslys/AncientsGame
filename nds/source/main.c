@@ -6,7 +6,7 @@
 #include <world/chunk.h>
 #include <world/tile.h>
 #include <rendering/render_chunk.h>
-#include <rendering/render_entity.h>
+#include <rendering/animate_entity.h>
 #include <rendering/sprite.h>
 #include <entity/entity.h>
 #include <rendering/animate_sprite.h>
@@ -66,7 +66,7 @@ int main(void) {
         Entity_Armor_Kind__Cloth;
     player.armor_properties.the_kind_of_modification__this_armor_has =
         Entity_Armor_Modification_Kind__None;
-    set_sprite__animation(&player, Sprite_Animation_Kind__Humanoid__Use);
+    set_animation__of_entity(&player, Sprite_Animation_Kind__Humanoid__Use);
     oamSet(&oamMain, 0, 0, 0, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
         player.sprite_wrapper.sprite.sprite_texture.gfx, -1, false, false, false, false, false);
 
@@ -112,52 +112,54 @@ int main(void) {
             switch (player.armor_properties.the_kind_of_armor__this_armor_is) {
                 default:
                 case Entity_Armor_Kind__None:
-                    player.armor_properties.the_kind_of_armor__this_armor_is =
-                        Entity_Armor_Kind__Cloth;
+                    set_entity__armor(&player,
+                            Entity_Armor_Kind__Cloth,
+                            Entity_Armor_Modification_Kind__None);
                     break;
                 case Entity_Armor_Kind__Cloth:
-                    player.armor_properties.the_kind_of_armor__this_armor_is =
-                        Entity_Armor_Kind__Iron;
+                    set_entity__armor(&player,
+                            Entity_Armor_Kind__Iron,
+                            Entity_Armor_Modification_Kind__None);
                     break;
                 case Entity_Armor_Kind__Iron:
                     switch (player.armor_properties.the_kind_of_modification__this_armor_has) {
                         case Entity_Armor_Modification_Kind__None:
-                            player.armor_properties.the_kind_of_modification__this_armor_has =
-                                Entity_Armor_Modification_Kind__Diamond;
+                            set_entity__armor(&player,
+                                    Entity_Armor_Kind__Iron,
+                                    Entity_Armor_Modification_Kind__Diamond);
                             break;
                         case Entity_Armor_Modification_Kind__Diamond:
-                            player.armor_properties.the_kind_of_modification__this_armor_has =
-                                Entity_Armor_Modification_Kind__Amethyst;
+                            set_entity__armor(&player,
+                                    Entity_Armor_Kind__Iron,
+                                    Entity_Armor_Modification_Kind__Amethyst);
                             break;
                         case Entity_Armor_Modification_Kind__Amethyst:
-                            player.armor_properties.the_kind_of_modification__this_armor_has =
-                                Entity_Armor_Modification_Kind__None;
-                            player.armor_properties.the_kind_of_armor__this_armor_is =
-                                Entity_Armor_Kind__Gold;
+                            set_entity__armor(&player,
+                                    Entity_Armor_Kind__Gold,
+                                    Entity_Armor_Modification_Kind__None);
                             break;
                     }
                     break;
                 case Entity_Armor_Kind__Gold:
                     switch (player.armor_properties.the_kind_of_modification__this_armor_has) {
                         case Entity_Armor_Modification_Kind__None:
-                            player.armor_properties.the_kind_of_modification__this_armor_has =
-                                Entity_Armor_Modification_Kind__Diamond;
+                            set_entity__armor(&player,
+                                    Entity_Armor_Kind__Gold,
+                                    Entity_Armor_Modification_Kind__Diamond);
                             break;
                         case Entity_Armor_Modification_Kind__Diamond:
-                            player.armor_properties.the_kind_of_modification__this_armor_has =
-                                Entity_Armor_Modification_Kind__Amethyst;
+                            set_entity__armor(&player,
+                                    Entity_Armor_Kind__Gold,
+                                    Entity_Armor_Modification_Kind__Amethyst);
                             break;
                         case Entity_Armor_Modification_Kind__Amethyst:
-                            player.armor_properties.the_kind_of_modification__this_armor_has =
-                                Entity_Armor_Modification_Kind__None;
-                            player.armor_properties.the_kind_of_armor__this_armor_is =
-                                Entity_Armor_Kind__None;
+                            set_entity__armor(&player,
+                                    Entity_Armor_Kind__None,
+                                    Entity_Armor_Modification_Kind__None);
                             break;
                     }
                     break;
             }
-            set_sprite__animation(&player,
-                    player.sprite_wrapper.the_kind_of_animation__this_sprite_has);
         }
 
         if (i++ > 100) {

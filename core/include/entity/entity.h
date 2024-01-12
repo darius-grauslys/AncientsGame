@@ -25,4 +25,8 @@ bool can_entity_kind_have__armor(enum Entity_Kind kind_of_entity);
 
 void init_entity(Entity *entity, enum Entity_Kind kind_of_entity);
 
+void set_entity__armor(Entity *entity,
+        enum Entity_Armor_Kind kind_of_armor,
+        enum Entity_Armor_Modification_Kind kind_of_armor_modification);
+
 #endif

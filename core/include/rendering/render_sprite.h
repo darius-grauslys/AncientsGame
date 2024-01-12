@@ -8,6 +8,6 @@
 /// optimized out.
 ///
 
-void PLATFORM_render_sprite(PLATFORM_Sprite *sprite);
+void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
 
 #endif

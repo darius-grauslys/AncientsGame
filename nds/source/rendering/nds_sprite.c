@@ -27,22 +27,19 @@ void PLATFORM_init_sprite(
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
             dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME_WIDTH__ENTITY_HUMANOID
-                    * SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID);
+                    SPRITE_FRAME__16x16__OFFSET);
             return;
         case Entity_Kind__Skeleton:
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)skeletonTiles;
             dmaCopy((u8*)skeletonTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME_WIDTH__ENTITY_HUMANOID
-                    * SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID);
+                    SPRITE_FRAME__16x16__OFFSET);
             return;
         case Entity_Kind__Zombie:
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)zombieTiles;
             dmaCopy((u8*)zombieTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME_WIDTH__ENTITY_HUMANOID
-                    * SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID);
+                    SPRITE_FRAME__16x16__OFFSET);
             return;
     }
 }
