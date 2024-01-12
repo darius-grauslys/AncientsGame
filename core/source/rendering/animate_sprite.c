@@ -1,15 +1,14 @@
+#include <rendering/animate_sprite.h>
 #include <entity/entity.h>
-#include <rendering/render_entity.h>
 #include <debug/debug.h>
-#include <nds.h>
 
-uint32_t inline get_frame(uint32_t col, uint32_t row) {
+uint32_t get_frame(uint32_t col, uint32_t row) {
     return
         col
-        + (row * SPRITE_FRAME_COL__ENTITY_HUMANOID__LAST_COL);
+        + (row * (SPRITE_FRAME_COL__ENTITY_HUMANOID__LAST_COL+1));
 }
 
-uint32_t inline get_frame_offset__for_direction(Entity *entity) {
+uint32_t get_frame_offset__for_direction(Entity *entity) {
     switch (entity->sprite_wrapper.direction) {
         default:
         case Direction__East:
@@ -25,7 +24,7 @@ uint32_t inline get_frame_offset__for_direction(Entity *entity) {
     }
 }
 
-uint32_t inline get_frame_offset__for_cloth_armor(Entity *entity) {
+uint32_t get_frame_offset__for_cloth_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -34,7 +33,7 @@ uint32_t inline get_frame_offset__for_cloth_armor(Entity *entity) {
                 * SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH);
 }
 
-uint32_t inline get_frame_offset__for_iron_diamond_armor(Entity *entity) {
+uint32_t get_frame_offset__for_iron_diamond_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -43,7 +42,7 @@ uint32_t inline get_frame_offset__for_iron_diamond_armor(Entity *entity) {
                 * SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND);
 }
 
-uint32_t inline get_frame_offset__for_iron_amethyst_armor(Entity *entity) {
+uint32_t get_frame_offset__for_iron_amethyst_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -52,7 +51,7 @@ uint32_t inline get_frame_offset__for_iron_amethyst_armor(Entity *entity) {
                 * SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST);
 }
 
-uint32_t inline get_frame_offset__for_gold_diamond_armor(Entity *entity) {
+uint32_t get_frame_offset__for_gold_diamond_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -61,7 +60,7 @@ uint32_t inline get_frame_offset__for_gold_diamond_armor(Entity *entity) {
                 * SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND);
 }
 
-uint32_t inline get_frame_offset__for_gold_amethyst_armor(Entity *entity) {
+uint32_t get_frame_offset__for_gold_amethyst_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -70,7 +69,7 @@ uint32_t inline get_frame_offset__for_gold_amethyst_armor(Entity *entity) {
                 * SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST);
 }
 
-uint32_t inline get_frame_offset__for_iron_armor(Entity *entity) {
+uint32_t get_frame_offset__for_iron_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -79,7 +78,7 @@ uint32_t inline get_frame_offset__for_iron_armor(Entity *entity) {
                 * SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON);
 }
 
-uint32_t inline get_frame_offset__for_gold_armor(Entity *entity) {
+uint32_t get_frame_offset__for_gold_armor(Entity *entity) {
     return
         get_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -119,7 +118,8 @@ uint32_t get_frame_offset__from_entity_armor(Entity *entity) {
     }
 }
 
-void animate_humanoid(Entity *entity) {
+uint32_t get_start_frame__of_animation(Entity *entity, 
+        enum Sprite_Animation_Kind kind_of_animation) {
     uint32_t frame_offset = 0;
     if (can_entity_kind_have__armor(
                 entity->the_kind_of_entity__this_entity_is)) {
@@ -129,21 +129,52 @@ void animate_humanoid(Entity *entity) {
     frame_offset += 
         get_frame_offset__for_direction(entity);
 
+    switch (kind_of_animation) {
+        default:
+            debug_error(
+                    "Missing animation implementation for given humanoid kind.");
+            return 0;
+        case Sprite_Animation_Kind__Idle:
+            return frame_offset;
+        case Sprite_Animation_Kind__Humanoid__Walk:
+            return
+                frame_offset
+                + SPRITE_FRAME_COL__ENTITY_HUMANOID__WALK
+                ;
+        case Sprite_Animation_Kind__Humanoid__Use:
+            return
+                frame_offset
+                + SPRITE_FRAME_COL__ENTITY_HUMANOID__USE
+                ;
+    }
+}
+
+void animate_sprite__humanoid(Entity *entity) {
+    uint32_t frame_offset = 0;
+    if (can_entity_kind_have__armor(
+                entity->the_kind_of_entity__this_entity_is)) {
+        frame_offset = get_frame_offset__from_entity_armor(entity);
+    }
+
+    frame_offset += 
+        get_frame_offset__for_direction(entity);
+    debug_info("dir: %d", get_frame_offset__for_direction(entity));
+
     switch (entity->sprite_wrapper.the_kind_of_animation__this_sprite_has) {
         default:
             debug_error("Missing animation implementation for given humanoid kind.");
             break;
         case Sprite_Animation_Kind__Idle:
-            entity->sprite_wrapper.sprite.frame = frame_offset;
+            entity->sprite_wrapper.frame = frame_offset;
             break;
         case Sprite_Animation_Kind__Humanoid__Walk:
             uint32_t last_frame_of_walk =
                 frame_offset
                 + SPRITE_FRAME_COL__ENTITY_HUMANOID__USE
                 ;
-            entity->sprite_wrapper.sprite.frame++;
-            if (entity->sprite_wrapper.sprite.frame >= last_frame_of_walk)
-                entity->sprite_wrapper.sprite.frame = 
+            entity->sprite_wrapper.frame++;
+            if (entity->sprite_wrapper.frame >= last_frame_of_walk)
+                entity->sprite_wrapper.frame = 
                     frame_offset
                     + SPRITE_FRAME_COL__ENTITY_HUMANOID__WALK
                     ;
@@ -153,34 +184,24 @@ void animate_humanoid(Entity *entity) {
                 frame_offset 
                 + SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
                 ;
-            entity->sprite_wrapper.sprite.frame++;
-            if (entity->sprite_wrapper.sprite.frame >= last_frame_of_use)
-                entity->sprite_wrapper.sprite.frame =
+            entity->sprite_wrapper.frame++;
+            if (entity->sprite_wrapper.frame >= last_frame_of_use)
+                entity->sprite_wrapper.frame =
                     frame_offset
                     + SPRITE_FRAME_COL__ENTITY_HUMANOID__USE
                     ;
             break;
     }
+    PLATFORM_update_sprite_gfx__to_current_frame(entity);
 }
 
-void animate_entity(Entity *entity) {
-    switch (entity->the_kind_of_entity__this_entity_is) {
-        default:
-            debug_error("Missing animation implementation for given entity kind.");
-        case Entity_Kind__Player:
-        case Entity_Kind__Skeleton:
-        case Entity_Kind__Zombie:
-            uint32_t frame = entity->sprite_wrapper.sprite.frame;
-            animate_humanoid(entity);
-            if (frame != entity->sprite_wrapper.sprite.frame)
-                return;
-            frame = entity->sprite_wrapper.sprite.frame;
-            dmaCopy(entity->sprite_wrapper.sprite.gfx_sprite_sheet +
-                    (SPRITE_FRAME_WIDTH__ENTITY_HUMANOID 
-                     * SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID
-                     * frame), entity->sprite_wrapper.sprite.sprite_texture.gfx,
-                    (SPRITE_FRAME_WIDTH__ENTITY_HUMANOID *
-                     SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID));
-            break;
-    }
+void set_sprite__animation(Entity *entity, 
+        enum Sprite_Animation_Kind kind_of_animation) {
+    uint32_t frame =
+        get_start_frame__of_animation(
+                entity, kind_of_animation);
+    entity->sprite_wrapper.frame = frame;
+    entity->sprite_wrapper.the_kind_of_animation__this_sprite_has =
+        kind_of_animation;
+    PLATFORM_update_sprite_gfx__to_current_frame(entity);
 }

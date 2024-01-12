@@ -167,6 +167,8 @@ typedef struct Sprite_Wrapper_t {
     PLATFORM_Sprite sprite;
     enum Direction direction;
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
+    uint32_t frame;
+    uint32_t x, y;
 } Sprite_Wrapper;
 
 #define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID 16

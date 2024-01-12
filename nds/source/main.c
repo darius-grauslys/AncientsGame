@@ -6,10 +6,14 @@
 #include <world/chunk.h>
 #include <world/tile.h>
 #include <rendering/render_chunk.h>
+#include <rendering/render_entity.h>
 #include <rendering/sprite.h>
 #include <entity/entity.h>
+#include <rendering/animate_sprite.h>
 
 #include <assets/entities/player.h>
+#include <assets/entities/skeleton.h>
+#include <assets/entities/zombie.h>
 
 // 2bytes ppx, 8x8 pixel per tile, 8x8 tiles per chunk
 // thats 2x64x64, but we need to fit in 128x128, so *2*2
@@ -53,11 +57,16 @@ int main(void) {
 	oamInit(&oamMain, SpriteMapping_1D_128, false);
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
-	dmaCopy(playerPal, SPRITE_PALETTE, 512);
 
     Entity player;
 
-    init_entity(&player, Entity_Kind__Player);
+    init_entity(&player, Entity_Kind__Skeleton);
+	dmaCopy(skeletonPal, SPRITE_PALETTE, 512);
+    player.armor_properties.the_kind_of_armor__this_armor_is =
+        Entity_Armor_Kind__Cloth;
+    player.armor_properties.the_kind_of_modification__this_armor_has =
+        Entity_Armor_Modification_Kind__None;
+    set_sprite__animation(&player, Sprite_Animation_Kind__Humanoid__Use);
     oamSet(&oamMain, 0, 0, 0, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
         player.sprite_wrapper.sprite.sprite_texture.gfx, -1, false, false, false, false, false);
 
@@ -74,11 +83,87 @@ int main(void) {
 	// set up our bitmap background
 	bgInit(3, BgType_Bmp16, BgSize_B16_128x128, 0,0);
     dmaCopy(gfx_chunk, BG_GFX, sizeof(gfx_chunk));
-	
+
+    int i=0;
+
 	while(1) {
 		swiWaitForVBlank();
 		scanKeys();
 		if (keysDown()&KEY_START) break;
+
+        if (keysDown() & KEY_B) {
+            switch (player.sprite_wrapper.direction) {
+                case Direction__East:
+                    player.sprite_wrapper.direction = Direction__South;
+                    break;
+                case Direction__South:
+                    player.sprite_wrapper.direction = Direction__West;
+                    break;
+                case Direction__West:
+                    player.sprite_wrapper.direction = Direction__North;
+                    break;
+                case Direction__North:
+                    player.sprite_wrapper.direction = Direction__East;
+                    break;
+            }
+        }
+
+        if (keysDown() & KEY_A) {
+            switch (player.armor_properties.the_kind_of_armor__this_armor_is) {
+                default:
+                case Entity_Armor_Kind__None:
+                    player.armor_properties.the_kind_of_armor__this_armor_is =
+                        Entity_Armor_Kind__Cloth;
+                    break;
+                case Entity_Armor_Kind__Cloth:
+                    player.armor_properties.the_kind_of_armor__this_armor_is =
+                        Entity_Armor_Kind__Iron;
+                    break;
+                case Entity_Armor_Kind__Iron:
+                    switch (player.armor_properties.the_kind_of_modification__this_armor_has) {
+                        case Entity_Armor_Modification_Kind__None:
+                            player.armor_properties.the_kind_of_modification__this_armor_has =
+                                Entity_Armor_Modification_Kind__Diamond;
+                            break;
+                        case Entity_Armor_Modification_Kind__Diamond:
+                            player.armor_properties.the_kind_of_modification__this_armor_has =
+                                Entity_Armor_Modification_Kind__Amethyst;
+                            break;
+                        case Entity_Armor_Modification_Kind__Amethyst:
+                            player.armor_properties.the_kind_of_modification__this_armor_has =
+                                Entity_Armor_Modification_Kind__None;
+                            player.armor_properties.the_kind_of_armor__this_armor_is =
+                                Entity_Armor_Kind__Gold;
+                            break;
+                    }
+                    break;
+                case Entity_Armor_Kind__Gold:
+                    switch (player.armor_properties.the_kind_of_modification__this_armor_has) {
+                        case Entity_Armor_Modification_Kind__None:
+                            player.armor_properties.the_kind_of_modification__this_armor_has =
+                                Entity_Armor_Modification_Kind__Diamond;
+                            break;
+                        case Entity_Armor_Modification_Kind__Diamond:
+                            player.armor_properties.the_kind_of_modification__this_armor_has =
+                                Entity_Armor_Modification_Kind__Amethyst;
+                            break;
+                        case Entity_Armor_Modification_Kind__Amethyst:
+                            player.armor_properties.the_kind_of_modification__this_armor_has =
+                                Entity_Armor_Modification_Kind__None;
+                            player.armor_properties.the_kind_of_armor__this_armor_is =
+                                Entity_Armor_Kind__None;
+                            break;
+                    }
+                    break;
+            }
+            set_sprite__animation(&player,
+                    player.sprite_wrapper.the_kind_of_animation__this_sprite_has);
+        }
+
+        if (i++ > 100) {
+            animate_entity(&player);
+            i = 0;
+        }
 
 		oamUpdate(&oamMain);
 		oamUpdate(&oamSub);

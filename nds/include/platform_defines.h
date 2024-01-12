@@ -48,7 +48,6 @@ typedef struct PLATFORM_Texture_t {
 typedef struct PLATFORM_Sprite_t {
     PLATFORM_Texture sprite_texture;
     const uint16_t *gfx_sprite_sheet;
-    uint8_t frame;
 } PLATFORM_Sprite;
 
 #define TEXTURE_FLAG__SIZE__BIT_COUNT 3
