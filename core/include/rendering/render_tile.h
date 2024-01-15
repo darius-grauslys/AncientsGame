@@ -4,8 +4,7 @@
 #include <defines.h>
 
 void PLATFORM_render_tile(
-        RenderTarget *texture_atlas,
-        RenderTarget *target,
+        PLATFORM_Gfx_Context *context,
         Tile *tile);
 
 #endif

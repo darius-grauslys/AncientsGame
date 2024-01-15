@@ -5,11 +5,8 @@
 #include <defines.h>
 #include <world/chunk.h>
 #include <world/tile.h>
-#include <rendering/render_chunk.h>
-#include <rendering/animate_entity.h>
-#include <rendering/sprite.h>
 #include <entity/entity.h>
-#include <rendering/animate_sprite.h>
+#include <rendering/rendering.h>
 
 #include <assets/entities/player.h>
 #include <assets/entities/skeleton.h>
@@ -19,44 +16,15 @@
 // thats 2x64x64, but we need to fit in 128x128, so *2*2
 unsigned short gfx_chunk[8 * 8 * 8 * 8 * 2 * 2] = { 0 };
 
-Chunk chunk;
+Chunk_Manager chunk_manager;
 
 int main(void) {
+    PLATFORM_Gfx_Context gfx_context;
+    PLATFORM_init_gfx_context(&gfx_context);
+    PLATFORM_init_rendering__game(&gfx_context);
 
-    videoSetMode(MODE_5_2D);
-	// set the sub background up for text display (we could just print to one
-	// of the main display text backgrounds just as easily
-	videoSetModeSub(MODE_0_2D); //sub bg 0 will be used to print text
-
-	//vram banks are somewhat complex
-	vramSetPrimaryBanks(VRAM_A_MAIN_BG_0x06000000, VRAM_B_MAIN_SPRITE, VRAM_C_SUB_BG, VRAM_D_SUB_SPRITE);
-
-    // render oak_wood_planks into the chunk.
-    // for (int tile_x=0;tile_x<16;tile_x++) {
-    //     for (int tile_y=0;tile_y<16;tile_y++) {
-    //         render_tile(tile_x, tile_y);
-    //     }
-    // }
-
-	consoleDemoInit();
-
-    RenderTarget target;
-    RenderTarget source;
-    target.destination = gfx_chunk;
-    target.dma_channel = 0;
-    target.offset = 0;
-    target.target_row_stride = CHUNK_WIDTH__IN_BYTES / 2;
-
-    source.destination = (unsigned short*)tilesBitmap;
-    source.dma_channel = 0;
-    source.offset = 0;
-    source.target_row_stride = TILE_SHEET_WIDTH__IN_BYTES / 2;
-
-    init_chunk(&chunk, 0, 0);
-
-	oamInit(&oamMain, SpriteMapping_1D_128, false);
-	oamInit(&oamSub, SpriteMapping_1D_128, false);
-
+    init_chunk(&chunk_manager.chunk, 0, 0);
+    Chunk *chunk = &chunk_manager.chunk;
 
     Entity player;
 
@@ -66,23 +34,19 @@ int main(void) {
         Entity_Armor_Kind__Cloth;
     player.armor_properties.the_kind_of_modification__this_armor_has =
         Entity_Armor_Modification_Kind__None;
-    set_animation__of_entity(&player, Sprite_Animation_Kind__Humanoid__Use);
+    set_animation__of_entity(&player, Sprite_Animation_Kind__Humanoid__Walk);
     oamSet(&oamMain, 0, 0, 0, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
         player.sprite_wrapper.sprite.sprite_texture.gfx, -1, false, false, false, false, false);
 
     for (int i=0;i<CHUNK_QUANTITY_OF__TILES;i++)
-        init_tile(&chunk.tiles[i], Tile_Kind__Grass, TILE_FLAGS__NONE);
+        init_tile(&chunk->tiles[i], Tile_Kind__Grass, TILE_FLAGS__NONE);
 
-    init_tile(&chunk.tiles[13], Tile_Kind__Iron, TILE_FLAGS__NONE);
-    init_tile(&chunk.tiles[11], Tile_Kind__Stone_Brick, TILE_FLAGS__NONE);
+    init_tile(&chunk->tiles[13], Tile_Kind__Iron, TILE_FLAGS__NONE);
+    init_tile(&chunk->tiles[11], Tile_Kind__Stone_Brick, TILE_FLAGS__NONE);
 
-    PLATFORM_render_chunk(
-            &source,
-            &target, &chunk);
-
-	// set up our bitmap background
-	bgInit(3, BgType_Bmp16, BgSize_B16_128x128, 0,0);
-    dmaCopy(gfx_chunk, BG_GFX, sizeof(gfx_chunk));
+    PLATFORM_update_chunks(
+            &gfx_context,
+            &chunk_manager);
 
     int i=0;
 

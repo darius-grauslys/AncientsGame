@@ -4,12 +4,11 @@
 #include <world/tile.h>
 
 void PLATFORM_render_tile(
-        RenderTarget *texture_atlas,
-        RenderTarget *target,
+        PLATFORM_Gfx_Context *context,
         Tile *tile) {
 
-    while (DMA_CR(target->dma_channel) & DMA_BUSY);
+    // while (DMA_CR(target->dma_channel) & DMA_BUSY);
 
-    dmaCopy(texture_atlas->destination + texture_atlas->offset,
-            target->destination + target->offset, TILE_WIDTH__IN_BYTES);
+    // dmaCopy(texture_atlas->destination + texture_atlas->offset,
+    //         target->destination + target->offset, TILE_WIDTH__IN_BYTES);
 }

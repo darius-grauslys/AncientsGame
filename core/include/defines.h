@@ -1,15 +1,20 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
+typedef struct PLATFORM_Texture_t PLATFORM_Texture_t;
+typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
+
 /*
  *
  * The following comes from platform_defines.h:
- * - RenderTarget
+ * - PLATFORM_Gfx_Context
  * - PLATFORM_Sprite
  *
  * */
 #include <platform_defines.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.
@@ -217,6 +222,41 @@ typedef struct Sprite_Wrapper_t {
 #define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
 #define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
 
+typedef struct Tile_t {
+    enum Tile_Kind          the_kind_of_tile__this_tile_is;
+    enum Tile_Cover_Kind    the_kind_of_tile_cover__this_tile_has;
+    uint8_t flags;
+    // bits 1 2 3, stair direction (values 0-7)
+    // bit 4, is the stair inverted
+    // bit 5, is the stair going up or down
+    // bit 6, is this a stair
+    // bit 7, is sight blocking
+    // bit 8, is passable
+} Tile;
+
+#define CHUNK__WIDTH_BIT_SHIFT 3
+#define CHUNK__HEIGHT_BIT_SHIFT 3
+#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT + CHUNK__HEIGHT_BIT_SHIFT)
+
+#define CHUNK__WIDTH (1 << CHUNK__WIDTH_BIT_SHIFT)
+#define CHUNK__HEIGHT (1 << CHUNK__HEIGHT_BIT_SHIFT)
+// depth is 1 until AFTER the adventure update.
+#define CHUNK__DEPTH (1)
+
+#define CHUNK__QUANTITY_OF_TILES (CHUNK__WIDTH * \
+        CHUNK__HEIGHT * CHUNK__DEPTH)
+
+typedef struct Chunk_t {
+    Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
+    int32_t x, y;
+    bool is_available;
+} Chunk;
+typedef struct Chunk_Manager_t {
+    //TODO: update to be an actual chunk manager, and not
+    //a chunk wrapper
+    Chunk chunk;
+} Chunk_Manager;
+
 ///
 /// The meaning of these flags is dependent on
 /// platform_defines.h
@@ -240,8 +280,5 @@ typedef uint32_t Texture_Flags;
 /// Then, for more restricted platforms we may want to even drop down
 /// to just 4!
 ///
-
-typedef struct Chunk_t Chunk;
-typedef struct Chunk_Manager_t Chunk_Manager;
 
 #endif

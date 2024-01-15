@@ -30,12 +30,35 @@
         TILE_WIDTH__IN_BYTES *\
         TILE_SHEET_WIDTH__IN_TILES)
 
-typedef struct RenderTarget_t {
-    unsigned short *destination;
-    uint32_t offset;
-    uint32_t target_row_stride;
-    uint8_t dma_channel;
-} RenderTarget;
+typedef struct NDS_Background_t {
+    int background_index;
+    uint16_t *gfx_map;
+    uint16_t *gfx_tileset;
+    // uint16_t *gfx_palette;
+    uint32_t background__scroll_x, background__scroll_y;
+    uint32_t priority;
+    uint8_t map_base, tile_base;
+} NDS_Background;
+
+static void inline NDS_init_background(
+        NDS_Background *background) {
+    background->background_index = -1;
+    background->gfx_map = 0;
+    background->gfx_tileset = 0;
+    background->background__scroll_x =
+        background->background__scroll_y = 0;
+    background->priority = 0;
+    background->tile_base =
+        background->map_base = 0;
+}
+
+typedef struct PLATFORM_Gfx_Context_t {
+    NDS_Background background_ground__back_buffer;
+    NDS_Background background_ground__front_buffer;
+    NDS_Background background_ground__overlay;
+    NDS_Background background_extra;
+    NDS_Background *active_background_ground__buffer;
+} PLATFORM_Gfx_Context;
 
 typedef struct PLATFORM_Texture_t {
     uint16_t *gfx;

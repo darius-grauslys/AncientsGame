@@ -5,18 +5,6 @@
 #include <stdint.h>
 #include <defines.h>
 
-typedef struct Tile_t {
-    enum Tile_Kind          the_kind_of_tile__this_tile_is;
-    enum Tile_Cover_Kind    the_kind_of_tile_cover__this_tile_has;
-    uint8_t flags;
-    // bits 1 2 3, stair direction (values 0-7)
-    // bit 4, is the stair inverted
-    // bit 5, is the stair going up or down
-    // bit 6, is this a stair
-    // bit 7, is sight blocking
-    // bit 8, is passable
-} Tile;
-
 void init_tile(Tile *tile, enum Tile_Kind kind_of_tile,
         uint8_t flags);
 

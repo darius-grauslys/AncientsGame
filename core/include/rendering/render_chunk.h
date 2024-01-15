@@ -22,8 +22,7 @@
 ///
 
 void PLATFORM_render_chunk(
-        RenderTarget *texture_atlas,
-        RenderTarget *target,
+        PLATFORM_Gfx_Context *context,
         Chunk *chunk);
 
 #endif
