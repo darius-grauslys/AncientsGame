@@ -1,9 +1,6 @@
 #include <world/chunk.h>
 
 void init_chunk(Chunk *chunk, int32_t x, int32_t y) {
-    for (int i=0;i<CHUNK__QUANTITY_OF_TILES;i++) {
-        init_tile(&chunk->tiles[i], Tile_Kind__Void, TILE_FLAGS__NONE);
-    }
     chunk->x = x;
     chunk->y = y;
 }

@@ -3,15 +3,38 @@
 
 #include <stdint.h>
 
+#define PLATFORM__CHUNKS
+
+#define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 4
+#define GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS 3
+
 #define CHUNK_WIDTH__IN_TILES 8
 #define CHUNK_DEPTH__IN_TILES 1
 
 #define CHUNK_QUANTITY_OF__TILES \
     (CHUNK_WIDTH__IN_TILES * CHUNK_WIDTH__IN_TILES)
 
+#define CHUNK__WIDTH_BIT_SHIFT 3
+#define CHUNK__HEIGHT_BIT_SHIFT 3
+#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT + CHUNK__HEIGHT_BIT_SHIFT)
+
+#define CHUNK__WIDTH (1 << CHUNK__WIDTH_BIT_SHIFT)
+#define CHUNK__HEIGHT (1 << CHUNK__HEIGHT_BIT_SHIFT)
+// depth is 1 until AFTER the adventure update.
+#define CHUNK__DEPTH (1)
+
+#define CHUNK__QUANTITY_OF_TILES (CHUNK__WIDTH * \
+        CHUNK__HEIGHT * CHUNK__DEPTH)
+
+#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 8
+#define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS 8
+#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS \
+    (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS \
+    * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+
 // We use a singular wrapping background.
-#define LOCAL_SPACE_RENDER_WIDTH__IN_CHUNKS 0
-#define LOCAL_SPACE_LOGICAL_WIDTH__IN_CHUNKS 5
+// #define LOCAL_SPACE_RENDER_WIDTH__IN_CHUNKS 0
+// #define LOCAL_SPACE_LOGICAL_WIDTH__IN_CHUNKS 5
 
 //16bpx, 8 pixels per row (of 8 rows)
 #define TILE_WIDTH__IN_BYTES (2 * 8)
@@ -52,12 +75,21 @@ static void inline NDS_init_background(
         background->map_base = 0;
 }
 
+typedef uint8_t Direction;
+
+typedef struct NDS_Gfx_Context__Chunk_Record_t {
+    int32_t x, y;
+} NDS_Gfx_Context__Chunk_Record;
+
 typedef struct PLATFORM_Gfx_Context_t {
     NDS_Background background_ground__back_buffer;
     NDS_Background background_ground__front_buffer;
     NDS_Background background_ground__overlay;
     NDS_Background background_extra;
     NDS_Background *active_background_ground__buffer;
+
+    NDS_Gfx_Context__Chunk_Record chunk_records
+        [CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
 } PLATFORM_Gfx_Context;
 
 typedef struct PLATFORM_Texture_t {

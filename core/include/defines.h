@@ -13,6 +13,36 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
  *
  * */
 #include <platform_defines.h>
+
+#ifndef PLATFORM__CHUNKS
+#define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 4
+#define GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS 3
+
+#define CHUNK_WIDTH__IN_TILES 8
+#define CHUNK_DEPTH__IN_TILES 1
+
+#define CHUNK_QUANTITY_OF__TILES \
+    (CHUNK_WIDTH__IN_TILES * CHUNK_WIDTH__IN_TILES)
+
+#define CHUNK__WIDTH_BIT_SHIFT 3
+#define CHUNK__HEIGHT_BIT_SHIFT 3
+#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT + CHUNK__HEIGHT_BIT_SHIFT)
+
+#define CHUNK__WIDTH (1 << CHUNK__WIDTH_BIT_SHIFT)
+#define CHUNK__HEIGHT (1 << CHUNK__HEIGHT_BIT_SHIFT)
+// depth is 1 until AFTER the adventure update.
+#define CHUNK__DEPTH (1)
+
+#define CHUNK__QUANTITY_OF_TILES (CHUNK__WIDTH * \
+        CHUNK__HEIGHT * CHUNK__DEPTH)
+
+#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 8
+#define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS 8
+#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS \
+    (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS \
+    * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -91,6 +121,7 @@ typedef void (*m_unload_scene)(Game* game, Scene* this_scene);
 #define TILE_SHEET_INDEX__GRASS 10
 #define TILE_SHEET_INDEX__LEAVES 11
 #define TILE_SHEET_INDEX__SNOW 12
+#define TILE_SHEET_INDEX__WATER 257
 
 typedef struct Tile_t Tile;
 
@@ -107,6 +138,7 @@ enum Tile_Kind {
     Tile_Kind__Diamond,
     Tile_Kind__Amethyst,
     Tile_Kind__Sandstone,
+    Tile_Kind__Water,
 };
 
 enum Tile_Cover_Kind {
@@ -120,16 +152,23 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Leaf_Clutter,
 };
 
-enum Direction {
-    Direction__North,
-    Direction__North_East,
-    Direction__East,
-    Direction__South_East,
-    Direction__South,
-    Direction__South_West,
-    Direction__West,
-    Direction__North_West
-};
+typedef uint8_t Direction;
+
+#define DIRECTION__NONE 0
+#define DIRECTION__NORTH 1
+#define DIRECTION__EAST (1 << 1)
+#define DIRECTION__SOUTH (1 << 2)
+#define DIRECTION__WEST (1 << 3)
+
+#define DIRECTION__ANY ((1 << 4) - 1)
+#define DIRECTION__NORTH_EAST (DIRECTION__NORTH \
+        | DIRECITON__EAST)
+#define DIRECTION__NORTH_WEST (DIRECTION__NORTH \
+        | DIRECITON__WEST)
+#define DIRECTION__SOUTH_EAST (DIRECTION__SOUTH \
+        | DIRECTION__EAST)
+#define DIRECTION__SOUTH_WEST (DIRECTION__SOUTH \
+        | DIRECTION__WEST)
 
 enum Entity_Kind {
     Entity_Kind__Particle,
@@ -170,7 +209,7 @@ enum Sprite_Animation_Kind {
 
 typedef struct Sprite_Wrapper_t {
     PLATFORM_Sprite sprite;
-    enum Direction direction;
+    Direction direction;
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
     uint32_t frame;
     uint32_t x, y;
@@ -234,27 +273,45 @@ typedef struct Tile_t {
     // bit 8, is passable
 } Tile;
 
-#define CHUNK__WIDTH_BIT_SHIFT 3
-#define CHUNK__HEIGHT_BIT_SHIFT 3
-#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT + CHUNK__HEIGHT_BIT_SHIFT)
+typedef struct World_Parameters_t World_Parameters;
+typedef struct Chunk_t Chunk;
 
-#define CHUNK__WIDTH (1 << CHUNK__WIDTH_BIT_SHIFT)
-#define CHUNK__HEIGHT (1 << CHUNK__HEIGHT_BIT_SHIFT)
-// depth is 1 until AFTER the adventure update.
-#define CHUNK__DEPTH (1)
+typedef void (*Chunk_Generator_f)(
+        World_Parameters *world_params,
+        Chunk *chunk);
 
-#define CHUNK__QUANTITY_OF_TILES (CHUNK__WIDTH * \
-        CHUNK__HEIGHT * CHUNK__DEPTH)
+typedef struct World_Parameters_t {
+    Chunk_Generator_f chunk_generator_f;
+    uint32_t seed__initial;
+    uint32_t seed__current_random;
+} World_Parameters;
 
 typedef struct Chunk_t {
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
     int32_t x, y;
     bool is_available;
 } Chunk;
+
+typedef struct Chunk_Manager__Chunk_Map_Node_t {
+    Chunk *chunk__here;
+    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__north;
+    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__east;
+    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__south;
+    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__west;
+} Chunk_Manager__Chunk_Map_Node;
+
+typedef Chunk_Manager__Chunk_Map_Node
+    Chunk_Manager__Chunk_Map[CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
+
 typedef struct Chunk_Manager_t {
-    //TODO: update to be an actual chunk manager, and not
-    //a chunk wrapper
-    Chunk chunk;
+    Chunk chunks[CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
+    Chunk_Manager__Chunk_Map chunk_map;
+    
+    Chunk_Manager__Chunk_Map_Node *chunk_map_node__that_the_player_is_on;
+    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_western;
+    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_eastern;
+    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_eastern;
+    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_western;
 } Chunk_Manager;
 
 ///

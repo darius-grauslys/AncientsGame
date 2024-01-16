@@ -6,10 +6,10 @@
 #include <assets/tiles.h>
 
 void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
-    NDS_init_background(&gfx_context->background_ground__back_buffer);
+    // NDS_init_background(&gfx_context->background_ground__back_buffer);
+    // NDS_init_background(&gfx_context->background_ground__overlay);
     NDS_init_background(&gfx_context->background_ground__front_buffer);
-    NDS_init_background(&gfx_context->background_ground__overlay);
-    NDS_init_background(&gfx_context->background_extra);
+    // NDS_init_background(&gfx_context->background_extra);
     gfx_context->active_background_ground__buffer =
         &gfx_context->background_ground__front_buffer;
 }
@@ -115,17 +115,57 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager) {
-    //TODO: we are currently just rendering a single chunk.
+    debug_warning("PLATFORM_update_chunks uses magic numbers.");
     uint16_t *background_tile_map =
         bgGetMapPtr(gfx_context->active_background_ground__buffer
                 ->background_index);
+    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
+        chunk_manager->chunk_map_node__most_north_western;
+    Chunk_Manager__Chunk_Map_Node *current_sub__chunk_map_node;
 
-    //TODO: im am using magic numbers here atm.
-    for (int y=0;y<8;y++) {
-        for (int x=0;x<8;x++) {
-            background_tile_map[y * 32 + x] =
-                get_tile_texture_sheet_index(
-                    &chunk_manager->chunk.tiles[y * 8 + x]) + 1;
+    for (uint8_t y=0; y < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
+            y++) {
+        current_sub__chunk_map_node =
+            current__chunk_map_node;
+        for (uint8_t x=0; x < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
+                x++) {
+            uint32_t x__index =
+                ((current_sub__chunk_map_node->chunk__here->x
+                  % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+                 + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+                % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+            uint32_t y__index =
+                ((current_sub__chunk_map_node->chunk__here->y
+                  % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+                 + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+                % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+
+            Chunk *chunk__here =
+                current_sub__chunk_map_node->chunk__here;
+
+            //TODO: im am using magic numbers here atm.
+            for (int y=0;y<8;y++) {
+                for (int x=0;x<8;x++) {
+                    uint32_t background_tile_index = 
+                        y * 32 + x;
+                    background_tile_index += 
+                        (x__index % 4) * 8;
+                    background_tile_index +=
+                        (y__index % 4) * 8 * 32;
+                    if (x__index >= 4)
+                        background_tile_index += 32 * 32;
+                    if (y__index >= 4)
+                        background_tile_index += 32 * 32 * 2;
+                    background_tile_map[background_tile_index] =
+                        get_tile_texture_sheet_index(
+                            &chunk__here->tiles[y * 8 + x]) + 1;
+                }
+            }
+
+            current_sub__chunk_map_node =
+                current_sub__chunk_map_node->chunk_map_node__east;
         }
+        current__chunk_map_node =
+            current__chunk_map_node->chunk_map_node__south;
     }
 }

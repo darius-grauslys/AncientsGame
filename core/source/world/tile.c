@@ -13,7 +13,7 @@ void init_tile(Tile *tile, enum Tile_Kind kind_of_tile,
 uint32_t get_tile_texture_sheet_index(Tile *tile) {
     switch (tile->the_kind_of_tile__this_tile_is) {
         default:
-            return 0;
+            return (uint32_t)tile->the_kind_of_tile__this_tile_is;
         case Tile_Kind__Oak_Wood:
             return TILE_SHEET_INDEX__WOOD;
         case Tile_Kind__Stone_Brick:
@@ -39,5 +39,7 @@ uint32_t get_tile_texture_sheet_index(Tile *tile) {
         //TODO: leaves and snow
         // case Tile_Kind__Snow:
         //     return TILE_SHEET_INDEX__DIRT;
+        case Tile_Kind__Water:
+            return TILE_SHEET_INDEX__WATER;
     }
 }

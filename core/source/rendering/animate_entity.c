@@ -4,20 +4,20 @@
 #include <debug/debug.h>
 
 uint32_t get_animation_frame_offset__for_direction(
-        enum Direction direction,
+        Direction direction,
         uint32_t cols_per_row) {
     switch (direction) {
         default:
-        case Direction__East:
-        case Direction__West:
+        case DIRECTION__EAST:
+        case DIRECTION__WEST:
             return get_animation_frame(0,
                     SPRITE_FRAME_ROW__ENTITY_HUMANOID__SIDE_FACING,
                     cols_per_row);
-        case Direction__South:
+        case DIRECTION__SOUTH:
             return get_animation_frame(0,
                     SPRITE_FRAME_ROW__ENTITY_HUMANOID__FORWARD_FACING,
                     cols_per_row);
-        case Direction__North:
+        case DIRECTION__NORTH:
             return get_animation_frame(0,
                     SPRITE_FRAME_ROW__ENTITY_HUMANOID__BACK_FACING,
                     cols_per_row);

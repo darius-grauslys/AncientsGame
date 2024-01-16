@@ -3,22 +3,19 @@
 
 #include <defines.h>
 
-void init_chunk_manager(Chunk_Manager* manager);
+void init_chunk_manager(
+        Chunk_Manager* manager,
+        World_Parameters *world_params);
 
-Chunk* get_chunk_from_chunk_manager(Chunk_Manager* manager, 
-        int world_x, int world_y, int world_z);
+Chunk* get_chunk_from__chunk_manager(
+        Chunk_Manager* manager, 
+        int32_t global_chunk_x, int32_t global_chunk_y, 
+        int32_t global_chunk_z);
 
-///
-/// The chunk manager will set the given chunk as the center
-/// of the managed space. Resulting in some chunks getting
-/// marked for release, and likely getting overwritten for
-/// new loaded chunks.
-///
-void set_chunk_as_center_for_chunk_manager(
-        Chunk_Manager* manager, Chunk* chunk);
-Chunk* get_neighboring_chunk(Chunk_Manager* manager,
-        Chunk* chunk, enum Direction direction);
-
-void release_chunk_manager(Chunk_Manager* manager);
+void move_chunk_manager__chunks(
+        Chunk_Manager *manager,
+        World_Parameters *world_params,
+        Direction direction,
+        uint32_t steps);
 
 #endif

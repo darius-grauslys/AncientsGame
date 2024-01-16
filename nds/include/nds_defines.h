@@ -10,7 +10,7 @@ static void inline NDS_init_background_ground__back_buffer__for_game(
     background->map_base = 0;
     background->tile_base = 2;
     background->background_index =
-        bgInit(0, BgType_Text8bpp, BgSize_ER_512x512, 
+        bgInit(0, BgType_Text8bpp, BgSize_T_512x512, 
                 background->map_base, 
                 background->tile_base);
     background->gfx_map = 
@@ -26,7 +26,7 @@ static void inline NDS_init_background_ground__front_buffer__for_game(
     background->map_base = 4;
     background->tile_base = 2;
     background->background_index =
-        bgInit(1, BgType_Text8bpp, BgSize_ER_512x512, 
+        bgInit(1, BgType_Text8bpp, BgSize_T_512x512, 
                 background->map_base, 
                 background->tile_base);
     background->gfx_map = 
@@ -42,7 +42,7 @@ static void inline NDS_init_background_ground__overlay__for_game(
     background->map_base = 8;
     background->tile_base = 2;
     background->background_index =
-        bgInit(2, BgType_Text8bpp, BgSize_ER_512x512, 
+        bgInit(2, BgType_Text8bpp, BgSize_T_512x512, 
                 background->map_base, 
                 background->tile_base);
     background->gfx_map = 

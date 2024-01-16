@@ -86,18 +86,18 @@ static uint32_t inline get_animation_frame_offset__for_gold_armor(Entity *entity
 
 }
 
-uint32_t get_animation_frame_offset__for_direction(enum Direction direction,
+uint32_t get_animation_frame_offset__for_direction(Direction direction,
         uint32_t cols_per_row);
 
 static uint32_t inline get_animation_frame_offset__for_direction__of_humanoid_armored (
-        enum Direction direction) {
+        Direction direction) {
     return 
         get_animation_frame_offset__for_direction(direction, 
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED);
 }
 
 static uint32_t inline get_animation_frame_offset__for_direction__of_humanoid_unarmored (
-        enum Direction direction) {
+        Direction direction) {
     return 
         get_animation_frame_offset__for_direction(direction, 
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_UNARMORED);
