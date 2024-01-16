@@ -261,6 +261,28 @@ typedef struct Sprite_Wrapper_t {
 #define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
 #define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
 
+///
+/// INPUT
+///
+
+#define INPUT_NONE 0
+#define INPUT_FORWARD (1<<0)
+#define INPUT_LEFT (INPUT_FORWARD<<1)
+#define INPUT_RIGHT (INPUT_LEFT<<1)
+#define INPUT_BACKWARDS (INPUT_RIGHT<<1)
+
+#define INPUT_GAME_SETTINGS (INPUT_BACKWARDS<<1)
+#define INPUT_INVENTORY (INPUT_GAME_SETTINGS<<1)
+#define INPUT_USE (INPUT_INVENTORY<<1)
+
+typedef struct Input_t {
+    uint32_t input_flags;
+} Input;
+
+///
+/// WORLD
+///
+
 typedef struct Tile_t {
     enum Tile_Kind          the_kind_of_tile__this_tile_is;
     enum Tile_Cover_Kind    the_kind_of_tile_cover__this_tile_has;

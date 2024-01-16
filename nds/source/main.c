@@ -40,6 +40,7 @@ int main(void) {
     PLATFORM_init_gfx_context(&gfx_context);
     PLATFORM_init_rendering__game(&gfx_context);
 
+    init_weight_map();
     init_world_parameters(&world_params, 
             chunk_generator__flat_world_f, 0);
 

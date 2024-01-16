@@ -5,4 +5,7 @@ void chunk_generator__flat_world_f(
         World_Parameters *world_params,
         Chunk *chunk);
 
+
+void init_weight_map(void);
+
 #endif
