@@ -8,23 +8,14 @@
 
 #include <defines.h>
 
-void set_scene_for_game(Game* game, Scene* scene);
-void load_config_for_game(Game* game, Config* config);
-void load_game(Game* game);
-void update_game(Game* game);
-void render_game(Game* game);
-void unload_game(Game* game);
+void manage_game(Game *game);
 
-/// 
-/// If returned nullptr, then the current scene 
-/// lacks a worldspace.
-///
-World* get_world_from_game(Game* game);
+void PLATFORM_pre_render(Game *game);
+void PLATFORM_post_render(Game *game);
 
-///
-/// If returned nullptr, then the current scene
-/// lakcs a worldspace.
-///
-Entity_Manager* get_entity_manager_from_game(Game* game);
+void manage_game__pre_render(Game *game);
+void manage_game__post_render(Game *game);
+void manage_entities(Game *game);
+void release_entity(Game *game, Entity *entity);
 
 #endif

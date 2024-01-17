@@ -5,6 +5,8 @@
 void init_chunk_manager(
         Chunk_Manager* manager,
         World_Parameters *world_params) {
+    manager->x__center_chunk =
+        manager->y__center_chunk = 0;
     for (int32_t y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
         for (int32_t x=0; x <
@@ -334,4 +336,43 @@ void move_chunk_manager__chunks(
                     world_params);
         }
     }
+}
+
+bool poll_chunk_manager__for_chunk_movement(
+        Chunk_Manager *chunk_manager,
+        World_Parameters *world_params,
+        int32_t x__chunk, int32_t y__chunk) {
+
+    Direction direction__move_chunks = DIRECTION__NONE;
+
+    if (x__chunk != chunk_manager->x__center_chunk 
+        || y__chunk != chunk_manager->y__center_chunk) {
+        if (chunk_manager->x__center_chunk < x__chunk) {
+            direction__move_chunks |=
+                DIRECTION__EAST;
+        } else if (chunk_manager->x__center_chunk > x__chunk) {
+            direction__move_chunks |=
+                DIRECTION__WEST;
+        }
+        if (chunk_manager->y__center_chunk > y__chunk) {
+            direction__move_chunks |=
+                DIRECTION__NORTH;
+        } else if (chunk_manager->y__center_chunk < y__chunk) {
+            direction__move_chunks |=
+                DIRECTION__SOUTH;
+        }
+        chunk_manager->x__center_chunk = x__chunk;
+        chunk_manager->y__center_chunk = y__chunk;
+    }
+
+    if(direction__move_chunks != DIRECTION__NONE) {
+        move_chunk_manager__chunks(
+                chunk_manager, 
+                world_params, 
+                direction__move_chunks,
+                1);
+        return true;
+    }
+
+    return false;
 }

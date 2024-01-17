@@ -9,6 +9,39 @@ bool can_entity__move(enum Entity_Kind kind_of_entity);
 
 bool is_entity__humanoid(enum Entity_Kind kind_of_entity);
 
+static bool inline is_entity__enabled(Entity *entity) {
+    return entity->entity_flags &
+        ENTITY_FLAG__IS_ENABLED;
+}
+static bool inline is_entity_not__updating_position(Entity *entity) {
+    return entity->entity_flags &
+        ENTITY_FLAG__IS_NOT_UPDATING_POSITION;
+}
+static bool inline is_entity_not__updating_graphics(Entity *entity) {
+    return entity->entity_flags &
+        ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS;
+}
+
+static void inline set_entity__enabled(Entity *entity) {
+    entity->entity_flags |= ENTITY_FLAG__IS_ENABLED;
+}
+static void inline set_entity__is_updating_position(Entity *entity) {
+    entity->entity_flags &= ~ENTITY_FLAG__IS_NOT_UPDATING_POSITION;
+}
+static void inline set_entity__is_updating_graphics(Entity *entity) {
+    entity->entity_flags &= ~ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS;
+}
+
+static void inline set_entity__disabled(Entity *entity) {
+    entity->entity_flags &= ~ENTITY_FLAG__IS_ENABLED;
+}
+static void inline set_entity__is_not_updating_position(Entity *entity) {
+    entity->entity_flags |= ENTITY_FLAG__IS_NOT_UPDATING_POSITION;
+}
+static void inline set_entity__is_not_updating_graphics(Entity *entity) {
+    entity->entity_flags |= ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS;
+}
+
 void init_entity(Entity *entity, enum Entity_Kind kind_of_entity);
 
 void set_entity__armor(Entity *entity,

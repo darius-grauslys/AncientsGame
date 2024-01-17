@@ -5,6 +5,10 @@
 
 #include <assets/tiles.h>
 
+#include <assets/entities/player.h>
+#include <assets/entities/skeleton.h>
+#include <assets/entities/zombie.h>
+
 void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     // NDS_init_background(&gfx_context->background_ground__back_buffer);
     // NDS_init_background(&gfx_context->background_ground__overlay);
@@ -45,9 +49,20 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
             VRAM_C_SUB_BG, 
             VRAM_D_SUB_SPRITE);
 
-    // // enable extended palettes
-    // bgExtPaletteEnable();
-    // bgExtPaletteEnableSub();
+	vramSetBankF(VRAM_F_LCD);
+
+	dmaCopy(playerPal, 
+            VRAM_F_EXT_SPR_PALETTE[SPRITE_PALETTE__PLAYER], 
+            playerPalLen);
+	dmaCopy(skeletonPal, 
+            VRAM_F_EXT_SPR_PALETTE[SPRITE_PALETTE__SKELETON], 
+            skeletonPalLen);
+	dmaCopy(zombiePal, 
+            VRAM_F_EXT_SPR_PALETTE[SPRITE_PALETTE__ZOMBIE], 
+            zombiePalLen);
+
+	// set vram to ex palette
+	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 
 #ifndef NDEBUG
 	consoleDemoInit();
@@ -108,8 +123,8 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
     // vramSetBankE(VRAM_E_BG_EXT_PALETTE);     // for main engine
     // vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE); // for sub engine
 
-	oamInit(&oamMain, SpriteMapping_1D_128, false);
-	oamInit(&oamSub, SpriteMapping_1D_128, false);
+	oamInit(&oamMain, SpriteMapping_1D_128, true);
+	oamInit(&oamSub, SpriteMapping_1D_128, true);
 }
 
 void PLATFORM_update_chunks(

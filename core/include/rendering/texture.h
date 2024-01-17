@@ -17,8 +17,20 @@ void PLATFORM_init_texture__with_size(PLATFORM_Texture *texture,
         Texture_Flags flags,
         uint32_t width, uint32_t height);
 
+void PLATFORM_update_texture(PLATFORM_Texture *texture);
+
 void PLATFORM_use_texture(PLATFORM_Texture *texture);
 
 void PLATFORM_release_texture(PLATFORM_Texture *texture);
+
+static void inline set_texture_flag__hidden(PLATFORM_Texture *texture) {
+    texture->flags |= 
+        TEXTURE_FLAG__IS_HIDDEN;
+}
+
+static bool inline is_texture_flag_set__hidden(PLATFORM_Texture *texture) {
+    return texture->flags & TEXTURE_FLAG__IS_HIDDEN;
+}
+
 
 #endif

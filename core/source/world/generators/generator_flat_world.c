@@ -341,7 +341,7 @@ void chunk_generator__flat_world_f(
         Chunk *chunk) {
     Local_Parameters random__results[9];
 
-    debug_warning("chunk_generator__flat_world_f uses magic numbers.");
+    // debug_warning("chunk_generator__flat_world_f uses magic numbers.");
     
     for (int32_t y=-1;y<2;y++) {
         for (int32_t x=-1;x<2;x++) {

@@ -159,6 +159,8 @@ void animate_entity__as_humanoid(Entity *entity) {
 }
 
 void animate_entity(Entity *entity) {
+    if (is_entity_not__updating_graphics(entity))
+        return;
     switch (entity->the_kind_of_entity__this_entity_is) {
         default:
             debug_error("Missing animation implementation for given entity kind.");

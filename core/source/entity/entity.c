@@ -56,7 +56,9 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
     entity->z__chunk =
         entity->z = 0;
 
-    debug_warning("init_entity is not complete.");
+    set_entity__enabled(entity);
+    set_entity__is_updating_position(entity);
+    set_entity__is_updating_graphics(entity);
 
     init_sprite_wrapper(
             &entity->sprite_wrapper,

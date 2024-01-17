@@ -164,8 +164,13 @@ typedef struct Armor_Properties_t {
 
 typedef struct Entity_t Entity;
 
-typedef void (*m_init_entity)       (Entity *this_entity, Game *game);
-typedef void (*m_render_entity)     (Entity *this_entity, Game *game);
+typedef struct Item_t Item;
+typedef void (*m_item_use)    (Item* self, Entity* user, Game* game);
+typedef void (*m_item_equip)  (Item *self, Entity* user, Game* game);
+typedef void (*m_item_unequip)(Item *self, Entity* user, Game* game);
+
+typedef struct Inventory_t Inventory;
+
 typedef void (*m_dispose_entity)    (Entity *this_entity, Game *game);
 typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
 
@@ -175,15 +180,18 @@ typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
 ///
 
 #define ENTITY_FLAG__NONE 0
-#define ENTITY_FLAG__IS_NOT_UPDATING_POSITION (1)
+#define ENTITY_FLAG__IS_ENABLED (1)
+#define ENTITY_FLAG__IS_NOT_UPDATING_POSITION \
+    (ENTITY_FLAG__IS_ENABLED << 1)
 #define ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS \
-    (ENTITY_FLAG__IS_UPDATING_POSITION << 1)
+    (ENTITY_FLAG__IS_NOT_UPDATING_POSITION << 1)
 
 typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
-    m_init_entity           init_handler;
-    m_render_entity         render_handler;
+
+    // DO NOT INVOKE! Called automatically in release_entity(...)
     m_dispose_entity        dispose_handler;
+    // DO NOT INVOKE! Called automatically
     m_entity_controller     controller_handler;
 
     uint32_t                entity_flags;
@@ -202,17 +210,15 @@ typedef struct Entity_t {
     (ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE \
      + ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE)
 // 1.5 pixels.
-#define ENTITY_VELOCITY__PLAYER          0b11000
-#define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b10010
+#define ENTITY_VELOCITY__PLAYER          0b1100
+#define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b1001
 
-typedef struct Entity_Manager_t Entity_Manager;
+#define ENTITY_MAXIMUM__QUANTITY_OF 128
+#define ENTITY_PLAYER_MAXIMUM__QUANTITY_OF 8
 
-typedef struct Item_t Item;
-typedef void (*m_item_use)    (Item* self, Entity* user, Game* game);
-typedef void (*m_item_equip)  (Item *self, Entity* user, Game* game);
-typedef void (*m_item_unequip)(Item *self, Entity* user, Game* game);
-
-typedef struct Inventory_t Inventory;
+typedef struct Entity_Manager_t {
+    Entity entities[ENTITY_MAXIMUM__QUANTITY_OF];
+} Entity_Manager;
 
 typedef unsigned short USER_ID;
 
@@ -370,6 +376,8 @@ typedef struct Chunk_Manager_t {
     Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_eastern;
     Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_eastern;
     Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_western;
+
+    int32_t x__center_chunk, y__center_chunk;
 } Chunk_Manager;
 
 ///
@@ -379,6 +387,125 @@ typedef struct Chunk_Manager_t {
 typedef uint32_t Texture_Flags;
 
 #define TEXTURE_FLAGS__NONE 0
+
+///
+/// TEXTURE_FLAGS:
+/// Bit orderings, from most significant to least:
+/// [31 <-> 10, PLATFORM specific flags]
+/// [1 bit, is hidden]
+/// [3 bits, render method] 
+/// [3 bits, width] 
+/// [3 bits, height]
+///
+
+// Just a width or height component of an image.
+#define TEXTURE_FLAG__LENGTH__BIT_COUNT 3
+#define TEXTURE_FLAG__LENGTH__MASK 0b111
+// The width and height component of the image
+#define TEXTURE_FLAG__SIZE__BIT_COUNT 6
+#define TEXTURE_FLAG__SIZE__MASK 0b111111
+
+// Texture length specifiers
+#define TEXTURE_FLAG__LENGTH_x8   0b000
+#define TEXTURE_FLAG__LENGTH_x16  0b001
+#define TEXTURE_FLAG__LENGTH_x32  0b010
+#define TEXTURE_FLAG__LENGTH_x64  0b011
+#define TEXTURE_FLAG__LENGTH_x128 0b100
+#define TEXTURE_FLAG__LENGTH_x256 0b101
+
+// Texture size specifiers
+// Add these combinations in as needed:
+#define TEXTURE_FLAG__SIZE_8x8 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x8 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_8x16 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x16 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_8x32 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x32 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_16x8 \
+    TEXTURE_FLAG__LENGTH_x16 \
+    | (TEXTURE_FLAG__LENGTH_x8 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_16x16 \
+    TEXTURE_FLAG__LENGTH_x16 \
+    | (TEXTURE_FLAG__LENGTH_x16 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_16x32 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x32 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x8 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x8 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x16 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x16 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x32 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x32 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x64 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x64 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_64x64 \
+    TEXTURE_FLAG__LENGTH_x64 \
+    | (TEXTURE_FLAG__LENGTH_x64 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_128x128 \
+    TEXTURE_FLAG__LENGTH_x128 \
+    | (TEXTURE_FLAG__LENGTH_x128 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_256x256 \
+    TEXTURE_FLAG__LENGTH_x256 \
+    | (TEXTURE_FLAG__LENGTH_x256 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+
+// We support up to 8 texture render methods 
+// (on nds, this is oamMain, oamSub)
+#define TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT 3
+#define TEXTURE_FLAG__RENDER_METHOD__MASK 0b111
+#define TEXTURE_FLAG__RENDER_METHOD__0 0b000
+#define TEXTURE_FLAG__RENDER_METHOD__1 0b001
+#define TEXTURE_FLAG__RENDER_METHOD__2 0b010
+#define TEXTURE_FLAG__RENDER_METHOD__3 0b011
+#define TEXTURE_FLAG__RENDER_METHOD__4 0b100
+#define TEXTURE_FLAG__RENDER_METHOD__5 0b101
+#define TEXTURE_FLAG__RENDER_METHOD__6 0b110
+#define TEXTURE_FLAG__RENDER_METHOD__7 0b111
+
+// We support up to 8 texture formats 
+// Replace 1-7 as needed.
+#define TEXTURE_FLAG__FORMAT__BIT_COUNT 3
+#define TEXTURE_FLAG__FORMAT__MASK 0b111
+#define TEXTURE_FLAG__FORMAT__15_RGB 0b000
+#define TEXTURE_FLAG__FORMAT__1 0b001
+#define TEXTURE_FLAG__FORMAT__2 0b010
+#define TEXTURE_FLAG__FORMAT__3 0b011
+#define TEXTURE_FLAG__FORMAT__4 0b100
+#define TEXTURE_FLAG__FORMAT__5 0b101
+#define TEXTURE_FLAG__FORMAT__6 0b110
+#define TEXTURE_FLAG__FORMAT__7 0b111
+
+#define TEXTURE_FLAG__IS_HIDDEN \
+    (1 << (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \
+           + TEXTURE_FLAG__SIZE__BIT_COUNT \
+           + TEXTURE_FLAG__FORMAT__BIT_COUNT))
+
+#define GET_TEXTURE_FLAG__LENGTH__WIDTH(flags) \
+    ((flags & (TEXTURE_FLAG__LENGTH__MASK \
+              << TEXTURE_FLAG__LENGTH__BIT_COUNT)) \
+              >> TEXTURE_FLAG__LENGTH__BIT_COUNT)
+
+#define GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags) \
+    (flags & TEXTURE_FLAG__LENGTH__MASK)
 
 ///
 /// The following are platform specific.
@@ -405,8 +532,15 @@ typedef struct Game_t {
     World_Parameters world_params;
     Chunk_Manager chunk_manager;
     PLATFORM_Gfx_Context gfx_context;
+    Entity_Manager entity_manager;
 
     Entity *local_player;
+
+    uint32_t tick;
 } Game;
+
+typedef struct Scene_t {
+    bool is_with__gamespace;
+} Scene;
 
 #endif

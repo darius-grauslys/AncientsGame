@@ -10,14 +10,13 @@
 #include <entity/entity.h>
 #include <rendering/rendering.h>
 
-#include <assets/entities/player.h>
-#include <assets/entities/skeleton.h>
-#include <assets/entities/zombie.h>
-
 #include <entity/controllers/controller_player.h>
+#include <entity/controllers/controller_dummy.h>
 #include <input/input.h>
 
 #include <world/generators/generator_flat_world.h>
+#include <game.h>
+#include <entity/entity_manager.h>
 
 Game game;
 
@@ -32,19 +31,20 @@ int main(void) {
     init_chunk_manager(&game.chunk_manager,
             &game.world_params);
 
-	oamInit(&oamMain, SpriteMapping_1D_128, false);
-	oamInit(&oamSub, SpriteMapping_1D_128, false);
+    for (uint8_t i=0;i<16;i++) {
+        Entity *skeleton =
+            get_new_entity(&game.entity_manager,
+                    Entity_Kind__Skeleton);
+        skeleton->controller_handler =
+            controller__dummy;
+    }
 
-    Entity player;
+    game.local_player = get_new_player(&game.entity_manager);
+    set_entity__is_not_updating_position(game.local_player);
 
-    init_entity(&player, Entity_Kind__Player);
-	dmaCopy(playerPal, SPRITE_PALETTE, 512);
-    oamSet(&oamMain, 0, 127 - 8, 96 - 8, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
-        player.sprite_wrapper.sprite.sprite_texture.gfx, -1, false, false, false, false, false);
-
-    player.controller_handler =
+    game.local_player->controller_handler =
         controller__player;
-    set_entity__armor(&player,
+    set_entity__armor(game.local_player,
             Entity_Armor_Kind__Cloth,
             Entity_Armor_Modification_Kind__None);
 
@@ -57,73 +57,9 @@ int main(void) {
             &game.gfx_context,
             &game.chunk_manager);
 
-    int32_t center_x = 0, center_y = 0;
-
-    uint32_t frame_tick = 0;
-
-    Direction direction__move_chunks = DIRECTION__NONE;
-
 	while(1) {
-		swiWaitForVBlank();
-        PLATFORM_poll_input(&game);
-        player.controller_handler(&player, &game);
-
-        if (frame_tick++ % 8 == 0) {
-            animate_entity(&player);
-        }
-
-		if (is_input__game_settings(&game)) break;
-
-        int32_t dx = player.x__chunk;
-        int32_t dy = player.y__chunk;
-
-        direction__move_chunks = DIRECTION__NONE;
-
-        if (dx != center_x || dy != center_y) {
-            if (center_x < dx) {
-                direction__move_chunks |=
-                    DIRECTION__EAST;
-            } else if (center_x > dx) {
-                direction__move_chunks |=
-                    DIRECTION__WEST;
-            }
-            if (center_y > dy) {
-                direction__move_chunks |=
-                    DIRECTION__NORTH;
-            } else if (center_y < dy) {
-                direction__move_chunks |=
-                    DIRECTION__SOUTH;
-            }
-            center_x = dx;
-            center_y = dy;
-        }
-	
-        if(direction__move_chunks != DIRECTION__NONE) {
-            move_chunk_manager__chunks(
-                    &game.chunk_manager, 
-                    &game.world_params, 
-                    direction__move_chunks,
-                    1);
-            PLATFORM_update_chunks(
-                    &game.gfx_context,
-                    &game.chunk_manager);
-        }
-
-		bgSetScroll(
-                game.gfx_context.active_background_ground__buffer->
-                background_index,
-                (player.x__chunk << 
-                    ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-                    + (player.x >> 
-                        ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE), 
-                -((player.y__chunk << 
-                    ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-                    + (player.y >> 
-                        ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)));
-		bgUpdate();
-
-		oamUpdate(&oamMain);
-		oamUpdate(&oamSub);
+        manage_game(&game);
+        if (is_input__game_settings(&game)) break;
 	}
 
     return 0;

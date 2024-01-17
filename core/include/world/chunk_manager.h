@@ -18,4 +18,9 @@ void move_chunk_manager__chunks(
         Direction direction,
         uint32_t steps);
 
+bool poll_chunk_manager__for_chunk_movement(
+        Chunk_Manager *chunk_manager,
+        World_Parameters *world_params,
+        int32_t x__chunk, int32_t y__chunk);
+
 #endif

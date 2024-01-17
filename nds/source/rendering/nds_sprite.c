@@ -17,6 +17,9 @@ void PLATFORM_init_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
 void PLATFORM_init_sprite(
         PLATFORM_Sprite *sprite,
         Entity *entity) {
+    debug_warning("PLATFORM_init_sprite is not finished yet: \
+            doesn't support oamSub.");
+    uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);
     switch (entity->the_kind_of_entity__this_entity_is) {
         case Entity_Kind__Item:
@@ -24,22 +27,41 @@ void PLATFORM_init_sprite(
             debug_abort("Entity type not implemented for PLATFORM_init_sprite.");
             return;
         case Entity_Kind__Player:
+            palette = SPRITE_PALETTE__PLAYER;
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
             dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__16x16__OFFSET);
-            return;
+            break;
         case Entity_Kind__Skeleton:
+            palette = SPRITE_PALETTE__SKELETON;
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)skeletonTiles;
             dmaCopy((u8*)skeletonTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__16x16__OFFSET);
-            return;
+            break;
         case Entity_Kind__Zombie:
+            palette = SPRITE_PALETTE__ZOMBIE;
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)zombieTiles;
             dmaCopy((u8*)zombieTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__16x16__OFFSET);
-            return;
+            break;
     }
+
+    oamSet(
+        sprite->sprite_texture.oam, 
+        sprite->sprite_texture.oam_index, 
+        127 - 8, 96 - 8, 
+        0, 
+        palette, 
+        SpriteSize_16x16, 
+        SpriteColorFormat_256Color, 
+        sprite->sprite_texture.gfx, 
+        -1, 
+        false, 
+        false, 
+        false, 
+        false, 
+        false);
 }

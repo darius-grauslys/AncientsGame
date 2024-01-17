@@ -3,6 +3,9 @@
 
 #include <stdint.h>
 
+/*****************************************************
+ *  CHUNKS
+ *****************************************************/
 #define PLATFORM__CHUNKS
 
 #define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 6
@@ -16,7 +19,8 @@
 
 #define CHUNK__WIDTH_BIT_SHIFT 3
 #define CHUNK__HEIGHT_BIT_SHIFT 3
-#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT + CHUNK__HEIGHT_BIT_SHIFT)
+#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT \
+        + CHUNK__HEIGHT_BIT_SHIFT)
 
 #define CHUNK__WIDTH (1 << CHUNK__WIDTH_BIT_SHIFT)
 #define CHUNK__HEIGHT (1 << CHUNK__HEIGHT_BIT_SHIFT)
@@ -44,6 +48,10 @@
         TILE_WIDTH__IN_BYTES *\
         CHUNK_WIDTH__IN_TILES)
 
+/*****************************************************
+ *  TILES
+ *****************************************************/
+
 #define TILE_SHEET_WIDTH__IN_PIXELS 256
 #define TILE_SHEET_WIDTH__IN_TILES (\
         TILE_SHEET_WIDTH__IN_PIXELS /\
@@ -52,6 +60,10 @@
 #define TILE_SHEET_WIDTH__IN_BYTES (\
         TILE_WIDTH__IN_BYTES *\
         TILE_SHEET_WIDTH__IN_TILES)
+
+/*****************************************************
+ *  GFX_CONTEXT
+ *****************************************************/
 
 typedef struct NDS_Background_t {
     int background_index;
@@ -92,28 +104,20 @@ typedef struct PLATFORM_Gfx_Context_t {
         [CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
 } PLATFORM_Gfx_Context;
 
+/*****************************************************
+ *  TEXTURES
+ *****************************************************/
+
+typedef struct OamState OamState;
+
 typedef struct PLATFORM_Texture_t {
+    OamState *oam;
     uint16_t *gfx;
     uint32_t width, height;
     uint32_t oam_index;
     uint32_t flags;
     uint8_t dma_channel;
 } PLATFORM_Texture;
-
-typedef struct PLATFORM_Sprite_t {
-    PLATFORM_Texture sprite_texture;
-    const uint16_t *gfx_sprite_sheet;
-} PLATFORM_Sprite;
-
-#define TEXTURE_FLAG__SIZE__BIT_COUNT 3
-#define TEXTURE_FLAG__MASK__SIZE 0b111
-
-#define TEXTURE_FLAG__SIZE_x8   0b000
-#define TEXTURE_FLAG__SIZE_x16  0b001
-#define TEXTURE_FLAG__SIZE_x32  0b010
-#define TEXTURE_FLAG__SIZE_x64  0b011
-#define TEXTURE_FLAG__SIZE_x128 0b100
-#define TEXTURE_FLAG__SIZE_x256 0b101
 
 #define TEXTURE_FLAG__USE_OAM__BIT_INDEX 31
 #define TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX 30
@@ -129,96 +133,102 @@ typedef struct PLATFORM_Sprite_t {
 #define CHECK_TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB(flags) \
     (flags & TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB)
 
-#define GET_TEXTURE_FLAG__SIZE__WIDTH(flags) \
-    ((flags & (TEXTURE_FLAG__MASK__SIZE \
-              << TEXTURE_FLAG__SIZE__BIT_COUNT)) \
-              >> TEXTURE_FLAG__SIZE__BIT_COUNT)
-
-#define GET_TEXTURE_FLAG__SIZE__HEIGHT(flags) \
-    (flags & TEXTURE_FLAG__MASK__SIZE)
-
 #define USE_TEXTURE_FLAGS__OAM__8x8(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x8 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x8))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x8 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x8))
 
 #define USE_TEXTURE_FLAGS__OAM__8x16(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x8 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x16))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x8 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x16))
 
 #define USE_TEXTURE_FLAGS__OAM__8x32(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x8 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x32))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x8 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__16x8(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x16 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x8))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x16 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x8))
 
 #define USE_TEXTURE_FLAGS__OAM__16x16(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x16 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x16))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x16 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x16))
 
 #define USE_TEXTURE_FLAGS__OAM__16x32(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x16 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x32))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x16 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__32x8(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x32 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x8))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x8))
 
 #define USE_TEXTURE_FLAGS__OAM__32x16(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x32 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x16))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x16))
 
 #define USE_TEXTURE_FLAGS__OAM__32x32(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x32 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x32))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__32x64(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x32 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x64))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x64))
 
 #define USE_TEXTURE_FLAGS__OAM__64x32(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x64 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x32))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x64 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__64x64(main_or_sub) \
-    (TEXTURE_FLAG__USE_OAM | \
+    ((TEXTURE_FLAG__USE_OAM & \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
-     (TEXTURE_FLAG__SIZE_x64 << TEXTURE_FLAG__SIZE__BIT_COUNT) | \
-     (TEXTURE_FLAG__SIZE_x64))
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+     (TEXTURE_FLAG__LENGTH_x64 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
+     (TEXTURE_FLAG__LENGTH_x64))
+
+/*****************************************************
+ *  SPRITES
+ *****************************************************/
+
+#define SPRITE_PALETTE__PLAYER      0
+#define SPRITE_PALETTE__SKELETON    1
+#define SPRITE_PALETTE__ZOMBIE      2
+
+
+typedef struct PLATFORM_Sprite_t {
+    PLATFORM_Texture sprite_texture;
+    const uint16_t *gfx_sprite_sheet;
+} PLATFORM_Sprite;
 
 #endif
