@@ -51,21 +51,164 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #endif
 
 typedef struct Console_t Console;
+typedef struct Game_t Game;
 
-typedef struct World_t World;
+typedef uint8_t Direction;
+
+#define DIRECTION__NONE 0
+#define DIRECTION__NORTH 1
+#define DIRECTION__EAST (1 << 1)
+#define DIRECTION__SOUTH (1 << 2)
+#define DIRECTION__WEST (1 << 3)
+
+#define DIRECTION__ANY ((1 << 4) - 1)
+#define DIRECTION__NORTH_EAST (DIRECTION__NORTH \
+        | DIRECTION__EAST)
+#define DIRECTION__NORTH_WEST (DIRECTION__NORTH \
+        | DIRECTION__WEST)
+#define DIRECTION__SOUTH_EAST (DIRECTION__SOUTH \
+        | DIRECTION__EAST)
+#define DIRECTION__SOUTH_WEST (DIRECTION__SOUTH \
+        | DIRECTION__WEST)
+
+enum Sprite_Animation_Kind {
+    Sprite_Animation_Kind__Idle,
+    Sprite_Animation_Kind__Humanoid__Walk,
+    Sprite_Animation_Kind__Humanoid__Use,
+    Sprite_Animation_Kind__Humanoid__Hurt,
+    Sprite_Animation_Kind__Humanoid__Die,
+    Sprite_Animation_Kind__Player__Sleep,
+};
+
+typedef struct Sprite_Wrapper_t {
+    PLATFORM_Sprite sprite;
+    Direction direction;
+    enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
+    uint32_t frame;
+    uint32_t x, y;
+} Sprite_Wrapper;
+
+#define SPRITE_FRAME__16x16__OFFSET (16 * 16)
+
+#define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED 16
+#define SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID_ARMORED 16
+
+#define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_UNARMORED 6
+#define SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID_UNARMORED 4
+
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__IDLE 0
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__WALK 1
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__USE 3
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__HURT 0
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__DIE 1
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__SLEEP 3
+
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__SIDE_FACING 0
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FORWARD_FACING 1
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__BACK_FACING 2
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FALLING 3
+
+#define SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID 6
+#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID 4
+
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__ARMORED__LAST_COL 15
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__ARMORED__LAST_ROW 15
+
+#define SPRITE_FRAME_COL__ENTITY_HUMANOID__UNARMORED__LAST_COL 5
+#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__UNARMORED__LAST_ROW 3
+
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 0
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 1
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 0
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 2
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 0
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 3
+
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 0
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
+
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 2
+#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
+#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
+
+enum Entity_Kind {
+    Entity_Kind__Particle,
+    Entity_Kind__Item,
+    Entity_Kind__Player,
+    Entity_Kind__Skeleton,
+    Entity_Kind__Zombie
+};
+
+enum Entity_Armor_Kind {
+    Entity_Armor_Kind__None,
+    Entity_Armor_Kind__Cloth,
+    Entity_Armor_Kind__Iron,
+    Entity_Armor_Kind__Gold,
+};
+
+enum Entity_Armor_Modification_Kind {
+    Entity_Armor_Modification_Kind__None,
+    Entity_Armor_Modification_Kind__Diamond,
+    Entity_Armor_Modification_Kind__Amethyst
+};
+
+typedef struct Armor_Properties_t {
+    enum Entity_Armor_Kind                  
+        the_kind_of_armor__this_armor_is;
+    enum Entity_Armor_Modification_Kind     
+        the_kind_of_modification__this_armor_has;
+} Armor_Properties;
 
 typedef struct Entity_t Entity;
-typedef void (*m_init_entity)(Entity* self, World* world);
-typedef void (*m_update_entity)(Entity* self, World* world);
-typedef void (*m_render_entity)(Entity* self, World* world);
-typedef void (*m_dispose_entity)(Entity* self, World* world);
+
+typedef void (*m_init_entity)       (Entity *this_entity, Game *game);
+typedef void (*m_render_entity)     (Entity *this_entity, Game *game);
+typedef void (*m_dispose_entity)    (Entity *this_entity, Game *game);
+typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
+
+///
+/// Here we define the entity super struct. It has everything we could need
+/// for an entity, even if some of the things are not used.
+///
+
+#define ENTITY_FLAG__NONE 0
+#define ENTITY_FLAG__IS_NOT_UPDATING_POSITION (1)
+#define ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS \
+    (ENTITY_FLAG__IS_UPDATING_POSITION << 1)
+
+typedef struct Entity_t {
+    Sprite_Wrapper          sprite_wrapper;
+    m_init_entity           init_handler;
+    m_render_entity         render_handler;
+    m_dispose_entity        dispose_handler;
+    m_entity_controller     controller_handler;
+
+    uint32_t                entity_flags;
+    int32_t                 x, y, z;
+    int16_t                 x__velocity_accumilator, 
+                            y__velocity_accumilator,
+                            z__velocity_accumilator;
+
+    enum Entity_Kind        the_kind_of_entity__this_entity_is;
+    union {
+        Armor_Properties    armor_properties;
+    };
+} Entity;
+
+#define ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE 4
+// 1.5 pixels.
+#define ENTITY_VELOCITY__PLAYER 0b11000
+#define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b10010
 
 typedef struct Entity_Manager_t Entity_Manager;
 
 typedef struct Item_t Item;
-typedef void (*m_item_use)(Item* self, Entity* user, World* world);
-typedef void (*m_item_equip)(Item *self, Entity* user, World* world);
-typedef void (*m_item_unequip)(Item *self, Entity* user, World* world);
+typedef void (*m_item_use)    (Item* self, Entity* user, Game* game);
+typedef void (*m_item_equip)  (Item *self, Entity* user, Game* game);
+typedef void (*m_item_unequip)(Item *self, Entity* user, Game* game);
 
 typedef struct Inventory_t Inventory;
 
@@ -74,10 +217,10 @@ typedef unsigned short USER_ID;
 typedef struct Game_t Game;
 
 typedef struct Scene_t Scene;
-typedef void (*m_load_scene)(Game* game, Scene* this_scene);
-typedef void (*m_update_scene)(Game* game, Scene* this_scene);
-typedef void (*m_render_scene)(Game* game, Scene* this_scene);
-typedef void (*m_unload_scene)(Game* game, Scene* this_scene);
+typedef void (*m_load_scene)  (Scene *this_scene, Game* game);
+typedef void (*m_update_scene)(Scene *this_scene, Game* game);
+typedef void (*m_render_scene)(Scene *this_scene, Game* game);
+typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
 
 #define TILE_PIXEL_HEIGHT 8
 #define TILE_PIXEL_WIDTH 8
@@ -151,115 +294,6 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Oak_Leaves,
     Tile_Cover_Kind__Leaf_Clutter,
 };
-
-typedef uint8_t Direction;
-
-#define DIRECTION__NONE 0
-#define DIRECTION__NORTH 1
-#define DIRECTION__EAST (1 << 1)
-#define DIRECTION__SOUTH (1 << 2)
-#define DIRECTION__WEST (1 << 3)
-
-#define DIRECTION__ANY ((1 << 4) - 1)
-#define DIRECTION__NORTH_EAST (DIRECTION__NORTH \
-        | DIRECITON__EAST)
-#define DIRECTION__NORTH_WEST (DIRECTION__NORTH \
-        | DIRECITON__WEST)
-#define DIRECTION__SOUTH_EAST (DIRECTION__SOUTH \
-        | DIRECTION__EAST)
-#define DIRECTION__SOUTH_WEST (DIRECTION__SOUTH \
-        | DIRECTION__WEST)
-
-enum Entity_Kind {
-    Entity_Kind__Particle,
-    Entity_Kind__Item,
-    Entity_Kind__Player,
-    Entity_Kind__Skeleton,
-    Entity_Kind__Zombie
-};
-
-enum Entity_Armor_Kind {
-    Entity_Armor_Kind__None,
-    Entity_Armor_Kind__Cloth,
-    Entity_Armor_Kind__Iron,
-    Entity_Armor_Kind__Gold,
-};
-
-enum Entity_Armor_Modification_Kind {
-    Entity_Armor_Modification_Kind__None,
-    Entity_Armor_Modification_Kind__Diamond,
-    Entity_Armor_Modification_Kind__Amethyst
-};
-
-typedef struct Armor_Properties_t {
-    enum Entity_Armor_Kind                  
-        the_kind_of_armor__this_armor_is;
-    enum Entity_Armor_Modification_Kind     
-        the_kind_of_modification__this_armor_has;
-} Armor_Properties;
-
-enum Sprite_Animation_Kind {
-    Sprite_Animation_Kind__Idle,
-    Sprite_Animation_Kind__Humanoid__Walk,
-    Sprite_Animation_Kind__Humanoid__Use,
-    Sprite_Animation_Kind__Humanoid__Hurt,
-    Sprite_Animation_Kind__Humanoid__Die,
-    Sprite_Animation_Kind__Player__Sleep,
-};
-
-typedef struct Sprite_Wrapper_t {
-    PLATFORM_Sprite sprite;
-    Direction direction;
-    enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
-    uint32_t frame;
-    uint32_t x, y;
-} Sprite_Wrapper;
-
-#define SPRITE_FRAME__16x16__OFFSET (16 * 16)
-
-#define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED 16
-#define SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID_ARMORED 16
-
-#define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_UNARMORED 6
-#define SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID_UNARMORED 4
-
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__IDLE 0
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__WALK 1
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__USE 3
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__HURT 0
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__DIE 1
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__SLEEP 3
-
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__SIDE_FACING 0
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FORWARD_FACING 1
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__BACK_FACING 2
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FALLING 3
-
-#define SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID 6
-#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID 4
-
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__ARMORED__LAST_COL 15
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__ARMORED__LAST_ROW 15
-
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__UNARMORED__LAST_COL 5
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__UNARMORED__LAST_ROW 3
-
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 0
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 1
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 0
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 2
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 0
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 3
-
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 0
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
-
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 2
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
 
 ///
 /// INPUT
@@ -359,5 +393,18 @@ typedef uint32_t Texture_Flags;
 /// Then, for more restricted platforms we may want to even drop down
 /// to just 4!
 ///
+
+///
+/// GAME
+///
+
+typedef struct Game_t {
+    Input input;
+    World_Parameters world_params;
+    Chunk_Manager chunk_manager;
+    PLATFORM_Gfx_Context gfx_context;
+
+    Entity *local_player;
+} Game;
 
 #endif

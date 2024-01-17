@@ -20,6 +20,8 @@
    SpriteSize_32x64 = (OBJSIZE_64 << 14) | (OBJSHAPE_TALL << 12) | (32*64>>5)		//!< 32x64
  * */
 
+uint32_t current_oam_index = 0;
+
 void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
     texture->gfx = 0;
     texture->width =
@@ -120,6 +122,9 @@ void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
         oam = &oamSub;
     }
 
+    debug_warning("oam id setting is not robust.");
+    texture->oam_index = current_oam_index;
+    current_oam_index++;
 	texture->gfx = oamAllocateGfx(oam, sprite_size, SpriteColorFormat_256Color);
 
     return;

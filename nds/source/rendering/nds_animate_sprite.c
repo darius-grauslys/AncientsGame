@@ -11,4 +11,23 @@ void PLATFORM_update_sprite_gfx__to_current_frame(
             (SPRITE_FRAME__16x16__OFFSET
              * frame / 2), sprite_wrapper->sprite.sprite_texture.gfx,
             (SPRITE_FRAME__16x16__OFFSET));
+
+    if (sprite_wrapper->direction & DIRECTION__WEST) {
+        oamSetFlip(
+                &oamMain,
+                sprite_wrapper
+                ->sprite.sprite_texture
+                .oam_index,
+                true,
+                false);
+
+    } else {
+        oamSetFlip(
+                &oamMain,
+                sprite_wrapper
+                ->sprite.sprite_texture
+                .oam_index,
+                false,
+                false);
+    }
 }

@@ -92,7 +92,8 @@ uint32_t get_animation_starting_frame__for_humanoid_entity(Entity *entity,
 
 uint32_t get_animation_starting_frame__for_entity(Entity *entity, 
         enum Sprite_Animation_Kind kind_of_animation) {
-    debug_warning("get_animation_starting_frame__for_entity not finished.");
+    // TODO: this debug_warning is true, but annoying atm.
+    // debug_warning("get_animation_starting_frame__for_entity not finished.");
     return get_animation_starting_frame__for_humanoid_entity(entity, 
             kind_of_animation);
 }

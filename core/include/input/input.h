@@ -3,17 +3,19 @@
 
 #include <defines.h>
 
-void PLATFORM_poll_input(Input *input);
+void PLATFORM_poll_input(Game *game);
 
-void clear_input(Input *input);
+void clear_input(Game *game);
 
-bool is_input__forward(Input *input);
-bool is_input__left(Input *input);
-bool is_input__right(Input *input);
-bool is_input__backwards(Input *input);
+bool is_input__forward(Game *game);
+bool is_input__left(Game *game);
+bool is_input__right(Game *game);
+bool is_input__backwards(Game *game);
 
-bool is_input__game_settings(Input *input);
-bool is_input__inventory(Input *input);
-bool is_input__use(Input *input);
+bool is_input__game_settings(Game *game);
+bool is_input__inventory(Game *game);
+bool is_input__use(Game *game);
+
+bool is_input__none(Game *game);
 
 #endif
