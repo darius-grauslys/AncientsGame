@@ -49,6 +49,13 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
     entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
+    entity->x__chunk =
+        entity->x = 0;
+    entity->y__chunk =
+        entity->y = 0;
+    entity->z__chunk =
+        entity->z = 0;
+
     debug_warning("init_entity is not complete.");
 
     init_sprite_wrapper(
@@ -71,9 +78,6 @@ void set_entity__direction(Entity *entity,
         Direction direction) {
     if (entity->sprite_wrapper.direction == direction)
         return;
-    entity->x__velocity_accumilator = 0;
-    entity->y__velocity_accumilator = 0;
-    entity->z__velocity_accumilator = 0;
     entity->sprite_wrapper.direction = direction;
     set_animation__of_entity(entity, 
             entity->sprite_wrapper.the_kind_of_animation__this_sprite_has);
@@ -128,35 +132,23 @@ void apply_velocity_to__entity(Entity *entity,
         int32_t y__velocity,
         int32_t z__velocity) {
 
-    entity->x__velocity_accumilator
-        += x__velocity;
-    entity->y__velocity_accumilator
-        += y__velocity;
-    entity->z__velocity_accumilator
-        += z__velocity;
-
     int32_t dx, dy, dz;
-    dx = entity->x__velocity_accumilator >>
-        ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE;
-    dy = entity->y__velocity_accumilator >>
-        ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE;
-    dz = entity->z__velocity_accumilator >>
-        ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE;
 
-    entity->x += dx;
-    entity->y += dy;
-    entity->z += dz;
+    dx = ((entity->x + x__velocity) >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
+        - (entity->x >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    dy = ((entity->y + y__velocity) >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
+        - (entity->y >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    dz = ((entity->z + z__velocity) >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
+        - (entity->z >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
 
-    if (dx > 0 || dx < 0)
-        entity->x__velocity_accumilator =
-            entity->x__velocity_accumilator
-            % (1 << ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE);
-    if (dy > 0 || dy < 0)
-        entity->y__velocity_accumilator =
-            entity->y__velocity_accumilator
-            % (1 << ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE);
-    if (dz > 0 || dz < 0)
-        entity->z__velocity_accumilator =
-            entity->z__velocity_accumilator
-            % (1 << ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE);
+    entity->x += x__velocity
+        - (dx << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    entity->y += y__velocity
+        - (dy << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    entity->z += z__velocity
+        - (dz << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+
+    entity->x__chunk += dx;
+    entity->y__chunk += dy;
+    entity->z__chunk += dz;
 }

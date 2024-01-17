@@ -66,29 +66,29 @@ void controller__player(
         case DIRECTION__NORTH_EAST:
             apply_velocity_to__entity(
                     this_player,
-                    ENTITY_VELOCITY__PLAYER * 7 / 10, 
-                    ENTITY_VELOCITY__PLAYER * 7 / 10,
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL, 
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     0);
             break;
         case DIRECTION__SOUTH_EAST:
             apply_velocity_to__entity(
                     this_player,
-                    ENTITY_VELOCITY__PLAYER * 7 / 10,
-                    -(ENTITY_VELOCITY__PLAYER * 7 / 10),
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
                     0);
             break;
         case DIRECTION__SOUTH_WEST:
             apply_velocity_to__entity(
                     this_player,
-                    -(ENTITY_VELOCITY__PLAYER * 7 / 10),
-                    -(ENTITY_VELOCITY__PLAYER * 7 / 10),
+                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
+                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
                     0);
             break;
         case DIRECTION__NORTH_WEST:
             apply_velocity_to__entity(
                     this_player,
-                    -(ENTITY_VELOCITY__PLAYER * 7 / 10),
-                    ENTITY_VELOCITY__PLAYER * 7 / 10,
+                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     0);
             break;
     }

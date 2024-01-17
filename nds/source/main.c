@@ -51,13 +51,8 @@ int main(void) {
     move_chunk_manager__chunks(
             &game.chunk_manager, 
             &game.world_params, 
-            DIRECTION__SOUTH,
-            4);
-    move_chunk_manager__chunks(
-            &game.chunk_manager, 
-            &game.world_params, 
             DIRECTION__NORTH,
-            1);
+            2);
     PLATFORM_update_chunks(
             &game.gfx_context,
             &game.chunk_manager);
@@ -79,8 +74,8 @@ int main(void) {
 
 		if (is_input__game_settings(&game)) break;
 
-        int32_t dx = player.x >> 6;
-        int32_t dy = player.y >> 6;
+        int32_t dx = player.x__chunk;
+        int32_t dy = player.y__chunk;
 
         direction__move_chunks = DIRECTION__NONE;
 
@@ -117,7 +112,14 @@ int main(void) {
 		bgSetScroll(
                 game.gfx_context.active_background_ground__buffer->
                 background_index,
-                player.x, -player.y);
+                (player.x__chunk << 
+                    ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
+                    + (player.x >> 
+                        ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE), 
+                -((player.y__chunk << 
+                    ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
+                    + (player.y >> 
+                        ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)));
 		bgUpdate();
 
 		oamUpdate(&oamMain);

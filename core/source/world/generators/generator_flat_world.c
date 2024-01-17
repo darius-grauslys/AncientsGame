@@ -360,22 +360,16 @@ void chunk_generator__flat_world_f(
             // for flat_world, we will use these randomized values
             // as a sort of "moisture" level.
 
-            // random__results[index]
-            //     .random__result__greater =
-            //     random__results[index]
-            //     .random__result__greater / (1<<7) % 5;
             random__results[index]
                 .random__result__greater =
                 random__results[index]
                 .random__result__greater % 5;
-            // random__results[index]
-            //     .random__result__local =
-            //     random__results[index]
-            //     .random__result__local / (1<<7) % 5;
+
             random__results[index]
                 .random__result__local =
                 random__results[index]
                 .random__result__local % 5;
+
             random__results[index]
                 .random__result__local = 
                 (random__results[index].random__result__greater * 3

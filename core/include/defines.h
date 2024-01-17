@@ -187,10 +187,8 @@ typedef struct Entity_t {
     m_entity_controller     controller_handler;
 
     uint32_t                entity_flags;
-    int32_t                 x, y, z;
-    int16_t                 x__velocity_accumilator, 
-                            y__velocity_accumilator,
-                            z__velocity_accumilator;
+    int32_t x__chunk, y__chunk, z__chunk;
+    int32_t x, y, z;
 
     enum Entity_Kind        the_kind_of_entity__this_entity_is;
     union {
@@ -198,9 +196,13 @@ typedef struct Entity_t {
     };
 } Entity;
 
-#define ENTITY_VELOCITY_ACUMMILATOR__BIT_SIZE 4
+#define ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE 6
+#define ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE 4
+#define ENTITY_CHUNK_FRACTIONAL__BIT_SIZE \
+    (ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE \
+     + ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE)
 // 1.5 pixels.
-#define ENTITY_VELOCITY__PLAYER 0b11000
+#define ENTITY_VELOCITY__PLAYER          0b11000
 #define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b10010
 
 typedef struct Entity_Manager_t Entity_Manager;
