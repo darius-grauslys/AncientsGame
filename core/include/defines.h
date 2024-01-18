@@ -259,6 +259,8 @@ typedef struct Collision_Manager__Layer_Three_t {
     Collision_Manager__Collision_Node collision_node__top_right;
     Collision_Manager__Collision_Node collision_node__bottom_left;
     Collision_Manager__Collision_Node collision_node__bottom_right;
+
+    int32_t x__center_chunk, y__center_chunk;
 } Collision_Manager__Layer_Three;
 
 typedef struct Collision_Manager__Layer_Two_t {
@@ -266,19 +268,21 @@ typedef struct Collision_Manager__Layer_Two_t {
     Collision_Manager__Layer_Three layer_three__top_right;
     Collision_Manager__Layer_Three layer_three__bottom_left;
     Collision_Manager__Layer_Three layer_three__bottom_right;
+
+    int32_t x__center_chunk, y__center_chunk;
 } Collision_Manager__Layer_Two;
 
-typedef struct Collision_Manager__Layer_One_t {
+typedef struct Collision_Manager__t {
+    Collision_Manager__Collision_Node collision_nodes[
+        CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
+
     Collision_Manager__Layer_Two layer_two__top_left;
     Collision_Manager__Layer_Two layer_two__top_right;
     Collision_Manager__Layer_Two layer_two__bottom_left;
     Collision_Manager__Layer_Two layer_two__bottom_right;
-} Collision_Manager__Layer_One;
 
-typedef struct Collision_Manager_t {
+    int32_t x__center_chunk, y__center_chunk;
 } Collision_Manager;
-
-typedef unsigned short USER_ID;
 
 typedef struct Game_t Game;
 
@@ -585,12 +589,17 @@ typedef uint32_t Texture_Flags;
 /// GAME
 ///
 
+typedef struct World_t {
+    Entity_Manager entity_manager;
+    Chunk_Manager chunk_manager;
+    Collision_Manager collision_manager;
+    World_Parameters world_params;
+} World;
+
 typedef struct Game_t {
     Input input;
-    World_Parameters world_params;
-    Chunk_Manager chunk_manager;
     PLATFORM_Gfx_Context gfx_context;
-    Entity_Manager entity_manager;
+    World world;
 
     uint32_t tick;
 } Game;

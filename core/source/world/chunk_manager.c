@@ -115,7 +115,7 @@ uint32_t get_chunk_index__from_chunk_xy(
                 ->chunk_map_node__most_south_eastern->chunk__here->y) {
         debug_error("chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
-        return &chunk_manager->chunks[0];
+        return 0;
     }
 
     int32_t local_x =

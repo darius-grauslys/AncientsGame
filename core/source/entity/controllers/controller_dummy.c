@@ -14,7 +14,7 @@ void m_controller_for__dummy(
     if (game->tick % 50 == 0) {
         srand(game->tick + (int32_t)this_dummy);
         random__result = rand() & DIRECTION__ANY;
-        srand(game->world_params.seed__current_random);
+        srand(game->world.world_params.seed__current_random);
     }
 
     switch (random__result) {

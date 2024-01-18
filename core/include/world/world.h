@@ -1,10 +1,15 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-typedef struct World_t {
+#include <defines.h>
 
-} World;
+void init_world(World *world);
 
-Chunk* get_chunk_entity_is_in(World* world, Entity* entity);
+void add_entity_to__world(
+        World *world,
+        Entity *entity);
+
+bool poll_world_for__scrolling(
+        World *world);
 
 #endif

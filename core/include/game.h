@@ -8,6 +8,8 @@
 
 #include <defines.h>
 
+void init_game(Game *game);
+
 void manage_game(Game *game);
 
 void PLATFORM_pre_render(Game *game);
