@@ -44,17 +44,15 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #endif
 
 #ifndef PLATFORM__ENTITIES
-#define ENTITY_MAXIMUM__QUANTITY_OF 128
-#define ENTITY_PLAYER_MAXIMUM__QUANTITY_OF 8
-#define ENTITY_NPC_MAXIMUM__QUANTITY_OF 48
-#define ENTITY_PROJECTILE_MAXIMUM__QUANTITY_OF 72
-
-#define ENTITY_MANAGER__COLLISION_NODE_QUANTITY_OF__ENTITIES 8
-#define ENTITY_MANAGER_QUANTITY_OF__COLISION_NODES \
-    ((ENTITY_PLAYER_MAXIMUM__QUANTITY_OF \
-     + ENTITY_NPC_MAXIMUM__QUANTITY_OF) \
-     / ENTITY_MANAGER__COLLISION_NODE_QUANTITY_OF__ENTITIES) 
+#define ENTITY_MAXIMUM_QUANTITY_OF 128
+#define ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS 8
+#define ENTITY_MAXIMUM_QUANTITY_OF__NPCS 48
+#define ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES 72
 #endif
+
+#define ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE \
+    (ENTITY_MAXIMUM_QUANTITY_OF__NPCS \
+    + ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS)
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -235,7 +233,8 @@ typedef struct Entity_t {
 #define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b1001
 
 typedef struct Entity_Manager_t {
-    Entity entities[ENTITY_MAXIMUM__QUANTITY_OF];
+    Entity entities[ENTITY_MAXIMUM_QUANTITY_OF];
+    Entity *local_player;
     uint32_t entity_count;
 } Entity_Manager;
 
@@ -244,7 +243,37 @@ typedef struct Entity_Manager_t {
 /// so there is no header files supporting it.
 ///
 typedef struct Collision_Manager__Collision_Node_t {
-} Entity_Manager__Collision_Node;
+    Entity *entity_ptrs[ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE];
+
+    struct Collision_Manager__Collision_Node_t *collision_node__north;
+    struct Collision_Manager__Collision_Node_t *collision_node__east;
+    struct Collision_Manager__Collision_Node_t *collision_node__south;
+    struct Collision_Manager__Collision_Node_t *collision_node__west;
+} Collision_Manager__Collision_Node;
+
+///
+/// 4 Collision Nodes per layer 3 node.
+///
+typedef struct Collision_Manager__Layer_Three_t {
+    Collision_Manager__Collision_Node collision_node__top_left;
+    Collision_Manager__Collision_Node collision_node__top_right;
+    Collision_Manager__Collision_Node collision_node__bottom_left;
+    Collision_Manager__Collision_Node collision_node__bottom_right;
+} Collision_Manager__Layer_Three;
+
+typedef struct Collision_Manager__Layer_Two_t {
+    Collision_Manager__Layer_Three layer_three__top_left;
+    Collision_Manager__Layer_Three layer_three__top_right;
+    Collision_Manager__Layer_Three layer_three__bottom_left;
+    Collision_Manager__Layer_Three layer_three__bottom_right;
+} Collision_Manager__Layer_Two;
+
+typedef struct Collision_Manager__Layer_One_t {
+    Collision_Manager__Layer_Two layer_two__top_left;
+    Collision_Manager__Layer_Two layer_two__top_right;
+    Collision_Manager__Layer_Two layer_two__bottom_left;
+    Collision_Manager__Layer_Two layer_two__bottom_right;
+} Collision_Manager__Layer_One;
 
 typedef struct Collision_Manager_t {
 } Collision_Manager;
@@ -562,8 +591,6 @@ typedef struct Game_t {
     Chunk_Manager chunk_manager;
     PLATFORM_Gfx_Context gfx_context;
     Entity_Manager entity_manager;
-
-    Entity *local_player;
 
     uint32_t tick;
 } Game;

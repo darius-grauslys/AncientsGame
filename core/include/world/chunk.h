@@ -14,7 +14,7 @@ void init_chunk(Chunk *chunk, int32_t x, int32_t y);
 /// Implementation should store tiles sequentially in memory.
 /// So, x=0, y=0, z=0 gets us the first tile in memory.
 ///
-void set_tile_of_chunk(Chunk* chunk, 
+void set_tile_of__chunk(Chunk* chunk, 
         int32_t x, int32_t y, int32_t z, 
         Tile* tile);
 
@@ -23,7 +23,7 @@ void set_tile_of_chunk(Chunk* chunk,
 /// Implementation should store tiles sequentially in memory.
 /// So, x=0, y=0, z=0 gets us the first tile in memory.
 ///
-Tile* get_tile_from_chunk(Chunk *chunk, 
+Tile* get_tile_from__chunk(Chunk *chunk, 
         int32_t x, int32_t y, int32_t z);
 
 #endif

@@ -39,12 +39,9 @@ int main(void) {
             m_controller_for__dummy;
     }
 
-    game.local_player = get_new__player(&game.entity_manager);
-    set_entity__is_not_updating_position(game.local_player);
+    get_new__player(&game.entity_manager, true);
 
-    game.local_player->controller_handler =
-        m_controller_for__player;
-    set_entity__armor(game.local_player,
+    set_entity__armor(game.entity_manager.local_player,
             Entity_Armor_Kind__Cloth,
             Entity_Armor_Modification_Kind__None);
 

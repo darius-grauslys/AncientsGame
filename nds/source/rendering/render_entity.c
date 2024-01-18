@@ -12,7 +12,7 @@ void PLATFORM_render_entity(
     PLATFORM_Sprite *sprite =
         &entity->sprite_wrapper.sprite;
 
-    Entity *local_player = game->local_player;
+    Entity *local_player = game->entity_manager.local_player;
 
     if (is_entity_not__updating_position(entity)) {
         oamSetXY(

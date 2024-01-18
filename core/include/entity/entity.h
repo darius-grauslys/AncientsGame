@@ -42,6 +42,12 @@ static void inline set_entity__is_not_updating_graphics(Entity *entity) {
     entity->entity_flags |= ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS;
 }
 
+static void inline set_entity__controller(
+        Entity *entity,
+        m_entity_controller controller) {
+    entity->controller_handler = controller;
+}
+
 void init_entity(Entity *entity, enum Entity_Kind kind_of_entity);
 
 void set_entity__armor(Entity *entity,

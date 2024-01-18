@@ -7,7 +7,7 @@ void PLATFORM_pre_render(Game *game) {
 }
 void PLATFORM_post_render(Game *game) {
     Entity *player =
-        game->local_player;
+        game->entity_manager.local_player;
     bgSetScroll(
         game->gfx_context.active_background_ground__buffer->
         background_index,

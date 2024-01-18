@@ -26,8 +26,9 @@ void manage_game__post_render(Game *game) {
         poll_chunk_manager__for_chunk_movement(
             &game->chunk_manager,
             &game->world_params,
-            game->local_player->x__chunk,
-            game->local_player->y__chunk);
+            game->entity_manager.local_player->x__chunk,
+            game->entity_manager.local_player->y__chunk,
+            game->entity_manager.local_player->z__chunk);
     if (is_chunks_moved) {
         PLATFORM_update_chunks(
                 &game->gfx_context,
@@ -42,7 +43,7 @@ void manage_entities(Game *game) {
         &game->entity_manager;
 
     for (uint32_t i=0;
-            i<ENTITY_MAXIMUM__QUANTITY_OF;i++) {
+            i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         Entity *entity =
             &game->entity_manager.entities[i];
         if (!is_entity__enabled(entity)) {
