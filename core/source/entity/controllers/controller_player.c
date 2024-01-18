@@ -2,7 +2,7 @@
 #include <input/input.h>
 #include <entity/entity.h>
 
-void controller__player(
+void m_controller_for__player(
         Entity *this_player,
         Game *game) {
 

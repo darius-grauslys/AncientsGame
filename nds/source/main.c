@@ -31,19 +31,19 @@ int main(void) {
     init_chunk_manager(&game.chunk_manager,
             &game.world_params);
 
-    for (uint8_t i=0;i<16;i++) {
+    for (uint8_t i=0;i<96;i++) {
         Entity *skeleton =
-            get_new_entity(&game.entity_manager,
+            get_new__entity(&game.entity_manager,
                     Entity_Kind__Skeleton);
         skeleton->controller_handler =
-            controller__dummy;
+            m_controller_for__dummy;
     }
 
-    game.local_player = get_new_player(&game.entity_manager);
+    game.local_player = get_new__player(&game.entity_manager);
     set_entity__is_not_updating_position(game.local_player);
 
     game.local_player->controller_handler =
-        controller__player;
+        m_controller_for__player;
     set_entity__armor(game.local_player,
             Entity_Armor_Kind__Cloth,
             Entity_Armor_Modification_Kind__None);
@@ -58,6 +58,7 @@ int main(void) {
             &game.chunk_manager);
 
 	while(1) {
+        //swiWaitForVBlank();
         manage_game(&game);
         if (is_input__game_settings(&game)) break;
 	}

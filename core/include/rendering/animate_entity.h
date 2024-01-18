@@ -11,7 +11,7 @@ static uint32_t inline get_animation_frame (
         + (row * cols_per_row);
 }
 
-static uint32_t inline get_animation_frame_offset__for_cloth_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__cloth_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -21,7 +21,7 @@ static uint32_t inline get_animation_frame_offset__for_cloth_armor(Entity *entit
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED);
 }
 
-static uint32_t inline get_animation_frame_offset__for_iron_diamond_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__iron_diamond_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -31,7 +31,7 @@ static uint32_t inline get_animation_frame_offset__for_iron_diamond_armor(Entity
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED);
 }
 
-static uint32_t inline get_animation_frame_offset__for_iron_amethyst_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__iron_amethyst_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -42,7 +42,7 @@ static uint32_t inline get_animation_frame_offset__for_iron_amethyst_armor(Entit
 
 }
 
-static uint32_t inline get_animation_frame_offset__for_gold_diamond_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__gold_diamond_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -53,7 +53,7 @@ static uint32_t inline get_animation_frame_offset__for_gold_diamond_armor(Entity
 
 }
 
-static uint32_t inline get_animation_frame_offset__for_gold_amethyst_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__gold_amethyst_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -64,7 +64,7 @@ static uint32_t inline get_animation_frame_offset__for_gold_amethyst_armor(Entit
 
 }
 
-static uint32_t inline get_animation_frame_offset__for_iron_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__iron_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -75,7 +75,7 @@ static uint32_t inline get_animation_frame_offset__for_iron_armor(Entity *entity
 
 }
 
-static uint32_t inline get_animation_frame_offset__for_gold_armor(Entity *entity) {
+static uint32_t inline get_animation_frame_offset_for__gold_armor(Entity *entity) {
     return
         get_animation_frame(
                 SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID
@@ -86,35 +86,35 @@ static uint32_t inline get_animation_frame_offset__for_gold_armor(Entity *entity
 
 }
 
-uint32_t get_animation_frame_offset__for_direction(Direction direction,
+uint32_t get_animation_frame_offset_for__direction(Direction direction,
         uint32_t cols_per_row);
 
-static uint32_t inline get_animation_frame_offset__for_direction__of_humanoid_armored (
+static uint32_t inline get_animation_frame_offset_for__direction__of_humanoid_armored (
         Direction direction) {
     return 
-        get_animation_frame_offset__for_direction(direction, 
+        get_animation_frame_offset_for__direction(direction, 
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED);
 }
 
-static uint32_t inline get_animation_frame_offset__for_direction__of_humanoid_unarmored (
+static uint32_t inline get_animation_frame_offset_for__direction__of_humanoid_unarmored (
         Direction direction) {
     return 
-        get_animation_frame_offset__for_direction(direction, 
+        get_animation_frame_offset_for__direction(direction, 
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_UNARMORED);
 }
 
-uint32_t get_animation_frame_offset__for_armor(Entity *entity);
+uint32_t get_animation_frame_offset_for__armor(Entity *entity);
 
-uint32_t get_animation_starting_frame__for_humanoid_entity(Entity *entity,
+uint32_t get_animation_starting_frame_for__humanoid_entity(Entity *entity,
         enum Sprite_Animation_Kind kind_of_animation);
 
-uint32_t get_animation_starting_frame__for_entity(Entity *entity,
+uint32_t get_animation_starting_frame_for__entity(Entity *entity,
         enum Sprite_Animation_Kind kind_of_animation);
 
-void set_animation__of_entity(Entity *entity,
+void set_entity_animation(Entity *entity,
         enum Sprite_Animation_Kind kind_of_animation);
 
-void animate_entity__as_humanoid(Entity *entity);
+void animate_entity_as__humanoid(Entity *entity);
 
 void animate_entity(Entity *entity);
 

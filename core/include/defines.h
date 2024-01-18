@@ -43,6 +43,19 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
     * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
 #endif
 
+#ifndef PLATFORM__ENTITIES
+#define ENTITY_MAXIMUM__QUANTITY_OF 128
+#define ENTITY_PLAYER_MAXIMUM__QUANTITY_OF 8
+#define ENTITY_NPC_MAXIMUM__QUANTITY_OF 48
+#define ENTITY_PROJECTILE_MAXIMUM__QUANTITY_OF 72
+
+#define ENTITY_MANAGER__COLLISION_NODE_QUANTITY_OF__ENTITIES 8
+#define ENTITY_MANAGER_QUANTITY_OF__COLISION_NODES \
+    ((ENTITY_PLAYER_MAXIMUM__QUANTITY_OF \
+     + ENTITY_NPC_MAXIMUM__QUANTITY_OF) \
+     / ENTITY_MANAGER__COLLISION_NODE_QUANTITY_OF__ENTITIES) 
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -175,6 +188,14 @@ typedef void (*m_dispose_entity)    (Entity *this_entity, Game *game);
 typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
 
 ///
+/// callee_data is an opaque pointer to whatever
+/// data the user of this function pointer needs
+/// passed in addition to collided entities.
+///
+typedef void (*f_entity_collision)  (Entity *source,
+        Entity *colliding_entity, void *callee_data);
+
+///
 /// Here we define the entity super struct. It has everything we could need
 /// for an entity, even if some of the things are not used.
 ///
@@ -213,12 +234,20 @@ typedef struct Entity_t {
 #define ENTITY_VELOCITY__PLAYER          0b1100
 #define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b1001
 
-#define ENTITY_MAXIMUM__QUANTITY_OF 128
-#define ENTITY_PLAYER_MAXIMUM__QUANTITY_OF 8
-
 typedef struct Entity_Manager_t {
     Entity entities[ENTITY_MAXIMUM__QUANTITY_OF];
+    uint32_t entity_count;
 } Entity_Manager;
+
+///
+/// This type is specific to Collision_Manager,
+/// so there is no header files supporting it.
+///
+typedef struct Collision_Manager__Collision_Node_t {
+} Entity_Manager__Collision_Node;
+
+typedef struct Collision_Manager_t {
+} Collision_Manager;
 
 typedef unsigned short USER_ID;
 

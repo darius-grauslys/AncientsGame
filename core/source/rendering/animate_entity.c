@@ -3,7 +3,7 @@
 #include <rendering/animate_sprite.h>
 #include <debug/debug.h>
 
-uint32_t get_animation_frame_offset__for_direction(
+uint32_t get_animation_frame_offset_for__direction(
         Direction direction,
         uint32_t cols_per_row) {
     switch (direction) {
@@ -24,49 +24,49 @@ uint32_t get_animation_frame_offset__for_direction(
     }
 }
 
-uint32_t get_animation_frame_offset__for_armor(Entity *entity) {
+uint32_t get_animation_frame_offset_for__armor(Entity *entity) {
     switch (entity->armor_properties.the_kind_of_armor__this_armor_is) {
         default:
         case Entity_Armor_Kind__None:
             return 0;
         case Entity_Armor_Kind__Cloth:
-            return get_animation_frame_offset__for_cloth_armor(entity);
+            return get_animation_frame_offset_for__cloth_armor(entity);
         case Entity_Armor_Kind__Iron:
             switch (entity->armor_properties.the_kind_of_modification__this_armor_has) {
                 default:
                 case Entity_Armor_Modification_Kind__None:
-                    return get_animation_frame_offset__for_iron_armor(entity);
+                    return get_animation_frame_offset_for__iron_armor(entity);
                 case Entity_Armor_Modification_Kind__Diamond:
-                    return get_animation_frame_offset__for_iron_diamond_armor(entity);
+                    return get_animation_frame_offset_for__iron_diamond_armor(entity);
                 case Entity_Armor_Modification_Kind__Amethyst:
-                    return get_animation_frame_offset__for_iron_amethyst_armor(entity);
+                    return get_animation_frame_offset_for__iron_amethyst_armor(entity);
             }
         case Entity_Armor_Kind__Gold:
             switch (entity->armor_properties.the_kind_of_modification__this_armor_has) {
                 default:
                 case Entity_Armor_Modification_Kind__None:
-                    return get_animation_frame_offset__for_gold_armor(entity);
+                    return get_animation_frame_offset_for__gold_armor(entity);
                 case Entity_Armor_Modification_Kind__Diamond:
-                    return get_animation_frame_offset__for_gold_diamond_armor(entity);
+                    return get_animation_frame_offset_for__gold_diamond_armor(entity);
                 case Entity_Armor_Modification_Kind__Amethyst:
-                    return get_animation_frame_offset__for_gold_amethyst_armor(entity);
+                    return get_animation_frame_offset_for__gold_amethyst_armor(entity);
             }
             break;
     }
 }
 
-uint32_t get_animation_starting_frame__for_humanoid_entity(Entity *entity, 
+uint32_t get_animation_starting_frame_for__humanoid_entity(Entity *entity, 
         enum Sprite_Animation_Kind kind_of_animation) {
     uint32_t frame_offset = 0;
     if (can_entity_kind_have__armor(
                 entity->the_kind_of_entity__this_entity_is)) {
         frame_offset = 
-            get_animation_frame_offset__for_armor(entity)
-            + get_animation_frame_offset__for_direction__of_humanoid_armored(
+            get_animation_frame_offset_for__armor(entity)
+            + get_animation_frame_offset_for__direction__of_humanoid_armored(
                     entity->sprite_wrapper.direction);
     } else {
         frame_offset = 
-            get_animation_frame_offset__for_direction__of_humanoid_unarmored(
+            get_animation_frame_offset_for__direction__of_humanoid_unarmored(
                     entity->sprite_wrapper.direction);
     }
 
@@ -90,20 +90,20 @@ uint32_t get_animation_starting_frame__for_humanoid_entity(Entity *entity,
     }
 }
 
-uint32_t get_animation_starting_frame__for_entity(Entity *entity, 
+uint32_t get_animation_starting_frame_for__entity(Entity *entity, 
         enum Sprite_Animation_Kind kind_of_animation) {
     // TODO: this debug_warning is true, but annoying atm.
-    // debug_warning("get_animation_starting_frame__for_entity not finished.");
-    return get_animation_starting_frame__for_humanoid_entity(entity, 
+    // debug_warning("get_animation_starting_frame_for__entity not finished.");
+    return get_animation_starting_frame_for__humanoid_entity(entity, 
             kind_of_animation);
 }
 
-void set_animation__of_entity(Entity *entity,
+void set_entity_animation(Entity *entity,
         enum Sprite_Animation_Kind kind_of_animation) {
     entity->sprite_wrapper.the_kind_of_animation__this_sprite_has =
         kind_of_animation;
     entity->sprite_wrapper.frame =
-        get_animation_starting_frame__for_entity(entity,
+        get_animation_starting_frame_for__entity(entity,
                 kind_of_animation);
     PLATFORM_update_sprite_gfx__to_current_frame(&entity->sprite_wrapper);
 }
@@ -113,12 +113,12 @@ void animate_entity__as_humanoid(Entity *entity) {
     if (can_entity_kind_have__armor(
                 entity->the_kind_of_entity__this_entity_is)) {
         frame_offset = 
-            get_animation_frame_offset__for_armor(entity)
-            + get_animation_frame_offset__for_direction__of_humanoid_armored(
+            get_animation_frame_offset_for__armor(entity)
+            + get_animation_frame_offset_for__direction__of_humanoid_armored(
                     entity->sprite_wrapper.direction);
     } else {
         frame_offset = 
-            get_animation_frame_offset__for_direction__of_humanoid_unarmored(
+            get_animation_frame_offset_for__direction__of_humanoid_unarmored(
                     entity->sprite_wrapper.direction);
     }
 

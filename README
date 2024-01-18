@@ -4,15 +4,6 @@ include         -   all core header files.
 unix_opengl     -   implementation for unix opengl
 nds             -   implementation for the nintendo DS
 
-A few header files in core will not be implemented in core.
-This is the comprehensive list:
-    *   game.h
-    *   multiplayer/multiplayer.h
-    *   rendering/sprite.h
-    *   rendering/tile.h
-    *   world/chunk.h
-    *   world/chunk_manager.h
-
 -------
 
 Building:
@@ -34,16 +25,130 @@ well as establishing some environment variables.
 Always be sure to check the platform directory's README
 before building.
 
+NOTE:
+    unix_opengl does not compile at the moment.
+    I wont be working on this until after
+    the next push to master.
+
 -------
 
 Contributing:
 Whenever you make a contribution to the project, make sure
 to test your contribution within unix_opengl/test/
 
+LOL - I haven't wrote jack shit for tests yet.
+Writting tests for platform specific code isn't
+always straightforward, or even desired (go ahead and test
+all the GL calls in unix_opengl, for example.)
+
+I will write tests for core at some point, and that is
+only after I determine everything I need for core.
+
+Please use my coding style. (Or refactor all my stuff
+to your style, if you maintain your own fork.)
+
+-------
+
+Coding Paradigm:
+OOP can so easily become hot steaming garbage.
+That isn't to say it's all bad but, with that said:
+Djikstra was right. Cry about it.
+
+Honestly, OOP without inheritance/polymorphism is OKAY.
+Rust has the right idea with traits.
+You get serious problems when you express program structure
+in the form of objects. 99 times out of 100 you can express
+whatever program structure you're trying to express in the
+form of functions as opposed to methods. (functions exist outside 
+of objects, methods exist inside objects.)
+
+I have a programming language in the works,
+Xerxes, which I will present at LLVM 2024
+which intends to do what OOP wishes it could do.
+
+Imperative programming just works, and when done
+correctly, is a much easier beast to maintain.
+
+-------
+
+Coding Style:
+I'll put all relevant coding style stuff here:
+- opening delimiter of any kind is not on a new line.
+    (\n...), [\n...], {\n...}
+- imperative conditional keywords are not on new lines.
+    } else if (...) {\n...\n} else {\n ... }
+- imperative keywords and delimiters have a space prior to 
+    any sequential delimiter.
+    switch (...) {
+- when breaking out arithmetic into new lines, break the line
+    before an operator:
+    1 + 2 + 3 \n+ 4 \n*7
+    additionally, put the statement's semicolon on a new line
+    1 + 2 \n+3 + 7\n;
+    Why? Because if you had to break up arithmetic once, you
+    probably need to do it again, and often times at the end.
+    I use neovim for my editor, so I'd rather start typing away
+    immediately, instead of carefully putting my text cursor
+    before a tiny semi-colon.
+
+    This applies to boolean operators as well.
+
+-------
+
+Naming Style:
+For all symbols, every word is spaced with an underscore.
+Everything is in lower case except type names.
+
+Sometimes there is two underscores instead of one, here is
+the cases where you should put two instead of one:
+
+Examples:
+[verb]_[noun_noun_..._noun]_[as|of|for|have]__[...]
+update_entity_animation_as__humanoid(...);
+get_entity_animation_frame__last_frame_of__walk(...);
+get_entity_animation_frame_offset_for__iron_armor(...);
+
+- use as, when the prior noun is assumed to be in a particular state.
+    (in this case, entity is assumed to be a humanoid.)
+
+- use of, when the prior noun is being extracted from a collection.
+
+- use for, when the prior noun is in relation to some context.
+
+- use have, for a boolean returning function when checking if
+    the noun can have the following noun/verb.
+
+Regarding function pointers:
+All function pointers require typedefs.
+If a function pointer is meant to live inside a struct,
+typedef like so:
+    m_[normal_naming_convention]
+Otherwise like so:
+    f_[normal_naming_convention]
+If your function pointer is a member of a struct
+and doesn't intend to take THAT STRUCT as an argument
+you should reconsider what you're doing fundamentally.
+IE, maybe this function pointer shouldn't live in that struct?
+
+When you write a m_function_pointer, the FIRST
+argument should be the type of the struct it resides in
+and the name of that argument MUST be prefixed with "this."
+Additionally, treat that function pointer as a noun, for example:
+    m_controller_for__player(...);
+
+When it comes to file names:
+Only use nouns, and never use more than one underscore between
+nouns.
+
+Don't break a sweat over this stuff, just try your best.
+At the end of the day, focus on being productive, you can
+always refactor code when you don't know what to do during
+break time.
+
 -------
 
 Testing:
-All game logic testing will occur in unix_opengl.
+All game logic testing will occur in core.
 All other platform directories will only have testing
 for platform specific logic (as seen in the above list.)
 
@@ -62,13 +167,21 @@ This project is my first serious attempt to learn and use Makefile.
 As a result the Makefiles will have a LOT of comments (maybe helpful to you
 if you are learning aswell.)
 
+^ This is a lie, I will go back and add comments later.
+
 In short, the libnds Makefile relies on recurison, and so will the Makefiles
-in this project. It works. That's all I'll say in advocation of a recursive build system. Personally, I think using recursion is a pretty poor idea for project maintenance but it is what it is. I think this is one reason why Cmake is a better option overall.
+in this project. It works. That's all I'll say in advocation of a recursive 
+build system. Personally, I think using recursion is a pretty poor idea for 
+project maintenance but it is what it is. I think this is one reason why Cmake 
+is a better option overall.
 
 -------
 
 Build Configuration:
-Use the FLAGS Makefile variable override to get the job done.
+-e GENERATE_COMPILE_COMMANDS    -   This should produce a compile_commands.json file
+                                    the target platform's build directory.
+
+Use the FLAGS Makefile variable override to pass flags to gcc.
 For example, if we want to define NDEBUG for unix_opengl, do the following:
 make unix_opengl -e FLAGS="-DNDEBUG"
 

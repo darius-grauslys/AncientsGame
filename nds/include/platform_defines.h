@@ -49,6 +49,22 @@
         CHUNK_WIDTH__IN_TILES)
 
 /*****************************************************
+ *  ENTITIES
+ *****************************************************/
+
+#define PLATFORM__ENTITIES
+#define ENTITY_MAXIMUM__QUANTITY_OF 128
+#define ENTITY_PLAYER_MAXIMUM__QUANTITY_OF 8
+#define ENTITY_NPC_MAXIMUM__QUANTITY_OF 48
+#define ENTITY_PROJECTILE_MAXIMUM__QUANTITY_OF 72
+
+#define ENTITY_MANAGER__COLLISION_NODE_QUANTITY_OF__ENTITIES 8
+#define ENTITY_MANAGER_QUANTITY_OF__COLISION_NODES \
+    ((ENTITY_PLAYER_MAXIMUM__QUANTITY_OF \
+     + ENTITY_NPC_MAXIMUM__QUANTITY_OF) \
+     / ENTITY_MANAGER__COLLISION_NODE_QUANTITY_OF__ENTITIES) 
+
+/*****************************************************
  *  TILES
  *****************************************************/
 
@@ -134,86 +150,86 @@ typedef struct PLATFORM_Texture_t {
     (flags & TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB)
 
 #define USE_TEXTURE_FLAGS__OAM__8x8(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x8 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x8))
 
 #define USE_TEXTURE_FLAGS__OAM__8x16(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x8 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x16))
 
 #define USE_TEXTURE_FLAGS__OAM__8x32(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x8 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__16x8(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x16 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x8))
 
 #define USE_TEXTURE_FLAGS__OAM__16x16(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x16 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x16))
 
 #define USE_TEXTURE_FLAGS__OAM__16x32(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x16 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__32x8(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x8))
 
 #define USE_TEXTURE_FLAGS__OAM__32x16(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x16))
 
 #define USE_TEXTURE_FLAGS__OAM__32x32(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__32x64(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x32 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x64))
 
 #define USE_TEXTURE_FLAGS__OAM__64x32(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x64 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x32))
 
 #define USE_TEXTURE_FLAGS__OAM__64x64(main_or_sub) \
-    ((TEXTURE_FLAG__USE_OAM & \
+    (TEXTURE_FLAG__USE_OAM | \
      (main_or_sub << \
-      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX)) | \
+      TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB__BIT_INDEX) | \
      (TEXTURE_FLAG__LENGTH_x64 << TEXTURE_FLAG__LENGTH__BIT_COUNT) | \
      (TEXTURE_FLAG__LENGTH_x64))
 

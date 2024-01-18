@@ -123,8 +123,8 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
     // vramSetBankE(VRAM_E_BG_EXT_PALETTE);     // for main engine
     // vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE); // for sub engine
 
-	oamInit(&oamMain, SpriteMapping_1D_128, true);
-	oamInit(&oamSub, SpriteMapping_1D_128, true);
+	oamInit(&oamMain, SpriteMapping_1D_256, true);
+	oamInit(&oamSub, SpriteMapping_1D_256, true);
 }
 
 void PLATFORM_update_chunks(

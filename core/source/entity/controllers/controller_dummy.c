@@ -1,7 +1,7 @@
 #include <entity/controllers/controller_dummy.h>
 #include <entity/entity.h>
 
-void controller__dummy(
+void m_controller_for__dummy(
         Entity *this_dummy,
         Game *game) {
 

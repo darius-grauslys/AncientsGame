@@ -72,7 +72,7 @@ void set_entity__armor(Entity *entity,
         kind_of_armor;
     entity->armor_properties.the_kind_of_modification__this_armor_has =
         kind_of_armor_modification;
-    set_animation__of_entity(entity,
+    set_entity_animation(entity,
             entity->sprite_wrapper.the_kind_of_animation__this_sprite_has);
 }
 
@@ -81,7 +81,7 @@ void set_entity__direction(Entity *entity,
     if (entity->sprite_wrapper.direction == direction)
         return;
     entity->sprite_wrapper.direction = direction;
-    set_animation__of_entity(entity, 
+    set_entity_animation(entity, 
             entity->sprite_wrapper.the_kind_of_animation__this_sprite_has);
 }
 
@@ -115,11 +115,11 @@ void set_entity_as__moving(Entity *entity,
 
     if (is_entity__humanoid(entity->the_kind_of_entity__this_entity_is)) {
         if (state_of_movement) {
-            set_animation__of_entity(
+            set_entity_animation(
                     entity,
                     Sprite_Animation_Kind__Humanoid__Walk);
         } else {
-            set_animation__of_entity(
+            set_entity_animation(
                     entity,
                     Sprite_Animation_Kind__Idle);
         }

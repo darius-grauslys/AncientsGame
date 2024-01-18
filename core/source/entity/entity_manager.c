@@ -3,7 +3,14 @@
 #include <entity/entity.h>
 #include <debug/debug.h>
 
-Entity *get_new_player(Entity_Manager* manager) {
+void init_entity_manager(Entity_Manager *entity_manager) {
+    entity_manager->entity_count = 0;
+    for (uint32_t i=0;i<ENTITY_MAXIMUM__QUANTITY_OF;i++) {
+        set_entity__disabled(&entity_manager->entities[i]);
+    }
+}
+
+Entity *get_new__player(Entity_Manager* manager) {
     for (uint32_t i=0;i<ENTITY_PLAYER_MAXIMUM__QUANTITY_OF;i++) {
         if (!is_entity__enabled(&manager->entities[i])) {
             init_entity(&manager->entities[i],
@@ -17,7 +24,7 @@ Entity *get_new_player(Entity_Manager* manager) {
     return 0;
 }
 
-Entity *get_new_entity(Entity_Manager* manager,
+Entity *get_new__entity(Entity_Manager* manager,
         enum Entity_Kind kind_of_entity) {
     for (uint32_t i=
             ENTITY_PLAYER_MAXIMUM__QUANTITY_OF;

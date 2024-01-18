@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-void controller__dummy(
+void m_controller_for__dummy(
         Entity *this_dummy,
         Game *game);
 

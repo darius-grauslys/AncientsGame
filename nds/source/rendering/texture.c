@@ -2,8 +2,6 @@
 #include <debug/debug.h>
 #include <nds.h>
 
-uint32_t current_oam_index = 0;
-
 void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
     texture->gfx = 0;
     texture->width =
@@ -103,10 +101,8 @@ void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
         texture->oam = &oamSub;
     }
 
-    debug_warning("oam id setting is not robust.");
-    texture->oam_index = current_oam_index;
-    current_oam_index++;
 	texture->gfx = oamAllocateGfx(texture->oam, sprite_size, SpriteColorFormat_256Color);
+    texture->oam_index = oamGfxPtrToOffset(texture->oam, texture->gfx);
 
     return;
 _abort:

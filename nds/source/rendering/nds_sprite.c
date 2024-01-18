@@ -17,8 +17,8 @@ void PLATFORM_init_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
 void PLATFORM_init_sprite(
         PLATFORM_Sprite *sprite,
         Entity *entity) {
-    debug_warning("PLATFORM_init_sprite is not finished yet: \
-            doesn't support oamSub.");
+    // debug_warning("PLATFORM_init_sprite is not finished yet: \
+    //         doesn't support oamSub.");
     uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);
     switch (entity->the_kind_of_entity__this_entity_is) {

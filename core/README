@@ -12,8 +12,3 @@ in header files:
 
 in source files:
     invocation to a platform defined signature.
-
-NOTE:
-    unix_opengl does not compile at the moment.
-    I wont be working on this until after
-    the next push to master.
