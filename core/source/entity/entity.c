@@ -49,12 +49,12 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
     entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    entity->x__chunk =
-        entity->x = 0;
-    entity->y__chunk =
-        entity->y = 0;
-    entity->z__chunk =
-        entity->z = 0;
+    entity->hitbox.x__chunk =
+        entity->hitbox.x = 0;
+    entity->hitbox.y__chunk =
+        entity->hitbox.y = 0;
+    entity->hitbox.z__chunk =
+        entity->hitbox.z = 0;
 
     set_entity__enabled(entity);
     set_entity__is_updating_position(entity);
@@ -127,30 +127,4 @@ void set_entity_as__moving(Entity *entity,
     }
 
     debug_warning("unhandled case in: set_entity_as__moving");
-}
-
-void apply_velocity_to__entity(Entity *entity,
-        int32_t x__velocity,
-        int32_t y__velocity,
-        int32_t z__velocity) {
-
-    int32_t dx, dy, dz;
-
-    dx = ((entity->x + x__velocity) >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (entity->x >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dy = ((entity->y + y__velocity) >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (entity->y >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dz = ((entity->z + z__velocity) >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (entity->z >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-
-    entity->x += x__velocity
-        - (dx << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    entity->y += y__velocity
-        - (dy << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    entity->z += z__velocity
-        - (dz << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-
-    entity->x__chunk += dx;
-    entity->y__chunk += dy;
-    entity->z__chunk += dz;
 }

@@ -216,6 +216,9 @@ typedef struct Hitbox_AABB_t {
     // Entities can't co-exist in the same tile
     // but they can stand on top of one in an
     // above tile.
+    int32_t x__chunk, y__chunk, z__chunk;
+    int32_t x, y, z;
+    int32_t x__global, y__global, z__global;
 } Hitbox_AABB;
 
 typedef struct Entity_t {
@@ -229,8 +232,6 @@ typedef struct Entity_t {
     Hitbox_AABB hitbox;
 
     uint32_t                entity_flags;
-    int32_t x__chunk, y__chunk, z__chunk;
-    int32_t x, y, z;
 
     enum Entity_Kind        the_kind_of_entity__this_entity_is;
     union {

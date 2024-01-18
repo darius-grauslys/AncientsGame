@@ -65,9 +65,4 @@ void set_entity_as__moving(Entity *entity,
         bool state_of_movement,
         enum Sprite_Animation_Kind fallback_animation);
 
-void apply_velocity_to__entity(Entity *entity,
-        int32_t x__velocity,
-        int32_t y__velocity,
-        int32_t z__velocity);
-
 #endif

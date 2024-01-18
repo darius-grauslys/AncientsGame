@@ -1,6 +1,7 @@
 #include <rendering/render_entity.h>
 #include <entity/entity.h>
 #include <nds.h>
+#include <collisions/hitbox_aabb.h>
 
 void PLATFORM_render_entity(
         Entity *entity,
@@ -23,14 +24,10 @@ void PLATFORM_render_entity(
         oamSetXY(
             sprite->sprite_texture.oam, 
             sprite->sprite_texture.oam_index, 
-            ((entity->x__chunk - local_player->x__chunk) << 
-                ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-                + ((entity->x - local_player->x) >> 
-                    ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE), 
-            -(((entity->y__chunk - local_player->y__chunk) << 
-                ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-                + ((entity->y - local_player->y) >> 
-                    ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
+            get_global_x_from__hitbox(&entity->hitbox)
+                - get_global_x_from__hitbox(&local_player->hitbox),
+            -(get_global_y_from__hitbox(&entity->hitbox)
+                - get_global_y_from__hitbox(&local_player->hitbox))
             );
     }
 

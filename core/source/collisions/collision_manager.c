@@ -1,5 +1,6 @@
 #include <collisions/collision_manager.h>
 #include <debug/debug.h>
+#include <collisions/hitbox_aabb.h>
 
 ///
 /// (0,7)    (1.5,7)                (4.5,7)
@@ -326,8 +327,8 @@ Collision_Manager__Collision_Node
     Collision_Manager__Layer_Two *layer_two;
 
     int32_t x__entity_chunk, y__entity_chunk;
-    x__entity_chunk = entity->x__chunk;
-    y__entity_chunk = entity->y__chunk;
+    x__entity_chunk = entity->hitbox.x__chunk;
+    y__entity_chunk = entity->hitbox.y__chunk;
 
     if (x__entity_chunk <
             collision_manager->x__center_chunk) {
@@ -402,11 +403,9 @@ Collision_Manager__Collision_Node
 bool is_this_entity_colliding_into__this_entity(
         Entity *entity_collision_source,
         Entity *entity_collided) {
-    //TODO: actually implement this :)
-    debug_warning("is_this_entity_colliding_into__this_entity \
-is not implemented.");
-
-    return false;
+    return is_hitboxes__overlapping(
+            &entity_collision_source->hitbox, 
+            &entity_collided->hitbox);
 }
 
 void check_collision_node_for__collisions(

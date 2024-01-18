@@ -1,5 +1,6 @@
 #include <entity/controllers/controller_dummy.h>
 #include <entity/entity.h>
+#include <collisions/hitbox_aabb.h>
 
 void m_controller_for__dummy(
         Entity *this_dummy,
@@ -25,50 +26,50 @@ void m_controller_for__dummy(
                     Sprite_Animation_Kind__Idle);
             return;
         case DIRECTION__NORTH:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     0, ENTITY_VELOCITY__PLAYER,
                     0);
             break;
         case DIRECTION__EAST:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     ENTITY_VELOCITY__PLAYER,
                     0, 0);
             break;
         case DIRECTION__SOUTH:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     0, -ENTITY_VELOCITY__PLAYER,
                     0);
             break;
         case DIRECTION__WEST:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     -ENTITY_VELOCITY__PLAYER,
                     0, 0);
             break;
         case DIRECTION__NORTH_EAST:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
             break;
         case DIRECTION__SOUTH_EAST:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     -ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
             break;
         case DIRECTION__SOUTH_WEST:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     -ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     -ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
             break;
         case DIRECTION__NORTH_WEST:
-            apply_velocity_to__entity(
-                    this_dummy,
+            apply_velocity_to__hitbox(
+                    &this_dummy->hitbox,
                     -ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
             break;
