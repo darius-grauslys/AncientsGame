@@ -2,6 +2,7 @@
 #include <debug/debug.h>
 #include <rendering/sprite.h>
 #include <rendering/animate_entity.h>
+#include <collisions/hitbox_aabb.h>
 
 #include <debug/debug.h>
 
@@ -127,4 +128,32 @@ void set_entity_as__moving(Entity *entity,
     }
 
     debug_warning("unhandled case in: set_entity_as__moving");
+}
+
+void apply_velocity_to__entity(
+        Game *game,
+        Entity *entity,
+        int32_t x__velocity,
+        int32_t y__velocity,
+        int32_t z__velocity) {
+    int32_t old_x__chunk = entity->hitbox.x__chunk;
+    int32_t old_y__chunk = entity->hitbox.y__chunk;
+
+    apply_velocity_to__hitbox(
+            &entity->hitbox, 
+            x__velocity, 
+            y__velocity,
+            z__velocity);
+
+    if (old_x__chunk != entity->hitbox.x__chunk 
+            || old_y__chunk != entity->hitbox.y__chunk) {
+        if (entity->chunk_transition_handler) {
+            entity->chunk_transition_handler(
+                    entity,
+                    game,
+                    old_x__chunk,
+                    old_y__chunk
+                    );
+        }
+    }
 }

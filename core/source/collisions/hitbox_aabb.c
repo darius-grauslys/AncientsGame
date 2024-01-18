@@ -1,4 +1,5 @@
 #include <collisions/hitbox_aabb.h>
+#include <debug/debug.h>
 
 int32_t get_global_x_from__hitbox(
         Hitbox_AABB *hitbox) {
@@ -26,6 +27,31 @@ int32_t get_global_z_from__hitbox(
         + ((hitbox->z) >> 
             ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
 }
+
+int32_t set_hitbox__position(
+        Hitbox_AABB *hitbox,
+        int32_t x__global,
+        int32_t y__global,
+        int32_t z__global) {
+    hitbox->x__chunk = x__global 
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+    hitbox->y__chunk = y__global 
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+    hitbox->z__chunk = z__global 
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+
+    hitbox->x = x__global &
+        ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK;
+    hitbox->y = y__global &
+        ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK;
+    hitbox->z = z__global &
+        ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK;
+
+    hitbox->x__global= x__global;
+    hitbox->y__global= y__global;
+    hitbox->z__global= z__global;
+}
+
 
 void apply_velocity_to__hitbox(
         Hitbox_AABB *hitbox,

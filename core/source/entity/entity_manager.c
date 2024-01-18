@@ -12,34 +12,15 @@ void init_entity_manager(Entity_Manager *entity_manager) {
     }
 }
 
-Entity *get_new__player(Entity_Manager* entity_manager,
-        bool is_local_player) {
-    for (uint32_t i=0;i<ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS;i++) {
-        if (!is_entity__enabled(&entity_manager->entities[i])) {
-            init_entity(&entity_manager->entities[i],
-                    Entity_Kind__Player);
-            if (is_local_player) {
-                entity_manager->local_player =
-                    &entity_manager->entities[i];
-                set_entity__is_not_updating_position(
-                        entity_manager->local_player);
-                set_entity__controller(
-                        entity_manager->local_player,
-                        m_controller_for__player);
-            }
-            return &entity_manager->entities[i];
-        }
-    }
-
-    debug_error("Failed to allocate new entity.");
-
-    return 0;
-}
-
-Entity *get_new__entity(Entity_Manager* entity_manager,
+Entity *allocate__entity(Entity_Manager* entity_manager,
         enum Entity_Kind kind_of_entity) {
-    for (uint32_t i=
-            ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS;
+    uint32_t start = 0;
+    if (kind_of_entity == Entity_Kind__Player) {
+        start =0;
+    } else {
+        start = ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS;
+    }
+    for (uint32_t i = start;
             i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         if (!is_entity__enabled(&entity_manager->entities[i])) {
             init_entity(&entity_manager->entities[i],

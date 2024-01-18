@@ -36,6 +36,15 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #define CHUNK__QUANTITY_OF_TILES (CHUNK__WIDTH * \
         CHUNK__HEIGHT * CHUNK__DEPTH)
 
+///
+/// Note, both  CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
+/// and         CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS
+///
+/// must equal one another. These two only exist to remind
+/// the programmer if we are moving along COLS or ROWS.
+///
+/// That also means YOU should use these appropriately.
+///
 #define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 8
 #define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS 8
 #define CHUNK_MANAGER__QUANTITY_OF_CHUNKS \
@@ -184,13 +193,15 @@ typedef struct Inventory_t Inventory;
 
 typedef void (*m_dispose_entity)    (Entity *this_entity, Game *game);
 typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
+typedef void (*m_entity_chunk_transitioner) (Entity *this_entity, Game *game,
+        int32_t old_x__chunk, int32_t old_y__chunk);
 
 ///
 /// callee_data is an opaque pointer to whatever
 /// data the user of this function pointer needs
 /// passed in addition to collided entities.
 ///
-typedef void (*f_entity_collision)  (Entity *entity_collision_source,
+typedef void (*m_entity_collision)  (Entity *entity_collision_source,
         Entity *entity_collided);
 
 ///
@@ -204,6 +215,8 @@ typedef void (*f_entity_collision)  (Entity *entity_collision_source,
     (ENTITY_FLAG__IS_ENABLED << 1)
 #define ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS \
     (ENTITY_FLAG__IS_NOT_UPDATING_POSITION << 1)
+#define ENTITY_FLAG__IS_COLLIDING \
+    (ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS << 1)
 
 typedef struct Hitbox_AABB_t {
     uint32_t width;
@@ -225,9 +238,12 @@ typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
 
     // DO NOT INVOKE! Called automatically in release_entity(...)
-    m_dispose_entity        dispose_handler;
+    m_dispose_entity            dispose_handler;
     // DO NOT INVOKE! Called automatically
-    m_entity_controller     controller_handler;
+    m_entity_controller         controller_handler;
+    // DO NOT INVOKE! Called automatically
+    m_entity_chunk_transitioner chunk_transition_handler;
+    m_entity_collision          collision_handler;
 
     Hitbox_AABB hitbox;
 
@@ -240,6 +256,7 @@ typedef struct Entity_t {
 } Entity;
 
 #define ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE 6
+#define ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK ((1 << 7) -1)
 #define ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE 4
 #define ENTITY_CHUNK_FRACTIONAL__BIT_SIZE \
     (ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE \
@@ -265,6 +282,8 @@ typedef struct Collision_Manager__Collision_Node_t {
     struct Collision_Manager__Collision_Node_t *collision_node__east;
     struct Collision_Manager__Collision_Node_t *collision_node__south;
     struct Collision_Manager__Collision_Node_t *collision_node__west;
+
+    Direction legal_directions;
 } Collision_Manager__Collision_Node;
 
 ///
@@ -296,6 +315,8 @@ typedef struct Collision_Manager__t {
     Collision_Manager__Layer_Two layer_two__top_right;
     Collision_Manager__Layer_Two layer_two__bottom_left;
     Collision_Manager__Layer_Two layer_two__bottom_right;
+
+    Collision_Manager__Collision_Node *most_north_western__node;
 
     int32_t x__center_chunk, y__center_chunk;
 } Collision_Manager;

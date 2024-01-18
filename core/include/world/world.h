@@ -10,6 +10,7 @@ void add_entity_to__world(
         Entity *entity);
 
 bool poll_world_for__scrolling(
-        World *world);
+        World *world,
+        Game *game);
 
 #endif

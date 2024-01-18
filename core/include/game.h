@@ -20,4 +20,15 @@ void manage_game__post_render(Game *game);
 void manage_entities(Game *game);
 void release_entity(Game *game, Entity *entity);
 
+Entity *get_new__player(Game *game, 
+        bool is_local_player,
+        int32_t x__global,
+        int32_t y__global,
+        int32_t z__global);
+Entity *get_new__entity(Game *game, 
+        enum Entity_Kind kind_of_entity,
+        int32_t x__global,
+        int32_t y__global,
+        int32_t z__global);
+
 #endif

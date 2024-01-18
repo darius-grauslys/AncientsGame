@@ -24,22 +24,6 @@ void init_world(World *world) {
 
     debug_warning("Some things in init_world are \
             inappropriate.");
-
-    //TEMP:
-
-    for (uint8_t i=0;i<96;i++) {
-        Entity *skeleton =
-            get_new__entity(&world->entity_manager,
-                    Entity_Kind__Skeleton);
-        skeleton->controller_handler =
-            m_controller_for__dummy;
-    }
-
-    get_new__player(&world->entity_manager, true);
-
-    set_entity__armor(world->entity_manager.local_player,
-            Entity_Armor_Kind__Cloth,
-            Entity_Armor_Modification_Kind__None);
 }
 
 void add_entity_to__world(
@@ -51,7 +35,8 @@ void add_entity_to__world(
 }
 
 bool poll_world_for__scrolling(
-        World *world) {
+        World *world,
+        Game *game) {
     bool is_chunks_moved =
         poll_chunk_manager__for_chunk_movement(
             &world->chunk_manager,
@@ -63,7 +48,8 @@ bool poll_world_for__scrolling(
     if (is_chunks_moved) {
         update_collision_manager(
                 &world->collision_manager, 
-                world);
+                world,
+                game);
     }
 
     return is_chunks_moved;
