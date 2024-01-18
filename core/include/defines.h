@@ -190,8 +190,8 @@ typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
 /// data the user of this function pointer needs
 /// passed in addition to collided entities.
 ///
-typedef void (*f_entity_collision)  (Entity *source,
-        Entity *colliding_entity, void *callee_data);
+typedef void (*f_entity_collision)  (Entity *entity_collision_source,
+        Entity *entity_collided);
 
 ///
 /// Here we define the entity super struct. It has everything we could need
@@ -205,6 +205,19 @@ typedef void (*f_entity_collision)  (Entity *source,
 #define ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS \
     (ENTITY_FLAG__IS_NOT_UPDATING_POSITION << 1)
 
+typedef struct Hitbox_AABB_t {
+    uint32_t width;
+    uint32_t length;
+    // We don't have a z-axis height.
+    // Why? Because even thought the world
+    // is 3D, everyone is made out of paper
+    // in this video game.
+    //
+    // Entities can't co-exist in the same tile
+    // but they can stand on top of one in an
+    // above tile.
+} Hitbox_AABB;
+
 typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
 
@@ -212,6 +225,8 @@ typedef struct Entity_t {
     m_dispose_entity        dispose_handler;
     // DO NOT INVOKE! Called automatically
     m_entity_controller     controller_handler;
+
+    Hitbox_AABB hitbox;
 
     uint32_t                entity_flags;
     int32_t x__chunk, y__chunk, z__chunk;
@@ -255,10 +270,10 @@ typedef struct Collision_Manager__Collision_Node_t {
 /// 4 Collision Nodes per layer 3 node.
 ///
 typedef struct Collision_Manager__Layer_Three_t {
-    Collision_Manager__Collision_Node collision_node__top_left;
-    Collision_Manager__Collision_Node collision_node__top_right;
-    Collision_Manager__Collision_Node collision_node__bottom_left;
-    Collision_Manager__Collision_Node collision_node__bottom_right;
+    Collision_Manager__Collision_Node *collision_node__top_left;
+    Collision_Manager__Collision_Node *collision_node__top_right;
+    Collision_Manager__Collision_Node *collision_node__bottom_left;
+    Collision_Manager__Collision_Node *collision_node__bottom_right;
 
     int32_t x__center_chunk, y__center_chunk;
 } Collision_Manager__Layer_Three;

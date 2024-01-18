@@ -11,6 +11,10 @@ void poll_collision_mannager(
         Entity *entity,
         f_entity_collision collision_handler);
 
+void remove_entity_from__collision_manager(
+        Collision_Manager *collision_manager,
+        Entity *entity);
+
 void add_entity_to__collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity);
