@@ -3,6 +3,26 @@
 
 #include <defines.h>
 
+static Entity_Manager inline 
+*get_entity_manager_from__world(World *world) {
+    return &world->entity_manager;
+}
+
+static Chunk_Manager inline 
+*get_chunk_manager_from__world(World *world) {
+    return &world->chunk_manager;
+}
+
+static Collision_Manager inline 
+*get_collision_manager_from__world(World *world) {
+    return &world->collision_manager;
+}
+
+static World_Parameters inline
+*get_world_parameters_from__world(World *world) {
+    return &world->world_params;
+}
+
 void init_world(World *world);
 
 void add_entity_to__world(

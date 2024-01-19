@@ -56,6 +56,11 @@ static void inline set_entity__controller(
         Entity *entity,
         m_entity_controller controller) {
     entity->controller_handler = controller;
+    if (!controller) {
+        set_entity__collidable(entity);
+    } else {
+        set_entity__uncollidable(entity);
+    }
 }
 
 static void inline set_entity__disposer(

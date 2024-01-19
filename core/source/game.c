@@ -24,6 +24,11 @@ void init_game(Game *game) {
 
     init_world(&game->world);
 
+    // TODO: prob wanna remove some of the stuff below
+
+    get_new__player(game, true,
+            0, 0, 0);
+
     move_chunk_manager__chunks(
             &game->world.chunk_manager, 
             &game->world.world_params, 
@@ -100,7 +105,6 @@ Entity *get_new__humanoid(Game *game,
         int32_t z__global) {
     Entity *entity = allocate__entity(
             &game->world.entity_manager, kind_of_entity);
-    set_entity__collidable(entity);
 
     set_hitbox__position(
             &entity->hitbox, 
@@ -111,12 +115,15 @@ Entity *get_new__humanoid(Game *game,
     set_entity__collider(
             entity, 
             m_entity_collision_handler);
+
     set_entity__chunk_transitioner(
             entity,
             m_entity_chunk_transition_handler);
 
     add_entity_to__collision_manager(
             &game->world.collision_manager, entity);
+
+    return entity;
 }
 
 Entity *get_new__player(Game *game, 
@@ -140,6 +147,8 @@ Entity *get_new__player(Game *game,
                 player,
                 m_controller_for__player);
     }
+
+    return player;
 }
 
 Entity *get_new__entity(Game *game, 
@@ -156,9 +165,16 @@ Entity *get_new__entity(Game *game,
             debug_error("Failed to get new entity, \
 invalid kind_of_entity. get_new__entity(...).");
             break;
+        // non-player humanoids:
         case Entity_Kind__Skeleton:
-            break;
         case Entity_Kind__Zombie:
-            break;
+            return get_new__humanoid(
+                    game,
+                    kind_of_entity,
+                    x__global,
+                    y__global,
+                    z__global);
     }
+
+    return 0;
 }

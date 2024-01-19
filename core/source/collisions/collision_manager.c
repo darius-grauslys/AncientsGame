@@ -46,7 +46,7 @@
 /// any modulus to obtain a bounded index
 /// of [0, CHUNK_MANAGER__QUANTITY_OF_CHUNKS - 1]
 ///
-uint32_t get_collision_node_index_during__initialization(
+static uint32_t inline get_collision_node_index_during__initialization(
     int32_t x__chunk, int32_t y__chunk) {
     return y__chunk
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
@@ -112,6 +112,24 @@ bad quadrant_direction layer_three.");
                 - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
             break;
     }
+
+    //TODO: remove, here for debugging
+    layer_three->collision_node__top_left
+        ->x__chunk = layer_three->x__center_chunk - 1;
+    layer_three->collision_node__top_left
+        ->y__chunk = layer_three->y__center_chunk + 1;
+    layer_three->collision_node__top_right
+        ->x__chunk = layer_three->x__center_chunk;
+    layer_three->collision_node__top_right
+        ->y__chunk = layer_three->y__center_chunk + 1;
+    layer_three->collision_node__bottom_left
+        ->x__chunk = layer_three->x__center_chunk - 1;
+    layer_three->collision_node__bottom_left
+        ->y__chunk = layer_three->y__center_chunk;
+    layer_three->collision_node__bottom_right
+        ->x__chunk = layer_three->x__center_chunk;
+    layer_three->collision_node__bottom_right
+        ->y__chunk = layer_three->y__center_chunk;
 }
 
 void update_collision_manager__layer_two(
@@ -156,6 +174,10 @@ bad quadrant_direction layer_two.");
                 - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
             break;
     }
+
+    // debug_info("layer2: %d, %d",
+    //         layer_two->x__center_chunk,
+    //         layer_two->y__center_chunk);
 
     update_collision_manager__layer_three(
             &layer_two->layer_three__top_left, 
@@ -654,6 +676,9 @@ void add_entity_to__collision_manager(
                 entity->hitbox.x__chunk,
                 entity->hitbox.y__chunk);
 
+    // debug_info("added entity to node: %d, %d",
+    //         collision_node->x__chunk,
+    //         collision_node->y__chunk);
     add_entity_to__collision_node(
             collision_node, entity);
 }
@@ -663,12 +688,20 @@ void remove_entity_from__collision_manager(
         Entity *entity,
         int32_t old_x__chunk,
         int32_t old_y__chunk) {
+    // debug_info("old_chunk %d, %d vs new %d, %d",
+    //         old_x__chunk,
+    //         old_y__chunk,
+    //         entity->hitbox.x__chunk,
+    //         entity->hitbox.y__chunk);
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
                 old_x__chunk,
                 old_y__chunk);
 
+    // debug_info("remove entity to node: %d, %d",
+    //         collision_node->x__chunk,
+    //         collision_node->y__chunk);
     remove_entity_from__collision_node(
             collision_node, entity);
 }
@@ -1039,6 +1072,10 @@ void update_collision_manager(
         world->chunk_manager.x__center_chunk;
     collision_manager->y__center_chunk =
         world->chunk_manager.y__center_chunk;
+
+    // debug_info("cm: %d, %d",
+    //         collision_manager->x__center_chunk,
+    //         collision_manager->y__center_chunk);
 
     update_collision_manager__layer_two(
             &collision_manager->layer_two__top_left, 

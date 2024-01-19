@@ -21,9 +21,6 @@ void init_world(World *world) {
     init_chunk_manager(
             &world->chunk_manager,
             &world->world_params);
-
-    debug_warning("Some things in init_world are \
-            inappropriate.");
 }
 
 void add_entity_to__world(

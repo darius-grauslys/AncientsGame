@@ -7,6 +7,37 @@
 ///
 
 #include <defines.h>
+#include <world/world.h>
+
+static Entity_Manager inline 
+*get_entity_manager_from__game(Game *game) {
+    return get_entity_manager_from__world(&game->world);
+}
+
+static Chunk_Manager inline 
+*get_chunk_manager_from__game(Game *game) {
+    return get_chunk_manager_from__world(&game->world);
+}
+
+static Collision_Manager inline 
+*get_collision_manager_from__game(Game *game) {
+    return get_collision_manager_from__world(&game->world);    
+}
+
+static PLATFORM_Gfx_Context inline
+*get_PLATFORM_gfx_context_from__game(Game *game) {
+    return &game->gfx_context;
+}
+
+static Input inline
+*get_input_from__game(Game *game) {
+    return &game->input;
+}
+
+static Entity inline
+*get_local_player_from__game(Game *game) {
+    return game->world.entity_manager.local_player;
+}
 
 void init_game(Game *game);
 

@@ -9,12 +9,6 @@ void m_entity_chunk_transition_handler(
         int32_t old_x__chunk,
         int32_t old_y__chunk);
 
-void m_local_player_chunk_transition_handler(
-        Entity *this_local_player,
-        Game *game,
-        int32_t old_x__chunk,
-        int32_t old_y__chunk);
-
 void m_entity_collision_handler(
         Entity *entity_collision_source,
         Entity *entity_collided);

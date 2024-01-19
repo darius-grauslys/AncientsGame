@@ -284,6 +284,8 @@ typedef struct Collision_Manager__Collision_Node_t {
     struct Collision_Manager__Collision_Node_t *collision_node__west;
 
     Direction legal_directions;
+    //TODO: remove, this is for debugging.
+    int32_t x__chunk, y__chunk;
 } Collision_Manager__Collision_Node;
 
 ///
