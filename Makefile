@@ -18,11 +18,21 @@ export BASE_DIR := $(CURDIR)
 
 export SILENT := @
 
+export DIR_NDS := $(CURDIR)/nds
+export DIR_UNIX_OPENGL := $(CURDIR)/unix_opengl
+export DIR_CORE := $(CURDIR)/core
+
+export DIR_TEST_CORE := $(CURDIR)/tests/core
+
 export BUILD_NDS := $(CURDIR)/build/nds
 export BUILD_UNIX_OPENGL := $(CURDIR)/build/unix_opengl
+export BUILD_TEST_CORE := $(CURDIR)/build/tests/core
 
 default:
 	echo 'I deleted the Makefile. TODO: make default target print a target specification menu.'
+
+test_core:
+	$(SILENT)mkdir -p ./build && make -C $(DIR_TEST_CORE) -f $(DIR_TEST_CORE)/Makefile -e BUILD=$(BUILD_TEST_CORE)
 
 nds:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/nds -f $(CURDIR)/nds/Makefile -e BUILD=$(BUILD_NDS)

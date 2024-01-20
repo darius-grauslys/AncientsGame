@@ -138,3 +138,7 @@ void PLATFORM_release_texture(PLATFORM_Texture *texture) {
 
     oamFreeGfx(oam, texture->gfx);
 }
+
+uint32_t *PLATFORM_get_texture_flags_ptr(PLATFORM_Texture *texture) {
+    return &texture->flags;
+}

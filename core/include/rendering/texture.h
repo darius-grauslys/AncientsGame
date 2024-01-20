@@ -23,13 +23,15 @@ void PLATFORM_use_texture(PLATFORM_Texture *texture);
 
 void PLATFORM_release_texture(PLATFORM_Texture *texture);
 
+uint32_t *PLATFORM_get_texture_flags_ptr(PLATFORM_Texture *texture);
+
 static void inline set_texture_flag__hidden(PLATFORM_Texture *texture) {
-    texture->flags |= 
+    *PLATFORM_get_texture_flags_ptr(texture) |= 
         TEXTURE_FLAG__IS_HIDDEN;
 }
 
 static bool inline is_texture_flag_set__hidden(PLATFORM_Texture *texture) {
-    return texture->flags & TEXTURE_FLAG__IS_HIDDEN;
+    return *PLATFORM_get_texture_flags_ptr(texture) & TEXTURE_FLAG__IS_HIDDEN;
 }
 
 
