@@ -28,7 +28,7 @@ int32_t get_global_z_from__hitbox(
             ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
 }
 
-int32_t set_hitbox__position(
+void set_hitbox__position(
         Hitbox_AABB *hitbox,
         int32_t x__global,
         int32_t y__global,

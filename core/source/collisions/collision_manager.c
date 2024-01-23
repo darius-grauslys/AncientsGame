@@ -112,24 +112,6 @@ bad quadrant_direction layer_three.");
                 - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
             break;
     }
-
-    //TODO: remove, here for debugging
-    layer_three->collision_node__top_left
-        ->x__chunk = layer_three->x__center_chunk - 1;
-    layer_three->collision_node__top_left
-        ->y__chunk = layer_three->y__center_chunk + 1;
-    layer_three->collision_node__top_right
-        ->x__chunk = layer_three->x__center_chunk;
-    layer_three->collision_node__top_right
-        ->y__chunk = layer_three->y__center_chunk + 1;
-    layer_three->collision_node__bottom_left
-        ->x__chunk = layer_three->x__center_chunk - 1;
-    layer_three->collision_node__bottom_left
-        ->y__chunk = layer_three->y__center_chunk;
-    layer_three->collision_node__bottom_right
-        ->x__chunk = layer_three->x__center_chunk;
-    layer_three->collision_node__bottom_right
-        ->y__chunk = layer_three->y__center_chunk;
 }
 
 void update_collision_manager__layer_two(
