@@ -4,7 +4,7 @@ export ancientsgame_files=$(sh -c 'cd ${ancientsgame_base_dir} && find . -iname 
 pushd "./source"
 
 for file in $(echo $ancientsgame_files); do
-    converted_name="test_$(basename $file)"
+    converted_name="test_suite_$(basename $file)"
     copy_dir=$(dirname $file)
     src_file="${ancientsgame_base_dir}/${file}"
     dest_file="${copy_dir}/${converted_name}"

@@ -1,5 +1,5 @@
 
 #include <test_util.h>
 
-DECLARE_SUITE(input);
+DECLARE_SUITE(debug);
 
