@@ -11,6 +11,7 @@ void m_entity_chunk_transition_handler(
 
 void m_entity_collision_handler(
         Entity *entity_collision_source,
-        Entity *entity_collided);
+        Entity *entity_collided,
+        Direction direction_of_collision);
 
 #endif

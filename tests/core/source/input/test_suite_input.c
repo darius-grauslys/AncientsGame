@@ -1,6 +1,10 @@
-#include <input/input.h>
+#include <input/test_suite_input.h>
 
-INCLUDE_SUB_SUITES(input, 2,END_SUITES);
+#include <input/input.c>
 
-DEFINE_SUITE_WITH__SUB_SUITES(input, END_TESTS);
+#warning Please make tests for: /home/shalidor/Projects/AncientsGame/tests/core/source/input/test_suite_input.c
 
+// Before writing any tests, please see the README
+// found in ./tests
+
+DEFINE_SUITE(input, END_TESTS)

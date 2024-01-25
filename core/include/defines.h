@@ -202,7 +202,8 @@ typedef void (*m_entity_chunk_transitioner) (Entity *this_entity, Game *game,
 /// passed in addition to collided entities.
 ///
 typedef void (*m_entity_collision)  (Entity *entity_collision_source,
-        Entity *entity_collided);
+        Entity *entity_collided,
+        Direction direction_of_collision);
 
 ///
 /// Here we define the entity super struct. It has everything we could need
@@ -217,6 +218,8 @@ typedef void (*m_entity_collision)  (Entity *entity_collision_source,
     (ENTITY_FLAG__IS_NOT_UPDATING_POSITION << 1)
 #define ENTITY_FLAG__IS_COLLIDING \
     (ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS << 1)
+#define ENTITY_FLAG__IS_UNLOADED \
+    (ENTITY_FLAG__IS_COLLIDING << 1)
 
 typedef struct Hitbox_AABB_t {
     uint32_t width;
@@ -231,7 +234,7 @@ typedef struct Hitbox_AABB_t {
     // above tile.
     int32_t x__chunk, y__chunk, z__chunk;
     int32_t x, y, z;
-    int32_t x__global, y__global, z__global;
+    int32_t x__velocity, y__velocity, z__velocity;
 } Hitbox_AABB;
 
 typedef struct Entity_t {
@@ -270,6 +273,11 @@ typedef struct Entity_Manager_t {
     Entity *local_player;
     uint32_t entity_count;
 } Entity_Manager;
+
+#define COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET \
+    (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4)
+#define COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET \
+    (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8)
 
 ///
 /// This type is specific to Collision_Manager,

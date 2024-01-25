@@ -25,9 +25,9 @@ void PLATFORM_render_entity(
             sprite->sprite_texture.oam, 
             sprite->sprite_texture.oam_index, 
             get_global_x_from__hitbox(&entity->hitbox)
-                - get_global_x_from__hitbox(&local_player->hitbox),
+                - get_global_x_from__hitbox(&local_player->hitbox) + 127 - 8,
             -(get_global_y_from__hitbox(&entity->hitbox)
-                - get_global_y_from__hitbox(&local_player->hitbox))
+                - get_global_y_from__hitbox(&local_player->hitbox) - 96 + 8)
             );
     }
 

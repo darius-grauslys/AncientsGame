@@ -22,12 +22,37 @@ export ancientsgame_core_dir=$(realpath "../core/source")
 export ancientsgame_nds_dir=$(realpath "../nds/source")
 export ancientsgame_unix_opengl_dir=$(realpath "../unix_opengl/source")
 
+gen_main() {
+    output="$2/main.c"
+    printf "#include <MAIN_TEST_SUITE_ANCIENTS_GAME.h>
+
+int main(int argc, char* argv[MUNIT_ARRAY_PARAM(argc + 1)]) {
+    MunitSuite test_suite;
+
+    include_test_suite__ANCIENTS_GAME(&test_suite);
+
+    return munit_suite_main(&test_suite, (void*) \"µnit\", argc, argv);
+}\n" > $output
+    cp ./templates/test_util.h "$1/test_util.h"
+    cp ./templates/munit.h "$1/munit.h"
+    cp ./templates/munit.c "$2/munit.c"
+    if ! test -f "$1/platform_defines.h"; then
+        cp ./templates/platform_defines.h "$1/platform_defines.h"
+    fi
+    if ! test -f "$2/PLATFORM.c"; then
+        cp ./templates/PLATFORM.c "$2/PLATFORM.c"
+    fi
+}
+
 update () {
+    core_include=$(realpath "./core/include")
+    core_source=$(realpath "./core/source")
     ./update_recursive.sh \
         $ancientsgame_core_dir \
         "" \
-        $(realpath "./core/include") \
-        $(realpath "./core/source")
+        $core_include \
+        $core_source
+    gen_main $core_include $core_source
 }
 
 update 

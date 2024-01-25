@@ -28,6 +28,14 @@ void init_game(Game *game) {
 
     get_new__player(game, true,
             0, 0, 0);
+    
+    for (uint32_t i=0;i<8;i++) {
+        Entity *entity = get_new__entity(game,
+                Entity_Kind__Skeleton,
+                -96 + (9 * (i %8)), -32 + (9 * (i / 8)), 0);
+        set_entity__controller(entity,
+                m_controller_for__dummy);
+    }
 
     move_chunk_manager__chunks(
             &game->world.chunk_manager, 
@@ -53,7 +61,11 @@ void manage_game__post_render(Game *game) {
     PLATFORM_poll_input(game);
     manage_entities(game);
 
-    if (poll_world_for__scrolling(&game->world, game)) {
+    if (poll_world_for__scrolling(&game->world)) {
+        set_collision_manager__center_chunk(
+                &game->world.collision_manager,
+                game->world.chunk_manager.x__center_chunk,
+                game->world.chunk_manager.y__center_chunk);
         PLATFORM_update_chunks(
                 &game->gfx_context,
                 &game->world.chunk_manager);
@@ -72,6 +84,27 @@ void manage_entities(Game *game) {
             &game->world.entity_manager.entities[i];
         if (!is_entity__enabled(entity)) {
             continue;
+        }
+        if (is_entity__unloaded(entity)) {
+            release_entity(game, entity);
+        }
+
+        poll_collision_manager(
+                &game->world.collision_manager, 
+                entity);
+
+        int32_t old_x__chunk, old_y__chunk;
+        if (commit_entity_velocity(entity, 
+                    &old_x__chunk,
+                    &old_y__chunk)) {
+            if (entity->chunk_transition_handler) {
+                entity->chunk_transition_handler(
+                        entity,
+                        game,
+                        old_x__chunk,
+                        old_y__chunk
+                        );
+            }
         }
 
         if (entity->controller_handler) {
@@ -106,8 +139,9 @@ Entity *get_new__humanoid(Game *game,
     Entity *entity = allocate__entity(
             &game->world.entity_manager, kind_of_entity);
 
-    set_hitbox__position(
+    init_hitbox(
             &entity->hitbox, 
+            8, 8, 
             x__global, 
             y__global, 
             z__global);

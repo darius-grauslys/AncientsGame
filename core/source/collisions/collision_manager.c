@@ -1,6 +1,15 @@
 #include <collisions/collision_manager.h>
 #include <debug/debug.h>
 #include <collisions/hitbox_aabb.h>
+#include <entity/entity.h>
+
+#warning See TODO
+// TODO: this currently wont work for 
+// CHUNK_MANAGER__QUANTITY_OF_CHUNKS != 8x8
+// To fix this, keep collision_manager.collision_nodes at 8x8
+// and map get_collision_node_index_during__initialization(...)
+// accordingly based on the dimension discrepencies betwen
+// Collision_Manager and Chunk_Manager.
 
 ///
 /// (0,7)    (1.5,7)                (4.5,7)
@@ -48,7 +57,7 @@
 ///
 static uint32_t inline get_collision_node_index_during__initialization(
     int32_t x__chunk, int32_t y__chunk) {
-    return y__chunk
+    return (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - y__chunk - 1)
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
         + x__chunk
         ;
@@ -82,34 +91,34 @@ bad quadrant_direction layer_three.");
         case DIRECTION__NORTH_EAST:
             layer_three->x__center_chunk =
                 layer_two->x__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                + COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             layer_three->y__center_chunk =
                 layer_two->y__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                + COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             break;
         case DIRECTION__NORTH_WEST:
             layer_three->x__center_chunk =
                 layer_two->x__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                - COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             layer_three->y__center_chunk =
                 layer_two->y__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                + COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             break;
         case DIRECTION__SOUTH_EAST:
             layer_three->x__center_chunk =
                 layer_two->x__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                + COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             layer_three->y__center_chunk =
                 layer_two->y__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                - COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             break;
         case DIRECTION__SOUTH_WEST:
             layer_three->x__center_chunk =
                 layer_two->x__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                - COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             layer_three->y__center_chunk =
                 layer_two->y__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8;
+                - COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET;
             break;
     }
 }
@@ -126,34 +135,34 @@ bad quadrant_direction layer_two.");
         case DIRECTION__NORTH_EAST:
             layer_two->x__center_chunk =
                 collision_manager->x__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                + COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             layer_two->y__center_chunk =
                 collision_manager->y__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                + COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             break;
         case DIRECTION__NORTH_WEST:
             layer_two->x__center_chunk =
                 collision_manager->x__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                - COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             layer_two->y__center_chunk =
                 collision_manager->y__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                + COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             break;
         case DIRECTION__SOUTH_EAST:
             layer_two->x__center_chunk =
                 collision_manager->x__center_chunk
-                + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                + COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             layer_two->y__center_chunk =
                 collision_manager->y__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                - COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             break;
         case DIRECTION__SOUTH_WEST:
             layer_two->x__center_chunk =
                 collision_manager->x__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                - COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             layer_two->y__center_chunk =
                 collision_manager->y__center_chunk
-                - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4;
+                - COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET;
             break;
     }
 
@@ -172,42 +181,49 @@ bad quadrant_direction layer_two.");
     update_collision_manager__layer_three(
             &layer_two->layer_three__bottom_left, 
             layer_two, 
-            DIRECTION__SOUTH_EAST);
+            DIRECTION__SOUTH_WEST);
     update_collision_manager__layer_three(
             &layer_two->layer_three__bottom_right, 
             layer_two, 
-            DIRECTION__SOUTH_WEST);
+            DIRECTION__SOUTH_EAST);
+}
+
+void init_collision_manager__collision_node(
+        Collision_Manager__Collision_Node *collision_node) {
+    for (uint32_t i=0;
+            i<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
+            i++) {
+        collision_node->entity_ptrs[i] = 0;
+    }
 }
 
 void init_collision_manager__layer_three(
         Collision_Manager__Layer_Three *layer_three,
-        Collision_Manager *collision_manager,
-        Collision_Manager__Layer_Two *layer_two,
-        Direction quadrant_direction) {
+        Collision_Manager *collision_manager) {
 
     layer_three->collision_node__top_right =
         &collision_manager->collision_nodes[
             get_collision_node_index_during__initialization(
-                    layer_three->x__center_chunk + 1, 
-                    layer_three->y__center_chunk  + 1)
+                    layer_three->x__center_chunk, 
+                    layer_three->y__center_chunk)
         ];
     layer_three->collision_node__top_left =
         &collision_manager->collision_nodes[
             get_collision_node_index_during__initialization(
                     layer_three->x__center_chunk - 1, 
-                    layer_three->y__center_chunk  + 1)
+                    layer_three->y__center_chunk)
         ];
     layer_three->collision_node__bottom_right =
         &collision_manager->collision_nodes[
             get_collision_node_index_during__initialization(
-                    layer_three->x__center_chunk + 1, 
-                    layer_three->y__center_chunk  - 1)
+                    layer_three->x__center_chunk, 
+                    layer_three->y__center_chunk - 1)
         ];
     layer_three->collision_node__bottom_left =
         &collision_manager->collision_nodes[
             get_collision_node_index_during__initialization(
                     layer_three->x__center_chunk - 1, 
-                    layer_three->y__center_chunk  - 1)
+                    layer_three->y__center_chunk - 1)
         ];
 }
 
@@ -223,24 +239,16 @@ void init_collision_manager__layer_two(
     
     init_collision_manager__layer_three(
             &layer_two->layer_three__top_left, 
-            collision_manager, 
-            layer_two, 
-            DIRECTION__NORTH_WEST);
+            collision_manager);
     init_collision_manager__layer_three(
             &layer_two->layer_three__top_right, 
-            collision_manager, 
-            layer_two, 
-            DIRECTION__NORTH_EAST);
+            collision_manager);
     init_collision_manager__layer_three(
             &layer_two->layer_three__bottom_left, 
-            collision_manager, 
-            layer_two, 
-            DIRECTION__SOUTH_EAST);
+            collision_manager);
     init_collision_manager__layer_three(
             &layer_two->layer_three__bottom_right, 
-            collision_manager, 
-            layer_two, 
-            DIRECTION__SOUTH_WEST);
+            collision_manager);
 }
 
 void init_collision_manager(
@@ -258,6 +266,8 @@ void init_collision_manager(
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
+
+            init_collision_manager__collision_node(collision_node);
 
             collision_node->legal_directions = DIRECTION__NONE;
 
@@ -340,11 +350,11 @@ void init_collision_manager(
     init_collision_manager__layer_two(
             &collision_manager->layer_two__bottom_left, 
             collision_manager, 
-            DIRECTION__SOUTH_EAST);
+            DIRECTION__SOUTH_WEST);
     init_collision_manager__layer_two(
             &collision_manager->layer_two__bottom_right, 
             collision_manager, 
-            DIRECTION__SOUTH_WEST);
+            DIRECTION__SOUTH_EAST);
 
     collision_manager->most_north_western__node =
         &collision_manager->collision_nodes[0];
@@ -428,10 +438,10 @@ Collision_Manager__Collision_Node
     return collision_node;
 }
 
-bool is_this_entity_colliding_into__this_entity(
+Direction is_this_entity_colliding_into__this_entity(
         Entity *entity_collision_source,
         Entity *entity_collided) {
-    return is_hitboxes__overlapping(
+    return is_hitbox__colliding(
             &entity_collision_source->hitbox, 
             &entity_collided->hitbox);
 }
@@ -453,18 +463,21 @@ void check_collision_node_for__collisions(
             continue;
         }
 
-        if (is_this_entity_colliding_into__this_entity(
-                    entity,
-                    collision_node->entity_ptrs[i])) {
+        Direction direction_of_collision =
+            is_this_entity_colliding_into__this_entity(
+            entity,
+            collision_node->entity_ptrs[i]);
+        if (direction_of_collision != DIRECTION__NONE) {
             if (entity->collision_handler) {
                 entity->collision_handler(entity,
-                        collision_node->entity_ptrs[i]);
+                        collision_node->entity_ptrs[i],
+                        direction_of_collision);
             }
         }
     }
 }
 
-void poll_collision_mannager(
+void poll_collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity) {
     Collision_Manager__Collision_Node *collision_node =
@@ -589,6 +602,10 @@ empty collision node.");
 collision node.");
         return;
     }
+    if (*removed_entity_ptr_slot == *last_entity_ptr_slot) {
+        *removed_entity_ptr_slot = 0;
+        return;
+    }
     // Keep the entity array tightly packed.
     // Order doesn't matter.
     *removed_entity_ptr_slot =
@@ -600,20 +617,14 @@ collision node.");
 /// This is called because the node "fell off" the map.
 ///
 void unload_all_entities_from__collision_node(
-        Collision_Manager__Collision_Node *collision_node,
-        Game *game) {
+        Collision_Manager__Collision_Node *collision_node) {
     for (uint32_t i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
             i++) {
         Entity *entity =
             collision_node->entity_ptrs[i];
-        if (!entity) {
-            if (entity->dispose_handler) {
-                entity->dispose_handler(entity, game);
-            }
-            // Don't do this, since dispose_handler
-            // will call release_entity(...);
-            // collision_node->entity_ptrs[i] = 0;
+        if (entity) {
+            set_entity_as__unloaded(entity);
         }
     }
 }
@@ -626,6 +637,9 @@ void add_entity_to__collision_node(
     for (uint32_t i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
             i++) {
+        if (collision_node->entity_ptrs[i] == entity) {
+            return;
+        }
         if (!collision_node->entity_ptrs[i]) {
             collision_node->entity_ptrs[i] =
                 entity;
@@ -865,8 +879,7 @@ void move_collision_manager__nodes(
 }
 
 void update_collision_manager__nodes_legal_directions__north(
-        Collision_Manager *collision_manager,
-        Game *game) {
+        Collision_Manager *collision_manager) {
     Collision_Manager__Collision_Node *current_node =
         collision_manager->most_north_western__node;
     for (uint32_t i=0;
@@ -882,7 +895,7 @@ void update_collision_manager__nodes_legal_directions__north(
             ->legal_directions;
 
         unload_all_entities_from__collision_node(
-                current_node, game);
+                current_node);
 
         current_node =
             current_node->collision_node__east;
@@ -894,8 +907,7 @@ void update_collision_manager__nodes_legal_directions__north(
 }
 
 void update_collision_manager__nodes_legal_directions__east(
-        Collision_Manager *collision_manager,
-        Game *game) {
+        Collision_Manager *collision_manager) {
     Collision_Manager__Collision_Node *current_node =
         collision_manager->most_north_western__node
         ->collision_node__west;
@@ -914,7 +926,7 @@ void update_collision_manager__nodes_legal_directions__east(
             ->legal_directions;
 
         unload_all_entities_from__collision_node(
-                current_node, game);
+                current_node);
 
         current_node =
             current_node->collision_node__south;
@@ -926,8 +938,7 @@ void update_collision_manager__nodes_legal_directions__east(
 }
 
 void update_collision_manager__nodes_legal_directions__south(
-        Collision_Manager *collision_manager,
-        Game *game) {
+        Collision_Manager *collision_manager) {
     Collision_Manager__Collision_Node *current_node =
         collision_manager->most_north_western__node
         ->collision_node__north;
@@ -946,7 +957,7 @@ void update_collision_manager__nodes_legal_directions__south(
             ->legal_directions;
 
         unload_all_entities_from__collision_node(
-                current_node, game);
+                current_node);
 
         current_node =
             current_node->collision_node__east;
@@ -959,8 +970,7 @@ void update_collision_manager__nodes_legal_directions__south(
 }
 
 void update_collision_manager__nodes_legal_directions__west(
-        Collision_Manager *collision_manager,
-        Game *game) {
+        Collision_Manager *collision_manager) {
     Collision_Manager__Collision_Node *current_node =
         collision_manager->most_north_western__node;
     for (uint32_t i=0;
@@ -978,7 +988,7 @@ void update_collision_manager__nodes_legal_directions__west(
             ->legal_directions;
 
         unload_all_entities_from__collision_node(
-                current_node, game);
+                current_node);
 
         current_node =
             current_node
@@ -992,68 +1002,65 @@ void update_collision_manager__nodes_legal_directions__west(
 
 void update_collision_manager__nodes_legal_directions(
         Collision_Manager *collision_manager,
-        Direction direction_to_move_nodes,
-        Game *game) {
+        Direction direction_to_move_nodes) {
     if (direction_to_move_nodes & DIRECTION__NORTH) {
         update_collision_manager__nodes_legal_directions__north(
-                collision_manager,
-                game);
+                collision_manager);
     } else if (direction_to_move_nodes & DIRECTION__SOUTH) {
         update_collision_manager__nodes_legal_directions__south(
-                collision_manager,
-				game);
+                collision_manager);
     }
     if (direction_to_move_nodes & DIRECTION__EAST) {
         update_collision_manager__nodes_legal_directions__east(
-                collision_manager,
-				game);
+                collision_manager);
     } else if (direction_to_move_nodes & DIRECTION__WEST) {
         update_collision_manager__nodes_legal_directions__west(
-                collision_manager,
-				game);
+                collision_manager);
     }
 }
 
-void update_collision_manager(
+void set_collision_manager__center_chunk(
         Collision_Manager *collision_manager,
-        World *world,
-        Game *game) {
+        int32_t x__center_chunk,
+        int32_t y__center_chunk) {
 
-    Direction direction_to_move_nodes =
-        DIRECTION__NONE;
+    while (collision_manager->x__center_chunk
+            != x__center_chunk
+            || collision_manager->y__center_chunk
+            != y__center_chunk) {
+        Direction direction_to_move_nodes =
+            DIRECTION__NONE;
+        if (collision_manager->x__center_chunk 
+                < x__center_chunk) {
+            collision_manager->x__center_chunk++;
+            direction_to_move_nodes |=
+                DIRECTION__EAST;
+        } else if (collision_manager->x__center_chunk 
+                > x__center_chunk) {
+            collision_manager->x__center_chunk--;
+            direction_to_move_nodes |=
+                DIRECTION__WEST;
+        }
 
-    if (collision_manager->x__center_chunk 
-            < world->chunk_manager.x__center_chunk) {
-        direction_to_move_nodes |=
-            DIRECTION__EAST;
-    } else if (collision_manager->x__center_chunk 
-            > world->chunk_manager.x__center_chunk) {
-        direction_to_move_nodes |=
-            DIRECTION__WEST;
+        if (collision_manager->y__center_chunk 
+                < y__center_chunk) {
+            collision_manager->y__center_chunk++;
+            direction_to_move_nodes |=
+                DIRECTION__NORTH;
+        } else if (collision_manager->y__center_chunk 
+                > y__center_chunk) {
+            collision_manager->y__center_chunk--;
+            direction_to_move_nodes |=
+                DIRECTION__SOUTH;
+        }
+
+        move_collision_manager__nodes(
+                collision_manager,
+                direction_to_move_nodes);
+        update_collision_manager__nodes_legal_directions(
+                collision_manager, 
+                direction_to_move_nodes);
     }
-
-    if (collision_manager->y__center_chunk 
-            < world->chunk_manager.y__center_chunk) {
-        direction_to_move_nodes |=
-            DIRECTION__NORTH;
-    } else if (collision_manager->y__center_chunk 
-            > world->chunk_manager.y__center_chunk) {
-        direction_to_move_nodes |=
-            DIRECTION__SOUTH;
-    }
-
-    move_collision_manager__nodes(
-            collision_manager,
-            direction_to_move_nodes);
-    update_collision_manager__nodes_legal_directions(
-            collision_manager, 
-            direction_to_move_nodes,
-            game);
-
-    collision_manager->x__center_chunk =
-        world->chunk_manager.x__center_chunk;
-    collision_manager->y__center_chunk =
-        world->chunk_manager.y__center_chunk;
 
     // debug_info("cm: %d, %d",
     //         collision_manager->x__center_chunk,
@@ -1070,9 +1077,9 @@ void update_collision_manager(
     update_collision_manager__layer_two(
             &collision_manager->layer_two__bottom_left, 
             collision_manager, 
-            DIRECTION__SOUTH_EAST);
+            DIRECTION__SOUTH_WEST);
     update_collision_manager__layer_two(
             &collision_manager->layer_two__bottom_right, 
             collision_manager, 
-            DIRECTION__SOUTH_WEST);
+            DIRECTION__SOUTH_EAST);
 }

@@ -63,7 +63,7 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
 
     init_sprite_wrapper(
             &entity->sprite_wrapper,
-            entity);
+            kind_of_entity);
 }
 
 void set_entity__armor(Entity *entity,
@@ -122,7 +122,7 @@ void set_entity_as__moving(Entity *entity,
         } else {
             set_entity_animation(
                     entity,
-                    Sprite_Animation_Kind__Idle);
+                    fallback_animation);
         }
         return;
     }
@@ -130,30 +130,18 @@ void set_entity_as__moving(Entity *entity,
     debug_warning("unhandled case in: set_entity_as__moving");
 }
 
-void apply_velocity_to__entity(
-        Game *game,
+bool commit_entity_velocity(
         Entity *entity,
-        int32_t x__velocity,
-        int32_t y__velocity,
-        int32_t z__velocity) {
-    int32_t old_x__chunk = entity->hitbox.x__chunk;
-    int32_t old_y__chunk = entity->hitbox.y__chunk;
+        int32_t *old_x__chunk,
+        int32_t *old_y__chunk) {
+    *old_x__chunk = entity->hitbox.x__chunk;
+    *old_y__chunk = entity->hitbox.y__chunk;
 
-    apply_velocity_to__hitbox(
-            &entity->hitbox, 
-            x__velocity, 
-            y__velocity,
-            z__velocity);
+    commit_hitbox_velocity(&entity->hitbox);
 
     if (old_x__chunk != entity->hitbox.x__chunk 
             || old_y__chunk != entity->hitbox.y__chunk) {
-        if (entity->chunk_transition_handler) {
-            entity->chunk_transition_handler(
-                    entity,
-                    game,
-                    old_x__chunk,
-                    old_y__chunk
-                    );
-        }
+        return true;
     }
+    return false;
 }

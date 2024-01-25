@@ -1,16 +1,10 @@
-#include <world/world.h>
+#include <world/test_suite_world.h>
 
-INCLUDE_SUB_SUITES(world, 7,
-INCLUDE_SUITE(test_suite_tile.c),
+#include <world/world.c>
 
-INCLUDE_SUITE(test_suite_chunk.c),
+#warning Please make tests for: /home/shalidor/Projects/AncientsGame/tests/core/source/world/test_suite_world.c
 
-INCLUDE_SUITE(test_suite_world_parameters.c),
+// Before writing any tests, please see the README
+// found in ./tests
 
-INCLUDE_SUITE(test_suite_chunk_manager.c),
-
-INCLUDE_SUITE(generators),
-END_SUITES);
-
-DEFINE_SUITE_WITH__SUB_SUITES(world, END_TESTS);
-
+DEFINE_SUITE(world, END_TESTS)

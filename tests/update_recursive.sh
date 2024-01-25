@@ -35,11 +35,12 @@ mkdir -p $main_suite_dir__source
 # the name of the test_suite dedicated for
 # the entire directory
 if [ "$search_suffix" == "" ]; then
-    main_suite_name="ancients_game"
-    main_suite_name__full="test_suite_ancients_game"
+    main_suite_name="ANCIENTS_GAME"
+    main_suite_name__full="MAIN_TEST_SUITE_ANCIENTS_GAME"
 else
     main_suite_name=$(basename $main_suite_dir__include)
-    main_suite_name__full="test_suite_$(basename $main_suite_dir__include)"
+    main_suite_name="${main_suite_name~~}"
+    main_suite_name__full="MAIN_TEST_SUITE_${main_suite_name}"
 fi
 
 # the output file paths for the main test_suite
@@ -48,7 +49,11 @@ main_test_suite__source="${main_suite_dir__source}/${main_suite_name__full}.c"
 
 # always remake these above mentioned files.
 printf "" > $main_test_suite__header
-printf "#include <${search_suffix}/${main_suite_name}.h>" > $main_test_suite__source
+if [[ -z $search_suffix ]]; then
+    printf "#include <${main_suite_name__full}.h>" > $main_test_suite__source
+else
+    printf "#include <${search_suffix}/${main_suite_name__full}.h>" > $main_test_suite__source
+fi
 printf "\n\nINCLUDE_SUB_SUITES(${main_suite_name}, __COUNT," \
     >> $main_test_suite__source
 
@@ -65,29 +70,37 @@ modules=$(find $search_path -maxdepth 1 -type f -iname "*.c" -exec \
 module_count=1
 for module in $modules; do
     module_count=$((module_count+1))
-    test_suite__module_name="test_suite_$(basename $module)"
+    test_suite__module_name="$(basename $module)"
     test_suite__module_name__full="test_suite_$(basename $module)"
     test_sub_suite__header="${main_suite_dir__include}/\
 ${test_suite__module_name__full%.*}.h"
     test_sub_suite__source="${main_suite_dir__source}/\
 ${test_suite__module_name__full}"
+    if [[ -z $search_suffix ]]; then
+        test_sub_suite__header_include="\
+$(basename $test_sub_suite__header)"
+    else
+        test_sub_suite__header_include="\
+${search_suffix}/$(basename $test_sub_suite__header)"
+    fi
     if ! test -f $test_sub_suite__header; then
-        printf "#include <test_util.h>\n
+        printf "#include <test_util.h>
 
-DECLARE_SUITE(${module%.*})" > $test_sub_suite__header
-        printf "#include \"$(basename $test_sub_suite__header)\"" \
+DECLARE_SUITE(${test_suite__module_name%.*})\n" > $test_sub_suite__header
+        printf "#include \"$(basename $test_sub_suite__header)\"\n" \
             >> $main_test_suite__header
     fi
     if ! test -f $test_sub_suite__source; then
-        printf "#include <${include_prefix}/$(basename $test_sub_suite__header)>\n
+        printf "#include <$test_sub_suite__header_include>\n
 #include <${module}>
+
 #warning Please make tests for: ${test_sub_suite__source}
 
 // Before writing any tests, please see the README
 // found in ./tests
 
-DEFINE_SUITE(${module%.*}, END_TESTS)" > $test_sub_suite__header
-        printf "\nINCLUDE_SUITE(${test_suite__module_name}),\n" \
+DEFINE_SUITE(${test_suite__module_name%.*}, END_TESTS)\n" > $test_sub_suite__source
+        printf "\nINCLUDE_SUITE(${test_suite__module_name%.*})," \
             >> $main_test_suite__source
     fi
 done
@@ -96,15 +109,15 @@ subdirs=$(find $search_path -mindepth 1 -maxdepth 1 -type d -exec realpath {} \;
 for dir in $subdirs; do
     module_count=$((module_count+1))
     dir_basename=$(basename $dir)
-    printf "#include \"${dir_basename}/test_suite_${dir_basename}.h\"\n" \
+    printf "#include \"${dir_basename}/MAIN_TEST_SUITE_${dir_basename~~}.h\"\n" \
         >> $main_test_suite__header
-    printf "\nINCLUDE_SUITE(${dir_basename}),\n" \
+    printf "\nINCLUDE_SUITE(${dir_basename~~})," \
         >> $main_test_suite__source
 done
 printf "\n#include <test_util.h>
 
 DECLARE_SUITE(${main_suite_name});\n\n" >> $main_test_suite__header
-printf "END_SUITES);
+printf "NULL);
 
 DEFINE_SUITE_WITH__SUB_SUITES(${main_suite_name}, END_TESTS);\n\n" \
     >> $main_test_suite__source

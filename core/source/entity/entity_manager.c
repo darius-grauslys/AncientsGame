@@ -2,6 +2,7 @@
 #include <rendering/animate_entity.h>
 #include <entity/entity.h>
 #include <debug/debug.h>
+#include <rendering/sprite.h>
 
 #include <entity/controllers/controller_player.h>
 
@@ -36,4 +37,5 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
 
 void release_entity__silently(Entity_Manager* entity_manager, Entity* entity) {
     set_entity__disabled(entity);
+    PLATFORM_release_sprite(&entity->sprite_wrapper.sprite);
 }

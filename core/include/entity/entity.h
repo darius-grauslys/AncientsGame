@@ -25,6 +25,10 @@ static bool inline is_entity__collidable(Entity *entity) {
     return entity->entity_flags &
         ENTITY_FLAG__IS_COLLIDING;
 }
+static bool inline is_entity__unloaded(Entity *entity) {
+    return entity->entity_flags &
+        ENTITY_FLAG__IS_UNLOADED;
+}
 
 static void inline set_entity__enabled(Entity *entity) {
     entity->entity_flags |= ENTITY_FLAG__IS_ENABLED;
@@ -38,6 +42,9 @@ static void inline set_entity__is_updating_graphics(Entity *entity) {
 static void inline set_entity__collidable(Entity *entity) {
     entity->entity_flags |= ENTITY_FLAG__IS_COLLIDING;
 }
+static void inline set_entity_as__loaded(Entity *entity) {
+    entity->entity_flags &= ~ENTITY_FLAG__IS_UNLOADED;
+}
 
 static void inline set_entity__disabled(Entity *entity) {
     entity->entity_flags &= ~ENTITY_FLAG__IS_ENABLED;
@@ -50,6 +57,9 @@ static void inline set_entity__is_not_updating_graphics(Entity *entity) {
 }
 static void inline set_entity__uncollidable(Entity *entity) {
     entity->entity_flags &= ~ENTITY_FLAG__IS_COLLIDING;
+}
+static void inline set_entity_as__unloaded(Entity *entity) {
+    entity->entity_flags |= ENTITY_FLAG__IS_UNLOADED;
 }
 
 static void inline set_entity__controller(
@@ -99,15 +109,16 @@ void set_entity_as__moving(Entity *entity,
         enum Sprite_Animation_Kind fallback_animation);
 
 /// 
-/// Apply a velocity, and if the entity
-/// undergoes a chunk transition, reflect
-/// that in it's chunk_transition callback method.
+/// DO NOT CALL THIS!
+/// TODO: make internal headers.
 ///
-void apply_velocity_to__entity(
-        Game *game,
+/// This will commit hitbox velocity
+/// and return true if a chunk transition
+/// has occured.
+///
+bool commit_entity_velocity(
         Entity *entity,
-        int32_t x__velocity,
-        int32_t y__velocity,
-        int32_t z__velocity);
+        int32_t *old_x__chunk,
+        int32_t *old_y__chunk);
 
 #endif

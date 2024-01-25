@@ -18,6 +18,8 @@ void init_world(World *world) {
             chunk_generator__flat_world_f, 0);
     init_entity_manager(&world->entity_manager);
     init_collision_manager(&world->collision_manager);
+    set_collision_manager__center_chunk(
+            &world->collision_manager, 0, 0);
     init_chunk_manager(
             &world->chunk_manager,
             &world->world_params);
@@ -32,8 +34,7 @@ void add_entity_to__world(
 }
 
 bool poll_world_for__scrolling(
-        World *world,
-        Game *game) {
+        World *world) {
     bool is_chunks_moved =
         poll_chunk_manager__for_chunk_movement(
             &world->chunk_manager,
@@ -41,13 +42,6 @@ bool poll_world_for__scrolling(
             world->entity_manager.local_player->hitbox.x__chunk,
             world->entity_manager.local_player->hitbox.y__chunk,
             world->entity_manager.local_player->hitbox.z__chunk);
-
-    if (is_chunks_moved) {
-        update_collision_manager(
-                &world->collision_manager, 
-                world,
-                game);
-    }
 
     return is_chunks_moved;
 }

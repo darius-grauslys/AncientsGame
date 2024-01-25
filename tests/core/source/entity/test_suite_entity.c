@@ -1,10 +1,10 @@
-#include <entity/entity.h>
+#include <entity/test_suite_entity.h>
 
-INCLUDE_SUB_SUITES(entity, 4,
-INCLUDE_SUITE(test_suite_entity_manager.c),
+#include <entity/entity.c>
 
-INCLUDE_SUITE(controllers),
-END_SUITES);
+#warning Please make tests for: /home/shalidor/Projects/AncientsGame/tests/core/source/entity/test_suite_entity.c
 
-DEFINE_SUITE_WITH__SUB_SUITES(entity, END_TESTS);
+// Before writing any tests, please see the README
+// found in ./tests
 
+DEFINE_SUITE(entity, END_TESTS)

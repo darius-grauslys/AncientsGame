@@ -4,6 +4,7 @@
 #include <defines.h>
 
 void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags);
+void PLATFORM_free_texture(PLATFORM_Texture *texture);
 
 ///
 /// This is currently no-op on NDS. Later, if we need to,

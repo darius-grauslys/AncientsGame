@@ -2,9 +2,9 @@
 #include <defines.h>
 
 void init_sprite_wrapper(Sprite_Wrapper *sprite_wrapper,
-        Entity *entity) {
+        enum Entity_Kind entity_kind) {
     PLATFORM_init_sprite(&sprite_wrapper->sprite,
-            entity);
+            entity_kind);
     sprite_wrapper->direction =
         DIRECTION__EAST;
     sprite_wrapper->

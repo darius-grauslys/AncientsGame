@@ -16,12 +16,12 @@ void PLATFORM_init_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
 
 void PLATFORM_init_sprite(
         PLATFORM_Sprite *sprite,
-        Entity *entity) {
+        enum Entity_Kind entity_kind) {
     // debug_warning("PLATFORM_init_sprite is not finished yet: \
     //         doesn't support oamSub.");
     uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);
-    switch (entity->the_kind_of_entity__this_entity_is) {
+    switch (entity_kind) {
         case Entity_Kind__Item:
         case Entity_Kind__Particle:
             debug_abort("Entity type not implemented for PLATFORM_init_sprite.");
@@ -64,4 +64,12 @@ void PLATFORM_init_sprite(
         false, 
         false, 
         false);
+}
+
+void PLATFORM_release_sprite(PLATFORM_Sprite *sprite) {
+    oamSetHidden(
+            sprite->sprite_texture.oam,
+            sprite->sprite_texture.oam_index,
+            true);
+    PLATFORM_free_texture(&sprite->sprite_texture);
 }

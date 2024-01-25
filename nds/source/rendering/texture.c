@@ -109,6 +109,12 @@ _abort:
     debug_abort("Invalid sprite size.");
 }
 
+void PLATFORM_free_texture(PLATFORM_Texture *texture) {
+    oamFreeGfx(
+            texture->oam,
+            texture->oam_index);
+}
+
 void PLATFORM_init_texture__with_path(PLATFORM_Texture *texture,
         Texture_Flags flags,
         const char *path) {
