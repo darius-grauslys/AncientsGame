@@ -28,14 +28,6 @@ void init_game(Game *game) {
 
     get_new__player(game, true,
             0, 0, 0);
-    
-    for (uint32_t i=0;i<8;i++) {
-        Entity *entity = get_new__entity(game,
-                Entity_Kind__Skeleton,
-                -96 + (9 * (i %8)), -32 + (9 * (i / 8)), 0);
-        set_entity__controller(entity,
-                m_controller_for__dummy);
-    }
 
     move_chunk_manager__chunks(
             &game->world.chunk_manager, 
@@ -126,6 +118,9 @@ void release_entity(Game *game, Entity *entity) {
     } else {
         debug_info("released entity.");
     }
+    remove_entity_from__collision_manager(
+            &game->world.collision_manager, 
+            entity);
     release_entity__silently(
             &game->world.entity_manager,
             entity);

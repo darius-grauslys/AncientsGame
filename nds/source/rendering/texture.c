@@ -112,7 +112,7 @@ _abort:
 void PLATFORM_free_texture(PLATFORM_Texture *texture) {
     oamFreeGfx(
             texture->oam,
-            texture->oam_index);
+            texture->gfx);
 }
 
 void PLATFORM_init_texture__with_path(PLATFORM_Texture *texture,

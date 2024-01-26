@@ -10,11 +10,15 @@ void poll_collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity);
 
-void remove_entity_from__collision_manager(
+void remove_entity_from__collision_manager__at(
         Collision_Manager *collision_manager,
         Entity *entity,
         int32_t old_x__chunk,
         int32_t old_y__chunk);
+
+void remove_entity_from__collision_manager(
+        Collision_Manager *collision_manager,
+        Entity *entity);
 
 void add_entity_to__collision_manager(
         Collision_Manager *collision_manager,

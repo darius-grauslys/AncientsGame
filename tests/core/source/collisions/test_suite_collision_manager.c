@@ -436,7 +436,7 @@ TEST_FUNCTION(add_entity_to__collision_manager) {
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(remove_entity_from__collision_manager) {
+TEST_FUNCTION(remove_entity_from__collision_manager__at) {
     Collision_Manager collision_manager;
     init_collision_manager(&collision_manager);
     Entity entity;
@@ -466,7 +466,7 @@ TEST_FUNCTION(remove_entity_from__collision_manager) {
             collision_node->entity_ptrs[0], 
             &entity);
 
-    remove_entity_from__collision_manager(
+    remove_entity_from__collision_manager__at(
             &collision_manager,
             &entity,
             entity.hitbox.x__chunk,
@@ -667,7 +667,7 @@ DEFINE_SUITE(collision_manager,
         INCLUDE_TEST__STATELESS
             (add_entity_to__collision_manager),
         INCLUDE_TEST__STATELESS
-            (remove_entity_from__collision_manager),
+            (remove_entity_from__collision_manager__at),
         INCLUDE_TEST__STATELESS
             (move_collision_manager__nodes),
         INCLUDE_TEST__STATELESS

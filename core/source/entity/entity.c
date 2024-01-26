@@ -139,8 +139,8 @@ bool commit_entity_velocity(
 
     commit_hitbox_velocity(&entity->hitbox);
 
-    if (old_x__chunk != entity->hitbox.x__chunk 
-            || old_y__chunk != entity->hitbox.y__chunk) {
+    if (*old_x__chunk != entity->hitbox.x__chunk 
+            || *old_y__chunk != entity->hitbox.y__chunk) {
         return true;
     }
     return false;

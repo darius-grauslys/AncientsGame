@@ -679,16 +679,16 @@ void add_entity_to__collision_manager(
             collision_node, entity);
 }
 
-void remove_entity_from__collision_manager(
+void remove_entity_from__collision_manager__at(
         Collision_Manager *collision_manager,
         Entity *entity,
         int32_t old_x__chunk,
         int32_t old_y__chunk) {
-    // debug_info("old_chunk %d, %d vs new %d, %d",
+    // debug_info("remove entity from collision_node: %d, %d where manager is: %d, %d",
     //         old_x__chunk,
     //         old_y__chunk,
-    //         entity->hitbox.x__chunk,
-    //         entity->hitbox.y__chunk);
+    //         collision_manager->x__center_chunk,
+    //         collision_manager->y__center_chunk);
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
@@ -698,6 +698,18 @@ void remove_entity_from__collision_manager(
     // debug_info("remove entity to node: %d, %d",
     //         collision_node->x__chunk,
     //         collision_node->y__chunk);
+    remove_entity_from__collision_node(
+            collision_node, entity);
+}
+
+void remove_entity_from__collision_manager(
+        Collision_Manager *collision_manager,
+        Entity *entity) {
+    Collision_Manager__Collision_Node *collision_node =
+        get_collision_node_for__this_position(
+                collision_manager, 
+                entity->hitbox.x__chunk,
+                entity->hitbox.y__chunk);
     remove_entity_from__collision_node(
             collision_node, entity);
 }
