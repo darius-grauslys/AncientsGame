@@ -6,22 +6,22 @@ void set_hitbox__position(
         int32_t x__global,
         int32_t y__global,
         int32_t z__global) {
-    hitbox->x__chunk = x__global 
-        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
-    hitbox->y__chunk = y__global 
-        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
-    hitbox->z__chunk = z__global 
-        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+    hitbox->x__chunk = 
+        x__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
+    hitbox->y__chunk = 
+        y__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
+    hitbox->z__chunk = 
+        z__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
 
-    hitbox->x = (x__global &
-        ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK)
+    hitbox->x =
+        (x__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
-    hitbox->y = (y__global &
-        ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK)
+    hitbox->y =
+        (y__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
-    hitbox->z = (z__global &
-        ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK)
-        << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
+    hitbox->z =
+        (z__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1)
+        << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
 }
 
 void commit_hitbox_velocity(

@@ -55,7 +55,9 @@ void m_controller_for__player(
                 game, 
                 Entity_Kind__Skeleton,
                 x, y, 0);
-        set_entity__controller(skele, m_controller_for__dummy);
+        if (skele) {
+            set_entity__controller(skele, m_controller_for__dummy);
+        }
     } else if (!is_input__use(game)) {
         toggle = false;
     }

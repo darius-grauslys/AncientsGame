@@ -7,7 +7,7 @@
 // Before writing any tests, please see the README
 // found in ./tests
 
-TEST_FUNCTION(is_hitboxes__overlapping__small_box_in_big) {
+TEST_FUNCTION(is_hitbox__colliding__small_box_in_big) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
@@ -18,60 +18,72 @@ TEST_FUNCTION(is_hitboxes__overlapping__small_box_in_big) {
     init_hitbox(&hitbox__two, 
             6, 6,
             0, 0, 0);
+    apply_velocity_to__hitbox(&hitbox__two, 
+            1, 0, 0);
 
-    munit_assert_true(
-            is_hitboxes__overlapping(
-                &hitbox__one,
-                &hitbox__two));
+    munit_assert_int32(
+            is_hitbox__colliding(
+                &hitbox__two,
+                &hitbox__one),
+            ==,
+            DIRECTION__EAST);
 
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(is_hitboxes__overlapping__perfect_overlap) {
+TEST_FUNCTION(is_hitbox__colliding__perfect_overlap) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
     init_hitbox(&hitbox__one, 
             8, 8,
-            0, 0, 0);
+            -1, 0, 0);
+    apply_velocity_to__hitbox(&hitbox__one, 
+            1, 0, 0);
 
     init_hitbox(&hitbox__two, 
             8, 8,
             0, 0, 0);
 
-    munit_assert_true(
-            is_hitboxes__overlapping(
+    munit_assert_int32(
+            is_hitbox__colliding(
                 &hitbox__one,
-                &hitbox__two));
+                &hitbox__two),
+            ==,
+            DIRECTION__EAST);
 
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(is_hitboxes__overlapping__edge_inside) {
+TEST_FUNCTION(is_hitbox__colliding__edge_inside) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
     init_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
+    apply_velocity_to__hitbox(&hitbox__one, 
+            1, 0, 0);
 
     init_hitbox(&hitbox__two, 
             8, 8,
             7, 0, 0);
 
-    munit_assert_true(
-            is_hitboxes__overlapping(
+    munit_assert_int32(
+            is_hitbox__colliding(
                 &hitbox__one,
-                &hitbox__two));
+                &hitbox__two),
+            ==,
+            DIRECTION__EAST);
 
     return MUNIT_OK;
 }
 
 DEFINE_SUITE(hitbox_aabb, 
         INCLUDE_TEST__STATELESS
-            (is_hitboxes__overlapping__small_box_in_big),
+            (is_hitbox__colliding__small_box_in_big),
         INCLUDE_TEST__STATELESS
-            (is_hitboxes__overlapping__perfect_overlap),
+            (is_hitbox__colliding__perfect_overlap),
         INCLUDE_TEST__STATELESS
-            (is_hitboxes__overlapping__edge_inside),
+            (is_hitbox__colliding__edge_inside),
         END_TESTS)

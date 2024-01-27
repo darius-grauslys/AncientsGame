@@ -193,8 +193,6 @@ typedef struct Inventory_t Inventory;
 
 typedef void (*m_dispose_entity)    (Entity *this_entity, Game *game);
 typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
-typedef void (*m_entity_chunk_transitioner) (Entity *this_entity, Game *game,
-        int32_t old_x__chunk, int32_t old_y__chunk);
 
 ///
 /// callee_data is an opaque pointer to whatever
@@ -220,6 +218,8 @@ typedef void (*m_entity_collision)  (Entity *entity_collision_source,
     (ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS << 1)
 #define ENTITY_FLAG__IS_UNLOADED \
     (ENTITY_FLAG__IS_COLLIDING << 1)
+#define ENTITY_FLAG__IS_HIDDEN \
+    (ENTITY_FLAG__IS_UNLOADED << 1)
 
 typedef struct Hitbox_AABB_t {
     uint32_t width;
@@ -245,7 +245,6 @@ typedef struct Entity_t {
     // DO NOT INVOKE! Called automatically
     m_entity_controller         controller_handler;
     // DO NOT INVOKE! Called automatically
-    m_entity_chunk_transitioner chunk_transition_handler;
     m_entity_collision          collision_handler;
 
     Hitbox_AABB hitbox;
@@ -259,11 +258,13 @@ typedef struct Entity_t {
 } Entity;
 
 #define ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE 6
-#define ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK ((1 << 7) -1)
 #define ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE 4
 #define ENTITY_CHUNK_FRACTIONAL__BIT_SIZE \
     (ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE \
      + ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE)
+
+#define ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK ((1 << 6) -1)
+
 // 1.5 pixels.
 #define ENTITY_VELOCITY__PLAYER          0b1100
 #define ENTITY_VELOCITY__PLAYER_DIAGONAL 0b1001

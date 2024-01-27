@@ -79,23 +79,30 @@ void manage_entities(Game *game) {
         }
         if (is_entity__unloaded(entity)) {
             release_entity(game, entity);
+            continue;
         }
 
-        poll_collision_manager(
+        if (!poll_collision_manager(
                 &game->world.collision_manager, 
-                entity);
+                entity)) {
+            release_entity(game, entity);
+            continue;
+        }
 
         int32_t old_x__chunk, old_y__chunk;
         if (commit_entity_velocity(entity, 
                     &old_x__chunk,
                     &old_y__chunk)) {
-            if (entity->chunk_transition_handler) {
-                entity->chunk_transition_handler(
-                        entity,
-                        game,
-                        old_x__chunk,
-                        old_y__chunk
-                        );
+            remove_entity_from__collision_manager__at(
+                    &game->world.collision_manager, 
+                    entity, 
+                    old_x__chunk, 
+                    old_y__chunk);
+            if (!add_entity_to__collision_manager(
+                    &game->world.collision_manager, 
+                    entity)) {
+                release_entity(game, entity);
+                continue;
             }
         }
 
@@ -118,9 +125,6 @@ void release_entity(Game *game, Entity *entity) {
     } else {
         debug_info("released entity.");
     }
-    remove_entity_from__collision_manager(
-            &game->world.collision_manager, 
-            entity);
     release_entity__silently(
             &game->world.entity_manager,
             entity);
@@ -134,6 +138,10 @@ Entity *get_new__humanoid(Game *game,
     Entity *entity = allocate__entity(
             &game->world.entity_manager, kind_of_entity);
 
+    if (!entity) {
+        return 0;
+    }
+
     init_hitbox(
             &entity->hitbox, 
             8, 8, 
@@ -144,10 +152,6 @@ Entity *get_new__humanoid(Game *game,
     set_entity__collider(
             entity, 
             m_entity_collision_handler);
-
-    set_entity__chunk_transitioner(
-            entity,
-            m_entity_chunk_transition_handler);
 
     add_entity_to__collision_manager(
             &game->world.collision_manager, entity);
@@ -166,6 +170,9 @@ Entity *get_new__player(Game *game,
             x__global,
             y__global,
             z__global);
+    if (!player) {
+        return 0;
+    }
     if (is_local_player) {
         Entity_Manager *entity_manager = 
             &game->world.entity_manager;

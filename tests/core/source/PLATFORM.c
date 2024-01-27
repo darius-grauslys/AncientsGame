@@ -66,8 +66,9 @@ void debug_abort(const char *msg_fmt, ...) {
 
 // rendering/PLATFORM_sprite.c
 void PLATFORM_init_sprite(
-        PLATFORM_Sprite *sprite,
-        Entity *entity) { }
+        PLATFORM_Sprite *sprite) { }
+void PLATFORM_release_sprite(
+        PLATFORM_Sprite *sprite) { }
 // rendering/PLATFORM_animate_sprite.c
 void PLATFORM_update_sprite_gfx__to_current_frame(
         Sprite_Wrapper *sprite_wrapper) { }

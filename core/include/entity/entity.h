@@ -29,6 +29,10 @@ static bool inline is_entity__unloaded(Entity *entity) {
     return entity->entity_flags &
         ENTITY_FLAG__IS_UNLOADED;
 }
+static bool inline is_entity__hidden(Entity *entity) {
+    return entity->entity_flags &
+        ENTITY_FLAG__IS_HIDDEN;
+}
 
 static void inline set_entity__enabled(Entity *entity) {
     entity->entity_flags |= ENTITY_FLAG__IS_ENABLED;
@@ -44,6 +48,9 @@ static void inline set_entity__collidable(Entity *entity) {
 }
 static void inline set_entity_as__loaded(Entity *entity) {
     entity->entity_flags &= ~ENTITY_FLAG__IS_UNLOADED;
+}
+static void inline set_entity_as__hidden(Entity *entity) {
+    entity->entity_flags |= ENTITY_FLAG__IS_HIDDEN;
 }
 
 static void inline set_entity__disabled(Entity *entity) {
@@ -61,6 +68,9 @@ static void inline set_entity__uncollidable(Entity *entity) {
 static void inline set_entity_as__unloaded(Entity *entity) {
     entity->entity_flags |= ENTITY_FLAG__IS_UNLOADED;
 }
+static void inline set_entity_as__visible(Entity *entity) {
+    entity->entity_flags &= ~ENTITY_FLAG__IS_HIDDEN;
+}
 
 static void inline set_entity__controller(
         Entity *entity,
@@ -77,12 +87,6 @@ static void inline set_entity__disposer(
         Entity *entity,
         m_dispose_entity disposer) {
     entity->dispose_handler = disposer;
-}
-
-static void inline set_entity__chunk_transitioner(
-        Entity *entity,
-        m_entity_chunk_transitioner chunk_transitioner) {
-    entity->chunk_transition_handler = chunk_transitioner;
 }
 
 static void inline set_entity__collider(

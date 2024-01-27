@@ -15,6 +15,20 @@ void init_entity_manager(Entity_Manager *entity_manager) {
 
 Entity *allocate__entity(Entity_Manager* entity_manager,
         enum Entity_Kind kind_of_entity) {
+    // TODO: do better than bellow:
+    switch (kind_of_entity) {
+        default:
+            break;
+        case Entity_Kind__Player:
+        case Entity_Kind__Skeleton:
+        case Entity_Kind__Zombie:
+            if (entity_manager->entity_count >=
+                    ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE) {
+                debug_error("Entity limit reached.");
+                return 0;
+            }
+            break;
+    }
     uint32_t start = 0;
     if (kind_of_entity == Entity_Kind__Player) {
         start =0;
@@ -26,6 +40,7 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
         if (!is_entity__enabled(&entity_manager->entities[i])) {
             init_entity(&entity_manager->entities[i],
                     kind_of_entity);
+            entity_manager->entity_count++;
             return &entity_manager->entities[i];
         }
     }
@@ -36,6 +51,7 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
 }
 
 void release_entity__silently(Entity_Manager* entity_manager, Entity* entity) {
+    entity_manager->entity_count--;
     set_entity__disabled(entity);
     PLATFORM_release_sprite(&entity->sprite_wrapper.sprite);
 }
