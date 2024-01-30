@@ -70,6 +70,31 @@ void set_hitbox__position(
         int32_t y__global,
         int32_t z__global);
 
+static Direction inline get_movement_direction_of__hitbox(
+        Hitbox_AABB *hitbox) {
+    Direction direction_of_movement =
+        DIRECTION__NONE;
+    if (0 < hitbox__one->x__velocity) {
+        direction_of_movement |= DIRECTION__EAST;
+    }
+    if (0 > hitbox__one->x__velocity) {
+        direction_of_movement |= DIRECTION__WEST;
+    }
+    if (0 < hitbox__one->y__velocity) {
+        direction_of_movement |= DIRECTION__NORTH;
+    }
+    if (0 > hitbox__one->y__velocity) {
+        direction_of_movement |= DIRECTION__SOUTH;
+    }
+
+    return direction_of_movement;
+}
+
+Direction get_tile_transition_direction_of__hitbox(
+        Hitbox_AABB *hitbox,
+        Hitbox_Point *aa,
+        Hitbox_Point *bb);
+
 static void inline init_hitbox(
         Hitbox_AABB *hitbox,
         int32_t width, int32_t length,

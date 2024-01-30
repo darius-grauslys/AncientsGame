@@ -221,6 +221,10 @@ typedef void (*m_entity_collision)  (Entity *entity_collision_source,
 #define ENTITY_FLAG__IS_HIDDEN \
     (ENTITY_FLAG__IS_UNLOADED << 1)
 
+typedef struct Hitbox_Point_t {
+    int32_t x, y, z;
+} Hitbox_Point;
+
 typedef struct Hitbox_AABB_t {
     uint32_t width;
     uint32_t length;
@@ -341,6 +345,8 @@ typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
 #define TILE_PIXEL_HEIGHT 8
 #define TILE_PIXEL_WIDTH 8
 
+#define TILE_PIXEL_WIDTH__BIT_SIZE 3
+
 #define TILE_SHEET_PIXEL_WIDTH 256
 #define TILE_SHEET_PIXEL_HEIGHT 256
 
@@ -411,6 +417,15 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Leaf_Clutter,
 };
 
+enum Tile_Structure_Kind {
+    Tile_Structure_Kind__None,
+    Tile_Structure_Kind__Floor,
+    Tile_Structure_Kind__Stair_Ascending,
+    Tile_Structure_Kind__Stair_Descending,
+    Tile_Structure_Kind__Wall,
+    Tile_Structure_Kind__Window,
+};
+
 ///
 /// INPUT
 ///
@@ -434,8 +449,14 @@ typedef struct Input_t {
 ///
 
 typedef struct Tile_t {
-    enum Tile_Kind          the_kind_of_tile__this_tile_is;
-    enum Tile_Cover_Kind    the_kind_of_tile_cover__this_tile_has;
+    enum Tile_Kind                  the_kind_of_tile__this_tile_is;
+    union {
+        enum Tile_Cover_Kind        the_kind_of_tile_cover__this_tile_has;
+        enum Tile_Structure_Kind    the_kind_of_tile_structure__this_tile_is;
+        union {
+            Direction               direction_of_structure;
+        };
+    };
     uint8_t flags;
     // bits 1 2 3, stair direction (values 0-7)
     // bit 4, is the stair inverted

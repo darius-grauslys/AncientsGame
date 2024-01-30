@@ -7,4 +7,17 @@
 // Before writing any tests, please see the README
 // found in ./tests
 
-DEFINE_SUITE(chunk_manager, END_TESTS)
+TEST_FUNCTION(get_chunk_index_from__chunk_manager) {
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(get_chunk_from__chunk_manager) {
+    return MUNIT_OK;
+}
+
+DEFINE_SUITE(chunk_manager, 
+        INLCUDE_TEST
+            (get_chunk_index_at__xyz_from__chunk_manager),
+        INLCUDE_TEST
+            (get_chunk_from__chunk_manager),
+        END_TESTS)

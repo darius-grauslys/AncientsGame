@@ -55,10 +55,6 @@ void commit_hitbox_velocity(
     hitbox->z__chunk += dz;
 }
 
-typedef struct Hitbox_Point_t {
-    int32_t x, y;
-} Hitbox_Point;
-
 void init_hitbox_point__without_velocity(Hitbox_Point *hitbox_point,
         Hitbox_AABB *hitbox,
         Direction corner_direction) {
@@ -127,6 +123,68 @@ void init_hitbox_point(Hitbox_Point *hitbox_point,
         get_global_y_from__hitbox(hitbox)
         + offset_half_length
         ;
+}
+
+Direction get_tile_transition_direction_of__hitbox(
+        Hitbox_AABB *hitbox,
+        Hitbox_Point *aa,
+        Hitbox_Point *bb) {
+    Direction direction_of_movement =
+        get_movement_direction_of__hitbox(hitbox);
+    Direction direction_of_transition =
+        DIRECTION__NONE;
+
+    int32_t x__tile_pos =
+        (hitbox->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        ;
+    int32_t y__tile_pos =
+        (hitbox->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        ;
+
+    init_hitbox_point(
+            aa, hitbox, 
+            DIRECTION__SOUTH_WEST);
+    init_hitbox_point(
+            bb, hitbox, 
+            DIRECTION__NORTH_EAST);
+
+    int32_t x__aa_tile_pos =
+        (aa->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        ;
+    int32_t y__aa_tile_pos
+        (aa->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        ;
+    int32_t x__bb_tile_pos
+        (bb->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        ;
+    int32_t y__bb_tile_pos
+        (bb->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        ;
+
+    if (direction_of_movement & DIRECTION__EAST
+            && (x__bb_tile_pos > x__tile_pos)) {
+        direction_of_transition |= DIRECTION__EAST;
+    }
+    if (direction_of_movement & DIRECTION__WEST
+            && (x__bb_tile_pos > x__tile_pos)) {
+        direction_of_transition |= DIRECTION__WEST;
+    }
+    if (direction_of_movement & DIRECTION__NORTH
+            && (x__bb_tile_pos > x__tile_pos)) {
+        direction_of_transition |= DIRECTION__NORTH;
+    }
+    if (direction_of_movement & DIRECTION__SOUTH
+            && (x__bb_tile_pos > x__tile_pos)) {
+        direction_of_transition |= DIRECTION__SOUTH;
+    }
+
+    return direction_of_transition;
 }
 
 Direction is_this_hitbox__inside_this_hitbox(
@@ -262,27 +320,29 @@ get_direction:
         || bb__one_still.y == bb__two.y
         ;
 
+    Direction direction_of_movement =
+        get_movement_direction_of__hitbox(hitbox__one);
     Direction direction_of_collision = DIRECTION__NONE;
 
-    if (0 < hitbox__one->x__velocity) {
+    if (direction_of_movement & DIRECTION__EAST) {
         if (is_still_aa__contained_along_y 
                 || is_still_bb__contained_along_y
                 || is_still_aligned__y)
             direction_of_collision |= DIRECTION__EAST;
     }
-    if (0 > hitbox__one->x__velocity) {
+    if (direction_of_movement & DIRECTION__WEST) {
         if (is_still_aa__contained_along_y 
                 || is_still_bb__contained_along_y
                 || is_still_aligned__y)
             direction_of_collision |= DIRECTION__WEST;
     }
-    if (0 < hitbox__one->y__velocity) {
+    if (direction_of_movement & DIRECTION__NORTH) {
         if (is_still_aa__contained_along_x
                 || is_still_bb__contained_along_x
                 || is_still_aligned__x)
             direction_of_collision |= DIRECTION__NORTH;
     }
-    if (0 > hitbox__one->y__velocity) {
+    if (direction_of_movement & DIRECTION__SOUTH) {
         if (is_still_aa__contained_along_x
                 || is_still_bb__contained_along_x
                 || is_still_aligned__x)

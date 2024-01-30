@@ -29,7 +29,7 @@ void init_game(Game *game) {
     get_new__player(game, true,
             0, 0, 0);
 
-    move_chunk_manager__chunks(
+    move_chunk_manager(
             &game->world.chunk_manager, 
             &game->world.world_params, 
             DIRECTION__NORTH,
