@@ -34,6 +34,20 @@ void init_game(Game *game) {
             &game->world.world_params, 
             DIRECTION__NORTH,
             2);
+
+    Tile tile;
+    init_tile(
+            &tile,
+            Tile_Kind__Amethyst);
+    Chunk *chunk =
+        get_chunk_from__chunk_manager(
+            &game->world.chunk_manager, 
+            0, -2, 0);
+    set_tile_of__chunk(
+            chunk,
+            5, 5, 5,
+            &tile);
+
     PLATFORM_update_chunks(
             &game->gfx_context,
             &game->world.chunk_manager);

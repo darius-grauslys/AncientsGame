@@ -2,38 +2,6 @@
 
 #include <collisions/collision_manager.c>
 
-TEST_FUNCTION(get_collision_node_index_during__initialization) {
-    uint32_t index = 
-        CHUNK_MANAGER__QUANTITY_OF_CHUNKS - 1;
-    uint32_t returned_index;
-    for (int32_t y=0;
-            y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
-            y++) {
-        for (int32_t x=CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW-1;
-                x>=0;
-                x--) {
-            returned_index =
-                get_collision_node_index_during__initialization(x,y);
-            munit_assert_uint32(returned_index, ==, index--);
-        }
-    }
-
-    returned_index =
-        get_collision_node_index_during__initialization(-1,7);
-    munit_assert_int32(
-            returned_index,
-            ==,
-            CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1);
-    returned_index =
-        get_collision_node_index_during__initialization(0,-1);
-    munit_assert_int32(
-            returned_index,
-            ==,
-            0);
-
-    return MUNIT_OK;
-}
-
 TEST_FUNCTION(update_collision_manager__layer_three) {
     Collision_Manager__Layer_Two layer_two;
     Collision_Manager__Layer_Three layer_three;
@@ -271,7 +239,7 @@ TEST_FUNCTION(init_collision_manager) {
     munit_assert_ptr_equal(
             collision_manager.most_north_western__node,
             &collision_manager.collision_nodes[
-            get_collision_node_index_during__initialization(0,
+            get_chunk_index_during__initialization(0,
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS-1)]);
 
     Collision_Manager__Collision_Node *current_node =
@@ -288,25 +256,25 @@ TEST_FUNCTION(init_collision_manager) {
             munit_assert_ptr_equal(
                     current_node->collision_node__east,
                     &collision_manager.collision_nodes[
-                    get_collision_node_index_during__initialization(x+1,y)]
+                    get_chunk_index_during__initialization(x+1,y)]
                     );
             // check west
             munit_assert_ptr_equal(
                     current_node->collision_node__west,
                     &collision_manager.collision_nodes[
-                    get_collision_node_index_during__initialization(x-1,y)]
+                    get_chunk_index_during__initialization(x-1,y)]
                     );
             // check north
             munit_assert_ptr_equal(
                     current_node->collision_node__north,
                     &collision_manager.collision_nodes[
-                    get_collision_node_index_during__initialization(x,y+1)]
+                    get_chunk_index_during__initialization(x,y+1)]
                     );
             // check south
             munit_assert_ptr_equal(
                     current_node->collision_node__south,
                     &collision_manager.collision_nodes[
-                    get_collision_node_index_during__initialization(x,y-1)]
+                    get_chunk_index_during__initialization(x,y-1)]
                     );
             current_node = current_node->collision_node__east;
         }
@@ -335,7 +303,7 @@ TEST_FUNCTION(init_collision_manager) {
         munit_assert_ptr_equal(
                 current_node,
                 &collision_manager.collision_nodes[
-                get_collision_node_index_during__initialization(x,y)]);
+                get_chunk_index_during__initialization(x,y)]);
     }
 
     munit_assert_int32(
@@ -369,7 +337,7 @@ TEST_FUNCTION(init_collision_manager) {
             y++) {
         collision_node__boundary =
             &collision_manager.collision_nodes[
-                get_collision_node_index_during__initialization(0, y)];
+                get_chunk_index_during__initialization(0, y)];
         munit_assert_int32(
                 collision_node__boundary->
                 legal_directions,
@@ -377,7 +345,7 @@ TEST_FUNCTION(init_collision_manager) {
                 DIRECTION__NORTH_EAST | DIRECTION__SOUTH);
         collision_node__boundary =
             &collision_manager.collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1, y)];
         munit_assert_int32(
                 collision_node__boundary->
@@ -390,7 +358,7 @@ TEST_FUNCTION(init_collision_manager) {
             x++) {
         collision_node__boundary =
             &collision_manager.collision_nodes[
-                get_collision_node_index_during__initialization(x, 0)];
+                get_chunk_index_during__initialization(x, 0)];
         munit_assert_int32(
                 collision_node__boundary->
                 legal_directions,
@@ -398,7 +366,7 @@ TEST_FUNCTION(init_collision_manager) {
                 DIRECTION__SOUTH_EAST | DIRECTION__WEST);
         collision_node__boundary =
             &collision_manager.collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         x, CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1)];
         munit_assert_int32(
                 collision_node__boundary->
@@ -429,7 +397,7 @@ TEST_FUNCTION(get_collision_node_for__this_position) {
                     x__chunk, y__chunk);
         actual_node =
             &collision_manager.collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         x__chunk,
                         y__chunk)];
         munit_assert_ptr_equal(node, actual_node);
@@ -1134,8 +1102,6 @@ TEST_FUNCTION(set_collision_manager__center_chunk) {
 }
 
 DEFINE_SUITE(collision_manager, 
-        INCLUDE_TEST__STATELESS
-            (get_collision_node_index_during__initialization), 
         INCLUDE_TEST__STATELESS
             (update_collision_manager__layer_three), 
         INCLUDE_TEST__STATELESS

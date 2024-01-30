@@ -6,74 +6,47 @@ void init_chunk_manager(
         Chunk_Manager* chunk_manager,
         World_Parameters *world_params) {
     chunk_manager->x__center_chunk =
-        chunk_manager->y__center_chunk = 0;
+        chunk_manager->y__center_chunk = 4;
     for (int32_t y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
         for (int32_t x=0; x <
                 CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW; x++) {
+            uint32_t index =
+                get_chunk_index_during__initialization(x, y);
             Chunk_Manager__Chunk_Map_Node *chunk_map_node =
-                &chunk_manager->chunk_map[
-                    y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-                        + x
-                ];
+                &chunk_manager->chunk_map[index];
 
             Chunk *chunk__here =
-                &chunk_manager->chunks[
-                    y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
-                    + x];
+                &chunk_manager->chunks[index];
 
-            init_chunk(chunk__here, x, -y);
+            init_chunk(chunk__here, x, y);
 
             world_params->chunk_generator_f(world_params, chunk__here);
 
             chunk_map_node->chunk__here = chunk__here;
 
-            uint32_t x__east, x__west, y__north, y__south;
-
-            if (x == 0)
-                x__west = CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1;
-            else
-                x__west = x - 1;
-            if (x == CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1)
-                x__east = 0;
-            else
-                x__east = x + 1;
-
-            if (y == 0)
-                y__north = CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1;
-            else
-                y__north = y - 1;
-            if (y == CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1)
-                y__south = 0;
-            else
-                y__south = y + 1;
-
             // link north
             chunk_map_node->chunk_map_node__north =
                 &chunk_manager->chunk_map[
-                y__north * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
-                + x
+                get_chunk_index_during__initialization(x, y + 1)
                 ];
 
             // link east
             chunk_map_node->chunk_map_node__east =
                 &chunk_manager->chunk_map[
-                y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
-                + x__east
+                get_chunk_index_during__initialization(x + 1, y)
                 ];
 
             // link south
             chunk_map_node->chunk_map_node__south =
                 &chunk_manager->chunk_map[
-                y__south * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-                + x 
+                get_chunk_index_during__initialization(x, y - 1)
                 ];
 
             // link west
             chunk_map_node->chunk_map_node__west =
                 &chunk_manager->chunk_map[
-                y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-                + x__west
+                get_chunk_index_during__initialization(x - 1, y)
                 ];
         }
     }

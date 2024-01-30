@@ -135,12 +135,13 @@ Direction get_tile_transition_direction_of__hitbox(
         DIRECTION__NONE;
 
     int32_t x__tile_pos =
-        (hitbox->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
-        >> TILE_PIXEL_WIDTH__BIT_SIZE
-        ;
+        get_global_x_from__hitbox(hitbox);
+    x__tile_pos =
+        x__tile_pos >> TILE_PIXEL_WIDTH__BIT_SIZE;
     int32_t y__tile_pos =
-        (hitbox->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
-        >> TILE_PIXEL_WIDTH__BIT_SIZE
+        get_global_y_from__hitbox(hitbox);
+    y__tile_pos =
+        y__tile_pos >> TILE_PIXEL_WIDTH__BIT_SIZE;
         ;
 
     init_hitbox_point(
@@ -150,37 +151,29 @@ Direction get_tile_transition_direction_of__hitbox(
             bb, hitbox, 
             DIRECTION__NORTH_EAST);
 
-    int32_t x__aa_tile_pos =
-        (aa->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
-        >> TILE_PIXEL_WIDTH__BIT_SIZE
-        ;
-    int32_t y__aa_tile_pos = 
-        (aa->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
-        >> TILE_PIXEL_WIDTH__BIT_SIZE
-        ;
-    int32_t x__bb_tile_pos =
-        (bb->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
-        >> TILE_PIXEL_WIDTH__BIT_SIZE
-        ;
-    int32_t y__bb_tile_pos = 
-        (bb->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
-        >> TILE_PIXEL_WIDTH__BIT_SIZE
-        ;
+    aa->x =
+        aa->x >> TILE_PIXEL_WIDTH__BIT_SIZE;
+    aa->y = 
+        aa->y >> TILE_PIXEL_WIDTH__BIT_SIZE;
+    bb->x =
+        bb->x >> TILE_PIXEL_WIDTH__BIT_SIZE;
+    bb->y = 
+        bb->y >> TILE_PIXEL_WIDTH__BIT_SIZE;
 
     if (direction_of_movement & DIRECTION__EAST
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (bb->x > x__tile_pos)) {
         direction_of_transition |= DIRECTION__EAST;
     }
     if (direction_of_movement & DIRECTION__WEST
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (aa->x < x__tile_pos)) {
         direction_of_transition |= DIRECTION__WEST;
     }
     if (direction_of_movement & DIRECTION__NORTH
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (bb->y > y__tile_pos)) {
         direction_of_transition |= DIRECTION__NORTH;
     }
     if (direction_of_movement & DIRECTION__SOUTH
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (aa->y < y__tile_pos)) {
         direction_of_transition |= DIRECTION__SOUTH;
     }
 

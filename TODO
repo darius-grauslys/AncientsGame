@@ -1,0 +1,14 @@
+*   Decouple the chunk_manager view fulcrum into a helper module
+        chunk_manager has most_NESW__chunk_node's which is primarily
+        used for the view fulcrum. This is beyond the responsibility
+        of the chunk_manager. It should only be storing and managing
+        chunks in memory.
+
+        We will however need this fuctionality in every single backend
+        implementation, so to remedy this, we will want to remove
+        all utilization of chunk_manager for rendering chunks into
+        a helper module called "viewing_fulcrum" placed in rendering.
+
+        Nothing in core will make use of this, and only backend
+        implementations will use it in PLATFORM_Gfx_Context.
+

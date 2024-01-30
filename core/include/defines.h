@@ -14,6 +14,9 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
  * */
 #include <platform_defines.h>
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #ifndef PLATFORM__CHUNKS
 #define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 4
 #define GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS 3
@@ -52,6 +55,38 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
     * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
 #endif
 
+///
+/// This is to only be called during
+/// initalization, since layer_one
+/// (x/y)__center_chunk is
+/// CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 2.
+///
+/// Most north west collision node is:
+///     x__chunk == 0
+///     y__chunk == 0
+///
+/// In otherwords, we don't need to do
+/// any modulus to obtain a bounded index
+/// of [0, CHUNK_MANAGER__QUANTITY_OF_CHUNKS - 1]
+///
+static uint32_t inline get_chunk_index_during__initialization(
+    int32_t x__chunk, int32_t y__chunk) {
+    x__chunk = x__chunk % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+    y__chunk = y__chunk % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+    if (x__chunk < 0) {
+        x__chunk = (x__chunk + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+            % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+    }
+    if (y__chunk < 0) {
+        y__chunk = (y__chunk + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+            % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+    }
+    return (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - y__chunk - 1)
+        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
+        + x__chunk
+        ;
+}
+
 #ifndef PLATFORM__ENTITIES
 #define ENTITY_MAXIMUM_QUANTITY_OF 128
 #define ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS 8
@@ -62,9 +97,6 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #define ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE \
     (ENTITY_MAXIMUM_QUANTITY_OF__NPCS \
     + ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS)
-
-#include <stdint.h>
-#include <stdbool.h>
 
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.

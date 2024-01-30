@@ -41,38 +41,6 @@
 /// (0,0) is collision_nodes[0]
 ///
 
-///
-/// This is to only be called during
-/// initalization, since layer_one
-/// (x/y)__center_chunk is
-/// CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 2.
-///
-/// Most north west collision node is:
-///     x__chunk == 0
-///     y__chunk == 0
-///
-/// In otherwords, we don't need to do
-/// any modulus to obtain a bounded index
-/// of [0, CHUNK_MANAGER__QUANTITY_OF_CHUNKS - 1]
-///
-static uint32_t inline get_collision_node_index_during__initialization(
-    int32_t x__chunk, int32_t y__chunk) {
-    x__chunk = x__chunk % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-    y__chunk = y__chunk % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
-    if (x__chunk < 0) {
-        x__chunk = (x__chunk + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-            % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-    }
-    if (y__chunk < 0) {
-        y__chunk = (y__chunk + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-            % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
-    }
-    return (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - y__chunk - 1)
-        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-        + x__chunk
-        ;
-}
-
 void update_collision_manager__layer_three(
         Collision_Manager__Layer_Three *layer_three, 
         Collision_Manager__Layer_Two *layer_two,
@@ -213,25 +181,25 @@ void init_collision_manager__layer_three(
 
     layer_three->collision_node__top_right =
         &collision_manager->collision_nodes[
-            get_collision_node_index_during__initialization(
+            get_chunk_index_during__initialization(
                     layer_three->x__center_chunk, 
                     layer_three->y__center_chunk)
         ];
     layer_three->collision_node__top_left =
         &collision_manager->collision_nodes[
-            get_collision_node_index_during__initialization(
+            get_chunk_index_during__initialization(
                     layer_three->x__center_chunk - 1, 
                     layer_three->y__center_chunk)
         ];
     layer_three->collision_node__bottom_right =
         &collision_manager->collision_nodes[
-            get_collision_node_index_during__initialization(
+            get_chunk_index_during__initialization(
                     layer_three->x__center_chunk, 
                     layer_three->y__center_chunk - 1)
         ];
     layer_three->collision_node__bottom_left =
         &collision_manager->collision_nodes[
-            get_collision_node_index_during__initialization(
+            get_chunk_index_during__initialization(
                     layer_three->x__center_chunk - 1, 
                     layer_three->y__center_chunk - 1)
         ];
@@ -273,7 +241,7 @@ void init_collision_manager(
                 CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW; x++) {
             Collision_Manager__Collision_Node *collision_node=
                 &collision_manager->collision_nodes[
-                get_collision_node_index_during__initialization(x, y)];
+                get_chunk_index_during__initialization(x, y)];
 
             init_collision_manager__collision_node(collision_node);
 
@@ -284,7 +252,7 @@ void init_collision_manager(
             // link west
             collision_node->collision_node__west =
                 &collision_manager->collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         x-1, y)];
             if (x != 0) {
                 *node_legal_directions |= DIRECTION__WEST;
@@ -292,7 +260,7 @@ void init_collision_manager(
             // link east
             collision_node->collision_node__east =
                 &collision_manager->collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         x+1, y)];
             if (x != CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW-1) {
                 *node_legal_directions |= DIRECTION__EAST;
@@ -302,7 +270,7 @@ void init_collision_manager(
             // link north
             collision_node->collision_node__north =
                 &collision_manager->collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         x, y+1)];
             if (y != 0) {
                 *node_legal_directions |= DIRECTION__NORTH;
@@ -310,7 +278,7 @@ void init_collision_manager(
             // link south
             collision_node->collision_node__south =
                 &collision_manager->collision_nodes[
-                get_collision_node_index_during__initialization(
+                get_chunk_index_during__initialization(
                         x, y-1)];
             if (y != CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS-1) {
                 *node_legal_directions |= DIRECTION__SOUTH;
