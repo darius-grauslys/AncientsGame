@@ -3,9 +3,46 @@
 
 #include <defines.h>
 
-Direction is_hitbox__colliding(
-        Hitbox_AABB *hitbox__checking,
-        Hitbox_AABB *hitbox__other);
+void init_hitbox_point__without_velocity(
+        Hitbox_Point *hitbox_point,
+        Hitbox_AABB *hitbox,
+        Direction corner_direction);
+
+static void inline init_hitbox_point__aa__without_velocity(
+        Hitbox_Point *aa,
+        Hitbox_AABB *hitbox) {
+    init_hitbox_point__without_velocity(
+            aa, hitbox, 
+            DIRECTION__SOUTH_WEST);
+}
+
+static void inline init_hitbox_point__bb__without_velocity(
+        Hitbox_Point *bb,
+        Hitbox_AABB *hitbox) {
+    init_hitbox_point__without_velocity(
+            bb, hitbox, 
+            DIRECTION__NORTH_EAST);
+}
+
+void init_hitbox_point(Hitbox_Point *hitbox_point,
+        Hitbox_AABB *hitbox,
+        Direction corner_direction);
+
+static void inline init_hitbox_point__aa(
+        Hitbox_Point *aa,
+        Hitbox_AABB *hitbox) {
+    init_hitbox_point(
+            aa, hitbox, 
+            DIRECTION__SOUTH_WEST);
+}
+
+static void inline init_hitbox_point__bb(
+        Hitbox_Point *bb,
+        Hitbox_AABB *hitbox) {
+    init_hitbox_point(
+            bb, hitbox, 
+            DIRECTION__NORTH_EAST);
+}
 
 static int32_t inline get_global_x_from__hitbox(
         Hitbox_AABB *hitbox) {
@@ -59,6 +96,38 @@ static int32_t inline get_global_z_from__hitbox__without_velocity(
         ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->z) >> 
             ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
+}
+
+static int32_t inline get_aa__x__chunk_from__hitbox(
+        Hitbox_AABB *hitbox) {
+    return
+        (get_global_x_from__hitbox(hitbox)
+            - hitbox->width)
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+}
+
+static int32_t inline get_aa__y__chunk_from__hitbox(
+        Hitbox_AABB *hitbox) {
+    return
+        (get_global_y_from__hitbox(hitbox)
+            - hitbox->height)
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+}
+
+static int32_t inline get_bb__x__chunk_from__hitbox(
+        Hitbox_AABB *hitbox) {
+    return
+        (get_global_x_from__hitbox(hitbox)
+            + hitbox->width)
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
+}
+
+static int32_t inline get_bb__y__chunk_from__hitbox(
+        Hitbox_AABB *hitbox) {
+    return
+        (get_global_y_from__hitbox(hitbox)
+            + hitbox->height)
+        >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
 void commit_hitbox_velocity(
@@ -137,5 +206,17 @@ static void inline apply_z_velocity_to__hitbox(
         int32_t z__velocity) {
     hitbox->z__velocity += z__velocity;
 }
+
+Direction is_hitbox__colliding(
+        Hitbox_AABB *hitbox__checking,
+        Hitbox_AABB *hitbox__other);
+
+bool is_this_hitbox__inside_this_hitbox(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two);
+
+bool is_this_hitbox_center__inside_this_hitbox(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two);
 
 #endif

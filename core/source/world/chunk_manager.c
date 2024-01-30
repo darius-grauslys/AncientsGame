@@ -1,6 +1,6 @@
 #include <defines.h>
+#include <world/chunk_manager.h>
 #include <world/chunk.h>
-#include <debug/debug.h>
 
 void init_chunk_manager(
         Chunk_Manager* chunk_manager,
@@ -53,22 +53,6 @@ void init_chunk_manager(
 
     chunk_manager->chunk_map_node__most_north_western =
         &chunk_manager->chunk_map[0];
-
-    chunk_manager->chunk_map_node__most_north_eastern =
-        &chunk_manager->chunk_map[
-        GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1];
-
-    chunk_manager->chunk_map_node__most_south_western =
-        &chunk_manager->chunk_map[
-        (GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS - 1)
-        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW];
-
-    chunk_manager->chunk_map_node__most_south_eastern =
-        &chunk_manager->chunk_map[
-        (GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS - 1)
-        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-        + GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1
-        ];
 }
 
 uint32_t get_chunk_index_at__xyz_from__chunk_manager(
@@ -77,63 +61,52 @@ uint32_t get_chunk_index_at__xyz_from__chunk_manager(
         int32_t z__chunk) {
     // TODO: extend to use z
 
-    if (x__chunk < chunk_manager
-            ->chunk_map_node__most_north_western->chunk__here->x 
-            || y__chunk > chunk_manager
-                ->chunk_map_node__most_north_western->chunk__here->y 
-            || x__chunk > chunk_manager
-                ->chunk_map_node__most_south_eastern->chunk__here->x
-            || y__chunk < chunk_manager
-                ->chunk_map_node__most_south_eastern->chunk__here->y) {
-        debug_error("chunk index out of bounds: (%d, %d, %d)",
-                x__chunk, y__chunk, z__chunk);
+    Chunk *most_north_western__chunk =
+        get_most_north_western__chunk(chunk_manager);
+    Chunk *most_south_western__chunk =
+        get_most_south_western__chunk(chunk_manager);
+
+    if (x__chunk
+            < most_north_western__chunk->x 
+            || y__chunk
+                > most_north_western__chunk->y 
+            || x__chunk 
+                > get_most_north_eastern__chunk(chunk_manager)->x
+            || y__chunk
+                < most_south_western__chunk->y) {
+        // Deliberately do not print error.
         return 0;
     }
 
     int32_t local_x =
-        x__chunk - chunk_manager
-        ->chunk_map_node__most_north_western->chunk__here->x;
+        x__chunk
+        - most_north_western__chunk->x
+        ;
     int32_t local_y =
-        y__chunk - chunk_manager
-        ->chunk_map_node__most_south_eastern->chunk__here->y;
+        y__chunk
+        - most_south_western__chunk->y
+        ;
 
-    return  local_y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-            + local_x;
-}
-
-Chunk* get_chunk_from__chunk_manager(
-        Chunk_Manager* chunk_manager, 
-        int32_t x__chunk, int32_t y__chunk, 
-        int32_t z__chunk) {
-
-    return &chunk_manager->chunks[
-        get_chunk_index_at__xyz_from__chunk_manager(
-                chunk_manager,
-                x__chunk, y__chunk,
-                z__chunk)
-    ];
+    return local_y 
+        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
+        + local_x
+        ;
 }
 
 void move_chunk_manager__chunks_north(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params) {
     int32_t x__old_most_north_western_chunk =
-        chunk_manager->chunk_map_node__most_north_western
-            ->chunk__here->x;
+        get_most_north_eastern__chunk(chunk_manager)->x;
     int32_t y__new_most_north_western_chunk =
-        chunk_manager->chunk_map_node__most_north_western
-            ->chunk__here->y + 1;
-    chunk_manager->chunk_map_node__most_north_western =
-        chunk_manager->chunk_map_node__most_north_western->chunk_map_node__north;
-    chunk_manager->chunk_map_node__most_north_eastern =
-        chunk_manager->chunk_map_node__most_north_eastern->chunk_map_node__north;
-    chunk_manager->chunk_map_node__most_south_western =
-        chunk_manager->chunk_map_node__most_south_western->chunk_map_node__north;
-    chunk_manager->chunk_map_node__most_south_eastern =
-        chunk_manager->chunk_map_node__most_south_eastern->chunk_map_node__north;
+        get_most_north_western__chunk(chunk_manager)->y + 1;
+    
+    // move the NW north.
+    move_most_north_western__chunk_map_node__north(chunk_manager);
 
+    // Begin at NW
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->chunk_map_node__most_north_western;
+        get_most_south_western__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
@@ -163,23 +136,16 @@ void move_chunk_manager__chunks_east(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params) {
     int32_t x__new_most_north_eastern_chunk =
-        chunk_manager->chunk_map_node__most_north_eastern
-            ->chunk__here->x + 1;
+        get_most_north_western__chunk(chunk_manager)->x + 1;
     int32_t y__old_most_south_eastern_chunk =
-        chunk_manager->chunk_map_node__most_south_eastern
-            ->chunk__here->y;
+        get_most_south_eastern__chunk(chunk_manager)->y;
 
-    chunk_manager->chunk_map_node__most_north_western =
-        chunk_manager->chunk_map_node__most_north_western->chunk_map_node__east;
-    chunk_manager->chunk_map_node__most_north_eastern =
-        chunk_manager->chunk_map_node__most_north_eastern->chunk_map_node__east;
-    chunk_manager->chunk_map_node__most_south_western =
-        chunk_manager->chunk_map_node__most_south_western->chunk_map_node__east;
-    chunk_manager->chunk_map_node__most_south_eastern =
-        chunk_manager->chunk_map_node__most_south_eastern->chunk_map_node__east;
+    // Move the NW east
+    move_most_north_western__chunk_map_node__east(chunk_manager);
 
+    // Begin at SE
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->chunk_map_node__most_south_eastern;
+        get_most_south_eastern__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
@@ -210,22 +176,16 @@ void move_chunk_manager__chunks_south(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params) {
     int32_t x__old_most_south_western_chunk =
-        chunk_manager->chunk_map_node__most_south_western
-            ->chunk__here->x;
+        get_most_south_western__chunk(chunk_manager)->x;
     int32_t y__new_most_south_western_chunk =
-        chunk_manager->chunk_map_node__most_south_western
-            ->chunk__here->y - 1;
-    chunk_manager->chunk_map_node__most_north_western =
-        chunk_manager->chunk_map_node__most_north_western->chunk_map_node__south;
-    chunk_manager->chunk_map_node__most_north_eastern =
-        chunk_manager->chunk_map_node__most_north_eastern->chunk_map_node__south;
-    chunk_manager->chunk_map_node__most_south_western =
-        chunk_manager->chunk_map_node__most_south_western->chunk_map_node__south;
-    chunk_manager->chunk_map_node__most_south_eastern =
-        chunk_manager->chunk_map_node__most_south_eastern->chunk_map_node__south;
+        get_most_south_western__chunk(chunk_manager)->y - 1;
 
+    // Move the NW south
+    move_most_north_western__chunk_map_node__south(chunk_manager);
+
+    // Begin at SW
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->chunk_map_node__most_south_western;
+        get_most_south_western__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
@@ -255,23 +215,16 @@ void move_chunk_manager__chunks_west(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params) {
     int32_t x__new_most_north_western_chunk =
-        chunk_manager->chunk_map_node__most_north_western
-            ->chunk__here->x - 1;
+        get_most_north_western__chunk(chunk_manager)->x - 1;
     int32_t y__old_most_south_western_chunk =
-        chunk_manager->chunk_map_node__most_south_western
-            ->chunk__here->y;
+        get_most_south_western__chunk(chunk_manager)->y;
 
-    chunk_manager->chunk_map_node__most_north_western =
-        chunk_manager->chunk_map_node__most_north_western->chunk_map_node__west;
-    chunk_manager->chunk_map_node__most_north_eastern =
-        chunk_manager->chunk_map_node__most_north_eastern->chunk_map_node__west;
-    chunk_manager->chunk_map_node__most_south_western =
-        chunk_manager->chunk_map_node__most_south_western->chunk_map_node__west;
-    chunk_manager->chunk_map_node__most_south_eastern =
-        chunk_manager->chunk_map_node__most_south_eastern->chunk_map_node__west;
+    // Move the NW west
+    move_most_north_western__chunk_map_node__west(chunk_manager);
 
+    // Begin SW
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->chunk_map_node__most_south_western;
+        get_most_south_western__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
@@ -372,3 +325,4 @@ Direction poll_chunk_manager_for__tile_collision(
         Entity *entity) {
     
 }
+

@@ -180,7 +180,60 @@ Direction get_tile_transition_direction_of__hitbox(
     return direction_of_transition;
 }
 
-Direction is_this_hitbox__inside_this_hitbox(
+bool is_this_hitbox__inside_this_hitbox(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two) {
+    Hitbox_Point aa__one_moving;
+    Hitbox_Point bb__one_moving;
+    Hitbox_Point aa__two_still;
+    Hitbox_Point bb__two_still;
+
+    init_hitbox_point__aa(
+            &aa__one_moving, 
+            hitbox__one);
+    init_hitbox_point__bb(
+            &bb__one_moving, 
+            hitbox__one);
+    init_hitbox_point__aa__without_velocity(
+            &aa__two_moving, 
+            hitbox__two);
+    init_hitbox_point__bb__without_velocity(
+            &bb__two_moving, 
+            hitbox__two);
+
+    return 
+        aa__one_moving.x < bb__two_still.x
+        && bb__one_moving.x > aa__two_still.x
+        && aa__one_moving.y < bb__two_still.y
+        && bb__one_moving.y > aa__two_still.y
+}
+
+bool is_this_hitbox_center__inside_this_hitbox(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two) {
+    Hitbox_Point aa__two_still;
+    Hitbox_Point bb__two_still;
+    
+    int32_t x__center =
+        get_global_x_from__hitbox(hitbox__one);
+    int32_t y__center =
+        get_global_y_from__hitbox(hitbox__one);
+
+    init_hitbox_point__aa__without_velocity(
+            &aa__two_moving, 
+            hitbox__two);
+    init_hitbox_point__bb__without_velocity(
+            &bb__two_moving, 
+            hitbox__two);
+
+    return 
+        x__center < bb__two_still.x
+        && x__center > aa__two_still.x
+        && y__center < bb__two_still.y
+        && y__center > aa__two_still.y
+}
+
+Direction is_hitbox__colliding(
         Hitbox_AABB *hitbox__one,
         Hitbox_AABB *hitbox__two) {
     Hitbox_Point aa__one_moving;
@@ -343,25 +396,4 @@ get_direction:
     }
 
     return direction_of_collision;
-}
-
-
-Direction is_hitbox__colliding(
-        Hitbox_AABB *hitbox__checking,
-        Hitbox_AABB *hitbox__other) {
-    // It is not enough to check if a corner
-    // is in a given hitbox.
-    //
-    // Take for example, a situation where two
-    // hitboxes are equal in dimensions, and they
-    // collide into each other on one face perfectly.
-    // In such a situation neither hitbox will have a
-    // corner in the other, but they will each have
-    // an edge in the other.
-    //
-    // Hitbox collision is therefore not about checking
-    // if corners are inside another hitbox, but
-    // rather checking if edges are.
-    return is_this_hitbox__inside_this_hitbox(
-                hitbox__checking, hitbox__other);
 }

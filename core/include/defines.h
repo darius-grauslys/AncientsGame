@@ -532,11 +532,7 @@ typedef struct Chunk_Manager_t {
     Chunk chunks[CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
     Chunk_Manager__Chunk_Map chunk_map;
     
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__that_the_player_is_on;
     Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_western;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_eastern;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_eastern;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_western;
 
     int32_t x__center_chunk, y__center_chunk;
 } Chunk_Manager;
@@ -687,6 +683,10 @@ typedef uint32_t Texture_Flags;
 ///
 /// GAME
 ///
+
+typedef struct Viewing_Fulcrum_t {
+    Hitbox_AABB fulcrum;
+} Viewing_Fulcrum;
 
 typedef struct World_t {
     Entity_Manager entity_manager;
