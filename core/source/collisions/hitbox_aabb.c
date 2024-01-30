@@ -180,59 +180,6 @@ Direction get_tile_transition_direction_of__hitbox(
     return direction_of_transition;
 }
 
-bool is_this_hitbox__inside_this_hitbox(
-        Hitbox_AABB *hitbox__one,
-        Hitbox_AABB *hitbox__two) {
-    Hitbox_Point aa__one_moving;
-    Hitbox_Point bb__one_moving;
-    Hitbox_Point aa__two_still;
-    Hitbox_Point bb__two_still;
-
-    init_hitbox_point__aa(
-            &aa__one_moving, 
-            hitbox__one);
-    init_hitbox_point__bb(
-            &bb__one_moving, 
-            hitbox__one);
-    init_hitbox_point__aa__without_velocity(
-            &aa__two_moving, 
-            hitbox__two);
-    init_hitbox_point__bb__without_velocity(
-            &bb__two_moving, 
-            hitbox__two);
-
-    return 
-        aa__one_moving.x < bb__two_still.x
-        && bb__one_moving.x > aa__two_still.x
-        && aa__one_moving.y < bb__two_still.y
-        && bb__one_moving.y > aa__two_still.y
-}
-
-bool is_this_hitbox_center__inside_this_hitbox(
-        Hitbox_AABB *hitbox__one,
-        Hitbox_AABB *hitbox__two) {
-    Hitbox_Point aa__two_still;
-    Hitbox_Point bb__two_still;
-    
-    int32_t x__center =
-        get_global_x_from__hitbox(hitbox__one);
-    int32_t y__center =
-        get_global_y_from__hitbox(hitbox__one);
-
-    init_hitbox_point__aa__without_velocity(
-            &aa__two_moving, 
-            hitbox__two);
-    init_hitbox_point__bb__without_velocity(
-            &bb__two_moving, 
-            hitbox__two);
-
-    return 
-        x__center < bb__two_still.x
-        && x__center > aa__two_still.x
-        && y__center < bb__two_still.y
-        && y__center > aa__two_still.y
-}
-
 Direction is_hitbox__colliding(
         Hitbox_AABB *hitbox__one,
         Hitbox_AABB *hitbox__two) {
@@ -246,11 +193,6 @@ Direction is_hitbox__colliding(
             &bb__one_moving, hitbox__one, 
             DIRECTION__NORTH_EAST);
 
-    // printf("\npnt_aa_one: %d, %d\n", 
-    //         aa__one.x, aa__one.y);
-    // printf("pnt_bb_one: %d, %d\n", 
-    //         bb__one.x, bb__one.y);
-
     Hitbox_Point aa__two;
     Hitbox_Point bb__two;
 
@@ -261,35 +203,22 @@ Direction is_hitbox__colliding(
             &bb__two, hitbox__two, 
             DIRECTION__NORTH_EAST);
 
-    // printf("pnt_aa_two: %d, %d\n", 
-    //         aa__two.x, aa__two.y);
-    // printf("pnt_bb_two: %d, %d\n", 
-    //         bb__two.x, bb__two.y);
-
     bool is_aa__contained_along_x =
            aa__one_moving.x > aa__two.x
         && aa__one_moving.x < bb__two.x
         ;
-    // printf("state aa_x: %b\n",
-    //         is_aa__contained_along_x);
     bool is_aa__contained_along_y =
            aa__one_moving.y > aa__two.y
         && aa__one_moving.y < bb__two.y
         ;
-    // printf("state aa_y: %b\n",
-    //         is_aa__contained_along_y);
     bool is_bb__contained_along_y =
            bb__one_moving.y > aa__two.y
         && bb__one_moving.y < bb__two.y
         ;
-    // printf("state ab_y: %b\n",
-    //         is_ab__contained_along_y);
     bool is_bb__contained_along_x =
            bb__one_moving.x > aa__two.x
         && bb__one_moving.x < bb__two.x
         ;
-    // printf("state bb_x: %b\n",
-    //         is_ba__contained_along_x);
 
     //// all corners acquired, now do edges.
 
@@ -297,14 +226,10 @@ Direction is_hitbox__colliding(
         aa__one_moving.x == aa__two.x
         || bb__one_moving.x == bb__two.x
         ;
-    // printf("state alg_x: %b\n",
-    //        is_aligned__x);
     bool is_aligned__y =
         aa__one_moving.y == aa__two.y
         || bb__one_moving.y == bb__two.y
         ;
-    // printf("state alg_y: %b\n",
-    //        is_aligned__x);
 
     if (is_aa__contained_along_x && is_bb__contained_along_y)
         goto get_direction;
@@ -359,8 +284,6 @@ get_direction:
         aa__one_still.x == aa__two.x
         || bb__one_still.x == bb__two.x
         ;
-    // printf("state alg_x: %b\n",
-    //        is_still_aligned__x);
     bool is_still_aligned__y =
         aa__one_still.y == aa__two.y
         || bb__one_still.y == bb__two.y

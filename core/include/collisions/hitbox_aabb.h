@@ -110,7 +110,7 @@ static int32_t inline get_aa__y__chunk_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
         (get_global_y_from__hitbox(hitbox)
-            - hitbox->height)
+            - hitbox->length)
         >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
@@ -126,7 +126,7 @@ static int32_t inline get_bb__y__chunk_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
         (get_global_y_from__hitbox(hitbox)
-            + hitbox->height)
+            + hitbox->length)
         >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
@@ -211,12 +211,88 @@ Direction is_hitbox__colliding(
         Hitbox_AABB *hitbox__checking,
         Hitbox_AABB *hitbox__other);
 
-bool is_this_hitbox__inside_this_hitbox(
-        Hitbox_AABB *hitbox__one,
-        Hitbox_AABB *hitbox__two);
+///
+/// Use this, "using_points" inline invocation
+/// if you plan on reusing some of the arguments
+/// outside of a for loop.
+///
+static bool inline is_this_hitbox__inside_this_hitbox__using_points(
+        Hitbox_Point *aa__one_moving,
+        Hitbox_Point *bb__one_moving,
+        Hitbox_Point *aa__two_still,
+        Hitbox_Point *bb__two_still) {
 
-bool is_this_hitbox_center__inside_this_hitbox(
+    return 
+        aa__one_moving->x < bb__two_still->x
+        && bb__one_moving->x > aa__two_still->x
+        && aa__one_moving->y < bb__two_still->y
+        && bb__one_moving->y > aa__two_still->y;
+}
+
+static bool inline is_this_hitbox__inside_this_hitbox(
         Hitbox_AABB *hitbox__one,
-        Hitbox_AABB *hitbox__two);
+        Hitbox_AABB *hitbox__two) {
+    Hitbox_Point aa__one_moving;
+    Hitbox_Point bb__one_moving;
+    Hitbox_Point aa__two_still;
+    Hitbox_Point bb__two_still;
+
+    init_hitbox_point__aa(
+            &aa__one_moving, 
+            hitbox__one);
+    init_hitbox_point__bb(
+            &bb__one_moving, 
+            hitbox__one);
+    init_hitbox_point__aa__without_velocity(
+            &aa__two_still, 
+            hitbox__two);
+    init_hitbox_point__bb__without_velocity(
+            &bb__two_still, 
+            hitbox__two);
+
+    return is_this_hitbox__inside_this_hitbox__using_points(
+            &bb__one_moving,
+            &aa__one_moving,
+            &bb__two_still,
+            &aa__two_still);
+}
+
+///
+/// Use this, "using_points" inline invocation
+/// if you plan on reusing some of the arguments
+/// outside of a for loop.
+///
+static bool inline is_this_hitbox_center__inside_this_hitbox__using_points(
+        int32_t hitbox__one__x__global,
+        int32_t hitbox__one__y__global,
+        Hitbox_Point *hitbox__two__aa__still,
+        Hitbox_Point *hitbox__two__bb__still) {
+
+    return 
+           hitbox__one__x__global < hitbox__two__bb__still->x
+        && hitbox__one__x__global > hitbox__two__aa__still->x
+        && hitbox__one__y__global < hitbox__two__bb__still->y
+        && hitbox__one__y__global > hitbox__two__aa__still->y;
+}
+
+static bool inline is_this_hitbox_center__inside_this_hitbox(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two) {
+    Hitbox_Point hitbox__two__aa__still;
+    Hitbox_Point hitbox__two__bb__still;
+
+    init_hitbox_point__aa__without_velocity(
+            &hitbox__two__aa__still, 
+            hitbox__two);
+    init_hitbox_point__bb__without_velocity(
+            &hitbox__two__bb__still, 
+            hitbox__two);
+
+    return is_this_hitbox_center__inside_this_hitbox__using_points(
+            get_global_x_from__hitbox(hitbox__one),
+            get_global_y_from__hitbox(hitbox__two),
+            &hitbox__two__aa__still,
+            &hitbox__two__bb__still);
+}
 
 #endif
