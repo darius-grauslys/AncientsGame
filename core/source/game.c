@@ -82,6 +82,10 @@ void manage_entities(Game *game) {
             continue;
         }
 
+        if (entity->controller_handler) {
+            entity->controller_handler(entity, game);
+        }
+
         if (!poll_collision_manager(
                 &game->world.collision_manager, 
                 entity)) {
@@ -104,10 +108,6 @@ void manage_entities(Game *game) {
                 release_entity(game, entity);
                 continue;
             }
-        }
-
-        if (entity->controller_handler) {
-            entity->controller_handler(entity, game);
         }
 
         //TODO: remove magic number, 8

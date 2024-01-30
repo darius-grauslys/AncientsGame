@@ -154,15 +154,15 @@ Direction get_tile_transition_direction_of__hitbox(
         (aa->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t y__aa_tile_pos
+    int32_t y__aa_tile_pos = 
         (aa->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t x__bb_tile_pos
+    int32_t x__bb_tile_pos =
         (bb->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t y__bb_tile_pos
+    int32_t y__bb_tile_pos = 
         (bb->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;

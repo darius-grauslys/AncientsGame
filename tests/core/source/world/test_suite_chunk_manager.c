@@ -16,8 +16,8 @@ TEST_FUNCTION(get_chunk_from__chunk_manager) {
 }
 
 DEFINE_SUITE(chunk_manager, 
-        INLCUDE_TEST
-            (get_chunk_index_at__xyz_from__chunk_manager),
-        INLCUDE_TEST
+        INCLUDE_TEST__STATELESS
+            (get_chunk_index_from__chunk_manager),
+        INCLUDE_TEST__STATELESS
             (get_chunk_from__chunk_manager),
         END_TESTS)

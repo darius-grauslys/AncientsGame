@@ -13,7 +13,7 @@ void init_tile(Tile *tile, enum Tile_Kind kind_of_tile,
 void init_tile_structure(Tile *tile, 
         enum Tile_Kind kind_of_tile,
         enum Tile_Structure_Kind kind_of_tile_structure) {
-    init_tile(tile, TILE_FLAGS__NONE);
+    init_tile(tile, kind_of_tile, TILE_FLAGS__NONE);
     set_tile__is_passable(
             tile, 
             is_tile_structure_kind__passable(
@@ -92,7 +92,7 @@ tile_structure:
         case Tile_Structure_Kind__Floor:
             return index;
         case Tile_Structure_Kind__Stair_Ascending:
-            return 
+            return 0;
     }
 }
 

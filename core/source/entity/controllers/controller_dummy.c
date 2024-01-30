@@ -5,7 +5,6 @@
 void m_controller_for__dummy(
         Entity *this_dummy,
         Game *game) {
-
     int32_t random__result =
         get_entity__direction(this_dummy);
 

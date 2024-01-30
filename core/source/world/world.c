@@ -36,7 +36,7 @@ void add_entity_to__world(
 bool poll_world_for__scrolling(
         World *world) {
     bool is_chunks_moved =
-        poll_chunk_manager__for_chunk_movement(
+        poll_chunk_manager_for__chunk_movement(
             &world->chunk_manager,
             &world->world_params,
             world->entity_manager.local_player->hitbox.x__chunk,

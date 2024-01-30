@@ -74,16 +74,16 @@ static Direction inline get_movement_direction_of__hitbox(
         Hitbox_AABB *hitbox) {
     Direction direction_of_movement =
         DIRECTION__NONE;
-    if (0 < hitbox__one->x__velocity) {
+    if (0 < hitbox->x__velocity) {
         direction_of_movement |= DIRECTION__EAST;
     }
-    if (0 > hitbox__one->x__velocity) {
+    if (0 > hitbox->x__velocity) {
         direction_of_movement |= DIRECTION__WEST;
     }
-    if (0 < hitbox__one->y__velocity) {
+    if (0 < hitbox->y__velocity) {
         direction_of_movement |= DIRECTION__NORTH;
     }
-    if (0 > hitbox__one->y__velocity) {
+    if (0 > hitbox->y__velocity) {
         direction_of_movement |= DIRECTION__SOUTH;
     }
 
