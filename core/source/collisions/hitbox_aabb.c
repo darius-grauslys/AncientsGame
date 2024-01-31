@@ -55,7 +55,7 @@ void commit_hitbox_velocity(
     hitbox->z__chunk += dz;
 }
 
-void init_hitbox_point__without_velocity(Hitbox_Point *hitbox_point,
+void init_hitbox_point_without__velocity(Hitbox_Point *hitbox_point,
         Hitbox_AABB *hitbox,
         Direction corner_direction) {
 
@@ -81,11 +81,11 @@ void init_hitbox_point__without_velocity(Hitbox_Point *hitbox_point,
     }
 
     hitbox_point->x =
-        get_global_x_from__hitbox__without_velocity(hitbox)
+        get_global_x_from__hitbox_without__velocity(hitbox)
         + offset_half_width
         ;
     hitbox_point->y =
-        get_global_y_from__hitbox__without_velocity(hitbox)
+        get_global_y_from__hitbox_without__velocity(hitbox)
         + offset_half_length
         ;
 }
@@ -196,10 +196,10 @@ Direction is_hitbox__colliding(
     Hitbox_Point aa__two;
     Hitbox_Point bb__two;
 
-    init_hitbox_point__without_velocity(
+    init_hitbox_point_without__velocity(
             &aa__two, hitbox__two, 
             DIRECTION__SOUTH_WEST);
-    init_hitbox_point__without_velocity(
+    init_hitbox_point_without__velocity(
             &bb__two, hitbox__two, 
             DIRECTION__NORTH_EAST);
 
@@ -254,10 +254,10 @@ Direction is_hitbox__colliding(
 get_direction:
     Hitbox_Point aa__one_still;
     Hitbox_Point bb__one_still;
-    init_hitbox_point__without_velocity(
+    init_hitbox_point_without__velocity(
             &aa__one_still, hitbox__one, 
             DIRECTION__SOUTH_WEST);
-    init_hitbox_point__without_velocity(
+    init_hitbox_point_without__velocity(
             &bb__one_still, hitbox__one, 
             DIRECTION__NORTH_EAST);
 

@@ -35,7 +35,6 @@ TEST_FUNCTION(get_chunk_index_during__initialization) {
     return MUNIT_OK;
 }
 
-
 void chunk_generator__test_f(
         World_Parameters *world_params,
         Chunk *chunk) {
@@ -48,7 +47,7 @@ void chunk_generator__test_f(
     return;
 }
 
-TEST_FUNCTION(init_chunk_manager) {
+TEST_FUNCTION(get_most_north_western__chunk_map_node) {
     Chunk_Manager chunk_manager;
     World_Parameters world_params;
     init_world_parameters(&world_params,
@@ -57,27 +56,125 @@ TEST_FUNCTION(init_chunk_manager) {
     init_chunk_manager(
             &chunk_manager, &world_params);
 
-    munit_assert_ptr_equal(
-            chunk_manager.chunk_map_node__most_north_western,
-            &chunk_manager.chunk_map[0]
-            );
+    Chunk_Manager__Chunk_Map_Node *actual_node =
+        get_most_north_western__chunk_map_node(&chunk_manager);
+    Chunk_Manager__Chunk_Map_Node *expected_node =
+        &chunk_manager.chunk_map[
+        get_chunk_index_during__initialization(0,
+                CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1)];
 
+    munit_assert_ptr_equal(
+            actual_node,
+            expected_node);
+
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(get_most_north_eastern__chunk_map_node) {
+    Chunk_Manager chunk_manager;
+    World_Parameters world_params;
+    init_world_parameters(&world_params,
+            chunk_generator__test_f,
+            0);
+    init_chunk_manager(
+            &chunk_manager, &world_params);
+
+    Chunk_Manager__Chunk_Map_Node *actual_node =
+        get_most_north_eastern__chunk_map_node(&chunk_manager);
+    Chunk_Manager__Chunk_Map_Node *expected_node =
+        &chunk_manager.chunk_map[
+        get_chunk_index_during__initialization(
+                CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1, 
+                CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1)];
+
+    munit_assert_ptr_equal(
+            actual_node,
+            expected_node);
+
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(get_most_south_western__chunk_map_node) {
+    Chunk_Manager chunk_manager;
+    World_Parameters world_params;
+    init_world_parameters(&world_params,
+            chunk_generator__test_f,
+            0);
+    init_chunk_manager(
+            &chunk_manager, &world_params);
+
+    Chunk_Manager__Chunk_Map_Node *actual_node =
+        get_most_south_western__chunk_map_node(&chunk_manager);
+    Chunk_Manager__Chunk_Map_Node *expected_node =
+        &chunk_manager.chunk_map[
+        get_chunk_index_during__initialization(
+                0, 
+                0)];
+
+    munit_assert_ptr_equal(
+            actual_node,
+            expected_node);
+
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(get_most_south_eastern__chunk_map_node) {
+    Chunk_Manager chunk_manager;
+    World_Parameters world_params;
+    init_world_parameters(&world_params,
+            chunk_generator__test_f,
+            0);
+    init_chunk_manager(
+            &chunk_manager, &world_params);
+
+    Chunk_Manager__Chunk_Map_Node *actual_node =
+        get_most_south_eastern__chunk_map_node(&chunk_manager);
+    Chunk_Manager__Chunk_Map_Node *expected_node =
+        &chunk_manager.chunk_map[
+        get_chunk_index_during__initialization(
+                CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1, 
+                0)];
+
+    munit_assert_ptr_equal(
+            actual_node,
+            expected_node);
+
+    return MUNIT_OK;
+}
+
+static void inline assert_chunk_positions(
+        Chunk_Manager *chunk_manager,
+        int32_t x__center_chunk,
+        int32_t y__center_chunk) {
     Chunk *current__chunk;
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node;
-    for (int32_t y=0;
-            y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+    for (int32_t y=-CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
+            y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
             y++) {
-        for (int32_t x=0;
-                x<CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+        for (int32_t x=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x<CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
                 x++) {
             current__chunk =
-                &chunk_manager.chunks[
-                get_chunk_index_during__initialization(x, y)
+                &chunk_manager->chunks[
+                get_chunk_index_during__initialization(
+                        x + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2, 
+                        y + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2)
                 ];
             current__chunk_map_node =
-                &chunk_manager.chunk_map[
-                get_chunk_index_during__initialization(x, y)
+                &chunk_manager->chunk_map[
+                get_chunk_index_during__initialization(
+                        x + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2, 
+                        y + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2)
                 ];
+
+            munit_assert_int32(
+                    current__chunk_map_node->chunk__here->x,
+                    ==,
+                    x__center_chunk + x);
+            munit_assert_int32(
+                    current__chunk_map_node->chunk__here->y,
+                    ==,
+                    y__center_chunk + y);
 
             munit_assert_ptr_equal(
                     current__chunk,
@@ -102,6 +199,26 @@ TEST_FUNCTION(init_chunk_manager) {
                     );
         }
     }
+}
+
+TEST_FUNCTION(init_chunk_manager) {
+    Chunk_Manager chunk_manager;
+    World_Parameters world_params;
+    init_world_parameters(&world_params,
+            chunk_generator__test_f,
+            0);
+    init_chunk_manager(
+            &chunk_manager, &world_params);
+
+    munit_assert_ptr_equal(
+            chunk_manager.chunk_map_node__most_north_western,
+            &chunk_manager.chunk_map[0]
+            );
+
+    Chunk *current__chunk;
+    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node;
+    assert_chunk_positions(&chunk_manager,
+            4, 4);
     return MUNIT_OK;
 }
 
@@ -127,7 +244,8 @@ TEST_FUNCTION(get_chunk_index_at__xyz_from__chunk_manager) {
             munit_assert_uint32(
                     index,
                     ==,
-                    y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
+                    (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - y - 1)
+                    * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                     + x
                     );
         }
@@ -156,9 +274,7 @@ TEST_FUNCTION(get_chunk_from__chunk_manager) {
                         x, y, 0);
             Chunk *chunk_actual =
                 &chunk_manager.chunks[
-                y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-                + x
-                ];
+                get_chunk_index_during__initialization(x, y)];
             munit_assert_ptr_equal(
                     chunk_test,
                     chunk_actual);
@@ -339,9 +455,104 @@ TEST_FUNCTION(move_chunk_manager) {
     return MUNIT_OK;
 }
 
+TEST_FUNCTION(set_chunk_manager_at__position) {
+    Chunk_Manager chunk_manager;
+    World_Parameters world_params;
+
+    init_world_parameters(&world_params,
+            chunk_generator__test_f,
+            0);
+    init_chunk_manager(
+            &chunk_manager, &world_params);
+
+    int32_t x__chunk_start, y__chunk_start;
+    x__chunk_start =
+        munit_rand_int_range(-128, 128);
+    y__chunk_start =
+        munit_rand_int_range(-128, 128);
+
+    set_chunk_manager_at__position(
+            &chunk_manager,
+            &world_params,
+            x__chunk_start, y__chunk_start);
+
+    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_western =
+        get_most_north_western__chunk_map_node(&chunk_manager);
+
+    munit_assert_int32(
+            chunk_map_node__most_north_western->chunk__here->x,
+            ==,
+            x__chunk_start
+            - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2);
+    munit_assert_int32(
+            chunk_map_node__most_north_western->chunk__here->y,
+            ==,
+            y__chunk_start
+            + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2 - 1);
+
+    assert_chunk_positions(&chunk_manager,
+            x__chunk_start, y__chunk_start);
+
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(get_chunk_from__chunk_manager__after_setting_position) {
+    Chunk_Manager chunk_manager;
+    World_Parameters world_params;
+    init_world_parameters(&world_params,
+            chunk_generator__test_f,
+            0);
+    init_chunk_manager(
+            &chunk_manager, &world_params);
+
+    int32_t x__chunk_start, y__chunk_start;
+    x__chunk_start =
+        munit_rand_int_range(-128, 128);
+    y__chunk_start =
+        munit_rand_int_range(-128, 128);
+
+    set_chunk_manager_at__position(
+            &chunk_manager,
+            &world_params,
+            x__chunk_start,
+            y__chunk_start);
+
+    for (int32_t y=-CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
+            y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
+            y++) {
+        for (int32_t x=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x<CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x++) {
+            Chunk *chunk_test =
+                get_chunk_from__chunk_manager(
+                        &chunk_manager,
+                        x + x__chunk_start, 
+                        y + y__chunk_start, 
+                        0);
+            munit_assert_int32(
+                    chunk_test->x,
+                    ==,
+                    x + x__chunk_start);
+            munit_assert_int32(
+                    chunk_test->y,
+                    ==,
+                    y + y__chunk_start);
+        }
+    }
+    return MUNIT_OK;
+}
+
 DEFINE_SUITE(chunk_manager, 
         INCLUDE_TEST__STATELESS
             (get_chunk_index_during__initialization), 
+        INCLUDE_TEST__STATELESS
+            (get_most_north_western__chunk_map_node),
+        INCLUDE_TEST__STATELESS
+            (get_most_north_eastern__chunk_map_node),
+        INCLUDE_TEST__STATELESS
+            (get_most_south_western__chunk_map_node),
+        INCLUDE_TEST__STATELESS
+            (get_most_south_eastern__chunk_map_node),
         INCLUDE_TEST__STATELESS
             (get_chunk_index_at__xyz_from__chunk_manager),
         INCLUDE_TEST__STATELESS
@@ -350,4 +561,8 @@ DEFINE_SUITE(chunk_manager,
             (get_chunk_from__chunk_manager),
         INCLUDE_TEST__STATELESS
             (move_chunk_manager),
+        INCLUDE_TEST__STATELESS
+            (set_chunk_manager_at__position),
+        INCLUDE_TEST__STATELESS
+            (get_chunk_from__chunk_manager__after_setting_position),
         END_TESTS)

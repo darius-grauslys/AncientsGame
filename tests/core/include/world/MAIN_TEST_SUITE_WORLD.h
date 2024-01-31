@@ -1,4 +1,5 @@
 #include "test_suite_tile.h"
+#include "test_suite_viewing_fulcrum.h"
 #include "test_suite_chunk.h"
 #include "test_suite_world.h"
 #include "test_suite_world_parameters.h"

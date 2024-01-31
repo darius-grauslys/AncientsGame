@@ -47,9 +47,17 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 /// the programmer if we are moving along COLS or ROWS.
 ///
 /// That also means YOU should use these appropriately.
+/// 
+/// Additionally, they must be power of 2, so use
+/// CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW__BIT_SIZE
+/// CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS__BIT_SIZE
 ///
-#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 8
-#define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS 8
+#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW__BIT_SIZE (3)
+#define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS__BIT_SIZE (3)
+#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW (1 << \
+        CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW__BIT_SIZE)
+#define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS (1 << \
+        CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS__BIT_SIZE)
 #define CHUNK_MANAGER__QUANTITY_OF_CHUNKS \
     (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS \
     * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
@@ -100,6 +108,11 @@ static uint32_t inline get_chunk_index_during__initialization(
 
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.
+#endif
+
+#ifndef PLATFORM__VIEWING_FULCRUM
+#define VIEWING_FULCRUM__WIDTH 256
+#define VIEWING_FULCRUM__LENGTH 196
 #endif
 
 typedef struct Console_t Console;
@@ -693,6 +706,7 @@ typedef struct World_t {
     Chunk_Manager chunk_manager;
     Collision_Manager collision_manager;
     World_Parameters world_params;
+    Viewing_Fulcrum viewing_fulcrum;
 } World;
 
 typedef struct Game_t {

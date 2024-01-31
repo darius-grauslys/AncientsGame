@@ -83,8 +83,8 @@ uint32_t get_chunk_index_at__xyz_from__chunk_manager(
         - most_north_western__chunk->x
         ;
     int32_t local_y =
-        y__chunk
-        - most_south_western__chunk->y
+        most_north_western__chunk->y
+        - y__chunk
         ;
 
     return local_y 
@@ -276,6 +276,62 @@ void move_chunk_manager(
             move_chunk_manager__chunks_west(
                     chunk_manager, 
                     world_params);
+        }
+    }
+}
+
+void set_chunk_manager_at__position(
+        Chunk_Manager *chunk_manager,
+        World_Parameters *world_params,
+        int32_t x__chunk,
+        int32_t y__chunk) {
+    int32_t x__chunk_delta =
+        chunk_manager->x__center_chunk - x__chunk;
+    int32_t y__chunk_delta =
+        chunk_manager->y__center_chunk - y__chunk;
+
+    chunk_manager->x__center_chunk =
+        x__chunk;
+    chunk_manager->y__center_chunk =
+        y__chunk;
+
+    init_chunk(
+            get_most_north_western__chunk(chunk_manager),
+            x__chunk - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2,
+            y__chunk + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2 - 1);
+    init_chunk(
+            get_most_north_eastern__chunk(chunk_manager),
+            x__chunk + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2 - 1,
+            y__chunk + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2 - 1);
+    init_chunk(
+            get_most_south_western__chunk(chunk_manager),
+            x__chunk - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2,
+            y__chunk - CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2);
+    init_chunk(
+            get_most_south_eastern__chunk(chunk_manager),
+            x__chunk + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2 - 1,
+            y__chunk - CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2);
+
+    for (int32_t y=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+            y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
+            y++) {
+        for (int32_t x=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x<CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x++) {
+            Chunk *chunk__here =
+                get_chunk_from__chunk_manager(
+                        chunk_manager, 
+                        x__chunk + x, 
+                        y__chunk + y, 
+                        0);
+
+            init_chunk(chunk__here, 
+                    x__chunk + x, 
+                    y__chunk + y);
+            
+            world_params->chunk_generator_f(
+                    world_params,
+                    chunk__here);
         }
     }
 }

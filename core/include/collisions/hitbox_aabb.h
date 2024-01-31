@@ -3,23 +3,23 @@
 
 #include <defines.h>
 
-void init_hitbox_point__without_velocity(
+void init_hitbox_point_without__velocity(
         Hitbox_Point *hitbox_point,
         Hitbox_AABB *hitbox,
         Direction corner_direction);
 
-static void inline init_hitbox_point__aa__without_velocity(
+static void inline init_hitbox_point__aa_without__velocity(
         Hitbox_Point *aa,
         Hitbox_AABB *hitbox) {
-    init_hitbox_point__without_velocity(
+    init_hitbox_point_without__velocity(
             aa, hitbox, 
             DIRECTION__SOUTH_WEST);
 }
 
-static void inline init_hitbox_point__bb__without_velocity(
+static void inline init_hitbox_point__bb_without__velocity(
         Hitbox_Point *bb,
         Hitbox_AABB *hitbox) {
-    init_hitbox_point__without_velocity(
+    init_hitbox_point_without__velocity(
             bb, hitbox, 
             DIRECTION__NORTH_EAST);
 }
@@ -47,31 +47,31 @@ static void inline init_hitbox_point__bb(
 static int32_t inline get_global_x_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
-    ((hitbox->x__chunk) << 
-        ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->x + hitbox->x__velocity) >> 
-            ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
+        ((hitbox->x__chunk) << 
+            ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
+            + ((hitbox->x + hitbox->x__velocity) >> 
+                ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
 }
 
 static int32_t inline get_global_y_from__hitbox(
         Hitbox_AABB *hitbox) {
     return 
-    (((hitbox->y__chunk) << 
-        ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->y + hitbox->y__velocity) >> 
-            ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
+        (((hitbox->y__chunk) << 
+            ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
+            + ((hitbox->y + hitbox->y__velocity) >> 
+                ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
 }
 
 static int32_t inline get_global_z_from__hitbox(
         Hitbox_AABB *hitbox) {
     return 
-    (((hitbox->z__chunk) << 
-        ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->z + hitbox->z__velocity) >> 
-            ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
+        (((hitbox->z__chunk) << 
+            ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
+            + ((hitbox->z + hitbox->z__velocity) >> 
+                ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
 }
 
-static int32_t inline get_global_x_from__hitbox__without_velocity(
+static int32_t inline get_global_x_from__hitbox_without__velocity(
         Hitbox_AABB *hitbox) {
     return
     ((hitbox->x__chunk) << 
@@ -80,7 +80,7 @@ static int32_t inline get_global_x_from__hitbox__without_velocity(
             ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
 }
 
-static int32_t inline get_global_y_from__hitbox__without_velocity(
+static int32_t inline get_global_y_from__hitbox_without__velocity(
         Hitbox_AABB *hitbox) {
     return 
     (((hitbox->y__chunk) << 
@@ -89,7 +89,7 @@ static int32_t inline get_global_y_from__hitbox__without_velocity(
             ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
 }
 
-static int32_t inline get_global_z_from__hitbox__without_velocity(
+static int32_t inline get_global_z_from__hitbox_without__velocity(
         Hitbox_AABB *hitbox) {
     return 
     (((hitbox->z__chunk) << 
@@ -98,35 +98,35 @@ static int32_t inline get_global_z_from__hitbox__without_velocity(
             ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE));
 }
 
+// TODO: remove 32 magic number
+//       the significance of 32 is that it's half the pixel width
+//       of a chunk. We basically want it so that if you're
+//       only 1 pixel into a chunk, you're on that chunk.
 static int32_t inline get_aa__x__chunk_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
-        (get_global_x_from__hitbox(hitbox)
-            - hitbox->width)
+        (get_global_x_from__hitbox(hitbox) - (int32_t)hitbox->width / 2 + 32)
         >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
 static int32_t inline get_aa__y__chunk_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
-        (get_global_y_from__hitbox(hitbox)
-            - hitbox->length)
+        (get_global_y_from__hitbox(hitbox) - (int32_t)hitbox->length / 2 + 32)
         >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
 static int32_t inline get_bb__x__chunk_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
-        (get_global_x_from__hitbox(hitbox)
-            + hitbox->width)
+        (get_global_x_from__hitbox(hitbox) + (int32_t)hitbox->width / 2 + 32)
         >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
 static int32_t inline get_bb__y__chunk_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
-        (get_global_y_from__hitbox(hitbox)
-            + hitbox->length)
+        (get_global_y_from__hitbox(hitbox) + (int32_t)hitbox->length / 2 + 32)
         >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE;
 }
 
@@ -243,10 +243,10 @@ static bool inline is_this_hitbox__inside_this_hitbox(
     init_hitbox_point__bb(
             &bb__one_moving, 
             hitbox__one);
-    init_hitbox_point__aa__without_velocity(
+    init_hitbox_point__aa_without__velocity(
             &aa__two_still, 
             hitbox__two);
-    init_hitbox_point__bb__without_velocity(
+    init_hitbox_point__bb_without__velocity(
             &bb__two_still, 
             hitbox__two);
 
@@ -281,10 +281,10 @@ static bool inline is_this_hitbox_center__inside_this_hitbox(
     Hitbox_Point hitbox__two__aa__still;
     Hitbox_Point hitbox__two__bb__still;
 
-    init_hitbox_point__aa__without_velocity(
+    init_hitbox_point__aa_without__velocity(
             &hitbox__two__aa__still, 
             hitbox__two);
-    init_hitbox_point__bb__without_velocity(
+    init_hitbox_point__bb_without__velocity(
             &hitbox__two__bb__still, 
             hitbox__two);
 

@@ -170,6 +170,12 @@ void move_chunk_manager(
         Direction direction,
         uint32_t steps);
 
+void set_chunk_manager_at__position(
+        Chunk_Manager *chunk_manager,
+        World_Parameters *world_params,
+        int32_t x__chunk,
+        int32_t y__chunk);
+
 bool poll_chunk_manager_for__chunk_movement(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params,

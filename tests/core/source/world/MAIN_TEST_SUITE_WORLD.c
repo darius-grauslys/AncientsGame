@@ -1,7 +1,8 @@
 #include <world/MAIN_TEST_SUITE_WORLD.h>
 
-INCLUDE_SUB_SUITES(WORLD, 7,
+INCLUDE_SUB_SUITES(WORLD, 8,
 INCLUDE_SUITE(tile),
+INCLUDE_SUITE(viewing_fulcrum),
 INCLUDE_SUITE(chunk),
 INCLUDE_SUITE(world),
 INCLUDE_SUITE(world_parameters),

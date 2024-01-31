@@ -16,6 +16,8 @@
 ///
 
 #include <defines.h>
+#include <collisions/hitbox_aabb.h>
+#include <world/chunk_manager.h>
 
 static bool inline is_chunk_within__viewing_fulcrum(
         Viewing_Fulcrum *viewing_fulcrum,
@@ -87,25 +89,25 @@ static Chunk_Manager__Chunk_Map_Node inline
 static Chunk_Manager__Chunk_Map_Node inline
 *get_next_chunk_map_node_in__viewing_fulcrum(
         Viewing_Fulcrum *viewing_fulcrum,
-        Chunk_Manager__Chunk_Map_Node *current__chunk_map_node
+        Chunk_Manager__Chunk_Map_Node *current__chunk_map_node,
         Chunk_Manager__Chunk_Map_Node *original__chunk_map_node) {
     if (!is_chunk_within__viewing_fulcrum(
                 viewing_fulcrum, 
-                current__chunk_map_node->chunk__here.x,
-                current__chunk_map_node->chunk__here.y))
-        return 0;
-    if (!is_chunk_within__viewing_fulcrum(
-                viewing_fulcrum, 
                 current__chunk_map_node
-                ->chunk_map_node__east->chunk__here.x, 
+                ->chunk_map_node__east->chunk__here->x,
                 current__chunk_map_node
-                ->chunk_map_node__east->chunk__here.y)) {
+                ->chunk_map_node__east->chunk__here->y)) {
         Chunk_Manager__Chunk_Map_Node *next_node =
             original__chunk_map_node;
-        if (next_node->chunk__here.y <= current__chunk_map_node.y)
-            return 0;
-        while (next_node->chunk__here.y > current__chunk_map_node.y) {
+        while (next_node->chunk__here->y >= 
+                current__chunk_map_node->chunk__here->y) {
             next_node = next_node->chunk_map_node__south;
+        }
+        if (!is_chunk_within__viewing_fulcrum(
+                    viewing_fulcrum, 
+                    next_node->chunk__here->x,
+                    next_node->chunk__here->y)) {
+            return 0;
         }
         return next_node;
     }
@@ -115,8 +117,8 @@ static Chunk_Manager__Chunk_Map_Node inline
 static bool inline is_entity_within__viewing_fulcrum(
         Entity *entity,
         Viewing_Fulcrum *viewing_fulcrum) {
-    return is_this_hitbox__inside_this_hitbox(
-            entity->hitbox, &viewing_fulcrum->fulcrum);
+    return is_this_hitbox_center__inside_this_hitbox(
+            &entity->hitbox, &viewing_fulcrum->fulcrum);
 }
 
 ///
@@ -131,7 +133,7 @@ static bool inline is_entity_within__viewing_fulcrum(
 #define FOREACH_CHUNK_MAP_NODE_IN__VIEWING_FULCRUM( \
         viewing_fulcrum, \
         chunk_manager, \
-        z__chunk \
+        z__chunk, \
         alias_for_current_chunk) \
         Chunk_Manager__Chunk_Map \
             *most_north_western__node_in__viewing_fulcrum; \
@@ -140,6 +142,8 @@ static bool inline is_entity_within__viewing_fulcrum(
             most_north_western__node_in__viewing_fulcrum = \
                 get_most_north_western__chunk_map_node_in__viewing_fulcrum( \
                         viewing_fulcrum, chunk_manager, z__chunk); \
+        alias_for_current_chunk = \
+            alias_for_current_chunk->chunk_map_node__west; \
         while ((alias_for_current_chunk = \
                     get_next_chunk_map_node_in__viewing_fulcrum( \
                         viewing_fulcrum, \
