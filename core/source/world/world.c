@@ -4,6 +4,7 @@
 #include <world/chunk_manager.h>
 #include <world/generators/generator_flat_world.h>
 #include <world/world_parameters.h>
+#include <world/viewing_fulcrum.h>
 
 // temp:
 #include <entity/controllers/controller_player.h>
@@ -23,6 +24,7 @@ void init_world(World *world) {
     init_chunk_manager(
             &world->chunk_manager,
             &world->world_params);
+    init_viewing_fulcrum(&world->viewing_fulcrum);
 }
 
 void add_entity_to__world(
@@ -39,9 +41,9 @@ bool poll_world_for__scrolling(
         poll_chunk_manager_for__chunk_movement(
             &world->chunk_manager,
             &world->world_params,
-            world->entity_manager.local_player->hitbox.x__chunk,
-            world->entity_manager.local_player->hitbox.y__chunk,
-            world->entity_manager.local_player->hitbox.z__chunk);
+            world->viewing_fulcrum.fulcrum.x__chunk,
+            world->viewing_fulcrum.fulcrum.y__chunk,
+            world->viewing_fulcrum.fulcrum.z__chunk);
 
     return is_chunks_moved;
 }

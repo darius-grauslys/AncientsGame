@@ -53,6 +53,11 @@ void init_chunk_manager(
 
     chunk_manager->chunk_map_node__most_north_western =
         &chunk_manager->chunk_map[0];
+
+    set_chunk_manager_at__position(
+            chunk_manager,
+            world_params,
+            0, 0);
 }
 
 uint32_t get_chunk_index_at__xyz_from__chunk_manager(
@@ -75,21 +80,29 @@ uint32_t get_chunk_index_at__xyz_from__chunk_manager(
             || y__chunk
                 < most_south_western__chunk->y) {
         // Deliberately do not print error.
+        debug_warning("fail on: (%d, %d)",
+                x__chunk,
+                y__chunk);
+        debug_warning("mngr-bounds: (%d, %d) <-> (%d, %d)",
+            most_north_western__chunk->x,
+            most_south_western__chunk->y,
+            get_most_north_eastern__chunk(chunk_manager)->x,
+            most_north_western__chunk->y
+            );
         return 0;
     }
 
-    int32_t local_x =
-        x__chunk
-        - most_north_western__chunk->x
-        ;
-    int32_t local_y =
-        most_north_western__chunk->y
-        - y__chunk
-        ;
+    x__chunk =
+        get_chunk_mod_index(
+                x__chunk);
+    y__chunk =
+        get_chunk_mod_index(
+                y__chunk);
 
-    return local_y 
+    return
+        (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - y__chunk - 1)
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-        + local_x
+        + x__chunk
         ;
 }
 
@@ -97,7 +110,7 @@ void move_chunk_manager__chunks_north(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params) {
     int32_t x__old_most_north_western_chunk =
-        get_most_north_eastern__chunk(chunk_manager)->x;
+        get_most_north_western__chunk(chunk_manager)->x;
     int32_t y__new_most_north_western_chunk =
         get_most_north_western__chunk(chunk_manager)->y + 1;
     
@@ -106,10 +119,10 @@ void move_chunk_manager__chunks_north(
 
     // Begin at NW
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        get_most_south_western__chunk_map_node(chunk_manager);
+        get_most_north_western__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
-            step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
+            step < CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
             step++) {
         Chunk *chunk__here =
             current__chunk_map_node->chunk__here;
@@ -136,7 +149,7 @@ void move_chunk_manager__chunks_east(
         Chunk_Manager *chunk_manager,
         World_Parameters *world_params) {
     int32_t x__new_most_north_eastern_chunk =
-        get_most_north_western__chunk(chunk_manager)->x + 1;
+        get_most_north_eastern__chunk(chunk_manager)->x + 1;
     int32_t y__old_most_south_eastern_chunk =
         get_most_south_eastern__chunk(chunk_manager)->y;
 
@@ -148,7 +161,7 @@ void move_chunk_manager__chunks_east(
         get_most_south_eastern__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
-            step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
+            step < CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
             step++) {
         Chunk *chunk__here =
             current__chunk_map_node->chunk__here;
@@ -188,7 +201,7 @@ void move_chunk_manager__chunks_south(
         get_most_south_western__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
-            step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
+            step < CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
             step++) {
         Chunk *chunk__here =
             current__chunk_map_node->chunk__here;
@@ -227,7 +240,7 @@ void move_chunk_manager__chunks_west(
         get_most_south_western__chunk_map_node(chunk_manager);
 
     for (uint32_t step = 0; 
-            step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
+            step < CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
             step++) {
         Chunk *chunk__here =
             current__chunk_map_node->chunk__here;
@@ -261,21 +274,25 @@ void move_chunk_manager(
             move_chunk_manager__chunks_north(
                     chunk_manager, 
                     world_params);
+            chunk_manager->y__center_chunk++;
         }
         if (direction & DIRECTION__EAST) {
             move_chunk_manager__chunks_east(
                     chunk_manager, 
                     world_params);
+            chunk_manager->x__center_chunk++;
         }
         if (direction & DIRECTION__SOUTH) {
             move_chunk_manager__chunks_south(
                     chunk_manager, 
                     world_params);
+            chunk_manager->y__center_chunk--;
         }
         if (direction & DIRECTION__WEST) {
             move_chunk_manager__chunks_west(
                     chunk_manager, 
                     world_params);
+            chunk_manager->x__center_chunk--;
         }
     }
 }
@@ -285,32 +302,68 @@ void set_chunk_manager_at__position(
         World_Parameters *world_params,
         int32_t x__chunk,
         int32_t y__chunk) {
-    int32_t x__chunk_delta =
-        chunk_manager->x__center_chunk - x__chunk;
-    int32_t y__chunk_delta =
-        chunk_manager->y__center_chunk - y__chunk;
-
     chunk_manager->x__center_chunk =
         x__chunk;
     chunk_manager->y__center_chunk =
         y__chunk;
 
-    init_chunk(
-            get_most_north_western__chunk(chunk_manager),
-            x__chunk - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2,
-            y__chunk + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2 - 1);
-    init_chunk(
-            get_most_north_eastern__chunk(chunk_manager),
-            x__chunk + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2 - 1,
-            y__chunk + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2 - 1);
-    init_chunk(
-            get_most_south_western__chunk(chunk_manager),
-            x__chunk - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2,
-            y__chunk - CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2);
-    init_chunk(
-            get_most_south_eastern__chunk(chunk_manager),
-            x__chunk + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2 - 1,
-            y__chunk - CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2);
+    int32_t local_x__new_most_north_western_chunk =
+        get_chunk_mod_index__sum(
+                x__chunk,
+                -CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2);
+    int32_t local_y__new_most_north_western_chunk =
+        get_chunk_mod_index__sum(
+                y__chunk,
+                CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2);
+
+    Chunk_Manager__Chunk_Map_Node 
+        *chunk_map_node__most_north_western =
+        get_most_north_western__chunk_map_node(chunk_manager);
+
+    int32_t local_x__current_most_north_western_chunk =
+        get_chunk_mod_index(
+                chunk_map_node__most_north_western->chunk__here->x);
+
+    int32_t local_y__current_most_north_western_chunk =
+        get_chunk_mod_index(
+                chunk_map_node__most_north_western->chunk__here->y);
+
+    while (local_x__new_most_north_western_chunk
+            !=
+            local_x__current_most_north_western_chunk) {
+        if (local_x__new_most_north_western_chunk
+                < local_x__current_most_north_western_chunk) {
+            local_x__current_most_north_western_chunk--;
+            move_most_north_western__chunk_map_node__west(
+                    chunk_manager);
+        } else {
+            local_x__current_most_north_western_chunk++;
+            move_most_north_western__chunk_map_node__east(
+                    chunk_manager);
+        }
+    }
+
+    // TODO: figure out why this needs a -1
+    while (local_y__new_most_north_western_chunk - 1
+            !=
+            local_y__current_most_north_western_chunk) {
+        if (local_y__new_most_north_western_chunk - 1
+                < local_y__current_most_north_western_chunk) {
+            local_y__current_most_north_western_chunk--;
+            move_most_north_western__chunk_map_node__south(
+                    chunk_manager);
+        } else {
+            local_y__current_most_north_western_chunk++;
+            move_most_north_western__chunk_map_node__north(
+                    chunk_manager);
+        }
+    }
+
+    Chunk_Manager__Chunk_Map_Node 
+        *origin__chunk_map_node =
+        get_most_south_western__chunk_map_node(chunk_manager);
+    Chunk_Manager__Chunk_Map_Node
+        *current__chunk_map_node = origin__chunk_map_node;
 
     for (int32_t y=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
             y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
@@ -318,21 +371,25 @@ void set_chunk_manager_at__position(
         for (int32_t x=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
                 x<CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
                 x++) {
-            Chunk *chunk__here =
-                get_chunk_from__chunk_manager(
-                        chunk_manager, 
-                        x__chunk + x, 
-                        y__chunk + y, 
-                        0);
-
-            init_chunk(chunk__here, 
+            init_chunk(
+                    current__chunk_map_node
+                        ->chunk__here, 
                     x__chunk + x, 
                     y__chunk + y);
             
             world_params->chunk_generator_f(
                     world_params,
-                    chunk__here);
+                    current__chunk_map_node
+                        ->chunk__here);
+            current__chunk_map_node =
+                current__chunk_map_node
+                ->chunk_map_node__east;
         }
+        origin__chunk_map_node =
+            origin__chunk_map_node
+            ->chunk_map_node__north;
+        current__chunk_map_node =
+            origin__chunk_map_node;
     }
 }
 

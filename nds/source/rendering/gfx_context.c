@@ -2,6 +2,7 @@
 #include <nds_defines.h>
 #include <rendering/gfx_context.h>
 #include <world/tile.h>
+#include <world/viewing_fulcrum.h>
 
 #include <assets/tiles.h>
 
@@ -129,57 +130,85 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
-        Chunk_Manager *chunk_manager) {
+        Chunk_Manager *chunk_manager,
+        Viewing_Fulcrum *viewing_fulcrum) {
     uint16_t *background_tile_map =
         bgGetMapPtr(gfx_context->active_background_ground__buffer
                 ->background_index);
-    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->chunk_map_node__most_north_western;
-    Chunk_Manager__Chunk_Map_Node *current_sub__chunk_map_node;
 
-    for (uint8_t y=0; y < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
-            y++) {
-        current_sub__chunk_map_node =
-            current__chunk_map_node;
-        for (uint8_t x=0; x < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
-                x++) {
-            uint32_t x__index =
-                ((current_sub__chunk_map_node->chunk__here->x
-                  % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-                 + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-                % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-            uint32_t y__index =
-                ((current_sub__chunk_map_node->chunk__here->y
-                  % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-                 + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-                % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+    debug_info("--- START ---: %d, %d", 
+            viewing_fulcrum->fulcrum.x__chunk, 
+            viewing_fulcrum->fulcrum.y__chunk
+            );
+    debug_info("mngr: %d, %d", 
+            chunk_manager->x__center_chunk, 
+            chunk_manager->y__center_chunk
+            );
+    Chunk_Manager__Chunk_Map_Node *tmp =
+        get_most_north_western__chunk_map_node_in__viewing_fulcrum(
+                viewing_fulcrum, chunk_manager, 0);
+    debug_info("tmp: %d, %d", 
+            tmp->chunk__here->x, 
+            tmp->chunk__here->y
+            );
+    debug_info("ptr: %p",
+            get_chunk_map_node_from__chunk_manager(
+                chunk_manager, 
+                tmp->chunk__here->x, 
+                tmp->chunk__here->y, 0));
+    int32_t x__chunk__min =
+        get_aa__x__chunk_from__hitbox(&viewing_fulcrum->fulcrum);
+    int32_t y__chunk__min =
+        get_aa__y__chunk_from__hitbox(&viewing_fulcrum->fulcrum);
+    int32_t x__chunk__max =
+        get_bb__x__chunk_from__hitbox(&viewing_fulcrum->fulcrum);
+    int32_t y__chunk__max =
+        get_bb__y__chunk_from__hitbox(&viewing_fulcrum->fulcrum);
 
-            Chunk *chunk__here =
-                current_sub__chunk_map_node->chunk__here;
+    debug_info("fulc-bounds: (%d, %d) <-> (%d, %d)",
+            x__chunk__min,
+            y__chunk__min,
+            x__chunk__max,
+            y__chunk__max
+            );
+    FOREACH_CHUNK_MAP_NODE_IN__VIEWING_FULCRUM(
+            viewing_fulcrum,
+            chunk_manager,
+            0,
+            current__chunk_map_node) {
+        uint32_t x__index =
+            ((current__chunk_map_node->chunk__here->x
+              % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+             + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+            % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+        uint32_t y__index =
+            ((current__chunk_map_node->chunk__here->y
+              % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+             + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+            % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
 
-            //TODO: im am using magic numbers here atm.
-            for (int y=0;y<8;y++) {
-                for (int x=0;x<8;x++) {
-                    uint32_t background_tile_index = 
-                        y * 32 + x;
-                    background_tile_index += 
-                        (x__index % 4) * 8;
-                    background_tile_index +=
-                        (y__index % 4) * 8 * 32;
-                    if (x__index >= 4)
-                        background_tile_index += 32 * 32;
-                    if (y__index >= 4)
-                        background_tile_index += 32 * 32 * 2;
-                    background_tile_map[background_tile_index] =
-                        get_tile_texture_sheet_index(
-                            &chunk__here->tiles[y * 8 + x]) + 1;
-                }
+        debug_info("pos: %d, %d", x__index, y__index);
+
+        Chunk *chunk__here =
+            current__chunk_map_node->chunk__here;
+
+        //TODO: im am using magic numbers here atm.
+        for (int y=0;y<8;y++) {
+            for (int x=0;x<8;x++) {
+                uint32_t background_tile_index = 
+                    y * 32 + x;
+                background_tile_index += 
+                    (x__index % 4) * 8;
+                background_tile_index +=
+                    (y__index % 4) * 8 * 32;
+                if (x__index >= 4)
+                    background_tile_index += 32 * 32;
+                if (y__index >= 4)
+                    background_tile_index += 32 * 32 * 2;
+                background_tile_map[background_tile_index] =
+                    get_tile_texture_sheet_index(
+                        &chunk__here->tiles[y * 8 + x]) + 1;
             }
-
-            current_sub__chunk_map_node =
-                current_sub__chunk_map_node->chunk_map_node__east;
         }
-        current__chunk_map_node =
-            current__chunk_map_node->chunk_map_node__south;
     }
 }

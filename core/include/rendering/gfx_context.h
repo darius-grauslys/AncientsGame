@@ -14,6 +14,7 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context);
 
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
-        Chunk_Manager *chunk_manager);
+        Chunk_Manager *chunk_manager,
+        Viewing_Fulcrum *viewing_fulcrum);
 
 #endif

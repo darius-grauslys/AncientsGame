@@ -8,6 +8,7 @@
 #include <rendering/animate_entity.h>
 #include <rendering/render_entity.h>
 #include <world/world.h>
+#include <world/viewing_fulcrum.h>
 
 #include <entity/controllers/collidable_entity_handlers.h>
 #include <entity/controllers/entity_handlers.h>
@@ -29,12 +30,6 @@ void init_game(Game *game) {
     get_new__player(game, true,
             0, 0, 0);
 
-    move_chunk_manager(
-            &game->world.chunk_manager, 
-            &game->world.world_params, 
-            DIRECTION__NORTH,
-            2);
-
     Tile tile;
     init_tile(
             &tile,
@@ -50,7 +45,8 @@ void init_game(Game *game) {
 
     PLATFORM_update_chunks(
             &game->gfx_context,
-            &game->world.chunk_manager);
+            &game->world.chunk_manager,
+            &game->world.viewing_fulcrum);
 }
 
 void manage_game(Game *game) {
@@ -67,6 +63,10 @@ void manage_game__post_render(Game *game) {
     PLATFORM_poll_input(game);
     manage_entities(game);
 
+    focus_viewing_fulcrum_at__entity(
+            &game->world.viewing_fulcrum, 
+            get_local_player_from__game(game));
+
     if (poll_world_for__scrolling(&game->world)) {
         set_collision_manager__center_chunk(
                 &game->world.collision_manager,
@@ -74,7 +74,8 @@ void manage_game__post_render(Game *game) {
                 game->world.chunk_manager.y__center_chunk);
         PLATFORM_update_chunks(
                 &game->gfx_context,
-                &game->world.chunk_manager);
+                &game->world.chunk_manager,
+                &game->world.viewing_fulcrum);
     }
 
     PLATFORM_post_render(game);

@@ -130,11 +130,16 @@ static Chunk_Manager__Chunk_Map_Node inline
         int32_t x__chunk, int32_t y__chunk, 
         int32_t z__chunk) {
 
+    //TODO: include z
     return &chunk_manager->chunk_map[
-        get_chunk_index_at__xyz_from__chunk_manager(
-                chunk_manager,
-                x__chunk, y__chunk,
-                z__chunk)
+        get_chunk_index_during__initialization(
+            get_chunk_mod_index(
+                x__chunk
+                ),
+            get_chunk_mod_index(
+                y__chunk
+                )
+            )
     ];
 }
 

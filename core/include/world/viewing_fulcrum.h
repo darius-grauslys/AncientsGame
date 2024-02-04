@@ -15,9 +15,13 @@
 /// visible.
 ///
 
+#include "chunk_manager.h"
 #include <defines.h>
 #include <collisions/hitbox_aabb.h>
 #include <world/chunk_manager.h>
+
+void init_viewing_fulcrum(
+        Viewing_Fulcrum *viewing_fulcrum);
 
 static bool inline is_chunk_within__viewing_fulcrum(
         Viewing_Fulcrum *viewing_fulcrum,
@@ -107,6 +111,10 @@ static Chunk_Manager__Chunk_Map_Node inline
                     viewing_fulcrum, 
                     next_node->chunk__here->x,
                     next_node->chunk__here->y)) {
+            debug_info("done: %d, %d",
+                    next_node->chunk__here->x,
+                    next_node->chunk__here->y
+                    );
             return 0;
         }
         return next_node;
@@ -119,6 +127,17 @@ static bool inline is_entity_within__viewing_fulcrum(
         Viewing_Fulcrum *viewing_fulcrum) {
     return is_this_hitbox_center__inside_this_hitbox(
             &entity->hitbox, &viewing_fulcrum->fulcrum);
+}
+
+static void inline focus_viewing_fulcrum_at__entity(
+        Viewing_Fulcrum *viewing_fulcrum,
+        Entity *entity) {
+    set_hitbox__position(
+            &viewing_fulcrum->fulcrum, 
+            get_global_x_from__hitbox(&entity->hitbox), 
+            get_global_y_from__hitbox(&entity->hitbox), 
+            get_global_z_from__hitbox(&entity->hitbox)
+            );
 }
 
 ///
@@ -135,10 +154,10 @@ static bool inline is_entity_within__viewing_fulcrum(
         chunk_manager, \
         z__chunk, \
         alias_for_current_chunk) \
-        Chunk_Manager__Chunk_Map \
+        Chunk_Manager__Chunk_Map_Node \
             *most_north_western__node_in__viewing_fulcrum; \
         Chunk_Manager__Chunk_Map_Node \
-            *alias_for_current_chunk = \
+            * alias_for_current_chunk = \
             most_north_western__node_in__viewing_fulcrum = \
                 get_most_north_western__chunk_map_node_in__viewing_fulcrum( \
                         viewing_fulcrum, chunk_manager, z__chunk); \

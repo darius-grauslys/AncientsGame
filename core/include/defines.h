@@ -63,6 +63,24 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
     * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
 #endif
 
+static uint8_t inline get_chunk_mod_index(int32_t x) {
+    return
+        x & (
+            (1 << CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW__BIT_SIZE)
+            - 1)
+        ;
+}
+
+static uint8_t inline get_chunk_mod_index__sum(
+        int32_t x,
+        int32_t y
+        ) {
+    return
+        get_chunk_mod_index(
+                get_chunk_mod_index(x)
+                + get_chunk_mod_index(y));
+}
+
 ///
 /// This is to only be called during
 /// initalization, since layer_one
