@@ -554,107 +554,6 @@ TEST_FUNCTION(remove_entity_from__collision_manager__at) {
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(move_collision_manager__nodes) {
-    // 
-    // Note with this test, the layers do
-    // not have their (x/y)__center_chunk values
-    // updated, so when we call get_collision_node_for__this_position(...)
-    // we will receive nodes based on old (x/y)__center_chunk values.
-    //
-    Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
-
-    Collision_Manager__Collision_Node 
-        *node_travelled, *node_received;
-
-    int32_t x__chunk = 0, y__chunk = 0;
-    for (int32_t i = munit_rand_int_range(16,32);
-            i>=0;i--) {
-        int dx__chunk = munit_rand_int_range(-1,1);
-        int dy__chunk = munit_rand_int_range(-1,1);
-        if (dx__chunk == 1) {
-            node_travelled = node_travelled->collision_node__east;
-            x__chunk = (x__chunk + 1) % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-        } else if (dx__chunk == -1) {
-            node_travelled = node_travelled->collision_node__west;
-            x__chunk = (x__chunk + (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1))
-                % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-        }
-        if (dy__chunk == 1) {
-            node_travelled = node_travelled->collision_node__north;
-            y__chunk = (y__chunk + 1) % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
-        } else if (dy__chunk == -1) {
-            node_travelled = node_travelled->collision_node__south;
-            y__chunk = (y__chunk + (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1))
-                % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
-        }
-    }
-
-    node_travelled =
-        get_collision_node_for__this_position(
-                &collision_manager,
-                x__chunk, y__chunk);
-
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__NORTH);
-
-    node_received =
-        get_collision_node_for__this_position(
-                &collision_manager,
-                x__chunk, y__chunk);
-
-    munit_assert_ptr_equal(
-            node_travelled->collision_node__north, node_received);
-
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__SOUTH);
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__SOUTH);
-
-    node_received =
-        get_collision_node_for__this_position(
-                &collision_manager,
-                x__chunk, y__chunk);
-
-    munit_assert_ptr_equal(
-            node_travelled->collision_node__south, node_received);
-
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__NORTH);
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__EAST);
-
-    node_received =
-        get_collision_node_for__this_position(
-                &collision_manager,
-                x__chunk, y__chunk);
-
-    munit_assert_ptr_equal(
-            node_travelled->collision_node__east, node_received);
-
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__WEST);
-    move_collision_manager__nodes(
-            &collision_manager,
-            DIRECTION__WEST);
-
-    node_received =
-        get_collision_node_for__this_position(
-                &collision_manager,
-                x__chunk, y__chunk);
-
-    munit_assert_ptr_equal(
-            node_travelled->collision_node__west, node_received);
-
-    return MUNIT_OK;
-}
-
 void seed_collision_manager_nodes_with__dummy_entity(
         Collision_Manager *collision_manager) {
     for (uint32_t i=0;
@@ -1040,7 +939,116 @@ TEST_FUNCTION(update_collision_manager__nodes_legal_directions) {
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(set_collision_manager__center_chunk) {
+TEST_FUNCTION(move_collision_manager) {
+    // 
+    // Note with this test, the layers do
+    // not have their (x/y)__center_chunk values
+    // updated, so when we call get_collision_node_for__this_position(...)
+    // we will receive nodes based on old (x/y)__center_chunk values.
+    //
+    Collision_Manager collision_manager;
+    init_collision_manager(&collision_manager);
+
+    Collision_Manager__Collision_Node 
+        *node_travelled, *node_received;
+
+    int32_t x__chunk = 0, y__chunk = 0;
+    for (int32_t i = munit_rand_int_range(16,32);
+            i>=0;i--) {
+        int dx__chunk = munit_rand_int_range(-1,1);
+        int dy__chunk = munit_rand_int_range(-1,1);
+        if (dx__chunk == 1) {
+            node_travelled = node_travelled->collision_node__east;
+            x__chunk = (x__chunk + 1) % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+        } else if (dx__chunk == -1) {
+            node_travelled = node_travelled->collision_node__west;
+            x__chunk = (x__chunk + (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1))
+                % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+        }
+        if (dy__chunk == 1) {
+            node_travelled = node_travelled->collision_node__north;
+            y__chunk = (y__chunk + 1) % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+        } else if (dy__chunk == -1) {
+            node_travelled = node_travelled->collision_node__south;
+            y__chunk = (y__chunk + (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1))
+                % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+        }
+    }
+
+    node_travelled =
+        get_collision_node_for__this_position(
+                &collision_manager,
+                x__chunk, y__chunk);
+
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__NORTH,
+            1);
+
+    node_received =
+        get_collision_node_for__this_position(
+                &collision_manager,
+                x__chunk, y__chunk);
+
+    munit_assert_ptr_equal(
+            node_travelled->collision_node__north, node_received);
+
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__SOUTH,
+            1);
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__SOUTH,
+            1);
+
+    node_received =
+        get_collision_node_for__this_position(
+                &collision_manager,
+                x__chunk, y__chunk);
+
+    munit_assert_ptr_equal(
+            node_travelled->collision_node__south, node_received);
+
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__NORTH,
+            1);
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__EAST,
+            1);
+
+    node_received =
+        get_collision_node_for__this_position(
+                &collision_manager,
+                x__chunk, y__chunk);
+
+    munit_assert_ptr_equal(
+            node_travelled->collision_node__east, node_received);
+
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__WEST,
+            1);
+    move_collision_manager(
+            &collision_manager,
+            DIRECTION__WEST,
+            1);
+
+    node_received =
+        get_collision_node_for__this_position(
+                &collision_manager,
+                x__chunk, y__chunk);
+
+    munit_assert_ptr_equal(
+            node_travelled->collision_node__west, node_received);
+
+    return MUNIT_OK;
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(set_collision_manager_at__position) {
     Collision_Manager collision_manager;
     init_collision_manager(&collision_manager);
 
@@ -1052,7 +1060,7 @@ TEST_FUNCTION(set_collision_manager__center_chunk) {
                 &collision_manager,
                 2, 2);
 
-    set_collision_manager__center_chunk(
+    set_collision_manager_at__position(
             &collision_manager,
             collision_manager.x__center_chunk,
             collision_manager.y__center_chunk + 2);
@@ -1064,7 +1072,7 @@ TEST_FUNCTION(set_collision_manager__center_chunk) {
 
     munit_assert_ptr_equal(node_test, node_actual);
 
-    set_collision_manager__center_chunk(
+    set_collision_manager_at__position(
             &collision_manager,
             collision_manager.x__center_chunk,
             collision_manager.y__center_chunk + 1);
@@ -1076,7 +1084,7 @@ TEST_FUNCTION(set_collision_manager__center_chunk) {
 
     munit_assert_ptr_equal(0, node_actual);
 
-    set_collision_manager__center_chunk(
+    set_collision_manager_at__position(
             &collision_manager,
             collision_manager.x__center_chunk,
             collision_manager.y__center_chunk - 3);
@@ -1086,7 +1094,7 @@ TEST_FUNCTION(set_collision_manager__center_chunk) {
                 &collision_manager,
                 7, 0);
 
-    set_collision_manager__center_chunk(
+    set_collision_manager_at__position(
             &collision_manager,
             collision_manager.x__center_chunk,
             collision_manager.y__center_chunk + 1);
@@ -1121,9 +1129,9 @@ DEFINE_SUITE(collision_manager,
         INCLUDE_TEST__STATELESS
             (remove_entity_from__collision_manager__at),
         INCLUDE_TEST__STATELESS
-            (move_collision_manager__nodes),
+            (move_collision_manager),
         INCLUDE_TEST__STATELESS
-            (set_collision_manager__center_chunk),
+            (set_collision_manager_at__position),
         INCLUDE_TEST__STATELESS
             (update_collision_manager__nodes_legal_directions),
         END_TESTS);

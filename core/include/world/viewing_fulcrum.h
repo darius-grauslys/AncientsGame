@@ -78,11 +78,11 @@ init_hitbox_point_as__most_south_eastern_chunk_in__viewing_fulcrum(
 /// Returns false if the current call is out of bounds.
 ///
 static bool inline
-*get_next_chunk_position_in__viewing_fulcrum(
+get_next_chunk_position_in__viewing_fulcrum(
         Viewing_Fulcrum *viewing_fulcrum,
         Hitbox_Point *current__position,
         Hitbox_Point *original__position) {
-    if (!is_chunk_within__viewing_fulcrum(
+    if (!is_chunk_position_within__viewing_fulcrum(
                 viewing_fulcrum, 
                 current__position->x,
                 current__position->y)) {
@@ -92,7 +92,7 @@ static bool inline
                 current__position->y) {
             next__position.y--;
         }
-        if (!is_chunk_within__viewing_fulcrum(
+        if (!is_chunk_position_within__viewing_fulcrum(
                     viewing_fulcrum, 
                     next__position.x,
                     next__position.y)) {
@@ -122,34 +122,5 @@ static void inline focus_viewing_fulcrum_at__entity(
             get_global_z_from__hitbox(&entity->hitbox)
             );
 }
-
-///
-/// This macro is to be used in the context which
-/// the viewing_fulcrum is overlapping the chunk_manager.
-///
-/// The macro exists in the first place because this
-/// is inlined code that pretty much every backend implementation
-/// wants to reuse. The usage caveat here is that the platform
-/// specific code wants to occur within the loop.
-///
-// #define FOREACH_CHUNK_POSITION_IN__VIEWING_FULCRUM( \
-//         viewing_fulcrum, \
-//         chunk_manager, \
-//         z__chunk, \
-//         alias_for_current_chunk) \
-//         Chunk_Manager__Chunk_Map_Node \
-//             *most_north_western__node_in__viewing_fulcrum; \
-//         Chunk_Manager__Chunk_Map_Node \
-//             * alias_for_current_chunk = \
-//             most_north_western__node_in__viewing_fulcrum = \
-//                 get_most_north_western__chunk_map_node_in__viewing_fulcrum( \
-//                         viewing_fulcrum, chunk_manager, z__chunk); \
-//         alias_for_current_chunk = \
-//             alias_for_current_chunk->chunk_map_node__west; \
-//         while ((alias_for_current_chunk = \
-//                     get_next_chunk_map_node_in__viewing_fulcrum( \
-//                         viewing_fulcrum, \
-//                         alias_for_current_chunk , \
-//                         most_north_western__node_in__viewing_fulcrum)))
 
 #endif

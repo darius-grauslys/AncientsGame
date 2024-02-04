@@ -64,19 +64,26 @@ bool add_entity_to__collision_manager(
         Entity *entity);
 
 ///
-/// Call this after each time you call
-/// move_chunk_manager__chunks(...)
+/// Call this every time after calling
+/// move_chunk_manager(...)
 ///
-/// TODO: note, if the change in center_chunk
-/// is sufficently large, this is very
-/// performance heavy. This should be better
-/// renamed to move_, and later on have
-/// a set_ for each chunk_manager and collision_manager
-/// which will fully reset internal data and before a
-/// large jump. Good if the player teleports for whatever
-/// reason.
+void move_collision_manager(
+        Collision_Manager *collision_manager,
+        Direction direction,
+        uint32_t steps);
+
 ///
-void set_collision_manager__center_chunk(
+/// Call this every time after calling
+/// set_chunk_manager_at__position(...)
+///
+/// NOTICE: if you call this function
+/// you must re-add any and all entities
+/// BACK into the collision_manager!
+///
+/// TODO: Can we try to do better in
+/// the re-add entity regard?
+///
+void set_collision_manager_at__position(
         Collision_Manager *collision_manager,
         int32_t x__center_chunk,
         int32_t y__center_chunk);

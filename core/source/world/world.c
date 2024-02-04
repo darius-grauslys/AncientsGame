@@ -19,7 +19,7 @@ void init_world(World *world) {
             chunk_generator__flat_world_f, 0);
     init_entity_manager(&world->entity_manager);
     init_collision_manager(&world->collision_manager);
-    set_collision_manager__center_chunk(
+    set_collision_manager_at__position(
             &world->collision_manager, 0, 0);
     init_chunk_manager(
             &world->chunk_manager,

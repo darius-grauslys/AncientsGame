@@ -68,7 +68,7 @@ void manage_game__post_render(Game *game) {
             get_local_player_from__game(game));
 
     if (poll_world_for__scrolling(&game->world)) {
-        set_collision_manager__center_chunk(
+        set_collision_manager_at__position(
                 &game->world.collision_manager,
                 game->world.chunk_manager.x__center_chunk,
                 game->world.chunk_manager.y__center_chunk);

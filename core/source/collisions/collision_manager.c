@@ -828,61 +828,6 @@ void move_collision_manager__layer_two_west(
             &layer_two->layer_three__bottom_right);
 }
 
-void move_collision_manager__nodes(
-        Collision_Manager *collision_manager,
-        Direction direction) {
-    if (direction & DIRECTION__NORTH) {
-        move_collision_manager__layer_two_north(
-                &collision_manager->layer_two__top_left);
-        move_collision_manager__layer_two_north(
-                &collision_manager->layer_two__top_right);
-        move_collision_manager__layer_two_north(
-                &collision_manager->layer_two__bottom_left);
-        move_collision_manager__layer_two_north(
-                &collision_manager->layer_two__bottom_right);
-        collision_manager->most_north_western__node =
-            collision_manager->most_north_western__node
-            ->collision_node__north;
-    } else if (direction & DIRECTION__SOUTH) {
-        move_collision_manager__layer_two_south(
-                &collision_manager->layer_two__top_left);
-        move_collision_manager__layer_two_south(
-                &collision_manager->layer_two__top_right);
-        move_collision_manager__layer_two_south(
-                &collision_manager->layer_two__bottom_left);
-        move_collision_manager__layer_two_south(
-                &collision_manager->layer_two__bottom_right);
-        collision_manager->most_north_western__node =
-            collision_manager->most_north_western__node
-            ->collision_node__south;
-    }
-    if (direction & DIRECTION__EAST) {
-        move_collision_manager__layer_two_east(
-                &collision_manager->layer_two__top_left);
-        move_collision_manager__layer_two_east(
-                &collision_manager->layer_two__top_right);
-        move_collision_manager__layer_two_east(
-                &collision_manager->layer_two__bottom_left);
-        move_collision_manager__layer_two_east(
-                &collision_manager->layer_two__bottom_right);
-        collision_manager->most_north_western__node =
-            collision_manager->most_north_western__node
-            ->collision_node__east;
-    } else if (direction & DIRECTION__WEST) {
-        move_collision_manager__layer_two_west(
-                &collision_manager->layer_two__top_left);
-        move_collision_manager__layer_two_west(
-                &collision_manager->layer_two__top_right);
-        move_collision_manager__layer_two_west(
-                &collision_manager->layer_two__bottom_left);
-        move_collision_manager__layer_two_west(
-                &collision_manager->layer_two__bottom_right);
-        collision_manager->most_north_western__node =
-            collision_manager->most_north_western__node
-            ->collision_node__west;
-    }
-}
-
 void update_collision_manager__nodes_legal_directions__north(
         Collision_Manager *collision_manager) {
     Collision_Manager__Collision_Node *current_node =
@@ -1011,52 +956,71 @@ void update_collision_manager__nodes_legal_directions(
     }
 }
 
-void set_collision_manager__center_chunk(
+void move_collision_manager(
         Collision_Manager *collision_manager,
-        int32_t x__center_chunk,
-        int32_t y__center_chunk) {
+        Direction direction,
+        uint32_t steps) {
 
-    while (collision_manager->x__center_chunk
-            != x__center_chunk
-            || collision_manager->y__center_chunk
-            != y__center_chunk) {
-        Direction direction_to_move_nodes =
-            DIRECTION__NONE;
-        if (collision_manager->x__center_chunk 
-                < x__center_chunk) {
-            collision_manager->x__center_chunk++;
-            direction_to_move_nodes |=
-                DIRECTION__EAST;
-        } else if (collision_manager->x__center_chunk 
-                > x__center_chunk) {
-            collision_manager->x__center_chunk--;
-            direction_to_move_nodes |=
-                DIRECTION__WEST;
-        }
-
-        if (collision_manager->y__center_chunk 
-                < y__center_chunk) {
+    for (uint32_t current__step=0;current__step<steps;current__step++) {
+        if (direction & DIRECTION__NORTH) {
+            move_collision_manager__layer_two_north(
+                    &collision_manager->layer_two__top_left);
+            move_collision_manager__layer_two_north(
+                    &collision_manager->layer_two__top_right);
+            move_collision_manager__layer_two_north(
+                    &collision_manager->layer_two__bottom_left);
+            move_collision_manager__layer_two_north(
+                    &collision_manager->layer_two__bottom_right);
+            collision_manager->most_north_western__node =
+                collision_manager->most_north_western__node
+                ->collision_node__north;
             collision_manager->y__center_chunk++;
-            direction_to_move_nodes |=
-                DIRECTION__NORTH;
-        } else if (collision_manager->y__center_chunk 
-                > y__center_chunk) {
+        } else if (direction & DIRECTION__SOUTH) {
+            move_collision_manager__layer_two_south(
+                    &collision_manager->layer_two__top_left);
+            move_collision_manager__layer_two_south(
+                    &collision_manager->layer_two__top_right);
+            move_collision_manager__layer_two_south(
+                    &collision_manager->layer_two__bottom_left);
+            move_collision_manager__layer_two_south(
+                    &collision_manager->layer_two__bottom_right);
+            collision_manager->most_north_western__node =
+                collision_manager->most_north_western__node
+                ->collision_node__south;
             collision_manager->y__center_chunk--;
-            direction_to_move_nodes |=
-                DIRECTION__SOUTH;
+        }
+        if (direction & DIRECTION__EAST) {
+            move_collision_manager__layer_two_east(
+                    &collision_manager->layer_two__top_left);
+            move_collision_manager__layer_two_east(
+                    &collision_manager->layer_two__top_right);
+            move_collision_manager__layer_two_east(
+                    &collision_manager->layer_two__bottom_left);
+            move_collision_manager__layer_two_east(
+                    &collision_manager->layer_two__bottom_right);
+            collision_manager->most_north_western__node =
+                collision_manager->most_north_western__node
+                ->collision_node__east;
+            collision_manager->x__center_chunk++;
+        } else if (direction & DIRECTION__WEST) {
+            move_collision_manager__layer_two_west(
+                    &collision_manager->layer_two__top_left);
+            move_collision_manager__layer_two_west(
+                    &collision_manager->layer_two__top_right);
+            move_collision_manager__layer_two_west(
+                    &collision_manager->layer_two__bottom_left);
+            move_collision_manager__layer_two_west(
+                    &collision_manager->layer_two__bottom_right);
+            collision_manager->most_north_western__node =
+                collision_manager->most_north_western__node
+                ->collision_node__west;
+            collision_manager->x__center_chunk--;
         }
 
-        move_collision_manager__nodes(
-                collision_manager,
-                direction_to_move_nodes);
         update_collision_manager__nodes_legal_directions(
                 collision_manager, 
-                direction_to_move_nodes);
+                direction);
     }
-
-    // debug_info("cm: %d, %d",
-    //         collision_manager->x__center_chunk,
-    //         collision_manager->y__center_chunk);
 
     update_collision_manager__layer_two(
             &collision_manager->layer_two__top_left, 
@@ -1074,4 +1038,94 @@ void set_collision_manager__center_chunk(
             &collision_manager->layer_two__bottom_right, 
             collision_manager, 
             DIRECTION__SOUTH_EAST);
+}
+
+void set_collision_manager_at__position(
+        Collision_Manager *collision_manager,
+        int32_t x__center_chunk,
+        int32_t y__center_chunk) {
+    int32_t local_x__current__center_chunk =
+        get_chunk_mod_index(collision_manager->x__center_chunk);
+
+    int32_t local_y__current__center_chunk =
+        get_chunk_mod_index(collision_manager->y__center_chunk);
+
+    int32_t local_x__new__center_chunk =
+        get_chunk_mod_index(x__center_chunk);
+    int32_t local_y__new__center_chunk =
+        get_chunk_mod_index(y__center_chunk);
+
+    while (local_x__new__center_chunk
+            !=
+            local_x__current__center_chunk) {
+        if (local_x__new__center_chunk
+                < local_x__current__center_chunk) {
+            local_x__current__center_chunk--;
+            move_collision_manager(
+                    collision_manager,
+                    DIRECTION__WEST,
+                    1);
+        } else {
+            local_x__current__center_chunk++;
+            move_collision_manager(
+                    collision_manager,
+                    DIRECTION__EAST,
+                    1);
+        }
+    }
+
+    // TODO: figure out why this needs a -1
+    while (local_y__new__center_chunk - 1
+            !=
+            local_y__current__center_chunk) {
+        if (local_y__new__center_chunk - 1
+                < local_y__current__center_chunk) {
+            local_y__current__center_chunk--;
+            move_collision_manager(
+                    collision_manager,
+                    DIRECTION__SOUTH,
+                    1);
+        } else {
+            local_y__current__center_chunk++;
+            move_collision_manager(
+                    collision_manager,
+                    DIRECTION__NORTH,
+                    1);
+        }
+    }
+
+    collision_manager->x__center_chunk =
+        x__center_chunk;
+    collision_manager->y__center_chunk =
+        y__center_chunk;
+
+    // Start at most SE
+    Collision_Manager__Collision_Node
+        *origin__collision_node =
+        &collision_manager
+        ->layer_two__bottom_left
+        .layer_three__bottom_left
+        .collision_node__bottom_left
+        ;
+    Collision_Manager__Collision_Node
+        *current__collision_node = 
+        origin__collision_node;
+
+    for (int32_t y=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+            y<CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS/2;
+            y++) {
+        for (int32_t x=-CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x<CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW/2;
+                x++) {
+            unload_all_entities_from__collision_node(current__collision_node);
+            current__collision_node =
+                current__collision_node
+                ->collision_node__east;
+        }
+        origin__collision_node =
+            origin__collision_node
+            ->collision_node__north;
+        current__collision_node =
+            origin__collision_node;
+    }
 }

@@ -383,7 +383,7 @@ typedef struct Collision_Manager__Layer_Two_t {
     int32_t x__center_chunk, y__center_chunk;
 } Collision_Manager__Layer_Two;
 
-typedef struct Collision_Manager__t {
+typedef struct Collision_Manager_t {
     Collision_Manager__Collision_Node collision_nodes[
         CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
 
