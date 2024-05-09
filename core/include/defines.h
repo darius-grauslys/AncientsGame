@@ -279,6 +279,11 @@ typedef struct Entity_Manager_t {
     uint32_t entity_count;
 } Entity_Manager;
 
+/// When checking the distance between two collisions along each axis
+/// anything equal to or less than this value is ignored when determining
+/// displacement. This useful threshold is what allows a colliding player
+/// to move up while an entity is moving into them from the right.
+#define COLLISION_DELTA_THRESHOLD 25
 #define COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET \
     (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4)
 #define COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET \

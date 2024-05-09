@@ -64,6 +64,12 @@ static int32_t inline get_global_z_from__hitbox__without_velocity(
 void commit_hitbox_velocity(
         Hitbox_AABB *hitbox);
 
+///
+/// BE CAREFUL!!!
+/// Whenever you call this, you need to
+/// make sure the entity's record in the collision_manager
+/// is updated!!!
+///
 void set_hitbox__position(
         Hitbox_AABB *hitbox,
         int32_t x__global,
@@ -115,9 +121,9 @@ static void inline apply_velocity_to__hitbox(
         int32_t x__velocity,
         int32_t y__velocity,
         int32_t z__velocity) {
-    hitbox->x__velocity = x__velocity;
-    hitbox->y__velocity = y__velocity;
-    hitbox->z__velocity = z__velocity;
+    hitbox->x__velocity += x__velocity;
+    hitbox->y__velocity += y__velocity;
+    hitbox->z__velocity += z__velocity;
 }
 
 static void inline apply_x_velocity_to__hitbox(
@@ -136,6 +142,34 @@ static void inline apply_z_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         int32_t z__velocity) {
     hitbox->z__velocity += z__velocity;
+}
+
+static void inline set_velocity_to__hitbox(
+        Hitbox_AABB *hitbox,
+        int32_t x__velocity,
+        int32_t y__velocity,
+        int32_t z__velocity) {
+    hitbox->x__velocity = x__velocity;
+    hitbox->y__velocity = y__velocity;
+    hitbox->z__velocity = z__velocity;
+}
+
+static void inline set_x_velocity_to__hitbox(
+        Hitbox_AABB *hitbox,
+        int32_t x__velocity) {
+    hitbox->x__velocity = x__velocity;
+}
+
+static void inline set_y_velocity_to__hitbox(
+        Hitbox_AABB *hitbox,
+        int32_t y__velocity) {
+    hitbox->y__velocity = y__velocity;
+}
+
+static void inline set_z_velocity_to__hitbox(
+        Hitbox_AABB *hitbox,
+        int32_t z__velocity) {
+    hitbox->z__velocity = z__velocity;
 }
 
 #endif
