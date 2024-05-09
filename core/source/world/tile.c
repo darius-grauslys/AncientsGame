@@ -1,30 +1,15 @@
 #include <world/tile.h>
 #include <stdbool.h>
 
-void init_tile(Tile *tile, enum Tile_Kind kind_of_tile,
+void init_tile(Tile *tile, 
+        enum Tile_Kind kind_of_tile,
+        enum Tile_Cover_Kind kind_of_tile_cover,
         uint8_t flags) {
     tile->flags = flags;
     tile->the_kind_of_tile__this_tile_is =
         kind_of_tile;
     tile->the_kind_of_tile_cover__this_tile_has =
-        Tile_Cover_Kind__None;
-}
-
-void init_tile_structure(Tile *tile, 
-        enum Tile_Kind kind_of_tile,
-        enum Tile_Structure_Kind kind_of_tile_structure) {
-    init_tile(tile, kind_of_tile, TILE_FLAGS__NONE);
-    set_tile__is_passable(
-            tile, 
-            is_tile_structure_kind__passable(
-                kind_of_tile_structure)
-            );
-    set_tile__sight_blocking(
-            tile, 
-            is_tile_structure_kind__sight_blocking(
-                kind_of_tile_structure)
-            );
-    //TODO: finish this
+        kind_of_tile_cover;
 }
 
 uint32_t get_tile_texture_sheet_index(Tile *tile) {
@@ -87,12 +72,42 @@ tile_structure:
             index = TILE_SHEET_INDEX__GRASS;
 			break;
     }
-    switch (tile->the_kind_of_tile_structure__this_tile_is) {
-        default:
-        case Tile_Structure_Kind__Floor:
-            return index;
-        case Tile_Structure_Kind__Stair_Ascending:
-            return 0;
+    if (is_tile__stairs(tile)) {
+        // This is based on how we layout the tile sheet.
+        // If we're descending, then we don't need an
+        // offset.
+        // If we are ascending, we need to offset such that
+        // we pass the rows which include the descending
+        // tiles. This also included the inverted descending
+        // tile variants (example: North-East normal, North-East inverted.)
+        int32_t offset = 0;
+        //     (is_tile__up_or_down_stairs(tile))
+        //     ? TILE_SHEET_ELEMENT_WIDTH
+        //         * (TILE_STAIR_DIRECTION_COUNT
+        //         + TILE_STAIR_DIRECTION_COUNT / 2)
+        //     : 0
+        //     ;
+        if (is_tile__inverted_stairs(tile)) {
+            // offset +=
+            //     TILE_SHEET_ELEMENT_WIDTH
+            //     * TILE_STAIR_DIRECTION_COUNT
+            //     ;
+            // offset +=
+            //     (tile->flags
+            //      & TILE_FLAGS__MASK_STAIR_VALUE) / 2
+            //     * TILE_SHEET_ELEMENT_WIDTH
+            //     ;
+        } else {
+            offset += 128;
+            // offset +=
+            //     ((tile->flags
+            //      & TILE_FLAGS__MASK_STAIR_VALUE) + 1)
+            //     * TILE_SHEET_ELEMENT_WIDTH
+            //     ;
+        }
+
+        return index + offset;
     }
+    return index;
 }
 

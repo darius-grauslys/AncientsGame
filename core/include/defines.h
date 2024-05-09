@@ -363,6 +363,8 @@ typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
 #define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING 6
 #define TILE_FLAGS__BIT_SHIFT_IS_PASSABLE 7
 
+#define TILE_STAIR_DIRECTION_COUNT 8
+
 #define TILE_FLAGS__MASK_STAIR_VALUE ((1<<\
             TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR) - 1)
 #define TILE_FLAGS__BIT_INVERTED_STAIR (1<<\
@@ -377,6 +379,8 @@ typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
         TILE_FLAGS__BIT_SHIFT_IS_PASSABLE)
 
 #define TILE_FLAGS__NONE 0
+
+#define TILE_SHEET_ELEMENT_WIDTH 32
 
 #define TILE_SHEET_INDEX__WOOD 0
 #define TILE_SHEET_INDEX__STONE_BRICK 1
@@ -422,15 +426,6 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Leaf_Clutter,
 };
 
-enum Tile_Structure_Kind {
-    Tile_Structure_Kind__None,
-    Tile_Structure_Kind__Floor,
-    Tile_Structure_Kind__Stair_Ascending,
-    Tile_Structure_Kind__Stair_Descending,
-    Tile_Structure_Kind__Wall,
-    Tile_Structure_Kind__Window,
-};
-
 ///
 /// INPUT
 ///
@@ -455,13 +450,9 @@ typedef struct Input_t {
 
 typedef struct Tile_t {
     enum Tile_Kind                  the_kind_of_tile__this_tile_is;
-    union {
-        enum Tile_Cover_Kind        the_kind_of_tile_cover__this_tile_has;
-        enum Tile_Structure_Kind    the_kind_of_tile_structure__this_tile_is;
-        union {
-            Direction               direction_of_structure;
-        };
-    };
+    enum Tile_Cover_Kind        the_kind_of_tile_cover__this_tile_has;
+    //TODO: this structure is not padding friendly.
+    // consider making flags 16 bit
     uint8_t flags;
     // bits 1 2 3, stair direction (values 0-7)
     // bit 4, is the stair inverted

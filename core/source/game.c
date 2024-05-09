@@ -17,6 +17,9 @@
 #include <collisions/hitbox_aabb.h>
 #include <collisions/collision_manager.h>
 
+#include <world/chunk.h>
+#include <world/tile.h>
+
 void init_game(Game *game) {
     PLATFORM_init_gfx_context(&game->gfx_context);
     //TODO: start with a main menu.
@@ -34,6 +37,7 @@ void init_game(Game *game) {
             &game->world.world_params, 
             DIRECTION__NORTH,
             2);
+
     PLATFORM_update_chunks(
             &game->gfx_context,
             &game->world.chunk_manager);
