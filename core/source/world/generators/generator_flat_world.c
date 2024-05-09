@@ -432,8 +432,6 @@ void chunk_generator__flat_world_f(
                 case 0:
                     tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Sand;
-                    set_tile__is_stairs(tile, true);
-                    set_tile__stair_direction(tile, 2);
                     break;
                 case 1:
                     tile->the_kind_of_tile__this_tile_is =

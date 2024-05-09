@@ -73,37 +73,33 @@ tile_structure:
 			break;
     }
     if (is_tile__stairs(tile)) {
-        // This is based on how we layout the tile sheet.
-        // If we're descending, then we don't need an
-        // offset.
-        // If we are ascending, we need to offset such that
-        // we pass the rows which include the descending
-        // tiles. This also included the inverted descending
-        // tile variants (example: North-East normal, North-East inverted.)
         int32_t offset = 0;
-        //     (is_tile__up_or_down_stairs(tile))
-        //     ? TILE_SHEET_ELEMENT_WIDTH
-        //         * (TILE_STAIR_DIRECTION_COUNT
-        //         + TILE_STAIR_DIRECTION_COUNT / 2)
-        //     : 0
-        //     ;
-        if (is_tile__inverted_stairs(tile)) {
-            // offset +=
-            //     TILE_SHEET_ELEMENT_WIDTH
-            //     * TILE_STAIR_DIRECTION_COUNT
-            //     ;
-            // offset +=
-            //     (tile->flags
-            //      & TILE_FLAGS__MASK_STAIR_VALUE) / 2
-            //     * TILE_SHEET_ELEMENT_WIDTH
-            //     ;
-        } else {
-            offset += 128;
-            // offset +=
-            //     ((tile->flags
-            //      & TILE_FLAGS__MASK_STAIR_VALUE) + 1)
-            //     * TILE_SHEET_ELEMENT_WIDTH
-            //     ;
+        
+        // TODO: magic numbers, but its not that bad.
+        // they will only be used here, but who knows
+        // what the future might require?
+        switch(get_tile__stair_direction(tile)) {
+            case TILE_STAIR_DIRECTION_EAST:
+            case TILE_STAIR_DIRECTION_WEST:
+                offset = TILE_SHEET_ELEMENT_WIDTH;
+                break;
+            case TILE_STAIR_DIRECTION_NORTH:
+            case TILE_STAIR_DIRECTION_SOUTH:
+                offset = TILE_SHEET_ELEMENT_WIDTH * 2;
+                break;
+            case TILE_STAIR_DIRECTION_NORTH_EAST:
+            case TILE_STAIR_DIRECTION_NORTH_WEST:
+            case TILE_STAIR_DIRECTION_SOUTH_EAST:
+            case TILE_STAIR_DIRECTION_SOUTH_WEST:
+                if (is_tile__inverted_stairs(tile)) {
+                    offset = TILE_SHEET_ELEMENT_WIDTH * 4;
+                } else {
+                    offset = TILE_SHEET_ELEMENT_WIDTH * 3;
+                }
+                break;
+        }
+        if (is_tile__up_or_down_stairs(tile)) {
+            offset += TILE_SHEET_ELEMENT_WIDTH * 4;
         }
 
         return index + offset;

@@ -130,8 +130,10 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager) {
-    uint16_t *background_tile_map =
-        bgGetMapPtr(gfx_context->active_background_ground__buffer
+    TileMapEntry16 *background_tile_map =
+        (TileMapEntry16*)
+        bgGetMapPtr(gfx_context
+                ->active_background_ground__buffer
                 ->background_index);
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
         chunk_manager->chunk_map_node__most_north_western;
@@ -158,6 +160,10 @@ void PLATFORM_update_chunks(
                 current_sub__chunk_map_node->chunk__here;
 
             //TODO: im am using magic numbers here atm.
+
+            // Everything is based on the implementation of
+            // TileMapEntry16 of background.h in the arm9
+            // folder of libnds.
             for (int y=0;y<8;y++) {
                 for (int x=0;x<8;x++) {
                     uint32_t background_tile_index = 
@@ -170,9 +176,19 @@ void PLATFORM_update_chunks(
                         background_tile_index += 32 * 32;
                     if (y__index >= 4)
                         background_tile_index += 32 * 32 * 2;
-                    background_tile_map[background_tile_index] =
-                        get_tile_texture_sheet_index(
-                            &chunk__here->tiles[y * 8 + x]) + 1;
+                    Tile *tile = &chunk__here->tiles[y * 8 + x];
+                    TileMapEntry16 *tile_entry =
+                        &background_tile_map[background_tile_index];
+                    uint16_t value =
+                        (get_tile_texture_sheet_index(tile) + 1)
+                        & ((1 << 10)-1);
+                    if (is_tile__stairs(tile)) {
+                        value |= does_tile__stair_direction__require_hflip(tile)
+                            << 11;
+                        value |= does_tile__stair_direction__require_vflip(tile)
+                            << 10;
+                    }
+                    *(uint16_t*)tile_entry = value;
                 }
             }
 

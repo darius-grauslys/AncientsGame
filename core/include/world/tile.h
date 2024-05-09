@@ -19,6 +19,35 @@ static void inline set_tile__stair_direction(
         ;
 }
 
+static uint32_t inline get_tile__stair_direction(
+        Tile *tile) {
+    return tile->flags & TILE_FLAGS__MASK_STAIR_VALUE;
+}
+
+static bool inline does_tile__stair_direction__require_hflip(
+        Tile *tile) {
+    switch(get_tile__stair_direction(tile)) {
+        case TILE_STAIR_DIRECTION_SOUTH:
+        case TILE_STAIR_DIRECTION_NORTH_EAST:
+        case TILE_STAIR_DIRECTION_NORTH_WEST:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static bool inline does_tile__stair_direction__require_vflip(
+        Tile *tile) {
+    switch(get_tile__stair_direction(tile)) {
+        case TILE_STAIR_DIRECTION_WEST:
+        case TILE_STAIR_DIRECTION_NORTH_WEST:
+        case TILE_STAIR_DIRECTION_SOUTH_WEST:
+            return true;
+        default:
+            return false;
+    }
+}
+
 static bool inline is_tile__passable(Tile *tile) {
     return (bool)(tile->flags & TILE_FLAGS__BIT_IS_PASSABLE);
 }
