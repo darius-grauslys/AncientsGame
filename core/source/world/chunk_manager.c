@@ -114,6 +114,11 @@ uint32_t get_chunk_index_at__xyz_from__chunk_manager(
                 ->chunk_map_node__most_south_eastern->chunk__here->y) {
         debug_error("chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
+        debug_info("bounds are: (%d, %d) - (%d, %d)",
+            chunk_manager->chunk_map_node__most_north_western->chunk__here->x,
+            chunk_manager->chunk_map_node__most_north_western->chunk__here->y, 
+            chunk_manager->chunk_map_node__most_south_eastern->chunk__here->x,
+            chunk_manager->chunk_map_node__most_south_eastern->chunk__here->y);
         return 0;
     }
 
@@ -133,12 +138,47 @@ Chunk* get_chunk_from__chunk_manager(
         int32_t x__chunk, int32_t y__chunk, 
         int32_t z__chunk) {
 
-    return &chunk_manager->chunks[
-        get_chunk_index_at__xyz_from__chunk_manager(
-                chunk_manager,
-                x__chunk, y__chunk,
-                z__chunk)
-    ];
+    int32_t north_west__x = chunk_manager
+                ->chunk_map_node__most_north_western->chunk__here->x;
+    int32_t north_west__y = chunk_manager
+                ->chunk_map_node__most_north_western->chunk__here->y;
+    int32_t south_east__x = chunk_manager
+                ->chunk_map_node__most_south_eastern->chunk__here->x;
+    int32_t south_east__y = chunk_manager
+                ->chunk_map_node__most_south_eastern->chunk__here->y;
+
+    if (x__chunk < north_west__x
+            || y__chunk > north_west__y
+            || x__chunk > south_east__x
+            || y__chunk < south_east__y) {
+        debug_error("chunk index out of bounds: (%d, %d, %d)",
+                x__chunk, y__chunk, z__chunk);
+        debug_info("bounds are: (%d, %d) - (%d, %d)",
+            chunk_manager->chunk_map_node__most_north_western->chunk__here->x,
+            chunk_manager->chunk_map_node__most_north_western->chunk__here->y, 
+            chunk_manager->chunk_map_node__most_south_eastern->chunk__here->x,
+            chunk_manager->chunk_map_node__most_south_eastern->chunk__here->y);
+        return 0;
+    }
+
+    Chunk_Manager__Chunk_Map_Node *node =
+        chunk_manager->chunk_map_node__most_north_western;
+    for (int32_t x = north_west__x; x < x__chunk; x++) {
+        node = node->chunk_map_node__east;
+    }
+    for (int32_t y = north_west__y; y > y__chunk; y--) {
+        node = node->chunk_map_node__south;
+    }
+
+    return node->chunk__here;
+
+    // return &chunk_manager->chunks[
+    //     get_chunk_index_at__xyz_from__chunk_manager(
+    //             chunk_manager,
+    //             x__chunk, 
+    //             y__chunk,
+    //             z__chunk)
+    // ];
 }
 
 void move_chunk_manager__chunks_north(

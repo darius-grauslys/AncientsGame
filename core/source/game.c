@@ -35,7 +35,7 @@ void init_game(Game *game) {
     move_chunk_manager(
             &game->world.chunk_manager, 
             &game->world.world_params, 
-            DIRECTION__NORTH,
+            DIRECTION__NORTH_WEST,
             2);
 
     PLATFORM_update_chunks(

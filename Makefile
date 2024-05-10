@@ -28,6 +28,8 @@ export BUILD_NDS := $(CURDIR)/build/nds
 export BUILD_UNIX_OPENGL := $(CURDIR)/build/unix_opengl
 export BUILD_TEST_CORE := $(CURDIR)/build/tests/core
 
+export GENERATE_COMPILE_COMMANDS := 1
+
 default:
 	echo 'I deleted the Makefile. TODO: make default target print a target specification menu.'
 
