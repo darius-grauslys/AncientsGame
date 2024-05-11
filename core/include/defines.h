@@ -442,6 +442,12 @@ enum Tile_Kind {
 #define TILE_COVER_SHEET_INDEX__WALL__LEAVES (11 + 32 * 10)
 #define TILE_COVER_SHEET_INDEX__WALL__SNOW (12 + 32 * 10)
 
+#define TILE_COVER_SHEET_INDEX__PLANT (25 + 32 * 17)
+#define TILE_COVER_SHEET_INDEX__FLOWER_RED (26 + 32 * 17)
+#define TILE_COVER_SHEET_INDEX__FLOWER_BLUE (27 + 32 * 17)
+#define TILE_COVER_SHEET_INDEX__FLOWER_YELLOW (28 + 32 * 17)
+#define TILE_COVER_SHEET_INDEX__CACTUS (29 + 32 * 17)
+
 enum Tile_Cover_Kind {
     Tile_Cover_Kind__None,
     Tile_Cover_Kind__Wall__Dirt,
@@ -454,7 +460,10 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Wall__Diamond,
     Tile_Cover_Kind__Wall__Amethyst,
     Tile_Cover_Kind__Wall__Sandstone,
-    Tile_Cover_Kind__Flower,
+    Tile_Cover_Kind__Plant,
+    Tile_Cover_Kind__Flower_Red,
+    Tile_Cover_Kind__Flower_Blue,
+    Tile_Cover_Kind__Flower_Yellow,
     Tile_Cover_Kind__Cactus,
     Tile_Cover_Kind__Oak_Trunk,
     Tile_Cover_Kind__Oak_Root,

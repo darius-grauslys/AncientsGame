@@ -16,7 +16,7 @@
 void init_world(World *world) {
     init_weight_map();
     init_world_parameters(&world->world_params, 
-            chunk_generator__test_world_f, 0);
+            chunk_generator__flat_world_f, 100);
     init_entity_manager(&world->entity_manager);
     init_collision_manager(&world->collision_manager);
     set_collision_manager__center_chunk(

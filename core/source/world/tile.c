@@ -130,8 +130,16 @@ uint32_t get_tile_cover_texture_sheet_index(Tile *tile) {
             return TILE_COVER_SHEET_INDEX__WALL__AMEYTHYST;
         case Tile_Cover_Kind__Wall__Sandstone:
             return TILE_COVER_SHEET_INDEX__WALL__SANDSTONE;
-        case Tile_Cover_Kind__Flower:
+        case Tile_Cover_Kind__Plant:
+            return TILE_COVER_SHEET_INDEX__PLANT;
+        case Tile_Cover_Kind__Flower_Red:
+            return TILE_COVER_SHEET_INDEX__FLOWER_RED;
+        case Tile_Cover_Kind__Flower_Blue:
+            return TILE_COVER_SHEET_INDEX__FLOWER_BLUE;
+        case Tile_Cover_Kind__Flower_Yellow:
+            return TILE_COVER_SHEET_INDEX__FLOWER_YELLOW;
         case Tile_Cover_Kind__Cactus:
+            return TILE_COVER_SHEET_INDEX__CACTUS;
         case Tile_Cover_Kind__Oak_Trunk:
         case Tile_Cover_Kind__Oak_Root:
         case Tile_Cover_Kind__Oak_Branch:

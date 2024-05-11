@@ -86,9 +86,9 @@ void m_controller_for__player(
                         (y >> 3) & ((1 << 3) - 1),
                         0);
             tile->the_kind_of_tile_cover__this_tile_has =
-                Tile_Cover_Kind__Wall__Amethyst;
+                Tile_Cover_Kind__Plant;
             tile->the_kind_of_tile__this_tile_is =
-                Tile_Kind__Amethyst
+                Tile_Kind__Dirt
                 ;
             set_tile__is_unpassable(tile, true);
 

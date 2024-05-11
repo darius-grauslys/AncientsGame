@@ -427,11 +427,21 @@ void chunk_generator__flat_world_f(
             Tile *tile = 
                 &chunk->tiles[tile_index];
 
+            uint32_t chance_plant =
+                get_random__from_world_parameters(
+                        world_params)
+                % 100;
+            tile->the_kind_of_tile_cover__this_tile_has =
+                Tile_Cover_Kind__None;
+
             switch (moisture) {
                 default:
                 case 0:
                     tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Sand;
+                    if (chance_plant > 97)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Cactus;
                     break;
                 case 1:
                     tile->the_kind_of_tile__this_tile_is =
@@ -440,10 +450,34 @@ void chunk_generator__flat_world_f(
                 case 2:
                     tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Dirt;
+                    if (chance_plant > 94)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Plant;
+                    if (chance_plant > 96)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Yellow;
+                    if (chance_plant > 97)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Red;
+                    if (chance_plant > 98)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Blue;
                     break;
                 case 3:
                     tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Grass;
+                    if (chance_plant > 88)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Plant;
+                    if (chance_plant > 92)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Yellow;
+                    if (chance_plant > 95)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Red;
+                    if (chance_plant > 97)
+                        tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Blue;
                     break;
                 case 4:
                     tile->the_kind_of_tile__this_tile_is =
