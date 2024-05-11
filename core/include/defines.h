@@ -203,6 +203,11 @@ typedef void (*m_entity_collision)  (Entity *entity_collision_source,
         Entity *entity_collided,
         Direction direction_of_collision);
 
+typedef struct Tile_t Tile;
+
+typedef void (*m_entity_tile_collision) (Entity *entity_collision_source,
+        Tile *tile_collided);
+
 ///
 /// Here we define the entity super struct. It has everything we could need
 /// for an entity, even if some of the things are not used.
@@ -250,6 +255,7 @@ typedef struct Entity_t {
     m_entity_controller         controller_handler;
     // DO NOT INVOKE! Called automatically
     m_entity_collision          collision_handler;
+    m_entity_tile_collision     tile_collision_handler;
 
     Hitbox_AABB hitbox;
 
@@ -361,7 +367,7 @@ typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
 #define TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN 4
 #define TILE_FLAGS__BIT_SHIFT_IS_STAIR 5
 #define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING 6
-#define TILE_FLAGS__BIT_SHIFT_IS_PASSABLE 7
+#define TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE 7
 
 #define TILE_STAIR_DIRECTION_NORTH      0
 #define TILE_STAIR_DIRECTION_NORTH_EAST 1
@@ -383,8 +389,8 @@ typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
         TILE_FLAGS__BIT_SHIFT_IS_STAIR)
 #define TILE_FLAGS__BIT_IS_SIGHT_BLOCKING (1<<\
         TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
-#define TILE_FLAGS__BIT_IS_PASSABLE (1<<\
-        TILE_FLAGS__BIT_SHIFT_IS_PASSABLE)
+#define TILE_FLAGS__BIT_IS_UNPASSABLE (1<<\
+        TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
 
 #define TILE_FLAGS__NONE 0
 
@@ -423,8 +429,31 @@ enum Tile_Kind {
     Tile_Kind__Water,
 };
 
+#define TILE_COVER_SHEET_INDEX__WALL__WOOD (0 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__STONE_BRICK (1 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__GOLD (2 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__IRON (3 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__DIAMOND (4 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__AMEYTHYST (5 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__SANDSTONE (6 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__STONE (7 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__DIRT (8 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__SAND (9 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__LEAVES (11 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL__SNOW (12 + 32 * 10)
+
 enum Tile_Cover_Kind {
     Tile_Cover_Kind__None,
+    Tile_Cover_Kind__Wall__Dirt,
+    Tile_Cover_Kind__Wall__Sand,
+    Tile_Cover_Kind__Wall__Oak_Wood,
+    Tile_Cover_Kind__Wall__Stone,
+    Tile_Cover_Kind__Wall__Stone_Brick,
+    Tile_Cover_Kind__Wall__Iron,
+    Tile_Cover_Kind__Wall__Gold,
+    Tile_Cover_Kind__Wall__Diamond,
+    Tile_Cover_Kind__Wall__Amethyst,
+    Tile_Cover_Kind__Wall__Sandstone,
     Tile_Cover_Kind__Flower,
     Tile_Cover_Kind__Cactus,
     Tile_Cover_Kind__Oak_Trunk,

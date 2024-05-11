@@ -107,3 +107,36 @@ tile_structure:
     return index;
 }
 
+uint32_t get_tile_cover_texture_sheet_index(Tile *tile) {
+    switch(tile->the_kind_of_tile_cover__this_tile_has) {
+        default:
+        case Tile_Cover_Kind__Wall__Dirt:
+            return TILE_COVER_SHEET_INDEX__WALL__DIRT;
+        case Tile_Cover_Kind__Wall__Sand:
+            return TILE_COVER_SHEET_INDEX__WALL__SAND;
+        case Tile_Cover_Kind__Wall__Oak_Wood:
+            return TILE_COVER_SHEET_INDEX__WALL__WOOD;
+        case Tile_Cover_Kind__Wall__Stone:
+            return TILE_COVER_SHEET_INDEX__WALL__STONE;
+        case Tile_Cover_Kind__Wall__Stone_Brick:
+            return TILE_COVER_SHEET_INDEX__WALL__STONE_BRICK;
+        case Tile_Cover_Kind__Wall__Iron:
+            return TILE_COVER_SHEET_INDEX__WALL__IRON;
+        case Tile_Cover_Kind__Wall__Gold:
+            return TILE_COVER_SHEET_INDEX__WALL__GOLD;
+        case Tile_Cover_Kind__Wall__Diamond:
+            return TILE_COVER_SHEET_INDEX__WALL__DIAMOND;
+        case Tile_Cover_Kind__Wall__Amethyst:
+            return TILE_COVER_SHEET_INDEX__WALL__AMEYTHYST;
+        case Tile_Cover_Kind__Wall__Sandstone:
+            return TILE_COVER_SHEET_INDEX__WALL__SANDSTONE;
+        case Tile_Cover_Kind__Flower:
+        case Tile_Cover_Kind__Cactus:
+        case Tile_Cover_Kind__Oak_Trunk:
+        case Tile_Cover_Kind__Oak_Root:
+        case Tile_Cover_Kind__Oak_Branch:
+        case Tile_Cover_Kind__Oak_Leaves:
+        case Tile_Cover_Kind__Leaf_Clutter:
+            return 0;
+    }
+}

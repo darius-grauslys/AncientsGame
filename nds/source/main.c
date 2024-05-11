@@ -14,7 +14,7 @@ int main(void) {
 	while(1) {
         //swiWaitForVBlank();
         manage_game(&game);
-        if (is_input__game_settings(&game)) break;
+        // if (is_input__game_settings(&game)) break;
 	}
 
     return 0;

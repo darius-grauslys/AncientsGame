@@ -57,6 +57,11 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
     entity->hitbox.z__chunk =
         entity->hitbox.z = 0;
 
+    entity->dispose_handler = 0;
+    entity->controller_handler = 0;
+    entity->collision_handler = 0;
+    entity->tile_collision_handler = 0;
+
     set_entity__enabled(entity);
     set_entity__is_updating_position(entity);
     set_entity__is_updating_graphics(entity);

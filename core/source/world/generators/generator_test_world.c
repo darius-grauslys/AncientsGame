@@ -7,11 +7,18 @@
 void chunk_generator__test_world_f(
         World_Parameters *world_params,
         Chunk *chunk) {
+    int32_t x = chunk->x;
+    int32_t y = chunk->y;
+    if (x < 0)
+        x *= -1;
+    if (y < 0)
+        y *= -1;
+
     enum Tile_Kind kind_of_tile =
-        ((chunk->y % 2 == 0)
-         && (chunk->x % 2 == 1))
-        || ((chunk->y % 2 == 1)
-         && (chunk->x % 2 == 0))
+        ((y % 2 == 0)
+         && (x % 2 == 1))
+        || ((y % 2 == 1)
+         && (x % 2 == 0))
          ? Tile_Kind__Oak_Wood
          : Tile_Kind__Gold
          ;

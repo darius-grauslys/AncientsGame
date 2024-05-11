@@ -95,6 +95,12 @@ static void inline set_entity__collider(
     entity->collision_handler = collision_handler;
 }
 
+static void inline set_entity__tile_collider(
+        Entity *entity,
+        m_entity_tile_collision collision_handler) {
+    entity->tile_collision_handler = collision_handler;
+}
+
 void init_entity(Entity *entity, enum Entity_Kind kind_of_entity);
 
 void set_entity__armor(Entity *entity,

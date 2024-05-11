@@ -49,7 +49,7 @@ static void inline NDS_init_background_ground__overlay__for_game(
         bgGetMapPtr(background->background_index);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index);
-    bgHide(background->background_index);
+    //bgHide(background->background_index);
 }
 
 static void inline NDS_init_background_extra(NDS_Background *background) {

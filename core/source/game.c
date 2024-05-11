@@ -97,6 +97,13 @@ void manage_entities(Game *game) {
             continue;
         }
 
+        if (!poll_chunk_manager_for__tile_collision(
+                    &game->world.chunk_manager,
+                    entity)) {
+            release_entity(game, entity);
+            continue;
+        }
+
         int32_t old_x__chunk, old_y__chunk;
         if (commit_entity_velocity(entity, 
                     &old_x__chunk,
@@ -156,6 +163,9 @@ Entity *get_new__humanoid(Game *game,
     set_entity__collider(
             entity, 
             m_entity_collision_handler);
+    set_entity__tile_collider(
+            entity,
+            m_entity_tile_collision_handler);
 
     add_entity_to__collision_manager(
             &game->world.collision_manager, entity);

@@ -48,11 +48,11 @@ static bool inline does_tile__stair_direction__require_vflip(
     }
 }
 
-static bool inline is_tile__passable(Tile *tile) {
-    return (bool)(tile->flags & TILE_FLAGS__BIT_IS_PASSABLE);
+static bool inline is_tile__unpassable(Tile *tile) {
+    return (bool)(tile->flags & TILE_FLAGS__BIT_IS_UNPASSABLE);
 }
-static void inline set_tile__is_passable(Tile *tile, bool value) {
-    tile->flags |= (-1) & (value << TILE_FLAGS__BIT_SHIFT_IS_PASSABLE);
+static void inline set_tile__is_unpassable(Tile *tile, bool value) {
+    tile->flags |= (-1) & (value << TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE);
 }
 static bool inline is_tile__stairs(Tile *tile) {
     return (bool)((tile->flags & TILE_FLAGS__BIT_IS_STAIR));
@@ -80,5 +80,6 @@ static void inline set_tile__up_or_down_stairs(Tile *tile, bool value) {
 }
 
 uint32_t get_tile_texture_sheet_index(Tile *tile);
+uint32_t get_tile_cover_texture_sheet_index(Tile *tile);
 
 #endif

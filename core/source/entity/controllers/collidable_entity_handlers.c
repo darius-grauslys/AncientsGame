@@ -44,3 +44,13 @@ void m_entity_collision_handler(
                 );
     }
 }
+
+void m_entity_tile_collision_handler(
+        Entity *entity_collision_source,
+        Tile *tile_collided) {
+    //TODO: improve lol.
+
+    entity_collision_source->hitbox.x__velocity *= -1;
+    entity_collision_source->hitbox.y__velocity *= -1;
+    entity_collision_source->hitbox.z__velocity *= -1;
+}

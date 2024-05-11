@@ -14,7 +14,13 @@ void PLATFORM_post_render(Game *game) {
         game->gfx_context.active_background_ground__buffer->
         background_index,
         get_global_x_from__hitbox(&player->hitbox) - 123,
-        -get_global_y_from__hitbox(&player->hitbox) - 104
+        -get_global_y_from__hitbox(&player->hitbox) - 40
+        );
+    bgSetScroll(
+        game->gfx_context.background_ground__overlay
+        .background_index,
+        get_global_x_from__hitbox(&player->hitbox) - 123,
+        -get_global_y_from__hitbox(&player->hitbox) - 40
         );
 	
     bgUpdate();

@@ -29,7 +29,7 @@ bool poll_chunk_manager_for__chunk_movement(
         int32_t x__chunk, int32_t y__chunk,
         int32_t z__chunk);
 
-Direction poll_chunk_manager_for__tile_collision(
+bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *chunk_manager,
         Entity *entity);
 

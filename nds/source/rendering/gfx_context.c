@@ -130,6 +130,11 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager) {
+    TileMapEntry16 *overlay_tile_map =
+        (TileMapEntry16*)
+        bgGetMapPtr(gfx_context
+                ->background_ground__overlay
+                .background_index);
     TileMapEntry16 *background_tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(gfx_context
@@ -179,16 +184,28 @@ void PLATFORM_update_chunks(
                     Tile *tile = &chunk__here->tiles[y * 8 + x];
                     TileMapEntry16 *tile_entry =
                         &background_tile_map[background_tile_index];
-                    uint16_t value =
+                    TileMapEntry16 *tile_cover_entry =
+                        &overlay_tile_map[background_tile_index];
+                    uint16_t background_value =
                         (get_tile_texture_sheet_index(tile) + 1)
                         & ((1 << 10)-1);
+                    uint16_t overlay_value = 0;
+                    if (tile->the_kind_of_tile_cover__this_tile_has
+                            != Tile_Cover_Kind__None) {
+                        overlay_value = 
+                            (get_tile_cover_texture_sheet_index(tile))
+                             & ((1 << 10)-1);
+                    } 
                     if (is_tile__stairs(tile)) {
-                        value |= does_tile__stair_direction__require_hflip(tile)
+                        background_value |= 
+                            does_tile__stair_direction__require_hflip(tile)
                             << 11;
-                        value |= does_tile__stair_direction__require_vflip(tile)
+                        background_value |= 
+                            does_tile__stair_direction__require_vflip(tile)
                             << 10;
                     }
-                    *(uint16_t*)tile_entry = value;
+                    *(uint16_t*)tile_entry = background_value;
+                    *(uint16_t*)tile_cover_entry = overlay_value;
                 }
             }
 
