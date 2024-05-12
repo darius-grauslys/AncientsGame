@@ -8,9 +8,6 @@ void m_controller_for__dummy(
     int32_t random__result =
         get_entity__direction(this_dummy);
 
-    bool is_dummy__moving =
-        is_entity__moving(this_dummy);
-
     if (game->tick % 50 == 0) {
         srand(game->tick + (int32_t)this_dummy);
         random__result = rand() & DIRECTION__ANY;
@@ -21,10 +18,6 @@ void m_controller_for__dummy(
     switch (random__result) {
         default:
         case DIRECTION__ANY:
-            set_entity_as__moving(
-                    this_dummy,
-                    false,
-                    Sprite_Animation_Kind__Idle);
             apply_velocity_to__hitbox(
                     &this_dummy->hitbox,
                     0, 0,
@@ -80,9 +73,4 @@ void m_controller_for__dummy(
             break;
     }
     set_entity__direction(this_dummy, random__result);
-    if (!is_dummy__moving)
-        set_entity_as__moving(
-                this_dummy,
-                true,
-                Sprite_Animation_Kind__Idle);
 }

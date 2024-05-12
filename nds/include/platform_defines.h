@@ -104,11 +104,10 @@ typedef struct NDS_Gfx_Context__Chunk_Record_t {
 } NDS_Gfx_Context__Chunk_Record;
 
 typedef struct PLATFORM_Gfx_Context_t {
-    NDS_Background background_ground__back_buffer;
-    NDS_Background background_ground__front_buffer;
+    NDS_Background background_ground;
     NDS_Background background_ground__overlay;
-    NDS_Background background_extra;
-    NDS_Background *active_background_ground__buffer;
+    NDS_Background background_ui;
+    NDS_Background background_ui__overlay;
 
     NDS_Gfx_Context__Chunk_Record chunk_records
         [CHUNK_MANAGER__QUANTITY_OF_CHUNKS];

@@ -74,6 +74,7 @@ typedef struct Console_t Console;
 typedef struct Game_t Game;
 
 typedef uint8_t Direction;
+typedef uint32_t Timer;
 
 #define DIRECTION__NONE 0
 #define DIRECTION__NORTH 1
@@ -102,10 +103,10 @@ enum Sprite_Animation_Kind {
 
 typedef struct Sprite_Wrapper_t {
     PLATFORM_Sprite sprite;
-    Direction direction;
-    enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
-    uint32_t frame;
     uint32_t x, y;
+    Direction direction;
+    uint16_t frame;
+    enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
 } Sprite_Wrapper;
 
 #define SPRITE_FRAME__16x16__OFFSET (16 * 16)
@@ -122,6 +123,13 @@ typedef struct Sprite_Wrapper_t {
 #define SPRITE_FRAME_COL__ENTITY_HUMANOID__HURT 0
 #define SPRITE_FRAME_COL__ENTITY_HUMANOID__DIE 1
 #define SPRITE_FRAME_COL__ENTITY_HUMANOID__SLEEP 3
+
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__IDLE 0
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__WALK 1
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__USE 2
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__HURT 1
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__DIE 2
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__SLEEP 0
 
 #define SPRITE_FRAME_ROW__ENTITY_HUMANOID__SIDE_FACING 0
 #define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FORWARD_FACING 1
@@ -208,6 +216,8 @@ typedef struct Tile_t Tile;
 typedef void (*m_entity_tile_collision) (Entity *entity_collision_source,
         Tile *tile_collided);
 
+typedef void (*m_entity_animation) (Entity *entity, Timer timer);
+
 ///
 /// Here we define the entity super struct. It has everything we could need
 /// for an entity, even if some of the things are not used.
@@ -256,6 +266,7 @@ typedef struct Entity_t {
     // DO NOT INVOKE! Called automatically
     m_entity_collision          collision_handler;
     m_entity_tile_collision     tile_collision_handler;
+    m_entity_animation          animation_handler;
 
     Hitbox_AABB hitbox;
 
@@ -263,7 +274,11 @@ typedef struct Entity_t {
 
     enum Entity_Kind        the_kind_of_entity__this_entity_is;
     union {
-        Armor_Properties    armor_properties;
+        struct { // humanoid union
+            Armor_Properties    armor_properties;
+            int8_t max_health;
+            int8_t health;
+        };
     };
 } Entity;
 
@@ -710,7 +725,7 @@ typedef struct Game_t {
     PLATFORM_Gfx_Context gfx_context;
     World world;
 
-    uint32_t tick;
+    Timer tick;
 } Game;
 
 typedef struct Scene_t {

@@ -4,6 +4,7 @@
 #include <world/tile.h>
 
 #include <assets/tiles.h>
+#include <assets/ui/ui.h>
 
 #include <assets/entities/player.h>
 #include <assets/entities/skeleton.h>
@@ -12,10 +13,8 @@
 void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     // NDS_init_background(&gfx_context->background_ground__back_buffer);
     // NDS_init_background(&gfx_context->background_ground__overlay);
-    NDS_init_background(&gfx_context->background_ground__front_buffer);
+    NDS_init_background(&gfx_context->background_ground);
     // NDS_init_background(&gfx_context->background_extra);
-    gfx_context->active_background_ground__buffer =
-        &gfx_context->background_ground__front_buffer;
 }
 
 ///
@@ -66,48 +65,65 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 
 #ifndef NDEBUG
 	consoleDemoInit();
+#else
+    NDS_init_background_ui__for_game(
+            &gfx_context->background_ui);
+    NDS_init_background_ui__overlay__for_game(
+            &gfx_context->background_ui__overlay);
+
+	dmaCopy(uiTiles, 
+            gfx_context->background_ui
+            .gfx_tileset, uiTilesLen);
+	dmaCopy(uiTiles, 
+            gfx_context->background_ui__overlay
+            .gfx_tileset, uiTilesLen);
+	dmaCopy(uiPal, BG_PALETTE_SUB, uiPalLen);
+
+	dmaCopy(uiMap, 
+            gfx_context->background_ui
+            .gfx_map,
+            uiMapLen);
+	dmaCopy(uiMap, 
+            gfx_context->background_ui__overlay
+            .gfx_map,
+            uiMapLen);
+
+    NDS_set_background_priority(
+            &gfx_context->background_ui, 
+            1);
+    NDS_set_background_priority(
+            &gfx_context->background_ui__overlay, 
+            2);
 #endif
 
-    NDS_init_background_ground__back_buffer__for_game(
-            &gfx_context->background_ground__back_buffer);
-    NDS_init_background_ground__front_buffer__for_game(
-            &gfx_context->background_ground__front_buffer);
+    NDS_init_background_ground__for_game(
+            &gfx_context->background_ground);
     NDS_init_background_ground__overlay__for_game(
             &gfx_context->background_ground__overlay);
 
 	dmaCopy(tilesTiles, 
+            gfx_context->background_ground
+            .gfx_tileset, tilesTilesLen);
+	dmaCopy(tilesTiles, 
             gfx_context->background_ground__overlay
-            .gfx_tileset, tilesTilesLen);
-	dmaCopy(tilesTiles, 
-            gfx_context->background_ground__back_buffer
-            .gfx_tileset, tilesTilesLen);
-	dmaCopy(tilesTiles, 
-            gfx_context->background_ground__front_buffer
             .gfx_tileset, tilesTilesLen);
 	dmaCopy(tilesPal, BG_PALETTE, tilesPalLen);
 
 	dmaCopy(tilesMap,
-                gfx_context->background_ground__back_buffer
-                .gfx_map, 
-                tilesMapLen);
-	dmaCopy(tilesMap,
-                gfx_context->background_ground__front_buffer
-                .gfx_map,
-                tilesMapLen);
+            gfx_context->background_ground
+            .gfx_map, 
+            tilesMapLen);
 	dmaCopy(tilesMap, 
-                gfx_context->background_ground__overlay
-                .gfx_map,
-                tilesMapLen);
+            gfx_context->background_ground__overlay
+            .gfx_map,
+            tilesMapLen);
 
     NDS_set_background_priority(
             &gfx_context->background_ground__overlay, 
             1);
     NDS_set_background_priority(
-            &gfx_context->background_ground__back_buffer, 
+            &gfx_context->background_ground, 
             2);
-    NDS_set_background_priority(
-            &gfx_context->background_ground__front_buffer, 
-            3);
 
     // vramSetBankE(VRAM_E_LCD); // for main engine
     // vramSetBankH(VRAM_H_LCD); // for sub engine
@@ -138,8 +154,8 @@ void PLATFORM_update_chunks(
     TileMapEntry16 *background_tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(gfx_context
-                ->active_background_ground__buffer
-                ->background_index);
+                ->background_ground
+                .background_index);
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
         chunk_manager->chunk_map_node__most_north_western;
     Chunk_Manager__Chunk_Map_Node *current_sub__chunk_map_node;

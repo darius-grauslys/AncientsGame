@@ -32,6 +32,7 @@ export GENERATE_COMPILE_COMMANDS := 1
 
 default:
 	echo 'I deleted the Makefile. TODO: make default target print a target specification menu.'
+	echo "-e FLAGS='-DNDEBUG=1'"
 
 test_core:
 	$(SILENT)mkdir -p ./build && make -C $(DIR_TEST_CORE) -f $(DIR_TEST_CORE)/Makefile -e BUILD=$(BUILD_TEST_CORE)

@@ -13,6 +13,7 @@
 #include <entity/controllers/entity_handlers.h>
 #include <entity/controllers/controller_player.h>
 #include <entity/controllers/controller_dummy.h>
+#include <entity/controllers/humanoid_animation_handler.h>
 
 #include <collisions/hitbox_aabb.h>
 #include <collisions/collision_manager.h>
@@ -121,10 +122,8 @@ void manage_entities(Game *game) {
             }
         }
 
-        //TODO: remove magic number, 8
-        if (game->tick % 8 == 0) {
-            animate_entity(entity);
-            PLATFORM_render_entity(entity, game);
+        if (entity->animation_handler) {
+            entity->animation_handler(entity, game->tick);
         }
     }
 }
@@ -166,6 +165,9 @@ Entity *get_new__humanoid(Game *game,
     set_entity__tile_collider(
             entity,
             m_entity_tile_collision_handler);
+    set_entity__animator(
+            entity,
+            m_humanoid_animation_handler);
 
     add_entity_to__collision_manager(
             &game->world.collision_manager, entity);

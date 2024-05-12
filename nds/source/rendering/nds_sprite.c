@@ -61,8 +61,7 @@ void PLATFORM_init_sprite(
         -1, 
         false, 
         false, 
-        false, 
-        false, 
+        false, false, 
         false);
 }
 

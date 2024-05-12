@@ -78,8 +78,6 @@ void set_entity__armor(Entity *entity,
         kind_of_armor;
     entity->armor_properties.the_kind_of_modification__this_armor_has =
         kind_of_armor_modification;
-    set_entity_animation(entity,
-            entity->sprite_wrapper.the_kind_of_animation__this_sprite_has);
 }
 
 void set_entity__direction(Entity *entity,
@@ -87,52 +85,10 @@ void set_entity__direction(Entity *entity,
     if (entity->sprite_wrapper.direction == direction)
         return;
     entity->sprite_wrapper.direction = direction;
-    set_entity_animation(entity, 
-            entity->sprite_wrapper.the_kind_of_animation__this_sprite_has);
 }
 
 Direction get_entity__direction(Entity *entity) {
     return entity->sprite_wrapper.direction;
-}
-
-bool is_entity__moving(Entity *entity) {
-    if (!can_entity__move(entity->the_kind_of_entity__this_entity_is)) {
-        return false;
-    }
-
-    if (is_entity__humanoid(entity->the_kind_of_entity__this_entity_is)) {
-        return
-            entity->sprite_wrapper.the_kind_of_animation__this_sprite_has
-            == Sprite_Animation_Kind__Humanoid__Walk;
-    }
-
-    debug_warning("unhandled case in: is_entity__moving.");
-
-    return false;
-}
-
-void set_entity_as__moving(Entity *entity, 
-        bool state_of_movement,
-        enum Sprite_Animation_Kind fallback_animation) {
-    if (!can_entity__move(entity->the_kind_of_entity__this_entity_is)) {
-        debug_warning("illegal call to set_entity_as__moving.");
-        return;
-    }
-
-    if (is_entity__humanoid(entity->the_kind_of_entity__this_entity_is)) {
-        if (state_of_movement) {
-            set_entity_animation(
-                    entity,
-                    Sprite_Animation_Kind__Humanoid__Walk);
-        } else {
-            set_entity_animation(
-                    entity,
-                    fallback_animation);
-        }
-        return;
-    }
-
-    debug_warning("unhandled case in: set_entity_as__moving");
 }
 
 bool commit_entity_velocity(
