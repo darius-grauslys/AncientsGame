@@ -93,6 +93,7 @@ typedef uint32_t Timer;
         | DIRECTION__WEST)
 
 enum Sprite_Animation_Kind {
+    Sprite_Animation_Kind__None,
     Sprite_Animation_Kind__Idle,
     Sprite_Animation_Kind__Humanoid__Walk,
     Sprite_Animation_Kind__Humanoid__Use,
@@ -101,12 +102,31 @@ enum Sprite_Animation_Kind {
     Sprite_Animation_Kind__Player__Sleep,
 };
 
+typedef struct Entity_t Entity;
+
+typedef uint8_t Sprite_Frame_Index;
+
+typedef Sprite_Frame_Index (*f_sprite_frame_lookup) (
+        Entity *entity,
+        enum Sprite_Animation_Kind animation_kind);
+
+typedef Timer (*f_animation_speed_lookup) (
+        Entity *entity,
+        enum Sprite_Animation_Kind animation_kind);
+typedef Timer (*f_animation_duration_lookup) (
+        Entity *entity,
+        enum Sprite_Animation_Kind animation_kind);
+
 typedef struct Sprite_Wrapper_t {
     PLATFORM_Sprite sprite;
-    uint32_t x, y;
+    Timer time_elapsed;
+    Timer time_limit;
     Direction direction;
-    uint16_t frame;
+    Sprite_Frame_Index frame__initial;
+    Sprite_Frame_Index frame;
+    Sprite_Frame_Index frame__final;
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
+    enum Sprite_Animation_Kind the_kind_of_animation__thats_upcomming;
 } Sprite_Wrapper;
 
 #define SPRITE_FRAME__16x16__OFFSET (16 * 16)
@@ -125,7 +145,7 @@ typedef struct Sprite_Wrapper_t {
 #define SPRITE_FRAME_COL__ENTITY_HUMANOID__SLEEP 3
 
 #define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__IDLE 0
-#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__WALK 1
+#define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__WALK 2
 #define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__USE 2
 #define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__HURT 1
 #define SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__DIE 2
@@ -270,14 +290,16 @@ typedef struct Entity_t {
 
     Hitbox_AABB hitbox;
 
-    uint32_t                entity_flags;
+    uint8_t                entity_flags;
 
     enum Entity_Kind        the_kind_of_entity__this_entity_is;
     union {
         struct { // humanoid union
             Armor_Properties    armor_properties;
+            Direction direction;
             int8_t max_health;
             int8_t health;
+            uint8_t stun_timer;
         };
     };
 } Entity;

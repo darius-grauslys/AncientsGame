@@ -113,11 +113,6 @@ void set_entity__armor(Entity *entity,
         enum Entity_Armor_Kind kind_of_armor,
         enum Entity_Armor_Modification_Kind kind_of_armor_modification);
 
-void set_entity__direction(Entity *entity,
-        Direction direction);
-
-Direction get_entity__direction(Entity *entity);
-
 bool is_entity__moving(Entity *entity);
 
 void set_entity_as__moving(Entity *entity, 

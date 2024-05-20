@@ -3,7 +3,8 @@
 #include <entity/entity.h>
 #include <collisions/hitbox_aabb.h>
 #include <entity/controllers/controller_dummy.h>
-#include <entity/controllers/humanoid_animation_handler.h>
+#include <rendering/animate_humanoid.h>
+#include <entity/humanoid.h>
 
 #include <world/chunk.h>
 #include <world/tile.h>
@@ -18,6 +19,8 @@ void m_controller_for__player(
         return;
     }
 
+    Direction direction__old =
+        get_humanoid__direction(this_player);
     Direction direction__new =
         DIRECTION__NONE;
 
@@ -37,16 +40,16 @@ void m_controller_for__player(
     int32_t 
         x = get_global_x_from__hitbox(&this_player->hitbox), 
           y = get_global_y_from__hitbox(&this_player->hitbox);
-    if (get_entity__direction(this_player) & DIRECTION__NORTH) {
+    if (direction__old & DIRECTION__NORTH) {
         y += 32;
     }
-    if (get_entity__direction(this_player) & DIRECTION__SOUTH) {
+    if (direction__old & DIRECTION__SOUTH) {
         y -= 32;
     }
-    if (get_entity__direction(this_player) & DIRECTION__EAST) {
+    if (direction__old & DIRECTION__EAST) {
         x += 32;
     }
-    if (get_entity__direction(this_player) & DIRECTION__WEST) {
+    if (direction__old & DIRECTION__WEST) {
         x -= 32;
     }
 
@@ -95,6 +98,9 @@ void m_controller_for__player(
                     &game->world.chunk_manager);
         }
 
+        animate_humanoid__use(this_player);
+        return;
+
     } else if (!is_input__game_settings(game)
             && !is_input__use(game)) {
         toggle = false;
@@ -102,6 +108,7 @@ void m_controller_for__player(
 
     switch (direction__new) {
         default:
+            // animate_humanoid__idle(this_player);
             return;
         case DIRECTION__NORTH:
             apply_velocity_to__hitbox(
@@ -116,6 +123,7 @@ void m_controller_for__player(
                     &this_player->hitbox,
                     ENTITY_VELOCITY__PLAYER,
                     0, 0);
+            animate_humanoid__walk(this_player);
             break;
         case DIRECTION__SOUTH:
             apply_velocity_to__hitbox(
@@ -130,6 +138,7 @@ void m_controller_for__player(
                     &this_player->hitbox,
                     -ENTITY_VELOCITY__PLAYER,
                     0, 0);
+            animate_humanoid__walk(this_player);
             break;
         case DIRECTION__NORTH_EAST:
             apply_velocity_to__hitbox(
@@ -164,5 +173,5 @@ void m_controller_for__player(
             animate_humanoid__walk(this_player);
             break;
     }
-    set_entity__direction(this_player, direction__new);
+    set_humanoid__direction(this_player, direction__new);
 }

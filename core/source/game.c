@@ -75,6 +75,16 @@ void manage_entities(Game *game) {
     Entity_Manager *entity_manager =
         &game->world.entity_manager;
 
+    Hitbox_AABB *player__hitbox =
+        &game
+        ->world
+        .entity_manager
+        .local_player
+        ->hitbox;
+
+    int32_t x__origin = get_global_x_from__hitbox(player__hitbox);
+    int32_t y__origin = get_global_y_from__hitbox(player__hitbox);
+
     for (uint32_t i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         Entity *entity =
@@ -124,6 +134,13 @@ void manage_entities(Game *game) {
 
         if (entity->animation_handler) {
             entity->animation_handler(entity, game->tick);
+        }
+
+        if (!is_entity__hidden(entity)) {
+            PLATFORM_render_entity(entity,
+                    x__origin,
+                    y__origin,
+                    game);
         }
     }
 }

@@ -80,17 +80,6 @@ void set_entity__armor(Entity *entity,
         kind_of_armor_modification;
 }
 
-void set_entity__direction(Entity *entity,
-        Direction direction) {
-    if (entity->sprite_wrapper.direction == direction)
-        return;
-    entity->sprite_wrapper.direction = direction;
-}
-
-Direction get_entity__direction(Entity *entity) {
-    return entity->sprite_wrapper.direction;
-}
-
 bool commit_entity_velocity(
         Entity *entity,
         int32_t *old_x__chunk,
