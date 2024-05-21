@@ -12,7 +12,7 @@ static bool inline is_animation__finished (
 static bool inline is_animation__exceeded (
         Sprite_Wrapper sprite_wrapper) {
     return sprite_wrapper.frame 
-        > sprite_wrapper.frame__final;
+        >= sprite_wrapper.frame__final;
 }
 
 static bool inline is_animation__transitionless(
