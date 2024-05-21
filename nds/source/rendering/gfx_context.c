@@ -3,9 +3,11 @@
 #include <rendering/gfx_context.h>
 #include <world/tile.h>
 
-#include <assets/tiles.h>
-#include <assets/ui/ui.h>
+#include <assets/world/GFX_world.h>
+#include <assets/world/tiles.h>
+#include <assets/ui/GFX_ui.h>
 
+#include <assets/entities/GFX_entities.h>
 #include <assets/entities/player.h>
 #include <assets/entities/skeleton.h>
 #include <assets/entities/zombie.h>
@@ -50,15 +52,9 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 
 	vramSetBankF(VRAM_F_LCD);
 
-	dmaCopy(playerPal, 
-            VRAM_F_EXT_SPR_PALETTE[SPRITE_PALETTE__PLAYER], 
-            playerPalLen);
-	dmaCopy(skeletonPal, 
-            VRAM_F_EXT_SPR_PALETTE[SPRITE_PALETTE__SKELETON], 
-            skeletonPalLen);
-	dmaCopy(zombiePal, 
-            VRAM_F_EXT_SPR_PALETTE[SPRITE_PALETTE__ZOMBIE], 
-            zombiePalLen);
+	dmaCopy(GFX_entitiesPal, 
+            VRAM_F_EXT_SPR_PALETTE[0], 
+            GFX_entitiesPalLen);
 
 	// set vram to ex palette
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
@@ -71,22 +67,22 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
     NDS_init_background_ui__overlay__for_game(
             &gfx_context->background_ui__overlay);
 
-	dmaCopy(uiTiles, 
+	dmaCopy(GFX_uiTiles, 
             gfx_context->background_ui
-            .gfx_tileset, uiTilesLen);
-	dmaCopy(uiTiles, 
+            .gfx_tileset, GFX_uiTilesLen);
+	dmaCopy(GFX_uiTiles, 
             gfx_context->background_ui__overlay
             .gfx_tileset, uiTilesLen);
-	dmaCopy(uiPal, BG_PALETTE_SUB, uiPalLen);
+	dmaCopy(uiPal, BG_PALETTE_SUB, GFX_uiPalLen);
 
-	dmaCopy(uiMap, 
+	dmaCopy(ui_map_equipMap, 
             gfx_context->background_ui
             .gfx_map,
-            uiMapLen);
-	dmaCopy(uiMap, 
+            ui_map_equipMapLen);
+	dmaCopy(ui_map_equipMap, 
             gfx_context->background_ui__overlay
             .gfx_map,
-            uiMapLen);
+            ui_map_equipMapLen);
 
     NDS_set_background_priority(
             &gfx_context->background_ui, 
@@ -101,13 +97,13 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
     NDS_init_background_ground__overlay__for_game(
             &gfx_context->background_ground__overlay);
 
-	dmaCopy(tilesTiles, 
+	dmaCopy(GFX_worldTiles, 
             gfx_context->background_ground
-            .gfx_tileset, tilesTilesLen);
-	dmaCopy(tilesTiles, 
+            .gfx_tileset, GFX_worldTilesLen);
+	dmaCopy(GFX_worldTiles, 
             gfx_context->background_ground__overlay
-            .gfx_tileset, tilesTilesLen);
-	dmaCopy(tilesPal, BG_PALETTE, tilesPalLen);
+            .gfx_tileset, GFX_worldTilesLen);
+	dmaCopy(GFX_worldPal, BG_PALETTE, GFX_worldPalLen);
 
 	dmaCopy(tilesMap,
             gfx_context->background_ground

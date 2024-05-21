@@ -27,21 +27,21 @@ void PLATFORM_init_sprite(
             debug_abort("Entity type not implemented for PLATFORM_init_sprite.");
             return;
         case Entity_Kind__Player:
-            palette = SPRITE_PALETTE__PLAYER;
+            palette = 0;
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
             dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__16x16__OFFSET);
             break;
         case Entity_Kind__Skeleton:
-            palette = SPRITE_PALETTE__SKELETON;
+            palette = 0;
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)skeletonTiles;
             dmaCopy((u8*)skeletonTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__16x16__OFFSET);
             break;
         case Entity_Kind__Zombie:
-            palette = SPRITE_PALETTE__ZOMBIE;
+            palette = 0;
             PLATFORM_init_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)zombieTiles;
             dmaCopy((u8*)zombieTiles, sprite->sprite_texture.gfx, 

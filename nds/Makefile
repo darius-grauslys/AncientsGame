@@ -64,9 +64,6 @@ export CFILES_NDS	!= realpath --relative-to=$(SOURCE) $$(find $(SOURCE) -name *.
 export CFILES 		:= $(CFILES_NDS) $(CFILES_CORE)
 export SFILES       := $(shell find $(SOURCE) -name *.s)
 
-export PALETTE_FILES != realpath --relative-to=$(BASE_DIR)/nds \
-	$$(find $(BASE_DIR)/nds/assets -name '*_palette.grit')
-
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -84,9 +81,12 @@ endif
 export OFILES_NDS := \
   $(CFILES_NDS:.c=.o)
 
+export SHARED_SPRITE_FILES := $(foreach sprite_dir,$(SPRITE_DIRS),$(sprite_dir)/GFX_$(shell basename $(sprite_dir)).o)
+
 export OFILES := \
-	$(SPRITE_FILES:.png=.o) \
 	$(PALETTE_FILES:.grit=.o) \
+	$(SPRITE_FILES:.png=.o) \
+	$(SHARED_SPRITE_FILES) \
 	$(addsuffix .o,$(BINFILES)) \
 	$(OFILES_CORE) $(OFILES_NDS)
 
@@ -130,19 +130,15 @@ $(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file
 
 include $(BASE_DIR)/core/Makefile.build
 
-#---------------------------------------------------------------------------------
-$(PALETTE_FILES:.grit=.o) : $(foreach file,$(PALETTE_FILES),$(BASE_DIR)/nds/$(file))
-	@mkdir -p $(dir $@)
-	grit $(shell find $(BASE_DIR)/core/$(dir @)/ -iname "*.png") \
-		-ff$(BASE_DIR)/nds/$(basename $@).grit -o$(basename $@)
-	$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
-#---------------------------------------------------------------------------------
+$(SPRITE_DIRS): 
+	@mkdir -p $@
+	cd $@ && grit $(shell find $(BASE_DIR)/core/$@ -iname *.png) \
+		-ff$(BASE_DIR)/nds/$@/$(shell basename $@).grit
+$(SHARED_SPRITE_FILES):
+	cd $(shell dirname $@) && $(CC) $(CFLAGS) -c $(shell basename $(basename $@)).s -o $(shell basename $(basename $@)).o
 
 #---------------------------------------------------------------------------------
-$(SPRITE_FILES:.png=.o) : $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file))
-	@mkdir -p $(dir $@)
-	grit $(BASE_DIR)/core/$(basename $@).png \
-		-ff$(BASE_DIR)/nds/$(basename $@).grit -o$(basename $@)
+$(SPRITE_FILES:.png=.o) : $(SPRITE_DIRS) $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file)) 
 	$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
 #---------------------------------------------------------------------------------
 
