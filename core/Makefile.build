@@ -3,30 +3,7 @@ $(OFILES_CORE):
 	mkdir -p $(BUILD)/$$(dirname $@)
 	$(CC) $(LIBS) $(INCLUDE) $(FLAGS) -o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c) 
 
-ifeq ($(BUILD), $(BUILD_NDS))
-
-#---------------------------------------------------------------------------------
-$(SPRITE_FILES:.png=.o) : $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file))
-	@mkdir -p $(dir $@)
-	grit $(BASE_DIR)/core/$(basename $@).png -ff$(BASE_DIR)/core/$(basename $@).grit -o$(basename $@)
-	$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
-#---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-soundbank.bin soundbank.h : $(foreach file,$(AUDIO_FILES),../$(file))
-	@mmutil $^ -d -osoundbank.bin -hsoundbank.h
-#---------------------------------------------------------------------------------
-
-#---------------------------------------------------------------------------------
-%.bin.o %_bin.h : %.bin
-	@echo $(notdir $<)
-	@$(bin2o)
-#---------------------------------------------------------------------------------
-
-# else ifeq ($(BUILD), $(BUILD_SOMETHING_ELSE...)
-
-# otherwise, just copy assets entirely to the build dir.
-else
+ifneq ($(BUILD), $(BUILD_NDS))
 
 #---------------------------------------------------------------------------------
 $(SPRITE_FILES) :

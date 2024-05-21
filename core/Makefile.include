@@ -5,5 +5,6 @@ export SOURCE_CORE := $(BASE_DIR)/core/source
 export CFILES_CORE != realpath --relative-to=$(SOURCE_CORE) $$(find $(SOURCE_CORE) -name *.c)
 export OFILES_CORE := $(CFILES_CORE:.c=.o)
 
-export SPRITE_FILES != realpath --relative-to=$(BASE_DIR)/core $$(find $(BASE_DIR)/core/assets -name *.png)
+export SPRITE_FILES != realpath --relative-to=$(BASE_DIR)/core \
+	$$(find $(BASE_DIR)/core/assets -name *.png)
 

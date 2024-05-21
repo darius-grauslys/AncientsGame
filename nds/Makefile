@@ -64,6 +64,9 @@ export CFILES_NDS	!= realpath --relative-to=$(SOURCE) $$(find $(SOURCE) -name *.
 export CFILES 		:= $(CFILES_NDS) $(CFILES_CORE)
 export SFILES       := $(shell find $(SOURCE) -name *.s)
 
+export PALETTE_FILES != realpath --relative-to=$(BASE_DIR)/nds \
+	$$(find $(BASE_DIR)/nds/assets -name '*_palette.grit')
+
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
 #---------------------------------------------------------------------------------
@@ -83,6 +86,7 @@ export OFILES_NDS := \
 
 export OFILES := \
 	$(SPRITE_FILES:.png=.o) \
+	$(PALETTE_FILES:.grit=.o) \
 	$(addsuffix .o,$(BINFILES)) \
 	$(OFILES_CORE) $(OFILES_NDS)
 
@@ -98,7 +102,6 @@ export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
-	echo $(OFILES)
 	@[ -d $@ ] || mkdir -p $@
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
@@ -126,6 +129,33 @@ $(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file
 #---------------------------------------------------------------------------------
 
 include $(BASE_DIR)/core/Makefile.build
+
+#---------------------------------------------------------------------------------
+$(PALETTE_FILES:.grit=.o) : $(foreach file,$(PALETTE_FILES),$(BASE_DIR)/nds/$(file))
+	@mkdir -p $(dir $@)
+	grit $(shell find $(BASE_DIR)/core/$(dir @)/ -iname "*.png") \
+		-ff$(BASE_DIR)/nds/$(basename $@).grit -o$(basename $@)
+	$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+$(SPRITE_FILES:.png=.o) : $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file))
+	@mkdir -p $(dir $@)
+	grit $(BASE_DIR)/core/$(basename $@).png \
+		-ff$(BASE_DIR)/nds/$(basename $@).grit -o$(basename $@)
+	$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+soundbank.bin soundbank.h : $(foreach file,$(AUDIO_FILES),../$(file))
+	@mmutil $^ -d -osoundbank.bin -hsoundbank.h
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+%.bin.o %_bin.h : %.bin
+	@echo $(notdir $<)
+	@$(bin2o)
+#---------------------------------------------------------------------------------
 
 -include $(DEPSDIR)/*.d
 
