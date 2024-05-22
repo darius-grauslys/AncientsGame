@@ -426,6 +426,11 @@ void chunk_generator__flat_world_f(
 
             Tile *tile = 
                 &chunk->tiles[tile_index];
+            init_tile(
+                    tile,
+                    Tile_Kind__Oak_Wood,
+                    Tile_Cover_Kind__None,
+                    TILE_FLAGS__NONE);
 
             uint32_t chance_plant =
                 get_random__from_world_parameters(

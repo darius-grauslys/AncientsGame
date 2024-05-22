@@ -5,10 +5,16 @@
 #include <stdint.h>
 #include <defines.h>
 
-void init_tile(Tile *tile, 
+static void inline init_tile(Tile *tile, 
         enum Tile_Kind kind_of_tile,
         enum Tile_Cover_Kind kind_of_tile_cover,
-        uint8_t flags);
+        uint8_t flags) {
+    tile->flags = flags;
+    tile->the_kind_of_tile__this_tile_is =
+        kind_of_tile;
+    tile->the_kind_of_tile_cover__this_tile_has =
+        kind_of_tile_cover;
+}
 
 static void inline set_tile__stair_direction(
         Tile *tile,

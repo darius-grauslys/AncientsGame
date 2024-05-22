@@ -6,6 +6,7 @@
 #include <assets/world/GFX_world.h>
 #include <assets/world/tiles.h>
 #include <assets/ui/GFX_ui.h>
+#include <assets/ui/ui_map_equip.h>
 
 #include <assets/entities/GFX_entities.h>
 #include <assets/entities/player.h>
@@ -72,8 +73,8 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
             .gfx_tileset, GFX_uiTilesLen);
 	dmaCopy(GFX_uiTiles, 
             gfx_context->background_ui__overlay
-            .gfx_tileset, uiTilesLen);
-	dmaCopy(uiPal, BG_PALETTE_SUB, GFX_uiPalLen);
+            .gfx_tileset, GFX_uiTilesLen);
+	dmaCopy(GFX_uiPal, BG_PALETTE_SUB, GFX_uiPalLen);
 
 	dmaCopy(ui_map_equipMap, 
             gfx_context->background_ui

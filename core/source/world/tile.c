@@ -2,17 +2,6 @@
 #include <defines.h>
 #include <world/chunk_manager.h>
 
-void init_tile(Tile *tile, 
-        enum Tile_Kind kind_of_tile,
-        enum Tile_Cover_Kind kind_of_tile_cover,
-        uint8_t flags) {
-    tile->flags = flags;
-    tile->the_kind_of_tile__this_tile_is =
-        kind_of_tile;
-    tile->the_kind_of_tile_cover__this_tile_has =
-        kind_of_tile_cover;
-}
-
 static Tile inline *get_tile_from__chunk_node_for__tile_render(
         Chunk_Manager__Chunk_Map_Node *chunk_node,
         int32_t x__local,
