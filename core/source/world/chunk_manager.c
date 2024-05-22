@@ -443,62 +443,66 @@ bool poll_chunk_manager_for__chunk_movement(
 bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *chunk_manager, 
         Entity *entity) {
-    int32_t 
-        x = get_global_x_from__hitbox(&entity->hitbox), 
-          y = get_global_y_from__hitbox(&entity->hitbox);
-    int32_t x__chunk =
-        x >> 6; //entity->hitbox.x__chunk;
-    int32_t y__chunk =
-        y >> 6; //entity->hitbox.y__chunk;
-
-    Chunk *chunk =
-        get_chunk_from__chunk_manager(
-                chunk_manager,
-                x__chunk,
-                y__chunk,
-                0);
-
-    if (!chunk) {
-        debug_warning("entity out of tile collision bounds.");
-        debug_info("access attempt: %d, %d",
-                x__chunk, y__chunk);
-        return false;
-    }
-
-    int32_t x__no_velocity =
-        get_global_x_from__hitbox__without_velocity(&entity->hitbox);
-    int32_t y__no_velocity = 
-        get_global_z_from__hitbox__without_velocity(&entity->hitbox);
-
-    int32_t x__with_velocity =
-        get_global_x_from__hitbox(&entity->hitbox);
-    int32_t y__with_velocity =
-        get_global_y_from__hitbox(&entity->hitbox);
-
-    if (x__no_velocity == x__with_velocity
-            && y__no_velocity == y__with_velocity) {
+    if (entity->hitbox.x__velocity == 0
+            && entity->hitbox.y__velocity == 0) {
         return true;
     }
 
+    Hitbox_Point aa, bb;
+    get_points_aabb_from__hitbox(
+            &entity->hitbox, &aa, &bb);
 
+    Tile *tile;
     //TODO: magic num
-    int x__local =
-        (x__with_velocity >> 3) & ((1 << 3) - 1);
-    int y__local =
-        (y__with_velocity >> 3) & ((1 << 3) - 1);
+    int32_t global_positions[8] = {
+        aa.x, aa.y,
+        bb.x, aa.y,
+        aa.x, bb.y,
+        bb.x, bb.y
+    };
+    int32_t local_positions[8] = {
+        (aa.x >> 3) & ((1 << 3) - 1), (aa.y >> 3) & ((1 << 3) - 1),
+        (bb.x >> 3) & ((1 << 3) - 1), (aa.y >> 3) & ((1 << 3) - 1),
+        (aa.x >> 3) & ((1 << 3) - 1), (bb.y >> 3) & ((1 << 3) - 1),
+        (bb.x >> 3) & ((1 << 3) - 1), (bb.y >> 3) & ((1 << 3) - 1)
+    };
 
-    Tile *tile =
-        get_tile_from__chunk(
-                chunk,
-                x__local,
-                y__local,
-                0);
+    for (uint32_t index=0;index<8;index+=2) {
+        int32_t x__chunk =
+            global_positions[index] >> 6; //entity->hitbox.x__chunk;
+        int32_t y__chunk =
+            global_positions[index+1] >> 6; //entity->hitbox.y__chunk;
 
-    if (is_tile__unpassable(tile)) {
-        if (entity->tile_collision_handler) {
-            entity->tile_collision_handler(
-                    entity,
-                    tile);
+        Chunk *chunk =
+            get_chunk_from__chunk_manager(
+                    chunk_manager,
+                    x__chunk,
+                    y__chunk,
+                    0);
+
+        //TODO: this error occurs regularly when entity off screen 
+        //need to fix.
+        if (!chunk) {
+            debug_warning("entity out of tile collision bounds.");
+            debug_info("access attempt: %d, %d",
+                    x__chunk, y__chunk);
+            return true;
+        }
+
+        Tile *tile =
+            get_tile_from__chunk(
+                    chunk,
+                    local_positions[index],
+                    local_positions[index+1],
+                    0);
+
+        if (is_tile__unpassable(tile)) {
+            if (entity->tile_collision_handler) {
+                entity->tile_collision_handler(
+                        entity,
+                        tile);
+            }
+            return true;
         }
     }
 

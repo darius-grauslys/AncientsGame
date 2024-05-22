@@ -19,8 +19,8 @@ void chunk_generator__test_world_f(
          && (x % 2 == 1))
         || ((y % 2 == 1)
          && (x % 2 == 0))
-         ? Tile_Kind__Oak_Wood
-         : Tile_Kind__Gold
+         ? Tile_Kind__Stone
+         : Tile_Kind__Grass
          ;
 
     for (uint32_t y=0;y<CHUNK_WIDTH__IN_TILES;y++) {

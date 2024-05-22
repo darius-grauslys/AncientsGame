@@ -94,15 +94,17 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 
     NDS_init_background_ground__for_game(
             &gfx_context->background_ground);
+    NDS_init_background_ground__sprite_cover__for_game(
+            &gfx_context->background_ground__sprite_cover);
     NDS_init_background_ground__overlay__for_game(
             &gfx_context->background_ground__overlay);
 
 	dmaCopy(GFX_worldTiles, 
             gfx_context->background_ground
             .gfx_tileset, GFX_worldTilesLen);
-	dmaCopy(GFX_worldTiles, 
-            gfx_context->background_ground__overlay
-            .gfx_tileset, GFX_worldTilesLen);
+	// dmaCopy(GFX_worldTiles, 
+    //         gfx_context->background_ground__overlay
+    //         .gfx_tileset, GFX_worldTilesLen);
 	dmaCopy(GFX_worldPal, BG_PALETTE, GFX_worldPalLen);
 
 	dmaCopy(tilesMap,
@@ -113,7 +115,14 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
             gfx_context->background_ground__overlay
             .gfx_map,
             tilesMapLen);
+	dmaCopy(tilesMap, 
+            gfx_context->background_ground__sprite_cover
+            .gfx_map,
+            tilesMapLen);
 
+    NDS_set_background_priority(
+            &gfx_context->background_ground__sprite_cover, 
+            0);
     NDS_set_background_priority(
             &gfx_context->background_ground__overlay, 
             1);
@@ -142,6 +151,11 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager) {
+    TileMapEntry16 *sprite_cover_tile_map =
+        (TileMapEntry16*)
+        bgGetMapPtr(gfx_context
+                ->background_ground__sprite_cover
+                .background_index);
     TileMapEntry16 *overlay_tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(gfx_context
@@ -173,9 +187,6 @@ void PLATFORM_update_chunks(
                  + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
                 % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
 
-            Chunk *chunk__here =
-                current_sub__chunk_map_node->chunk__here;
-
             //TODO: im am using magic numbers here atm.
 
             // Everything is based on the implementation of
@@ -193,31 +204,22 @@ void PLATFORM_update_chunks(
                         background_tile_index += 32 * 32;
                     if (y__index >= 4)
                         background_tile_index += 32 * 32 * 2;
-                    Tile *tile = &chunk__here->tiles[y * 8 + x];
                     TileMapEntry16 *tile_entry =
                         &background_tile_map[background_tile_index];
                     TileMapEntry16 *tile_cover_entry =
                         &overlay_tile_map[background_tile_index];
-                    uint16_t background_value =
-                        (get_tile_texture_sheet_index(tile) + 1)
-                        & ((1 << 10)-1);
-                    uint16_t overlay_value = 0;
-                    if (tile->the_kind_of_tile_cover__this_tile_has
-                            != Tile_Cover_Kind__None) {
-                        overlay_value = 
-                            (get_tile_cover_texture_sheet_index(tile))
-                             & ((1 << 10)-1);
-                    } 
-                    if (is_tile__stairs(tile)) {
-                        background_value |= 
-                            does_tile__stair_direction__require_hflip(tile)
-                            << 11;
-                        background_value |= 
-                            does_tile__stair_direction__require_vflip(tile)
-                            << 10;
-                    }
-                    *(uint16_t*)tile_entry = background_value;
-                    *(uint16_t*)tile_cover_entry = overlay_value;
+                    TileMapEntry16 *tile_sprite_cover_entry =
+                        &sprite_cover_tile_map[background_tile_index];
+                    Tile_Render_Result render_result =
+                        get_tile_render_result(
+                                current_sub__chunk_map_node,
+                                x, y);
+                    *(uint16_t*)tile_entry = 
+                        render_result.tile_index__ground;
+                    *(uint16_t*)tile_cover_entry = 
+                        render_result.tile_index__cover;
+                    *(uint16_t*)tile_sprite_cover_entry = 
+                        render_result.tile_index__sprite_cover;
                 }
             }
 

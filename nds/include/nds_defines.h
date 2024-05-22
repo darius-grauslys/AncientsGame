@@ -36,6 +36,22 @@ static void inline NDS_init_background_ground__overlay__for_game(
     //bgHide(background->background_index);
 }
 
+static void inline NDS_init_background_ground__sprite_cover__for_game(
+        NDS_Background *background) {
+    debug_warning("nds_defines init's use magic numbers.");
+    background->map_base = 8;
+    background->tile_base = 2;
+    background->background_index =
+        bgInit(3, BgType_Text8bpp, BgSize_T_512x512, 
+                background->map_base, 
+                background->tile_base);
+    background->gfx_map = 
+        bgGetMapPtr(background->background_index);
+    background->gfx_tileset = 
+        bgGetGfxPtr(background->background_index);
+    //bgHide(background->background_index);
+}
+
 static void inline NDS_init_background_ui__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");

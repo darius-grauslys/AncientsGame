@@ -53,7 +53,7 @@ void PLATFORM_init_sprite(
         sprite->sprite_texture.oam, 
         sprite->sprite_texture.oam_index, 
         127 - 8, 96 - 8, 
-        0, 
+        1, 
         palette, 
         SpriteSize_16x16, 
         SpriteColorFormat_256Color, 

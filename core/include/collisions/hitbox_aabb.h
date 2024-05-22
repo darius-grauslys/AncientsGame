@@ -7,6 +7,11 @@ Direction is_hitbox__colliding(
         Hitbox_AABB *hitbox__checking,
         Hitbox_AABB *hitbox__other);
 
+void get_points_aabb_from__hitbox(
+        Hitbox_AABB *hitbox,
+        Hitbox_Point *aa,
+        Hitbox_Point *bb);
+
 static int32_t inline get_global_x_from__hitbox(
         Hitbox_AABB *hitbox) {
     return

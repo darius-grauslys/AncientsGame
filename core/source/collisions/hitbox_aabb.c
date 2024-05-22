@@ -372,3 +372,11 @@ Direction is_hitbox__colliding(
     return is_this_hitbox__inside_this_hitbox(
                 hitbox__checking, hitbox__other);
 }
+
+void get_points_aabb_from__hitbox(
+        Hitbox_AABB *hitbox,
+        Hitbox_Point *aa,
+        Hitbox_Point *bb) {
+    init_hitbox_point(aa, hitbox, DIRECTION__SOUTH_EAST);
+    init_hitbox_point(bb, hitbox, DIRECTION__NORTH_WEST);
+}

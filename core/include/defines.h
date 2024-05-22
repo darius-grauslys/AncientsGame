@@ -256,9 +256,33 @@ typedef void (*m_entity_animation) (Entity *entity, Timer timer);
 #define ENTITY_FLAG__IS_HIDDEN \
     (ENTITY_FLAG__IS_UNLOADED << 1)
 
+///
+/// TODO: Make obsolete with Vector_3i32
+///
 typedef struct Hitbox_Point_t {
     int32_t x, y, z;
 } Hitbox_Point;
+
+/// 
+/// Vector_3i32 is a 3-tuple of 32 bit integers
+/// where each integer is a fixed point fractional value.
+/// The fractional portion is dependent on the macro value
+/// of ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE.
+///
+/// To get a whole number, use ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK
+/// and shift the result to the right by ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE.
+///
+typedef struct Vector_3i32_t {
+    int32_t x, y, z;
+} Vector_3i32;
+
+///
+/// The localized version of Vector_3i32.
+/// It is local to a chunk.
+///
+typedef struct Local_Chunk_Vector_3u8_t {
+    uint8_t x, y, z;
+} Local_Chunk_Vector_3u8;
 
 typedef struct Hitbox_AABB_t {
     uint32_t width;
@@ -272,7 +296,9 @@ typedef struct Hitbox_AABB_t {
     // but they can stand on top of one in an
     // above tile.
     int32_t x__chunk, y__chunk, z__chunk;
+    // TODO: replace with Vector_3i32
     int32_t x, y, z;
+    // TODO: replace with Vector_3i32
     int32_t x__velocity, y__velocity, z__velocity;
 } Hitbox_AABB;
 
@@ -398,6 +424,9 @@ typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
 #define TILE_SHEET_PIXEL_WIDTH 256
 #define TILE_SHEET_PIXEL_HEIGHT 256
 
+#define TILE_SHEET_TILE_WIDTH (TILE_SHEET_PIXEL_WIDTH / TILE_PIXEL_WIDTH)
+#define TILE_SHEET_TILE_HEIGHT (TILE_SHEET_PIXEL_HEIGHT / TILE_PIXEL_HEIGHT)
+
 #define QUANTITY_OF_TILES__IN_TILE_SHEET_ROW (TILE_SHEET_PIXEL_WIDTH / TILE_PIXEL_WIDTH)
 
 #define TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR 3
@@ -452,51 +481,36 @@ typedef struct Tile_t Tile;
 
 enum Tile_Kind {
     Tile_Kind__Void,
-    Tile_Kind__Grass,
-    Tile_Kind__Dirt,
-    Tile_Kind__Sand,
     Tile_Kind__Oak_Wood,
-    Tile_Kind__Stone,
     Tile_Kind__Stone_Brick,
-    Tile_Kind__Iron,
     Tile_Kind__Gold,
+    Tile_Kind__Iron,
     Tile_Kind__Diamond,
     Tile_Kind__Amethyst,
     Tile_Kind__Sandstone,
+    Tile_Kind__Stone,
+    Tile_Kind__Dirt,
+    Tile_Kind__Sand,
+    Tile_Kind__Grass,
+    Tile_Kind__Leaves,
+    Tile_Kind__Snow,
     Tile_Kind__Water,
 };
 
-#define TILE_COVER_SHEET_INDEX__WALL__WOOD (0 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__STONE_BRICK (1 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__GOLD (2 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__IRON (3 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__DIAMOND (4 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__AMEYTHYST (5 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__SANDSTONE (6 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__STONE (7 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__DIRT (8 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__SAND (9 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__LEAVES (11 + 32 * 10)
-#define TILE_COVER_SHEET_INDEX__WALL__SNOW (12 + 32 * 10)
+#define TILE_COVER_SHEET_INDEX__WALL (1 + TILE_SHEET_TILE_WIDTH * 14)
 
-#define TILE_COVER_SHEET_INDEX__PLANT (23 + 32 * 21)
-#define TILE_COVER_SHEET_INDEX__FLOWER_RED (24 + 32 * 21)
-#define TILE_COVER_SHEET_INDEX__FLOWER_BLUE (25 + 32 * 21)
-#define TILE_COVER_SHEET_INDEX__FLOWER_YELLOW (26 + 32 * 21)
-#define TILE_COVER_SHEET_INDEX__CACTUS (27 + 32 * 21)
+#define TILE_COVER_SHEET_INDEX__PLANT (25 + TILE_SHEET_TILE_WIDTH * 21)
+#define TILE_COVER_SHEET_INDEX__FLOWER_RED (26 + TILE_SHEET_TILE_WIDTH * 21)
+#define TILE_COVER_SHEET_INDEX__FLOWER_BLUE (27 + TILE_SHEET_TILE_WIDTH * 21)
+#define TILE_COVER_SHEET_INDEX__FLOWER_YELLOW (28 + TILE_SHEET_TILE_WIDTH * 21)
+#define TILE_COVER_SHEET_INDEX__CACTUS (29 + TILE_SHEET_TILE_WIDTH * 21)
+
+#define TILE_COVER__BIT_SHIFT_IS_WALL 6
+#define TILE_COVER__BIT_IS_WALL (1 <<\
+        TILE_COVER__BIT_SHIFT_IS_WALL)
 
 enum Tile_Cover_Kind {
-    Tile_Cover_Kind__None,
-    Tile_Cover_Kind__Wall__Dirt,
-    Tile_Cover_Kind__Wall__Sand,
-    Tile_Cover_Kind__Wall__Oak_Wood,
-    Tile_Cover_Kind__Wall__Stone,
-    Tile_Cover_Kind__Wall__Stone_Brick,
-    Tile_Cover_Kind__Wall__Iron,
-    Tile_Cover_Kind__Wall__Gold,
-    Tile_Cover_Kind__Wall__Diamond,
-    Tile_Cover_Kind__Wall__Amethyst,
-    Tile_Cover_Kind__Wall__Sandstone,
+    Tile_Cover_Kind__None               = 0b00000,
     Tile_Cover_Kind__Plant,
     Tile_Cover_Kind__Flower_Red,
     Tile_Cover_Kind__Flower_Blue,
@@ -507,6 +521,16 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Oak_Branch,
     Tile_Cover_Kind__Oak_Leaves,
     Tile_Cover_Kind__Leaf_Clutter,
+    Tile_Cover_Kind__Wall__Oak_Wood     = 0b1000001,
+    Tile_Cover_Kind__Wall__Stone_Brick  = 0b1000010,
+    Tile_Cover_Kind__Wall__Gold         = 0b1000011,
+    Tile_Cover_Kind__Wall__Iron         = 0b1000100,
+    Tile_Cover_Kind__Wall__Diamond      = 0b1000101,
+    Tile_Cover_Kind__Wall__Amethyst     = 0b1000110,
+    Tile_Cover_Kind__Wall__Sandstone    = 0b1000111,
+    Tile_Cover_Kind__Wall__Stone        = 0b1001000,
+    Tile_Cover_Kind__Wall__Dirt         = 0b1001001,
+    Tile_Cover_Kind__Wall__Sand         = 0b1001010,
 };
 
 ///
@@ -520,8 +544,12 @@ enum Tile_Cover_Kind {
 #define INPUT_BACKWARDS (INPUT_RIGHT<<1)
 
 #define INPUT_GAME_SETTINGS (INPUT_BACKWARDS<<1)
-#define INPUT_INVENTORY (INPUT_GAME_SETTINGS<<1)
-#define INPUT_USE (INPUT_INVENTORY<<1)
+#define INPUT_LOCKON (INPUT_GAME_SETTINGS<<1)
+#define INPUT_USE (INPUT_LOCKON<<1)
+#define INPUT_USE_SECONDARY (INPUT_USE<<1)
+#define INPUT_EXAMINE (INPUT_USE_SECONDARY<<1)
+//TODO: figure out what y does again lol
+#define INPUT_Y_IS_WHAT_AGAIN (INPUT_EXAMINE<<1)
 
 typedef struct Input_t {
     uint32_t input_flags;
@@ -545,6 +573,28 @@ typedef struct Tile_t {
     // bit 8, is passable
 } Tile;
 
+typedef uint16_t Tile_Render_Index_u16;
+typedef uint16_t Tile_Wall_Adjacency_Code_u16;
+
+typedef struct Tile_Render_Result_t {
+    Tile_Render_Index_u16 tile_index__ground;
+    Tile_Render_Index_u16 tile_index__cover;
+    Tile_Render_Index_u16 tile_index__sprite_cover;
+    Tile_Wall_Adjacency_Code_u16 wall_adjacency;
+} Tile_Render_Result;
+
+#define TILE_RENDER__WALL_ADJACENCY__BIT_SHIFT_VFLIP 5
+#define TILE_RENDER__WALL_ADJACENCY__BIT_VFLIP (1<<\
+        TILE_RENDER__WALL_ADJACENCY__BIT_SHIFT_VFLIP)
+
+#define TILE_RENDER__WALL_ADJACENCY__EAST  0b00010001
+#define TILE_RENDER__WALL_ADJACENCY__WEST  0b00110001
+#define TILE_RENDER__WALL_ADJACENCY__NORTH 0b00000100
+#define TILE_RENDER__WALL_ADJACENCY__SOUTH 0b00001000
+
+#define TILE_RENDER__WALL_ADJACENCY__COVER_MASK 0b0011
+#define TILE_RENDER__WALL_ADJACENCY__SPRITE_COVER_MASK 0b1111
+
 typedef struct World_Parameters_t World_Parameters;
 typedef struct Chunk_t Chunk;
 
@@ -557,6 +607,13 @@ typedef struct World_Parameters_t {
     uint32_t seed__initial;
     uint32_t seed__current_random;
 } World_Parameters;
+
+/// Should only be made from calls to inlined helpers
+/// from chunk_manager.h
+typedef struct Position_Local_To_Chunk_2i8_t {
+    int8_t x__local;
+    int8_t y__local;
+} Position_Local_To_Chunk_2i8;
 
 typedef struct Chunk_t {
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];

@@ -9,7 +9,17 @@
 #include <world/chunk.h>
 #include <world/tile.h>
 
+enum Use_Mode {
+    Use_Mode__Place_Wall,
+    Use_Mode__Place_Ground,
+    Use_Mode__Remove_Wall
+};
+
 bool toggle = false;
+enum Tile_Kind kind_of_tile =
+    Tile_Kind__Oak_Wood;
+enum Use_Mode mode_of_use =
+    Use_Mode__Place_Wall;
 
 void m_controller_for__player(
         Entity *this_player,
@@ -63,6 +73,59 @@ void m_controller_for__player(
         set_entity__controller(
                 skeleton, 
                 m_controller_for__dummy);
+    } else if (is_input__examine(game) && !toggle) {
+        toggle = true;
+        mode_of_use++;
+        switch(mode_of_use) {
+            default:
+                mode_of_use = Use_Mode__Place_Wall;
+            case Use_Mode__Place_Wall:
+                debug_info("Use_Mode__Place_Wall");
+                break;
+            case Use_Mode__Place_Ground:
+                debug_info("Use_Mode__Place_Ground");
+                break;
+            case Use_Mode__Remove_Wall:
+                debug_info("Use_Mode__Remove_Wall");
+                break;
+        }
+    } else if (is_input__use_secondary(game) && !toggle) {
+        toggle = true;
+        kind_of_tile++;
+        switch(kind_of_tile) {
+            default:
+                kind_of_tile = Tile_Kind__Oak_Wood;
+            case Tile_Kind__Oak_Wood:
+                debug_info("Tile_Kind__Oak_Wood");
+                break;
+            case Tile_Kind__Stone_Brick:
+                debug_info("Tile_Kind__Stone_Brick");
+                break;
+            case Tile_Kind__Gold:
+                debug_info("Tile_Kind__Gold");
+                break;
+            case Tile_Kind__Iron:
+                debug_info("Tile_Kind__Iron");
+                break;
+            case Tile_Kind__Diamond:
+                debug_info("Tile_Kind__Diamond");
+                break;
+            case Tile_Kind__Amethyst:
+                debug_info("Tile_Kind__Amethyst");
+                break;
+            case Tile_Kind__Sandstone:
+                debug_info("Tile_Kind__Sandstone");
+                break;
+            case Tile_Kind__Stone:
+                debug_info("Tile_Kind__Stone");
+                break;
+            case Tile_Kind__Dirt:
+                debug_info("Tile_Kind__Dirt");
+                break;
+            case Tile_Kind__Sand:
+                debug_info("Tile_Kind__Sand");
+                break;
+        }
     } else if (is_input__use(game) && !toggle) {
         toggle = true;
 
@@ -73,12 +136,6 @@ void m_controller_for__player(
                     y >> 6,
                     0);
 
-        debug_info("chunk place: %d, %d",
-                    x >> 6,
-                    y >> 6);
-        debug_info("place: %d, %d",
-                    (x >> 3) & ((1 << 3) - 1),
-                    (y >> 3) & ((1 << 3) - 1));
         if (chunk) {
             Tile *tile =
                 get_tile_from__chunk(
@@ -86,12 +143,23 @@ void m_controller_for__player(
                         (x >> 3) & ((1 << 3) - 1),
                         (y >> 3) & ((1 << 3) - 1),
                         0);
-            tile->the_kind_of_tile_cover__this_tile_has =
-                Tile_Cover_Kind__Plant;
-            tile->the_kind_of_tile__this_tile_is =
-                Tile_Kind__Dirt
-                ;
-            set_tile__is_unpassable(tile, true);
+            switch(mode_of_use) {
+                default:
+                case Use_Mode__Place_Wall:
+                    tile->the_kind_of_tile_cover__this_tile_has =
+                        get_tile_cover_wall_for__tile_kind(kind_of_tile);
+                    set_tile__is_unpassable(tile, true);
+                    break;
+                case Use_Mode__Place_Ground:
+                    tile->the_kind_of_tile__this_tile_is =
+                        kind_of_tile;
+                    break;
+                case Use_Mode__Remove_Wall:
+                    tile->the_kind_of_tile_cover__this_tile_has =
+                        Tile_Cover_Kind__None;
+                    set_tile__is_unpassable(tile, false);
+                    break;
+            }
 
             PLATFORM_update_chunks(
                     &game->gfx_context,
@@ -100,9 +168,10 @@ void m_controller_for__player(
 
         animate_humanoid__use(this_player);
         return;
-
     } else if (!is_input__game_settings(game)
-            && !is_input__use(game)) {
+            && !is_input__use(game)
+            && !is_input__use_secondary(game)
+            && !is_input__examine(game)) {
         toggle = false;
     }
 

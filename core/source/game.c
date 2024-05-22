@@ -171,7 +171,7 @@ Entity *get_new__humanoid(Game *game,
 
     init_hitbox(
             &entity->hitbox, 
-            8, 8, 
+            6, 6, 
             x__global, 
             y__global, 
             z__global);

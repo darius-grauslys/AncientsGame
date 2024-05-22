@@ -11,13 +11,21 @@ void PLATFORM_poll_input(Game *game) {
         game->input.input_flags |=
             INPUT_USE;
     }
+    if (keys & KEY_B) {
+        game->input.input_flags |=
+            INPUT_USE_SECONDARY;
+    }
     if (keys & KEY_X) {
         game->input.input_flags |=
-            INPUT_INVENTORY;
+            INPUT_EXAMINE;
     }
     if (keys & KEY_START) {
         game->input.input_flags |=
             INPUT_GAME_SETTINGS;
+    }
+    if (keys & KEY_SELECT) {
+        game->input.input_flags |=
+            INPUT_LOCKON;
     }
 
     if (keys & KEY_UP) {

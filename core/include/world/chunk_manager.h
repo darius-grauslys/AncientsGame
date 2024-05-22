@@ -33,4 +33,21 @@ bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *chunk_manager,
         Entity *entity);
 
+static Tile inline *get_tile_from__chunk_node(
+        Chunk_Manager__Chunk_Map_Node *chunk_node,
+        int32_t x__local, int32_t y__local) {
+#ifndef NDEBUG
+    if (x__local < 0 
+            || x__local >= CHUNK_WIDTH__IN_TILES
+            || y__local < 0
+            || y__local >= CHUNK_WIDTH__IN_TILES) {
+        debug_error("get_tile_from__chunk_node out of bounds %d,%d", 
+                x__local, y__local);
+        return &chunk_node->chunk__here->tiles[0];
+    }
+#endif
+    return &chunk_node->chunk__here->tiles[
+        y__local * CHUNK_WIDTH__IN_TILES + x__local];
+}
+
 #endif

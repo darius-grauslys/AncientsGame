@@ -106,6 +106,7 @@ typedef struct NDS_Gfx_Context__Chunk_Record_t {
 typedef struct PLATFORM_Gfx_Context_t {
     NDS_Background background_ground;
     NDS_Background background_ground__overlay;
+    NDS_Background background_ground__sprite_cover;
     NDS_Background background_ui;
     NDS_Background background_ui__overlay;
 

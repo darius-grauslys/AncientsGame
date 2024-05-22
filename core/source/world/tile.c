@@ -1,5 +1,6 @@
 #include <world/tile.h>
-#include <stdbool.h>
+#include <defines.h>
+#include <world/chunk_manager.h>
 
 void init_tile(Tile *tile, 
         enum Tile_Kind kind_of_tile,
@@ -12,10 +13,89 @@ void init_tile(Tile *tile,
         kind_of_tile_cover;
 }
 
-uint32_t get_tile_texture_sheet_index(Tile *tile) {
+static Tile inline *get_tile_from__chunk_node_for__tile_render(
+        Chunk_Manager__Chunk_Map_Node *chunk_node,
+        int32_t x__local,
+        int32_t y__local,
+        Tile_Render_Result *render_result) {
+    Tile *tile =
+        get_tile_from__chunk_node(
+                chunk_node,
+                x__local,
+                y__local);
+
+    Tile *north, *east, *south, *west;
+
+    //TODO: this is a pretty glaring problem
+    //with how the chunk_nodes are connected
+    north =
+        (y__local == 0)
+        ? get_tile_from__chunk_node(
+                chunk_node->chunk_map_node__south,
+                x__local, CHUNK_WIDTH__IN_TILES - 1)
+        : get_tile_from__chunk_node(
+                chunk_node,
+                x__local, y__local - 1)
+        ;
+    south =
+        (y__local == CHUNK_WIDTH__IN_TILES - 1)
+        ? get_tile_from__chunk_node(
+                chunk_node->chunk_map_node__north,
+                x__local, 0)
+        : get_tile_from__chunk_node(
+                chunk_node,
+                x__local, y__local + 1)
+        ;
+    west =
+        (x__local == 0)
+        ? get_tile_from__chunk_node(
+                chunk_node->chunk_map_node__west,
+                CHUNK_WIDTH__IN_TILES - 1, y__local)
+        : get_tile_from__chunk_node(
+                chunk_node,
+                x__local - 1, y__local)
+        ;
+    east =
+        (x__local == CHUNK_WIDTH__IN_TILES - 1)
+        ? get_tile_from__chunk_node(
+                chunk_node->chunk_map_node__east,
+                0, y__local)
+        : get_tile_from__chunk_node(
+                chunk_node,
+                x__local + 1, y__local)
+        ;
+
+    Tile_Wall_Adjacency_Code_u16 wall_adjacency = 0;
+    if (is_tile_cover__a_wall(north->the_kind_of_tile_cover__this_tile_has)) {
+        wall_adjacency +=
+            TILE_RENDER__WALL_ADJACENCY__NORTH;
+    }
+    if (is_tile_cover__a_wall(east->the_kind_of_tile_cover__this_tile_has)) {
+        wall_adjacency +=
+            TILE_RENDER__WALL_ADJACENCY__EAST;
+    }
+    if (is_tile_cover__a_wall(south->the_kind_of_tile_cover__this_tile_has)) {
+        wall_adjacency +=
+            TILE_RENDER__WALL_ADJACENCY__SOUTH;
+    }
+    if (is_tile_cover__a_wall(west->the_kind_of_tile_cover__this_tile_has)) {
+        wall_adjacency +=
+            TILE_RENDER__WALL_ADJACENCY__WEST;
+    }
+
+    render_result->wall_adjacency = wall_adjacency;
+
+    return tile;
+}
+
+static void inline get_tile_texture_sheet_index(
+        Tile *tile,
+        Tile_Render_Result *result) {
     switch (tile->the_kind_of_tile__this_tile_is) {
         default:
-            return (uint32_t)tile->the_kind_of_tile__this_tile_is;
+            result->tile_index__ground =
+                (uint32_t)tile->the_kind_of_tile__this_tile_is;
+            return;
         case Tile_Kind__Oak_Wood:
         case Tile_Kind__Stone_Brick:
         case Tile_Kind__Gold:
@@ -32,7 +112,8 @@ uint32_t get_tile_texture_sheet_index(Tile *tile) {
         // case Tile_Kind__Snow:
         //     return TILE_SHEET_INDEX__DIRT;
         case Tile_Kind__Water:
-            return TILE_SHEET_INDEX__WATER;
+            result->tile_index__ground = TILE_SHEET_INDEX__WATER;
+            return;
     }
 tile_structure:
     uint32_t index = 0;
@@ -72,6 +153,8 @@ tile_structure:
             index = TILE_SHEET_INDEX__GRASS;
 			break;
     }
+    //TODO: look into why we have to add 1.
+    index += 1;
     if (is_tile__stairs(tile)) {
         int32_t offset = 0;
         
@@ -102,49 +185,194 @@ tile_structure:
             offset += TILE_SHEET_ELEMENT_WIDTH * 4;
         }
 
-        return index + offset;
+        index += offset;
     }
-    return index;
+    result->tile_index__ground = index;
 }
 
-uint32_t get_tile_cover_texture_sheet_index(Tile *tile) {
+static void inline get_tile_cover_texture_sheet_index(
+        Tile *tile,
+        Tile_Render_Result *result) {
     switch(tile->the_kind_of_tile_cover__this_tile_has) {
-        default:
         case Tile_Cover_Kind__Wall__Dirt:
-            return TILE_COVER_SHEET_INDEX__WALL__DIRT;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__DIRT;
+            goto wall;
         case Tile_Cover_Kind__Wall__Sand:
-            return TILE_COVER_SHEET_INDEX__WALL__SAND;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__SAND;
+            goto wall;
         case Tile_Cover_Kind__Wall__Oak_Wood:
-            return TILE_COVER_SHEET_INDEX__WALL__WOOD;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__WOOD;
+            goto wall;
         case Tile_Cover_Kind__Wall__Stone:
-            return TILE_COVER_SHEET_INDEX__WALL__STONE;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__STONE;
+            goto wall;
         case Tile_Cover_Kind__Wall__Stone_Brick:
-            return TILE_COVER_SHEET_INDEX__WALL__STONE_BRICK;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__STONE_BRICK;
+            goto wall;
         case Tile_Cover_Kind__Wall__Iron:
-            return TILE_COVER_SHEET_INDEX__WALL__IRON;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__IRON;
+            goto wall;
         case Tile_Cover_Kind__Wall__Gold:
-            return TILE_COVER_SHEET_INDEX__WALL__GOLD;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__GOLD;
+            goto wall;
         case Tile_Cover_Kind__Wall__Diamond:
-            return TILE_COVER_SHEET_INDEX__WALL__DIAMOND;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__DIAMOND;
+            goto wall;
         case Tile_Cover_Kind__Wall__Amethyst:
-            return TILE_COVER_SHEET_INDEX__WALL__AMEYTHYST;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__AMEYTHYST;
+            goto wall;
         case Tile_Cover_Kind__Wall__Sandstone:
-            return TILE_COVER_SHEET_INDEX__WALL__SANDSTONE;
+            result->tile_index__cover =
+                TILE_SHEET_INDEX__SANDSTONE;
+wall:
+            result->tile_index__cover +=
+                TILE_COVER_SHEET_INDEX__WALL
+                + get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
+                        result->wall_adjacency);
+            break;
         case Tile_Cover_Kind__Plant:
-            return TILE_COVER_SHEET_INDEX__PLANT;
+            result->tile_index__cover =
+				TILE_COVER_SHEET_INDEX__PLANT;
+			break;
         case Tile_Cover_Kind__Flower_Red:
-            return TILE_COVER_SHEET_INDEX__FLOWER_RED;
+            result->tile_index__cover =
+				TILE_COVER_SHEET_INDEX__FLOWER_RED;
+			break;
         case Tile_Cover_Kind__Flower_Blue:
-            return TILE_COVER_SHEET_INDEX__FLOWER_BLUE;
+            result->tile_index__cover =
+				TILE_COVER_SHEET_INDEX__FLOWER_BLUE;
+			break;
         case Tile_Cover_Kind__Flower_Yellow:
-            return TILE_COVER_SHEET_INDEX__FLOWER_YELLOW;
+            result->tile_index__cover =
+				TILE_COVER_SHEET_INDEX__FLOWER_YELLOW;
+			break;
         case Tile_Cover_Kind__Cactus:
-            return TILE_COVER_SHEET_INDEX__CACTUS;
+            result->tile_index__cover =
+				TILE_COVER_SHEET_INDEX__CACTUS;
+			break;
         case Tile_Cover_Kind__Oak_Trunk:
         case Tile_Cover_Kind__Oak_Root:
         case Tile_Cover_Kind__Oak_Branch:
         case Tile_Cover_Kind__Oak_Leaves:
         case Tile_Cover_Kind__Leaf_Clutter:
-            return 0;
+        default:
+            result->tile_index__cover = 0;
+			break;
     }
+}
+
+static void inline get_tile_sprite_cover_texture_sheet_index(
+        Tile *tile,
+        Tile_Render_Result *render_result) {
+    switch(tile->the_kind_of_tile_cover__this_tile_has) {
+        default:
+            render_result->tile_index__sprite_cover = 0;
+            break;
+        case Tile_Cover_Kind__Wall__Dirt:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__DIRT;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Sand:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__SAND;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Oak_Wood:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__WOOD;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Stone:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__STONE;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Stone_Brick:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__STONE_BRICK;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Iron:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__IRON;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Gold:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__GOLD;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Diamond:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__DIAMOND;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Amethyst:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__AMEYTHYST;
+            goto wall;
+        case Tile_Cover_Kind__Wall__Sandstone:
+            render_result->tile_index__sprite_cover =
+                TILE_SHEET_INDEX__SANDSTONE;
+wall:
+            render_result->tile_index__sprite_cover +=
+                TILE_COVER_SHEET_INDEX__WALL
+                + get_tile_sheet_index_offset_for__sprite_cover_from__wall_adjacency(
+                    render_result->wall_adjacency);
+            break;
+    }
+}
+
+Tile_Render_Result get_tile_render_result(
+        Chunk_Manager__Chunk_Map_Node *chunk_node,
+        int32_t x__local,
+        int32_t y__local) {
+    Tile_Render_Result result;
+
+    Tile *tile = 
+        get_tile_from__chunk_node_for__tile_render(
+            chunk_node,
+            x__local,
+            y__local,
+            &result);
+
+    get_tile_texture_sheet_index(
+            tile, 
+            &result);
+
+    get_tile_cover_texture_sheet_index(
+            tile, 
+            &result);
+
+    get_tile_sprite_cover_texture_sheet_index(
+            tile, 
+            &result);
+
+    result.tile_index__cover &= ((1 << 10)-1);
+    result.tile_index__ground &= ((1 << 10)-1);
+    result.tile_index__sprite_cover &= ((1 << 10)-1);
+
+    if (does_tile__have_a_wall(tile)) {
+        result.tile_index__cover |= 
+            does_wall_adjacency_require__vflip(
+                    result.wall_adjacency)
+            << 10;
+        result.tile_index__sprite_cover |= 
+            does_wall_adjacency_require__vflip(
+                    result.wall_adjacency)
+            << 10;
+    }
+
+    if (is_tile__stairs(tile)) {
+        result.tile_index__ground |= 
+            does_tile__stair_direction__require_hflip(tile)
+            << 11;
+        result.tile_index__ground |= 
+            does_tile__stair_direction__require_vflip(tile)
+            << 10;
+    }
+
+    return result;
 }
