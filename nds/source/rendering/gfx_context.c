@@ -150,52 +150,56 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
 }
 
 void PLATFORM_update_chunks(
-        PLATFORM_Gfx_Context *gfx_context,
-        Chunk_Manager *chunk_manager) {
-    TileMapEntry16 *sprite_cover_tile_map =
+        PLATFORM_Gfx_Context *p_gfx_context,
+        Chunk_Manager *p_chunk_manager) {
+    TileMapEntry16 *p_sprite_cover_tile_map =
         (TileMapEntry16*)
-        bgGetMapPtr(gfx_context
+        bgGetMapPtr(p_gfx_context
                 ->background_ground__sprite_cover
                 .background_index);
-    TileMapEntry16 *overlay_tile_map =
+    TileMapEntry16 *p_overlay_tile_map =
         (TileMapEntry16*)
-        bgGetMapPtr(gfx_context
+        bgGetMapPtr(p_gfx_context
                 ->background_ground__overlay
                 .background_index);
-    TileMapEntry16 *background_tile_map =
+    TileMapEntry16 *p_background_tile_map =
         (TileMapEntry16*)
-        bgGetMapPtr(gfx_context
+        bgGetMapPtr(p_gfx_context
                 ->background_ground
                 .background_index);
-    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->most_north_western__chunk_map_node;
-    Chunk_Manager__Chunk_Map_Node *current_sub__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node;
 
     for (uint8_t y=0; y < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
             y++) {
-        current_sub__chunk_map_node =
-            current__chunk_map_node;
+        p_current_sub__chunk_map_node =
+            p_current__chunk_map_node;
         for (uint8_t x=0; x < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
                 x++) {
+            //TODO: consolidate this to a helper
             uint32_t x__index =
-                ((current_sub__chunk_map_node->chunk__here->x__signed_index_i32
+                ((p_current_sub__chunk_map_node->p_chunk__here
+                  ->x__signed_index_i32
                   % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
                  + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
                 % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
             uint32_t y__index =
-                ((current_sub__chunk_map_node->chunk__here->y__signed_index_i32
+                ((p_current_sub__chunk_map_node->p_chunk__here
+                  ->y__signed_index_i32
                   % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
                  + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
                 % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
 
             //TODO: im am using magic numbers here atm.
+            //TODO: prim wrap
 
             // Everything is based on the implementation of
             // TileMapEntry16 of background.h in the arm9
             // folder of libnds.
             for (int y=0;y<8;y++) {
                 for (int x=0;x<8;x++) {
-                    uint32_t background_tile_index = 
+                    Quantity__u32 background_tile_index = 
                         y * 32 + x;
                     background_tile_index += 
                         (x__index % 4) * 8;
@@ -205,29 +209,29 @@ void PLATFORM_update_chunks(
                         background_tile_index += 32 * 32;
                     if (y__index >= 4)
                         background_tile_index += 32 * 32 * 2;
-                    TileMapEntry16 *tile_entry =
-                        &background_tile_map[background_tile_index];
-                    TileMapEntry16 *tile_cover_entry =
-                        &overlay_tile_map[background_tile_index];
-                    TileMapEntry16 *tile_sprite_cover_entry =
-                        &sprite_cover_tile_map[background_tile_index];
+                    TileMapEntry16 *p_tile_entry =
+                        &p_background_tile_map[background_tile_index];
+                    TileMapEntry16 *p_tile_cover_entry =
+                        &p_overlay_tile_map[background_tile_index];
+                    TileMapEntry16 *p_tile_sprite_cover_entry =
+                        &p_sprite_cover_tile_map[background_tile_index];
                     Tile_Render_Result render_result =
                         get_tile_render_result(
-                                current_sub__chunk_map_node,
+                                p_current_sub__chunk_map_node,
                                 x, y);
-                    *(uint16_t*)tile_entry = 
+                    *(uint16_t*)p_tile_entry = 
                         render_result.tile_index__ground;
-                    *(uint16_t*)tile_cover_entry = 
+                    *(uint16_t*)p_tile_cover_entry = 
                         render_result.tile_index__cover;
-                    *(uint16_t*)tile_sprite_cover_entry = 
+                    *(uint16_t*)p_tile_sprite_cover_entry = 
                         render_result.tile_index__sprite_cover;
                 }
             }
 
-            current_sub__chunk_map_node =
-                current_sub__chunk_map_node->east__chunk_map_node;
+            p_current_sub__chunk_map_node =
+                p_current_sub__chunk_map_node->p_east__chunk_map_node;
         }
-        current__chunk_map_node =
-            current__chunk_map_node->south__chunk_map_node;
+        p_current__chunk_map_node =
+            p_current__chunk_map_node->p_south__chunk_map_node;
     }
 }

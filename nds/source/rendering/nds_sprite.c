@@ -18,7 +18,7 @@ void PLATFORM_init_sprite(
         PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,
         bool perform_update) {
-    // debug_warning("PLATFORM_init_sprite is not finished yet: \
+    // TODO: debug_warning("PLATFORM_init_sprite is not finished yet:
     //         doesn't support oamSub.");
     uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);

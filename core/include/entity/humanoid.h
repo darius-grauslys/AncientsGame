@@ -7,7 +7,7 @@ bool is_entity_a__humanoid(Entity *entity);
     
 static void inline set_humanoid__direction(
         Entity *humanoid,
-        Direction direction) {
+        Direction__u8 direction) {
 #ifndef NDEBUG
     if (!is_entity_a__humanoid(humanoid)) {
         debug_error("Treated non-humanoid %p as humanoid!",
@@ -18,7 +18,7 @@ static void inline set_humanoid__direction(
     humanoid->direction = direction;
 }
 
-static Direction inline get_humanoid__direction(
+static Direction__u8 inline get_humanoid__direction(
         Entity *humanoid) {
 #ifndef NDEBUG
     if (!is_entity_a__humanoid(humanoid)) {

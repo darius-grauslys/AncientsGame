@@ -150,6 +150,7 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
             bb, hitbox, 
             DIRECTION__NORTH_EAST);
 
+    // TODO: consolidate bit manips
     Signed_Index__i32 x__aa_tile_pos =
         (aa->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
@@ -172,15 +173,15 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
         direction_of_transition |= DIRECTION__EAST;
     }
     if (direction_of_movement & DIRECTION__WEST
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (x__aa_tile_pos < x__tile_pos)) {
         direction_of_transition |= DIRECTION__WEST;
     }
     if (direction_of_movement & DIRECTION__NORTH
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (y__bb_tile_pos > y__tile_pos)) {
         direction_of_transition |= DIRECTION__NORTH;
     }
     if (direction_of_movement & DIRECTION__SOUTH
-            && (x__bb_tile_pos > x__tile_pos)) {
+            && (y__aa_tile_pos < y__tile_pos)) {
         direction_of_transition |= DIRECTION__SOUTH;
     }
 

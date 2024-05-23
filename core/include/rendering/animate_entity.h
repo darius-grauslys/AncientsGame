@@ -5,31 +5,31 @@
 #include <defines.h>
 
 static void inline poll_entity_animation__transition(
-        Entity *entity,
-        f_sprite_frame_lookup inital_frame__lookup,
-        f_sprite_frame_lookup final_frame__lookup,
+        Entity *p_entity,
+        f_Sprite_Frame_Lookup f_inital_frame__lookup,
+        f_Sprite_Frame_Lookup f_final_frame__lookup,
         bool force) {
-    if (force || is_animation__in_transition(entity->sprite_wrapper)) {
-        entity->sprite_wrapper.the_kind_of_animation__this_sprite_has =
-            entity->sprite_wrapper.the_kind_of_animation__thats_upcomming;
+    if (force || is_animation__in_transition(p_entity->sprite_wrapper)) {
+        p_entity->sprite_wrapper.the_kind_of_animation__this_sprite_has =
+            p_entity->sprite_wrapper.the_kind_of_animation__thats_upcomming;
 
-        entity->sprite_wrapper.the_kind_of_animation__thats_upcomming =
+        p_entity->sprite_wrapper.the_kind_of_animation__thats_upcomming =
             Sprite_Animation_Kind__None;
 
-        entity->sprite_wrapper.frame = 
-            entity->sprite_wrapper.frame__initial = 
-            inital_frame__lookup(entity,
-                    entity->sprite_wrapper
+        p_entity->sprite_wrapper.frame = 
+            p_entity->sprite_wrapper.frame__initial = 
+            f_inital_frame__lookup(p_entity,
+                    p_entity->sprite_wrapper
                     .the_kind_of_animation__this_sprite_has);
-        entity->sprite_wrapper.frame__final =
-            final_frame__lookup(entity,
-                    entity->sprite_wrapper
+        p_entity->sprite_wrapper.frame__final =
+            f_final_frame__lookup(p_entity,
+                    p_entity->sprite_wrapper
                     .the_kind_of_animation__this_sprite_has);
         return;
     }
-    if (is_animation__exceeded(entity->sprite_wrapper)) {
-        entity->sprite_wrapper.frame =
-            entity->sprite_wrapper.frame__initial;
+    if (is_animation__exceeded(p_entity->sprite_wrapper)) {
+        p_entity->sprite_wrapper.frame =
+            p_entity->sprite_wrapper.frame__initial;
         return;
     }
 }

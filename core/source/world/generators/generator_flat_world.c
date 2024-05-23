@@ -24,54 +24,54 @@ typedef struct Weight_Map_t {
 Weight_Map weight_map;
 
 void flip_xy__weight_matrix(
-        Weight_Matrix *source, Weight_Matrix *dest) {
-    dest->E = source->E;
+        Weight_Matrix *p_source, Weight_Matrix *p_dest) {
+    p_dest->E = p_source->E;
 
-    dest->A = source->I;
-    dest->B = source->H;
-    dest->C = source->G;
+    p_dest->A = p_source->I;
+    p_dest->B = p_source->H;
+    p_dest->C = p_source->G;
 
-    dest->F = source->D;
-    dest->I = source->A;
+    p_dest->F = p_source->D;
+    p_dest->I = p_source->A;
 
-    dest->H = source->B;
-    dest->G = source->C;
+    p_dest->H = p_source->B;
+    p_dest->G = p_source->C;
 
-    dest->D = source->F;
+    p_dest->D = p_source->F;
 }
 
 void flip_y__weight_matrix(
-        Weight_Matrix *source, Weight_Matrix *dest) {
-    dest->E = source->E;
+        Weight_Matrix *p_source, Weight_Matrix *p_dest) {
+    p_dest->E = p_source->E;
 
-    dest->A = source->C;
-    dest->B = source->B;
-    dest->C = source->A;
+    p_dest->A = p_source->C;
+    p_dest->B = p_source->B;
+    p_dest->C = p_source->A;
 
-    dest->F = source->D;
-    dest->I = source->G;
+    p_dest->F = p_source->D;
+    p_dest->I = p_source->G;
 
-    dest->H = source->H;
-    dest->G = source->I;
+    p_dest->H = p_source->H;
+    p_dest->G = p_source->I;
 
-    dest->D = source->F;
+    p_dest->D = p_source->F;
 }
 
 void flip_x__weight_matrix(
-        Weight_Matrix *source, Weight_Matrix *dest) {
-    dest->E = source->E;
+        Weight_Matrix *p_source, Weight_Matrix *p_dest) {
+    p_dest->E = p_source->E;
 
-    dest->A = source->G;
-    dest->B = source->H;
-    dest->C = source->I;
+    p_dest->A = p_source->G;
+    p_dest->B = p_source->H;
+    p_dest->C = p_source->I;
 
-    dest->F = source->F;
-    dest->I = source->C;
+    p_dest->F = p_source->F;
+    p_dest->I = p_source->C;
 
-    dest->H = source->B;
-    dest->G = source->A;
+    p_dest->H = p_source->B;
+    p_dest->G = p_source->A;
 
-    dest->D = source->D;
+    p_dest->D = p_source->D;
 }
 
 void init_weight_map(void) {
@@ -311,10 +311,7 @@ void init_weight_map(void) {
 
     // return;
 
-    Weight_Matrix *source_matrix;
-    Weight_Matrix *current_matrix;
-    uint32_t index;
-
+    //TODO: magic numbers
     for (uint32_t y=0; y<4;y++) {
         for (uint32_t x=0; x<4;x++) {
             flip_y__weight_matrix(
@@ -338,12 +335,12 @@ void init_weight_map(void) {
     }
 }
 
-void chunk_generator__flat_world_f(
-        World_Parameters *world_parameters,
-        Chunk *chunk) {
+void f_chunk_generator__flat_world(
+        World_Parameters *p_world_parameters,
+        Chunk *p_chunk) {
     Local_Parameters random_results[9];
 
-    // debug_warning("chunk_generator__flat_world_f uses magic numbers.");
+    //TODO: debug_warning("f_chunk_generator__flat_world uses magic numbers.");
     
     for (Signed_Index__i32 y=-1;y< 2;y++) {
         for (Signed_Index__i32 x=-1;x<2;x++) {
@@ -351,15 +348,15 @@ void chunk_generator__flat_world_f(
             random_results[index]
                 .random_result__local__u32 =
                 get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
-                        world_parameters, 
-                        chunk->x__signed_index_i32 + x, 
-                        chunk->y__signed_index_i32 + y);
+                        p_world_parameters, 
+                        p_chunk->x__signed_index_i32 + x, 
+                        p_chunk->y__signed_index_i32 + y);
             random_results[index]
                 .random_result__greater__u32 =
                 get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
-                        world_parameters, 
-                        (chunk->x__signed_index_i32 + x) >> 4, 
-                        (chunk->y__signed_index_i32 + y) >> 4);
+                        p_world_parameters, 
+                        (p_chunk->x__signed_index_i32 + x) >> 4, 
+                        (p_chunk->y__signed_index_i32 + y) >> 4);
 
             // for flat_world, we will use these randomized values
             // as a sort of "moisture" level.
@@ -413,68 +410,68 @@ void chunk_generator__flat_world_f(
             if (moisture >= 5)
                 moisture = 4;
 
-            Tile *tile = 
-                &chunk->tiles[tile_index];
+            Tile *p_tile = 
+                &p_chunk->tiles[tile_index];
             init_tile(
-                    tile,
+                    p_tile,
                     Tile_Kind__Oak_Wood,
                     Tile_Cover_Kind__None,
                     TILE_FLAGS__NONE);
 
             Psuedo_Random__u32 chance_plant =
                 get_pseudo_random_i32__from_world_parameters(
-                        world_parameters)
+                        p_world_parameters)
                 % 100;
-            tile->the_kind_of_tile_cover__this_tile_has =
+            p_tile->the_kind_of_tile_cover__this_tile_has =
                 Tile_Cover_Kind__None;
 
             switch (moisture) {
                 default:
                 case 0:
-                    tile->the_kind_of_tile__this_tile_is =
+                    p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Sand;
                     if (chance_plant > 97)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Cactus;
                     break;
                 case 1:
-                    tile->the_kind_of_tile__this_tile_is =
+                    p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Stone;
                     break;
                 case 2:
-                    tile->the_kind_of_tile__this_tile_is =
+                    p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Dirt;
                     if (chance_plant > 94)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Plant;
                     if (chance_plant > 96)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Yellow;
                     if (chance_plant > 97)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Red;
                     if (chance_plant > 98)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Blue;
                     break;
                 case 3:
-                    tile->the_kind_of_tile__this_tile_is =
+                    p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Grass;
                     if (chance_plant > 88)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Plant;
                     if (chance_plant > 92)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Yellow;
                     if (chance_plant > 95)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Red;
                     if (chance_plant > 97)
-                        tile->the_kind_of_tile_cover__this_tile_has =
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Blue;
                     break;
                 case 4:
-                    tile->the_kind_of_tile__this_tile_is =
+                    p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Water;
                     break;
             }

@@ -3,13 +3,30 @@
 
 #include <defines.h>
 
-void init_entity_manager(Entity_Manager *entity_manager);
+void init_entity_manager(Entity_Manager *p_entity_manager);
 
 ///
 /// Return nullptr (0) if fails to get new entity.
 ///
-Entity *allocate__entity(Entity_Manager* manager,
+Entity *allocate__entity(
+        Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity);
-void release_entity__silently(Entity_Manager* manager, Entity* entity);
+void release_entity__silently(
+        Entity_Manager *p_manager, 
+        Entity *p_entity);
+
+static Entity inline *get_entity_ptr_from__entity_manager(
+        Entity_Manager *p_entity_manager,
+        Quantity__u16 id) {
+#ifndef NDEBUG
+    if (ENTITY_MAXIMUM_QUANTITY_OF <= id) {
+        debug_abort("Index out of bounds %d, \
+get_entity_ptr_from__entity_manager",
+                id);
+        return 0;
+    }
+#endif
+    return &p_entity_manager->entities[id];
+}
 
 #endif

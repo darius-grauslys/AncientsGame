@@ -73,38 +73,38 @@ static void inline set_entity_as__visible(Entity *entity) {
 }
 
 static void inline set_entity__controller(
-        Entity *entity,
-        m_entity_controller controller) {
-    entity->controller_handler = controller;
-    if (!controller) {
-        set_entity__collidable(entity);
+        Entity *p_entity,
+        m_Entity_Controller m_controller) {
+    p_entity->m_controller_handler = m_controller;
+    if (!m_controller) {
+        set_entity__collidable(p_entity);
     } else {
-        set_entity__uncollidable(entity);
+        set_entity__uncollidable(p_entity);
     }
 }
 
 static void inline set_entity__disposer(
-        Entity *entity,
-        m_dispose_entity disposer) {
-    entity->dispose_handler = disposer;
+        Entity *p_entity,
+        m_Dispose_Entity m_disposer) {
+    p_entity->m_dispose_handler = m_disposer;
 }
 
 static void inline set_entity__collider(
-        Entity *entity,
-        m_entity_collision collision_handler) {
-    entity->collision_handler = collision_handler;
+        Entity *p_entity,
+        m_Entity_Collision m_collision_handler) {
+    p_entity->m_collision_handler = m_collision_handler;
 }
 
 static void inline set_entity__tile_collider(
-        Entity *entity,
-        m_entity_tile_collision collision_handler) {
-    entity->tile_collision_handler = collision_handler;
+        Entity *p_entity,
+        m_Entity_Tile_Collision m_collision_handler) {
+    p_entity->m_tile_collision_handler = m_collision_handler;
 }
 
 static void inline set_entity__animator(
-        Entity *entity,
-        m_entity_animation animation_handler) {
-    entity->animation_handler = animation_handler;
+        Entity *p_entity,
+        m_Entity_Animation m_animation_handler) {
+    p_entity->m_animation_handler = m_animation_handler;
 }
 
 void init_entity(Entity *entity, enum Entity_Kind kind_of_entity);

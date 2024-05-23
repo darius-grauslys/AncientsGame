@@ -10,50 +10,50 @@
 #include <world/world.h>
 
 static Entity_Manager inline 
-*get_entity_manager_from__game(Game *game) {
-    return get_entity_manager_from__world(&game->world);
+*get_entity_manager_ptr_from__game(Game *p_game) {
+    return get_entity_manager_ptr_from__world(&p_game->world);
 }
 
 static Chunk_Manager inline 
-*get_chunk_manager_from__game(Game *game) {
-    return get_chunk_manager_from__world(&game->world);
+*get_chunk_manager_ptr_from__game(Game *p_game) {
+    return get_chunk_manager_ptr_from__world(&p_game->world);
 }
 
 static Collision_Manager inline 
-*get_collision_manager_from__game(Game *game) {
-    return get_collision_manager_from__world(&game->world);    
+*get_collision_manager_ptr_from__game(Game *p_game) {
+    return get_collision_manager_ptr_from__world(&p_game->world);    
 }
 
 static PLATFORM_Gfx_Context inline
-*get_PLATFORM_gfx_context_from__game(Game *game) {
-    return &game->gfx_context;
+*get_PLATFORM_gfx_context_ptr_from__game(Game *p_game) {
+    return &p_game->gfx_context;
 }
 
 static Input inline
-*get_input_from__game(Game *game) {
-    return &game->input;
+*get_input_ptr_from__game(Game *p_game) {
+    return &p_game->input;
 }
 
 static Entity inline
-*get_local_player_from__game(Game *game) {
-    return game->world.entity_manager.local_player;
+*get_local_player_ptr_from__game(Game *p_game) {
+    return get_local_player_ptr_from__world(&p_game->world);
 }
 
-void init_game(Game *game);
+void init_game(Game *p_game);
 
-void manage_game(Game *game);
+void manage_game(Game *p_game);
 
-void manage_game__pre_render(Game *game);
-void manage_game__post_render(Game *game);
-void manage_entities(Game *game);
-void release_entity(Game *game, Entity *entity);
+void manage_game__pre_render(Game *p_game);
+void manage_game__post_render(Game *p_game);
+void manage_entities(Game *p_game);
+void release_entity(Game *p_game, Entity *p_entity);
 
-Entity *get_new__player(Game *game, 
+Entity *get_new__player(Game *p_game, 
         bool is_local_player,
         int32_t x__global,
         int32_t y__global,
         int32_t z__global);
-Entity *get_new__entity(Game *game, 
+Entity *get_new__entity(Game *p_game, 
         enum Entity_Kind kind_of_entity,
         int32_t x__global,
         int32_t y__global,

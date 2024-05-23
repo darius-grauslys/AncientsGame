@@ -48,7 +48,7 @@ static uint32_t inline get_sprite_frame (
 }
 
 static uint32_t inline get_animation_frame_offset_for__direction(
-        Direction direction,
+        Direction__u8 direction,
         uint32_t cols_per_row) {
     switch (direction) {
         default:

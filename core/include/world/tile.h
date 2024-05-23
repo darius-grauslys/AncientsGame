@@ -59,7 +59,7 @@ static bool inline is_tile_cover__a_wall(
     return kind_of_tile_cover & TILE_COVER__BIT_IS_WALL;
 }
 
-static Index_u16 get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
+static Index_u16 inline get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
         Tile_Wall_Adjacency_Code__u16 wall_adjacency) {
     return 
         TILE_SHEET_TILE_WIDTH
@@ -69,7 +69,7 @@ static Index_u16 get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
         ;
 }
 
-static Index_u16 
+static Index_u16 inline
 get_tile_sheet_index_offset_for__sprite_cover_from__wall_adjacency(
         Tile_Wall_Adjacency_Code__u16 wall_adjacency) {
     return 
@@ -100,38 +100,40 @@ static bool inline is_tile__unpassable(Tile *tile) {
     return (bool)(tile->tile_flags & TILE_FLAGS__BIT_IS_UNPASSABLE);
 }
 static void inline set_tile__is_unpassable(Tile *tile, bool value) {
-    tile->tile_flags &= (-1) ^ (1 << TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE);
+    tile->tile_flags &= ~TILE_FLAGS__BIT_IS_UNPASSABLE;
     tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE);
 }
 static bool inline is_tile__stairs(Tile *tile) {
     return (bool)((tile->tile_flags & TILE_FLAGS__BIT_IS_STAIR));
 }
 static void inline set_tile__is_stairs(Tile *tile, bool value) {
-    tile->tile_flags &= (-1) ^ (1 << TILE_FLAGS__BIT_SHIFT_IS_STAIR);
+    tile->tile_flags &= ~TILE_FLAGS__BIT_IS_STAIR;
     tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_IS_STAIR);
 }
 static bool inline is_tile__sight_blocking(Tile *tile) {
     return (bool)(tile->tile_flags & TILE_FLAGS__BIT_IS_SIGHT_BLOCKING); 
 }
 static void inline set_tile__sight_blocking(Tile *tile, bool value) {
-    tile->tile_flags &= (-1) ^ (1 << TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING);
+    tile->tile_flags &= ~TILE_FLAGS__BIT_IS_SIGHT_BLOCKING;
     tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING);
 }
 static bool inline is_tile__inverted_stairs(Tile *tile) {
     return (bool)(tile->tile_flags & TILE_FLAGS__BIT_INVERTED_STAIR);
 }
 static void inline set_tile__inverted_stairs(Tile *tile, bool value) {
-    tile->tile_flags &= (-1) ^ (1 << TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR);
+    tile->tile_flags &= ~TILE_FLAGS__BIT_INVERTED_STAIR;
     tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR);
 }
 static bool inline is_tile__up_or_down_stairs(Tile *tile) {
     return (bool)(tile->tile_flags & TILE_FLAGS__BIT_IS_STAIR_UP_OR_DOWN);
 }
 static void inline set_tile__up_or_down_stairs(Tile *tile, bool value) {
-    tile->tile_flags &= (-1) ^ (1 << TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN);
+    tile->tile_flags &= ~TILE_FLAGS__BIT_IS_STAIR_UP_OR_DOWN;
     tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN);
 }
 
+// TODO: make this PLATFORM_render_tile
+// TODO: make Tile_Render_Result into PLATFORM_Tile_Render_Result
 Tile_Render_Result get_tile_render_result(
         Chunk_Manager__Chunk_Map_Node *chunk_node,
         Signed_Index__i32 x__local__signed_index_i32,

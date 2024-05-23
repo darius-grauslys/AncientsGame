@@ -6,7 +6,7 @@
 void m_entity_collision_handler(
         Entity *entity_collision_source,
         Entity *entity_collided,
-        Direction direction_of_collision);
+        Direction__u8 direction_of_collision);
 
 void m_entity_tile_collision_handler(
         Entity *entity_collision_source,

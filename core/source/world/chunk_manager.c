@@ -6,30 +6,32 @@
 #include <collisions/hitbox_aabb.h>
 
 void init_chunk_manager(
-        Chunk_Manager* chunk_manager,
-        World_Parameters *world_parameters) {
-    chunk_manager->x__center_chunk__signed_index_i32 =
-        chunk_manager->y__center_chunk__signed_index_i32 = 0;
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters) {
+    p_chunk_manager->x__center_chunk__signed_index_i32 =
+        p_chunk_manager->y__center_chunk__signed_index_i32 = 0;
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
         for (Signed_Index__i32 x=0; x <
                 CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW; x++) {
-            Chunk_Manager__Chunk_Map_Node *chunk_map_node =
-                &chunk_manager->chunk_map[
+            Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
 
-            Chunk *chunk__here =
-                &chunk_manager->chunks[
+            Chunk *p_chunk__here =
+                &p_chunk_manager->chunks[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
                     + x];
 
-            init_chunk(chunk__here, x, -y);
+            init_chunk(p_chunk__here, x, -y);
 
-            world_parameters->f_chunk_generator(world_parameters, chunk__here);
+            p_world_parameters->f_chunk_generator(
+                    p_world_parameters, 
+                    p_chunk__here);
 
-            chunk_map_node->chunk__here = chunk__here;
+            p_chunk_map_node->p_chunk__here = p_chunk__here;
 
             Index_u32 x__east, x__west, y__north, y__south;
 
@@ -52,49 +54,49 @@ void init_chunk_manager(
                 y__south = y + 1;
 
             // link north
-            chunk_map_node->north__chunk_map_node =
-                &chunk_manager->chunk_map[
+            p_chunk_map_node->p_north__chunk_map_node =
+                &p_chunk_manager->chunk_map[
                 y__north * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
                 + x
                 ];
 
             // link east
-            chunk_map_node->east__chunk_map_node =
-                &chunk_manager->chunk_map[
+            p_chunk_map_node->p_east__chunk_map_node =
+                &p_chunk_manager->chunk_map[
                 y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
                 + x__east
                 ];
 
             // link south
-            chunk_map_node->south__chunk_map_node =
-                &chunk_manager->chunk_map[
+            p_chunk_map_node->p_south__chunk_map_node =
+                &p_chunk_manager->chunk_map[
                 y__south * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                 + x 
                 ];
 
             // link west
-            chunk_map_node->west__chunk_map_node =
-                &chunk_manager->chunk_map[
+            p_chunk_map_node->p_west__chunk_map_node =
+                &p_chunk_manager->chunk_map[
                 y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                 + x__west
                 ];
         }
     }
 
-    chunk_manager->most_north_western__chunk_map_node =
-        &chunk_manager->chunk_map[0];
+    p_chunk_manager->p_most_north_western__chunk_map_node =
+        &p_chunk_manager->chunk_map[0];
 
-    chunk_manager->most_north_eastern__chunk_map_node =
-        &chunk_manager->chunk_map[
+    p_chunk_manager->p_most_north_eastern__chunk_map_node =
+        &p_chunk_manager->chunk_map[
         GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1];
 
-    chunk_manager->most_south_western__chunk_map_node =
-        &chunk_manager->chunk_map[
+    p_chunk_manager->p_most_south_western__chunk_map_node =
+        &p_chunk_manager->chunk_map[
         (GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS - 1)
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW];
 
-    chunk_manager->most_south_eastern__chunk_map_node =
-        &chunk_manager->chunk_map[
+    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+        &p_chunk_manager->chunk_map[
         (GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS - 1)
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
         + GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1
@@ -102,53 +104,53 @@ void init_chunk_manager(
 }
 
 uint32_t get_chunk_index_at__xyz_from__chunk_manager(
-        Chunk_Manager *chunk_manager,
+        Chunk_Manager *p_chunk_manager,
         Signed_Index__i32 x__chunk, 
         Signed_Index__i32 y__chunk,
         Signed_Index__i32 z__chunk) {
     // TODO: extend to use z
 
-    if (x__chunk < chunk_manager
-            ->most_north_western__chunk_map_node
-                ->chunk__here->x__signed_index_i32
-            || y__chunk > chunk_manager
-                ->most_north_western__chunk_map_node
-                    ->chunk__here->y__signed_index_i32
-            || x__chunk > chunk_manager
-                ->most_south_eastern__chunk_map_node
-                    ->chunk__here->x__signed_index_i32
-            || y__chunk < chunk_manager
-                ->most_south_eastern__chunk_map_node
-                    ->chunk__here->y__signed_index_i32) {
+    if (x__chunk < p_chunk_manager
+            ->p_most_north_western__chunk_map_node
+                ->p_chunk__here->x__signed_index_i32
+            || y__chunk > p_chunk_manager
+                ->p_most_north_western__chunk_map_node
+                    ->p_chunk__here->y__signed_index_i32
+            || x__chunk > p_chunk_manager
+                ->p_most_south_eastern__chunk_map_node
+                    ->p_chunk__here->x__signed_index_i32
+            || y__chunk < p_chunk_manager
+                ->p_most_south_eastern__chunk_map_node
+                    ->p_chunk__here->y__signed_index_i32) {
         debug_error("chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
         debug_info("bounds are: (%d, %d) - (%d, %d)",
-            chunk_manager->most_north_western__chunk_map_node
-                ->chunk__here->x__signed_index_i32,
-            chunk_manager->most_north_western__chunk_map_node
-                ->chunk__here->y__signed_index_i32, 
-            chunk_manager->most_south_eastern__chunk_map_node
-                ->chunk__here->x__signed_index_i32,
-            chunk_manager->most_south_eastern__chunk_map_node
-                ->chunk__here->y__signed_index_i32);
+            p_chunk_manager->p_most_north_western__chunk_map_node
+                ->p_chunk__here->x__signed_index_i32,
+            p_chunk_manager->p_most_north_western__chunk_map_node
+                ->p_chunk__here->y__signed_index_i32, 
+            p_chunk_manager->p_most_south_eastern__chunk_map_node
+                ->p_chunk__here->x__signed_index_i32,
+            p_chunk_manager->p_most_south_eastern__chunk_map_node
+                ->p_chunk__here->y__signed_index_i32);
         return 0;
     }
 
     Signed_Index__i32 local_x =
-        x__chunk - chunk_manager
-        ->most_north_western__chunk_map_node
-            ->chunk__here->x__signed_index_i32;
+        x__chunk - p_chunk_manager
+        ->p_most_north_western__chunk_map_node
+            ->p_chunk__here->x__signed_index_i32;
     Signed_Index__i32 local_y =
-        y__chunk - chunk_manager
-        ->most_south_eastern__chunk_map_node
-            ->chunk__here->y__signed_index_i32;
+        y__chunk - p_chunk_manager
+        ->p_most_south_eastern__chunk_map_node
+            ->p_chunk__here->y__signed_index_i32;
 
     return  local_y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
             + local_x;
 }
 
-Chunk* get_chunk_from__chunk_manager(
-        Chunk_Manager* chunk_manager, 
+Chunk* get_chunk_ptr_from__chunk_manager(
+        Chunk_Manager *p_chunk_manager, 
         Signed_Index__i32 x__chunk, 
         Signed_Index__i32 y__chunk, 
         Signed_Index__i32 z__chunk) {
@@ -156,18 +158,18 @@ Chunk* get_chunk_from__chunk_manager(
     // Invert, TODO: look into why
     y__chunk *= -1;
 
-    Signed_Index__i32 north_west__x = chunk_manager
-                ->most_north_western__chunk_map_node
-                    ->chunk__here->x__signed_index_i32;
-    Signed_Index__i32 north_west__y = chunk_manager
-                ->most_north_western__chunk_map_node
-                    ->chunk__here->y__signed_index_i32;
-    Signed_Index__i32 south_east__x = chunk_manager
-                ->most_south_eastern__chunk_map_node
-                    ->chunk__here->x__signed_index_i32;
-    Signed_Index__i32 south_east__y = chunk_manager
-                ->most_south_eastern__chunk_map_node
-                    ->chunk__here->y__signed_index_i32;
+    Signed_Index__i32 north_west__x = p_chunk_manager
+                ->p_most_north_western__chunk_map_node
+                    ->p_chunk__here->x__signed_index_i32;
+    Signed_Index__i32 north_west__y = p_chunk_manager
+                ->p_most_north_western__chunk_map_node
+                    ->p_chunk__here->y__signed_index_i32;
+    Signed_Index__i32 south_east__x = p_chunk_manager
+                ->p_most_south_eastern__chunk_map_node
+                    ->p_chunk__here->x__signed_index_i32;
+    Signed_Index__i32 south_east__y = p_chunk_manager
+                ->p_most_south_eastern__chunk_map_node
+                    ->p_chunk__here->y__signed_index_i32;
 
     if (x__chunk < north_west__x
             || y__chunk > north_west__y
@@ -176,295 +178,296 @@ Chunk* get_chunk_from__chunk_manager(
         debug_error("chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
         debug_info("bounds are: (%d, %d) - (%d, %d)",
-            chunk_manager->most_north_western__chunk_map_node
-                ->chunk__here->x__signed_index_i32,
-            chunk_manager->most_north_western__chunk_map_node
-                ->chunk__here->y__signed_index_i32, 
-            chunk_manager->most_south_eastern__chunk_map_node
-                ->chunk__here->x__signed_index_i32,
-            chunk_manager->most_south_eastern__chunk_map_node
-                ->chunk__here->y__signed_index_i32);
+            p_chunk_manager->p_most_north_western__chunk_map_node
+                ->p_chunk__here->x__signed_index_i32,
+            p_chunk_manager->p_most_north_western__chunk_map_node
+                ->p_chunk__here->y__signed_index_i32, 
+            p_chunk_manager->p_most_south_eastern__chunk_map_node
+                ->p_chunk__here->x__signed_index_i32,
+            p_chunk_manager->p_most_south_eastern__chunk_map_node
+                ->p_chunk__here->y__signed_index_i32);
         return 0;
     }
 
-    Chunk_Manager__Chunk_Map_Node *node =
-        chunk_manager->most_north_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node;
     for (Signed_Index__i32 x = north_west__x; x < x__chunk; x++) {
-        node = node->east__chunk_map_node;
+        p_node = p_node->p_east__chunk_map_node;
     }
     for (Signed_Index__i32 y = north_west__y; y > y__chunk; y--) {
-        node = node->south__chunk_map_node;
+        p_node = p_node->p_south__chunk_map_node;
     }
 
-    return node->chunk__here;
+    return p_node->p_chunk__here;
 }
 
+// TODO: find a way to consolidate this helpers without macros?
 void move_chunk_manager__chunks_north(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_parameters) {
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters) {
     Signed_Index__i32 x__old_most_north_western_chunk =
-        chunk_manager->most_north_western__chunk_map_node
-            ->chunk__here->x__signed_index_i32;
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_chunk__here->x__signed_index_i32;
     Signed_Index__i32 y__new_most_north_western_chunk =
-        chunk_manager->most_north_western__chunk_map_node
-            ->chunk__here->y__signed_index_i32 + 1;
-    chunk_manager->most_north_western__chunk_map_node =
-        chunk_manager->most_north_western__chunk_map_node
-            ->north__chunk_map_node;
-    chunk_manager->most_north_eastern__chunk_map_node =
-        chunk_manager->most_north_eastern__chunk_map_node
-            ->north__chunk_map_node;
-    chunk_manager->most_south_western__chunk_map_node =
-        chunk_manager->most_south_western__chunk_map_node
-            ->north__chunk_map_node;
-    chunk_manager->most_south_eastern__chunk_map_node =
-        chunk_manager->most_south_eastern__chunk_map_node
-            ->north__chunk_map_node;
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_chunk__here->y__signed_index_i32 + 1;
+    p_chunk_manager->p_most_north_western__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_north__chunk_map_node;
+    p_chunk_manager->p_most_north_eastern__chunk_map_node =
+        p_chunk_manager->p_most_north_eastern__chunk_map_node
+            ->p_north__chunk_map_node;
+    p_chunk_manager->p_most_south_western__chunk_map_node =
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_north__chunk_map_node;
+    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+        p_chunk_manager->p_most_south_eastern__chunk_map_node
+            ->p_north__chunk_map_node;
 
-    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->most_north_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node;
 
     for (Quantity__u32 step = 0; 
             step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
             step++) {
-        Chunk *chunk__here =
-            current__chunk_map_node->chunk__here;
-        if (chunk__here->x__signed_index_i32 !=
+        Chunk *p_chunk__here =
+            p_current__chunk_map_node->p_chunk__here;
+        if (p_chunk__here->x__signed_index_i32 !=
                 (x__old_most_north_western_chunk + step)
-                || chunk__here->y__signed_index_i32 
+                || p_chunk__here->y__signed_index_i32 
                 != y__new_most_north_western_chunk) {
 
-            chunk__here->x__signed_index_i32 =
+            p_chunk__here->x__signed_index_i32 =
                 x__old_most_north_western_chunk + step;
-            chunk__here->y__signed_index_i32 =
+            p_chunk__here->y__signed_index_i32 =
                 y__new_most_north_western_chunk;
 
-            world_parameters->f_chunk_generator(
-                    world_parameters,
-                    chunk__here);
+            p_world_parameters->f_chunk_generator(
+                    p_world_parameters,
+                    p_chunk__here);
         }
 
-        current__chunk_map_node = 
-            current__chunk_map_node->east__chunk_map_node;
+        p_current__chunk_map_node = 
+            p_current__chunk_map_node->p_east__chunk_map_node;
     }
 }
 
 void move_chunk_manager__chunks_east(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_parameters) {
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters) {
     int32_t x__new_most_north_eastern_chunk =
-        chunk_manager->most_north_eastern__chunk_map_node
-            ->chunk__here->x__signed_index_i32 + 1;
+        p_chunk_manager->p_most_north_eastern__chunk_map_node
+            ->p_chunk__here->x__signed_index_i32 + 1;
     int32_t y__old_most_south_eastern_chunk =
-        chunk_manager->most_south_eastern__chunk_map_node
-            ->chunk__here->y__signed_index_i32;
+        p_chunk_manager->p_most_south_eastern__chunk_map_node
+            ->p_chunk__here->y__signed_index_i32;
 
-    chunk_manager->most_north_western__chunk_map_node =
-        chunk_manager->most_north_western__chunk_map_node
-            ->east__chunk_map_node;
-    chunk_manager->most_north_eastern__chunk_map_node =
-        chunk_manager->most_north_eastern__chunk_map_node
-            ->east__chunk_map_node;
-    chunk_manager->most_south_western__chunk_map_node =
-        chunk_manager->most_south_western__chunk_map_node
-            ->east__chunk_map_node;
-    chunk_manager->most_south_eastern__chunk_map_node =
-        chunk_manager->most_south_eastern__chunk_map_node
-            ->east__chunk_map_node;
+    p_chunk_manager->p_most_north_western__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_east__chunk_map_node;
+    p_chunk_manager->p_most_north_eastern__chunk_map_node =
+        p_chunk_manager->p_most_north_eastern__chunk_map_node
+            ->p_east__chunk_map_node;
+    p_chunk_manager->p_most_south_western__chunk_map_node =
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_east__chunk_map_node;
+    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+        p_chunk_manager->p_most_south_eastern__chunk_map_node
+            ->p_east__chunk_map_node;
 
-    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->most_south_eastern__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
+        p_chunk_manager->p_most_south_eastern__chunk_map_node;
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
             step++) {
-        Chunk *chunk__here =
-            current__chunk_map_node->chunk__here;
-        if (chunk__here->x__signed_index_i32 !=
+        Chunk *p_chunk__here =
+            p_current__chunk_map_node->p_chunk__here;
+        if (p_chunk__here->x__signed_index_i32 !=
                 x__new_most_north_eastern_chunk
-                || (chunk__here->y__signed_index_i32 != 
+                || (p_chunk__here->y__signed_index_i32 != 
                     y__old_most_south_eastern_chunk + step)) {
 
-            chunk__here->x__signed_index_i32 =
+            p_chunk__here->x__signed_index_i32 =
                 x__new_most_north_eastern_chunk;
-            chunk__here->y__signed_index_i32 =
+            p_chunk__here->y__signed_index_i32 =
                 y__old_most_south_eastern_chunk + step;
 
-            world_parameters->f_chunk_generator(
-                    world_parameters,
-                    chunk__here);
+            p_world_parameters->f_chunk_generator(
+                    p_world_parameters,
+                    p_chunk__here);
         }
 
-        current__chunk_map_node = 
-            current__chunk_map_node->north__chunk_map_node;
+        p_current__chunk_map_node = 
+            p_current__chunk_map_node->p_north__chunk_map_node;
     }
 }
 
 void move_chunk_manager__chunks_south(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_parameters) {
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters) {
     int32_t x__old_most_south_western_chunk=
-        chunk_manager->most_south_western__chunk_map_node
-            ->chunk__here->x__signed_index_i32;
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_chunk__here->x__signed_index_i32;
     int32_t y__new_most_south_western_chunk=
-        chunk_manager->most_south_western__chunk_map_node
-            ->chunk__here->y__signed_index_i32 - 1;
-    chunk_manager->most_north_western__chunk_map_node =
-        chunk_manager->most_north_western__chunk_map_node
-            ->south__chunk_map_node;
-    chunk_manager->most_north_eastern__chunk_map_node =
-        chunk_manager->most_north_eastern__chunk_map_node
-            ->south__chunk_map_node;
-    chunk_manager->most_south_western__chunk_map_node =
-        chunk_manager->most_south_western__chunk_map_node
-            ->south__chunk_map_node;
-    chunk_manager->most_south_eastern__chunk_map_node =
-        chunk_manager->most_south_eastern__chunk_map_node
-            ->south__chunk_map_node;
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_chunk__here->y__signed_index_i32 - 1;
+    p_chunk_manager->p_most_north_western__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_south__chunk_map_node;
+    p_chunk_manager->p_most_north_eastern__chunk_map_node =
+        p_chunk_manager->p_most_north_eastern__chunk_map_node
+            ->p_south__chunk_map_node;
+    p_chunk_manager->p_most_south_western__chunk_map_node =
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_south__chunk_map_node;
+    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+        p_chunk_manager->p_most_south_eastern__chunk_map_node
+            ->p_south__chunk_map_node;
 
-    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->most_south_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
+        p_chunk_manager->p_most_south_western__chunk_map_node;
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
             step++) {
-        Chunk *chunk__here =
-            current__chunk_map_node->chunk__here;
-        if (chunk__here->x__signed_index_i32 !=
+        Chunk *p_chunk__here =
+            p_current__chunk_map_node->p_chunk__here;
+        if (p_chunk__here->x__signed_index_i32 !=
                 (x__old_most_south_western_chunk + step)
-                || chunk__here->y__signed_index_i32 
+                || p_chunk__here->y__signed_index_i32 
                 != y__new_most_south_western_chunk) {
 
-            chunk__here->x__signed_index_i32 =
+            p_chunk__here->x__signed_index_i32 =
                 x__old_most_south_western_chunk + step;
-            chunk__here->y__signed_index_i32 =
+            p_chunk__here->y__signed_index_i32 =
                 y__new_most_south_western_chunk;
 
-            world_parameters->f_chunk_generator(
-                    world_parameters,
-                    chunk__here);
+            p_world_parameters->f_chunk_generator(
+                    p_world_parameters,
+                    p_chunk__here);
         }
 
-        current__chunk_map_node = 
-            current__chunk_map_node->east__chunk_map_node;
+        p_current__chunk_map_node = 
+            p_current__chunk_map_node->p_east__chunk_map_node;
     }
 }
 
 void move_chunk_manager__chunks_west(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_parameters) {
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters) {
     int32_t x__new_most_north_western_chunk =
-        chunk_manager->most_north_western__chunk_map_node
-            ->chunk__here->x__signed_index_i32 - 1;
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_chunk__here->x__signed_index_i32 - 1;
     int32_t y__old_most_south_western_chunk =
-        chunk_manager->most_south_western__chunk_map_node
-            ->chunk__here->y__signed_index_i32;
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_chunk__here->y__signed_index_i32;
 
-    chunk_manager->most_north_western__chunk_map_node =
-        chunk_manager->most_north_western__chunk_map_node
-            ->west__chunk_map_node;
-    chunk_manager->most_north_eastern__chunk_map_node =
-        chunk_manager->most_north_eastern__chunk_map_node
-            ->west__chunk_map_node;
-    chunk_manager->most_south_western__chunk_map_node =
-        chunk_manager->most_south_western__chunk_map_node
-            ->west__chunk_map_node;
-    chunk_manager->most_south_eastern__chunk_map_node =
-        chunk_manager->most_south_eastern__chunk_map_node
-            ->west__chunk_map_node;
+    p_chunk_manager->p_most_north_western__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node
+            ->p_west__chunk_map_node;
+    p_chunk_manager->p_most_north_eastern__chunk_map_node =
+        p_chunk_manager->p_most_north_eastern__chunk_map_node
+            ->p_west__chunk_map_node;
+    p_chunk_manager->p_most_south_western__chunk_map_node =
+        p_chunk_manager->p_most_south_western__chunk_map_node
+            ->p_west__chunk_map_node;
+    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+        p_chunk_manager->p_most_south_eastern__chunk_map_node
+            ->p_west__chunk_map_node;
 
-    Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->most_south_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
+        p_chunk_manager->p_most_south_western__chunk_map_node;
 
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
             step++) {
-        Chunk *chunk__here =
-            current__chunk_map_node->chunk__here;
-        if (chunk__here->x__signed_index_i32 !=
+        Chunk *p_chunk__here =
+            p_current__chunk_map_node->p_chunk__here;
+        if (p_chunk__here->x__signed_index_i32 !=
                 x__new_most_north_western_chunk
-                || (chunk__here->y__signed_index_i32 != 
+                || (p_chunk__here->y__signed_index_i32 != 
                     y__old_most_south_western_chunk + step)) {
 
-            chunk__here->x__signed_index_i32 =
+            p_chunk__here->x__signed_index_i32 =
                 x__new_most_north_western_chunk;
-            chunk__here->y__signed_index_i32 =
+            p_chunk__here->y__signed_index_i32 =
                 y__old_most_south_western_chunk + step;
 
-            world_parameters->f_chunk_generator(
-                    world_parameters,
-                    chunk__here);
+            p_world_parameters->f_chunk_generator(
+                    p_world_parameters,
+                    p_chunk__here);
         }
 
-        current__chunk_map_node = 
-            current__chunk_map_node->north__chunk_map_node;
+        p_current__chunk_map_node = 
+            p_current__chunk_map_node->p_north__chunk_map_node;
     }
 }
 
 void move_chunk_manager(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_parameters,
-        Direction direction,
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters,
+        Direction__u8 direction,
         Quantity__u32 steps) {
     for (Quantity__u32 step=0; step < steps; step++) {
         if (direction & DIRECTION__NORTH) {
             move_chunk_manager__chunks_north(
-                    chunk_manager, 
-                    world_parameters);
+                    p_chunk_manager, 
+                    p_world_parameters);
         }
         if (direction & DIRECTION__EAST) {
             move_chunk_manager__chunks_east(
-                    chunk_manager, 
-                    world_parameters);
+                    p_chunk_manager, 
+                    p_world_parameters);
         }
         if (direction & DIRECTION__SOUTH) {
             move_chunk_manager__chunks_south(
-                    chunk_manager, 
-                    world_parameters);
+                    p_chunk_manager, 
+                    p_world_parameters);
         }
         if (direction & DIRECTION__WEST) {
             move_chunk_manager__chunks_west(
-                    chunk_manager, 
-                    world_parameters);
+                    p_chunk_manager, 
+                    p_world_parameters);
         }
     }
 }
 
 bool poll_chunk_manager_for__chunk_movement(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_parameters,
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters,
         Signed_Index__i32 x__chunk, 
         Signed_Index__i32 y__chunk,
         Signed_Index__i32 z__chunk) {
 
     Direction__u8 direction__move_chunks = DIRECTION__NONE;
 
-    if (x__chunk != chunk_manager->x__center_chunk__signed_index_i32 
-        || y__chunk != chunk_manager->y__center_chunk__signed_index_i32) {
-        if (chunk_manager->x__center_chunk__signed_index_i32 < x__chunk) {
+    if (x__chunk != p_chunk_manager->x__center_chunk__signed_index_i32 
+        || y__chunk != p_chunk_manager->y__center_chunk__signed_index_i32) {
+        if (p_chunk_manager->x__center_chunk__signed_index_i32 < x__chunk) {
             direction__move_chunks |=
                 DIRECTION__EAST;
-        } else if (chunk_manager->x__center_chunk__signed_index_i32 
+        } else if (p_chunk_manager->x__center_chunk__signed_index_i32 
                 > x__chunk) {
             direction__move_chunks |=
                 DIRECTION__WEST;
         }
-        if (chunk_manager->y__center_chunk__signed_index_i32 > y__chunk) {
+        if (p_chunk_manager->y__center_chunk__signed_index_i32 > y__chunk) {
             direction__move_chunks |=
                 DIRECTION__NORTH;
-        } else if (chunk_manager->y__center_chunk__signed_index_i32 
+        } else if (p_chunk_manager->y__center_chunk__signed_index_i32 
                 < y__chunk) {
             direction__move_chunks |=
                 DIRECTION__SOUTH;
         }
-        chunk_manager->x__center_chunk__signed_index_i32 = x__chunk;
-        chunk_manager->y__center_chunk__signed_index_i32 = y__chunk;
+        p_chunk_manager->x__center_chunk__signed_index_i32 = x__chunk;
+        p_chunk_manager->y__center_chunk__signed_index_i32 = y__chunk;
     }
 
     if(direction__move_chunks != DIRECTION__NONE) {
         move_chunk_manager(
-                chunk_manager, 
-                world_parameters, 
+                p_chunk_manager, 
+                p_world_parameters, 
                 direction__move_chunks,
                 1);
         return true;
@@ -474,18 +477,17 @@ bool poll_chunk_manager_for__chunk_movement(
 }
 
 bool poll_chunk_manager_for__tile_collision(
-        Chunk_Manager *chunk_manager, 
-        Entity *entity) {
-    if (entity->hitbox.x__velocity__i32F4 == 0
-            && entity->hitbox.y__velocity__i32F4 == 0) {
+        Chunk_Manager *p_chunk_manager, 
+        Entity *p_entity) {
+    if (p_entity->hitbox.x__velocity__i32F4 == 0
+            && p_entity->hitbox.y__velocity__i32F4 == 0) {
         return true;
     }
 
     Vector__3i32F4 aa, bb;
     get_points_aabb_from__hitbox(
-            &entity->hitbox, &aa, &bb);
+            &p_entity->hitbox, &aa, &bb);
 
-    Tile *tile;
     //TODO: magic num
     i32F4 global_positions[8] = {
         aa.x__i32F4, aa.y__i32F4,
@@ -510,34 +512,34 @@ bool poll_chunk_manager_for__tile_collision(
         Signed_Index__i32 y__chunk =
             global_positions[index+1] >> 6; //entity->hitbox.y__chunk;
 
-        Chunk *chunk =
-            get_chunk_from__chunk_manager(
-                    chunk_manager,
+        Chunk *p_chunk =
+            get_chunk_ptr_from__chunk_manager(
+                    p_chunk_manager,
                     x__chunk,
                     y__chunk,
                     0);
 
         //TODO: this error occurs regularly when entity off screen 
         //need to fix.
-        if (!chunk) {
+        if (!p_chunk) {
             debug_warning("entity out of tile collision bounds.");
             debug_info("access attempt: %d, %d",
                     x__chunk, y__chunk);
             return true;
         }
 
-        Tile *tile =
-            get_tile_from__chunk(
-                    chunk,
+        Tile *p_tile =
+            get_tile_ptr_from__chunk(
+                    p_chunk,
                     local_positions[index],
                     local_positions[index+1],
                     0);
 
-        if (is_tile__unpassable(tile)) {
-            if (entity->tile_collision_handler) {
-                entity->tile_collision_handler(
-                        entity,
-                        tile);
+        if (is_tile__unpassable(p_tile)) {
+            if (p_entity->m_tile_collision_handler) {
+                p_entity->m_tile_collision_handler(
+                        p_entity,
+                        p_tile);
             }
             return true;
         }

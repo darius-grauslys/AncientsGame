@@ -39,7 +39,7 @@ static inline void set_tile_of__chunk(
 /// Implementation should store tiles sequentially in memory.
 /// So, x=0, y=0, z=0 gets us the first tile in memory.
 ///
-static inline Tile* get_tile_from__chunk(
+static inline Tile* get_tile_ptr_from__chunk(
         Chunk *chunk, 
         Chunk_Tile_Index__u8 x__chunk_tile_index_u8, 
         Chunk_Tile_Index__u8 y__chunk_tile_index_u8, 

@@ -46,51 +46,53 @@ bool is_entity__humanoid(enum Entity_Kind kind_of_entity) {
     }
 }
 
-void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
-    entity->the_kind_of_entity__this_entity_is =
+void init_entity(
+        Entity *p_entity, 
+        enum Entity_Kind kind_of_entity) {
+    p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    entity->hitbox.x__chunk__signed_index_i32 =
-        entity->hitbox.x__i32F4 = 0;
-    entity->hitbox.y__chunk__signed_index_i32 =
-        entity->hitbox.y__i32F4 = 0;
-    entity->hitbox.z__chunk__signed_index_i32 =
-        entity->hitbox.z__i32F4 = 0;
+    p_entity->hitbox.x__chunk__signed_index_i32 =
+        p_entity->hitbox.x__i32F4 = 0;
+    p_entity->hitbox.y__chunk__signed_index_i32 =
+        p_entity->hitbox.y__i32F4 = 0;
+    p_entity->hitbox.z__chunk__signed_index_i32 =
+        p_entity->hitbox.z__i32F4 = 0;
 
-    entity->dispose_handler = 0;
-    entity->controller_handler = 0;
-    entity->collision_handler = 0;
-    entity->tile_collision_handler = 0;
+    p_entity->m_dispose_handler = 0;
+    p_entity->m_controller_handler = 0;
+    p_entity->m_collision_handler = 0;
+    p_entity->m_tile_collision_handler = 0;
 
-    set_entity__enabled(entity);
-    set_entity__is_updating_position(entity);
-    set_entity__is_updating_graphics(entity);
+    set_entity__enabled(p_entity);
+    set_entity__is_updating_position(p_entity);
+    set_entity__is_updating_graphics(p_entity);
 
     init_sprite_wrapper_for__entity(
-            entity);
+            p_entity);
 }
 
-void set_entity__armor(Entity *entity,
+void set_entity__armor(Entity *p_entity,
         enum Entity_Armor_Kind kind_of_armor,
         enum Entity_Armor_Modification_Kind kind_of_armor_modification) {
-    entity->armor_properties.the_kind_of_armor__this_armor_is =
+    p_entity->armor_properties.the_kind_of_armor__this_armor_is =
         kind_of_armor;
-    entity->armor_properties.the_kind_of_modification__this_armor_has =
+    p_entity->armor_properties.the_kind_of_modification__this_armor_has =
         kind_of_armor_modification;
 }
 
 bool commit_entity_velocity(
-        Entity *entity,
+        Entity *p_entity,
         int32_t *old_x__chunk,
         int32_t *old_y__chunk) {
-    *old_x__chunk = entity->hitbox.x__chunk__signed_index_i32;
-    *old_y__chunk = entity->hitbox.y__chunk__signed_index_i32;
+    *old_x__chunk = p_entity->hitbox.x__chunk__signed_index_i32;
+    *old_y__chunk = p_entity->hitbox.y__chunk__signed_index_i32;
 
-    commit_hitbox_velocity(&entity->hitbox);
+    commit_hitbox_velocity(&p_entity->hitbox);
 
-    if (*old_x__chunk != entity->hitbox.x__chunk__signed_index_i32 
+    if (*old_x__chunk != p_entity->hitbox.x__chunk__signed_index_i32 
             || *old_y__chunk
-            != entity->hitbox.y__chunk__signed_index_i32) {
+            != p_entity->hitbox.y__chunk__signed_index_i32) {
         return true;
     }
     return false;

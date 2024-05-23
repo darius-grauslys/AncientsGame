@@ -6,8 +6,10 @@
 #include <rendering/animate_humanoid.h>
 #include <entity/humanoid.h>
 
+#include <world/chunk_manager.h>
 #include <world/chunk.h>
 #include <world/tile.h>
+#include <game.h>
 
 enum Use_Mode {
     Use_Mode__Place_Wall,
@@ -22,34 +24,34 @@ enum Use_Mode mode_of_use =
     Use_Mode__Place_Wall;
 
 void m_controller_for__player(
-        Entity *this_player,
-        Game *game) {
+        Entity *p_this_player,
+        Game *p_game) {
 
-    if (is_input__none(game)) {
+    if (is_input__none(p_game)) {
         return;
     }
 
-    Direction direction__old =
-        get_humanoid__direction(this_player);
-    Direction direction__new =
+    Direction__u8 direction__old =
+        get_humanoid__direction(p_this_player);
+    Direction__u8 direction__new =
         DIRECTION__NONE;
 
-    if (is_input__forward(game)) {
+    if (is_input__forward(p_game)) {
         direction__new |= DIRECTION__NORTH;
     }
-    if (is_input__right(game)) {
+    if (is_input__right(p_game)) {
         direction__new |= DIRECTION__EAST;
     }
-    if (is_input__backwards(game)) {
+    if (is_input__backwards(p_game)) {
         direction__new |= DIRECTION__SOUTH;
     }
-    if (is_input__left(game)) {
+    if (is_input__left(p_game)) {
         direction__new |= DIRECTION__WEST;
     }
 
     int32_t 
-        x = get_global_x_from__hitbox(&this_player->hitbox), 
-          y = get_global_y_from__hitbox(&this_player->hitbox);
+        x = get_global_x_from__hitbox(&p_this_player->hitbox), 
+          y = get_global_y_from__hitbox(&p_this_player->hitbox);
     if (direction__old & DIRECTION__NORTH) {
         y += 32;
     }
@@ -63,17 +65,17 @@ void m_controller_for__player(
         x -= 32;
     }
 
-    if (is_input__game_settings(game) && !toggle) {
+    if (is_input__game_settings(p_game) && !toggle) {
         toggle = true;
-        Entity *skeleton = get_new__entity(
-                game,
+        Entity *p_skeleton = get_new__entity(
+                p_game,
                 Entity_Kind__Skeleton,
                 x, y, 0);
 
         set_entity__controller(
-                skeleton, 
+                p_skeleton, 
                 m_controller_for__dummy);
-    } else if (is_input__examine(game) && !toggle) {
+    } else if (is_input__examine(p_game) && !toggle) {
         toggle = true;
         mode_of_use++;
         switch(mode_of_use) {
@@ -89,7 +91,7 @@ void m_controller_for__player(
                 debug_info("Use_Mode__Remove_Wall");
                 break;
         }
-    } else if (is_input__use_secondary(game) && !toggle) {
+    } else if (is_input__use_secondary(p_game) && !toggle) {
         toggle = true;
         kind_of_tile++;
         switch(kind_of_tile) {
@@ -126,52 +128,53 @@ void m_controller_for__player(
                 debug_info("Tile_Kind__Sand");
                 break;
         }
-    } else if (is_input__use(game) && !toggle) {
+    } else if (is_input__use(p_game) && !toggle) {
         toggle = true;
 
-        Chunk *chunk =
-            get_chunk_from__chunk_manager(
-                    &game->world.chunk_manager,
+        Chunk *p_chunk =
+            get_chunk_ptr_from__chunk_manager(
+                    &p_game->world.chunk_manager,
                     x >> 6,
                     y >> 6,
                     0);
 
-        if (chunk) {
-            Tile *tile =
-                get_tile_from__chunk(
-                        chunk,
+        if (p_chunk) {
+            Tile *p_tile =
+                //TODO: consolidate these bit manips
+                get_tile_ptr_from__chunk(
+                        p_chunk,
                         (x >> 3) & ((1 << 3) - 1),
                         (y >> 3) & ((1 << 3) - 1),
                         0);
             switch(mode_of_use) {
                 default:
                 case Use_Mode__Place_Wall:
-                    tile->the_kind_of_tile_cover__this_tile_has =
+                    p_tile->the_kind_of_tile_cover__this_tile_has =
                         get_tile_cover_wall_for__tile_kind(kind_of_tile);
-                    set_tile__is_unpassable(tile, true);
+                    set_tile__is_unpassable(p_tile, true);
                     break;
                 case Use_Mode__Place_Ground:
-                    tile->the_kind_of_tile__this_tile_is =
+                    p_tile->the_kind_of_tile__this_tile_is =
                         kind_of_tile;
                     break;
                 case Use_Mode__Remove_Wall:
-                    tile->the_kind_of_tile_cover__this_tile_has =
+                    p_tile->the_kind_of_tile_cover__this_tile_has =
                         Tile_Cover_Kind__None;
-                    set_tile__is_unpassable(tile, false);
+                    set_tile__is_unpassable(p_tile, false);
                     break;
             }
 
             PLATFORM_update_chunks(
-                    &game->gfx_context,
-                    &game->world.chunk_manager);
+                    &p_game->gfx_context,
+                    &p_game->world.chunk_manager);
         }
 
-        animate_humanoid__use(this_player);
+        animate_humanoid__use(p_this_player);
         return;
-    } else if (!is_input__game_settings(game)
-            && !is_input__use(game)
-            && !is_input__use_secondary(game)
-            && !is_input__examine(game)) {
+    } else if (!is_input__game_settings(p_game)
+            && !is_input__use(p_game)
+            && !is_input__use_secondary(p_game)
+            && !is_input__examine(p_game)) {
         toggle = false;
     }
 
@@ -181,66 +184,66 @@ void m_controller_for__player(
             return;
         case DIRECTION__NORTH:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     0, 
                     ENTITY_VELOCITY__PLAYER,
                     0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__EAST:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     ENTITY_VELOCITY__PLAYER,
                     0, 0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     0,
                     -ENTITY_VELOCITY__PLAYER,
                     0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__WEST:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     -ENTITY_VELOCITY__PLAYER,
                     0, 0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_EAST:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     ENTITY_VELOCITY__PLAYER_DIAGONAL, 
                     ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_EAST:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
                     0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_WEST:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
                     -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
                     0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_WEST:
             apply_velocity_to__hitbox(
-                    &this_player->hitbox,
+                    &p_this_player->hitbox,
                     -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
                     ENTITY_VELOCITY__PLAYER_DIAGONAL,
                     0);
-            animate_humanoid__walk(this_player);
+            animate_humanoid__walk(p_this_player);
             break;
     }
-    set_humanoid__direction(this_player, direction__new);
+    set_humanoid__direction(p_this_player, direction__new);
 }

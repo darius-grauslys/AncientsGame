@@ -6,7 +6,7 @@
 void m_entity_collision_handler(
         Entity *entity_collision_source,
         Entity *entity_collided,
-        Direction direction_of_collision) {
+        Direction__u8 direction_of_collision) {
     int32_t source_x =
         get_global_x_from__hitbox(&entity_collision_source->hitbox);
     int32_t source_y =
@@ -22,6 +22,11 @@ void m_entity_collision_handler(
     int32_t delta_y = 
         source_y - collided_y;
 
+
+    debug_info("collide: %d, %d < %d",
+            delta_x * delta_x,
+            delta_y * delta_y,
+            COLLISION_DELTA_THRESHOLD);
     if (delta_x * delta_x > COLLISION_DELTA_THRESHOLD) {
         set_x_velocity_to__hitbox(
                 &entity_collided->hitbox, 

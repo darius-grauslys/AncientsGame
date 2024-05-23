@@ -1,6 +1,10 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#ifndef NDEBUG
+#include <debug/debug.h>
+#endif
+
 ///
 /// This file has the definition of EVERY struct
 /// macro, and typedef used in core!
@@ -111,7 +115,7 @@ typedef struct Hitbox_AABB_t {
 /// anything equal to or less than this value is ignored when determining
 /// displacement. This useful threshold is what allows a colliding player
 /// to move up while an entity is moving into them from the right.
-#define COLLISION_DELTA_THRESHOLD 25
+#define COLLISION_DELTA_THRESHOLD 20
 #define COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET \
     (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4)
 #define COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET \
@@ -122,12 +126,12 @@ typedef struct Hitbox_AABB_t {
 /// so there is no header files supporting it.
 ///
 typedef struct Collision_Manager__Collision_Node_t {
-    Entity *entity_ptrs[ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE];
+    Entity *p_entity_ptrs[ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE];
 
-    struct Collision_Manager__Collision_Node_t *north__collision_node;
-    struct Collision_Manager__Collision_Node_t *east__collision_node;
-    struct Collision_Manager__Collision_Node_t *south__collision_node;
-    struct Collision_Manager__Collision_Node_t *west__collision_node;
+    struct Collision_Manager__Collision_Node_t *p_north__collision_node;
+    struct Collision_Manager__Collision_Node_t *p_east__collision_node;
+    struct Collision_Manager__Collision_Node_t *p_south__collision_node;
+    struct Collision_Manager__Collision_Node_t *p_west__collision_node;
 
     Direction__u8 legal_directions;
 } Collision_Manager__Collision_Node;
@@ -136,10 +140,10 @@ typedef struct Collision_Manager__Collision_Node_t {
 /// 4 Collision Nodes per layer 3 node.
 ///
 typedef struct Collision_Manager__Layer_Three_t {
-    Collision_Manager__Collision_Node *top_left__collision_node;
-    Collision_Manager__Collision_Node *top_right__collision_node;
-    Collision_Manager__Collision_Node *bottom_left__collision_node;
-    Collision_Manager__Collision_Node *bottom_right__collision_node;
+    Collision_Manager__Collision_Node *p_top_left__collision_node;
+    Collision_Manager__Collision_Node *p_top_right__collision_node;
+    Collision_Manager__Collision_Node *p_bottom_left__collision_node;
+    Collision_Manager__Collision_Node *p_bottom_right__collision_node;
 
     Signed_Index__i32 
         x__center_chunk__signed_index_i32, 
@@ -166,7 +170,7 @@ typedef struct Collision_Manager__t {
     Collision_Manager__Layer_Two bottom_left__layer_two;
     Collision_Manager__Layer_Two bottom_right__layer_two;
 
-    Collision_Manager__Collision_Node *most_north_western__collision_node;
+    Collision_Manager__Collision_Node *p_most_north_western__collision_node;
 
     Signed_Index__i32 
         x__center_chunk__signed_index_i32, 
@@ -193,15 +197,15 @@ enum Sprite_Animation_Kind {
 
 typedef uint8_t Sprite_Frame_Index__u8;
 
-typedef Sprite_Frame_Index__u8 (*f_sprite_frame_lookup) (
-        Entity *entity,
+typedef Sprite_Frame_Index__u8 (*f_Sprite_Frame_Lookup) (
+        Entity *p_entity,
         enum Sprite_Animation_Kind animation_kind);
 
-typedef Timer__u32 (*f_animation_speed_lookup) (
-        Entity *entity,
+typedef Timer__u32 (*f_Animation_Speed_Lookup) (
+        Entity *p_entity,
         enum Sprite_Animation_Kind animation_kind);
-typedef Timer__u32 (*f_animation_duration_lookup) (
-        Entity *entity,
+typedef Timer__u32 (*f_Animation_Duration_Lookup) (
+        Entity *p_entity,
         enum Sprite_Animation_Kind animation_kind);
 
 typedef struct Sprite_Wrapper_t {
@@ -441,30 +445,46 @@ typedef struct Armor_Properties_t {
 typedef struct Entity_t Entity;
 
 typedef struct Item_t Item;
-typedef void (*m_item_use)    (Item* self, Entity* user, Game* game);
-typedef void (*m_item_equip)  (Item *self, Entity* user, Game* game);
-typedef void (*m_item_unequip)(Item *self, Entity* user, Game* game);
+typedef void (*m_Item_Use)(
+        Item *p_item_self, 
+        Entity *p_entity_user, 
+        Game *p_game);
+typedef void (*m_Item_Equip)(
+        Item *p_item_self, 
+        Entity *p_entity_user, 
+        Game *p_game);
+typedef void (*m_Item_Unequip)(
+        Item *p_item_self, 
+        Entity *p_entity_user, 
+        Game *p_game);
 
 typedef struct Inventory_t Inventory;
 
-typedef void (*m_dispose_entity)    (Entity *this_entity, Game *game);
-typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
+typedef void (*m_Dispose_Entity)(
+        Entity *p_entity_self, 
+        Game *p_game);
+typedef void (*m_Entity_Controller)(
+        Entity *p_entity_self, 
+        Game *p_game);
 
 ///
 /// callee_data is an opaque pointer to whatever
 /// data the user of this function pointer needs
 /// passed in addition to collided entities.
 ///
-typedef void (*m_entity_collision)  (Entity *entity_collision_source,
-        Entity *entity_collided,
+typedef void (*m_Entity_Collision)(
+        Entity *p_entity_collision_source,
+        Entity *p_entity_collided,
         Direction__u8 direction_of_collision);
 
 typedef struct Tile_t Tile;
 
-typedef void (*m_entity_tile_collision) (Entity *entity_collision_source,
-        Tile *tile_collided);
+typedef void (*m_Entity_Tile_Collision)(
+        Entity *p_entity_self,
+        Tile *p_tile_collided);
 
-typedef void (*m_entity_animation) (Entity *entity, Timer__u32 timer);
+typedef void (*m_Entity_Animation) 
+    (Entity *p_entity_self, Timer__u32 timer);
 
 ///
 /// Here we define the entity super struct. It has everything we could need
@@ -490,13 +510,13 @@ typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
 
     // DO NOT INVOKE! Called automatically in release_entity(...)
-    m_dispose_entity            dispose_handler;
+    m_Dispose_Entity            m_dispose_handler;
     // DO NOT INVOKE! Called automatically
-    m_entity_controller         controller_handler;
+    m_Entity_Controller         m_controller_handler;
     // DO NOT INVOKE! Called automatically
-    m_entity_collision          collision_handler;
-    m_entity_tile_collision     tile_collision_handler;
-    m_entity_animation          animation_handler;
+    m_Entity_Collision          m_collision_handler;
+    m_Entity_Tile_Collision     m_tile_collision_handler;
+    m_Entity_Animation          m_animation_handler;
 
     Hitbox_AABB hitbox;
 
@@ -528,7 +548,7 @@ typedef struct Entity_t {
 
 typedef struct Entity_Manager_t {
     Entity entities[ENTITY_MAXIMUM_QUANTITY_OF];
-    Entity *local_player;
+    Entity *p_local_player;
     Quantity__u32 entity_count__quantity_u32;
 } Entity_Manager;
 
@@ -572,10 +592,10 @@ typedef struct Scene_t {
     bool is_with__gamespace;
 } Scene;
 
-typedef void (*m_load_scene)  (Scene *this_scene, Game* game);
-typedef void (*m_update_scene)(Scene *this_scene, Game* game);
-typedef void (*m_render_scene)(Scene *this_scene, Game* game);
-typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
+typedef void (*m_Load_Scene)  (Scene *p_this_scene, Game* p_game);
+typedef void (*m_Update_Scene)(Scene *p_this_scene, Game* p_game);
+typedef void (*m_Render_Scene)(Scene *p_this_scene, Game* p_game);
+typedef void (*m_Unload_Scene)(Scene *p_this_scene, Game* p_game);
 
 ///
 /// SECTION_ui
@@ -589,33 +609,43 @@ enum UI_Element_Kind {
 
 typedef struct UI_Element_t UI_Element;
 
-typedef void (*m_ui_clicked)(UI_Element *this_ui_element);
-typedef void (*m_ui_dragged)(UI_Element *this_ui_element);
-typedef void (*m_ui_dropped)(UI_Element *this_ui_element);
+typedef void (*m_UI_Clicked)(UI_Element *p_this_ui_element);
+typedef void (*m_UI_Dragged)(UI_Element *p_this_ui_element);
+typedef void (*m_UI_Dropped)(UI_Element *p_this_ui_element);
 
 typedef int16_t UI_Slider_Position__i16;
 typedef uint8_t UI_Flags__u8;
+
+#define UI_FLAGS__BIT_SHIFT_IS_ENABLED 0
+
+#define UI_FLAGS__BIT_IS_ENABLED \
+    (1 << UI_FLAGS__BIT_SHIFT_IS_ENABLED)
 
 typedef struct UI_Element_t {
     enum UI_Element_Kind the_kind_of_ui_element__this_is;
     Hitbox_AABB ui_bounding_box__aabb;
     UI_Flags__u8 ui_flags;
     union {
-        struct { // UI_Button
-            m_ui_clicked button_clicked_handler;
-        };
-        struct { // UI_Draggable
-            m_ui_dragged draggable_dragged_handler;
-            m_ui_dropped draggable_dropped_handler;
-        };
-        struct { // UI_Slider
-            m_ui_dragged ui_slider_dragged_handler;
-            UI_Slider_Position__i16 slider_position__ui_position_i16;
-            UI_Slider_Position__i16 slider_position_min__ui_position_i16;
-            UI_Slider_Position__i16 slider_position_max__ui_position_i16;
+        union {
+            struct { // UI_Button
+                m_UI_Clicked m_button_clicked_handler;
+            };
+            struct { // UI_Draggable
+                m_UI_Dragged m_draggable_dragged_handler;
+                m_UI_Dropped m_draggable_dropped_handler;
+            };
+            struct { // UI_Slider
+                m_UI_Dragged m_ui_slider_dragged_handler;
+                UI_Element *p_ui_slider_handle;
+                UI_Slider_Position__i16 slider_position__ui_position_i16;
+                UI_Slider_Position__i16 slider_position_min__ui_position_i16;
+                UI_Slider_Position__i16 slider_position_max__ui_position_i16;
+            };
         };
     };
 } UI_Element;
+
+#define UI_ELEMENT_MAXIMUM_QUANTITY_OF 128
 
 typedef struct UI_Manager_t {
     Quantity__u8 quantity_of__ui_elements__quantity_u8;
@@ -651,11 +681,6 @@ typedef struct Local_Chunk_Vector_t {
 
 #define QUANTITY_OF_TILES__IN_TILE_SHEET_ROW (TILE_SHEET_PIXEL_WIDTH / TILE_PIXEL_WIDTH)
 
-#define TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR 3
-#define TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN 4
-#define TILE_FLAGS__BIT_SHIFT_IS_STAIR 5
-#define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING 6
-#define TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE 7
 
 #define TILE_STAIR_DIRECTION_NORTH      0
 #define TILE_STAIR_DIRECTION_NORTH_EAST 1
@@ -667,18 +692,28 @@ typedef struct Local_Chunk_Vector_t {
 #define TILE_STAIR_DIRECTION_NORTH_WEST 7
 #define TILE_STAIR_DIRECTION_COUNT 8
 
-#define TILE_FLAGS__MASK_STAIR_VALUE ((1<<\
-            TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR) - 1)
-#define TILE_FLAGS__BIT_INVERTED_STAIR (1<<\
-        TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
-#define TILE_FLAGS__BIT_IS_STAIR_UP_OR_DOWN (1<<\
-        TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN)
-#define TILE_FLAGS__BIT_IS_STAIR (1<<\
-        TILE_FLAGS__BIT_SHIFT_IS_STAIR)
-#define TILE_FLAGS__BIT_IS_SIGHT_BLOCKING (1<<\
-        TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
-#define TILE_FLAGS__BIT_IS_UNPASSABLE (1<<\
-        TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
+#define TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR 3
+#define TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN \
+    (TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR + 1)
+#define TILE_FLAGS__BIT_SHIFT_IS_STAIR \
+    (TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN + 1)
+#define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING \
+    (TILE_FLAGS__BIT_SHIFT_IS_STAIR + 1)
+#define TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE \
+    (TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING  +1)
+
+#define TILE_FLAGS__MASK_STAIR_VALUE \
+    ((1 << TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR) - 1)
+#define TILE_FLAGS__BIT_INVERTED_STAIR \
+    ( 1 << TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
+#define TILE_FLAGS__BIT_IS_STAIR_UP_OR_DOWN \
+    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN)
+#define TILE_FLAGS__BIT_IS_STAIR \
+    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_STAIR)
+#define TILE_FLAGS__BIT_IS_SIGHT_BLOCKING \
+    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
+#define TILE_FLAGS__BIT_IS_UNPASSABLE \
+    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
 
 #define TILE_FLAGS__NONE 0
 
@@ -797,8 +832,8 @@ typedef struct World_Parameters_t World_Parameters;
 typedef struct Chunk_t Chunk;
 
 typedef void (*f_Chunk_Generator)(
-        World_Parameters *world_params,
-        Chunk *chunk);
+        World_Parameters *p_world_parameters,
+        Chunk *p_chunk_to_generate);
 
 typedef struct World_Parameters_t {
     f_Chunk_Generator f_chunk_generator;
@@ -820,11 +855,11 @@ typedef struct Chunk_t {
 } Chunk;
 
 typedef struct Chunk_Manager__Chunk_Map_Node_t {
-    Chunk *chunk__here;
-    struct Chunk_Manager__Chunk_Map_Node_t *north__chunk_map_node;
-    struct Chunk_Manager__Chunk_Map_Node_t *east__chunk_map_node;
-    struct Chunk_Manager__Chunk_Map_Node_t *south__chunk_map_node;
-    struct Chunk_Manager__Chunk_Map_Node_t *west__chunk_map_node;
+    Chunk *p_chunk__here;
+    struct Chunk_Manager__Chunk_Map_Node_t *p_north__chunk_map_node;
+    struct Chunk_Manager__Chunk_Map_Node_t *p_east__chunk_map_node;
+    struct Chunk_Manager__Chunk_Map_Node_t *p_south__chunk_map_node;
+    struct Chunk_Manager__Chunk_Map_Node_t *p_west__chunk_map_node;
 } Chunk_Manager__Chunk_Map_Node;
 
 typedef Chunk_Manager__Chunk_Map_Node
@@ -834,11 +869,11 @@ typedef struct Chunk_Manager_t {
     Chunk chunks[CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
     Chunk_Manager__Chunk_Map chunk_map;
     
-    Chunk_Manager__Chunk_Map_Node *local_player_occupied__chunk_map_node;
-    Chunk_Manager__Chunk_Map_Node *most_north_western__chunk_map_node;
-    Chunk_Manager__Chunk_Map_Node *most_south_eastern__chunk_map_node;
-    Chunk_Manager__Chunk_Map_Node *most_north_eastern__chunk_map_node;
-    Chunk_Manager__Chunk_Map_Node *most_south_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_local_player_occupied__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_most_north_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_most_south_eastern__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_most_north_eastern__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_most_south_western__chunk_map_node;
 
     Signed_Index__i32 
         x__center_chunk__signed_index_i32, 

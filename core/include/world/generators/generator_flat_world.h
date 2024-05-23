@@ -1,9 +1,9 @@
 #ifndef GENERATOR_FLAT_WORLD_H
 #define GENERATOR_FLAT_WORLD_H
 
-void chunk_generator__flat_world_f(
-        World_Parameters *world_params,
-        Chunk *chunk);
+void f_chunk_generator__flat_world(
+        World_Parameters *p_world_parameters,
+        Chunk *p_chunk);
 
 
 void init_weight_map(void);

@@ -13,46 +13,46 @@
 #include <rendering/rendering.h>
 #include <debug/debug.h>
 
-void init_world(World *world) {
+void init_world(World *p_world) {
     init_weight_map();
     // init_world_parameters(
     //         &world->world_parameters, 
-    //         chunk_generator__test_world_f, 
+    //         f_chunk_generator__test_world, 
     //         100);
     init_world_parameters(
-            &world->world_parameters, 
-            chunk_generator__flat_world_f, 
+            &p_world->world_parameters, 
+            f_chunk_generator__flat_world, 
             100);
-    init_entity_manager(&world->entity_manager);
-    init_collision_manager(&world->collision_manager);
+    init_entity_manager(&p_world->entity_manager);
+    init_collision_manager(&p_world->collision_manager);
     set_collision_manager__center_chunk(
-            &world->collision_manager, 
+            &p_world->collision_manager, 
             0, 
             0);
     init_chunk_manager(
-            &world->chunk_manager,
-            &world->world_parameters);
+            &p_world->chunk_manager,
+            &p_world->world_parameters);
 }
 
 void add_entity_to__world(
-        World *world,
-        Entity *entity) {
+        World *p_world,
+        Entity *p_entity) {
     add_entity_to__collision_manager(
-            &world->collision_manager, 
-            entity);
+            &p_world->collision_manager, 
+            p_entity);
 }
 
 bool poll_world_for__scrolling(
-        World *world) {
+        World *p_world) {
     bool is_chunks_moved =
         poll_chunk_manager_for__chunk_movement(
-            &world->chunk_manager,
-            &world->world_parameters,
-            world->entity_manager.local_player
+            &p_world->chunk_manager,
+            &p_world->world_parameters,
+            p_world->entity_manager.p_local_player
                 ->hitbox.x__chunk__signed_index_i32,
-            world->entity_manager.local_player
+            p_world->entity_manager.p_local_player
                 ->hitbox.y__chunk__signed_index_i32,
-            world->entity_manager.local_player
+            p_world->entity_manager.p_local_player
                 ->hitbox.z__chunk__signed_index_i32);
 
     return is_chunks_moved;

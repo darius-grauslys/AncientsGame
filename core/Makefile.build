@@ -1,7 +1,10 @@
 
 $(OFILES_CORE):
 	mkdir -p $(BUILD)/$$(dirname $@)
-	$(CC) $(LIBS) $(INCLUDE) $(FLAGS) -o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c) 
+	$(CC) $(CFLAGS) $(LIBS) $(INCLUDE) $(FLAGS) \
+		-o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c) 
+	$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) $(LIBS) $(INCLUDE) $(FLAGS) \
+		-o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c)" $(BUILD)/$@
 
 ifneq ($(BUILD), $(BUILD_NDS))
 

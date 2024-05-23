@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-Direction is_hitbox__colliding(
+Direction__u8 is_hitbox__colliding(
         Hitbox_AABB *hitbox__checking,
         Hitbox_AABB *hitbox__other);
 
@@ -107,7 +107,7 @@ static Direction__u8 inline get_movement_direction_of__hitbox(
     return direction_of_movement;
 }
 
-Direction get_tile_transition_direction_of__hitbox(
+Direction__u8 get_tile_transition_direction_of__hitbox(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 *aa,
         Vector__3i32F4 *bb);

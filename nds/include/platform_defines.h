@@ -95,8 +95,6 @@ static void inline NDS_init_background(
         background->map_base = 0;
 }
 
-typedef uint8_t Direction;
-
 typedef struct NDS_Gfx_Context__Chunk_Record_t {
     int32_t x, y;
 } NDS_Gfx_Context__Chunk_Record;

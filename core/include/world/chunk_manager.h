@@ -4,38 +4,43 @@
 #include <defines.h>
 
 void init_chunk_manager(
-        Chunk_Manager* chunk_manager,
-        World_Parameters *world_params);
+        Chunk_Manager* p_chunk_manager,
+        World_Parameters *p_world_parameters);
 
-uint32_t get_chunk_index_at__xyz_from__chunk_manager(
-        Chunk_Manager *chunk_manager,
-        int32_t x__chunk, int32_t y__chunk,
-        int32_t z__chunk);
+Index_u32 get_chunk_index_at__xyz_from__chunk_manager(
+        Chunk_Manager *p_chunk_manager,
+        Signed_Index__i32 x__chunk, 
+        Signed_Index__i32 y__chunk,
+        Signed_Index__i32 z__chunk);
 
-Chunk* get_chunk_from__chunk_manager(
-        Chunk_Manager* chunk_manager, 
-        int32_t x__chunk, int32_t y__chunk, 
-        int32_t z__chunk);
+Chunk* get_chunk_ptr_from__chunk_manager(
+        Chunk_Manager *p_chunk_manager, 
+        Signed_Index__i32 x__chunk, 
+        Signed_Index__i32 y__chunk, 
+        Signed_Index__i32 z__chunk);
 
 void move_chunk_manager(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_params,
-        Direction direction,
-        uint32_t steps);
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters,
+        Direction__u8 direction,
+        Quantity__u32 steps);
 
 bool poll_chunk_manager_for__chunk_movement(
-        Chunk_Manager *chunk_manager,
-        World_Parameters *world_params,
-        int32_t x__chunk, int32_t y__chunk,
-        int32_t z__chunk);
+        Chunk_Manager *p_chunk_manager,
+        World_Parameters *p_world_parameters,
+        Signed_Index__i32 x__chunk, 
+        Signed_Index__i32 y__chunk,
+        Signed_Index__i32 z__chunk);
 
 bool poll_chunk_manager_for__tile_collision(
-        Chunk_Manager *chunk_manager,
-        Entity *entity);
+        Chunk_Manager *p_chunk_manager,
+        Entity *p_entity);
 
-static Tile inline *get_tile_from__chunk_node(
-        Chunk_Manager__Chunk_Map_Node *chunk_node,
-        int32_t x__local, int32_t y__local) {
+// TODO: prim wrap arguments
+static Tile inline *get_tile_ptr_from__chunk_node(
+        Chunk_Manager__Chunk_Map_Node *p_chunk_node,
+        int32_t x__local, 
+        int32_t y__local) {
 #ifndef NDEBUG
     if (x__local < 0 
             || x__local >= CHUNK_WIDTH__IN_TILES
@@ -43,10 +48,10 @@ static Tile inline *get_tile_from__chunk_node(
             || y__local >= CHUNK_WIDTH__IN_TILES) {
         debug_error("get_tile_from__chunk_node out of bounds %d,%d", 
                 x__local, y__local);
-        return &chunk_node->chunk__here->tiles[0];
+        return &p_chunk_node->p_chunk__here->tiles[0];
     }
 #endif
-    return &chunk_node->chunk__here->tiles[
+    return &p_chunk_node->p_chunk__here->tiles[
         y__local * CHUNK_WIDTH__IN_TILES + x__local];
 }
 
