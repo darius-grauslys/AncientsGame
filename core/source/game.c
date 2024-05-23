@@ -35,7 +35,7 @@ void init_game(Game *game) {
 
     move_chunk_manager(
             &game->world.chunk_manager, 
-            &game->world.world_params, 
+            &game->world.world_parameters, 
             DIRECTION__NORTH_WEST,
             2);
 
@@ -47,7 +47,7 @@ void init_game(Game *game) {
 void manage_game(Game *game) {
     manage_game__pre_render(game);
     manage_game__post_render(game);
-    game->tick++;
+    game->tick__timer_u32++;
 }
 
 void manage_game__pre_render(Game *game) {
@@ -61,8 +61,8 @@ void manage_game__post_render(Game *game) {
     if (poll_world_for__scrolling(&game->world)) {
         set_collision_manager__center_chunk(
                 &game->world.collision_manager,
-                game->world.chunk_manager.x__center_chunk,
-                game->world.chunk_manager.y__center_chunk);
+                game->world.chunk_manager.x__center_chunk__signed_index_i32,
+                game->world.chunk_manager.y__center_chunk__signed_index_i32);
         PLATFORM_update_chunks(
                 &game->gfx_context,
                 &game->world.chunk_manager);
@@ -133,7 +133,7 @@ void manage_entities(Game *game) {
         }
 
         if (entity->animation_handler) {
-            entity->animation_handler(entity, game->tick);
+            entity->animation_handler(entity, game->tick__timer_u32);
         }
 
         if (!is_entity__hidden(entity)) {

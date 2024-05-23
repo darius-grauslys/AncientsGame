@@ -29,8 +29,8 @@ bool poll_collision_manager(
 void remove_entity_from__collision_manager__at(
         Collision_Manager *collision_manager,
         Entity *entity,
-        int32_t old_x__chunk,
-        int32_t old_y__chunk);
+        Signed_Index__i32 old_x__chunk__signed_index_i32,
+        Signed_Index__i32 old_y__chunk__signed_index_i32);
 
 ///
 /// Does nothing if cannot find
@@ -45,8 +45,8 @@ static void inline remove_entity_from__collision_manager(
     remove_entity_from__collision_manager__at(
             collision_manager,
             entity,
-            entity->hitbox.x__chunk,
-            entity->hitbox.y__chunk);
+            entity->hitbox.x__chunk__signed_index_i32,
+            entity->hitbox.y__chunk__signed_index_i32);
 }
 
 ///
@@ -78,23 +78,27 @@ bool add_entity_to__collision_manager(
 ///
 void set_collision_manager__center_chunk(
         Collision_Manager *collision_manager,
-        int32_t x__center_chunk,
-        int32_t y__center_chunk);
+        Signed_Index__i32 x__center_chunk__signed_index_i32,
+        Signed_Index__i32 y__center_chunk__signed_index_i32);
 
 static bool inline is_in_bounds_of__collision_manager(
         Collision_Manager *collision_manager,
-        int32_t x__chunk,
-        int32_t y__chunk) {
-    return (x__chunk < collision_manager->x__center_chunk 
+        Signed_Index__i32 x__chunk__signed_index_i32,
+        Signed_Index__i32 y__chunk__signed_index_i32) {
+    return (x__chunk__signed_index_i32 
+            < collision_manager->x__center_chunk__signed_index_i32
             + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 2)
         &&
-        (x__chunk >= collision_manager->x__center_chunk 
+        (x__chunk__signed_index_i32 
+         >= collision_manager->x__center_chunk__signed_index_i32 
          - CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 2)
         &&
-        (y__chunk < collision_manager->y__center_chunk 
+        (y__chunk__signed_index_i32 
+         < collision_manager->y__center_chunk__signed_index_i32
          + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS / 2)
         &&
-        (y__chunk >= collision_manager->y__center_chunk 
+        (y__chunk__signed_index_i32 
+         >= collision_manager->y__center_chunk__signed_index_i32
          - CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS / 2);
 }
 

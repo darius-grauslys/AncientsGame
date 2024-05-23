@@ -7,7 +7,7 @@
 #include <entity/controllers/controller_player.h>
 
 void init_entity_manager(Entity_Manager *entity_manager) {
-    entity_manager->entity_count = 0;
+    entity_manager->entity_count__quantity_u32 = 0;
     for (uint32_t i=0;i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         set_entity__disabled(&entity_manager->entities[i]);
     }
@@ -22,8 +22,8 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
         case Entity_Kind__Player:
         case Entity_Kind__Skeleton:
         case Entity_Kind__Zombie:
-            if (entity_manager->entity_count >=
-                    ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE) {
+            if (entity_manager->entity_count__quantity_u32 
+                    >= ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE) {
                 debug_error("Entity limit reached.");
                 return 0;
             }
@@ -40,7 +40,7 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
         if (!is_entity__enabled(&entity_manager->entities[i])) {
             init_entity(&entity_manager->entities[i],
                     kind_of_entity);
-            entity_manager->entity_count++;
+            entity_manager->entity_count__quantity_u32++;
             return &entity_manager->entities[i];
         }
     }
@@ -51,7 +51,7 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
 }
 
 void release_entity__silently(Entity_Manager* entity_manager, Entity* entity) {
-    entity_manager->entity_count--;
+    entity_manager->entity_count__quantity_u32--;
     set_entity__disabled(entity);
     PLATFORM_release_sprite(&entity->sprite_wrapper.sprite);
 }

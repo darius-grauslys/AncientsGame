@@ -3,23 +3,23 @@
 
 void set_hitbox__position(
         Hitbox_AABB *hitbox,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
-    hitbox->x__chunk = 
+        Signed_Index__i32 x__global,
+        Signed_Index__i32 y__global,
+        Signed_Index__i32 z__global) {
+    hitbox->x__chunk__signed_index_i32 = 
         x__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
-    hitbox->y__chunk = 
+    hitbox->y__chunk__signed_index_i32 = 
         y__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
-    hitbox->z__chunk = 
+    hitbox->z__chunk__signed_index_i32 = 
         z__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
 
-    hitbox->x =
+    hitbox->x__i32F4 =
         (x__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
-    hitbox->y =
+    hitbox->y__i32F4 =
         (y__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
-    hitbox->z =
+    hitbox->z__i32F4 =
         (z__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1)
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
 }
@@ -27,40 +27,40 @@ void set_hitbox__position(
 void commit_hitbox_velocity(
         Hitbox_AABB *hitbox) {
 
-    int32_t dx, dy, dz;
+    Signed_Index__i32 dx, dy, dz;
 
-    dx = ((hitbox->x + hitbox->x__velocity) 
+    dx = ((hitbox->x__i32F4 + hitbox->x__velocity__i32F4) 
             >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->x >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dy = ((hitbox->y + hitbox->y__velocity) 
+        - (hitbox->x__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    dy = ((hitbox->y__i32F4 + hitbox->y__velocity__i32F4) 
             >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->y >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dz = ((hitbox->z + hitbox->z__velocity) 
+        - (hitbox->y__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    dz = ((hitbox->z__i32F4 + hitbox->z__velocity__i32F4) 
             >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->z >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+        - (hitbox->z__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
 
-    hitbox->x += hitbox->x__velocity
+    hitbox->x__i32F4 += hitbox->x__velocity__i32F4
         - (dx << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    hitbox->y += hitbox->y__velocity
+    hitbox->y__i32F4 += hitbox->y__velocity__i32F4
         - (dy << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    hitbox->z += hitbox->z__velocity
+    hitbox->z__i32F4 += hitbox->z__velocity__i32F4
         - (dz << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
 
-    hitbox->x__velocity = 0;
-    hitbox->y__velocity = 0;
-    hitbox->z__velocity = 0;
+    hitbox->x__velocity__i32F4 = 0;
+    hitbox->y__velocity__i32F4 = 0;
+    hitbox->z__velocity__i32F4 = 0;
 
-    hitbox->x__chunk += dx;
-    hitbox->y__chunk += dy;
-    hitbox->z__chunk += dz;
+    hitbox->x__chunk__signed_index_i32 += dx;
+    hitbox->y__chunk__signed_index_i32 += dy;
+    hitbox->z__chunk__signed_index_i32 += dz;
 }
 
-void init_hitbox_point__without_velocity(Hitbox_Point *hitbox_point,
+void init_hitbox_point__without_velocity(Vector__3i32F4 *hitbox_point,
         Hitbox_AABB *hitbox,
-        Direction corner_direction) {
+        Direction__u8 corner_direction) {
 
-    int32_t offset_half_width = hitbox->width / 2;
-    int32_t offset_half_length = hitbox->length / 2;
+    Signed_Index__i32 offset_half_width = hitbox->width__quantity_32 / 2;
+    Signed_Index__i32 offset_half_height = hitbox->height__quantity_u32 / 2;
     switch (corner_direction) {
         default:
             // This should never be a problem...
@@ -72,30 +72,30 @@ void init_hitbox_point__without_velocity(Hitbox_Point *hitbox_point,
             offset_half_width *= -1;
             break;
         case DIRECTION__SOUTH_EAST:
-            offset_half_length *= -1;
+            offset_half_height *= -1;
             break;
         case DIRECTION__SOUTH_WEST:
             offset_half_width *= -1;
-            offset_half_length *= -1;
+            offset_half_height *= -1;
             break;
     }
 
-    hitbox_point->x =
+    hitbox_point->x__i32F4 =
         get_global_x_from__hitbox__without_velocity(hitbox)
         + offset_half_width
         ;
-    hitbox_point->y =
+    hitbox_point->y__i32F4 =
         get_global_y_from__hitbox__without_velocity(hitbox)
-        + offset_half_length
+        + offset_half_height
         ;
 }
 
-void init_hitbox_point(Hitbox_Point *hitbox_point,
+void init_hitbox_point(Vector__3i32F4 *hitbox_point,
         Hitbox_AABB *hitbox,
-        Direction corner_direction) {
+        Direction__u8 corner_direction) {
 
-    int32_t offset_half_width = hitbox->width / 2;
-    int32_t offset_half_length = hitbox->length / 2;
+    Signed_Index__i32 offset_half_width = hitbox->width__quantity_32 / 2;
+    Signed_Index__i32 offset_half_height = hitbox->height__quantity_u32 / 2;
     switch (corner_direction) {
         default:
             // This should never be a problem...
@@ -107,39 +107,39 @@ void init_hitbox_point(Hitbox_Point *hitbox_point,
             offset_half_width *= -1;
             break;
         case DIRECTION__SOUTH_EAST:
-            offset_half_length *= -1;
+            offset_half_height *= -1;
             break;
         case DIRECTION__SOUTH_WEST:
             offset_half_width *= -1;
-            offset_half_length *= -1;
+            offset_half_height *= -1;
             break;
     }
 
-    hitbox_point->x =
+    hitbox_point->x__i32F4 =
         get_global_x_from__hitbox(hitbox)
         + offset_half_width
         ;
-    hitbox_point->y =
+    hitbox_point->y__i32F4 =
         get_global_y_from__hitbox(hitbox)
-        + offset_half_length
+        + offset_half_height
         ;
 }
 
-Direction get_tile_transition_direction_of__hitbox(
+Direction__u8 get_tile_transition_direction_of__hitbox(
         Hitbox_AABB *hitbox,
-        Hitbox_Point *aa,
-        Hitbox_Point *bb) {
-    Direction direction_of_movement =
+        Vector__3i32F4 *aa,
+        Vector__3i32F4 *bb) {
+    Direction__u8 direction_of_movement =
         get_movement_direction_of__hitbox(hitbox);
-    Direction direction_of_transition =
+    Direction__u8 direction_of_transition =
         DIRECTION__NONE;
 
-    int32_t x__tile_pos =
-        (hitbox->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+    Signed_Index__i32 x__tile_pos =
+        (hitbox->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t y__tile_pos =
-        (hitbox->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+    Signed_Index__i32 y__tile_pos =
+        (hitbox->y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
 
@@ -150,20 +150,20 @@ Direction get_tile_transition_direction_of__hitbox(
             bb, hitbox, 
             DIRECTION__NORTH_EAST);
 
-    int32_t x__aa_tile_pos =
-        (aa->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+    Signed_Index__i32 x__aa_tile_pos =
+        (aa->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t y__aa_tile_pos = 
-        (aa->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+    Signed_Index__i32 y__aa_tile_pos = 
+        (aa->y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t x__bb_tile_pos =
-        (bb->x >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+    Signed_Index__i32 x__bb_tile_pos =
+        (bb->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
-    int32_t y__bb_tile_pos = 
-        (bb->y >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+    Signed_Index__i32 y__bb_tile_pos = 
+        (bb->y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
 
@@ -187,11 +187,11 @@ Direction get_tile_transition_direction_of__hitbox(
     return direction_of_transition;
 }
 
-Direction is_this_hitbox__inside_this_hitbox(
+Direction__u8 is_this_hitbox__inside_this_hitbox(
         Hitbox_AABB *hitbox__one,
         Hitbox_AABB *hitbox__two) {
-    Hitbox_Point aa__one_moving;
-    Hitbox_Point bb__one_moving;
+    Vector__3i32F4 aa__one_moving;
+    Vector__3i32F4 bb__one_moving;
 
     init_hitbox_point(
             &aa__one_moving, hitbox__one, 
@@ -200,13 +200,8 @@ Direction is_this_hitbox__inside_this_hitbox(
             &bb__one_moving, hitbox__one, 
             DIRECTION__NORTH_EAST);
 
-    // printf("\npnt_aa_one: %d, %d\n", 
-    //         aa__one.x, aa__one.y);
-    // printf("pnt_bb_one: %d, %d\n", 
-    //         bb__one.x, bb__one.y);
-
-    Hitbox_Point aa__two;
-    Hitbox_Point bb__two;
+    Vector__3i32F4 aa__two;
+    Vector__3i32F4 bb__two;
 
     init_hitbox_point__without_velocity(
             &aa__two, hitbox__two, 
@@ -215,50 +210,33 @@ Direction is_this_hitbox__inside_this_hitbox(
             &bb__two, hitbox__two, 
             DIRECTION__NORTH_EAST);
 
-    // printf("pnt_aa_two: %d, %d\n", 
-    //         aa__two.x, aa__two.y);
-    // printf("pnt_bb_two: %d, %d\n", 
-    //         bb__two.x, bb__two.y);
-
     bool is_aa__contained_along_x =
-           aa__one_moving.x > aa__two.x
-        && aa__one_moving.x < bb__two.x
+           aa__one_moving.x__i32F4 > aa__two.x__i32F4
+        && aa__one_moving.x__i32F4 < bb__two.x__i32F4
         ;
-    // printf("state aa_x: %b\n",
-    //         is_aa__contained_along_x);
     bool is_aa__contained_along_y =
-           aa__one_moving.y > aa__two.y
-        && aa__one_moving.y < bb__two.y
+           aa__one_moving.y__i32F4 > aa__two.y__i32F4
+        && aa__one_moving.y__i32F4 < bb__two.y__i32F4
         ;
-    // printf("state aa_y: %b\n",
-    //         is_aa__contained_along_y);
     bool is_bb__contained_along_y =
-           bb__one_moving.y > aa__two.y
-        && bb__one_moving.y < bb__two.y
+           bb__one_moving.y__i32F4 > aa__two.y__i32F4
+        && bb__one_moving.y__i32F4 < bb__two.y__i32F4
         ;
-    // printf("state ab_y: %b\n",
-    //         is_ab__contained_along_y);
     bool is_bb__contained_along_x =
-           bb__one_moving.x > aa__two.x
-        && bb__one_moving.x < bb__two.x
+           bb__one_moving.x__i32F4 > aa__two.x__i32F4
+        && bb__one_moving.x__i32F4 < bb__two.x__i32F4
         ;
-    // printf("state bb_x: %b\n",
-    //         is_ba__contained_along_x);
 
     //// all corners acquired, now do edges.
 
     bool is_aligned__x =
-        aa__one_moving.x == aa__two.x
-        || bb__one_moving.x == bb__two.x
+        aa__one_moving.x__i32F4 == aa__two.x__i32F4
+        || bb__one_moving.x__i32F4 == bb__two.x__i32F4
         ;
-    // printf("state alg_x: %b\n",
-    //        is_aligned__x);
     bool is_aligned__y =
-        aa__one_moving.y == aa__two.y
-        || bb__one_moving.y == bb__two.y
+        aa__one_moving.y__i32F4 == aa__two.y__i32F4
+        || bb__one_moving.y__i32F4 == bb__two.y__i32F4
         ;
-    // printf("state alg_y: %b\n",
-    //        is_aligned__x);
 
     if (is_aa__contained_along_x && is_bb__contained_along_y)
         goto get_direction;
@@ -281,8 +259,8 @@ Direction is_this_hitbox__inside_this_hitbox(
     return DIRECTION__NONE;
 
 get_direction:
-    Hitbox_Point aa__one_still;
-    Hitbox_Point bb__one_still;
+    Vector__3i32F4 aa__one_still;
+    Vector__3i32F4 bb__one_still;
     init_hitbox_point__without_velocity(
             &aa__one_still, hitbox__one, 
             DIRECTION__SOUTH_WEST);
@@ -291,38 +269,38 @@ get_direction:
             DIRECTION__NORTH_EAST);
 
     bool is_still_aa__contained_along_x =
-           aa__one_still.x > aa__two.x
-        && aa__one_still.x < bb__two.x
+           aa__one_still.x__i32F4 > aa__two.x__i32F4
+        && aa__one_still.x__i32F4 < bb__two.x__i32F4
         ;
     bool is_still_aa__contained_along_y =
-           aa__one_still.y > aa__two.y
-        && aa__one_still.y < bb__two.y
+           aa__one_still.y__i32F4 > aa__two.y__i32F4
+        && aa__one_still.y__i32F4 < bb__two.y__i32F4
         ;
     bool is_still_bb__contained_along_y =
-           bb__one_still.y > aa__two.y
-        && bb__one_still.y < bb__two.y
+           bb__one_still.y__i32F4 > aa__two.y__i32F4
+        && bb__one_still.y__i32F4 < bb__two.y__i32F4
         ;
     bool is_still_bb__contained_along_x =
-           bb__one_still.x > aa__two.x
-        && bb__one_still.x < bb__two.x
+           bb__one_still.x__i32F4 > aa__two.x__i32F4
+        && bb__one_still.x__i32F4 < bb__two.x__i32F4
         ;
 
     //// all corners acquired, now do edges.
 
     bool is_still_aligned__x =
-        aa__one_still.x == aa__two.x
-        || bb__one_still.x == bb__two.x
+        aa__one_still.x__i32F4 == aa__two.x__i32F4
+        || bb__one_still.x__i32F4 == bb__two.x__i32F4
         ;
     // printf("state alg_x: %b\n",
     //        is_still_aligned__x);
     bool is_still_aligned__y =
-        aa__one_still.y == aa__two.y
-        || bb__one_still.y == bb__two.y
+        aa__one_still.y__i32F4 == aa__two.y__i32F4
+        || bb__one_still.y__i32F4 == bb__two.y__i32F4
         ;
 
-    Direction direction_of_movement =
+    Direction__u8 direction_of_movement =
         get_movement_direction_of__hitbox(hitbox__one);
-    Direction direction_of_collision = DIRECTION__NONE;
+    Direction__u8 direction_of_collision = DIRECTION__NONE;
 
     if (direction_of_movement & DIRECTION__EAST) {
         if (is_still_aa__contained_along_y 
@@ -353,7 +331,7 @@ get_direction:
 }
 
 
-Direction is_hitbox__colliding(
+Direction__u8 is_hitbox__colliding(
         Hitbox_AABB *hitbox__checking,
         Hitbox_AABB *hitbox__other) {
     // It is not enough to check if a corner
@@ -375,8 +353,8 @@ Direction is_hitbox__colliding(
 
 void get_points_aabb_from__hitbox(
         Hitbox_AABB *hitbox,
-        Hitbox_Point *aa,
-        Hitbox_Point *bb) {
+        Vector__3i32F4 *aa,
+        Vector__3i32F4 *bb) {
     init_hitbox_point(aa, hitbox, DIRECTION__SOUTH_EAST);
     init_hitbox_point(bb, hitbox, DIRECTION__NORTH_WEST);
 }

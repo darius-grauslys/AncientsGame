@@ -7,14 +7,14 @@
 #include <world/tile.h>
 
 typedef struct Local_Parameters_t {
-    uint32_t random__result__greater;
-    uint32_t random__result__local;
+    Psuedo_Random__u32 random_result__greater__u32;
+    Psuedo_Random__u32 random_result__local__u32;
 } Local_Parameters;
 
 typedef struct Weight_Matrix_t {
-    uint8_t A, B, C;
-    uint8_t D, E, F;
-    uint8_t G, H, I;
+    Quantity__u8 A, B, C;
+    Quantity__u8 D, E, F;
+    Quantity__u8 G, H, I;
 } Weight_Matrix;
 
 typedef struct Weight_Map_t {
@@ -339,85 +339,74 @@ void init_weight_map(void) {
 }
 
 void chunk_generator__flat_world_f(
-        World_Parameters *world_params,
+        World_Parameters *world_parameters,
         Chunk *chunk) {
-    Local_Parameters random__results[9];
+    Local_Parameters random_results[9];
 
     // debug_warning("chunk_generator__flat_world_f uses magic numbers.");
     
-    for (int32_t y=-1;y<2;y++) {
-        for (int32_t x=-1;x<2;x++) {
-            uint32_t index = (x+1) + (3*(2 - (y+1)));
-            random__results[index]
-                .random__result__local =
-                get_repeatable_random__xy__from_world_parameters(
-                        world_params, 
-                        chunk->x + x, chunk->y + y);
-            random__results[index]
-                .random__result__greater =
-                get_repeatable_random__xy__from_world_parameters(
-                        world_params, 
-                        (chunk->x + x) >> 4, (chunk->y + y) >> 4);
+    for (Signed_Index__i32 y=-1;y< 2;y++) {
+        for (Signed_Index__i32 x=-1;x<2;x++) {
+            Index_u32 index = (x+1) + (3*(2 - (y+1)));
+            random_results[index]
+                .random_result__local__u32 =
+                get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
+                        world_parameters, 
+                        chunk->x__signed_index_i32 + x, 
+                        chunk->y__signed_index_i32 + y);
+            random_results[index]
+                .random_result__greater__u32 =
+                get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
+                        world_parameters, 
+                        (chunk->x__signed_index_i32 + x) >> 4, 
+                        (chunk->y__signed_index_i32 + y) >> 4);
 
             // for flat_world, we will use these randomized values
             // as a sort of "moisture" level.
 
-            random__results[index]
-                .random__result__greater =
-                random__results[index]
-                .random__result__greater % 5;
+            random_results[index]
+                .random_result__greater__u32 =
+                random_results[index]
+                .random_result__greater__u32 % 5;
 
-            random__results[index]
-                .random__result__local =
-                random__results[index]
-                .random__result__local % 5;
+            random_results[index]
+                .random_result__local__u32 =
+                random_results[index]
+                .random_result__local__u32 % 5;
 
-            random__results[index]
-                .random__result__local = 
-                (random__results[index].random__result__greater * 3
-                + random__results[index].random__result__local * 5)
+            random_results[index]
+                .random_result__local__u32 = 
+                (random_results[index].random_result__greater__u32 * 3
+                + random_results[index].random_result__local__u32 * 5)
                  >> 3;
         }
     }
 
-    // debug_info("chunk x,y,greater,local: %d, %d, %d , %d",
-    //         chunk->x, chunk->y, 
-    //         random__results[4].random__result__greater,
-    //         random__results[4].random__result__local);
-
-    for (int32_t y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
-        for (int32_t x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
-            uint32_t tile_index =
+    for (Signed_Index__i32 y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
+        for (Signed_Index__i32 x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
+            Index_u32 tile_index =
                 y * CHUNK_WIDTH__IN_TILES + x;
-            uint32_t moisture = 0;
+            Quantity__u32 moisture = 0;
 
             moisture +=
-                random__results[6].random__result__local *
-                weight_map.map[tile_index].A
-                +
-                random__results[7].random__result__local *
-                weight_map.map[tile_index].B
-                +
-                random__results[8].random__result__local *
-                weight_map.map[tile_index].C
-                +
-                random__results[3].random__result__local *
-                weight_map.map[tile_index].D
-                +
-                random__results[4].random__result__local *
-                weight_map.map[tile_index].E
-                +
-                random__results[5].random__result__local *
-                weight_map.map[tile_index].F
-                +
-                random__results[0].random__result__local *
-                weight_map.map[tile_index].G
-                +
-                random__results[1].random__result__local *
-                weight_map.map[tile_index].H
-                +
-                random__results[2].random__result__local *
-                weight_map.map[tile_index].I
+                random_results[6].random_result__local__u32 
+                * weight_map.map[tile_index].A
+                + random_results[7].random_result__local__u32 
+                * weight_map.map[tile_index].B
+                + random_results[8].random_result__local__u32 
+                * weight_map.map[tile_index].C
+                + random_results[3].random_result__local__u32 
+                * weight_map.map[tile_index].D
+                + random_results[4].random_result__local__u32 
+                * weight_map.map[tile_index].E
+                + random_results[5].random_result__local__u32 
+                * weight_map.map[tile_index].F
+                + random_results[0].random_result__local__u32 
+                * weight_map.map[tile_index].G
+                + random_results[1].random_result__local__u32 
+                * weight_map.map[tile_index].H
+                + random_results[2].random_result__local__u32 
+                * weight_map.map[tile_index].I
                 ;
 
             moisture = moisture >> 5;
@@ -432,9 +421,9 @@ void chunk_generator__flat_world_f(
                     Tile_Cover_Kind__None,
                     TILE_FLAGS__NONE);
 
-            uint32_t chance_plant =
-                get_random__from_world_parameters(
-                        world_params)
+            Psuedo_Random__u32 chance_plant =
+                get_pseudo_random_i32__from_world_parameters(
+                        world_parameters)
                 % 100;
             tile->the_kind_of_tile_cover__this_tile_has =
                 Tile_Cover_Kind__None;

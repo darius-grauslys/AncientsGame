@@ -122,19 +122,19 @@ static uint32_t inline get_animation_frame_offset_for__direction__of_humanoid_un
 
 uint32_t get_animation_frame_offset_for__armor(Entity *entity);
 
-Sprite_Frame_Index f_get_inital_sprite_frame_for__humanoid_animation(
+Sprite_Frame_Index__u8 f_get_inital_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-Sprite_Frame_Index f_get_final_sprite_frame_for__humanoid_animation(
+Sprite_Frame_Index__u8 f_get_final_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-Timer f_get_animation_speed_for__humanoid_animation(
+Timer__u32 f_get_animation_speed_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-Timer f_get_animation_duration_for__humanoid_animation(
+Timer__u32 f_get_animation_duration_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 

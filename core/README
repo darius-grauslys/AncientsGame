@@ -1,14 +1,98 @@
 
-In core source and header files, if you see:
+--- HOW TO PORT ---
+Create a backend definition for everything you
+see in platform.h
 
-    PLATFORM_
+For struct, and macro definitions, put it in a platform_defines.h
+located at the base level of your include folder.
 
-in header files:
-    This is a declaration without a definition
-    within the context of ./core .
+You can put the function definitions for functions in platform.h
+where ever you want. (hint: be organized about it.)
 
-    The definition resides in a backend implementation.
-    that being unix_opengl, or nds.
+--- CODING STYLE ---
+I like dense code to an extent.
+-   When naming a struct field, put __ at the end followed
+    by an abbreviation of that field's type.
+    Why: So you can easily tell the type without checking
+    it's declaration, or cursoring over it with LSP.
 
-in source files:
-    invocation to a platform defined signature.
+    Note: This is ONLY for struct fields! You do not
+    need to do this for local fields of functions.
+    Otherwise code gets TOO dense. You wont be in trouble
+    for doing it, but only do it sparingly. An example where
+    its good to do this, is if the function exceeds 100 lines
+    and the local field is used extensively.
+
+-   Wrap primitives in typedefs
+    Why: Sometimes primitives are treated differently
+    under certain contexts, such as the fixed point fractional
+    primitives. Using typedef wrappers helps inform the
+    developer how to use that primitive type.
+
+-   Underscores between words.
+    Why: Camel case is a MEME.
+
+-   Capitialize first letter of each word in type names.
+    Why: because
+
+-   Lowercase first letter of each word in function names.
+    Why: because!
+
+-   When naming callback functions, prepend a f_ if the callback
+    does not include a pointer to it's encapsulating struct otherwise
+    prepend a m_. When typedefing, the m_ and f_ are lowercased while
+    the typical type naming convention still holds.
+    Why: because >:(
+
+-   When positioning parameters, parameters which find themselves in
+    the name of the function should come first. For example,
+    get_entity__blah_blah(Entity *entity, ...)
+    Notice get_entity, this should mean entity comes first.
+    Notable exception,
+    get_entity__with_id__from_entity_manager(entity_manager, id)
+    entity_manager is at the end of the name, but it's significant
+    to the function such that it comes first.
+
+    Don't worry too much about this, you will pick up the logic behind it.
+
+
+    NOTE:
+    verb_noun_preposition__noun_preposition__...
+    boolean-preposition_noun_preposition__noun_preposision__...
+
+    Example:
+    is_apple__red(apple)
+    get_apple__color(apple)
+    does_apple_have__taste(apple)
+
+-   Math.
+    When you do math, if you need to break it out into multiple lines
+    you should do so before an operator. Additionally, and I don't
+    care HOW YOU FEEL about it, the semicolon is on a new line! Example,
+    3 + 2 * 5 / 3;, becomes:
+    3
+    + 2
+    * 5
+    / 3
+    ;
+    Why: If your statement is this complicated that it warrents new lines
+    then you're likely going to update it, and often enough you update
+    it at the end. So you will move the semi-colon onto a new line anyways.
+-   Ternaries, same deal as above. Except you ALWAYS expand it.
+    x = (bool statement) ? 0 : 1;, should be:
+    x =
+        (bool statement)
+        ? 0
+        : 1
+        ;
+    Also, always wrap the bool statement in parens.
+    Personally, I think this also makes nested ternaries viable.
+    x = 
+        (bool statement)
+        ? (bool statement)
+            ? 1
+            : 2
+        : 3
+
+
+

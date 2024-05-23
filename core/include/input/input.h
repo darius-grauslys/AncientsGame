@@ -3,8 +3,6 @@
 
 #include <defines.h>
 
-void PLATFORM_poll_input(Game *game);
-
 static void inline clear_input(Game *game) {
     game->input.input_flags = INPUT_NONE;
 }

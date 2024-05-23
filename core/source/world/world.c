@@ -15,17 +15,23 @@
 
 void init_world(World *world) {
     init_weight_map();
-    // init_world_parameters(&world->world_params, 
-    //         chunk_generator__test_world_f, 100);
-    init_world_parameters(&world->world_params, 
-            chunk_generator__flat_world_f, 100);
+    // init_world_parameters(
+    //         &world->world_parameters, 
+    //         chunk_generator__test_world_f, 
+    //         100);
+    init_world_parameters(
+            &world->world_parameters, 
+            chunk_generator__flat_world_f, 
+            100);
     init_entity_manager(&world->entity_manager);
     init_collision_manager(&world->collision_manager);
     set_collision_manager__center_chunk(
-            &world->collision_manager, 0, 0);
+            &world->collision_manager, 
+            0, 
+            0);
     init_chunk_manager(
             &world->chunk_manager,
-            &world->world_params);
+            &world->world_parameters);
 }
 
 void add_entity_to__world(
@@ -41,10 +47,13 @@ bool poll_world_for__scrolling(
     bool is_chunks_moved =
         poll_chunk_manager_for__chunk_movement(
             &world->chunk_manager,
-            &world->world_params,
-            world->entity_manager.local_player->hitbox.x__chunk,
-            world->entity_manager.local_player->hitbox.y__chunk,
-            world->entity_manager.local_player->hitbox.z__chunk);
+            &world->world_parameters,
+            world->entity_manager.local_player
+                ->hitbox.x__chunk__signed_index_i32,
+            world->entity_manager.local_player
+                ->hitbox.y__chunk__signed_index_i32,
+            world->entity_manager.local_player
+                ->hitbox.z__chunk__signed_index_i32);
 
     return is_chunks_moved;
 }

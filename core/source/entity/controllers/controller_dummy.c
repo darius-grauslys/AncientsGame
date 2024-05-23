@@ -10,11 +10,11 @@ void m_controller_for__dummy(
     int32_t random__result =
         get_humanoid__direction(this_dummy);
 
-    if (game->tick % 20 == 0) {
-        srand(game->tick + (int32_t)this_dummy);
+    if (game->tick__timer_u32 % 20 == 0) {
+        srand(game->tick__timer_u32 + (int32_t)this_dummy);
         random__result = rand() & DIRECTION__ANY;
         if ((abs(rand()) % 100) < 60) { random__result = DIRECTION__ANY; }
-        srand(game->world.world_params.seed__current_random);
+        srand(game->world.world_parameters.seed__current_random);
     }
 
     switch (random__result) {

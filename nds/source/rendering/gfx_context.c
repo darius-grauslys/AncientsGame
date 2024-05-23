@@ -168,7 +168,7 @@ void PLATFORM_update_chunks(
                 ->background_ground
                 .background_index);
     Chunk_Manager__Chunk_Map_Node *current__chunk_map_node =
-        chunk_manager->chunk_map_node__most_north_western;
+        chunk_manager->most_north_western__chunk_map_node;
     Chunk_Manager__Chunk_Map_Node *current_sub__chunk_map_node;
 
     for (uint8_t y=0; y < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
@@ -178,12 +178,12 @@ void PLATFORM_update_chunks(
         for (uint8_t x=0; x < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
                 x++) {
             uint32_t x__index =
-                ((current_sub__chunk_map_node->chunk__here->x
+                ((current_sub__chunk_map_node->chunk__here->x__signed_index_i32
                   % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
                  + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
                 % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
             uint32_t y__index =
-                ((current_sub__chunk_map_node->chunk__here->y
+                ((current_sub__chunk_map_node->chunk__here->y__signed_index_i32
                   % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
                  + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
                 % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
@@ -225,9 +225,9 @@ void PLATFORM_update_chunks(
             }
 
             current_sub__chunk_map_node =
-                current_sub__chunk_map_node->chunk_map_node__east;
+                current_sub__chunk_map_node->east__chunk_map_node;
         }
         current__chunk_map_node =
-            current__chunk_map_node->chunk_map_node__south;
+            current__chunk_map_node->south__chunk_map_node;
     }
 }

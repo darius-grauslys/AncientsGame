@@ -2,8 +2,8 @@
 #include <rendering/animate_humanoid.h>
 #include <rendering/animate_entity.h>
 
-void m_humanoid_animation_handler(Entity *entity, Timer timer) {
-    Timer animation_duration =
+void m_humanoid_animation_handler(Entity *entity, Timer__u32 timer) {
+    Timer__u32 animation_duration =
         f_get_animation_duration_for__humanoid_animation(
                 entity,
                 entity->sprite_wrapper

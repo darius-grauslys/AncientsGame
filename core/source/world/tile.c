@@ -20,7 +20,7 @@ static Tile inline *get_tile_from__chunk_node_for__tile_render(
     north =
         (y__local == 0)
         ? get_tile_from__chunk_node(
-                chunk_node->chunk_map_node__south,
+                chunk_node->south__chunk_map_node,
                 x__local, CHUNK_WIDTH__IN_TILES - 1)
         : get_tile_from__chunk_node(
                 chunk_node,
@@ -29,7 +29,7 @@ static Tile inline *get_tile_from__chunk_node_for__tile_render(
     south =
         (y__local == CHUNK_WIDTH__IN_TILES - 1)
         ? get_tile_from__chunk_node(
-                chunk_node->chunk_map_node__north,
+                chunk_node->north__chunk_map_node,
                 x__local, 0)
         : get_tile_from__chunk_node(
                 chunk_node,
@@ -38,7 +38,7 @@ static Tile inline *get_tile_from__chunk_node_for__tile_render(
     west =
         (x__local == 0)
         ? get_tile_from__chunk_node(
-                chunk_node->chunk_map_node__west,
+                chunk_node->west__chunk_map_node,
                 CHUNK_WIDTH__IN_TILES - 1, y__local)
         : get_tile_from__chunk_node(
                 chunk_node,
@@ -47,14 +47,14 @@ static Tile inline *get_tile_from__chunk_node_for__tile_render(
     east =
         (x__local == CHUNK_WIDTH__IN_TILES - 1)
         ? get_tile_from__chunk_node(
-                chunk_node->chunk_map_node__east,
+                chunk_node->east__chunk_map_node,
                 0, y__local)
         : get_tile_from__chunk_node(
                 chunk_node,
                 x__local + 1, y__local)
         ;
 
-    Tile_Wall_Adjacency_Code_u16 wall_adjacency = 0;
+    Tile_Wall_Adjacency_Code__u16 wall_adjacency = 0;
     if (is_tile_cover__a_wall(north->the_kind_of_tile_cover__this_tile_has)) {
         wall_adjacency +=
             TILE_RENDER__WALL_ADJACENCY__NORTH;

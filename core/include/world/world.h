@@ -20,7 +20,7 @@ static Collision_Manager inline
 
 static World_Parameters inline
 *get_world_parameters_from__world(World *world) {
-    return &world->world_params;
+    return &world->world_parameters;
 }
 
 void init_world(World *world);

@@ -1,80 +1,64 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
-typedef struct PLATFORM_Texture_t PLATFORM_Texture_t;
-typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
+///
+/// This file has the definition of EVERY struct
+/// macro, and typedef used in core!
+///
+/// Need help finding something? Everything is
+/// organized by PRIMARY usage within the ./include
+/// and ./source folders. So, for example, if you wanted
+/// to find structs primarily used in the "world" folder
+/// you should search for SECTION_World.
+///
+/// For base level files, search for SECTION_core.
+///
+/// NOTE:
+/// SECTION_defines is for definitions which only
+/// have PRIMARY usage in defines.h .
+///
+/// NOTE:
+/// Every single struct, macro, and typedef has a forward
+/// declaration in defines_weak.h . If you add a new
+/// struct, macro, or typedef you SHOULD include a forward
+/// definition of that type in defines_weak.h
+///
 
-/*
- *
- * The following comes from platform_defines.h:
- * - PLATFORM_Gfx_Context
- * - PLATFORM_Sprite
- *
- * */
-#include <platform_defines.h>
-
-#ifndef PLATFORM__CHUNKS
-#define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 4
-#define GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS 3
-
-#define CHUNK_WIDTH__IN_TILES 8
-#define CHUNK_DEPTH__IN_TILES 1
-
-#define CHUNK_QUANTITY_OF__TILES \
-    (CHUNK_WIDTH__IN_TILES * CHUNK_WIDTH__IN_TILES)
-
-#define CHUNK__WIDTH_BIT_SHIFT 3
-#define CHUNK__HEIGHT_BIT_SHIFT 3
-#define CHUNK__DEPTH_BIT_SHIFT (CHUNK__WIDTH_BIT_SHIFT + CHUNK__HEIGHT_BIT_SHIFT)
-
-#define CHUNK__WIDTH (1 << CHUNK__WIDTH_BIT_SHIFT)
-#define CHUNK__HEIGHT (1 << CHUNK__HEIGHT_BIT_SHIFT)
-// depth is 1 until AFTER the adventure update.
-#define CHUNK__DEPTH (1)
-
-#define CHUNK__QUANTITY_OF_TILES (CHUNK__WIDTH * \
-        CHUNK__HEIGHT * CHUNK__DEPTH)
+#include <defines_weak.h>
+#include <platform.h>
 
 ///
-/// Note, both  CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-/// and         CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS
+/// SECTION_defines
 ///
-/// must equal one another. These two only exist to remind
-/// the programmer if we are moving along COLS or ROWS.
+
+#define FRACTIONAL_PERCISION_4__BIT_SIZE 4
+/// FIXED POINT fractional, with 4 bits of percision.
+typedef int32_t     i32F4;
+
+/// 
+/// Vector__3i32F4 is a 3-tuple of 32 bit FIXED POINT
+/// fractional integers with 4 bits of percision.
 ///
-/// That also means YOU should use these appropriately.
+/// To get a whole number, use ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK
+/// and shift the result to the right by ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE.
 ///
-#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 8
-#define CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS 8
-#define CHUNK_MANAGER__QUANTITY_OF_CHUNKS \
-    (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS \
-    * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-#endif
+typedef struct Vector__3i32F4_t {
+    i32F4 x__i32F4, y__i32F4, z__i32F4;
+} Vector__3i32F4;
 
-#ifndef PLATFORM__ENTITIES
-#define ENTITY_MAXIMUM_QUANTITY_OF 128
-#define ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS 8
-#define ENTITY_MAXIMUM_QUANTITY_OF__NPCS 48
-#define ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES 72
-#endif
+typedef int32_t Signed_Index__i32;
 
-#define ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE \
-    (ENTITY_MAXIMUM_QUANTITY_OF__NPCS \
-    + ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS)
+typedef uint32_t Psuedo_Random_Seed__u32;
+typedef uint32_t Timer__u32;
+typedef uint8_t Timer__u8;
+typedef uint8_t Direction__u8;
 
-#include <stdint.h>
-#include <stdbool.h>
+typedef uint8_t Index_u8;
+typedef uint16_t Index_u16;
+typedef uint32_t Index_u32;
 
-#ifndef PLATFORM_DEFINES_H
-#error Cannot build AncientsGame without a backend implementation.
-#endif
-
-typedef struct Console_t Console;
-typedef struct Game_t Game;
-
-typedef uint8_t Direction;
-typedef uint32_t Timer;
+typedef int32_t Psuedo_Random__i32;
+typedef uint32_t Psuedo_Random__u32;
 
 #define DIRECTION__NONE 0
 #define DIRECTION__NORTH 1
@@ -92,6 +76,111 @@ typedef uint32_t Timer;
 #define DIRECTION__SOUTH_WEST (DIRECTION__SOUTH \
         | DIRECTION__WEST)
 
+///
+/// SECTION_collisions
+///
+
+typedef struct Hitbox_AABB_t {
+    Quantity__u32 width__quantity_32;
+    Quantity__u32 height__quantity_u32;
+    // We don't have a z-axis height.
+    // Why? Because even thought the world
+    // is 3D, everyone is made out of paper
+    // in this video game.
+    //
+    // Entities can't co-exist in the same tile
+    // but they can stand on top of one in an
+    // above tile.
+    Signed_Index__i32
+        x__chunk__signed_index_i32, 
+        y__chunk__signed_index_i32, 
+        z__chunk__signed_index_i32;
+    // TODO: replace with Vector_3i32
+   i32F4 
+        x__i32F4, 
+        y__i32F4, 
+        z__i32F4;
+    // TODO: replace with Vector_3i32
+   i32F4 
+        x__velocity__i32F4, 
+        y__velocity__i32F4, 
+        z__velocity__i32F4;
+} Hitbox_AABB;
+
+/// When checking the distance between two collisions along each axis
+/// anything equal to or less than this value is ignored when determining
+/// displacement. This useful threshold is what allows a colliding player
+/// to move up while an entity is moving into them from the right.
+#define COLLISION_DELTA_THRESHOLD 25
+#define COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET \
+    (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4)
+#define COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET \
+    (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8)
+
+///
+/// This type is specific to Collision_Manager,
+/// so there is no header files supporting it.
+///
+typedef struct Collision_Manager__Collision_Node_t {
+    Entity *entity_ptrs[ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE];
+
+    struct Collision_Manager__Collision_Node_t *north__collision_node;
+    struct Collision_Manager__Collision_Node_t *east__collision_node;
+    struct Collision_Manager__Collision_Node_t *south__collision_node;
+    struct Collision_Manager__Collision_Node_t *west__collision_node;
+
+    Direction__u8 legal_directions;
+} Collision_Manager__Collision_Node;
+
+///
+/// 4 Collision Nodes per layer 3 node.
+///
+typedef struct Collision_Manager__Layer_Three_t {
+    Collision_Manager__Collision_Node *top_left__collision_node;
+    Collision_Manager__Collision_Node *top_right__collision_node;
+    Collision_Manager__Collision_Node *bottom_left__collision_node;
+    Collision_Manager__Collision_Node *bottom_right__collision_node;
+
+    Signed_Index__i32 
+        x__center_chunk__signed_index_i32, 
+        y__center_chunk__signed_index_i32;
+} Collision_Manager__Layer_Three;
+
+typedef struct Collision_Manager__Layer_Two_t {
+    Collision_Manager__Layer_Three top_left__layer_three;
+    Collision_Manager__Layer_Three top_right__layer_three;
+    Collision_Manager__Layer_Three bottom_left__layer_three;
+    Collision_Manager__Layer_Three bottom_right__layer_three;
+
+    Signed_Index__i32 
+        x__center_chunk__signed_index_i32, 
+        y__center_chunk__signed_index_i32;
+} Collision_Manager__Layer_Two;
+
+typedef struct Collision_Manager__t {
+    Collision_Manager__Collision_Node collision_nodes[
+        CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
+
+    Collision_Manager__Layer_Two top_left__layer_two;
+    Collision_Manager__Layer_Two top_right__layer_two;
+    Collision_Manager__Layer_Two bottom_left__layer_two;
+    Collision_Manager__Layer_Two bottom_right__layer_two;
+
+    Collision_Manager__Collision_Node *most_north_western__collision_node;
+
+    Signed_Index__i32 
+        x__center_chunk__signed_index_i32, 
+        y__center_chunk__signed_index_i32;
+} Collision_Manager;
+
+///
+/// SECTION_debug
+///
+
+///
+/// SECTION_rendering
+///
+
 enum Sprite_Animation_Kind {
     Sprite_Animation_Kind__None,
     Sprite_Animation_Kind__Idle,
@@ -102,29 +191,27 @@ enum Sprite_Animation_Kind {
     Sprite_Animation_Kind__Player__Sleep,
 };
 
-typedef struct Entity_t Entity;
+typedef uint8_t Sprite_Frame_Index__u8;
 
-typedef uint8_t Sprite_Frame_Index;
-
-typedef Sprite_Frame_Index (*f_sprite_frame_lookup) (
+typedef Sprite_Frame_Index__u8 (*f_sprite_frame_lookup) (
         Entity *entity,
         enum Sprite_Animation_Kind animation_kind);
 
-typedef Timer (*f_animation_speed_lookup) (
+typedef Timer__u32 (*f_animation_speed_lookup) (
         Entity *entity,
         enum Sprite_Animation_Kind animation_kind);
-typedef Timer (*f_animation_duration_lookup) (
+typedef Timer__u32 (*f_animation_duration_lookup) (
         Entity *entity,
         enum Sprite_Animation_Kind animation_kind);
 
 typedef struct Sprite_Wrapper_t {
     PLATFORM_Sprite sprite;
-    Timer time_elapsed;
-    Timer time_limit;
-    Direction direction;
-    Sprite_Frame_Index frame__initial;
-    Sprite_Frame_Index frame;
-    Sprite_Frame_Index frame__final;
+    Timer__u32 time_elapsed;
+    Timer__u32 time_limit;
+    Direction__u8 direction;
+    Sprite_Frame_Index__u8 frame__initial;
+    Sprite_Frame_Index__u8 frame;
+    Sprite_Frame_Index__u8 frame__final;
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
     enum Sprite_Animation_Kind the_kind_of_animation__thats_upcomming;
 } Sprite_Wrapper;
@@ -182,6 +269,147 @@ typedef struct Sprite_Wrapper_t {
 #define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
 #define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
 
+///
+/// The meaning of these flags is dependent on
+/// platform_defines.h
+///
+typedef uint32_t Texture_Flags;
+
+#define TEXTURE_FLAGS__NONE 0
+
+///
+/// TEXTURE_FLAGS:
+/// Bit orderings, from most significant to least:
+/// [32 <-> 11 bits,    PLATFORM specific flags]
+/// [10th bit,          is hidden]
+/// [9-7 bits,          render method] 
+/// [6-4 bits,          width] 
+/// [3-1 bits,          height]
+///
+
+// Just a width or height component of an image.
+#define TEXTURE_FLAG__LENGTH__BIT_COUNT 3
+#define TEXTURE_FLAG__LENGTH__MASK ((1<<\
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)-1)
+// The width and height component of the image
+#define TEXTURE_FLAG__SIZE__BIT_COUNT 6
+#define TEXTURE_FLAG__SIZE__MASK ((1<<\
+            TEXTURE_FLAG__SIZE__BIT_COUNT)-1)
+
+// Texture length specifiers
+#define TEXTURE_FLAG__LENGTH_x8       0b000
+#define TEXTURE_FLAG__LENGTH_x16    (1+\
+        TEXTURE_FLAG__LENGTH_x8)    //0b001
+#define TEXTURE_FLAG__LENGTH_x32    (1+\
+        TEXTURE_FLAG__LENGTH_x16)   //0b010
+#define TEXTURE_FLAG__LENGTH_x64    (1+\
+        TEXTURE_FLAG__LENGTH_x32)   //0b011
+#define TEXTURE_FLAG__LENGTH_x128   (1+\
+        TEXTURE_FLAG__LENGTH_x64)   //0b100
+#define TEXTURE_FLAG__LENGTH_x256   (1+\
+        TEXTURE_FLAG__LENGTH_x128)  //0b101
+
+// Texture size specifiers
+// Add these combinations in as needed:
+#define TEXTURE_FLAG__SIZE_8x8 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x8 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_8x16 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x16 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_8x32 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x32 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_16x8 \
+    TEXTURE_FLAG__LENGTH_x16 \
+    | (TEXTURE_FLAG__LENGTH_x8 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_16x16 \
+    TEXTURE_FLAG__LENGTH_x16 \
+    | (TEXTURE_FLAG__LENGTH_x16 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_16x32 \
+    TEXTURE_FLAG__LENGTH_x8 \
+    | (TEXTURE_FLAG__LENGTH_x32 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x8 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x8 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x16 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x16 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x32 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x32 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_32x64 \
+    TEXTURE_FLAG__LENGTH_x32 \
+    | (TEXTURE_FLAG__LENGTH_x64 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_64x64 \
+    TEXTURE_FLAG__LENGTH_x64 \
+    | (TEXTURE_FLAG__LENGTH_x64 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_128x128 \
+    TEXTURE_FLAG__LENGTH_x128 \
+    | (TEXTURE_FLAG__LENGTH_x128 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_256x256 \
+    TEXTURE_FLAG__LENGTH_x256 \
+    | (TEXTURE_FLAG__LENGTH_x256 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+
+// We support up to 8 texture render methods 
+// (on nds, this is oamMain, oamSub)
+#define TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT 3
+#define TEXTURE_FLAG__RENDER_METHOD__MASK 0b111
+#define TEXTURE_FLAG__RENDER_METHOD__0 0b000
+#define TEXTURE_FLAG__RENDER_METHOD__1 0b001
+#define TEXTURE_FLAG__RENDER_METHOD__2 0b010
+#define TEXTURE_FLAG__RENDER_METHOD__3 0b011
+#define TEXTURE_FLAG__RENDER_METHOD__4 0b100
+#define TEXTURE_FLAG__RENDER_METHOD__5 0b101
+#define TEXTURE_FLAG__RENDER_METHOD__6 0b110
+#define TEXTURE_FLAG__RENDER_METHOD__7 0b111
+
+// We support up to 8 texture formats 
+// Replace 1-7 as needed.
+#define TEXTURE_FLAG__FORMAT__BIT_COUNT 3
+#define TEXTURE_FLAG__FORMAT__MASK 0b111
+#define TEXTURE_FLAG__FORMAT__15_RGB 0b000
+#define TEXTURE_FLAG__FORMAT__1 0b001
+#define TEXTURE_FLAG__FORMAT__2 0b010
+#define TEXTURE_FLAG__FORMAT__3 0b011
+#define TEXTURE_FLAG__FORMAT__4 0b100
+#define TEXTURE_FLAG__FORMAT__5 0b101
+#define TEXTURE_FLAG__FORMAT__6 0b110
+#define TEXTURE_FLAG__FORMAT__7 0b111
+
+#define TEXTURE_FLAG__IS_HIDDEN \
+    (1 << (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \
+           + TEXTURE_FLAG__SIZE__BIT_COUNT \
+           + TEXTURE_FLAG__FORMAT__BIT_COUNT))
+
+#define GET_TEXTURE_FLAG__LENGTH__WIDTH(flags) \
+    ((flags & (TEXTURE_FLAG__LENGTH__MASK \
+              << TEXTURE_FLAG__LENGTH__BIT_COUNT)) \
+              >> TEXTURE_FLAG__LENGTH__BIT_COUNT)
+
+#define GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags) \
+    (flags & TEXTURE_FLAG__LENGTH__MASK)
+
+
+///
+/// SECTION_entity
+///
+
+typedef struct Entity_t Entity;
+
 enum Entity_Kind {
     Entity_Kind__Particle,
     Entity_Kind__Item,
@@ -229,19 +457,21 @@ typedef void (*m_entity_controller) (Entity *this_entity, Game *game);
 ///
 typedef void (*m_entity_collision)  (Entity *entity_collision_source,
         Entity *entity_collided,
-        Direction direction_of_collision);
+        Direction__u8 direction_of_collision);
 
 typedef struct Tile_t Tile;
 
 typedef void (*m_entity_tile_collision) (Entity *entity_collision_source,
         Tile *tile_collided);
 
-typedef void (*m_entity_animation) (Entity *entity, Timer timer);
+typedef void (*m_entity_animation) (Entity *entity, Timer__u32 timer);
 
 ///
 /// Here we define the entity super struct. It has everything we could need
 /// for an entity, even if some of the things are not used.
 ///
+
+typedef uint8_t Entity_Flags__u8;
 
 #define ENTITY_FLAG__NONE 0
 #define ENTITY_FLAG__IS_ENABLED (1)
@@ -255,52 +485,6 @@ typedef void (*m_entity_animation) (Entity *entity, Timer timer);
     (ENTITY_FLAG__IS_COLLIDING << 1)
 #define ENTITY_FLAG__IS_HIDDEN \
     (ENTITY_FLAG__IS_UNLOADED << 1)
-
-///
-/// TODO: Make obsolete with Vector_3i32
-///
-typedef struct Hitbox_Point_t {
-    int32_t x, y, z;
-} Hitbox_Point;
-
-/// 
-/// Vector_3i32 is a 3-tuple of 32 bit integers
-/// where each integer is a fixed point fractional value.
-/// The fractional portion is dependent on the macro value
-/// of ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE.
-///
-/// To get a whole number, use ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK
-/// and shift the result to the right by ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE.
-///
-typedef struct Vector_3i32_t {
-    int32_t x, y, z;
-} Vector_3i32;
-
-///
-/// The localized version of Vector_3i32.
-/// It is local to a chunk.
-///
-typedef struct Local_Chunk_Vector_3u8_t {
-    uint8_t x, y, z;
-} Local_Chunk_Vector_3u8;
-
-typedef struct Hitbox_AABB_t {
-    uint32_t width;
-    uint32_t length;
-    // We don't have a z-axis height.
-    // Why? Because even thought the world
-    // is 3D, everyone is made out of paper
-    // in this video game.
-    //
-    // Entities can't co-exist in the same tile
-    // but they can stand on top of one in an
-    // above tile.
-    int32_t x__chunk, y__chunk, z__chunk;
-    // TODO: replace with Vector_3i32
-    int32_t x, y, z;
-    // TODO: replace with Vector_3i32
-    int32_t x__velocity, y__velocity, z__velocity;
-} Hitbox_AABB;
 
 typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
@@ -316,16 +500,16 @@ typedef struct Entity_t {
 
     Hitbox_AABB hitbox;
 
-    uint8_t                entity_flags;
+    Entity_Flags__u8            entity_flags;
 
-    enum Entity_Kind        the_kind_of_entity__this_entity_is;
+    enum Entity_Kind            the_kind_of_entity__this_entity_is;
     union {
         struct { // humanoid union
             Armor_Properties    armor_properties;
-            Direction direction;
-            int8_t max_health;
-            int8_t health;
-            uint8_t stun_timer;
+            Direction__u8       direction;
+            Quantity__u8        max_health__quantity_u8;
+            Quantity__u8        health__quantity_u8;
+            Timer__u8           stun_timer__timer_u8;
         };
     };
 } Entity;
@@ -345,76 +529,114 @@ typedef struct Entity_t {
 typedef struct Entity_Manager_t {
     Entity entities[ENTITY_MAXIMUM_QUANTITY_OF];
     Entity *local_player;
-    uint32_t entity_count;
+    Quantity__u32 entity_count__quantity_u32;
 } Entity_Manager;
 
-/// When checking the distance between two collisions along each axis
-/// anything equal to or less than this value is ignored when determining
-/// displacement. This useful threshold is what allows a colliding player
-/// to move up while an entity is moving into them from the right.
-#define COLLISION_DELTA_THRESHOLD 25
-#define COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET \
-    (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4)
-#define COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET \
-    (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 8)
+///
+/// SECTION_input
+///
+
+typedef uint32_t Input_Flags__u32;
+
+#define INPUT_NONE 0
+#define INPUT_FORWARD (1<<0)
+#define INPUT_LEFT (INPUT_FORWARD<<1)
+#define INPUT_RIGHT (INPUT_LEFT<<1)
+#define INPUT_BACKWARDS (INPUT_RIGHT<<1)
+
+#define INPUT_GAME_SETTINGS (INPUT_BACKWARDS<<1)
+#define INPUT_LOCKON (INPUT_GAME_SETTINGS<<1)
+#define INPUT_USE (INPUT_LOCKON<<1)
+#define INPUT_USE_SECONDARY (INPUT_USE<<1)
+#define INPUT_EXAMINE (INPUT_USE_SECONDARY<<1)
+//TODO: figure out what y does again lol
+#define INPUT_Y_IS_WHAT_AGAIN (INPUT_EXAMINE<<1)
+
+typedef struct Input_t {
+    Input_Flags__u32 input_flags;
+} Input;
 
 ///
-/// This type is specific to Collision_Manager,
-/// so there is no header files supporting it.
+/// SECTION_inventory
 ///
-typedef struct Collision_Manager__Collision_Node_t {
-    Entity *entity_ptrs[ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE];
-
-    struct Collision_Manager__Collision_Node_t *collision_node__north;
-    struct Collision_Manager__Collision_Node_t *collision_node__east;
-    struct Collision_Manager__Collision_Node_t *collision_node__south;
-    struct Collision_Manager__Collision_Node_t *collision_node__west;
-
-    Direction legal_directions;
-} Collision_Manager__Collision_Node;
 
 ///
-/// 4 Collision Nodes per layer 3 node.
+/// SECTION_multiplayer
 ///
-typedef struct Collision_Manager__Layer_Three_t {
-    Collision_Manager__Collision_Node *collision_node__top_left;
-    Collision_Manager__Collision_Node *collision_node__top_right;
-    Collision_Manager__Collision_Node *collision_node__bottom_left;
-    Collision_Manager__Collision_Node *collision_node__bottom_right;
 
-    int32_t x__center_chunk, y__center_chunk;
-} Collision_Manager__Layer_Three;
+///
+/// SECTION_scene
+///
 
-typedef struct Collision_Manager__Layer_Two_t {
-    Collision_Manager__Layer_Three layer_three__top_left;
-    Collision_Manager__Layer_Three layer_three__top_right;
-    Collision_Manager__Layer_Three layer_three__bottom_left;
-    Collision_Manager__Layer_Three layer_three__bottom_right;
+typedef struct Scene_t {
+    bool is_with__gamespace;
+} Scene;
 
-    int32_t x__center_chunk, y__center_chunk;
-} Collision_Manager__Layer_Two;
-
-typedef struct Collision_Manager__t {
-    Collision_Manager__Collision_Node collision_nodes[
-        CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
-
-    Collision_Manager__Layer_Two layer_two__top_left;
-    Collision_Manager__Layer_Two layer_two__top_right;
-    Collision_Manager__Layer_Two layer_two__bottom_left;
-    Collision_Manager__Layer_Two layer_two__bottom_right;
-
-    Collision_Manager__Collision_Node *most_north_western__node;
-
-    int32_t x__center_chunk, y__center_chunk;
-} Collision_Manager;
-
-typedef struct Game_t Game;
-
-typedef struct Scene_t Scene;
 typedef void (*m_load_scene)  (Scene *this_scene, Game* game);
 typedef void (*m_update_scene)(Scene *this_scene, Game* game);
 typedef void (*m_render_scene)(Scene *this_scene, Game* game);
 typedef void (*m_unload_scene)(Scene *this_scene, Game* game);
+
+///
+/// SECTION_ui
+///
+
+enum UI_Element_Kind {
+    UI_Element_Kind__Button,
+    UI_Element_Kind__Draggable,
+    UI_Element_Kind__Slider,
+};
+
+typedef struct UI_Element_t UI_Element;
+
+typedef void (*m_ui_clicked)(UI_Element *this_ui_element);
+typedef void (*m_ui_dragged)(UI_Element *this_ui_element);
+typedef void (*m_ui_dropped)(UI_Element *this_ui_element);
+
+typedef int16_t UI_Slider_Position__i16;
+typedef uint8_t UI_Flags__u8;
+
+typedef struct UI_Element_t {
+    enum UI_Element_Kind the_kind_of_ui_element__this_is;
+    Hitbox_AABB ui_bounding_box__aabb;
+    UI_Flags__u8 ui_flags;
+    union {
+        struct { // UI_Button
+            m_ui_clicked button_clicked_handler;
+        };
+        struct { // UI_Draggable
+            m_ui_dragged draggable_dragged_handler;
+            m_ui_dropped draggable_dropped_handler;
+        };
+        struct { // UI_Slider
+            m_ui_dragged ui_slider_dragged_handler;
+            UI_Slider_Position__i16 slider_position__ui_position_i16;
+            UI_Slider_Position__i16 slider_position_min__ui_position_i16;
+            UI_Slider_Position__i16 slider_position_max__ui_position_i16;
+        };
+    };
+} UI_Element;
+
+typedef struct UI_Manager_t {
+    Quantity__u8 quantity_of__ui_elements__quantity_u8;
+    UI_Element ui_elements[];
+} UI_Manager;
+
+///
+/// SECTION_world
+///
+
+typedef uint8_t Chunk_Tile_Index__u8;
+///
+/// The localized version of Vector_3i32.
+/// It is local to a chunk.
+///
+typedef struct Local_Chunk_Vector_t {
+    Chunk_Tile_Index__u8 
+        x__chunk_index_u8, 
+        y__chunk_index_u8, 
+        z__chunk_index_u8;
+} Local_Chunk_Vector;
 
 #define TILE_PIXEL_HEIGHT 8
 #define TILE_PIXEL_WIDTH 8
@@ -533,38 +755,14 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Wall__Sand         = 0b1001010,
 };
 
-///
-/// INPUT
-///
-
-#define INPUT_NONE 0
-#define INPUT_FORWARD (1<<0)
-#define INPUT_LEFT (INPUT_FORWARD<<1)
-#define INPUT_RIGHT (INPUT_LEFT<<1)
-#define INPUT_BACKWARDS (INPUT_RIGHT<<1)
-
-#define INPUT_GAME_SETTINGS (INPUT_BACKWARDS<<1)
-#define INPUT_LOCKON (INPUT_GAME_SETTINGS<<1)
-#define INPUT_USE (INPUT_LOCKON<<1)
-#define INPUT_USE_SECONDARY (INPUT_USE<<1)
-#define INPUT_EXAMINE (INPUT_USE_SECONDARY<<1)
-//TODO: figure out what y does again lol
-#define INPUT_Y_IS_WHAT_AGAIN (INPUT_EXAMINE<<1)
-
-typedef struct Input_t {
-    uint32_t input_flags;
-} Input;
-
-///
-/// WORLD
-///
+typedef uint8_t Tile_Flags__u8;
 
 typedef struct Tile_t {
     enum Tile_Kind                  the_kind_of_tile__this_tile_is;
     enum Tile_Cover_Kind        the_kind_of_tile_cover__this_tile_has;
     //TODO: this structure is not padding friendly.
     // consider making flags 16 bit
-    uint8_t flags;
+    Tile_Flags__u8 tile_flags;
     // bits 1 2 3, stair direction (values 0-7)
     // bit 4, is the stair inverted
     // bit 5, is the stair going up or down
@@ -573,14 +771,14 @@ typedef struct Tile_t {
     // bit 8, is passable
 } Tile;
 
-typedef uint16_t Tile_Render_Index_u16;
-typedef uint16_t Tile_Wall_Adjacency_Code_u16;
+typedef uint16_t Tile_Render_Index__u16;
+typedef uint16_t Tile_Wall_Adjacency_Code__u16;
 
 typedef struct Tile_Render_Result_t {
-    Tile_Render_Index_u16 tile_index__ground;
-    Tile_Render_Index_u16 tile_index__cover;
-    Tile_Render_Index_u16 tile_index__sprite_cover;
-    Tile_Wall_Adjacency_Code_u16 wall_adjacency;
+    Tile_Render_Index__u16 tile_index__ground;
+    Tile_Render_Index__u16 tile_index__cover;
+    Tile_Render_Index__u16 tile_index__sprite_cover;
+    Tile_Wall_Adjacency_Code__u16 wall_adjacency;
 } Tile_Render_Result;
 
 #define TILE_RENDER__WALL_ADJACENCY__BIT_SHIFT_VFLIP 5
@@ -598,35 +796,35 @@ typedef struct Tile_Render_Result_t {
 typedef struct World_Parameters_t World_Parameters;
 typedef struct Chunk_t Chunk;
 
-typedef void (*Chunk_Generator_f)(
+typedef void (*f_Chunk_Generator)(
         World_Parameters *world_params,
         Chunk *chunk);
 
 typedef struct World_Parameters_t {
-    Chunk_Generator_f chunk_generator_f;
-    uint32_t seed__initial;
-    uint32_t seed__current_random;
+    f_Chunk_Generator f_chunk_generator;
+    Psuedo_Random_Seed__u32 seed__initial;
+    Psuedo_Random_Seed__u32 seed__current_random;
 } World_Parameters;
 
 /// Should only be made from calls to inlined helpers
 /// from chunk_manager.h
 typedef struct Position_Local_To_Chunk_2i8_t {
-    int8_t x__local;
-    int8_t y__local;
+    Quantity__u8 x__local__quantity_u8;
+    Quantity__u8 y__local__quantity_u8;
 } Position_Local_To_Chunk_2i8;
 
 typedef struct Chunk_t {
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
-    int32_t x, y;
+    Signed_Index__i32 x__signed_index_i32, y__signed_index_i32;
     bool is_available;
 } Chunk;
 
 typedef struct Chunk_Manager__Chunk_Map_Node_t {
     Chunk *chunk__here;
-    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__north;
-    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__east;
-    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__south;
-    struct Chunk_Manager__Chunk_Map_Node_t *chunk_map_node__west;
+    struct Chunk_Manager__Chunk_Map_Node_t *north__chunk_map_node;
+    struct Chunk_Manager__Chunk_Map_Node_t *east__chunk_map_node;
+    struct Chunk_Manager__Chunk_Map_Node_t *south__chunk_map_node;
+    struct Chunk_Manager__Chunk_Map_Node_t *west__chunk_map_node;
 } Chunk_Manager__Chunk_Map_Node;
 
 typedef Chunk_Manager__Chunk_Map_Node
@@ -636,179 +834,34 @@ typedef struct Chunk_Manager_t {
     Chunk chunks[CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
     Chunk_Manager__Chunk_Map chunk_map;
     
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__that_the_player_is_on;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_western;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_eastern;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_north_eastern;
-    Chunk_Manager__Chunk_Map_Node *chunk_map_node__most_south_western;
+    Chunk_Manager__Chunk_Map_Node *local_player_occupied__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *most_north_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *most_south_eastern__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *most_north_eastern__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *most_south_western__chunk_map_node;
 
-    int32_t x__center_chunk, y__center_chunk;
+    Signed_Index__i32 
+        x__center_chunk__signed_index_i32, 
+        y__center_chunk__signed_index_i32;
 } Chunk_Manager;
-
-///
-/// The meaning of these flags is dependent on
-/// platform_defines.h
-///
-typedef uint32_t Texture_Flags;
-
-#define TEXTURE_FLAGS__NONE 0
-
-///
-/// TEXTURE_FLAGS:
-/// Bit orderings, from most significant to least:
-/// [31 <-> 10, PLATFORM specific flags]
-/// [1 bit, is hidden]
-/// [3 bits, render method] 
-/// [3 bits, width] 
-/// [3 bits, height]
-///
-
-// Just a width or height component of an image.
-#define TEXTURE_FLAG__LENGTH__BIT_COUNT 3
-#define TEXTURE_FLAG__LENGTH__MASK 0b111
-// The width and height component of the image
-#define TEXTURE_FLAG__SIZE__BIT_COUNT 6
-#define TEXTURE_FLAG__SIZE__MASK 0b111111
-
-// Texture length specifiers
-#define TEXTURE_FLAG__LENGTH_x8   0b000
-#define TEXTURE_FLAG__LENGTH_x16  0b001
-#define TEXTURE_FLAG__LENGTH_x32  0b010
-#define TEXTURE_FLAG__LENGTH_x64  0b011
-#define TEXTURE_FLAG__LENGTH_x128 0b100
-#define TEXTURE_FLAG__LENGTH_x256 0b101
-
-// Texture size specifiers
-// Add these combinations in as needed:
-#define TEXTURE_FLAG__SIZE_8x8 \
-    TEXTURE_FLAG__LENGTH_x8 \
-    | (TEXTURE_FLAG__LENGTH_x8 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_8x16 \
-    TEXTURE_FLAG__LENGTH_x8 \
-    | (TEXTURE_FLAG__LENGTH_x16 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_8x32 \
-    TEXTURE_FLAG__LENGTH_x8 \
-    | (TEXTURE_FLAG__LENGTH_x32 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_16x8 \
-    TEXTURE_FLAG__LENGTH_x16 \
-    | (TEXTURE_FLAG__LENGTH_x8 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_16x16 \
-    TEXTURE_FLAG__LENGTH_x16 \
-    | (TEXTURE_FLAG__LENGTH_x16 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_16x32 \
-    TEXTURE_FLAG__LENGTH_x8 \
-    | (TEXTURE_FLAG__LENGTH_x32 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_32x8 \
-    TEXTURE_FLAG__LENGTH_x32 \
-    | (TEXTURE_FLAG__LENGTH_x8 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_32x16 \
-    TEXTURE_FLAG__LENGTH_x32 \
-    | (TEXTURE_FLAG__LENGTH_x16 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_32x32 \
-    TEXTURE_FLAG__LENGTH_x32 \
-    | (TEXTURE_FLAG__LENGTH_x32 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_32x64 \
-    TEXTURE_FLAG__LENGTH_x32 \
-    | (TEXTURE_FLAG__LENGTH_x64 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_64x64 \
-    TEXTURE_FLAG__LENGTH_x64 \
-    | (TEXTURE_FLAG__LENGTH_x64 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_128x128 \
-    TEXTURE_FLAG__LENGTH_x128 \
-    | (TEXTURE_FLAG__LENGTH_x128 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-#define TEXTURE_FLAG__SIZE_256x256 \
-    TEXTURE_FLAG__LENGTH_x256 \
-    | (TEXTURE_FLAG__LENGTH_x256 << \
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)
-
-// We support up to 8 texture render methods 
-// (on nds, this is oamMain, oamSub)
-#define TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT 3
-#define TEXTURE_FLAG__RENDER_METHOD__MASK 0b111
-#define TEXTURE_FLAG__RENDER_METHOD__0 0b000
-#define TEXTURE_FLAG__RENDER_METHOD__1 0b001
-#define TEXTURE_FLAG__RENDER_METHOD__2 0b010
-#define TEXTURE_FLAG__RENDER_METHOD__3 0b011
-#define TEXTURE_FLAG__RENDER_METHOD__4 0b100
-#define TEXTURE_FLAG__RENDER_METHOD__5 0b101
-#define TEXTURE_FLAG__RENDER_METHOD__6 0b110
-#define TEXTURE_FLAG__RENDER_METHOD__7 0b111
-
-// We support up to 8 texture formats 
-// Replace 1-7 as needed.
-#define TEXTURE_FLAG__FORMAT__BIT_COUNT 3
-#define TEXTURE_FLAG__FORMAT__MASK 0b111
-#define TEXTURE_FLAG__FORMAT__15_RGB 0b000
-#define TEXTURE_FLAG__FORMAT__1 0b001
-#define TEXTURE_FLAG__FORMAT__2 0b010
-#define TEXTURE_FLAG__FORMAT__3 0b011
-#define TEXTURE_FLAG__FORMAT__4 0b100
-#define TEXTURE_FLAG__FORMAT__5 0b101
-#define TEXTURE_FLAG__FORMAT__6 0b110
-#define TEXTURE_FLAG__FORMAT__7 0b111
-
-#define TEXTURE_FLAG__IS_HIDDEN \
-    (1 << (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \
-           + TEXTURE_FLAG__SIZE__BIT_COUNT \
-           + TEXTURE_FLAG__FORMAT__BIT_COUNT))
-
-#define GET_TEXTURE_FLAG__LENGTH__WIDTH(flags) \
-    ((flags & (TEXTURE_FLAG__LENGTH__MASK \
-              << TEXTURE_FLAG__LENGTH__BIT_COUNT)) \
-              >> TEXTURE_FLAG__LENGTH__BIT_COUNT)
-
-#define GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags) \
-    (flags & TEXTURE_FLAG__LENGTH__MASK)
-
-///
-/// The following are platform specific.
-/// As a result, anything defined in core will
-/// treat them as opaque pointers.
-///
-
-///
-/// The reason Chunk is platform specific is for
-/// memory constraints and performance of a given platform.
-///
-/// For Desktop_PC, we can see this being 8, 16, or even 32, etc.
-/// However for the NDS we might want to keep this to 8.
-/// Then, for more restricted platforms we may want to even drop down
-/// to just 4!
-///
-
-///
-/// GAME
-///
 
 typedef struct World_t {
     Entity_Manager entity_manager;
     Chunk_Manager chunk_manager;
     Collision_Manager collision_manager;
-    World_Parameters world_params;
+    World_Parameters world_parameters;
 } World;
+
+///
+/// SECTION_core
+///
 
 typedef struct Game_t {
     Input input;
     PLATFORM_Gfx_Context gfx_context;
     World world;
 
-    Timer tick;
+    Timer__u32 tick__timer_u32;
 } Game;
-
-typedef struct Scene_t {
-    bool is_with__gamespace;
-} Scene;
 
 #endif

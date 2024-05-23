@@ -43,9 +43,6 @@ void init_game(Game *game);
 
 void manage_game(Game *game);
 
-void PLATFORM_pre_render(Game *game);
-void PLATFORM_post_render(Game *game);
-
 void manage_game__pre_render(Game *game);
 void manage_game__post_render(Game *game);
 void manage_entities(Game *game);

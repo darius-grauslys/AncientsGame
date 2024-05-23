@@ -4,6 +4,6 @@
 #include <defines.h>
 #include <rendering/animate_sprite.h>
 
-void m_humanoid_animation_handler(Entity *entity, Timer timer);
+void m_humanoid_animation_handler(Entity *entity, Timer__u32 timer);
 
 #endif

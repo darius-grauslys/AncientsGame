@@ -1,8 +1,6 @@
 #ifndef PLATFORM_DEFINES_H
 #define PLATFORM_DEFINES_H
 
-#include <stdint.h>
-
 /*****************************************************
  *  CHUNKS
  *****************************************************/

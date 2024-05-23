@@ -5,10 +5,10 @@
 #include <defines.h>
 
 void chunk_generator__test_world_f(
-        World_Parameters *world_params,
+        World_Parameters *world_parameters,
         Chunk *chunk) {
-    int32_t x = chunk->x;
-    int32_t y = chunk->y;
+    int32_t x = chunk->x__signed_index_i32;
+    int32_t y = chunk->y__signed_index_i32;
     if (x < 0)
         x *= -1;
     if (y < 0)

@@ -5,14 +5,16 @@
 
 void init_world_parameters(
         World_Parameters *world_params,
-        Chunk_Generator_f chunk_generator_f,
-        uint32_t seed__initial);
+        f_Chunk_Generator f_chunk_generator,
+        Psuedo_Random_Seed__u32 seed__initial);
 
-int32_t get_random__from_world_parameters(
+Psuedo_Random__i32 get_pseudo_random_i32__from_world_parameters(
         World_Parameters *world_params);
 
-int32_t get_repeatable_random__xy__from_world_parameters(
+Psuedo_Random__i32 
+get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
         World_Parameters *world_params,
-        int32_t x, int32_t y);
+        Signed_Index__i32 x, 
+        Signed_Index__i32 y);
 
 #endif

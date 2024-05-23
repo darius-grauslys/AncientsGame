@@ -3,16 +3,53 @@
 
 #include <defines.h>
 
-typedef struct Entity_t Entity;
-typedef struct Sprite_Wrapper_t Sprite_Wrapper;
-typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
+static void inline init_sprite_wrapper(
+        Sprite_Wrapper *sprite_wrapper,
+        Texture_Flags texture_flags_for__sprite) {
+    PLATFORM_init_sprite(
+            &sprite_wrapper->sprite,
+            texture_flags_for__sprite,
+            false);
+    sprite_wrapper->direction =
+        DIRECTION__EAST;
+    sprite_wrapper->
+        the_kind_of_animation__this_sprite_has =
+        Sprite_Animation_Kind__Idle;
 
-void init_sprite_wrapper(Sprite_Wrapper *sprite_wrapper,
-        enum Entity_Kind entity_kind);
+    sprite_wrapper->
+        the_kind_of_animation__thats_upcomming =
+        Sprite_Animation_Kind__Idle;
+    
+    sprite_wrapper->
+        frame__initial = 0;
+    sprite_wrapper->
+        frame = 0;
+    sprite_wrapper->
+        frame__final = 1;
+}
 
-void PLATFORM_init_sprite(PLATFORM_Sprite *sprite,
-        enum Entity_Kind entity_kind);
+static void inline init_sprite_wrapper_for__entity(
+        Entity *entity) {
+    PLATFORM_init_sprite_for__entity(
+            entity);
+    Sprite_Wrapper *sprite_wrapper =
+        &entity->sprite_wrapper;
+    sprite_wrapper->direction =
+        DIRECTION__EAST;
+    sprite_wrapper->
+        the_kind_of_animation__this_sprite_has =
+        Sprite_Animation_Kind__Idle;
 
-void PLATFORM_release_sprite(PLATFORM_Sprite *sprite);
+    sprite_wrapper->
+        the_kind_of_animation__thats_upcomming =
+        Sprite_Animation_Kind__Idle;
+    
+    sprite_wrapper->
+        frame__initial = 0;
+    sprite_wrapper->
+        frame = 0;
+    sprite_wrapper->
+        frame__final = 1;
+}
 
 #endif

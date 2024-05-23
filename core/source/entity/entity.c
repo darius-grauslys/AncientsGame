@@ -50,12 +50,12 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
     entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    entity->hitbox.x__chunk =
-        entity->hitbox.x = 0;
-    entity->hitbox.y__chunk =
-        entity->hitbox.y = 0;
-    entity->hitbox.z__chunk =
-        entity->hitbox.z = 0;
+    entity->hitbox.x__chunk__signed_index_i32 =
+        entity->hitbox.x__i32F4 = 0;
+    entity->hitbox.y__chunk__signed_index_i32 =
+        entity->hitbox.y__i32F4 = 0;
+    entity->hitbox.z__chunk__signed_index_i32 =
+        entity->hitbox.z__i32F4 = 0;
 
     entity->dispose_handler = 0;
     entity->controller_handler = 0;
@@ -66,9 +66,8 @@ void init_entity(Entity *entity, enum Entity_Kind kind_of_entity) {
     set_entity__is_updating_position(entity);
     set_entity__is_updating_graphics(entity);
 
-    init_sprite_wrapper(
-            &entity->sprite_wrapper,
-            kind_of_entity);
+    init_sprite_wrapper_for__entity(
+            entity);
 }
 
 void set_entity__armor(Entity *entity,
@@ -84,13 +83,14 @@ bool commit_entity_velocity(
         Entity *entity,
         int32_t *old_x__chunk,
         int32_t *old_y__chunk) {
-    *old_x__chunk = entity->hitbox.x__chunk;
-    *old_y__chunk = entity->hitbox.y__chunk;
+    *old_x__chunk = entity->hitbox.x__chunk__signed_index_i32;
+    *old_y__chunk = entity->hitbox.y__chunk__signed_index_i32;
 
     commit_hitbox_velocity(&entity->hitbox);
 
-    if (*old_x__chunk != entity->hitbox.x__chunk 
-            || *old_y__chunk != entity->hitbox.y__chunk) {
+    if (*old_x__chunk != entity->hitbox.x__chunk__signed_index_i32 
+            || *old_y__chunk
+            != entity->hitbox.y__chunk__signed_index_i32) {
         return true;
     }
     return false;
