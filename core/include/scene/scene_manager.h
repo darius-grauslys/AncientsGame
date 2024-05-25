@@ -6,6 +6,11 @@
 void init_scene_manager(
         Scene_Manager *p_scene_manager);
 
+static Scene inline *get_active_scene_ptr_from__scene_manager(
+        Scene_Manager *p_scene_manager) {
+    return p_scene_manager->p_active_scene;
+}
+
 static Scene inline *get_scene_ptr_from__scene_manager(
         Scene_Manager *p_scene_manager,
         Identifier__u16 identifier) {

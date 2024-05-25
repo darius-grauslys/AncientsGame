@@ -5,6 +5,7 @@
 #include "scene/scene__single_player_menu.h"
 #include "scene/scene_manager.h"
 #include <platform.h>
+#include <debug/nds_debug.h>
 
 void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager) {
     p_scene_manager->p_active_scene =

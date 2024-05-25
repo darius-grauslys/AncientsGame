@@ -40,23 +40,11 @@ static Entity inline
 }
 
 void init_game(Game *p_game);
+int run_game(Game *p_game);
 
 void manage_game(Game *p_game);
 
 void manage_game__pre_render(Game *p_game);
 void manage_game__post_render(Game *p_game);
-void manage_entities(Game *p_game);
-void release_entity(Game *p_game, Entity *p_entity);
-
-Entity *get_new__player(Game *p_game, 
-        bool is_local_player,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global);
-Entity *get_new__entity(Game *p_game, 
-        enum Entity_Kind kind_of_entity,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global);
 
 #endif

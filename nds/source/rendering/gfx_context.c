@@ -1,6 +1,8 @@
+#include "debug/nds_debug.h"
 #include <defines.h>
 #include <nds_defines.h>
 #include <rendering/gfx_context.h>
+#include <rendering/nds_gfx_context.h>
 #include <world/tile.h>
 
 #include <assets/world/GFX_world.h>
@@ -14,36 +16,31 @@
 #include <assets/entities/zombie.h>
 
 void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
-    // NDS_init_background(&gfx_context->background_ground__back_buffer);
-    // NDS_init_background(&gfx_context->background_ground__overlay);
-    NDS_init_background(&gfx_context->background_ground);
-    // NDS_init_background(&gfx_context->background_extra);
-}
-
-///
-/// On NDS, this will init both main and sub.
-///
-void PLATFORM_init_rendering__menu(PLATFORM_Gfx_Context *gfx_context) {
-
-}
-/// 
-/// On NDS, this will init both main and sub.
-///
-void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
-    //TODO: settle on better video modes
     videoSetMode(MODE_0_2D);
-	// set the sub background up for text display (we could just print to one
-	// of the main display text backgrounds just as easily
-	videoSetModeSub(MODE_0_2D); //sub bg 0 will be used to print text
+	videoSetModeSub(MODE_0_2D);
+#ifndef NDEBUG
+    NDS_init_debug__sub();
+#endif
 
-    // vramSetBankA(VRAM_A_MAIN_BG);
-    // vramSetBankC(VRAM_C_SUB_BG);
+    NDS_init_background(&gfx_context->background_ground__sprite_cover);
+    NDS_init_background(&gfx_context->background_ground__overlay);
+    NDS_init_background(&gfx_context->background_ground);
 
-	// vramSetPrimaryBanks(
-    //         VRAM_A_MAIN_SPRITE,
-    //         VRAM_B_MAIN_SPRITE, 
-    //         VRAM_C_SUB_BG, 
-    //         VRAM_D_MAIN_BG);
+    NDS_init_background(&gfx_context->background_ui__overlay);
+    NDS_init_background(&gfx_context->background_ui);
+}
+
+void NDS_init_gfx_for__main_menu(
+        PLATFORM_Gfx_Context *gfx_context) {
+    videoSetMode(MODE_0_2D);
+	videoSetModeSub(MODE_0_2D);
+    NDS_init_debug__main();
+}
+
+void NDS_init_gfx_for__world(
+        PLATFORM_Gfx_Context *gfx_context) {
+    videoSetMode(MODE_0_2D);
+	videoSetModeSub(MODE_0_2D);
 
 	vramSetPrimaryBanks(
             VRAM_A_MAIN_BG,
@@ -57,12 +54,8 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
             VRAM_F_EXT_SPR_PALETTE[0], 
             GFX_entitiesPalLen);
 
-	// set vram to ex palette
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 
-#ifndef NDEBUG
-	consoleDemoInit();
-#else
     NDS_init_background_ui__for_game(
             &gfx_context->background_ui);
     NDS_init_background_ui__overlay__for_game(
@@ -91,7 +84,6 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
     NDS_set_background_priority(
             &gfx_context->background_ui__overlay, 
             2);
-#endif
 
     NDS_init_background_ground__for_game(
             &gfx_context->background_ground);
@@ -130,20 +122,6 @@ void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) {
     NDS_set_background_priority(
             &gfx_context->background_ground, 
             2);
-
-    // vramSetBankE(VRAM_E_LCD); // for main engine
-    // vramSetBankH(VRAM_H_LCD); // for sub engine
-
-    // // copy palettes to extended palette area
-    // // there are 16 256-color palettes per bg
-    // // use '-mp #' to make grit use # for the slot number
-    // // we used '-mp 12' for drunkenlogo for demonstrative purposes
-    // dmaCopy(tilesPal,  &VRAM_E_EXT_PALETTE[0][0],  tilesPalLen);  // bg 0, slot 0
-
-    // // map vram banks to extended palettes
-    // // http://mtheall.com/banks.html#A=MBG0&C=MBG2&E=BGEPAL&H=SBGEPAL
-    // vramSetBankE(VRAM_E_BG_EXT_PALETTE);     // for main engine
-    // vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE); // for sub engine
 
 	oamInit(&oamMain, SpriteMapping_1D_256, true);
 	oamInit(&oamSub, SpriteMapping_1D_256, true);

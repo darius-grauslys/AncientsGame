@@ -1113,10 +1113,13 @@ typedef struct World_t {
 typedef struct Game_t {
     Input input;
     PLATFORM_Gfx_Context gfx_context;
-    World world;
+    Scene_Manager scene_manager;
     UI_Manager ui_manager;
 
+    World world;
+
     Timer__u32 tick__timer_u32;
+    bool is_world__initialized;
 } Game;
 
 ///

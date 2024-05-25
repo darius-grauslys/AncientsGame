@@ -1,8 +1,43 @@
+#include "nds/arm9/background.h"
+#include "nds/arm9/console.h"
 #include <debug/debug.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <debug/nds_debug.h>
+#include <nds.h>
+
+void NDS_init_debug__main(void) {
+#ifndef NDEBUG
+    PrintConsole *console =
+        consoleGetDefault();
+    consoleInit(
+            console,
+            3,
+            BgType_Text4bpp,
+            BgSize_T_256x256,
+            console->mapBase,
+            console->gfxBase,
+            true,
+            true);
+#endif
+}
+void NDS_init_debug__sub(void) {
+#ifndef NDEBUG
+    PrintConsole *console =
+        consoleGetDefault();
+    consoleInit(
+            console,
+            3,
+            BgType_Text4bpp,
+            BgSize_T_256x256,
+            console->mapBase,
+            console->gfxBase,
+            false,
+            true);
+#endif
+}
 
 void debug_info(const char *msg_fmt, ...) {
 #ifndef NDEBUG

@@ -29,9 +29,19 @@ static Entity inline
 }
 
 void init_world(World *p_world);
+void manage_world(Game *p_game);
+void manage_world__entities(Game *p_game);
 
 void add_entity_to__world(
         World *p_world,
+        Entity_Manager *p_entity_manager,
+        enum Entity_Kind kind_of_entity,
+        int32_t x__global,
+        int32_t y__global,
+        int32_t z__global);
+
+void release_entity_from__world(
+        Game *p_game,
         Entity *p_entity);
 
 bool poll_world_for__scrolling(
