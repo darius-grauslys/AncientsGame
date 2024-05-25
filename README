@@ -72,78 +72,103 @@ correctly, is a much easier beast to maintain.
 -------
 
 Coding Style:
-I'll put all relevant coding style stuff here:
-- opening delimiter of any kind is not on a new line.
-    (\n...), [\n...], {\n...}
-- imperative conditional keywords are not on new lines.
-    } else if (...) {\n...\n} else {\n ... }
-- imperative keywords and delimiters have a space prior to 
-    any sequential delimiter.
-    switch (...) {
-- when breaking out arithmetic into new lines, break the line
-    before an operator:
-    1 + 2 + 3 \n+ 4 \n*7
-    additionally, put the statement's semicolon on a new line
-    1 + 2 \n+3 + 7\n;
-    Why? Because if you had to break up arithmetic once, you
-    probably need to do it again, and often times at the end.
-    I use neovim for my editor, so I'd rather start typing away
-    immediately, instead of carefully putting my text cursor
-    before a tiny semi-colon.
 
-    This applies to boolean operators as well.
+I like dense code to an extent.
+-   When naming a struct field, put __ at the end followed
+    by an abbreviation of that field's type.
+    Why: So you can easily tell the type without checking
+    it's declaration, or cursoring over it with LSP.
 
--------
+    Note: This is ONLY for struct fields! You do not
+    need to do this for local fields of functions.
+    Otherwise code gets TOO dense. You wont be in trouble
+    for doing it, but only do it sparingly. An example where
+    its good to do this, is if the function exceeds 100 lines
+    and the local field is used extensively.
 
-Naming Style:
-For all symbols, every word is spaced with an underscore.
-Everything is in lower case except type names.
+-   Wrap primitives in typedefs
+    Why: Sometimes primitives are treated differently
+    under certain contexts, such as the fixed point fractional
+    primitives. Using typedef wrappers helps inform the
+    developer how to use that primitive type.
 
-Sometimes there is two underscores instead of one, here is
-the cases where you should put two instead of one:
+-   Underscores between words.
+    Why: Camel case is a MEME.
 
-Examples:
-[verb]_[noun_noun_..._noun]_[as|of|for|have]__[...]
-update_entity_animation_as__humanoid(...);
-get_entity_animation_frame__last_frame_of__walk(...);
-get_entity_animation_frame_offset_for__iron_armor(...);
+-   Capitialize first letter of each word in type names.
+    Why: because
 
-- use as, when the prior noun is assumed to be in a particular state.
-    (in this case, entity is assumed to be a humanoid.)
+-   Lowercase first letter of each word in function names.
+    Why: because!
 
-- use of, when the prior noun is being extracted from a collection.
+-   POINTERS, prefix the name of every pointer with p_.
+    If your pointer is a double or more pointer, just
+    do a single p_, and include "ptr" in the noun of
+    the pointer name.
 
-- use for, when the prior noun is in relation to some context.
+    double pointer:
+    p_x__ptr
+    triple pointer (why?):
+    p_x__ptr_ptr
 
-- use have, for a boolean returning function when checking if
-    the noun can have the following noun/verb.
+    p_'s job is to signify the variable is a pointer
+    but not how deep that pointer is. Use ptr_...ptr_ to do the later.
 
-Regarding function pointers:
-All function pointers require typedefs.
-If a function pointer is meant to live inside a struct,
-typedef like so:
-    m_[normal_naming_convention]
-Otherwise like so:
-    f_[normal_naming_convention]
-If your function pointer is a member of a struct
-and doesn't intend to take THAT STRUCT as an argument
-you should reconsider what you're doing fundamentally.
-IE, maybe this function pointer shouldn't live in that struct?
+-   When naming callback functions, prepend a f_ if the callback
+    does not include a pointer to it's encapsulating struct otherwise
+    prepend a m_. When typedefing, the m_ and f_ are lowercased while
+    the typical type naming convention still holds.
+    Why: because >:(
 
-When you write a m_function_pointer, the FIRST
-argument should be the type of the struct it resides in
-and the name of that argument MUST be prefixed with "this."
-Additionally, treat that function pointer as a noun, for example:
-    m_controller_for__player(...);
+-   When positioning parameters, parameters which find themselves in
+    the name of the function should come first. For example,
+    get_entity__blah_blah(Entity *entity, ...)
+    Notice get_entity, this should mean entity comes first.
+    Notable exception,
+    get_entity__with_id__from_entity_manager(entity_manager, id)
+    entity_manager is at the end of the name, but it's significant
+    to the function such that it comes first.
 
-When it comes to file names:
-Only use nouns, and never use more than one underscore between
-nouns.
+    Don't worry too much about this, you will pick up the logic behind it.
 
-Don't break a sweat over this stuff, just try your best.
-At the end of the day, focus on being productive, you can
-always refactor code when you don't know what to do during
-break time.
+
+    NOTE:
+    verb_noun_preposition__noun_preposition__...
+    boolean-preposition_noun_preposition__noun_preposision__...
+
+    Example:
+    is_apple__red(apple)
+    get_apple__color(apple)
+    does_apple_have__taste(apple)
+
+-   Math.
+    When you do math, if you need to break it out into multiple lines
+    you should do so before an operator. Additionally, and I don't
+    care HOW YOU FEEL about it, the semicolon is on a new line! Example,
+    3 + 2 * 5 / 3;, becomes:
+    3
+    + 2
+    * 5
+    / 3
+    ;
+    Why: If your statement is this complicated that it warrents new lines
+    then you're likely going to update it, and often enough you update
+    it at the end. So you will move the semi-colon onto a new line anyways.
+-   Ternaries, same deal as above. Except you ALWAYS expand it.
+    x = (bool statement) ? 0 : 1;, should be:
+    x =
+        (bool statement)
+        ? 0
+        : 1
+        ;
+    Also, always wrap the bool statement in parens.
+    Personally, I think this also makes nested ternaries viable.
+    x = 
+        (bool statement)
+        ? (bool statement)
+            ? 1
+            : 2
+        : 3
 
 -------
 

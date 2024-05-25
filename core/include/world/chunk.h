@@ -46,7 +46,7 @@ static inline Tile* get_tile_ptr_from__chunk(
         Chunk_Tile_Index__u8 z__chunk_tile_index_u8) {
     // int32_t index = (1 << (z * CHUNK__DEPTH_BIT_SHIFT)) +
     //     ((CHUNK_WIDTH__IN_TILES - y) << CHUNK__HEIGHT_BIT_SHIFT) + x;
-    Index_u8 index__u8 = 
+    Index__u8 index__u8 = 
         x__chunk_tile_index_u8 
         + (7 - y__chunk_tile_index_u8) 
         * 8;

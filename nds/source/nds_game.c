@@ -1,3 +1,4 @@
+#include "input/input.h"
 #include <nds.h>
 #include <game.h>
 #include <defines.h>

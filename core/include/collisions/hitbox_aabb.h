@@ -184,4 +184,28 @@ static void inline set_z_velocity_to__hitbox(
     hitbox->z__velocity__i32F4 = z__velocity;
 }
 
+static bool inline is_vector_inside__hitbox(
+        Vector__3i32F4 vector,
+        Hitbox_AABB *p_hitbox) {
+    Vector__3i32F4 aa, bb;
+    get_points_aabb_from__hitbox(
+            p_hitbox, 
+            &aa, 
+            &bb);
+    return (
+            vector.x__i32F4
+            >= aa.x__i32F4
+            && vector.x__i32F4
+            <= bb.x__i32F4
+            && vector.y__i32F4
+            >= aa.y__i32F4
+            && vector.y__i32F4
+            <= bb.y__i32F4
+            && vector.z__i32F4
+            >= aa.z__i32F4
+            && vector.z__i32F4
+            <= aa.z__i32F4
+            );
+}
+
 #endif

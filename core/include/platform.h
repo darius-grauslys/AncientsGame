@@ -18,17 +18,27 @@
 /// Here you will define all your PLATFORM_*** structs.
 /// Define the PLATFORM_*** functions whenever you want
 /// but try to be organized about it.
+///
+/// NOTE: there are some PLATFORM specific macros
+/// which should be considered. Search for 
+/// SECTION_defines. PLATFORM__*** is a series of
+/// macros which should be defined in the backend.
+///
+/// Defaults are provided, but are not always optimal
+/// for every platform.
 
-/// <Entity>
+///
+/// SECTION_entity
+///
 void PLATFORM_render_entity(
         Entity *entity,
         int32_t x__origin,
         int32_t y__origin,
         Game *game);
-/// </Entity>
 
-
-/// <GFX_context>
+///
+/// SECTION_rendering
+///
 void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context);
 
 ///
@@ -40,36 +50,6 @@ void PLATFORM_init_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
 ///
 void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context);
 
-void PLATFORM_update_chunks(
-        PLATFORM_Gfx_Context *gfx_context,
-        Chunk_Manager *chunk_manager);
-/// </GFX_context>
-
-/// <Chunk>
-///
-/// TODO: we will want to rethink
-/// the render_chunk and render_tile.
-///
-/// NDS wants to just use a tiled background
-/// and PC wants to use openGL rect with uv's.
-///
-/// not quite sure how to best manage this atm.
-///
-
-/// 
-/// Render a chunk using a texture_atlas
-/// onto a given RenderTarget.
-///
-/// RenderTarget is an opaque pointer, which is defined
-/// via a backend implementation.
-///
-
-void PLATFORM_render_chunk(
-        PLATFORM_Gfx_Context *context,
-        Chunk *chunk);
-/// </Chunk>
-
-/// <Texture>
 void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags);
 void PLATFORM_free_texture(PLATFORM_Texture *texture);
 
@@ -92,15 +72,23 @@ void PLATFORM_use_texture(PLATFORM_Texture *texture);
 void PLATFORM_release_texture(PLATFORM_Texture *texture);
 
 uint32_t *PLATFORM_get_texture_flags_ptr(PLATFORM_Texture *texture);
-/// </Texture>
 
-/// <Render_Tile>
+///
+/// SECTION_world
+///
+
+void PLATFORM_render_chunk(
+        PLATFORM_Gfx_Context *context,
+        Chunk *chunk);
+
 void PLATFORM_render_tile(
         PLATFORM_Gfx_Context *context,
         Tile *tile);
-/// </Render_Tile>
 
-/// <Sprite>
+void PLATFORM_update_chunks(
+        PLATFORM_Gfx_Context *gfx_context,
+        Chunk_Manager *chunk_manager);
+
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 void PLATFORM_init_sprite(PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,
@@ -108,37 +96,38 @@ void PLATFORM_init_sprite(PLATFORM_Sprite *sprite,
 void PLATFORM_init_sprite_for__entity(Entity *entity);
 
 void PLATFORM_release_sprite(PLATFORM_Sprite *sprite);
-/// </Sprite>
-
-/// <Render_Sprite>
-///
-/// On NDS, PLATFORM_render_sprite doesn't do anything, and will be
-/// optimized out.
-///
 
 void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
 
-/// </Render_Sprite>
-
-/// <Animate_Sprite>
-///
-/// Performs the necessary graphical changes needed
-/// to reflect the entity's sprite_wrapper.frame value.
-///
 void PLATFORM_update_sprite_gfx__to_current_frame(
         Sprite_Wrapper *sprite_wrapper);
-/// </Animate_Sprite>
 
-/// <Game>
+///
+/// SECTION_core
+///
+
 void PLATFORM_pre_render(Game *game);
+
 void PLATFORM_post_render(Game *game);
-/// </Game>
 
-/// <Input>
-void PLATFORM_poll_input(Game *game);
-/// </Input>
+/// 
+/// SECTION_ui
+///
 
-/// <Defines>
+///
+/// SECTION_scene
+///
+
+void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager);
+
+///
+/// SECTION_input
+///
+void PLATFORM_poll_input(Input *p_input);
+
+/// 
+/// SECTION_defines
+///
 typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
 typedef struct PLATFORM_Texture_t PLATFORM_Texture_t;
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
@@ -200,6 +189,23 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.
 #endif
-/// </Defines>
+
+#ifndef PLATFORM__INPUT
+#define INPUT_NONE 0
+#define INPUT_FORWARD (1<<0)
+#define INPUT_LEFT (INPUT_FORWARD<<1)
+#define INPUT_RIGHT (INPUT_LEFT<<1)
+#define INPUT_BACKWARD (INPUT_RIGHT<<1)
+
+#define INPUT_GAME_SETTINGS (INPUT_BACKWARD<<1)
+#define INPUT_LOCKON (INPUT_GAME_SETTINGS<<1)
+#define INPUT_USE (INPUT_LOCKON<<1)
+#define INPUT_USE_SECONDARY (INPUT_USE<<1)
+#define INPUT_EXAMINE (INPUT_USE_SECONDARY<<1)
+#define INPUT_CONSUME (INPUT_EXAMINE<<1)
+#define INPUT_TURN_RIGHT (INPUT_CONSUME<<1)
+#define INPUT_TURN_LEFT (INPUT_TURN_RIGHT<<1)
+#define INPUT_CLICK (INPUT_TURN_LEFT<<1)
+#endif
 
 #endif

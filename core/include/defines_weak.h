@@ -36,6 +36,8 @@ typedef struct Entity_t Entity;
 /// SECTION_input
 ///
 
+typedef struct Input_t Input;
+
 ///
 /// SECTION_inventory
 ///
@@ -54,9 +56,15 @@ typedef struct Sprite_Wrapper_t Sprite_Wrapper;
 /// SECTION_scene
 ///
 
+typedef struct Scene_t Scene;
+typedef struct Scene_Manager_t Scene_Manager;
+
 ///
 /// SECTION_ui
 ///
+
+typedef struct UI_Element_t UI_Element;
+typedef struct UI_Manager_t UI_Manager;
 
 ///
 /// SECTION_world

@@ -56,6 +56,48 @@
 #define ENTITY_MAXIMUM_QUANTITY_OF__NPCS 48
 #define ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES 72
 
+
+/*****************************************************
+ *  INPUT
+ *****************************************************/
+//
+// The following defines are from
+// nds arm9 input
+//
+// typedef enum KEYPAD_BITS {
+//   KEY_A      = BIT(0),  //!< Keypad A button.
+//   KEY_B      = BIT(1),  //!< Keypad B button.
+//   KEY_SELECT = BIT(2),  //!< Keypad SELECT button.
+//   KEY_START  = BIT(3),  //!< Keypad START button.
+//   KEY_RIGHT  = BIT(4),  //!< Keypad RIGHT button.
+//   KEY_LEFT   = BIT(5),  //!< Keypad LEFT button.
+//   KEY_UP     = BIT(6),  //!< Keypad UP button.
+//   KEY_DOWN   = BIT(7),  //!< Keypad DOWN button.
+//   KEY_R      = BIT(8),  //!< Right shoulder button.
+//   KEY_L      = BIT(9),  //!< Left shoulder button.
+//   KEY_X      = BIT(10), //!< Keypad X button.
+//   KEY_Y      = BIT(11), //!< Keypad Y button.
+//   KEY_TOUCH  = BIT(12), //!< Touchscreen pendown.
+//   KEY_LID    = BIT(13)  //!< Lid state.
+// } KEYPAD_BITS;
+
+#define PLATFORM__INPUT
+#define INPUT_NONE 0
+#define INPUT_USE (1<<0)
+#define INPUT_USE_SECONDARY (INPUT_USE <<1)
+#define INPUT_LOCKON (INPUT_USE_SECONDARY<<1)
+#define INPUT_GAME_SETTINGS (INPUT_LOCKON<<1)
+#define INPUT_RIGHT (INPUT_GAME_SETTINGS<<1)
+#define INPUT_LEFT (INPUT_RIGHT<<1)
+#define INPUT_FORWARD (INPUT_LEFT<<1)
+#define INPUT_BACKWARD (INPUT_FORWARD<<1)
+#define INPUT_TURN_RIGHT (INPUT_BACKWARD<<1)
+#define INPUT_TURN_LEFT (INPUT_TURN_RIGHT<<1)
+#define INPUT_EXAMINE (INPUT_TURN_LEFT<<1)
+#define INPUT_CONSUME (INPUT_EXAMINE<<1)
+#define INPUT_CLICK (INPUT_CONSUME<<1)
+
+
 /*****************************************************
  *  TILES
  *****************************************************/
@@ -236,5 +278,15 @@ typedef struct PLATFORM_Sprite_t {
     PLATFORM_Texture sprite_texture;
     const uint16_t *gfx_sprite_sheet;
 } PLATFORM_Sprite;
+
+#define SCENE_IDENTIFIER__MAIN_MENU 0
+#define SCENE_IDENTIFIER__SINGLE_PLAYER_MENU \
+    (SCENE_IDENTIFIER__MAIN_MENU + 1)
+#define SCENE_IDENTIFIER__MULTIPLAYER_MENU \
+    (SCENE_IDENTIFIER__MAIN_MENU + 1)
+#define SCENE_IDENTIFIER__SETTINGS_MENU \
+    (SCENE_IDENTIFIER__MAIN_MENU + 1)
+#define SCENE_IDENTIFIER__GAME \
+    (SCENE_IDENTIFIER__MAIN_MENU + 1)
 
 #endif

@@ -1,47 +1,24 @@
+#include "defines.h"
 #include <nds.h>
 #include <input/input.h>
 
-void PLATFORM_poll_input(Game *game) {
+void PLATFORM_poll_input(Input *p_input) {
     scanKeys();
-    int keys = keysHeld();
+    int keys_held = keysHeld();
+    int keys_pressed = keysDown();
+    int keys_released = keysUp();
 
-    clear_input(game);
+    touchPosition stylist;
+    touchRead(&stylist);
 
-    if (keys & KEY_A) {
-        game->input.input_flags |=
-            INPUT_USE;
-    }
-    if (keys & KEY_B) {
-        game->input.input_flags |=
-            INPUT_USE_SECONDARY;
-    }
-    if (keys & KEY_X) {
-        game->input.input_flags |=
-            INPUT_EXAMINE;
-    }
-    if (keys & KEY_START) {
-        game->input.input_flags |=
-            INPUT_GAME_SETTINGS;
-    }
-    if (keys & KEY_SELECT) {
-        game->input.input_flags |=
-            INPUT_LOCKON;
-    }
+    clear_input(p_input);
 
-    if (keys & KEY_UP) {
-        game->input.input_flags |=
-            INPUT_FORWARD;
-    }
-    if (keys & KEY_LEFT) {
-        game->input.input_flags |=
-            INPUT_LEFT;
-    }
-    if (keys & KEY_RIGHT) {
-        game->input.input_flags |=
-            INPUT_RIGHT;
-    }
-    if (keys & KEY_DOWN) {
-        game->input.input_flags |=
-            INPUT_BACKWARDS;
-    }
+    p_input->input_flags__held = keys_held;
+    p_input->input_flags__pressed = keys_pressed;
+    p_input->input_flags__released = keys_released;
+
+    p_input->cursor__i32f4
+        .x__i32F4 = stylist.px;
+    p_input->cursor__i32f4
+        .y__i32F4 = stylist.py;
 }

@@ -38,6 +38,11 @@
 #define FRACTIONAL_PERCISION_4__BIT_SIZE 4
 /// FIXED POINT fractional, with 4 bits of percision.
 typedef int32_t     i32F4;
+typedef int32_t     i16F4;
+typedef int32_t     i8F4;
+typedef uint32_t    u32F4;
+typedef uint32_t    u16F4;
+typedef uint32_t    u8F4;
 
 /// 
 /// Vector__3i32F4 is a 3-tuple of 32 bit FIXED POINT
@@ -57,12 +62,27 @@ typedef uint32_t Timer__u32;
 typedef uint8_t Timer__u8;
 typedef uint8_t Direction__u8;
 
-typedef uint8_t Index_u8;
-typedef uint16_t Index_u16;
+typedef uint8_t Index__u8;
+typedef uint16_t Index__u16;
 typedef uint32_t Index_u32;
+
+typedef uint8_t Quantity__u8;
+typedef uint16_t Quantity__u16;
+typedef uint32_t Quantity__u32;
+
+typedef int8_t  Signed_Quantity__i8;
+typedef int16_t Signed_Quantity__i16;
+typedef int32_t Signed_Quantity__i32;
 
 typedef int32_t Psuedo_Random__i32;
 typedef uint32_t Psuedo_Random__u32;
+
+#define IDENTIFIER__UNKNOWN__u32 (uint32_t)(-1)
+#define IDENTIFIER__UNKNOWN__u16 (uint16_t)(-1)
+#define IDENTIFIER__UNKNOWN__u8 (uint8_t)(-1)
+typedef uint32_t Identifier__u32;
+typedef uint16_t Identifier__u16;
+typedef uint8_t Identifier__u8;
 
 #define DIRECTION__NONE 0
 #define DIRECTION__NORTH 1
@@ -407,6 +427,116 @@ typedef uint32_t Texture_Flags;
 #define GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags) \
     (flags & TEXTURE_FLAG__LENGTH__MASK)
 
+///
+/// SECTION_inventory
+///
+
+enum Item_Kind {
+    Item_Kind__None,
+    Item_Kind__Stick,
+    Item_Kind__Club,
+    Item_Kind__Sword__Rusted,
+    Item_Kind__Scimitar__Rusted,
+    Item_Kind__Dagger__Rusted,
+    Item_Kind__Rapier__Rusted,
+    Item_Kind__Battleaxe__Rusted,
+    Item_Kind__Hatchet__Rusted,
+    Item_Kind__Pickaxe__Rusted,
+    Item_Kind__Hoe__Rusted,
+    Item_Kind__Shovel__Rusted,
+    Item_Kind__Sword__Iron,
+    Item_Kind__Scimitar__Iron,
+    Item_Kind__Dagger__Iron,
+    Item_Kind__Rapier__Iron,
+    Item_Kind__Battleaxe__Iron,
+    Item_Kind__Hatchet__Iron,
+    Item_Kind__Pickaxe__Iron,
+    Item_Kind__Hoe__Iron,
+    Item_Kind__Shovel__Iron,
+    Item_Kind__Sword__Steel,
+    Item_Kind__Scimitar__Steel,
+    Item_Kind__Dagger__Steel,
+    Item_Kind__Rapier__Steel,
+    Item_Kind__Battleaxe__Steel,
+    Item_Kind__Hatchet__Steel,
+    Item_Kind__Pickaxe__Steel,
+    Item_Kind__Hoe__Steel,
+    Item_Kind__Shovel__Steel,
+    Item_Kind__Bow,
+    Item_Kind__Composite_Bow,
+    Item_Kind__Crossbow,
+    Item_Kind__Sling,
+    Item_Kind__Crossbow__Steel,
+    Item_Kind__Arrow__Iron,
+    Item_Kind__Arrow__Steel,
+    Item_Kind__Crossbow_Bolt__Iron,
+    Item_Kind__Crossbow_Bolt__Steel,
+    Item_Kind__Glass_Bottle,
+    Item_Kind__Bottle__Water,
+    Item_Kind__Bottle__Blood,
+    Item_Kind__Bottle__White, //TODO: determine exactly what it is
+    Item_Kind__Bottle__Gold, //TODO: determine exactly what it is
+    Item_Kind__Bottle__Blue, //TODO: determine exactly what it is
+    Item_Kind__Bottle__Purple, //TODO: determine exactly what it is
+    Item_Kind__Bottle__Sparkling, //TODO: determine exactly what it is
+    Item_Kind__Bottle__Grey, //TODO: determine exactly what it is
+    Item_Kind__Bomb,
+    Item_Kind__Bread,
+    Item_Kind__Seeds,
+    Item_Kind__String,
+    Item_Kind__Tongs__Iron,
+    Item_Kind__Hammer__Iron,
+    Item_Kind__Pile__Wood,
+    Item_Kind__Pile__Stone_Brick,
+    Item_Kind__Pile__Gold,
+    Item_Kind__Pile__Iron,
+    Item_Kind__Pile__Diamond,
+    Item_Kind__Pile__Amethyst,
+    Item_Kind__Pile__Sandstone,
+    Item_Kind__Pile__Stone,
+    Item_Kind__Pile__Dirt,
+    Item_Kind__Pile__Sand,
+    Item_Kind__Pile__Grass,
+    Item_Kind__Pile__Leaves,
+    Item_Kind__Pile__Snow,
+    Item_Kind__Unknown
+};
+
+typedef struct Item_t Item;
+
+typedef void (*m_Item_Use)(
+        Item *p_item_self, 
+        Entity *p_entity_user, 
+        Game *p_game);
+typedef void (*m_Item_Equip)(
+        Item *p_item_self, 
+        Entity *p_entity_user, 
+        Game *p_game);
+typedef void (*m_Item_Unequip)(
+        Item *p_item_self, 
+        Entity *p_entity_user, 
+        Game *p_game);
+
+typedef struct Item_t {
+    enum Item_Kind the_kind_of_item__this_item_is;
+    m_Item_Use m_item_use;
+    m_Item_Equip m_item_equip;
+    m_Item_Unequip m_item_unequip;
+} Item;
+
+typedef struct Item_Stack_t {
+    Item item;
+    Quantity__u8 quantity_of__this_item;
+    Quantity__u8 max_quantity_of__this_item;
+    Quantity__u16 weight_of_each__item;
+    Identifier__u16 identifier_for__item_stack;
+} Item_Stack;
+
+#define ITEM_MAXIMUM_QUANTITY_OF 32
+
+typedef struct Inventory_t {
+    Item_Stack items[ITEM_MAXIMUM_QUANTITY_OF];
+} Inventory;
 
 ///
 /// SECTION_entity
@@ -441,24 +571,6 @@ typedef struct Armor_Properties_t {
     enum Entity_Armor_Modification_Kind     
         the_kind_of_modification__this_armor_has;
 } Armor_Properties;
-
-typedef struct Entity_t Entity;
-
-typedef struct Item_t Item;
-typedef void (*m_Item_Use)(
-        Item *p_item_self, 
-        Entity *p_entity_user, 
-        Game *p_game);
-typedef void (*m_Item_Equip)(
-        Item *p_item_self, 
-        Entity *p_entity_user, 
-        Game *p_game);
-typedef void (*m_Item_Unequip)(
-        Item *p_item_self, 
-        Entity *p_entity_user, 
-        Game *p_game);
-
-typedef struct Inventory_t Inventory;
 
 typedef void (*m_Dispose_Entity)(
         Entity *p_entity_self, 
@@ -506,6 +618,47 @@ typedef uint8_t Entity_Flags__u8;
 #define ENTITY_FLAG__IS_HIDDEN \
     (ENTITY_FLAG__IS_UNLOADED << 1)
 
+// this means, 16 hearts (32 hp), and 16 energy orbs (32 energy).
+#define ENTITY_RESOURCE_MAXIMUM_QUANTITY_OF 16
+
+typedef uint16_t Heart;
+typedef uint16_t Energy;
+
+typedef Heart Heart_Reserve[ENTITY_RESOURCE_MAXIMUM_QUANTITY_OF];
+typedef Energy Energy_Reserve[ENTITY_RESOURCE_MAXIMUM_QUANTITY_OF];
+
+typedef uint16_t Quantity_For_Healing__u16;
+typedef uint16_t Quantity_For_Damaging__u16;
+
+#define HEALING__BIT_SHIFT_IS_HEARTS_OR_ENERGY 10
+#define HEALING__BIT_IS_HEARTS_OR_ENERGY \
+    (1 << HEALING__BIT_SHIFT_IS_HEARTS_OR_ENERGY)
+
+#define HEALING__BIT_SHIFT_QUANTITY 10
+#define HEALING__BIT_MASK_QUANTITY \
+    ((1 << HEALING__QUANTITY__BIT_SHIFT) - 1)
+#define HEALING__BIT_MASK_FLAGS \
+    ~((1 << HEALING__QUANTITY__BIT_SHIFT) - 1)
+
+#define DAMAGING__BIT_SHIFT_IS_POISONED 10
+#define DAMAGING__BIT_SHIFT_IS_ORDER 11
+#define DAMAGING__BIT_SHIFT_IS_CHAOS 12
+#define DAMAGING__BIT_SHIFT_IS_CURSING 13
+#define DAMAGING__BIT_IS_POISONED \
+    (1 << DAMAGING__BIT_SHIFT_IS_POISONED)
+#define DAMAGING__BIT_IS_ORDER \
+    (1 << DAMAGING__BIT_SHIFT_IS_ORDER)
+#define DAMAGING__BIT_IS_CHAOS \
+    (1 << DAMAGING__BIT_SHIFT_IS_CHAOS)
+#define DAMAGING__BIT_IS_CURSING \
+    (1 << DAMAGING__BIT_SHIFT_IS_CURSING)
+
+#define DAMAGING__BIT_SHIFT_QUANTITY 10
+#define DAMAGING__BIT_MASK_QUANTITY \
+    ((1 << DAMAGING__QUANTITY__BIT_SHIFT) - 1)
+#define DAMAGING__BIT_MASK_FLAGS \
+    ~((1 << DAMAGING__QUANTITY__BIT_SHIFT) - 1)
+
 typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
 
@@ -522,14 +675,33 @@ typedef struct Entity_t {
 
     Entity_Flags__u8            entity_flags;
 
+    Identifier__u16             identifier;
+
     enum Entity_Kind            the_kind_of_entity__this_entity_is;
     union {
-        struct { // humanoid union
-            Armor_Properties    armor_properties;
-            Direction__u8       direction;
-            Quantity__u8        max_health__quantity_u8;
-            Quantity__u8        health__quantity_u8;
-            Timer__u8           stun_timer__timer_u8;
+        struct { // living entity
+            Heart_Reserve hearts;
+            Energy_Reserve energy_orbs;
+            Signed_Quantity__i8 homeostasis__i8;
+            Inventory inventory;
+            union {
+                struct { // humanoid union
+                    Armor_Properties    armor_properties;
+                    Direction__u8       direction;
+                    Timer__u8           stun_timer__timer_u8;
+                    Quantity__u8 primary_consumption__i8;
+                    Quantity__u8 secondary_consumption__i8;
+                };
+                struct { // ancient
+                    ///
+                    /// 16 hearts is such a lowsy HP cap for a boss!
+                    /// So we will simply have additional "health"
+                    /// which cannot be poisoned, immortalized, or
+                    /// locked.
+                    ///
+                    Signed_Quantity__i16 ancient_health__i16;
+                };
+            };
         };
     };
 } Entity;
@@ -558,27 +730,13 @@ typedef struct Entity_Manager_t {
 
 typedef uint32_t Input_Flags__u32;
 
-#define INPUT_NONE 0
-#define INPUT_FORWARD (1<<0)
-#define INPUT_LEFT (INPUT_FORWARD<<1)
-#define INPUT_RIGHT (INPUT_LEFT<<1)
-#define INPUT_BACKWARDS (INPUT_RIGHT<<1)
-
-#define INPUT_GAME_SETTINGS (INPUT_BACKWARDS<<1)
-#define INPUT_LOCKON (INPUT_GAME_SETTINGS<<1)
-#define INPUT_USE (INPUT_LOCKON<<1)
-#define INPUT_USE_SECONDARY (INPUT_USE<<1)
-#define INPUT_EXAMINE (INPUT_USE_SECONDARY<<1)
-//TODO: figure out what y does again lol
-#define INPUT_Y_IS_WHAT_AGAIN (INPUT_EXAMINE<<1)
-
 typedef struct Input_t {
-    Input_Flags__u32 input_flags;
+    Input_Flags__u32 input_flags__pressed;
+    Input_Flags__u32 input_flags__held;
+    Input_Flags__u32 input_flags__released;
+    Vector__3i32F4 cursor__i32f4;
+    Vector__3i32F4 cursor__old__i32f4;
 } Input;
-
-///
-/// SECTION_inventory
-///
 
 ///
 /// SECTION_multiplayer
@@ -588,58 +746,117 @@ typedef struct Input_t {
 /// SECTION_scene
 ///
 
+typedef struct Scene_t Scene;
+
+///
+/// Prepares p_game for scene entry.
+///
+typedef void (*m_Load_Scene)  (Scene *p_this_scene, Game* p_game);
+///
+/// Functions as main loop.
+///
+typedef void (*m_Enter_Scene) (Scene *p_this_scene, Game* p_game);
+///
+/// Cleans up p_game following scene exit
+///
+typedef void (*m_Unload_Scene)(Scene *p_this_scene, Game* p_game);
+
 typedef struct Scene_t {
-    bool is_with__gamespace;
+    Scene *p_parent_scene;
+    m_Load_Scene m_load_scene_handler;
+    m_Enter_Scene m_enter_scene_handler;
+    m_Unload_Scene m_unload_scene_handler;
+    void *p_scene_data;
+    Identifier__u16 scene__identifier_u16;
+    bool is_active;
 } Scene;
 
-typedef void (*m_Load_Scene)  (Scene *p_this_scene, Game* p_game);
-typedef void (*m_Update_Scene)(Scene *p_this_scene, Game* p_game);
-typedef void (*m_Render_Scene)(Scene *p_this_scene, Game* p_game);
-typedef void (*m_Unload_Scene)(Scene *p_this_scene, Game* p_game);
+//TODO: move to platform.h in ifndef
+#define SCENE_MAX_QUANTITY_OF 8
+
+typedef struct Scene_Manager_t {
+    Scene scenes[SCENE_MAX_QUANTITY_OF];
+    Scene *p_active_scene;
+} Scene_Manager;
 
 ///
 /// SECTION_ui
 ///
 
 enum UI_Element_Kind {
+    UI_Element_Kind__None,
     UI_Element_Kind__Button,
     UI_Element_Kind__Draggable,
     UI_Element_Kind__Slider,
 };
 
 typedef struct UI_Element_t UI_Element;
+typedef struct UI_Manager_t UI_Manager;
 
-typedef void (*m_UI_Clicked)(UI_Element *p_this_ui_element);
-typedef void (*m_UI_Dragged)(UI_Element *p_this_ui_element);
-typedef void (*m_UI_Dropped)(UI_Element *p_this_ui_element);
+typedef void (*m_UI_Dispose)(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_this_ui_element);
 
-typedef int16_t UI_Slider_Position__i16;
+typedef void (*m_UI_Clicked)(
+        UI_Element *p_this_ui_element,
+        Input *p_input);
+typedef void (*m_UI_Dragged)(
+        UI_Element *p_this_ui_element,
+        Input *p_input);
+typedef void (*m_UI_Dropped)(
+        UI_Element *p_this_ui_element,
+        Input *p_input);
+typedef void (*m_UI_Held)(
+        UI_Element *p_this_ui_element,
+        Input *p_input);
+
 typedef uint8_t UI_Flags__u8;
 
-#define UI_FLAGS__BIT_SHIFT_IS_ENABLED 0
+#define UI_FLAGS__BIT_SHIFT_IS_ALLOCATED 0
+#define UI_FLAGS__BIT_SHIFT_IS_ENABLED \
+    (UI_FLAGS__BIT_SHIFT_IS_ALLOCATED + 1)
+#define UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE \
+    (UI_FLAGS__BIT_SHIFT_IS_ENABLED + 1)
+#define UI_FLAGS__BIT_SHIFT_IS_BEING_HELD \
+    (UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE + 1)
+#define UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED \
+    (UI_FLAGS__BIT_SHIFT_IS_BEING_HELD + 1)
 
+#define UI_FLAGS__BIT_IS_ALLOCATED \
+    (1 << UI_FLAGS__BIT_SHIFT_IS_ALLOCATED)
 #define UI_FLAGS__BIT_IS_ENABLED \
     (1 << UI_FLAGS__BIT_SHIFT_IS_ENABLED)
+#define UI_FLAGS__BIT_IS_NEEDING_UPDATE \
+    (1 << UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE)
+#define UI_FLAGS__BIT_IS_BEING_HELD \
+    (1 << UI_FLAGS__BIT_SHIFT_IS_BEING_HELD)
+#define UI_FLAGS__BIT_IS_BEING_DRAGGED \
+    (1 << UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED )
 
 typedef struct UI_Element_t {
     enum UI_Element_Kind the_kind_of_ui_element__this_is;
     Hitbox_AABB ui_bounding_box__aabb;
+    m_UI_Clicked    m_ui_clicked_handler;
+    m_UI_Dragged    m_ui_dragged_handler;
+    m_UI_Dropped    m_ui_dropped_handler;
+    m_UI_Held       m_ui_held_handler;
+    m_UI_Dispose    m_ui_dispose_handler;
+    void *p_ui_data;
+    Identifier__u16 ui_identifier;
     UI_Flags__u8 ui_flags;
     union {
         union {
             struct { // UI_Button
-                m_UI_Clicked m_button_clicked_handler;
+                bool button__is_held_down;
+                bool button__is_toggleable;
             };
-            struct { // UI_Draggable
-                m_UI_Dragged m_draggable_dragged_handler;
-                m_UI_Dropped m_draggable_dropped_handler;
-            };
+            // struct { // UI_Draggable
+            // };
             struct { // UI_Slider
-                m_UI_Dragged m_ui_slider_dragged_handler;
-                UI_Element *p_ui_slider_handle;
-                UI_Slider_Position__i16 slider_position__ui_position_i16;
-                UI_Slider_Position__i16 slider_position_min__ui_position_i16;
-                UI_Slider_Position__i16 slider_position_max__ui_position_i16;
+                UI_Element *p_slider_bar;
+                u16F4      slider__position__u16F4;
+                u16F4      slider__position_min__u16F4;
+                u16F4      slider__position_max__u16F4;
             };
         };
     };
@@ -649,7 +866,9 @@ typedef struct UI_Element_t {
 
 typedef struct UI_Manager_t {
     Quantity__u8 quantity_of__ui_elements__quantity_u8;
-    UI_Element ui_elements[];
+    UI_Element ui_elements[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
+    UI_Element *ui_element_ptrs[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
+    UI_Element *p_ui_element__focused;
 } UI_Manager;
 
 ///
@@ -895,8 +1114,104 @@ typedef struct Game_t {
     Input input;
     PLATFORM_Gfx_Context gfx_context;
     World world;
+    UI_Manager ui_manager;
 
     Timer__u32 tick__timer_u32;
 } Game;
+
+///
+/// These specify the various kinds of Game_Actions
+/// which can exist. m_Game_Action_Handler will
+/// manage the game actions. 
+///
+/// See m_Game_Action_Handler for how you should
+/// implement such a handler.
+///
+/// Rules:
+/// You can add new kinds, but it must be of value greater
+/// than zero, and less than the value of Game_Action_Kind__Unknown.
+///
+enum Game_Action_Kind {
+    Game_Action_Kind__None = 0,
+    Game_Action_Kind__Entity__Flags__Set,
+    Game_Action_Kind__Entity__Hitbox__Apply_Velocity,
+    Game_Action_Kind__Entity__Health__Apply_Damage,
+    Game_Action_Kind__Entity__Health__Apply_Healing,
+    Game_Action_Kind__Entity__Health__Set,
+    Game_Action_Kind__Entity__Energy__Apply_Damage,
+    Game_Action_Kind__Entity__Energy__Apply_Healing,
+    Game_Action_Kind__Entity__Energy__Set,
+    Game_Action_Kind__Entity__Place_Tile,
+    Game_Action_Kind__Entity__Item_Stack__Pick_Up,
+    Game_Action_Kind__Entity__Item_Stack__Drop,
+    Game_Action_Kind__Entity__Item_Stack__Consume,
+    Game_Action_Kind__Entity__Item_Stack__Equip,
+    Game_Action_Kind__Unknown
+};
+
+typedef uint8_t Game_Action_Flags;
+
+#define GAME_ACTION_FLAGS__BIT_IS_PTR_OR_ID 1
+
+/// 
+/// Use this struct and it's associated helpers
+/// when you need to:
+/// - manipulate an entity
+/// - manupilate a UI_Element
+/// - change scene
+///
+/// Adding your own Game_Action? Be sure to include
+/// it into the enum list. --> READ <-- the rules
+/// for updating the enum list!!!
+///
+typedef struct Game_Action_t {
+    enum Game_Action_Kind the_kind_of_game_action__this_action_is;
+    Game_Action_Flags game_action_flags;
+    union {
+        struct { //Game_Action_Kind__Entity
+            union {
+                struct { // Targetting method
+                    Identifier__u16 identifier__entity_source;
+                    Identifier__u16 identifier__entity_target;
+                };
+                struct {
+                    Entity *p_entity_source;
+                    Entity *p_entity_target;
+                };
+            };
+            union {
+                struct { //...Entity__Flags
+                    Entity_Flags__u8 entity_flags;
+                };
+                struct { //...Entity__Health
+                         //...Entity__Energy
+                    union {
+                        struct { //...Health__Set
+                            Heart_Reserve hearts;
+                        };
+                        struct { //...Energy__Set
+                            Energy_Reserve energy_orbs;
+                        };
+                        struct { //...Health__Apply_Healing
+                                 //...Energy__Apply_Healing
+                            Quantity_For_Healing__u16 healing_quantity;
+                        };
+                        struct { //...Health__Apply_Damage
+                                 //...Energy__Apply_Damage
+                            Quantity_For_Damaging__u16 damaging_quantity;
+                        };
+                    };
+                };
+                struct { //...Entity__Place_Tile
+                    Tile tile_to_place;
+                    Direction__u8 direction_to_place_the__tile;
+                };
+                struct { //...Entity__Item
+                    Item_Stack item_stack;
+                };
+            };
+        };
+    };
+} Game_Action;
 
 #endif

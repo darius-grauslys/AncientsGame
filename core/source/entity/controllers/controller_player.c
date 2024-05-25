@@ -27,7 +27,8 @@ void m_controller_for__player(
         Entity *p_this_player,
         Game *p_game) {
 
-    if (is_input__none(p_game)) {
+    Input *p_input = &p_game->input;
+    if (is_input__none_held(p_input)) {
         return;
     }
 
@@ -36,16 +37,16 @@ void m_controller_for__player(
     Direction__u8 direction__new =
         DIRECTION__NONE;
 
-    if (is_input__forward(p_game)) {
+    if (is_input__forward_held(p_input)) {
         direction__new |= DIRECTION__NORTH;
     }
-    if (is_input__right(p_game)) {
+    if (is_input__right_held(p_input)) {
         direction__new |= DIRECTION__EAST;
     }
-    if (is_input__backwards(p_game)) {
+    if (is_input__backward_held(p_input)) {
         direction__new |= DIRECTION__SOUTH;
     }
-    if (is_input__left(p_game)) {
+    if (is_input__left_held(p_input)) {
         direction__new |= DIRECTION__WEST;
     }
 
@@ -65,7 +66,7 @@ void m_controller_for__player(
         x -= 32;
     }
 
-    if (is_input__game_settings(p_game) && !toggle) {
+    if (is_input__game_settings_held(p_input) && !toggle) {
         toggle = true;
         Entity *p_skeleton = get_new__entity(
                 p_game,
@@ -75,7 +76,7 @@ void m_controller_for__player(
         set_entity__controller(
                 p_skeleton, 
                 m_controller_for__dummy);
-    } else if (is_input__examine(p_game) && !toggle) {
+    } else if (is_input__examine_held(p_input) && !toggle) {
         toggle = true;
         mode_of_use++;
         switch(mode_of_use) {
@@ -91,7 +92,7 @@ void m_controller_for__player(
                 debug_info("Use_Mode__Remove_Wall");
                 break;
         }
-    } else if (is_input__use_secondary(p_game) && !toggle) {
+    } else if (is_input__use_secondary_held(p_input) && !toggle) {
         toggle = true;
         kind_of_tile++;
         switch(kind_of_tile) {
@@ -128,7 +129,7 @@ void m_controller_for__player(
                 debug_info("Tile_Kind__Sand");
                 break;
         }
-    } else if (is_input__use(p_game) && !toggle) {
+    } else if (is_input__use_held(p_input) && !toggle) {
         toggle = true;
 
         Chunk *p_chunk =
@@ -171,10 +172,10 @@ void m_controller_for__player(
 
         animate_humanoid__use(p_this_player);
         return;
-    } else if (!is_input__game_settings(p_game)
-            && !is_input__use(p_game)
-            && !is_input__use_secondary(p_game)
-            && !is_input__examine(p_game)) {
+    } else if (!is_input__game_settings_held(p_input)
+            && !is_input__use_held(p_input)
+            && !is_input__use_secondary_held(p_input)
+            && !is_input__examine_held(p_input)) {
         toggle = false;
     }
 

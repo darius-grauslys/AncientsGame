@@ -59,7 +59,7 @@ static bool inline is_tile_cover__a_wall(
     return kind_of_tile_cover & TILE_COVER__BIT_IS_WALL;
 }
 
-static Index_u16 inline get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
+static Index__u16 inline get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
         Tile_Wall_Adjacency_Code__u16 wall_adjacency) {
     return 
         TILE_SHEET_TILE_WIDTH
@@ -69,7 +69,7 @@ static Index_u16 inline get_tile_sheet_index_offset_for__cover_from__wall_adjace
         ;
 }
 
-static Index_u16 inline
+static Index__u16 inline
 get_tile_sheet_index_offset_for__sprite_cover_from__wall_adjacency(
         Tile_Wall_Adjacency_Code__u16 wall_adjacency) {
     return 

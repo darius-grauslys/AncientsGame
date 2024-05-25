@@ -21,12 +21,16 @@
 #include <world/chunk.h>
 #include <world/tile.h>
 
+#include <ui/ui_manager.h>
+
 void init_game(Game *p_game) {
     PLATFORM_init_gfx_context(&p_game->gfx_context);
     //TODO: start with a main menu.
     PLATFORM_init_rendering__game(&p_game->gfx_context);
 
     init_world(&p_game->world);
+
+    init_ui_manager(&p_game->ui_manager);
 
     // TODO: prob wanna remove some of the stuff below
 
@@ -42,6 +46,8 @@ void init_game(Game *p_game) {
     PLATFORM_update_chunks(
             &p_game->gfx_context,
             &p_game->world.chunk_manager);
+
+    //TODO: test adding some ui :)
 }
 
 void manage_game(Game *p_game) {
@@ -55,7 +61,8 @@ void manage_game__pre_render(Game *p_game) {
 }
 
 void manage_game__post_render(Game *p_game) {
-    PLATFORM_poll_input(p_game);
+    PLATFORM_poll_input(&p_game->input);
+    poll_ui_manager__update(&p_game->ui_manager, p_game);
     manage_entities(p_game);
 
     if (poll_world_for__scrolling(&p_game->world)) {

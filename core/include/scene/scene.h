@@ -3,16 +3,14 @@
 
 #include <defines.h>
 
-typedef struct Scene_t {
-    m_load_scene    load_handler;
-    m_update_scene  update_handler;
-    m_render_scene  render_handler;
-    m_unload_scene  unload_handler;
-} Scene;
-
-///
-/// This sets all handlers to nullptr.
-/// 
-void init_scene(Scene* scene);
+static void inline init_scene(Scene* scene) {
+    scene->m_enter_scene_handler = 0;
+    scene->m_load_scene_handler = 0;
+    scene->m_unload_scene_handler = 0;
+    scene->p_parent_scene = 0;
+    scene->scene__identifier_u16 = IDENTIFIER__UNKNOWN__u16;
+    scene->p_scene_data = 0;
+    scene->is_active = false;
+}
 
 #endif
