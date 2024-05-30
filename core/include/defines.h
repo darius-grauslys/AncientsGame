@@ -630,25 +630,115 @@ typedef uint8_t Entity_Flags__u8;
 #define ENTITY_FLAG__IS_HIDDEN \
     NEXT_BIT(ENTITY_FLAG__IS_UNLOADED)
 
+typedef uint8_t Humanoid_Flags;
+#define HUMANOID_FLAG__IS_UNDEAD                BIT(0)
+#define HUMANOID_FLAG__HAS_DIVINE_PROVIDENCE    BIT(1)
+
 #define ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF 32
 
 #define RESOURCE_SYMBOL__EMPTY 0
 #define RESOURCE_SYMBOL__LOCKED ((uint8_t)-1)
 
+//TODO: move to nds.
 //TODO: if heart/energy_orb HUD breaks, its likely because
 //      the tileset got moved around. DON'T PANIC! Just change
 //      the values below. TODO, make this not a problem.
-#define UI_TILE_SHEET_INDEX__EMPTY_HEART (Index__u16)254
-#define UI_TILE_SHEET_INDEX__HALF_HEART (Index__u16)255
-#define UI_TILE_SHEET_INDEX__FULL_HEART (Index__u16)256
-#define UI_TILE_SHEET_INDEX__HALF_POISON_HEART (Index__u16)257
-#define UI_TILE_SHEET_INDEX__FULL_POISON_HEART (Index__u16)258
-#define UI_TILE_SHEET_INDEX__NORMAL_POISON_HEART (Index__u16)259
-#define UI_TILE_SHEET_INDEX__HALF_IMMORTAL_HEART (Index__u16)260
-#define UI_TILE_SHEET_INDEX__FULL_IMMORTAL_HEART (Index__u16)261
-#define UI_TILE_SHEET_INDEX__IMMORTAL_NORMAL_HEART (Index__u16)262
-#define UI_TILE_SHEET_INDEX__IMMORTAL_POISON_HEART (Index__u16)263
-#define UI_TILE_SHEET_INDEX__LOCKED_HEART (Index__u16)264
+#define UI_TILE_SHEET_INDEX__EMPTY_HEART (Index__u16)220
+#define UI_TILE_SHEET_INDEX__HALF_HEART (Index__u16)221
+#define UI_TILE_SHEET_INDEX__FULL_HEART (Index__u16)222
+#define UI_TILE_SHEET_INDEX__HALF_POISON_HEART (Index__u16)223
+#define UI_TILE_SHEET_INDEX__FULL_POISON_HEART (Index__u16)224
+#define UI_TILE_SHEET_INDEX__NORMAL_POISON_HEART (Index__u16)225
+#define UI_TILE_SHEET_INDEX__HALF_IMMORTAL_HEART (Index__u16)226
+#define UI_TILE_SHEET_INDEX__FULL_IMMORTAL_HEART (Index__u16)227
+#define UI_TILE_SHEET_INDEX__IMMORTAL_NORMAL_HEART (Index__u16)228
+#define UI_TILE_SHEET_INDEX__IMMORTAL_POISON_HEART (Index__u16)229
+#define UI_TILE_SHEET_INDEX__LOCKED_HEART (Index__u16)230
+
+#define UI_TILE_SHEET_INDEX__EMPTY_ENERGY_ORB (Index__u16)209
+#define UI_TILE_SHEET_INDEX__HALF_ENERGY_ORB (Index__u16)210
+#define UI_TILE_SHEET_INDEX__FULL_ENERGY_ORB (Index__u16)211
+#define UI_TILE_SHEET_INDEX__HALF_POISON_ENERGY_ORB (Index__u16)212
+#define UI_TILE_SHEET_INDEX__FULL_POISON_ENERGY_ORB (Index__u16)213
+#define UI_TILE_SHEET_INDEX__NORMAL_POISON_ENERGY_ORB (Index__u16)214
+#define UI_TILE_SHEET_INDEX__HALF_DEMONIC_ENERGY_ORB (Index__u16)215
+#define UI_TILE_SHEET_INDEX__FULL_DEMONIC_ENERGY_ORB (Index__u16)216
+#define UI_TILE_SHEET_INDEX__DEMONIC_NORMAL_ENERGY_ORB (Index__u16)217
+#define UI_TILE_SHEET_INDEX__DEMONIC_POISON_ENERGY_ORB (Index__u16)218
+#define UI_TILE_SHEET_INDEX__LOCKED_ENERGY_ORB (Index__u16)219
+
+#define UI_TILE_SHEET_INDEX__EXTREME_FREEZING   (Index__u16)377
+#define UI_TILE_SHEET_INDEX__FREEZING           (Index__u16)379
+#define UI_TILE_SHEET_INDEX__COLD               (Index__u16)385
+#define UI_TILE_SHEET_INDEX__NEUTRAL            (Index__u16)391
+#define UI_TILE_SHEET_INDEX__HOT                (Index__u16)397
+#define UI_TILE_SHEET_INDEX__BURNING            (Index__u16)403
+#define UI_TILE_SHEET_INDEX__EXTREME_BURNING    (Index__u16)405
+#define UI_TILE_SHEET_INDEX__DIVINE_PROVIDENCE  (Index__u16)407
+#define UI_TILE_SHEET_INDEX__SOULFULL           (Index__u16)409
+#define UI_TILE_SHEET_INDEX__FLEETING_SOUL      (Index__u16)411
+#define UI_TILE_SHEET_INDEX__SOULLESS           (Index__u16)413
+#define UI_TILE_SHEET_INDEX__LICHLING           (Index__u16)415
+#define UI_TILE_SHEET_INDEX__LICH               (Index__u16)417
+
+//sub 53
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_BLOATED (Index__u16)427
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_BLOATED (Index__u16)429
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_TOP (Index__u16)419
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_TOP (Index__u16)421
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_FULL (Index__u16)435
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_FULL (Index__u16)438
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_TOP_MIDDLE (Index__u16)447
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_TOP_MIDDLE (Index__u16)450
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_SATISFIED (Index__u16)441
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_SATISFIED (Index__u16)444
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_MIDDLE (Index__u16)465
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_MIDDLE (Index__u16)468
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_WELL (Index__u16)453
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_WELL (Index__u16)466
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_INDIFFERENT (Index__u16)459
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_INDIFFERENT (Index__u16)462
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_BOTTOM_MIDDLE \
+    (Index__u16)483
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_BOTTOM_MIDDLE \
+    (Index__u16)486
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_WANTING (Index__u16)471
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_WANTING (Index__u16)474
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_NEEDING (Index__u16)477
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_NEEDING (Index__u16)480
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_DESPERATE (Index__u16)431
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_DESPERATE (Index__u16)433
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_BOTTOM (Index__u16)423
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_BOTTOM (Index__u16)425
+
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_BLOATED (Index__u16)497
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_BLOATED (Index__u16)499
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_TOP (Index__u16)489
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_TOP (Index__u16)491
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_FULL (Index__u16)501
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_FULL (Index__u16)504
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_TOP_MIDDLE (Index__u16)517
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_TOP_MIDDLE (Index__u16)520
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_SATISFIED (Index__u16)511
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_SATISFIED (Index__u16)514
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_MIDDLE (Index__u16)535
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_MIDDLE (Index__u16)538
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_WELL (Index__u16)529
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_WELL (Index__u16)532
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_INDIFFERENT (Index__u16)529
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_INDIFFERENT (Index__u16)532
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_BOTTOM_MIDDLE \
+    (Index__u16)553
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_BOTTOM_MIDDLE \
+    (Index__u16)556
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_WANTING (Index__u16)535
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_WANTING (Index__u16)538
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_NEEDING (Index__u16)547
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_NEEDING (Index__u16)550
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_DESPERATE (Index__u16)501
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_DESPERATE (Index__u16)503
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_BOTTOM (Index__u16)493
+#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_BOTTOM (Index__u16)495
 
 typedef uint8_t Resource_Symbol__u8;
 typedef uint8_t Heart__u8;
@@ -684,6 +774,18 @@ typedef struct Resource_Reserve_t {
     Resource_Symbol__u8 resource_symbols
         [ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF];
     Quantity__u8 max_quantity_of__resource_symbols;
+    ///
+    /// Used for entities who has more than
+    /// ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF
+    /// of a resource.
+    ///
+    /// This overflow cannot be modified. ie it
+    /// cannot be poisoned, etc.
+    ///
+    /// This is primarily used for Ancients only.
+    ///
+    Quantity__u16 resource_overflow;
+    Quantity__u16 max_quantity_of__resource_overflow;
 } Resource_Reserve;
 
 typedef uint8_t Hearts_Damaging_Flags;
@@ -738,6 +840,88 @@ typedef struct Energy_Healing_Specifier_t {
     Energy_Damaging_Flags energy_healing__flags;
 } Energy_Healing_Specifier;
 
+typedef int8_t Homeostasis__i8;
+#define HOMEOSTASIS_MAX_QUANTITY_OF MASK(7)
+#define HOMEOSTASIS_MIN_QUANTITY_OF (int8_t)BIT(7)
+
+#define HOMEOSTASIS__EXTREME_BURNING 110
+#define HOMEOSTASIS__BURNING 80
+#define HOMEOSTASIS__HOT 40
+#define HOMEOSTASIS__NEUTRAL 0
+#define HOMEOSTASIS__COLD -40
+#define HOMEOSTASIS__FREEZING -80
+#define HOMEOSTASIS__EXTREME_FREEZING -110
+
+#define HOMEOSTASIS__SOULFUL -100
+#define HOMEOSTASIS__FLEETING_SOUL -50
+#define HOMEOSTASIS__SOULLESS 0
+#define HOMEOSTASIS__LICHLING 120
+#define HOMEOSTASIS__LICH 128
+
+enum Homeostasis_State {
+    Homeostasis_State__None = 0,
+    Homeostasis_State__Extreme_Burning,
+    Homeostasis_State__Burning,
+    Homeostasis_State__Hot,
+    Homeostasis_State__Neutral,
+    Homeostasis_State__Cold,
+    Homeostasis_State__Freezing,
+    Homeostasis_State__Extreme_Freezing,
+    Homeostasis_State__Divine_Providence,
+    Homeostasis_State__Soulfull,
+    Homeostasis_State__Fleeting_Soul,
+    Homeostasis_State__Soulless,
+    Homeostasis_State__Lichling,
+    Homeostasis_State__Lich,
+    Homeostasis_State__Unknown = -1
+};
+
+enum Homeostasis_Update_Kind {
+    Homeostasis_Update_Kind__None = 0,
+    Homeostasis_Update_Kind__Increasing,
+    Homeostasis_Update_Kind__Decreasing,
+    Homeostasis_Update_Kind__Unknown = -1
+};
+
+typedef uint8_t Sustenance__u8;
+#define SUSTENANCE_MAX_QUANTITY_OF (uint8_t)MASK(8)
+#define SUSTENANCE_MIN_QUANTITY_OF 0
+
+enum Sustenance_Kind {
+    Sustenance_Kind__None = 0,
+    Sustenance_Kind__Primary = 1,
+    Sustenance_Kind__Secondary = 2,
+    Sustenance_Kind__Hunger = 1,    // primary
+    Sustenance_Kind__Thirst = 2,    // secondary
+    Sustenance_Kind__Sanity = 1,    // primary
+    Sustenance_Kind__Blood = 2,     // secondary
+    Sustenance_Kind__Unknown = (uint8_t)(-1)
+};
+
+#define SUSTENANCE__BLOATED 240
+#define SUSTENANCE__FULL 234
+#define SUSTENANCE__SATISFIED 206
+#define SUSTENANCE__WELL 178
+#define SUSTENANCE__INDIFFERENT 150
+#define SUSTENANCE__WANTING 122
+#define SUSTENANCE__NEEDING 84
+#define SUSTENANCE__DESPERATE 56
+#define SUSTENANCE__DYING 28
+
+enum Sustenance_State {
+    Sustenance_State__None = 0,
+    Sustenance_State__Bloated,
+    Sustenance_State__Full,
+    Sustenance_State__Satisifed,
+    Sustenance_State__Well,
+    Sustenance_State__Indifferent,
+    Sustenance_State__Wanting,
+    Sustenance_State__Needing,
+    Sustenance_State__Desperate,
+    Sustenance_State__Dying,
+    Sustenance_State__Unknown = (uint8_t)(-1)
+};
+
 typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
 
@@ -761,24 +945,17 @@ typedef struct Entity_t {
         struct { // living entity
             Resource_Reserve hearts;
             Resource_Reserve energy_orbs;
-            Signed_Quantity__i8 homeostasis__i8;
             Inventory inventory;
+            Homeostasis__i8 homeostasis__i8;
+            Humanoid_Flags humanoid_flags;
+            enum Homeostasis_Update_Kind kind_of_homeostasis__update;
             union {
                 struct { // humanoid union
                     Armor_Properties    armor_properties;
                     Direction__u8       direction;
                     Timer__u8           stun_timer__timer_u8;
-                    Quantity__u8 primary_consumption__i8;
-                    Quantity__u8 secondary_consumption__i8;
-                };
-                struct { // ancient
-                    ///
-                    /// 16 hearts is such a lowsy HP cap for a boss!
-                    /// So we will simply have additional "health"
-                    /// which cannot be poisoned, immortalized, or
-                    /// locked.
-                    ///
-                    Signed_Quantity__i16 ancient_health__i16;
+                    Sustenance__u8      primary_sustenance__u8;
+                    Sustenance__u8      secondary_sustenance__u8;
                 };
             };
         };
@@ -891,6 +1068,9 @@ typedef void (*m_UI_Held)(
         Game *p_game);
 
 typedef uint8_t UI_Flags__u8;
+
+#define UI_HUD_NOTIFICATION_LIFESPAN_IN__SECONDS 4
+#define UI_HUD_MESSAGE_LIFESPAN_IN__SECONDS 20
 
 #define UI_FLAGS__BIT_SHIFT_IS_ALLOCATED 0
 #define UI_FLAGS__BIT_SHIFT_IS_ENABLED \

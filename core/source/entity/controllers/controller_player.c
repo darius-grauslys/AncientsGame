@@ -67,6 +67,7 @@ void m_controller_for__player(
         x -= 32;
     }
 
+    goto set_direction;
     if (is_input__game_settings_held(p_input) && !toggle) {
         toggle = true;
         Entity *p_skeleton = add_entity_to__world(
@@ -180,6 +181,7 @@ void m_controller_for__player(
         toggle = false;
     }
 
+set_direction:
     switch (direction__new) {
         default:
             // animate_humanoid__idle(this_player);

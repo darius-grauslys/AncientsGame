@@ -71,7 +71,6 @@ void m_main_menu__menu_button__clicked_handler(
     Game *p_game) {
     enum Main_Menu_State button_associated_state =
         *((enum Main_Menu_State*)p_this_button->p_ui_data);
-    debug_info("btn state: %d", button_associated_state);
     switch(button_associated_state) {
         case Main_Menu_State__Idle:
             debug_info("idle");
@@ -166,22 +165,6 @@ void m_load_scene_as__main_menu_handler(
             118, 
             0);
 
-    for (Quantity__u8 i=0;i<4;i++) {
-        debug_info("pos: %d, %d",
-                p_button_ptrs[i]->ui_bounding_box__aabb.x__i32F4,
-                p_button_ptrs[i]->ui_bounding_box__aabb.y__i32F4);
-        Vector__3i32F4 aa, bb;
-        get_points_aabb_from__hitbox(
-                &p_button_ptrs[i]->ui_bounding_box__aabb,
-                &aa, 
-                &bb);
-        debug_info("bounds: (%d, %d) -> (%d, %d)",
-                aa.x__i32F4,
-                aa.y__i32F4,
-                bb.x__i32F4,
-                bb.y__i32F4);
-    }
-
     main_menu_data.p_gfx_context =
         &p_game->gfx_context;
 }
@@ -192,12 +175,6 @@ void m_enter_scene_as__main_menu_handler(
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         manage_game(p_game);
-        if (is_input__click_released(&p_game->input)) {
-            debug_info("input %d, %d",
-                    p_game->input.cursor__old__i32f4.x__i32F4,
-                    p_game->input.cursor__old__i32f4.y__i32F4
-                    );
-        }
     }
 }
 

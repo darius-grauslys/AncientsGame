@@ -35,17 +35,5 @@ Entity *get_new__entity(
         int32_t x__global,
         int32_t y__global,
         int32_t z__global);
-Entity *get_new__humanoid( 
-        Entity_Manager *p_entity_manager, 
-        enum Entity_Kind kind_of_entity,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global);
-Entity *get_new__player(
-        Entity_Manager *p_entity_manager, 
-        bool is_local_player,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global);
 
 #endif

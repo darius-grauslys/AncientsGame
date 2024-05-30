@@ -114,6 +114,18 @@ void apply_hearts_healing_specifier_to__entity(
         Entity *p_entity,
         Hearts_Healing_Specifier hearts_healing_specifier);
 
+///
+/// Gets quantity of non-empty/non-locked half hearts.
+///
+Quantity__u16 get_quantity_u16_of__health_of__entity(
+        Entity *p_entity);
+
+///
+/// Gets quantity of immortal/normal half hearts.
+///
+Quantity__u16 get_quantity_u16_of__quality_health_of__entity(
+        Entity *p_entity);
+
 void apply_energy_damaging_specifier_to__entity(
         Entity *p_entity,
         Energy_Damaging_Specifier energy_damaging_specifier);
@@ -121,5 +133,46 @@ void apply_energy_damaging_specifier_to__entity(
 void apply_energy_healing_specifier_to__entity(
         Entity *p_entity,
         Energy_Healing_Specifier energy_healing_specifier);
+
+Quantity__u16 get_quantity_u16_of__energy_of__entity(
+        Entity *p_entity);
+
+Quantity__u16 get_quantity_u16_of__quality_energy_of__entity(
+        Entity *p_entity);
+
+void increase_homeostasis_of__entity(
+        Entity *p_entity,
+        Quantity__u8 quantity_of__homeostasis_increase);
+
+void decrease_homeostasis_of__entity(
+        Entity *p_entity,
+        Quantity__u8 quantity_of__homeostasis_decrease);
+
+static Signed_Quantity__i8 inline 
+    get_signed_quantity_i8_of__homeostatis_of__entity(
+        Entity *p_entity) {
+    return p_entity->homeostasis__i8;
+}
+
+enum Homeostasis_State get_state_of__homeostasis_of__entity(
+        Entity *p_entity);
+
+void increase_sustenance_of__entity(
+        Entity *p_entity,
+        enum Sustenance_Kind kind_of_sustenance,
+        Quantity__u8 quantity_of__sustenance_increase);
+
+void decrease_sustenance_of__entity(
+        Entity *p_entity,
+        enum Sustenance_Kind kind_of_sustenance,
+        Quantity__u8 quantity_of__sustenance_decrease);
+
+Sustenance__u8 get_quantity_of__sustenance_of__entity(
+        Entity *p_entity,
+        enum Sustenance_Kind kind_of_sustenance);
+
+enum Sustenance_State get_state_of__sustenance_of__entity(
+        Entity *p_entity,
+        enum Sustenance_Kind kind_of_sustenance);
 
 #endif
