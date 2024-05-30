@@ -2,8 +2,8 @@
 #include "vectors.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
-#include <game_actions/game_actions__singleplayer.h>
-#include <game_actions/game_action.h>
+#include <game_action/game_actions__singleplayer.h>
+#include <game_action/game_action.h>
 #include <entity/entity_manager.h>
 #include <collisions/hitbox_aabb.h>
 #include <entity/reserves.h>
@@ -18,6 +18,14 @@ void handle_game_action__entity__hitbox__apply_velocity(
         Entity *p_entity,
         Vector__3i32F4 velocity) {
     apply_velocity_to__hitbox(
+            &p_entity->hitbox, 
+            velocity);
+}
+
+void handle_game_action__entity__hitbox__set_velocity(
+        Entity *p_entity,
+        Vector__3i32F4 velocity) {
+    set_velocity_to__hitbox(
             &p_entity->hitbox, 
             velocity);
 }
@@ -85,6 +93,9 @@ void handle_game_action__entity__place__tile(
         p_entity_source->hitbox.x__i32F4,
         p_entity_source->hitbox.y__i32F4,
         p_entity_source->hitbox.z__i32F4
+        // p_entity_source->hitbox.position__3i32F4.x__i32F4,
+        // p_entity_source->hitbox.position__3i32F4.y__i32F4,
+        // p_entity_source->hitbox.position__3i32F4.z__i32F4
     };
 
     offset_vector_by__direction(
@@ -151,6 +162,7 @@ void handle_game_action__entity(
             return;
         case Game_Action_Kind__Entity__Flags__Set:
         case Game_Action_Kind__Entity__Hitbox__Apply_Velocity:
+        case Game_Action_Kind__Entity__Hitbox__Set_Velocity:
         case Game_Action_Kind__Entity__Health__Apply_Damage:
         case Game_Action_Kind__Entity__Health__Apply_Healing:
         case Game_Action_Kind__Entity__Health__Set:
@@ -173,7 +185,12 @@ void handle_game_action__entity(
                 case Game_Action_Kind__Entity__Hitbox__Apply_Velocity:
                     handle_game_action__entity__hitbox__apply_velocity(
                             p_entity_target,
-                            p_game_action->velocity);
+                            p_game_action->velocity_vector__apply);
+                    break;
+                case Game_Action_Kind__Entity__Hitbox__Set_Velocity:
+                    handle_game_action__entity__hitbox__set_velocity(
+                            p_entity_target,
+                            p_game_action->velocity_vector__set);
                     break;
                 case Game_Action_Kind__Entity__Health__Apply_Damage:
                     handle_game_action__entity__health__apply_damage(

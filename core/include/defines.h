@@ -1422,6 +1422,7 @@ enum Game_Action_Kind {
     Game_Action_Kind__None = 0,
     Game_Action_Kind__Entity__Flags__Set,
     Game_Action_Kind__Entity__Hitbox__Apply_Velocity,
+    Game_Action_Kind__Entity__Hitbox__Set_Velocity,
     Game_Action_Kind__Entity__Health__Apply_Damage,
     Game_Action_Kind__Entity__Health__Apply_Healing,
     Game_Action_Kind__Entity__Health__Set,
@@ -1474,7 +1475,10 @@ typedef struct Game_Action_t {
                 struct { //...Entity__Hitbox
                     union {
                         struct { //...Hitbox__Apply_Velocity
-                            Vector__3i32F4 velocity;
+                            Vector__3i32F4 velocity_vector__apply;
+                        };
+                        struct { //...Hitbox__Set_Velocity
+                            Vector__3i32F4 velocity_vector__set;
                         };
                     };
                 };
