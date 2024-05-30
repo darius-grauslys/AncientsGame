@@ -184,68 +184,66 @@ void m_controller_for__player(
 set_direction:
     switch (direction__new) {
         default:
-            // animate_humanoid__idle(this_player);
+            // animate_humanoid__idle(p_this_player);
             return;
         case DIRECTION__NORTH:
-            apply_velocity_to__hitbox(
+            apply_y_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    0, 
-                    ENTITY_VELOCITY__PLAYER,
-                    0);
+                    ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__EAST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER,
-                    0, 0);
+                    ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH:
-            apply_velocity_to__hitbox(
+            apply_y_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    0,
-                    -ENTITY_VELOCITY__PLAYER,
-                    0);
+                    -ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__WEST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER,
-                    0, 0);
+                    -ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_EAST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL, 
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    0);
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &p_this_player->hitbox,
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_EAST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
-                    0);
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &p_this_player->hitbox,
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_WEST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
-                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
-                    0);
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &p_this_player->hitbox,
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_WEST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &p_this_player->hitbox,
-                    -(ENTITY_VELOCITY__PLAYER_DIAGONAL),
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    0);
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &p_this_player->hitbox,
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(p_this_player);
             break;
     }

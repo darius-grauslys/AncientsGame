@@ -17,7 +17,7 @@ void release_entity_from__entity_manager(
 
 static Entity inline *get_entity_ptr_from__entity_manager(
         Entity_Manager *p_entity_manager,
-        Quantity__u16 id) {
+        Identifier__u16 id) {
 #ifndef NDEBUG
     if (ENTITY_MAXIMUM_QUANTITY_OF <= id) {
         debug_abort("Index out of bounds %d, \

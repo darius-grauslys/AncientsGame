@@ -547,3 +547,29 @@ bool poll_chunk_manager_for__tile_collision(
 
     return true;
 }
+
+Tile *get_tile_ptr_from__chunk_manager_with__v__3i32F4(
+        Chunk_Manager *p_chunk_manager,
+        Vector__3i32F4 position) {
+
+    Vector__3i32 chunk_index =
+        vector_3i32F4_to__chunk_vector_3i32(position);
+    Vector__3u8 local_position =
+        vector_3i32F4_to__local_chunk_vector_3u8(
+                position);
+
+    Chunk *p_chunk =
+        get_chunk_ptr_from__chunk_manager(
+                p_chunk_manager, 
+                chunk_index.x__i32, 
+                chunk_index.y__i32, 
+                chunk_index.z__i32);
+    Tile *p_tile =
+        get_tile_ptr_from__chunk(
+                p_chunk, 
+                local_position.x__u8, 
+                local_position.y__u8,
+                local_position.z__u8);
+
+    return p_tile;
+}

@@ -20,66 +20,69 @@ void m_controller_for__dummy(
     switch (random__result) {
         default:
         case DIRECTION__ANY:
-            set_velocity_to__hitbox(
-                    &this_dummy->hitbox,
-                    0, 0,
-                    0);
+            set_x_velocity_to__hitbox(&this_dummy->hitbox, 0);
+            set_y_velocity_to__hitbox(&this_dummy->hitbox, 0);
+            set_z_velocity_to__hitbox(&this_dummy->hitbox, 0);
             animate_humanoid__idle(this_dummy);
             return;
         case DIRECTION__NORTH:
-            apply_velocity_to__hitbox(
+            apply_y_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    0, ENTITY_VELOCITY__PLAYER,
-                    0);
+                    ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__EAST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    ENTITY_VELOCITY__PLAYER,
-                    0, 0);
+                    ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__SOUTH:
-            apply_velocity_to__hitbox(
+            apply_y_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    0, -ENTITY_VELOCITY__PLAYER,
-                    0);
+                    -ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__WEST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    -ENTITY_VELOCITY__PLAYER,
-                    0, 0);
+                    -ENTITY_VELOCITY__PLAYER);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__NORTH_EAST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &this_dummy->hitbox,
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__SOUTH_EAST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &this_dummy->hitbox,
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__SOUTH_WEST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &this_dummy->hitbox,
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(this_dummy);
             break;
         case DIRECTION__NORTH_WEST:
-            apply_velocity_to__hitbox(
+            apply_x_velocity_to__hitbox(
                     &this_dummy->hitbox,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL, 0);
+                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_y_velocity_to__hitbox(
+                    &this_dummy->hitbox,
+                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
             animate_humanoid__walk(this_dummy);
             break;
     }

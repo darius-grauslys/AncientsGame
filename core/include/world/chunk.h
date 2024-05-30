@@ -5,7 +5,9 @@
 #include <stdint.h>
 #include <defines.h>
 
+#include "platform_defines.h"
 #include "tile.h"
+#include "vectors.h"
 
 static inline void init_chunk(
         Chunk *chunk, 
@@ -52,6 +54,40 @@ static inline Tile* get_tile_ptr_from__chunk(
         * 8;
 
     return &chunk->tiles[index__u8];
+}
+
+///
+/// Returns a Vector__3u8 with x,y,z signlessly indexing tiles
+///
+static inline Vector__3u8 vector_3i32F4_to__local_chunk_vector_3u8(
+        Vector__3i32F4 vector) {
+    Vector__3i32 vector__3i32 =
+        vector_3i32F4_to__vector_3i32(vector);
+    vector__3i32.x__i32 = ((vector__3i32.x__i32 
+            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
+        % CHUNK_WIDTH__IN_TILES;
+    vector__3i32.y__i32 = ((vector__3i32.y__i32 
+            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
+        % CHUNK_WIDTH__IN_TILES;
+    vector__3i32.z__i32 = ((vector__3i32.z__i32 
+            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
+        % CHUNK_WIDTH__IN_TILES;
+    Vector__3u8 vector__3u8 =
+        vector_3i32F4_to__vector_3u8(vector);
+    return vector__3u8;
+}
+
+///
+/// Returns a Vector__3i32 with x,y,z indexing chunks.
+///
+static inline Vector__3i32 vector_3i32F4_to__chunk_vector_3i32(
+        Vector__3i32F4 vector) {
+    Vector__3i32 vector__3i32 =
+        vector_3i32F4_to__vector_3i32(vector);
+    vector__3i32.x__i32 >>= CHUNK__WIDTH_BIT_SHIFT;
+    vector__3i32.y__i32 >>= CHUNK__WIDTH_BIT_SHIFT;
+    vector__3i32.z__i32 >>= CHUNK__WIDTH_BIT_SHIFT;
+    return vector__3i32;
 }
 
 #endif

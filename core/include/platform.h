@@ -37,6 +37,14 @@ void PLATFORM_render_entity(
         Game *game);
 
 ///
+/// SECTION_game_actions
+///
+
+void m_PLATFORM_game_action_handler_for__multiplayer(
+        Game *p_this_game,
+        Game_Action *p_game_action);
+
+///
 /// SECTION_rendering
 ///
 void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context);

@@ -1,6 +1,7 @@
 #ifndef CHUNK_MANAGER_H
 #define CHUNK_MANAGER_H
 
+#include "defines_weak.h"
 #include <defines.h>
 
 void init_chunk_manager(
@@ -54,5 +55,9 @@ static Tile inline *get_tile_ptr_from__chunk_node(
     return &p_chunk_node->p_chunk__here->tiles[
         y__local * CHUNK_WIDTH__IN_TILES + x__local];
 }
+
+Tile *get_tile_ptr_from__chunk_manager_with__v__3i32F4(
+        Chunk_Manager *p_chunk_manager,
+        Vector__3i32F4 position);
 
 #endif

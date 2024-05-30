@@ -60,6 +60,15 @@ typedef struct Vector__3i32F4_t {
 
 typedef int32_t Signed_Index__i32;
 
+///
+/// Has three int32_t components.
+///
+typedef struct Vector__3i32_t {
+    Signed_Index__i32 x__i32, 
+                      y__i32, 
+                      z__i32;
+} Vector__3i32;
+
 typedef uint32_t Psuedo_Random_Seed__u32;
 typedef uint32_t Timer__u32;
 typedef uint8_t Timer__u8;
@@ -71,6 +80,10 @@ typedef uint8_t Direction__u8;
 typedef uint8_t Index__u8;
 typedef uint16_t Index__u16;
 typedef uint32_t Index_u32;
+
+typedef struct Vector__3u8_t {
+    Index__u8 x__u8, y__u8, z__u8;
+} Vector__3u8;
 
 #define QUANTITY__UNKNOWN__u32 (uint32_t)(-1)
 #define QUANTITY__UNKNOWN__u16 (uint16_t)(-1)
@@ -1275,7 +1288,7 @@ typedef uint8_t Tile_Flags__u8;
 
 typedef struct Tile_t {
     enum Tile_Kind                  the_kind_of_tile__this_tile_is;
-    enum Tile_Cover_Kind        the_kind_of_tile_cover__this_tile_has;
+    enum Tile_Cover_Kind            the_kind_of_tile_cover__this_tile_has;
     //TODO: this structure is not padding friendly.
     // consider making flags 16 bit
     Tile_Flags__u8 tile_flags;
@@ -1374,6 +1387,11 @@ typedef struct World_t {
 /// SECTION_core
 ///
 
+typedef struct Game_Action_t Game_Action;
+typedef void (*m_Game_Action_Handler)(
+        Game *p_this_game,
+        Game_Action *p_game_action);
+
 typedef struct Game_t {
     Input input;
     PLATFORM_Gfx_Context gfx_context;
@@ -1381,6 +1399,8 @@ typedef struct Game_t {
     UI_Manager ui_manager;
 
     World world;
+
+    m_Game_Action_Handler m_game_action_handler;
 
     Timer__u32 tick__timer_u32;
     bool is_world__initialized;
@@ -1418,7 +1438,7 @@ enum Game_Action_Kind {
 
 typedef uint8_t Game_Action_Flags;
 
-#define GAME_ACTION_FLAGS__BIT_IS_PTR_OR_ID \
+#define GAME_ACTION_FLAGS__BIT_IS_ID_OR_PTR \
     BIT(0)
 
 /// 
@@ -1451,6 +1471,13 @@ typedef struct Game_Action_t {
                 struct { //...Entity__Flags
                     Entity_Flags__u8 entity_flags;
                 };
+                struct { //...Entity__Hitbox
+                    union {
+                        struct { //...Hitbox__Apply_Velocity
+                            Vector__3i32F4 velocity;
+                        };
+                    };
+                };
                 struct { //...Entity__Health
                          //...Entity__Energy
                     union {
@@ -1463,7 +1490,7 @@ typedef struct Game_Action_t {
                         struct { //...Health__Apply_Healing
                                  //...Energy__Apply_Healing
                             union {
-                                Hearts_Damaging_Specifier 
+                                Hearts_Healing_Specifier 
                                     hearts_healing_specifier;
                                 Energy_Healing_Specifier 
                                     energy_healing_specifier;

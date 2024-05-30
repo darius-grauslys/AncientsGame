@@ -79,6 +79,7 @@ typedef struct Tile_t Tile;
 ///
 
 typedef struct Game_t Game;
+typedef struct Game_Action_t Game_Action;
 
 ///
 /// SECTION_platform

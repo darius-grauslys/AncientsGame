@@ -126,6 +126,10 @@ Quantity__u16 get_quantity_u16_of__health_of__entity(
 Quantity__u16 get_quantity_u16_of__quality_health_of__entity(
         Entity *p_entity);
 
+void set_hearts_of__entity(
+        Entity *p_entity,
+        Resource_Reserve *hearts);
+
 void apply_energy_damaging_specifier_to__entity(
         Entity *p_entity,
         Energy_Damaging_Specifier energy_damaging_specifier);
@@ -139,6 +143,10 @@ Quantity__u16 get_quantity_u16_of__energy_of__entity(
 
 Quantity__u16 get_quantity_u16_of__quality_energy_of__entity(
         Entity *p_entity);
+
+void set_energy_orbs_of__entity(
+        Entity *p_entity,
+        Resource_Reserve *energy_orbs);
 
 void increase_homeostasis_of__entity(
         Entity *p_entity,

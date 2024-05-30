@@ -130,12 +130,10 @@ static void inline init_hitbox(
 
 static void inline apply_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
-        i32F4 x__velocity,
-        i32F4 y__velocity,
-        i32F4 z__velocity) {
-    hitbox->x__velocity__i32F4 += x__velocity;
-    hitbox->y__velocity__i32F4 += y__velocity;
-    hitbox->z__velocity__i32F4 += z__velocity;
+        Vector__3i32F4 vector) {
+    hitbox->x__velocity__i32F4 += vector.x__i32F4;
+    hitbox->y__velocity__i32F4 += vector.y__i32F4;
+    hitbox->z__velocity__i32F4 += vector.z__i32F4;
 }
 
 static void inline apply_x_velocity_to__hitbox(
@@ -158,12 +156,10 @@ static void inline apply_z_velocity_to__hitbox(
 
 static void inline set_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
-        i32F4 x__velocity,
-        i32F4 y__velocity,
-        i32F4 z__velocity) {
-    hitbox->x__velocity__i32F4 = x__velocity;
-    hitbox->y__velocity__i32F4 = y__velocity;
-    hitbox->z__velocity__i32F4 = z__velocity;
+        Vector__3i32F4 velocity) {
+    hitbox->x__velocity__i32F4 = velocity.x__i32F4;
+    hitbox->y__velocity__i32F4 = velocity.y__i32F4;
+    hitbox->z__velocity__i32F4 = velocity.z__i32F4;
 }
 
 static void inline set_x_velocity_to__hitbox(

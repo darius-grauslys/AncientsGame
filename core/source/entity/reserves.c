@@ -439,6 +439,25 @@ void apply_hearts_healing_specifier_to__entity(
             ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF * 2);
 }
 
+void set_hearts_of__entity(
+        Entity *p_entity,
+        Resource_Reserve *hearts) {
+    if (hearts->max_quantity_of__resource_symbols
+            > ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF) {
+        debug_error("set_hearts_of__entity, hearts->max_quantity_of__resource_symbols:%d > ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF.",
+                hearts->max_quantity_of__resource_symbols);
+        return;
+    }
+    p_entity->hearts.max_quantity_of__resource_overflow =
+        hearts->max_quantity_of__resource_overflow;
+    for (Quantity__u8 heart_index=0;
+            heart_index<hearts->max_quantity_of__resource_symbols;
+            heart_index++) {
+        p_entity->hearts.resource_symbols[heart_index] =
+            hearts->resource_symbols[heart_index];
+    }
+}
+
 Energy_Orb__u8 *get_first_incomplete_energy_orb(
         Energy_Orb__u8 *p_first_energy_orb,
         Energy_Orb__u8 *p_last_energy_orb) {
@@ -825,6 +844,25 @@ void apply_energy_healing_specifier_to__entity(
             && --quantity_of__healing > 0
             && quantity_of__healing < 
             ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF * 2);
+}
+
+void set_energy_orbs_of__entity(
+        Entity *p_entity,
+        Resource_Reserve *energy_orbs) {
+    if (energy_orbs->max_quantity_of__resource_symbols
+            > ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF) {
+        debug_error("set_energy_orbs_of__entity, energy_orbs->max_quantity_of__resource_symbols:%d > ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF.",
+                energy_orbs->max_quantity_of__resource_symbols);
+        return;
+    }
+    p_entity->energy_orbs.max_quantity_of__resource_overflow =
+        energy_orbs->max_quantity_of__resource_overflow;
+    for (Quantity__u8 heart_index=0;
+            heart_index<energy_orbs->max_quantity_of__resource_symbols;
+            heart_index++) {
+        p_entity->energy_orbs.resource_symbols[heart_index] =
+            energy_orbs->resource_symbols[heart_index];
+    }
 }
 
 void increase_homeostasis_of__entity(

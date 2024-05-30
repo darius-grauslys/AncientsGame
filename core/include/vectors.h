@@ -36,4 +36,32 @@ static bool inline is_3iF4_vectors__equal_without__fractional(
         ;
 }
 
+void offset_vector_by__direction(
+        Vector__3i32F4 *vector,
+        Direction__u8 direction);
+
+static Vector__3i32 inline vector_3i32F4_to__vector_3i32(
+        Vector__3i32F4 vector) {
+    return (Vector__3i32){
+        vector.x__i32F4 
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.y__i32F4 
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.z__i32F4 
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+    };
+}
+
+static Vector__3u8 inline vector_3i32F4_to__vector_3u8(
+        Vector__3i32F4 vector) {
+    return (Vector__3u8){
+        vector.x__i32F4 
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.y__i32F4 
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.z__i32F4 
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+    };
+}
+
 #endif
