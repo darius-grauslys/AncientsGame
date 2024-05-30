@@ -17,6 +17,7 @@ void init_ui_manager(
         init_ui_element(
                 p_ui_element, 
                 UI_Element_Kind__None, 
+                UI_FLAGS__NONE,
                 1, 
                 1);
         p_ui_element->ui_identifier = ui_index;
@@ -46,7 +47,7 @@ static void inline drop_ui_element_focus_for__ui_manager(
 
 UI_Element *get_highest_priority_ui_element_thats__under_the_cursor(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     for (Quantity__u8 ui_index=0;
             is_not_at_end_of__ui_element_array(p_ui_manager, ui_index);
             ui_index++) {
@@ -56,8 +57,9 @@ UI_Element *get_highest_priority_ui_element_thats__under_the_cursor(
             continue;
         }
 
+        //TODO: look into why using cursor old.
         if (is_vector_inside__hitbox(
-                    p_input->cursor__i32f4, 
+                    p_game->input.cursor__old__i32f4, 
                     &p_ui_element->ui_bounding_box__aabb)) {
             return p_ui_element;
         }
@@ -67,11 +69,11 @@ UI_Element *get_highest_priority_ui_element_thats__under_the_cursor(
 
 void poll_ui_manager_for__focused_ui_element_with__cursor_holding(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     UI_Element *p_ui_element__focused =
         get_highest_priority_ui_element_thats__under_the_cursor(
                 p_ui_manager, 
-                p_input);
+                p_game);
     if (!does_ui_element_have__held_handler(p_ui_element__focused))
         return;
     p_ui_manager->p_ui_element__focused =
@@ -82,11 +84,11 @@ void poll_ui_manager_for__focused_ui_element_with__cursor_holding(
 
 void poll_ui_manager_for__focused_ui_element_with__cursor_dragging(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     UI_Element *p_ui_element__focused =
         get_highest_priority_ui_element_thats__under_the_cursor(
                 p_ui_manager, 
-                p_input);
+                p_game);
     if (!does_ui_element_have__dragged_handler(p_ui_element__focused))
         return;
     p_ui_manager->p_ui_element__focused =
@@ -97,11 +99,11 @@ void poll_ui_manager_for__focused_ui_element_with__cursor_dragging(
 
 void poll_ui_manager__update_for__drag(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     if (!does_ui_manager_have__focused_ui_element(p_ui_manager)) {
         poll_ui_manager_for__focused_ui_element_with__cursor_dragging(
                 p_ui_manager, 
-                p_input);
+                p_game);
         // Still don't have focus? quit early.
         if (!does_ui_manager_have__focused_ui_element(p_ui_manager))
             return;
@@ -119,16 +121,16 @@ void poll_ui_manager__update_for__drag(
         ->m_ui_dragged_handler(
                 p_ui_manager
                 ->p_ui_element__focused,
-                p_input);
+                p_game);
 }
 
 void poll_ui_manager__update_for__held(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     if (!does_ui_manager_have__focused_ui_element(p_ui_manager)) {
         poll_ui_manager_for__focused_ui_element_with__cursor_holding(
                 p_ui_manager, 
-                p_input);
+                p_game);
         // Still don't have focus? quit early.
         if (!does_ui_manager_have__focused_ui_element(p_ui_manager))
             return;
@@ -137,7 +139,7 @@ void poll_ui_manager__update_for__held(
                 p_ui_manager->p_ui_element__focused)) {
         poll_ui_manager__update_for__drag(
                 p_ui_manager,
-                p_input);
+                p_game);
         return;
     }
     if (!does_ui_element_have__held_handler(
@@ -148,12 +150,12 @@ void poll_ui_manager__update_for__held(
         ->m_ui_held_handler(
                 p_ui_manager
                 ->p_ui_element__focused,
-                p_input);
+                p_game);
 }
 
 void poll_ui_manager__update_for__drop(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     if (!p_ui_manager->p_ui_element__focused
             || !does_ui_element_have__dropped_handler(
                 p_ui_manager->p_ui_element__focused))
@@ -168,22 +170,24 @@ void poll_ui_manager__update_for__drop(
         ->m_ui_dropped_handler(
                 p_ui_manager
                 ->p_ui_element__focused,
-                p_input);
+                p_game);
     drop_ui_element_focus_for__ui_manager(p_ui_manager);
 }
 
 void poll_ui_manager__update_for__clicked(
         UI_Manager *p_ui_manager,
-        Input *p_input) {
+        Game *p_game) {
     UI_Element *p_ui_element__focused =
         get_highest_priority_ui_element_thats__under_the_cursor(
                 p_ui_manager, 
-                p_input);
+                p_game);
+    if (!p_ui_element__focused)
+        return;
     if (!does_ui_element_have__clicked_handler(p_ui_element__focused))
         return;
     p_ui_element__focused->m_ui_clicked_handler(
             p_ui_element__focused,
-            p_input);
+            p_game);
 }
 
 void poll_ui_manager__update(
@@ -198,12 +202,12 @@ void poll_ui_manager__update(
         if (!has_ui_element__focus) {
             poll_ui_manager__update_for__clicked(
                     p_ui_manager, 
-                    p_input);
+                    p_game);
             return;
         }
         poll_ui_manager__update_for__drop(
                 p_ui_manager,
-                p_input);
+                p_game);
         return;
     }
 
@@ -212,13 +216,13 @@ void poll_ui_manager__update(
     if (is_input__click_held(p_input)) {
         poll_ui_manager__update_for__held(
                 p_ui_manager, 
-                p_input);
+                p_game);
         return;
     }
     if (is_input__click_dragged(p_input)) {
         poll_ui_manager__update_for__drag(
                 p_ui_manager, 
-                p_input);
+                p_game);
         return;
     }
 }
@@ -237,11 +241,8 @@ UI_Element **get_next__available_slot_in__ui_element_ptrs(
     return 0;
 }
 
-UI_Element *get_new__ui_element(
-        UI_Manager *p_ui_manager,
-        enum UI_Element_Kind kind_of_ui_element,
-        Quantity__u8 width,
-        Quantity__u8 height) {
+UI_Element *get_new__ui_element_from__ui_manager(
+        UI_Manager *p_ui_manager) {
     UI_Element **p_ui_element_ptr =
         get_next__available_slot_in__ui_element_ptrs(
                 p_ui_manager);
@@ -260,10 +261,13 @@ UI_Element *get_new__ui_element(
             p_ui_manager->quantity_of__ui_elements__quantity_u8++;
             init_ui_element(
                     p_ui_element, 
-                    kind_of_ui_element, 
-                    width, 
-                    height);
+                    UI_Element_Kind__None,
+                    UI_FLAGS__NONE,
+                    1,
+                    1);
             p_ui_element->ui_identifier = ui_index;
+            set_ui_element_as__allocated(p_ui_element);
+            set_ui_element_as__enabled(p_ui_element);
             return p_ui_element;
         }
     }
@@ -272,9 +276,26 @@ failure:
     return 0;
 }
 
-void release__ui_element(
+void get_many_new__ui_elements_from__ui_manager(
         UI_Manager *p_ui_manager,
-        UI_Element *p_ui_element) {
+        UI_Element **p_ptr_buffer,
+        Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
+        ) {
+    if (quantity_of__ui_elements_in__ptr_buffer
+            > UI_ELEMENT_MAXIMUM_QUANTITY_OF) {
+        return;
+    }
+    for (Quantity__u8 buffer_index=0;
+            buffer_index<quantity_of__ui_elements_in__ptr_buffer;
+            buffer_index++) {
+        p_ptr_buffer[buffer_index] =
+            get_new__ui_element_from__ui_manager(p_ui_manager);
+    }
+}
+
+void release__ui_element_from__ui_manager(
+        UI_Element *p_ui_element,
+        UI_Manager *p_ui_manager) {
     if (p_ui_manager->quantity_of__ui_elements__quantity_u8 == 0) {
 #ifndef NDEBUG
         debug_error("Tried to release UI_Element %p while ui_manager is empty.",
@@ -285,8 +306,8 @@ void release__ui_element(
     }
     if (p_ui_element->m_ui_dispose_handler) {
         p_ui_element->m_ui_dispose_handler(
-                p_ui_manager,
-                p_ui_element);
+                p_ui_element,
+                p_ui_manager);
     }
     for (Quantity__u8 ui_index=0;
             ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
@@ -313,7 +334,27 @@ void release__ui_element(
     p_ui_manager->quantity_of__ui_elements__quantity_u8--;
 }
 
-void raise_priority_of_this__ui_element__with_respect_to_other__ui_element(
+void release_all__ui_elements_from__ui_manager(
+        UI_Manager *p_ui_manager) {
+    for (Quantity__u8 ui_index=0;
+            ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
+            ui_index++) {
+        UI_Element *p_ui_element = 
+            &p_ui_manager->ui_elements[ui_index];
+        if (!is_ui_element__allocated(p_ui_element)) {
+            return;
+        }
+
+        init_ui_element(
+                p_ui_element, 
+                UI_Element_Kind__None, 
+                UI_FLAGS__NONE,
+                1,
+                1);
+    }
+}
+
+void swap_priority_of__ui_elenents_within__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element__this,
         UI_Element *p_ui_element__other) {

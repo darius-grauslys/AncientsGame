@@ -131,16 +131,15 @@ void manage_world__entities(Game *p_game) {
     }
 }
 
-void add_entity_to__world(
+Entity *add_entity_to__world(
         World *p_world,
-        Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
         int32_t x__global,
         int32_t y__global,
         int32_t z__global) {
     Entity *p_entity =
         get_new__entity(
-                p_entity_manager,
+                &p_world->entity_manager,
                 kind_of_entity,
                 x__global,
                 y__global,
@@ -148,6 +147,7 @@ void add_entity_to__world(
     add_entity_to__collision_manager(
             &p_world->collision_manager, 
             p_entity);
+    return p_entity;
 }
 
 void release_entity_from__world(

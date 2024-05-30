@@ -35,7 +35,7 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
     }
     uint32_t start = 0;
     if (kind_of_entity == Entity_Kind__Player) {
-        start =0;
+        start = 0;
     } else {
         start = ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS;
     }
@@ -66,6 +66,7 @@ Entity *get_new__entity(
         int32_t x__global,
         int32_t y__global,
         int32_t z__global) {
+    Entity *p_entity = 0;
     switch (kind_of_entity) {
         default:
             ///
@@ -78,15 +79,45 @@ invalid kind_of_entity. get_new__entity(...).");
         // non-player humanoids:
         case Entity_Kind__Skeleton:
         case Entity_Kind__Zombie:
-            return get_new__humanoid(
+            p_entity = get_new__humanoid(
                     p_entity_manager,
                     kind_of_entity,
                     x__global,
                     y__global,
                     z__global);
+            switch (kind_of_entity) {
+                default:
+                    break;
+                case Entity_Kind__Skeleton:
+                    p_entity->hearts.max_quantity_of__resource_symbols = 15;
+                    p_entity->energy_orbs.max_quantity_of__resource_symbols = 15;
+                    break;
+                case Entity_Kind__Zombie:
+                    p_entity->hearts.max_quantity_of__resource_symbols = 8;
+                    p_entity->energy_orbs.max_quantity_of__resource_symbols = 8;
+                    break;
+            }
+            break;
+        case Entity_Kind__Player:
+            p_entity = get_new__player(
+                    p_entity_manager,
+                    !(bool)p_entity_manager->p_local_player, 
+                    x__global, 
+                    y__global, 
+                    z__global);
+            p_entity->hearts.max_quantity_of__resource_symbols = 10;
+            p_entity->energy_orbs.max_quantity_of__resource_symbols = 10;
+            break;
     }
 
-    return 0;
+    init_hitbox(
+            &p_entity->hitbox, 
+            6, 6, 
+            x__global, 
+            y__global, 
+            z__global);
+
+    return p_entity;
 }
 
 Entity *get_new__humanoid(
@@ -96,18 +127,12 @@ Entity *get_new__humanoid(
         int32_t y__global,
         int32_t z__global) {
     Entity *p_entity = allocate__entity(
-            p_entity_manager, kind_of_entity);
+            p_entity_manager, 
+            kind_of_entity);
 
     if (!p_entity) {
         return 0;
     }
-
-    init_hitbox(
-            &p_entity->hitbox, 
-            6, 6, 
-            x__global, 
-            y__global, 
-            z__global);
 
     set_entity__collider(
             p_entity, 
@@ -118,6 +143,20 @@ Entity *get_new__humanoid(
     set_entity__animator(
             p_entity,
             m_humanoid_animation_handler);
+
+    for (Index__u8 heart_index = 0;
+            heart_index < p_entity->hearts.max_quantity_of__resource_symbols;
+            heart_index++) {
+        p_entity->hearts.resource_symbols[heart_index] =
+            Heart_Kind__Full_Normal;
+    }
+    for (Index__u8 energy_orb_index = 0;
+            energy_orb_index < 
+                p_entity->energy_orbs.max_quantity_of__resource_symbols;
+            energy_orb_index++) {
+        p_entity->energy_orbs.resource_symbols[energy_orb_index] =
+            Energy_Orb_Kind__Full_Normal;
+    }
 
     return p_entity;
 }

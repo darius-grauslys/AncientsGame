@@ -17,7 +17,6 @@ static void inline NDS_init_background_ground__for_game(
         bgGetMapPtr(background->background_index);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index);
-    // bgHide(background->background_index);
 }
 
 static void inline NDS_init_background_ground__overlay__for_game(
@@ -33,7 +32,6 @@ static void inline NDS_init_background_ground__overlay__for_game(
         bgGetMapPtr(background->background_index);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index);
-    //bgHide(background->background_index);
 }
 
 static void inline NDS_init_background_ground__sprite_cover__for_game(
@@ -49,7 +47,6 @@ static void inline NDS_init_background_ground__sprite_cover__for_game(
         bgGetMapPtr(background->background_index);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index);
-    //bgHide(background->background_index);
 }
 
 static void inline NDS_init_background_ui__for_game(
@@ -65,7 +62,6 @@ static void inline NDS_init_background_ui__for_game(
         bgGetMapPtr(background->background_index);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index);
-    //bgHide(background->background_index);
 }
 
 static void inline NDS_init_background_ui__overlay__for_game(
@@ -81,10 +77,10 @@ static void inline NDS_init_background_ui__overlay__for_game(
         bgGetMapPtr(background->background_index);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index);
-    //bgHide(background->background_index);
 }
 
-static void inline NDS_set_background_priority(NDS_Background *background,
+static void inline NDS_set_background_priority(
+        NDS_Background *background,
         uint32_t priority) {
     background->priority = priority;
 	bgSetPriority(background->background_index, priority);

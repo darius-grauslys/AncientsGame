@@ -1,4 +1,5 @@
 #include "debug/nds_debug.h"
+#include "defines_weak.h"
 #include <defines.h>
 #include <nds_defines.h>
 #include <rendering/gfx_context.h>
@@ -8,7 +9,6 @@
 #include <assets/world/GFX_world.h>
 #include <assets/world/tiles.h>
 #include <assets/ui/GFX_ui.h>
-#include <assets/ui/ui_map_equip.h>
 
 #include <assets/entities/GFX_entities.h>
 #include <assets/entities/player.h>
@@ -56,35 +56,6 @@ void NDS_init_gfx_for__world(
 
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 
-    NDS_init_background_ui__for_game(
-            &gfx_context->background_ui);
-    NDS_init_background_ui__overlay__for_game(
-            &gfx_context->background_ui__overlay);
-
-	dmaCopy(GFX_uiTiles, 
-            gfx_context->background_ui
-            .gfx_tileset, GFX_uiTilesLen);
-	dmaCopy(GFX_uiTiles, 
-            gfx_context->background_ui__overlay
-            .gfx_tileset, GFX_uiTilesLen);
-	dmaCopy(GFX_uiPal, BG_PALETTE_SUB, GFX_uiPalLen);
-
-	dmaCopy(ui_map_equipMap, 
-            gfx_context->background_ui
-            .gfx_map,
-            ui_map_equipMapLen);
-	dmaCopy(ui_map_equipMap, 
-            gfx_context->background_ui__overlay
-            .gfx_map,
-            ui_map_equipMapLen);
-
-    NDS_set_background_priority(
-            &gfx_context->background_ui, 
-            1);
-    NDS_set_background_priority(
-            &gfx_context->background_ui__overlay, 
-            2);
-
     NDS_init_background_ground__for_game(
             &gfx_context->background_ground);
     NDS_init_background_ground__sprite_cover__for_game(
@@ -95,9 +66,6 @@ void NDS_init_gfx_for__world(
 	dmaCopy(GFX_worldTiles, 
             gfx_context->background_ground
             .gfx_tileset, GFX_worldTilesLen);
-	// dmaCopy(GFX_worldTiles, 
-    //         gfx_context->background_ground__overlay
-    //         .gfx_tileset, GFX_worldTilesLen);
 	dmaCopy(GFX_worldPal, BG_PALETTE, GFX_worldPalLen);
 
 	dmaCopy(tilesMap,
@@ -212,4 +180,27 @@ void PLATFORM_update_chunks(
         p_current__chunk_map_node =
             p_current__chunk_map_node->p_south__chunk_map_node;
     }
+}
+
+void NDS_init_gfx_for__ui(
+        PLATFORM_Gfx_Context *gfx_context) {
+    NDS_init_background_ui__for_game(
+            &gfx_context->background_ui);
+    NDS_init_background_ui__overlay__for_game(
+            &gfx_context->background_ui__overlay);
+
+	dmaCopy(GFX_uiTiles, 
+            gfx_context->background_ui
+            .gfx_tileset, GFX_uiTilesLen);
+	dmaCopy(GFX_uiTiles, 
+            gfx_context->background_ui__overlay
+            .gfx_tileset, GFX_uiTilesLen);
+	dmaCopy(GFX_uiPal, BG_PALETTE_SUB, GFX_uiPalLen);
+
+    NDS_set_background_priority(
+            &gfx_context->background_ui, 
+            1);
+    NDS_set_background_priority(
+            &gfx_context->background_ui__overlay, 
+            2);
 }

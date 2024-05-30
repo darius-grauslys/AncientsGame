@@ -35,6 +35,9 @@
 /// SECTION_defines
 ///
 
+#define BIT(n) (1 << (n))
+#define NEXT_BIT(symbol) (symbol << 1)
+#define MASK(n) (BIT(n) - 1)
 #define FRACTIONAL_PERCISION_4__BIT_SIZE 4
 /// FIXED POINT fractional, with 4 bits of percision.
 typedef int32_t     i32F4;
@@ -62,10 +65,16 @@ typedef uint32_t Timer__u32;
 typedef uint8_t Timer__u8;
 typedef uint8_t Direction__u8;
 
+#define INDEX__UNKNOWN__u32 (uint32_t)(-1)
+#define INDEX__UNKNOWN__u16 (uint16_t)(-1)
+#define INDEX__UNKNOWN__u8 (uint8_t)(-1)
 typedef uint8_t Index__u8;
 typedef uint16_t Index__u16;
 typedef uint32_t Index_u32;
 
+#define QUANTITY__UNKNOWN__u32 (uint32_t)(-1)
+#define QUANTITY__UNKNOWN__u16 (uint16_t)(-1)
+#define QUANTITY__UNKNOWN__u8 (uint8_t)(-1)
 typedef uint8_t Quantity__u8;
 typedef uint16_t Quantity__u16;
 typedef uint32_t Quantity__u32;
@@ -84,13 +93,13 @@ typedef uint32_t Identifier__u32;
 typedef uint16_t Identifier__u16;
 typedef uint8_t Identifier__u8;
 
-#define DIRECTION__NONE 0
-#define DIRECTION__NORTH 1
-#define DIRECTION__EAST (1 << 1)
-#define DIRECTION__SOUTH (1 << 2)
-#define DIRECTION__WEST (1 << 3)
+#define DIRECTION__NONE     0
+#define DIRECTION__NORTH    BIT(0)
+#define DIRECTION__EAST     BIT(1)
+#define DIRECTION__SOUTH    BIT(2)
+#define DIRECTION__WEST     BIT(3)
 
-#define DIRECTION__ANY ((1 << 4) - 1)
+#define DIRECTION__ANY      MASK(4)
 #define DIRECTION__NORTH_EAST (DIRECTION__NORTH \
         | DIRECTION__EAST)
 #define DIRECTION__NORTH_WEST (DIRECTION__NORTH \
@@ -241,6 +250,7 @@ typedef struct Sprite_Wrapper_t {
 } Sprite_Wrapper;
 
 #define SPRITE_FRAME__16x16__OFFSET (16 * 16)
+#define SPRITE_FRAME__8x8__OFFSET (8 * 8)
 
 #define SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_ARMORED 16
 #define SPRITE_FRAME_HEIGHT__ENTITY_HUMANOID_ARMORED 16
@@ -313,12 +323,12 @@ typedef uint32_t Texture_Flags;
 
 // Just a width or height component of an image.
 #define TEXTURE_FLAG__LENGTH__BIT_COUNT 3
-#define TEXTURE_FLAG__LENGTH__MASK ((1<<\
-            TEXTURE_FLAG__LENGTH__BIT_COUNT)-1)
+#define TEXTURE_FLAG__LENGTH__MASK \
+    MASK(TEXTURE_FLAG__LENGTH__BIT_COUNT)
 // The width and height component of the image
 #define TEXTURE_FLAG__SIZE__BIT_COUNT 6
-#define TEXTURE_FLAG__SIZE__MASK ((1<<\
-            TEXTURE_FLAG__SIZE__BIT_COUNT)-1)
+#define TEXTURE_FLAG__SIZE__MASK \
+    MASK(TEXTURE_FLAG__SIZE__BIT_COUNT)
 
 // Texture length specifiers
 #define TEXTURE_FLAG__LENGTH_x8       0b000
@@ -391,7 +401,8 @@ typedef uint32_t Texture_Flags;
 // We support up to 8 texture render methods 
 // (on nds, this is oamMain, oamSub)
 #define TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT 3
-#define TEXTURE_FLAG__RENDER_METHOD__MASK 0b111
+#define TEXTURE_FLAG__RENDER_METHOD__MASK \
+    MASK(TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT)
 #define TEXTURE_FLAG__RENDER_METHOD__0 0b000
 #define TEXTURE_FLAG__RENDER_METHOD__1 0b001
 #define TEXTURE_FLAG__RENDER_METHOD__2 0b010
@@ -404,7 +415,8 @@ typedef uint32_t Texture_Flags;
 // We support up to 8 texture formats 
 // Replace 1-7 as needed.
 #define TEXTURE_FLAG__FORMAT__BIT_COUNT 3
-#define TEXTURE_FLAG__FORMAT__MASK 0b111
+#define TEXTURE_FLAG__FORMAT__MASK \
+    MASK(TEXTURE_FLAG__FORMAT__BIT_COUNT)
 #define TEXTURE_FLAG__FORMAT__15_RGB 0b000
 #define TEXTURE_FLAG__FORMAT__1 0b001
 #define TEXTURE_FLAG__FORMAT__2 0b010
@@ -606,58 +618,125 @@ typedef void (*m_Entity_Animation)
 typedef uint8_t Entity_Flags__u8;
 
 #define ENTITY_FLAG__NONE 0
-#define ENTITY_FLAG__IS_ENABLED (1)
+#define ENTITY_FLAG__IS_ENABLED     BIT(0)
 #define ENTITY_FLAG__IS_NOT_UPDATING_POSITION \
-    (ENTITY_FLAG__IS_ENABLED << 1)
+    NEXT_BIT(ENTITY_FLAG__IS_ENABLED)
 #define ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS \
-    (ENTITY_FLAG__IS_NOT_UPDATING_POSITION << 1)
+    NEXT_BIT(ENTITY_FLAG__IS_NOT_UPDATING_POSITION)
 #define ENTITY_FLAG__IS_COLLIDING \
-    (ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS << 1)
+    NEXT_BIT(ENTITY_FLAG__IS_NOT_UPDATING_GRAPHICS)
 #define ENTITY_FLAG__IS_UNLOADED \
-    (ENTITY_FLAG__IS_COLLIDING << 1)
+    NEXT_BIT(ENTITY_FLAG__IS_COLLIDING)
 #define ENTITY_FLAG__IS_HIDDEN \
-    (ENTITY_FLAG__IS_UNLOADED << 1)
+    NEXT_BIT(ENTITY_FLAG__IS_UNLOADED)
 
-// this means, 16 hearts (32 hp), and 16 energy orbs (32 energy).
-#define ENTITY_RESOURCE_MAXIMUM_QUANTITY_OF 16
+#define ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF 32
 
-typedef uint16_t Heart;
-typedef uint16_t Energy;
+#define RESOURCE_SYMBOL__EMPTY 0
+#define RESOURCE_SYMBOL__LOCKED ((uint8_t)-1)
 
-typedef Heart Heart_Reserve[ENTITY_RESOURCE_MAXIMUM_QUANTITY_OF];
-typedef Energy Energy_Reserve[ENTITY_RESOURCE_MAXIMUM_QUANTITY_OF];
+//TODO: if heart/energy_orb HUD breaks, its likely because
+//      the tileset got moved around. DON'T PANIC! Just change
+//      the values below. TODO, make this not a problem.
+#define UI_TILE_SHEET_INDEX__EMPTY_HEART (Index__u16)254
+#define UI_TILE_SHEET_INDEX__HALF_HEART (Index__u16)255
+#define UI_TILE_SHEET_INDEX__FULL_HEART (Index__u16)256
+#define UI_TILE_SHEET_INDEX__HALF_POISON_HEART (Index__u16)257
+#define UI_TILE_SHEET_INDEX__FULL_POISON_HEART (Index__u16)258
+#define UI_TILE_SHEET_INDEX__NORMAL_POISON_HEART (Index__u16)259
+#define UI_TILE_SHEET_INDEX__HALF_IMMORTAL_HEART (Index__u16)260
+#define UI_TILE_SHEET_INDEX__FULL_IMMORTAL_HEART (Index__u16)261
+#define UI_TILE_SHEET_INDEX__IMMORTAL_NORMAL_HEART (Index__u16)262
+#define UI_TILE_SHEET_INDEX__IMMORTAL_POISON_HEART (Index__u16)263
+#define UI_TILE_SHEET_INDEX__LOCKED_HEART (Index__u16)264
 
-typedef uint16_t Quantity_For_Healing__u16;
-typedef uint16_t Quantity_For_Damaging__u16;
+typedef uint8_t Resource_Symbol__u8;
+typedef uint8_t Heart__u8;
+enum Heart_Kind {
+    Heart_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
+    Heart_Kind__Half_Normal,
+    Heart_Kind__Full_Normal,
+    Heart_Kind__Half_Poison,
+    Heart_Kind__Full_Poison,
+    Heart_Kind__Normal_Poison,
+    Heart_Kind__Half_Immortal,
+    Heart_Kind__Full_Immortal,
+    Heart_Kind__Immortal_Normal,
+    Heart_Kind__Immortal_Poison,
+    Heart_Kind__Locked = RESOURCE_SYMBOL__LOCKED
+};
+typedef uint8_t Energy_Orb__u8;
+enum Energy_Orb_Kind {
+    Energy_Orb_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
+    Energy_Orb_Kind__Half_Normal,
+    Energy_Orb_Kind__Full_Normal,
+    Energy_Orb_Kind__Half_Poison,
+    Energy_Orb_Kind__Full_Poison,
+    Energy_Orb_Kind__Normal_Poison,
+    Energy_Orb_Kind__Half_Demonic,
+    Energy_Orb_Kind__Full_Demonic,
+    Energy_Orb_Kind__Demonic_Normal,
+    Energy_Orb_Kind__Demonic_Poison,
+    Energy_Orb_Kind__Locked = RESOURCE_SYMBOL__LOCKED
+};
 
-#define HEALING__BIT_SHIFT_IS_HEARTS_OR_ENERGY 10
-#define HEALING__BIT_IS_HEARTS_OR_ENERGY \
-    (1 << HEALING__BIT_SHIFT_IS_HEARTS_OR_ENERGY)
+typedef struct Resource_Reserve_t {
+    Resource_Symbol__u8 resource_symbols
+        [ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF];
+    Quantity__u8 max_quantity_of__resource_symbols;
+} Resource_Reserve;
 
-#define HEALING__BIT_SHIFT_QUANTITY 10
-#define HEALING__BIT_MASK_QUANTITY \
-    ((1 << HEALING__QUANTITY__BIT_SHIFT) - 1)
-#define HEALING__BIT_MASK_FLAGS \
-    ~((1 << HEALING__QUANTITY__BIT_SHIFT) - 1)
+typedef uint8_t Hearts_Damaging_Flags;
+#define HEARTS_DAMAGING_FLAG__IS_POISONING \
+    BIT(0)
+#define HEARTS_DAMAGING_FLAG__IS_ORDER \
+    BIT(1)
+#define HEARTS_DAMAGING_FLAG__IS_CHAOS \
+    BIT(2)
+#define HEARTS_DAMAGING_FLAG__IS_CURSING \
+    BIT(3)
+#define HEARTS_DAMAGING_FLAG__IS_BLUDGEONING \
+    BIT(4)
+#define HEARTS_DAMAGING_FLAG__IS_SLASHING \
+    BIT(5)
+#define HEARTS_DAMAGING_FLAG__IS_PIERCING \
+    BIT(6)
+typedef struct Hearts_Damaging_Specifier_t {
+    Quantity__u16 quantity_of__damage;
+    Hearts_Damaging_Flags hearts_damaging__flags;
+} Hearts_Damaging_Specifier;
 
-#define DAMAGING__BIT_SHIFT_IS_POISONED 10
-#define DAMAGING__BIT_SHIFT_IS_ORDER 11
-#define DAMAGING__BIT_SHIFT_IS_CHAOS 12
-#define DAMAGING__BIT_SHIFT_IS_CURSING 13
-#define DAMAGING__BIT_IS_POISONED \
-    (1 << DAMAGING__BIT_SHIFT_IS_POISONED)
-#define DAMAGING__BIT_IS_ORDER \
-    (1 << DAMAGING__BIT_SHIFT_IS_ORDER)
-#define DAMAGING__BIT_IS_CHAOS \
-    (1 << DAMAGING__BIT_SHIFT_IS_CHAOS)
-#define DAMAGING__BIT_IS_CURSING \
-    (1 << DAMAGING__BIT_SHIFT_IS_CURSING)
+#define HEARTS_HEALING_FLAG__IS_ANTIDOTE \
+    BIT(0)
+#define HEARTS_HEALING_FLAG__IS_IMMORTALIZING \
+    BIT(1)
+typedef uint8_t Hearts_Healing_Flags;
+typedef struct Hearts_Healing_Specifier_t {
+    Quantity__u16 quantity_of__healing;
+    Hearts_Healing_Flags hearts_healing__flags;
+} Hearts_Healing_Specifier;
 
-#define DAMAGING__BIT_SHIFT_QUANTITY 10
-#define DAMAGING__BIT_MASK_QUANTITY \
-    ((1 << DAMAGING__QUANTITY__BIT_SHIFT) - 1)
-#define DAMAGING__BIT_MASK_FLAGS \
-    ~((1 << DAMAGING__QUANTITY__BIT_SHIFT) - 1)
+#define ENERGY_DAMAGING_FLAG__IS_POISONING \
+    BIT(0)
+#define ENERGY_DAMAGING_FLAG__IS_ORDER \
+    BIT(1)
+#define ENERGY_DAMAGING_FLAG__IS_CHAOS \
+    BIT(2)
+typedef uint8_t Energy_Damaging_Flags;
+typedef struct Energy_Damaging_Specifier_t {
+    Quantity__u16 quantity_of__damage;
+    Energy_Damaging_Flags energy_damaging__flags;
+} Energy_Damaging_Specifier;
+
+#define ENERGY_HEALING_FLAG__IS_ANTIDOTE \
+    BIT(0)
+#define ENERGY_HEALING_FLAG__IS_DEMONIZING \
+    BIT(1)
+typedef uint8_t Energy_Healing_Flags;
+typedef struct Energy_Healing_Specifier_t {
+    Quantity__u16 quantity_of__healing;
+    Energy_Damaging_Flags energy_healing__flags;
+} Energy_Healing_Specifier;
 
 typedef struct Entity_t {
     Sprite_Wrapper          sprite_wrapper;
@@ -680,8 +759,8 @@ typedef struct Entity_t {
     enum Entity_Kind            the_kind_of_entity__this_entity_is;
     union {
         struct { // living entity
-            Heart_Reserve hearts;
-            Energy_Reserve energy_orbs;
+            Resource_Reserve hearts;
+            Resource_Reserve energy_orbs;
             Signed_Quantity__i8 homeostasis__i8;
             Inventory inventory;
             union {
@@ -712,7 +791,8 @@ typedef struct Entity_t {
     (ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE \
      + ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE)
 
-#define ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK ((1 << 6) -1)
+#define ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK \
+    MASK(ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE)
 
 // 1.5 pixels.
 #define ENTITY_VELOCITY__PLAYER          0b1100
@@ -794,21 +874,21 @@ typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;
 
 typedef void (*m_UI_Dispose)(
-        UI_Manager *p_ui_manager,
-        UI_Element *p_this_ui_element);
+        UI_Element *p_this_ui_element,
+        UI_Manager *p_ui_manager);
 
 typedef void (*m_UI_Clicked)(
         UI_Element *p_this_ui_element,
-        Input *p_input);
+        Game *p_game);
 typedef void (*m_UI_Dragged)(
         UI_Element *p_this_ui_element,
-        Input *p_input);
+        Game *p_game);
 typedef void (*m_UI_Dropped)(
         UI_Element *p_this_ui_element,
-        Input *p_input);
+        Game *p_game);
 typedef void (*m_UI_Held)(
         UI_Element *p_this_ui_element,
-        Input *p_input);
+        Game *p_game);
 
 typedef uint8_t UI_Flags__u8;
 
@@ -822,16 +902,18 @@ typedef uint8_t UI_Flags__u8;
 #define UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED \
     (UI_FLAGS__BIT_SHIFT_IS_BEING_HELD + 1)
 
+#define UI_FLAGS__NONE 0
+
 #define UI_FLAGS__BIT_IS_ALLOCATED \
-    (1 << UI_FLAGS__BIT_SHIFT_IS_ALLOCATED)
+    BIT(UI_FLAGS__BIT_SHIFT_IS_ALLOCATED)
 #define UI_FLAGS__BIT_IS_ENABLED \
-    (1 << UI_FLAGS__BIT_SHIFT_IS_ENABLED)
+    BIT(UI_FLAGS__BIT_SHIFT_IS_ENABLED)
 #define UI_FLAGS__BIT_IS_NEEDING_UPDATE \
-    (1 << UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE)
+    BIT(UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE)
 #define UI_FLAGS__BIT_IS_BEING_HELD \
-    (1 << UI_FLAGS__BIT_SHIFT_IS_BEING_HELD)
+    BIT(UI_FLAGS__BIT_SHIFT_IS_BEING_HELD)
 #define UI_FLAGS__BIT_IS_BEING_DRAGGED \
-    (1 << UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED )
+    BIT(UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED )
 
 typedef struct UI_Element_t {
     enum UI_Element_Kind the_kind_of_ui_element__this_is;
@@ -919,20 +1001,20 @@ typedef struct Local_Chunk_Vector_t {
 #define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING \
     (TILE_FLAGS__BIT_SHIFT_IS_STAIR + 1)
 #define TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE \
-    (TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING  +1)
+    (TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING + 1)
 
 #define TILE_FLAGS__MASK_STAIR_VALUE \
-    ((1 << TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR) - 1)
+    MASK(TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
 #define TILE_FLAGS__BIT_INVERTED_STAIR \
-    ( 1 << TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
+    BIT(TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
 #define TILE_FLAGS__BIT_IS_STAIR_UP_OR_DOWN \
-    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN)
+    BIT(TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN)
 #define TILE_FLAGS__BIT_IS_STAIR \
-    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_STAIR)
+    BIT(TILE_FLAGS__BIT_SHIFT_IS_STAIR)
 #define TILE_FLAGS__BIT_IS_SIGHT_BLOCKING \
-    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
+    BIT(TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
 #define TILE_FLAGS__BIT_IS_UNPASSABLE \
-    ( 1 << TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
+    BIT(TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
 
 #define TILE_FLAGS__NONE 0
 
@@ -982,8 +1064,8 @@ enum Tile_Kind {
 #define TILE_COVER_SHEET_INDEX__CACTUS (29 + TILE_SHEET_TILE_WIDTH * 21)
 
 #define TILE_COVER__BIT_SHIFT_IS_WALL 6
-#define TILE_COVER__BIT_IS_WALL (1 <<\
-        TILE_COVER__BIT_SHIFT_IS_WALL)
+#define TILE_COVER__BIT_IS_WALL \
+    BIT(TILE_COVER__BIT_SHIFT_IS_WALL)
 
 enum Tile_Cover_Kind {
     Tile_Cover_Kind__None               = 0b00000,
@@ -1036,16 +1118,18 @@ typedef struct Tile_Render_Result_t {
 } Tile_Render_Result;
 
 #define TILE_RENDER__WALL_ADJACENCY__BIT_SHIFT_VFLIP 5
-#define TILE_RENDER__WALL_ADJACENCY__BIT_VFLIP (1<<\
-        TILE_RENDER__WALL_ADJACENCY__BIT_SHIFT_VFLIP)
+#define TILE_RENDER__WALL_ADJACENCY__BIT_VFLIP \
+    BIT(TILE_RENDER__WALL_ADJACENCY__BIT_SHIFT_VFLIP)
 
 #define TILE_RENDER__WALL_ADJACENCY__EAST  0b00010001
 #define TILE_RENDER__WALL_ADJACENCY__WEST  0b00110001
 #define TILE_RENDER__WALL_ADJACENCY__NORTH 0b00000100
 #define TILE_RENDER__WALL_ADJACENCY__SOUTH 0b00001000
 
-#define TILE_RENDER__WALL_ADJACENCY__COVER_MASK 0b0011
-#define TILE_RENDER__WALL_ADJACENCY__SPRITE_COVER_MASK 0b1111
+#define TILE_RENDER__WALL_ADJACENCY__COVER_MASK \
+    MASK(2) 
+#define TILE_RENDER__WALL_ADJACENCY__SPRITE_COVER_MASK \
+    MASK(4)
 
 typedef struct World_Parameters_t World_Parameters;
 typedef struct Chunk_t Chunk;
@@ -1154,7 +1238,8 @@ enum Game_Action_Kind {
 
 typedef uint8_t Game_Action_Flags;
 
-#define GAME_ACTION_FLAGS__BIT_IS_PTR_OR_ID 1
+#define GAME_ACTION_FLAGS__BIT_IS_PTR_OR_ID \
+    BIT(0)
 
 /// 
 /// Use this struct and it's associated helpers
@@ -1190,18 +1275,28 @@ typedef struct Game_Action_t {
                          //...Entity__Energy
                     union {
                         struct { //...Health__Set
-                            Heart_Reserve hearts;
+                            Resource_Reserve hearts;
                         };
                         struct { //...Energy__Set
-                            Energy_Reserve energy_orbs;
+                            Resource_Reserve energy_orbs;
                         };
                         struct { //...Health__Apply_Healing
                                  //...Energy__Apply_Healing
-                            Quantity_For_Healing__u16 healing_quantity;
+                            union {
+                                Hearts_Damaging_Specifier 
+                                    hearts_healing_specifier;
+                                Energy_Healing_Specifier 
+                                    energy_healing_specifier;
+                            };
                         };
                         struct { //...Health__Apply_Damage
                                  //...Energy__Apply_Damage
-                            Quantity_For_Damaging__u16 damaging_quantity;
+                            union {
+                                Hearts_Damaging_Specifier 
+                                    hearts_damaging_specifier;
+                                Energy_Damaging_Specifier 
+                                    energy_damage_specifier;
+                            };
                         };
                     };
                 };

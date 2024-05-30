@@ -1,3 +1,4 @@
+#include "world/world.h"
 #include <entity/controllers/controller_player.h>
 #include <input/input.h>
 #include <entity/entity.h>
@@ -68,8 +69,8 @@ void m_controller_for__player(
 
     if (is_input__game_settings_held(p_input) && !toggle) {
         toggle = true;
-        Entity *p_skeleton = get_new__entity(
-                p_game,
+        Entity *p_skeleton = add_entity_to__world(
+                &p_game->world,
                 Entity_Kind__Skeleton,
                 x, y, 0);
 

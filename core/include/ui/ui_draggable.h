@@ -4,8 +4,9 @@
 
 // TODO: move to private header
 void init_ui_draggable(
-        UI_Manager *p_ui_manager,
-        UI_Element *p_ui_draggable);
+        UI_Element *p_ui_draggable,
+        Quantity__u8 width,
+        Quantity__u8 height);
 
 void f_ui_draggable__dragged_handler__default(
         UI_Element *p_this_draggable);

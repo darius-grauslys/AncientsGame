@@ -1,3 +1,5 @@
+#include "defines.h"
+#include "nds/arm9/sprite.h"
 #include <rendering/sprite.h>
 #include <rendering/texture.h>
 #include <entity/entity.h>
@@ -14,6 +16,12 @@ void PLATFORM_init_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
             USE_TEXTURE_FLAGS__OAM__16x16(TEXTURE_FLAGS__USE_OAM_MAIN));
 }
 
+void PLATFORM_init_oam_sprite__8x8(PLATFORM_Sprite *sprite) {
+    PLATFORM_init_texture(
+            &sprite->sprite_texture,
+            USE_TEXTURE_FLAGS__OAM__8x8(TEXTURE_FLAGS__USE_OAM_MAIN));
+}
+
 void PLATFORM_init_sprite(
         PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,
@@ -27,6 +35,28 @@ void PLATFORM_init_sprite(
             debug_abort("Texture_Flags %d not implemented for PLATFORM_init_sprite.",
                     texture_flags_for__sprite);
             return;
+        case TEXTURE_FLAG__SIZE_8x8:
+            palette = 0;
+            PLATFORM_init_oam_sprite__8x8(sprite);
+            sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
+            dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
+                    SPRITE_FRAME__8x8__OFFSET);
+            if (!perform_update)
+                break;
+            oamSet(
+                sprite->sprite_texture.oam, 
+                sprite->sprite_texture.oam_index, 
+                127 - 8, 96 - 8, 
+                1, 
+                palette, 
+                SpriteSize_8x8, 
+                SpriteColorFormat_256Color, 
+                0, // null gfx
+                -1, 
+                false, 
+                false, 
+                false, false, 
+                false);
         case TEXTURE_FLAG__SIZE_16x16:
             palette = 0;
             PLATFORM_init_oam_sprite__16x16(sprite);

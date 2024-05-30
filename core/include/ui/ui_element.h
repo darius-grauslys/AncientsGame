@@ -7,6 +7,7 @@
 void init_ui_element(
         UI_Element *p_ui_element,
         enum UI_Element_Kind kind_of_ui_element,
+        UI_Flags__u8 ui_flags,
         Quantity__u8 width,
         Quantity__u8 height);
 
@@ -67,6 +68,18 @@ static void inline set_ui_element_as__dropped(
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_BEING_HELD
         & ~UI_FLAGS__BIT_IS_BEING_DRAGGED;
+}
+
+static void inline set_ui_element_as__enabled(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags |=
+        UI_FLAGS__BIT_IS_ENABLED;
+}
+
+static void inline set_ui_element_as__disabled(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags &=
+        ~UI_FLAGS__BIT_IS_ENABLED;
 }
 
 static void inline set_ui_element__clicked_handler(

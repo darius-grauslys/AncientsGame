@@ -40,6 +40,9 @@ static bool inline is_input__use_secondary_released(Input *p_input) {
 static bool inline is_input__examine_released(Input *p_input) {
     return p_input->input_flags__released & INPUT_EXAMINE;
 }
+static bool inline is_input__consume_released(Input *p_input) {
+    return p_input->input_flags__released & INPUT_CONSUME;
+}
 static bool inline is_input__none_released(Input *p_input) {
     return p_input->input_flags__released & INPUT_NONE;
 }
@@ -75,6 +78,9 @@ static bool inline is_input__use_secondary_pressed(Input *p_input) {
 }
 static bool inline is_input__examine_pressed(Input *p_input) {
     return p_input->input_flags__pressed & INPUT_EXAMINE;
+}
+static bool inline is_input__consume_pressed(Input *p_input) {
+    return p_input->input_flags__pressed & INPUT_CONSUME;
 }
 static bool inline is_input__none_pressed(Input *p_input) {
     return p_input->input_flags__pressed & INPUT_NONE;
@@ -114,6 +120,9 @@ static bool inline is_input__examine_held(Input *p_input) {
 }
 static bool inline is_input__none_held(Input *p_input) {
     return p_input->input_flags__held & INPUT_NONE;
+}
+static bool inline is_input__consume_held(Input *p_input) {
+    return p_input->input_flags__held & INPUT_CONSUME;
 }
 static bool inline is_input__click_held(Input *p_input) {
     return p_input->input_flags__held & INPUT_CLICK

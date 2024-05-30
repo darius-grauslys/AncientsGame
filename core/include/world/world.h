@@ -32,9 +32,8 @@ void init_world(World *p_world);
 void manage_world(Game *p_game);
 void manage_world__entities(Game *p_game);
 
-void add_entity_to__world(
+Entity *add_entity_to__world(
         World *p_world,
-        Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
         int32_t x__global,
         int32_t y__global,

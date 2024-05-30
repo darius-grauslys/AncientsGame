@@ -123,6 +123,8 @@ void init_hitbox_point(Vector__3i32F4 *hitbox_point,
         get_global_y_from__hitbox(hitbox)
         + offset_half_height
         ;
+    //TODO: 3d
+    hitbox_point->z__i32F4 = 0;
 }
 
 Direction__u8 get_tile_transition_direction_of__hitbox(
@@ -356,6 +358,6 @@ void get_points_aabb_from__hitbox(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 *aa,
         Vector__3i32F4 *bb) {
-    init_hitbox_point(aa, hitbox, DIRECTION__SOUTH_EAST);
-    init_hitbox_point(bb, hitbox, DIRECTION__NORTH_WEST);
+    init_hitbox_point(aa, hitbox, DIRECTION__SOUTH_WEST);
+    init_hitbox_point(bb, hitbox, DIRECTION__NORTH_EAST);
 }
