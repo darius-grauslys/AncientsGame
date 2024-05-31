@@ -1,4 +1,4 @@
-#include <entity/controllers/collidable_entity_handlers.h>
+#include <entity/controllers/body/collidable_entity_handlers.h>
 #include <collisions/collision_manager.h>
 #include <collisions/hitbox_aabb.h>
 #include <world/chunk_manager.h>

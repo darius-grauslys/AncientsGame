@@ -1,6 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include <stdint.h>
 #ifndef NDEBUG
 #include <debug/debug.h>
 #endif
@@ -73,8 +74,20 @@ typedef struct Vector__3i32_t Chunk_Vector__3i32;
 typedef struct Vector__3i32_t Tile_Vector__3i32;
 
 typedef uint32_t Psuedo_Random_Seed__u32;
-typedef uint32_t Timer__u32;
-typedef uint8_t Timer__u8;
+
+typedef struct Timer__u32_t {
+    uint32_t remaining__u32;
+    uint32_t start__u32;
+} Timer__u32;
+typedef struct Timer__u16_t {
+    uint8_t remaining__u16;
+    uint8_t start__u16;
+} Timer__u16;
+typedef struct Timer__u8_t {
+    uint8_t remaining__u8;
+    uint8_t start__u8;
+} Timer__u8;
+
 typedef uint8_t Direction__u8;
 
 #define INDEX__UNKNOWN__u32 (uint32_t)(-1)
@@ -237,10 +250,10 @@ typedef Sprite_Frame_Index__u8 (*f_Sprite_Frame_Lookup) (
         Entity *p_entity,
         enum Sprite_Animation_Kind animation_kind);
 
-typedef Timer__u32 (*f_Animation_Speed_Lookup) (
+typedef Quantity__u32 (*f_Animation_Speed_Lookup) (
         Entity *p_entity,
         enum Sprite_Animation_Kind animation_kind);
-typedef Timer__u32 (*f_Animation_Duration_Lookup) (
+typedef Quantity__u32 (*f_Animation_Duration_Lookup) (
         Entity *p_entity,
         enum Sprite_Animation_Kind animation_kind);
 
@@ -594,8 +607,19 @@ typedef struct Armor_Properties_t {
 typedef void (*m_Dispose_Entity)(
         Entity *p_entity_self, 
         Game *p_game);
-typedef void (*m_Entity_Controller)(
+///
+/// method callback for entity AI.
+/// Use this for pathfinding, attacking, and the like.
+///
+typedef void (*m_Entity_AI_Handler)(
         Entity *p_entity_self, 
+        Game *p_game);
+///
+/// method callback for entity body.
+/// Use this for homeostasis, and "specie-like" abilities.
+///
+typedef void (*m_Entity_Body_Handler)(
+        Entity *p_entity_self,
         Game *p_game);
 
 ///
@@ -603,7 +627,7 @@ typedef void (*m_Entity_Controller)(
 /// data the user of this function pointer needs
 /// passed in addition to collided entities.
 ///
-typedef void (*m_Entity_Collision)(
+typedef void (*m_Entity_Collision_Handler)(
         Entity *p_entity_collision_source,
         Entity *p_entity_collided,
         Direction__u8 direction_of_collision);
@@ -614,8 +638,8 @@ typedef void (*m_Entity_Tile_Collision)(
         Entity *p_entity_self,
         Tile *p_tile_collided);
 
-typedef void (*m_Entity_Animation) 
-    (Entity *p_entity_self, Timer__u32 timer);
+typedef void (*m_Entity_Animation_Handler) 
+    (Entity *p_entity_self, Timer__u32 *p_timer);
 
 ///
 /// Here we define the entity super struct. It has everything we could need
@@ -762,6 +786,17 @@ enum Heart_Kind {
     Heart_Kind__Immortal_Poison,
     Heart_Kind__Locked = RESOURCE_SYMBOL__LOCKED
 };
+
+enum Health_State {
+    Health_State__None = 0,
+    Health_State__Normal,
+    Health_State__Hurt,
+    Health_State__Injured,
+    Health_State__Dying,
+    Health_State__Dead,     // health == 0
+    Health_State__Unknown = (uint8_t)(-1)
+};
+
 typedef uint8_t Energy_Orb__u8;
 enum Energy_Orb_Kind {
     Energy_Orb_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
@@ -777,10 +812,18 @@ enum Energy_Orb_Kind {
     Energy_Orb_Kind__Locked = RESOURCE_SYMBOL__LOCKED
 };
 
+enum Energy_State {
+    Energy_State__None = 0,
+    Energy_State__Normal,
+    Energy_State__Tired,
+    Energy_State__Exhausted,
+    Energy_State__Exerted,      // energy == 0
+    Energy_State__Unknown = (uint8_t)(-1)
+};
+
 typedef struct Resource_Reserve_t {
     Resource_Symbol__u8 resource_symbols
         [ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF];
-    Quantity__u8 max_quantity_of__resource_symbols;
     ///
     /// Used for entities who has more than
     /// ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF
@@ -793,6 +836,7 @@ typedef struct Resource_Reserve_t {
     ///
     Quantity__u16 resource_overflow;
     Quantity__u16 max_quantity_of__resource_overflow;
+    Quantity__u8 max_quantity_of__resource_symbols;
 } Resource_Reserve;
 
 typedef uint8_t Hearts_Damaging_Flags;
@@ -935,11 +979,15 @@ typedef struct Entity_t {
     // DO NOT INVOKE! Called automatically in release_entity(...)
     m_Dispose_Entity            m_dispose_handler;
     // DO NOT INVOKE! Called automatically
-    m_Entity_Controller         m_controller_handler;
+    m_Entity_Body_Handler    m_body_handler;
     // DO NOT INVOKE! Called automatically
-    m_Entity_Collision          m_collision_handler;
+    m_Entity_AI_Handler      m_ai_handler;
+    // DO NOT INVOKE! Called automatically
+    m_Entity_Collision_Handler          m_collision_handler;
+    // DO NOT INVOKE! Called automatically
     m_Entity_Tile_Collision     m_tile_collision_handler;
-    m_Entity_Animation          m_animation_handler;
+    // DO NOT INVOKE! Called automatically
+    m_Entity_Animation_Handler          m_animation_handler;
 
     Hitbox_AABB hitbox;
 
@@ -949,22 +997,26 @@ typedef struct Entity_t {
 
     enum Entity_Kind            the_kind_of_entity__this_entity_is;
     union {
-        struct { // living entity
+        struct { // "living" entity (including undead)
+            Direction__u8 direction;
             Resource_Reserve hearts;
             Resource_Reserve energy_orbs;
-            Inventory inventory;
-            Homeostasis__i8 homeostasis__i8;
             Humanoid_Flags humanoid_flags;
+            Timer__u8 stun__timer_u8;
             enum Homeostasis_Update_Kind kind_of_homeostasis__update;
             union {
                 struct { // humanoid union
-                    Armor_Properties    armor_properties;
-                    Direction__u8       direction;
-                    Timer__u8           stun_timer__timer_u8;
-                    Sustenance__u8      primary_sustenance__u8;
-                    Sustenance__u8      secondary_sustenance__u8;
+                    Armor_Properties    humanoid__armor_properties;
+                    Sustenance__u8      humanoid__primary_sustenance__u8;
+                    Sustenance__u8      humanoid__secondary_sustenance__u8;
+                    Inventory           humanoid__inventory;
+                    Homeostasis__i8     humanoid__homeostasis__i8;
+                    Timer__u16           humanoid__homeostasis__timer_u16;
                 };
             };
+        };
+        struct { // containers
+            Inventory container__inventory;
         };
     };
 } Entity;
@@ -1423,6 +1475,8 @@ enum Game_Action_Kind {
     Game_Action_Kind__Entity__Energy__Apply_Damage,
     Game_Action_Kind__Entity__Energy__Apply_Healing,
     Game_Action_Kind__Entity__Energy__Set,
+    Game_Action_Kind__Entity__Sustenance__Increase,
+    Game_Action_Kind__Entity__Sustenance__Decrease,
     Game_Action_Kind__Entity__Place_Tile,
     Game_Action_Kind__Entity__Item_Stack__Pick_Up,
     Game_Action_Kind__Entity__Item_Stack__Drop,
@@ -1448,8 +1502,6 @@ typedef uint8_t Game_Action_Flags;
 /// for updating the enum list!!!
 ///
 typedef struct Game_Action_t {
-    enum Game_Action_Kind the_kind_of_game_action__this_action_is;
-    Game_Action_Flags game_action_flags;
     union {
         struct { //Game_Action_Kind__Entity
             union {
@@ -1505,6 +1557,11 @@ typedef struct Game_Action_t {
                         };
                     };
                 };
+                struct { //...Entity__Sustenance__Increase
+                         //...Entity__Sustenance__Decrease
+                    enum Sustenance_Kind kind_of_sustenance;
+                    Sustenance__u8 change_in__sustenance;
+                };
                 struct { //...Entity__Place_Tile
                     Tile tile_to_place;
                     Direction__u8 direction_to_place_the__tile;
@@ -1515,6 +1572,9 @@ typedef struct Game_Action_t {
             };
         };
     };
+    Index__u8 a[2];
+    enum Game_Action_Kind the_kind_of_game_action__this_action_is;
+    Game_Action_Flags game_action_flags;
 } Game_Action;
 
 #endif

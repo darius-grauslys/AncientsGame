@@ -3,8 +3,8 @@
 
 #include <defines.h>
 
-void m_controller_for__player(
-        Entity *this_player,
-        Game *game);
+void m_handler_for__ai_player(
+        Entity *p_this_player,
+        Game *p_game);
 
 #endif

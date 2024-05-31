@@ -11,12 +11,13 @@
 #include <rendering/animate_entity.h>
 #include <rendering/render_entity.h>
 #include <world/world.h>
+#include <timer.h>
 
-#include <entity/controllers/collidable_entity_handlers.h>
+#include <entity/controllers/body/collidable_entity_handlers.h>
 #include <entity/controllers/entity_handlers.h>
-#include <entity/controllers/controller_player.h>
-#include <entity/controllers/controller_dummy.h>
-#include <entity/controllers/humanoid_animation_handler.h>
+#include <entity/controllers/ai/controller_player.h>
+#include <entity/controllers/ai/controller_dummy.h>
+#include <entity/controllers/animation/humanoid_animation_handler.h>
 
 #include <collisions/hitbox_aabb.h>
 #include <collisions/collision_manager.h>
@@ -85,7 +86,7 @@ int run_game(Game *p_game) {
 void manage_game(Game *p_game) {
     manage_game__pre_render(p_game);
     manage_game__post_render(p_game);
-    p_game->tick__timer_u32++;
+    loop_timer_u32(&p_game->tick__timer_u32);
 }
 
 void manage_game__pre_render(Game *p_game) {

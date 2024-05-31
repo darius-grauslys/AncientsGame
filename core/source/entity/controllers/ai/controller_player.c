@@ -1,11 +1,11 @@
 #include "defines.h"
 #include "game_action/game_action.h"
 #include "world/world.h"
-#include <entity/controllers/controller_player.h>
+#include <entity/controllers/ai/controller_player.h>
 #include <input/input.h>
 #include <entity/entity.h>
 #include <collisions/hitbox_aabb.h>
-#include <entity/controllers/controller_dummy.h>
+#include <entity/controllers/ai/controller_dummy.h>
 #include <rendering/animate_humanoid.h>
 #include <entity/humanoid.h>
 
@@ -26,7 +26,7 @@ enum Tile_Kind kind_of_tile =
 enum Use_Mode mode_of_use =
     Use_Mode__Place_Wall;
 
-void m_controller_for__player(
+void m_handler_for__ai_player(
         Entity *p_this_player,
         Game *p_game) {
 
@@ -77,9 +77,9 @@ void m_controller_for__player(
                 Entity_Kind__Skeleton,
                 get_vector__3i32F4(x, y, 0));
 
-        set_entity__controller(
+        set_entity__ai_handler(
                 p_skeleton, 
-                m_controller_for__dummy);
+                m_handler_for__ai_dummy);
     } else if (is_input__examine_held(p_input) && !toggle) {
         toggle = true;
         mode_of_use++;
@@ -189,7 +189,7 @@ set_direction:
             // animate_humanoid__idle(p_this_player);
             return;
         case DIRECTION__NORTH:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -199,7 +199,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__EAST:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -209,7 +209,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -219,7 +219,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__WEST:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -229,7 +229,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_EAST:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -239,7 +239,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_EAST:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -249,7 +249,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_WEST:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(
@@ -259,7 +259,7 @@ set_direction:
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_WEST:
-            apply_velocity_to__entity(
+            invoke_action__apply_velocity_to__entity(
                     p_game,
                     p_this_player,
                     get_vector__3i32F4(

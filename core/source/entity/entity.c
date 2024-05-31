@@ -60,7 +60,8 @@ void init_entity(
         p_entity->hitbox.position__3i32F4.z__i32F4 = 0;
 
     p_entity->m_dispose_handler = 0;
-    p_entity->m_controller_handler = 0;
+    p_entity->m_body_handler = 0;
+    p_entity->m_ai_handler = 0;
     p_entity->m_collision_handler = 0;
     p_entity->m_tile_collision_handler = 0;
 
@@ -75,9 +76,9 @@ void init_entity(
 void set_entity__armor(Entity *p_entity,
         enum Entity_Armor_Kind kind_of_armor,
         enum Entity_Armor_Modification_Kind kind_of_armor_modification) {
-    p_entity->armor_properties.the_kind_of_armor__this_armor_is =
+    p_entity->humanoid__armor_properties.the_kind_of_armor__this_armor_is =
         kind_of_armor;
-    p_entity->armor_properties.the_kind_of_modification__this_armor_has =
+    p_entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has =
         kind_of_armor_modification;
 }
 

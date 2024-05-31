@@ -1,15 +1,17 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
-#include "entity/controllers/collidable_entity_handlers.h"
-#include "entity/controllers/humanoid_animation_handler.h"
+#include "entity/controllers/body/collidable_entity_handlers.h"
+#include "entity/controllers/animation/humanoid_animation_handler.h"
+#include "entity/controllers/body/humanoid_body_handler.h"
+#include "entity/controllers/body/undead_body_handler.h"
 #include <entity/entity_manager.h>
 #include <rendering/animate_entity.h>
 #include <entity/entity.h>
 #include <debug/debug.h>
 #include <rendering/sprite.h>
 
-#include <entity/controllers/controller_player.h>
+#include <entity/controllers/ai/controller_player.h>
 
 void init_entity_manager(Entity_Manager *entity_manager) {
     entity_manager->entity_count__quantity_u32 = 0;
@@ -89,6 +91,9 @@ void init_entity_as__humanoid(
     p_entity->energy_orbs.max_quantity_of__resource_symbols =
         max_quantity_of__energy_orbs;
 
+    p_entity->humanoid__primary_sustenance__u8 = 128;
+    p_entity->humanoid__secondary_sustenance__u8 = 128;
+
     for (Index__u8 heart_index=0;
             heart_index
                 < p_entity->hearts.max_quantity_of__resource_symbols;
@@ -117,9 +122,12 @@ void init_entity_as__player(
 
     set_entity__is_not_updating_position(
             p_player);
-    set_entity__controller(
+    set_entity__body_handler(
+            p_player, 
+            m_handler_for__body_living);
+    set_entity__ai_handler(
             p_player,
-            m_controller_for__player);
+            m_handler_for__ai_player);
 }
 
 void init_entity_as__zombie(
@@ -131,6 +139,10 @@ void init_entity_as__zombie(
             6, 6, 
             8, 8,
             position__3i32F4);
+
+    set_entity__body_handler(
+            p_zombie, 
+            m_handler_for__body_undead);
 }
 
 void init_entity_as__skeleton(
@@ -142,6 +154,9 @@ void init_entity_as__skeleton(
             6, 6, 
             15, 15,
             position__3i32F4);
+    set_entity__body_handler(
+            p_skeleton, 
+            m_handler_for__body_undead);
 }
 
 Entity *get_new__entity(

@@ -131,11 +131,11 @@ Sprite_Frame_Index__u8 f_get_final_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-Timer__u32 f_get_animation_speed_for__humanoid_animation(
+Quantity__u32 f_get_animation_speed_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-Timer__u32 f_get_animation_duration_for__humanoid_animation(
+Quantity__u32 f_get_animation_duration_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 

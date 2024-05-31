@@ -7,8 +7,8 @@
 /// This will manage things such as 
 /// health regen, and death
 ///
-void m_controller_for__humanoid(
-        Entity *this_humanoid,
-        Game *game);
+void m_handler_for__body_living(
+        Entity *p_this_humanoid,
+        Game *p_game);
 
 #endif

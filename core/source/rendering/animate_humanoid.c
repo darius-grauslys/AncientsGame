@@ -2,14 +2,14 @@
 #include <entity/entity.h>
 
 uint32_t get_animation_frame_offset_for__armor(Entity *entity) {
-    switch (entity->armor_properties.the_kind_of_armor__this_armor_is) {
+    switch (entity->humanoid__armor_properties.the_kind_of_armor__this_armor_is) {
         default:
         case Entity_Armor_Kind__None:
             return 0;
         case Entity_Armor_Kind__Cloth:
             return get_animation_frame_offset_for__cloth_armor(entity);
         case Entity_Armor_Kind__Iron:
-            switch (entity->armor_properties.the_kind_of_modification__this_armor_has) {
+            switch (entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has) {
                 default:
                 case Entity_Armor_Modification_Kind__None:
                     return get_animation_frame_offset_for__iron_armor(entity);
@@ -19,7 +19,7 @@ uint32_t get_animation_frame_offset_for__armor(Entity *entity) {
                     return get_animation_frame_offset_for__iron_amethyst_armor(entity);
             }
         case Entity_Armor_Kind__Gold:
-            switch (entity->armor_properties.the_kind_of_modification__this_armor_has) {
+            switch (entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has) {
                 default:
                 case Entity_Armor_Modification_Kind__None:
                     return get_animation_frame_offset_for__gold_armor(entity);
@@ -97,7 +97,7 @@ Sprite_Frame_Index__u8 f_get_final_sprite_frame_for__humanoid_animation(
     }
 }
 
-Timer__u32 f_get_animation_speed_for__humanoid_animation(
+Quantity__u32 f_get_animation_speed_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind) {
     //TODO: magic number timers
@@ -113,7 +113,7 @@ Timer__u32 f_get_animation_speed_for__humanoid_animation(
     }
 }
 
-Timer__u32 f_get_animation_duration_for__humanoid_animation(
+Quantity__u32 f_get_animation_duration_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind) {
     //TODO: magic number timers

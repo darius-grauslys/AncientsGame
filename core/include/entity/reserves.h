@@ -159,7 +159,7 @@ void decrease_homeostasis_of__entity(
 static Signed_Quantity__i8 inline 
     get_signed_quantity_i8_of__homeostatis_of__entity(
         Entity *p_entity) {
-    return p_entity->homeostasis__i8;
+    return p_entity->humanoid__homeostasis__i8;
 }
 
 enum Homeostasis_State get_state_of__homeostasis_of__entity(
@@ -182,5 +182,15 @@ Sustenance__u8 get_quantity_of__sustenance_of__entity(
 enum Sustenance_State get_state_of__sustenance_of__entity(
         Entity *p_entity,
         enum Sustenance_Kind kind_of_sustenance);
+
+static enum Sustenance_State inline get_worst_of__two_sustenance_states(
+        enum Sustenance_State state_of__primary_sustenance,
+        enum Sustenance_State state_of__secondary_sustenance) {
+    return
+        (state_of__primary_sustenance > state_of__secondary_sustenance)
+        ? state_of__primary_sustenance
+        : state_of__secondary_sustenance
+        ;
+}
 
 #endif

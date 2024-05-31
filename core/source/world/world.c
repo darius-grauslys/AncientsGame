@@ -9,8 +9,8 @@
 #include <world/world_parameters.h>
 
 // temp:
-#include <entity/controllers/controller_player.h>
-#include <entity/controllers/controller_dummy.h>
+#include <entity/controllers/ai/controller_player.h>
+#include <entity/controllers/ai/controller_dummy.h>
 #include <entity/entity.h>
 #include <rendering/rendering.h>
 #include <debug/debug.h>
@@ -79,8 +79,12 @@ void manage_world__entities(Game *p_game) {
             continue;
         }
 
-        if (p_entity->m_controller_handler) {
-            p_entity->m_controller_handler(p_entity, p_game);
+        if (p_entity->m_body_handler) {
+            p_entity->m_body_handler(p_entity, p_game);
+        }
+
+        if (p_entity->m_ai_handler) {
+            p_entity->m_ai_handler(p_entity, p_game);
         }
 
         if (!poll_collision_manager(
@@ -118,7 +122,7 @@ void manage_world__entities(Game *p_game) {
         if (p_entity->m_animation_handler) {
             p_entity->m_animation_handler(
                     p_entity, 
-                    p_game->tick__timer_u32);
+                    &p_game->tick__timer_u32);
         }
 
         if (!is_entity__hidden(p_entity)) {

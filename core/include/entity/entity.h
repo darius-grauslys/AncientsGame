@@ -72,15 +72,16 @@ static void inline set_entity_as__visible(Entity *entity) {
     entity->entity_flags &= ~ENTITY_FLAG__IS_HIDDEN;
 }
 
-static void inline set_entity__controller(
+static void inline set_entity__ai_handler(
         Entity *p_entity,
-        m_Entity_Controller m_controller) {
-    p_entity->m_controller_handler = m_controller;
-    if (!m_controller) {
-        set_entity__collidable(p_entity);
-    } else {
-        set_entity__uncollidable(p_entity);
-    }
+        m_Entity_AI_Handler m_ai_handler) {
+    p_entity->m_ai_handler = m_ai_handler;
+}
+
+static void inline set_entity__body_handler(
+        Entity *p_entity,
+        m_Entity_Body_Handler m_body_handler) {
+    p_entity->m_body_handler = m_body_handler;
 }
 
 static void inline set_entity__disposer(
@@ -91,8 +92,13 @@ static void inline set_entity__disposer(
 
 static void inline set_entity__collider(
         Entity *p_entity,
-        m_Entity_Collision m_collision_handler) {
+        m_Entity_Collision_Handler m_collision_handler) {
     p_entity->m_collision_handler = m_collision_handler;
+    if (!m_collision_handler) {
+        set_entity__collidable(p_entity);
+    } else {
+        set_entity__uncollidable(p_entity);
+    }
 }
 
 static void inline set_entity__tile_collider(
@@ -103,7 +109,7 @@ static void inline set_entity__tile_collider(
 
 static void inline set_entity__animator(
         Entity *p_entity,
-        m_Entity_Animation m_animation_handler) {
+        m_Entity_Animation_Handler m_animation_handler) {
     p_entity->m_animation_handler = m_animation_handler;
 }
 

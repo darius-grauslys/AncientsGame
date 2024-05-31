@@ -25,7 +25,7 @@ static void inline invoke_game_action(
 ///
 /// Sends a Game_Action which applies velocity.
 ///
-void apply_velocity_to__entity(
+void invoke_action__apply_velocity_to__entity(
         Game *p_game,
         Entity *p_entity,
         Vector__3i32F4 velocity_vector);
@@ -33,9 +33,47 @@ void apply_velocity_to__entity(
 ///
 /// Sends a Game_Action which sets velocity.
 ///
-void set_velocity_of__entity(
+void invoke_action__set_velocity_of__entity(
         Game *p_game,
         Entity *p_entity,
         Vector__3i32F4 velocity_vector);
+
+void invoke_action__apply_heart_healing_to__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Hearts_Healing_Specifier *p_hearts_healing_specifier);
+
+void invoke_action__apply_energy_healing_to__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Energy_Healing_Specifier *p_energy_healing_specifier);
+
+void invoke_action__apply_heart_damage_to__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Hearts_Damaging_Specifier *p_hearts_damaging_specifier);
+
+void invoke_action__apply_energy_damage_to__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Energy_Damaging_Specifier *p_energy_damaging_specifier);
+
+void invoke_action__increase_sustenance_of__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        enum Sustenance_Kind kind_of_sustenance,
+        Sustenance__u8 change_in__sustenance);
+
+void invoke_action__decrease_sustenance_of__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        enum Sustenance_Kind kind_of_sustenance,
+        Sustenance__u8 change_in__sustenance);
 
 #endif

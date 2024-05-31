@@ -7,6 +7,7 @@
 #include "entity/humanoid.h"
 #include "entity/reserves.h"
 #include "game.h"
+#include "game_action/game_action.h"
 #include "input/input.h"
 #include "nds/arm9/background.h"
 #include "rendering/nds_gfx_context.h"
@@ -17,6 +18,7 @@
 #include "world/chunk_manager.h"
 #include <scene/scene__game.h>
 #include <stdint.h>
+#include <timer.h>
 
 #include <assets/ui/_ui_tiles.h>
 
@@ -56,6 +58,9 @@ void init_scene_as__game(Scene *p_scene) {
 
     p_scene->p_scene_data =
         &game_scene_data;
+    init_timer_u8(
+            &game_scene_data.hud_notification_timer,
+            30);
 }
 
 void m_ui_button__clicked_handler__game_button(
@@ -308,11 +313,9 @@ void update_ui_homeostasis(
     Timer__u8 *timer = 
             &((struct Game_Scene_Data_t *)p_this_scene->p_scene_data)
                 ->hud_notification_timer;
-    Timer__u8 timer_value =
-        *timer;
-    if (timer_value > 0) {
-        (*timer)--;
-    }
+    Quantity__u8 timer_value =
+        timer->remaining__u8;
+    poll_timer_u8(timer);
 
     switch (p_player->kind_of_homeostasis__update) {
         default:
@@ -340,7 +343,7 @@ void update_ui_homeostasis(
                 p_player->kind_of_homeostasis__update =
                     Homeostasis_Update_Kind__None;
             } else if (timer_value == 0) {
-                *timer = 30;
+                reset_timer_u8(timer);
             } 
             break;
     }
@@ -991,10 +994,6 @@ void m_enter_scene_as__game_handler(
             &p_game->world,
             Entity_Kind__Player,
             get_vector__3i32F4(0, 0, 0));
-    get_new__entity(
-            &p_game->world.entity_manager, 
-            Entity_Kind__Player,
-            get_vector__3i32F4(0, 0, 0));
 
     move_chunk_manager(
             &p_game->world.chunk_manager, 
@@ -1008,8 +1007,6 @@ void m_enter_scene_as__game_handler(
 
     Entity *p_player =
         p_game->world.entity_manager.p_local_player;
-    p_player->primary_sustenance__u8 = 0;
-    p_player->secondary_sustenance__u8 = 0;
     while (1) {
         if (p_game->scene_manager.p_active_scene == 0)
             break;
@@ -1018,16 +1015,14 @@ void m_enter_scene_as__game_handler(
             _index_tmp++;
         }
         if (is_input__use_released(&p_game->input)) {
-            increase_sustenance_of__entity(
+            Energy_Damaging_Specifier damage;
+            damage.energy_damaging__flags = 0;
+            damage.quantity_of__damage = 10;
+            invoke_action__apply_energy_damage_to__entity(
+                    p_game, 
                     p_player, 
-                    Sustenance_Kind__Secondary, 
-                    8);
-        }
-        if (is_input__use_secondary_released(&p_game->input)) {
-            decrease_sustenance_of__entity(
                     p_player, 
-                    Sustenance_Kind__Secondary, 
-                    8);
+                    &damage);
         }
         update_ui_for__player_resources(
                 p_this_scene, 

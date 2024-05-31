@@ -439,6 +439,73 @@ void apply_hearts_healing_specifier_to__entity(
             ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF * 2);
 }
 
+Quantity__u16 get_quantity_u16_of__health_of__entity(
+        Entity *p_entity) {
+    Resource_Reserve *p_hearts =
+        &p_entity->hearts;
+    Heart__u8 *p_first_heart =
+        get_ptr_to__first_resource_symbol(p_hearts);
+    Heart__u8 *p_last_heart =
+        get_ptr_to__last_resource_symbol(p_hearts);
+    Heart__u8 *p_last_usable_heart =
+        get_last_usable_resource(
+                p_first_heart, 
+                p_last_heart);
+
+    Quantity__u16 quantity_of__health =
+        (p_last_usable_heart - p_first_heart)
+        / sizeof(Heart__u8*)
+        ;
+
+    switch (*p_last_usable_heart) {
+        default:
+            quantity_of__health++;
+            break;
+        case Heart_Kind__Full_Immortal:
+        case Heart_Kind__Immortal_Normal:
+        case Heart_Kind__Immortal_Poison:
+        case Heart_Kind__Normal_Poison:
+        case Heart_Kind__Full_Poison:
+        case Heart_Kind__Full_Normal:
+            quantity_of__health += 2;
+            break;
+    }
+
+    return quantity_of__health;
+}
+
+Quantity__u16 get_quantity_u16_of__quality_health_of__entity(
+        Entity *p_entity) {
+    Resource_Reserve *p_hearts =
+        &p_entity->hearts;
+    Heart__u8 *p_first_heart =
+        get_ptr_to__first_resource_symbol(p_hearts);
+    Heart__u8 *p_last_heart =
+        get_ptr_to__last_resource_symbol(p_hearts);
+    Heart__u8 *p_last_healthy_heart =
+        get_last_healthy_heart(
+                p_first_heart, 
+                p_last_heart);
+
+    Quantity__u16 quantity_of__quality_energy =
+        (p_last_healthy_heart - p_first_heart)
+        / sizeof(Heart__u8*)
+        ;
+
+    switch (*p_last_healthy_heart) {
+        default:
+            quantity_of__quality_energy++;
+            break;
+        case Heart_Kind__Full_Immortal:
+        case Heart_Kind__Immortal_Normal:
+        case Heart_Kind__Full_Normal:
+            quantity_of__quality_energy += 2;
+            break;
+    }
+
+    return quantity_of__quality_energy;
+}
+
 void set_hearts_of__entity(
         Entity *p_entity,
         Resource_Reserve *hearts) {
@@ -865,6 +932,73 @@ void set_energy_orbs_of__entity(
     }
 }
 
+Quantity__u16 get_quantity_u16_of__energy_of__entity(
+        Entity *p_entity) {
+    Resource_Reserve *p_energy_orbs =
+        &p_entity->energy_orbs;
+    Energy_Orb__u8 *p_first_energy_orb =
+        get_ptr_to__first_resource_symbol(p_energy_orbs);
+    Energy_Orb__u8 *p_last_energy_orb =
+        get_ptr_to__last_resource_symbol(p_energy_orbs);
+    Energy_Orb__u8 *p_last_usable_energy_orb =
+        get_last_usable_resource(
+                p_first_energy_orb, 
+                p_last_energy_orb);
+
+    Quantity__u16 quantity_of__energy =
+        (p_last_usable_energy_orb - p_first_energy_orb)
+        / sizeof(Energy_Orb__u8*)
+        ;
+
+    switch (*p_last_usable_energy_orb) {
+        default:
+            quantity_of__energy++;
+            break;
+        case Energy_Orb_Kind__Full_Demonic:
+        case Energy_Orb_Kind__Demonic_Normal:
+        case Energy_Orb_Kind__Demonic_Poison:
+        case Energy_Orb_Kind__Normal_Poison:
+        case Energy_Orb_Kind__Full_Poison:
+        case Energy_Orb_Kind__Full_Normal:
+            quantity_of__energy += 2;
+            break;
+    }
+
+    return quantity_of__energy;
+}
+
+Quantity__u16 get_quantity_u16_of__quality_energy_of__entity(
+        Entity *p_entity) {
+    Resource_Reserve *p_energy_orbs =
+        &p_entity->energy_orbs;
+    Energy_Orb__u8 *p_first_energy_orb =
+        get_ptr_to__first_resource_symbol(p_energy_orbs);
+    Energy_Orb__u8 *p_last_energy_orb =
+        get_ptr_to__last_resource_symbol(p_energy_orbs);
+    Energy_Orb__u8 *p_last_healthy_energy_orb =
+        get_last_healthy_energy_orb(
+                p_first_energy_orb, 
+                p_last_energy_orb);
+
+    Quantity__u16 quantity_of__quality_energy =
+        (p_last_healthy_energy_orb - p_first_energy_orb)
+        / sizeof(Energy_Orb__u8*)
+        ;
+
+    switch (*p_last_healthy_energy_orb) {
+        default:
+            quantity_of__quality_energy++;
+            break;
+        case Energy_Orb_Kind__Full_Demonic:
+        case Energy_Orb_Kind__Demonic_Normal:
+        case Energy_Orb_Kind__Full_Normal:
+            quantity_of__quality_energy += 2;
+            break;
+    }
+
+    return quantity_of__quality_energy;
+}
+
 void increase_homeostasis_of__entity(
         Entity *p_entity,
         Quantity__u8 quantity_of__homeostasis_increase) {
@@ -872,12 +1006,12 @@ void increase_homeostasis_of__entity(
         Homeostasis_Update_Kind__Increasing;
     if (quantity_of__homeostasis_increase 
             > HOMEOSTASIS_MAX_QUANTITY_OF
-            - p_entity->homeostasis__i8) {
-        p_entity->homeostasis__i8 =
+            - p_entity->humanoid__homeostasis__i8) {
+        p_entity->humanoid__homeostasis__i8 =
             HOMEOSTASIS_MAX_QUANTITY_OF;
         return;
     }
-    p_entity->homeostasis__i8 += 
+    p_entity->humanoid__homeostasis__i8 += 
         quantity_of__homeostasis_increase;
 }
 
@@ -887,13 +1021,13 @@ void decrease_homeostasis_of__entity(
     p_entity->kind_of_homeostasis__update =
         Homeostasis_Update_Kind__Decreasing;
     if (quantity_of__homeostasis_decrease 
-            > p_entity->homeostasis__i8
+            > p_entity->humanoid__homeostasis__i8
             - HOMEOSTASIS_MIN_QUANTITY_OF) {
-        p_entity->homeostasis__i8 =
+        p_entity->humanoid__homeostasis__i8 =
             HOMEOSTASIS_MIN_QUANTITY_OF;
         return;
     }
-    p_entity->homeostasis__i8 -= 
+    p_entity->humanoid__homeostasis__i8 -= 
         quantity_of__homeostasis_decrease;
 }
 
@@ -902,7 +1036,7 @@ enum Homeostasis_State get_state_of__homeostasis_of__entity(
     enum Homeostasis_State state_of__homeostasis =
         Homeostasis_State__Unknown;
     Signed_Quantity__i8 homeostasis =
-        p_entity->homeostasis__i8;
+        p_entity->humanoid__homeostasis__i8;
     if (is_humanoid__undead(p_entity)) {
         if (homeostasis < HOMEOSTASIS__SOULFUL)
             return Homeostasis_State__Soulfull;
@@ -948,12 +1082,12 @@ void increase_sustenance_of__entity(
             return;
         case Sustenance_Kind__Hunger:
         // case Sustenance_Kind__Sanity:
-            p_entity->primary_sustenance__u8 += 
+            p_entity->humanoid__primary_sustenance__u8 += 
                 quantity_of__sustenance_increase;
             return;
         case Sustenance_Kind__Thirst:
         // case Sustenance_Kind__Blood:
-            p_entity->secondary_sustenance__u8 +=
+            p_entity->humanoid__secondary_sustenance__u8 +=
                 quantity_of__sustenance_increase;
             return;
     }
@@ -969,12 +1103,22 @@ void decrease_sustenance_of__entity(
             return;
         case Sustenance_Kind__Hunger:
         // case Sustenance_Kind__Sanity:
-            p_entity->primary_sustenance__u8 -= 
+            if (p_entity->humanoid__primary_sustenance__u8
+                    < quantity_of__sustenance_decrease) {
+                p_entity->humanoid__primary_sustenance__u8 = 0;
+                return;
+            }
+            p_entity->humanoid__primary_sustenance__u8 -= 
                 quantity_of__sustenance_decrease;
             return;
         case Sustenance_Kind__Thirst:
         // case Sustenance_Kind__Blood:
-            p_entity->secondary_sustenance__u8 -=
+            if (p_entity->humanoid__secondary_sustenance__u8
+                    < quantity_of__sustenance_decrease) {
+                p_entity->humanoid__secondary_sustenance__u8 = 0;
+                return;
+            }
+            p_entity->humanoid__secondary_sustenance__u8 -=
                 quantity_of__sustenance_decrease;
             return;
     }
@@ -989,10 +1133,10 @@ Sustenance__u8 get_quantity_of__sustenance_of__entity(
             return 0;
         case Sustenance_Kind__Hunger:
         // case Sustenance_Kind__Sanity:
-            return p_entity->primary_sustenance__u8;
+            return p_entity->humanoid__primary_sustenance__u8;
         case Sustenance_Kind__Thirst:
         // case Sustenance_Kind__Blood:
-            return p_entity->secondary_sustenance__u8;
+            return p_entity->humanoid__secondary_sustenance__u8;
     }
 }
 
@@ -1001,8 +1145,8 @@ enum Sustenance_State get_state_of__sustenance_of__entity(
         enum Sustenance_Kind kind_of_sustenance) {
     Sustenance__u8 sustenance =
         (kind_of_sustenance == Sustenance_Kind__Primary)
-        ? p_entity->primary_sustenance__u8
-        : p_entity->secondary_sustenance__u8
+        ? p_entity->humanoid__primary_sustenance__u8
+        : p_entity->humanoid__secondary_sustenance__u8
         ;
 
     if (sustenance > SUSTENANCE__BLOATED)
