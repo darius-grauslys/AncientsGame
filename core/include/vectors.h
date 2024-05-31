@@ -64,4 +64,13 @@ static Vector__3u8 inline vector_3i32F4_to__vector_3u8(
     };
 }
 
+static Vector__3i32F4 inline get_vector__3i32F4(
+        i32F4 x,
+        i32F4 y,
+        i32F4 z) {
+    return (Vector__3i32F4) {
+        x, y, z
+    };
+}
+
 #endif

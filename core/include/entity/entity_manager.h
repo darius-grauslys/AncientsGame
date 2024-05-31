@@ -32,8 +32,6 @@ get_entity_ptr_from__entity_manager",
 Entity *get_new__entity( 
         Entity_Manager *p_entity_manager, 
         enum Entity_Kind kind_of_entity,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global);
+        Vector__3i32F4 position__3i32F4);
 
 #endif

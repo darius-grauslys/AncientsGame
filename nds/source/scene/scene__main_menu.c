@@ -145,9 +145,7 @@ void m_load_scene_as__main_menu_handler(
             (enum Main_Menu_State)(i+1);
         set_hitbox__position(
                 &p_button_ptrs[i]->ui_bounding_box__aabb,
-                52,  
-                72 + 44 * i, 
-                0);
+                get_vector__3i32F4(52, 72 + 44 * i, 0));
         set_ui_element__clicked_handler(
                 p_button_ptrs[i], m_main_menu__menu_button__clicked_handler);
     }
@@ -161,9 +159,7 @@ void m_load_scene_as__main_menu_handler(
 
     set_hitbox__position(
             &p_button_ptrs[3]->ui_bounding_box__aabb, 
-            184, 
-            118, 
-            0);
+            get_vector__3i32F4(184, 118, 000000000));
 
     main_menu_data.p_gfx_context =
         &p_game->gfx_context;

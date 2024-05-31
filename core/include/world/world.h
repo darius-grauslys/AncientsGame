@@ -35,9 +35,7 @@ void manage_world__entities(Game *p_game);
 Entity *add_entity_to__world(
         World *p_world,
         enum Entity_Kind kind_of_entity,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global);
+        Vector__3i32F4 position__3i32F4);
 
 void release_entity_from__world(
         Game *p_game,

@@ -73,7 +73,7 @@ void m_controller_for__player(
         Entity *p_skeleton = add_entity_to__world(
                 &p_game->world,
                 Entity_Kind__Skeleton,
-                x, y, 0);
+                get_vector__3i32F4(x, y, 0));
 
         set_entity__controller(
                 p_skeleton, 

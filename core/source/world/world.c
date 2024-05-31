@@ -134,16 +134,12 @@ void manage_world__entities(Game *p_game) {
 Entity *add_entity_to__world(
         World *p_world,
         enum Entity_Kind kind_of_entity,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
+        Vector__3i32F4 position__3i32F4) {
     Entity *p_entity =
         get_new__entity(
                 &p_world->entity_manager,
                 kind_of_entity,
-                x__global,
-                y__global,
-                z__global);
+                position__3i32F4);
     add_entity_to__collision_manager(
             &p_world->collision_manager, 
             p_entity);

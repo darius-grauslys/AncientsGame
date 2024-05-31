@@ -67,9 +67,7 @@ void init_entity_as__humanoid(
         Quantity__u8 height,
         Quantity__u8 max_quantity_of__hearts,
         Quantity__u8 max_quantity_of__energy_orbs,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
+        Vector__3i32F4 position__3i32F4) {
 
     set_entity__collider(
             p_entity, 
@@ -84,9 +82,7 @@ void init_entity_as__humanoid(
     init_hitbox(
             &p_entity->hitbox, 
             width, height,
-            x__global, 
-            y__global, 
-            z__global);
+            position__3i32F4);
 
     p_entity->hearts.max_quantity_of__resource_symbols =
         max_quantity_of__hearts;
@@ -111,17 +107,13 @@ void init_entity_as__humanoid(
 
 void init_entity_as__player(
         Entity *p_player,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
+        Vector__3i32F4 position__3i32F4) {
 
     init_entity_as__humanoid(
             p_player, 
             6, 6, 
             10, 10,
-            x__global, 
-            y__global, 
-            z__global);
+            position__3i32F4);
 
     set_entity__is_not_updating_position(
             p_player);
@@ -132,40 +124,30 @@ void init_entity_as__player(
 
 void init_entity_as__zombie(
         Entity *p_zombie,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
+        Vector__3i32F4 position__3i32F4) {
 
     init_entity_as__humanoid(
             p_zombie, 
             6, 6, 
             8, 8,
-            x__global, 
-            y__global, 
-            z__global);
+            position__3i32F4);
 }
 
 void init_entity_as__skeleton(
         Entity *p_skeleton,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
+        Vector__3i32F4 position__3i32F4) {
 
     init_entity_as__humanoid(
             p_skeleton, 
             6, 6, 
             15, 15,
-            x__global, 
-            y__global, 
-            z__global);
+            position__3i32F4);
 }
 
 Entity *get_new__entity(
         Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
-        int32_t x__global,
-        int32_t y__global,
-        int32_t z__global) {
+        Vector__3i32F4 position__3i32F4) {
     Entity *p_entity = allocate__entity(
             p_entity_manager, 
             kind_of_entity);
@@ -178,23 +160,17 @@ invalid kind_of_entity %d get_new__entity(...).", kind_of_entity);
         case Entity_Kind__Zombie:
             init_entity_as__zombie(
                     p_entity,
-                    x__global,
-                    y__global,
-                    z__global);
+                    position__3i32F4);
             break;
         case Entity_Kind__Skeleton:
             init_entity_as__skeleton(
                     p_entity,
-                    x__global,
-                    y__global,
-                    z__global);
+                    position__3i32F4);
             break;
         case Entity_Kind__Player:
             init_entity_as__player(
                     p_entity,
-                    x__global,
-                    y__global,
-                    z__global);
+                    position__3i32F4);
             // TODO: don't assign local player here!
             if (!p_entity_manager->p_local_player) {
                 p_entity_manager->p_local_player =

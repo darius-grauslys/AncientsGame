@@ -1,11 +1,14 @@
+#include "defines.h"
 #include <collisions/hitbox_aabb.h>
 #include <debug/debug.h>
 
 void set_hitbox__position(
         Hitbox_AABB *hitbox,
-        Signed_Index__i32 x__global,
-        Signed_Index__i32 y__global,
-        Signed_Index__i32 z__global) {
+        Vector__3i32F4 position__3i32F4) {
+    i32F4 x__global = position__3i32F4.x__i32F4;
+    i32F4 y__global = position__3i32F4.y__i32F4;
+    i32F4 z__global = position__3i32F4.z__i32F4;
+
     hitbox->chunk_index__3i32.x__i32 = 
         x__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
     hitbox->chunk_index__3i32.y__i32 = 

@@ -83,9 +83,7 @@ void commit_hitbox_velocity(
 ///
 void set_hitbox__position(
         Hitbox_AABB *hitbox,
-        Signed_Index__i32 x__global,
-        Signed_Index__i32 y__global,
-        Signed_Index__i32 z__global);
+        Vector__3i32F4 position__3i32F4);
 
 static Direction__u8 inline get_movement_direction_of__hitbox(
         Hitbox_AABB *hitbox) {
@@ -116,16 +114,14 @@ static void inline init_hitbox(
         Hitbox_AABB *hitbox,
         Quantity__u32 width, 
         Quantity__u32 height,
-        Signed_Index__i32 x__global,
-        Signed_Index__i32 y__global,
-        Signed_Index__i32 z__global) {
+        Vector__3i32F4 position__3i32F4) {
     hitbox->width__quantity_32 = width;
     hitbox->height__quantity_u32 = height;
     hitbox->velocity__3i32F4.x__i32F4 = 0;
     hitbox->velocity__3i32F4.y__i32F4 = 0;
     hitbox->velocity__3i32F4.z__i32F4 = 0;
     set_hitbox__position(hitbox, 
-            x__global, y__global, z__global);
+            position__3i32F4);
 }
 
 static void inline apply_velocity_to__hitbox(

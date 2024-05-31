@@ -5,6 +5,7 @@
 #include "ui/ui_draggable.h"
 #include "ui/ui_slider.h"
 #include <ui/ui_element.h>
+#include <vectors.h>
 
 void init_ui_element(
         UI_Element *p_ui_element,
@@ -22,9 +23,7 @@ void init_ui_element(
             &p_ui_element->ui_bounding_box__aabb, 
             width, 
             height, 
-            0, 
-            0, 
-            0);
+            get_vector__3i32F4(0, 0, 0));
     p_ui_element->m_ui_clicked_handler = 0;
     p_ui_element->m_ui_dragged_handler = 0;
     p_ui_element->m_ui_dropped_handler = 0;

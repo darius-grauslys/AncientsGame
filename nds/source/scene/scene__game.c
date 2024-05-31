@@ -113,9 +113,7 @@ void m_load_scene_as__game_handler(
                 52, 32);
         set_hitbox__position(
                 &p_ui_button->ui_bounding_box__aabb, 
-                56 + 72 * ui_index, 
-                64, 
-                0);
+                get_vector__3i32F4(56 + 72 * ui_index, 64, 0));
         p_ui_button->p_ui_data =
             &game_scene_data.button_states[ui_index];
         game_scene_data.button_states[ui_index] =
@@ -992,11 +990,11 @@ void m_enter_scene_as__game_handler(
     add_entity_to__world(
             &p_game->world,
             Entity_Kind__Player,
-            0, 0, 0);
+            get_vector__3i32F4(0, 0, 0));
     get_new__entity(
             &p_game->world.entity_manager, 
             Entity_Kind__Player,
-            0, 0, 0);
+            get_vector__3i32F4(0, 0, 0));
 
     move_chunk_manager(
             &p_game->world.chunk_manager, 
