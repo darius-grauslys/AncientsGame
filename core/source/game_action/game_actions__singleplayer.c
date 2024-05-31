@@ -90,12 +90,9 @@ void handle_game_action__entity__place__tile(
         Tile *tile,
         Direction__u8 direction_to_place_the__tile) {
     Vector__3i32F4 position = {
-        p_entity_source->hitbox.x__i32F4,
-        p_entity_source->hitbox.y__i32F4,
-        p_entity_source->hitbox.z__i32F4
-        // p_entity_source->hitbox.position__3i32F4.x__i32F4,
-        // p_entity_source->hitbox.position__3i32F4.y__i32F4,
-        // p_entity_source->hitbox.position__3i32F4.z__i32F4
+        p_entity_source->hitbox.position__3i32F4.x__i32F4,
+        p_entity_source->hitbox.position__3i32F4.y__i32F4,
+        p_entity_source->hitbox.position__3i32F4.z__i32F4
     };
 
     offset_vector_by__direction(

@@ -6,20 +6,20 @@ void set_hitbox__position(
         Signed_Index__i32 x__global,
         Signed_Index__i32 y__global,
         Signed_Index__i32 z__global) {
-    hitbox->x__chunk__signed_index_i32 = 
+    hitbox->chunk_index__3i32.x__i32 = 
         x__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
-    hitbox->y__chunk__signed_index_i32 = 
+    hitbox->chunk_index__3i32.y__i32 = 
         y__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
-    hitbox->z__chunk__signed_index_i32 = 
+    hitbox->chunk_index__3i32.z__i32 = 
         z__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
 
-    hitbox->x__i32F4 =
+    hitbox->position__3i32F4.x__i32F4 =
         (x__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
-    hitbox->y__i32F4 =
+    hitbox->position__3i32F4.y__i32F4 =
         (y__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
-    hitbox->z__i32F4 =
+    hitbox->position__3i32F4.z__i32F4 =
         (z__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1)
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
 }
@@ -29,30 +29,30 @@ void commit_hitbox_velocity(
 
     Signed_Index__i32 dx, dy, dz;
 
-    dx = ((hitbox->x__i32F4 + hitbox->x__velocity__i32F4) 
+    dx = ((hitbox->position__3i32F4.x__i32F4 + hitbox->velocity__3i32F4.x__i32F4) 
             >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->x__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dy = ((hitbox->y__i32F4 + hitbox->y__velocity__i32F4) 
+        - (hitbox->position__3i32F4.x__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    dy = ((hitbox->position__3i32F4.y__i32F4 + hitbox->velocity__3i32F4.y__i32F4) 
             >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->y__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dz = ((hitbox->z__i32F4 + hitbox->z__velocity__i32F4) 
+        - (hitbox->position__3i32F4.y__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    dz = ((hitbox->position__3i32F4.z__i32F4 + hitbox->velocity__3i32F4.z__i32F4) 
             >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->z__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+        - (hitbox->position__3i32F4.z__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
 
-    hitbox->x__i32F4 += hitbox->x__velocity__i32F4
+    hitbox->position__3i32F4.x__i32F4 += hitbox->velocity__3i32F4.x__i32F4
         - (dx << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    hitbox->y__i32F4 += hitbox->y__velocity__i32F4
+    hitbox->position__3i32F4.y__i32F4 += hitbox->velocity__3i32F4.y__i32F4
         - (dy << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    hitbox->z__i32F4 += hitbox->z__velocity__i32F4
+    hitbox->position__3i32F4.z__i32F4 += hitbox->velocity__3i32F4.z__i32F4
         - (dz << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
 
-    hitbox->x__velocity__i32F4 = 0;
-    hitbox->y__velocity__i32F4 = 0;
-    hitbox->z__velocity__i32F4 = 0;
+    hitbox->velocity__3i32F4.x__i32F4 = 0;
+    hitbox->velocity__3i32F4.y__i32F4 = 0;
+    hitbox->velocity__3i32F4.z__i32F4 = 0;
 
-    hitbox->x__chunk__signed_index_i32 += dx;
-    hitbox->y__chunk__signed_index_i32 += dy;
-    hitbox->z__chunk__signed_index_i32 += dz;
+    hitbox->chunk_index__3i32.x__i32 += dx;
+    hitbox->chunk_index__3i32.y__i32 += dy;
+    hitbox->chunk_index__3i32.z__i32 += dz;
 }
 
 void init_hitbox_point__without_velocity(Vector__3i32F4 *hitbox_point,
@@ -137,11 +137,11 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
         DIRECTION__NONE;
 
     Signed_Index__i32 x__tile_pos =
-        (hitbox->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (hitbox->position__3i32F4.x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
     Signed_Index__i32 y__tile_pos =
-        (hitbox->y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (hitbox->position__3i32F4.y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
 

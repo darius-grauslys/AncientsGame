@@ -15,9 +15,9 @@ void get_points_aabb_from__hitbox(
 static Signed_Index__i32 inline get_global_x_from__hitbox(
         Hitbox_AABB *hitbox) {
     return
-    ((hitbox->x__chunk__signed_index_i32) 
+    ((hitbox->chunk_index__3i32.x__i32) 
      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->x__i32F4 + hitbox->x__velocity__i32F4) 
+        + ((hitbox->position__3i32F4.x__i32F4 + hitbox->velocity__3i32F4.x__i32F4) 
                 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         ;
 }
@@ -25,9 +25,9 @@ static Signed_Index__i32 inline get_global_x_from__hitbox(
 static Signed_Index__i32 inline get_global_y_from__hitbox(
         Hitbox_AABB *hitbox) {
     return 
-    (((hitbox->y__chunk__signed_index_i32) 
+    (((hitbox->chunk_index__3i32.y__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->y__i32F4 + hitbox->y__velocity__i32F4) 
+        + ((hitbox->position__3i32F4.y__i32F4 + hitbox->velocity__3i32F4.y__i32F4) 
             >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
     ;
 }
@@ -35,9 +35,9 @@ static Signed_Index__i32 inline get_global_y_from__hitbox(
 static Signed_Index__i32 inline get_global_z_from__hitbox(
         Hitbox_AABB *hitbox) {
     return 
-    (((hitbox->z__chunk__signed_index_i32) 
+    (((hitbox->chunk_index__3i32.z__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->z__i32F4 + hitbox->z__velocity__i32F4) 
+        + ((hitbox->position__3i32F4.z__i32F4 + hitbox->velocity__3i32F4.z__i32F4) 
             >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
     ;
 }
@@ -45,9 +45,9 @@ static Signed_Index__i32 inline get_global_z_from__hitbox(
 static Signed_Index__i32 inline get_global_x_from__hitbox__without_velocity(
         Hitbox_AABB *hitbox) {
     return
-    ((hitbox->x__chunk__signed_index_i32) 
+    ((hitbox->chunk_index__3i32.x__i32) 
      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->x__i32F4) 
+        + ((hitbox->position__3i32F4.x__i32F4) 
                 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
         ;
 }
@@ -55,9 +55,9 @@ static Signed_Index__i32 inline get_global_x_from__hitbox__without_velocity(
 static Signed_Index__i32 inline get_global_y_from__hitbox__without_velocity(
         Hitbox_AABB *hitbox) {
     return 
-    (((hitbox->y__chunk__signed_index_i32) 
+    (((hitbox->chunk_index__3i32.y__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->y__i32F4) 
+        + ((hitbox->position__3i32F4.y__i32F4) 
             >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
     ;
 }
@@ -65,9 +65,9 @@ static Signed_Index__i32 inline get_global_y_from__hitbox__without_velocity(
 static Signed_Index__i32 inline get_global_z_from__hitbox__without_velocity(
         Hitbox_AABB *hitbox) {
     return 
-    (((hitbox->z__chunk__signed_index_i32) 
+    (((hitbox->chunk_index__3i32.z__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->z__i32F4) 
+        + ((hitbox->position__3i32F4.z__i32F4) 
             >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
     ;
 }
@@ -91,16 +91,16 @@ static Direction__u8 inline get_movement_direction_of__hitbox(
         Hitbox_AABB *hitbox) {
     Direction__u8 direction_of_movement =
         DIRECTION__NONE;
-    if (0 < hitbox->x__velocity__i32F4) {
+    if (0 < hitbox->velocity__3i32F4.x__i32F4) {
         direction_of_movement |= DIRECTION__EAST;
     }
-    if (0 > hitbox->x__velocity__i32F4) {
+    if (0 > hitbox->velocity__3i32F4.x__i32F4) {
         direction_of_movement |= DIRECTION__WEST;
     }
-    if (0 < hitbox->y__velocity__i32F4) {
+    if (0 < hitbox->velocity__3i32F4.y__i32F4) {
         direction_of_movement |= DIRECTION__NORTH;
     }
-    if (0 > hitbox->y__velocity__i32F4) {
+    if (0 > hitbox->velocity__3i32F4.y__i32F4) {
         direction_of_movement |= DIRECTION__SOUTH;
     }
 
@@ -121,9 +121,9 @@ static void inline init_hitbox(
         Signed_Index__i32 z__global) {
     hitbox->width__quantity_32 = width;
     hitbox->height__quantity_u32 = height;
-    hitbox->x__velocity__i32F4 = 0;
-    hitbox->y__velocity__i32F4 = 0;
-    hitbox->z__velocity__i32F4 = 0;
+    hitbox->velocity__3i32F4.x__i32F4 = 0;
+    hitbox->velocity__3i32F4.y__i32F4 = 0;
+    hitbox->velocity__3i32F4.z__i32F4 = 0;
     set_hitbox__position(hitbox, 
             x__global, y__global, z__global);
 }
@@ -131,53 +131,53 @@ static void inline init_hitbox(
 static void inline apply_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 vector) {
-    hitbox->x__velocity__i32F4 += vector.x__i32F4;
-    hitbox->y__velocity__i32F4 += vector.y__i32F4;
-    hitbox->z__velocity__i32F4 += vector.z__i32F4;
+    hitbox->velocity__3i32F4.x__i32F4 += vector.x__i32F4;
+    hitbox->velocity__3i32F4.y__i32F4 += vector.y__i32F4;
+    hitbox->velocity__3i32F4.z__i32F4 += vector.z__i32F4;
 }
 
 static void inline apply_x_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         i32F4 x__velocity) {
-    hitbox->x__velocity__i32F4 += x__velocity;
+    hitbox->velocity__3i32F4.x__i32F4 += x__velocity;
 }
 
 static void inline apply_y_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         i32F4 y__velocity) {
-    hitbox->y__velocity__i32F4 += y__velocity;
+    hitbox->velocity__3i32F4.y__i32F4 += y__velocity;
 }
 
 static void inline apply_z_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         i32F4 z__velocity) {
-    hitbox->z__velocity__i32F4 += z__velocity;
+    hitbox->velocity__3i32F4.z__i32F4 += z__velocity;
 }
 
 static void inline set_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 velocity) {
-    hitbox->x__velocity__i32F4 = velocity.x__i32F4;
-    hitbox->y__velocity__i32F4 = velocity.y__i32F4;
-    hitbox->z__velocity__i32F4 = velocity.z__i32F4;
+    hitbox->velocity__3i32F4.x__i32F4 = velocity.x__i32F4;
+    hitbox->velocity__3i32F4.y__i32F4 = velocity.y__i32F4;
+    hitbox->velocity__3i32F4.z__i32F4 = velocity.z__i32F4;
 }
 
 static void inline set_x_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         i32F4 x__velocity) {
-    hitbox->x__velocity__i32F4 = x__velocity;
+    hitbox->velocity__3i32F4.x__i32F4 = x__velocity;
 }
 
 static void inline set_y_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         i32F4 y__velocity) {
-    hitbox->y__velocity__i32F4 = y__velocity;
+    hitbox->velocity__3i32F4.y__i32F4 = y__velocity;
 }
 
 static void inline set_z_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
         i32F4 z__velocity) {
-    hitbox->z__velocity__i32F4 = z__velocity;
+    hitbox->velocity__3i32F4.z__i32F4 = z__velocity;
 }
 
 static bool inline is_vector_inside__hitbox(

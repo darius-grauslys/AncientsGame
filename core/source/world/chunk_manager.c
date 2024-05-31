@@ -479,8 +479,8 @@ bool poll_chunk_manager_for__chunk_movement(
 bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *p_chunk_manager, 
         Entity *p_entity) {
-    if (p_entity->hitbox.x__velocity__i32F4 == 0
-            && p_entity->hitbox.y__velocity__i32F4 == 0) {
+    if (p_entity->hitbox.velocity__3i32F4.x__i32F4 == 0
+            && p_entity->hitbox.velocity__3i32F4.y__i32F4 == 0) {
         return true;
     }
 

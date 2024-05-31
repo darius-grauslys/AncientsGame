@@ -52,12 +52,12 @@ void init_entity(
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    p_entity->hitbox.x__chunk__signed_index_i32 =
-        p_entity->hitbox.x__i32F4 = 0;
-    p_entity->hitbox.y__chunk__signed_index_i32 =
-        p_entity->hitbox.y__i32F4 = 0;
-    p_entity->hitbox.z__chunk__signed_index_i32 =
-        p_entity->hitbox.z__i32F4 = 0;
+    p_entity->hitbox.chunk_index__3i32.x__i32 =
+        p_entity->hitbox.position__3i32F4.x__i32F4 = 0;
+    p_entity->hitbox.chunk_index__3i32.y__i32 =
+        p_entity->hitbox.position__3i32F4.y__i32F4 = 0;
+    p_entity->hitbox.chunk_index__3i32.z__i32 =
+        p_entity->hitbox.position__3i32F4.z__i32F4 = 0;
 
     p_entity->m_dispose_handler = 0;
     p_entity->m_controller_handler = 0;
@@ -85,14 +85,14 @@ bool commit_entity_velocity(
         Entity *p_entity,
         int32_t *old_x__chunk,
         int32_t *old_y__chunk) {
-    *old_x__chunk = p_entity->hitbox.x__chunk__signed_index_i32;
-    *old_y__chunk = p_entity->hitbox.y__chunk__signed_index_i32;
+    *old_x__chunk = p_entity->hitbox.chunk_index__3i32.x__i32;
+    *old_y__chunk = p_entity->hitbox.chunk_index__3i32.y__i32;
 
     commit_hitbox_velocity(&p_entity->hitbox);
 
-    if (*old_x__chunk != p_entity->hitbox.x__chunk__signed_index_i32 
+    if (*old_x__chunk != p_entity->hitbox.chunk_index__3i32.x__i32 
             || *old_y__chunk
-            != p_entity->hitbox.y__chunk__signed_index_i32) {
+            != p_entity->hitbox.chunk_index__3i32.y__i32) {
         return true;
     }
     return false;

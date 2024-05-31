@@ -55,7 +55,7 @@ void m_entity_tile_collision_handler(
         Tile *tile_collided) {
     //TODO: improve lol.
 
-    entity_collision_source->hitbox.x__velocity__i32F4 *= -1;
-    entity_collision_source->hitbox.y__velocity__i32F4 *= -1;
-    entity_collision_source->hitbox.z__velocity__i32F4 *= -1;
+    entity_collision_source->hitbox.velocity__3i32F4.x__i32F4 *= -1;
+    entity_collision_source->hitbox.velocity__3i32F4.y__i32F4 *= -1;
+    entity_collision_source->hitbox.velocity__3i32F4.z__i32F4 *= -1;
 }

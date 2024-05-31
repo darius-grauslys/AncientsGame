@@ -470,8 +470,8 @@ bool poll_collision_manager(
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
-                entity->hitbox.x__chunk__signed_index_i32,
-                entity->hitbox.y__chunk__signed_index_i32);
+                entity->hitbox.chunk_index__3i32.x__i32,
+                entity->hitbox.chunk_index__3i32.y__i32);
 
     if (!collision_node) {
         return false;
@@ -656,8 +656,8 @@ bool add_entity_to__collision_manager(
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
-                entity->hitbox.x__chunk__signed_index_i32,
-                entity->hitbox.y__chunk__signed_index_i32);
+                entity->hitbox.chunk_index__3i32.x__i32,
+                entity->hitbox.chunk_index__3i32.y__i32);
 
     if (!collision_node)
         return false;

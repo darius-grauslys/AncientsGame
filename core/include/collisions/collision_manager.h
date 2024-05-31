@@ -45,8 +45,8 @@ static void inline remove_entity_from__collision_manager(
     remove_entity_from__collision_manager__at(
             collision_manager,
             entity,
-            entity->hitbox.x__chunk__signed_index_i32,
-            entity->hitbox.y__chunk__signed_index_i32);
+            entity->hitbox.chunk_index__3i32.x__i32,
+            entity->hitbox.chunk_index__3i32.y__i32);
 }
 
 ///

@@ -69,6 +69,9 @@ typedef struct Vector__3i32_t {
                       z__i32;
 } Vector__3i32;
 
+typedef struct Vector__3i32_t Chunk_Vector__3i32;
+typedef struct Vector__3i32_t Tile_Vector__3i32;
+
 typedef uint32_t Psuedo_Random_Seed__u32;
 typedef uint32_t Timer__u32;
 typedef uint8_t Timer__u8;
@@ -137,20 +140,11 @@ typedef struct Hitbox_AABB_t {
     // Entities can't co-exist in the same tile
     // but they can stand on top of one in an
     // above tile.
-    Signed_Index__i32
-        x__chunk__signed_index_i32, 
-        y__chunk__signed_index_i32, 
-        z__chunk__signed_index_i32;
+    Chunk_Vector__3i32 chunk_index__3i32;
     // TODO: replace with Vector_3i32
-   i32F4 
-        x__i32F4, 
-        y__i32F4, 
-        z__i32F4;
+    Vector__3i32F4 position__3i32F4;
     // TODO: replace with Vector_3i32
-   i32F4 
-        x__velocity__i32F4, 
-        y__velocity__i32F4, 
-        z__velocity__i32F4;
+   Vector__3i32F4 velocity__3i32F4;
 } Hitbox_AABB;
 
 /// When checking the distance between two collisions along each axis
