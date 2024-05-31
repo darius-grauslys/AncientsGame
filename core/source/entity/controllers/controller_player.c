@@ -1,3 +1,5 @@
+#include "defines.h"
+#include "game_action/game_action.h"
 #include "world/world.h"
 #include <entity/controllers/controller_player.h>
 #include <input/input.h>
@@ -187,63 +189,83 @@ set_direction:
             // animate_humanoid__idle(p_this_player);
             return;
         case DIRECTION__NORTH:
-            apply_y_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        0,
+                        ENTITY_VELOCITY__PLAYER,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__EAST:
-            apply_x_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        ENTITY_VELOCITY__PLAYER,
+                        0,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH:
-            apply_y_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        0,
+                        -ENTITY_VELOCITY__PLAYER,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__WEST:
-            apply_x_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        -ENTITY_VELOCITY__PLAYER,
+                        0,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_EAST:
-            apply_x_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
-            apply_y_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_EAST:
-            apply_x_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
-            apply_y_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__SOUTH_WEST:
-            apply_x_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
-            apply_y_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
         case DIRECTION__NORTH_WEST:
-            apply_x_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    -ENTITY_VELOCITY__PLAYER_DIAGONAL);
-            apply_y_velocity_to__hitbox(
-                    &p_this_player->hitbox,
-                    ENTITY_VELOCITY__PLAYER_DIAGONAL);
+            apply_velocity_to__entity(
+                    p_game,
+                    p_this_player,
+                    get_vector__3i32F4(
+                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0));
             animate_humanoid__walk(p_this_player);
             break;
     }

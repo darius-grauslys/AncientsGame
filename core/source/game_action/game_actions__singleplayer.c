@@ -19,7 +19,7 @@ void handle_game_action__entity__hitbox__apply_velocity(
         Vector__3i32F4 velocity) {
     apply_velocity_to__hitbox(
             &p_entity->hitbox, 
-            velocity);
+            &velocity);
 }
 
 void handle_game_action__entity__hitbox__set_velocity(

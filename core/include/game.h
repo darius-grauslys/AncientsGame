@@ -39,7 +39,9 @@ static Entity inline
     return get_local_player_ptr_from__world(&p_game->world);
 }
 
-void init_game(Game *p_game);
+void init_game(
+        Game *p_game,
+        m_Game_Action_Handler m_game_action_handler);
 int run_game(Game *p_game);
 
 void manage_game(Game *p_game);

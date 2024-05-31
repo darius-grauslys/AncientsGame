@@ -124,12 +124,17 @@ static void inline init_hitbox(
             position__3i32F4);
 }
 
+///
+/// TODO: really funny stuff happens when
+///       we don't take vector as a pointer.
+///       Why?
+///
 static void inline apply_velocity_to__hitbox(
         Hitbox_AABB *hitbox,
-        Vector__3i32F4 vector) {
-    hitbox->velocity__3i32F4.x__i32F4 += vector.x__i32F4;
-    hitbox->velocity__3i32F4.y__i32F4 += vector.y__i32F4;
-    hitbox->velocity__3i32F4.z__i32F4 += vector.z__i32F4;
+        Vector__3i32F4 *vector) {
+    hitbox->velocity__3i32F4.x__i32F4 += vector->x__i32F4;
+    hitbox->velocity__3i32F4.y__i32F4 += vector->y__i32F4;
+    hitbox->velocity__3i32F4.z__i32F4 += vector->z__i32F4;
 }
 
 static void inline apply_x_velocity_to__hitbox(

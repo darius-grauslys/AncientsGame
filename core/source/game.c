@@ -26,13 +26,16 @@
 
 #include <ui/ui_manager.h>
 
-void init_game(Game *p_game) {
+void init_game(
+        Game *p_game,
+        m_Game_Action_Handler m_game_action_handler) {
     PLATFORM_init_gfx_context(&p_game->gfx_context);
     init_ui_manager(&p_game->ui_manager);
     init_scene_manager(&p_game->scene_manager);
     PLATFORM_establish_scenes(
             &p_game->scene_manager);
     p_game->is_world__initialized = false;
+    p_game->m_game_action_handler = m_game_action_handler;
 }
 
 int run_game(Game *p_game) {
