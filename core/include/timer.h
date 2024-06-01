@@ -11,7 +11,7 @@ static void inline init_timer_u32_as__unused(Timer__u32 *timer__u32) {
 
 static void inline init_timer_u32(
         Timer__u32 *timer__u32,
-        uint8_t start__u32) {
+        Quantity__u32 start__u32) {
     timer__u32->remaining__u32 =
         timer__u32->start__u32 = start__u32;
 }
@@ -103,7 +103,7 @@ static void inline init_timer_u16_as__unused(Timer__u16 *timer__u16) {
 
 static void inline init_timer_u16(
         Timer__u16 *timer__u16,
-        uint8_t start__u16) {
+        Quantity__u16 start__u16) {
     timer__u16->remaining__u16 =
         timer__u16->start__u16 = start__u16;
 }

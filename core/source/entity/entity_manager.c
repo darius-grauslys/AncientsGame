@@ -5,6 +5,7 @@
 #include "entity/controllers/animation/humanoid_animation_handler.h"
 #include "entity/controllers/body/humanoid_body_handler.h"
 #include "entity/controllers/body/undead_body_handler.h"
+#include "timer.h"
 #include <entity/entity_manager.h>
 #include <rendering/animate_entity.h>
 #include <entity/entity.h>
@@ -93,6 +94,9 @@ void init_entity_as__humanoid(
 
     p_entity->humanoid__primary_sustenance__u8 = 128;
     p_entity->humanoid__secondary_sustenance__u8 = 128;
+    init_timer_u16(
+            &p_entity->humanoid__homeostasis__timer_u16, 
+            MASK(16));
 
     for (Index__u8 heart_index=0;
             heart_index

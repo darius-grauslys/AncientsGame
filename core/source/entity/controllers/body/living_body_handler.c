@@ -8,19 +8,20 @@
 
 enum Health_State get_health_state_of__humanoid(
         Entity *p_humanoid) {
-    Quantity__u16 quantity_of__health =
-        get_quantity_u16_of__health_of__entity(p_humanoid);
+    Quantity__u16 quantity_of__quality_health =
+        get_quantity_u16_of__health_of__entity(p_humanoid,
+                true);
 
-    if (quantity_of__health == 0)
+    if (quantity_of__quality_health == 0)
         return Health_State__Dead;
 
-    if (quantity_of__health < 6)
+    if (quantity_of__quality_health < 6)
         return Health_State__Dying;
 
-    if (quantity_of__health < 10)
+    if (quantity_of__quality_health < 10)
         return Health_State__Injured;
 
-    if (quantity_of__health < 18)
+    if (quantity_of__quality_health < 18)
         return Health_State__Hurt;
 
     return Health_State__Normal;
@@ -28,24 +29,27 @@ enum Health_State get_health_state_of__humanoid(
 
 enum Energy_State get_energy_state_of__humanoid(
         Entity *p_humanoid) {
-    Quantity__u16 quantity_of__energy =
-        get_quantity_u16_of__energy_of__entity(p_humanoid);
+    Quantity__u16 quantity_of__quality_energy =
+        get_quantity_u16_of__energy_of__entity(
+                p_humanoid,
+                false);
 
-    if (quantity_of__energy == 0)
+    if (quantity_of__quality_energy == 0)
         return Energy_State__Exerted;
 
-    if (quantity_of__energy < 6)
+    if (quantity_of__quality_energy < 6)
         return Energy_State__Exhausted;
 
-    if (quantity_of__energy < 12)
+    if (quantity_of__quality_energy < 12)
         return Energy_State__Tired;
 
     return Energy_State__Normal;
 }
 
-Quantity__u8 get_energy_regeneration_tick_rate(
+Quantity__u16 get_energy_regeneration_tick_rate(
         enum Homeostasis_State state_of__homeostasis,
         enum Health_State state_of__health,
+        enum Sustenance_State state_of__primary_sustenance,
         enum Sustenance_State state_of__worst_sustenance) {
     Quantity__u16 tick_rate = 256;
     switch (state_of__homeostasis) {
@@ -87,7 +91,6 @@ Quantity__u8 get_energy_regeneration_tick_rate(
 
     switch (state_of__worst_sustenance) {
         case Sustenance_State__Dying:
-        case Sustenance_State__Bloated:
             tick_rate *= 2;
             break;
         case Sustenance_State__Desperate:
@@ -102,6 +105,12 @@ Quantity__u8 get_energy_regeneration_tick_rate(
             tick_rate *= 5;
             tick_rate /= 4;
             break;
+        case Sustenance_State__Bloated:
+            if (state_of__primary_sustenance
+                    == Sustenance_State__Bloated) {
+                tick_rate *= 3;
+                break;
+            }
         default:
         case Sustenance_State__Indifferent:
             break;
@@ -122,9 +131,10 @@ Quantity__u8 get_energy_regeneration_tick_rate(
     return tick_rate;
 }
 
-Quantity__u8 get_health_regeneration_tick_rate(
+Quantity__u16 get_health_regeneration_tick_rate(
         enum Homeostasis_State state_of__homeostasis,
         enum Energy_State state_of__energy,
+        enum Sustenance_State state_of__primary_sustenance,
         enum Sustenance_State state_of__worst_sustenance) {
     Quantity__u16 tick_rate = 768;
     switch (state_of__homeostasis) {
@@ -164,9 +174,13 @@ Quantity__u8 get_health_regeneration_tick_rate(
             break;
     }
 
+    if (state_of__primary_sustenance
+            == Sustenance_State__Bloated) {
+        tick_rate /= 2;
+    }
+
     switch (state_of__worst_sustenance) {
         case Sustenance_State__Dying:
-        case Sustenance_State__Bloated:
             tick_rate *= 2;
             break;
         case Sustenance_State__Desperate:
@@ -196,6 +210,13 @@ Quantity__u8 get_health_regeneration_tick_rate(
             tick_rate *= 2;
             tick_rate /= 3;
             break;
+        case Sustenance_State__Bloated:
+            if (state_of__primary_sustenance
+                    != Sustenance_State__Bloated) {
+                tick_rate *= 3;
+                tick_rate /= 5;
+            }
+            break;
     }
 
     return tick_rate;
@@ -205,7 +226,7 @@ Quantity__u16 get_primary_sustenance_tick_rate_for__humanoid(
         enum Homeostasis_State state_of__homeostasis,
         enum Health_State state_of__health,
         enum Energy_State state_of__energy) {
-    Quantity__u16 tick_rate = 3072;
+    Quantity__u16 tick_rate = 2048;
     switch (state_of__homeostasis) {
         case Homeostasis_State__Extreme_Freezing:
             tick_rate /= 3;
@@ -238,7 +259,7 @@ Quantity__u16 get_secondary_sustenance_tick_rate_for__humanoid(
         enum Homeostasis_State state_of__homeostasis,
         enum Health_State state_of__health,
         enum Energy_State state_of__energy) {
-    Quantity__u16 tick_rate = 2048;
+    Quantity__u16 tick_rate = 1024;
     switch (state_of__homeostasis) {
         case Homeostasis_State__Extreme_Freezing:
             tick_rate *= 3;
@@ -273,7 +294,11 @@ void m_handler_for__body_living(
     enum Health_State state_of__health =
         get_health_state_of__humanoid(p_this_humanoid);
 
-    if (state_of__health == Health_State__Dead) {
+    loop_timer_u16(
+            &p_this_humanoid->humanoid__homeostasis__timer_u16);
+
+    if (p_this_humanoid->hearts.resource_symbols[0]
+            == Heart_Kind__Empty) {
         //TODO: play death animation
         release_entity_from__world(
                 p_game, 
@@ -306,12 +331,14 @@ void m_handler_for__body_living(
         get_health_regeneration_tick_rate(
                 state_of__homeostasis, 
                 state_of__energy, 
+                state_of__primary_sustenance,
                 state_of__worst_sustenance);
 
     Quantity__u16 tick_rate__energy =
         get_energy_regeneration_tick_rate(
                 state_of__homeostasis, 
                 state_of__health, 
+                state_of__primary_sustenance,
                 state_of__worst_sustenance);
 
     Quantity__u16 tick_rate__primary_sustenance =
@@ -326,12 +353,9 @@ void m_handler_for__body_living(
                 state_of__health, 
                 state_of__energy);
 
-    loop_timer_u16(
-            &p_this_humanoid->humanoid__homeostasis__timer_u16);
-
     Quantity__u16 elapsed =
-        get_time_elapsed_from__timer_u16(
-                &p_this_humanoid->humanoid__homeostasis__timer_u16);
+         get_time_elapsed_from__timer_u16(
+                 &p_this_humanoid->humanoid__homeostasis__timer_u16);
 
     if (elapsed % tick_rate__health == 0) {
         Hearts_Healing_Specifier healing;

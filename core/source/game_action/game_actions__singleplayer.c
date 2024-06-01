@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "defines_weak.h"
 #include "vectors.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
@@ -153,6 +154,21 @@ void handle_game_action__entity__sustenance_increase(
             change_in__sustenance);
 }
 
+void handle_game_action__entity__homeostasis_increase(
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Quantity__u8 change_in__homeostasis) {
+    increase_homeostasis_of__entity(
+            p_entity_target, change_in__homeostasis);
+}
+void handle_game_action__entity__homeostasis_decrease(
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Quantity__u8 change_in__homeostasis) {
+    decrease_homeostasis_of__entity(
+            p_entity_target, change_in__homeostasis);
+}
+
 void handle_game_action__entity(
         Game *p_game,
         Game_Action *p_game_action) {
@@ -190,6 +206,8 @@ void handle_game_action__entity(
         case Game_Action_Kind__Entity__Energy__Set:
         case Game_Action_Kind__Entity__Sustenance__Decrease:
         case Game_Action_Kind__Entity__Sustenance__Increase:
+        case Game_Action_Kind__Entity__Homeostasis__Decrease:
+        case Game_Action_Kind__Entity__Homeostasis__Increase:
             if (!p_entity_target) {
                 debug_error("Game_Action_Kind__Entity:%d, p_entity_target==0.",
                         the_kind_of_game_action__this_action_is);
@@ -263,6 +281,18 @@ void handle_game_action__entity(
                             p_game_action->kind_of_sustenance,
                             p_game_action->change_in__sustenance);
                     break;
+                case Game_Action_Kind__Entity__Homeostasis__Decrease:
+                    handle_game_action__entity__homeostasis_decrease(
+                            p_entity_source,
+                            p_entity_target,
+                            p_game_action->change_in__homeostasis);
+                    break;
+                case Game_Action_Kind__Entity__Homeostasis__Increase:
+                    handle_game_action__entity__homeostasis_increase(
+                            p_entity_source,
+                            p_entity_target,
+                            p_game_action->change_in__homeostasis);
+                    break;
             }
             break;
         case Game_Action_Kind__Entity__Place_Tile:
@@ -315,6 +345,8 @@ void m_game_action_handler_for__singleplayer(
         case Game_Action_Kind__Entity__Item_Stack__Equip:
         case Game_Action_Kind__Entity__Sustenance__Decrease:
         case Game_Action_Kind__Entity__Sustenance__Increase:
+        case Game_Action_Kind__Entity__Homeostasis__Decrease:
+        case Game_Action_Kind__Entity__Homeostasis__Increase:
             handle_game_action__entity(
                     p_this_game, 
                     p_game_action);

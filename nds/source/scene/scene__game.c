@@ -1012,13 +1012,50 @@ void m_enter_scene_as__game_handler(
             break;
         manage_game(p_game);
         if (is_input__game_settings_released(&p_game->input)) {
-            _index_tmp++;
+            invoke_action__increase_homeostasis_of__entity(
+                    p_game,
+                    p_player,
+                    p_player,
+                    8);
+        }
+        if (is_input__lockon_released(&p_game->input)) {
+            invoke_action__decrease_homeostasis_of__entity(
+                    p_game,
+                    p_player,
+                    p_player,
+                    8);
+        }
+        if (is_input__consume_released(&p_game->input)) {
+            invoke_action__increase_sustenance_of__entity(
+                    p_game,
+                    p_player,
+                    p_player,
+                    Sustenance_Kind__Hunger,
+                    8);
+        }
+        if (is_input__examine_released(&p_game->input)) {
+            invoke_action__increase_sustenance_of__entity(
+                    p_game,
+                    p_player,
+                    p_player,
+                    Sustenance_Kind__Thirst,
+                    8);
         }
         if (is_input__use_released(&p_game->input)) {
             Energy_Damaging_Specifier damage;
             damage.energy_damaging__flags = 0;
             damage.quantity_of__damage = 10;
             invoke_action__apply_energy_damage_to__entity(
+                    p_game, 
+                    p_player, 
+                    p_player, 
+                    &damage);
+        }
+        if (is_input__use_secondary_released(&p_game->input)) {
+            Hearts_Damaging_Specifier damage;
+            damage.hearts_damaging__flags = 0;
+            damage.quantity_of__damage = 10;
+            invoke_action__apply_heart_damage_to__entity(
                     p_game, 
                     p_player, 
                     p_player, 

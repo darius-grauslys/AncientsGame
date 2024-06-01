@@ -686,17 +686,17 @@ typedef uint8_t Humanoid_Flags;
 #define UI_TILE_SHEET_INDEX__IMMORTAL_POISON_HEART (Index__u16)229
 #define UI_TILE_SHEET_INDEX__LOCKED_HEART (Index__u16)230
 
-#define UI_TILE_SHEET_INDEX__EMPTY_ENERGY_ORB (Index__u16)209
-#define UI_TILE_SHEET_INDEX__HALF_ENERGY_ORB (Index__u16)210
-#define UI_TILE_SHEET_INDEX__FULL_ENERGY_ORB (Index__u16)211
-#define UI_TILE_SHEET_INDEX__HALF_POISON_ENERGY_ORB (Index__u16)212
-#define UI_TILE_SHEET_INDEX__FULL_POISON_ENERGY_ORB (Index__u16)213
-#define UI_TILE_SHEET_INDEX__NORMAL_POISON_ENERGY_ORB (Index__u16)214
-#define UI_TILE_SHEET_INDEX__HALF_DEMONIC_ENERGY_ORB (Index__u16)215
-#define UI_TILE_SHEET_INDEX__FULL_DEMONIC_ENERGY_ORB (Index__u16)216
-#define UI_TILE_SHEET_INDEX__DEMONIC_NORMAL_ENERGY_ORB (Index__u16)217
-#define UI_TILE_SHEET_INDEX__DEMONIC_POISON_ENERGY_ORB (Index__u16)218
-#define UI_TILE_SHEET_INDEX__LOCKED_ENERGY_ORB (Index__u16)219
+#define UI_TILE_SHEET_INDEX__EMPTY_ENERGY_ORB (Index__u16)208
+#define UI_TILE_SHEET_INDEX__HALF_ENERGY_ORB (Index__u16)209
+#define UI_TILE_SHEET_INDEX__FULL_ENERGY_ORB (Index__u16)210
+#define UI_TILE_SHEET_INDEX__HALF_POISON_ENERGY_ORB (Index__u16)211
+#define UI_TILE_SHEET_INDEX__FULL_POISON_ENERGY_ORB (Index__u16)212
+#define UI_TILE_SHEET_INDEX__NORMAL_POISON_ENERGY_ORB (Index__u16)213
+#define UI_TILE_SHEET_INDEX__HALF_DEMONIC_ENERGY_ORB (Index__u16)214
+#define UI_TILE_SHEET_INDEX__FULL_DEMONIC_ENERGY_ORB (Index__u16)215
+#define UI_TILE_SHEET_INDEX__DEMONIC_NORMAL_ENERGY_ORB (Index__u16)216
+#define UI_TILE_SHEET_INDEX__DEMONIC_POISON_ENERGY_ORB (Index__u16)217
+#define UI_TILE_SHEET_INDEX__LOCKED_ENERGY_ORB (Index__u16)218
 
 #define UI_TILE_SHEET_INDEX__EXTREME_FREEZING   (Index__u16)377
 #define UI_TILE_SHEET_INDEX__FREEZING           (Index__u16)379
@@ -1477,6 +1477,8 @@ enum Game_Action_Kind {
     Game_Action_Kind__Entity__Energy__Set,
     Game_Action_Kind__Entity__Sustenance__Increase,
     Game_Action_Kind__Entity__Sustenance__Decrease,
+    Game_Action_Kind__Entity__Homeostasis__Increase,
+    Game_Action_Kind__Entity__Homeostasis__Decrease,
     Game_Action_Kind__Entity__Place_Tile,
     Game_Action_Kind__Entity__Item_Stack__Pick_Up,
     Game_Action_Kind__Entity__Item_Stack__Drop,
@@ -1561,6 +1563,10 @@ typedef struct Game_Action_t {
                          //...Entity__Sustenance__Decrease
                     enum Sustenance_Kind kind_of_sustenance;
                     Sustenance__u8 change_in__sustenance;
+                };
+                struct { //...Entity__Homeostasis__Increase
+                         //...Entity__Homeostasis__Decrease
+                    Quantity__u8 change_in__homeostasis;
                 };
                 struct { //...Entity__Place_Tile
                     Tile tile_to_place;

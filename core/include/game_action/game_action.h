@@ -76,4 +76,16 @@ void invoke_action__decrease_sustenance_of__entity(
         enum Sustenance_Kind kind_of_sustenance,
         Sustenance__u8 change_in__sustenance);
 
+void invoke_action__increase_homeostasis_of__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Quantity__u8 change_in__homeostasis);
+
+void invoke_action__decrease_homeostasis_of__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Quantity__u8 change_in__homeostasis);
+
 #endif

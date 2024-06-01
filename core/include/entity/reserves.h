@@ -114,17 +114,9 @@ void apply_hearts_healing_specifier_to__entity(
         Entity *p_entity,
         Hearts_Healing_Specifier hearts_healing_specifier);
 
-///
-/// Gets quantity of non-empty/non-locked half hearts.
-///
 Quantity__u16 get_quantity_u16_of__health_of__entity(
-        Entity *p_entity);
-
-///
-/// Gets quantity of immortal/normal half hearts.
-///
-Quantity__u16 get_quantity_u16_of__quality_health_of__entity(
-        Entity *p_entity);
+        Entity *p_entity,
+        bool should_only_count__quality_hearts);
 
 void set_hearts_of__entity(
         Entity *p_entity,
@@ -139,10 +131,8 @@ void apply_energy_healing_specifier_to__entity(
         Energy_Healing_Specifier energy_healing_specifier);
 
 Quantity__u16 get_quantity_u16_of__energy_of__entity(
-        Entity *p_entity);
-
-Quantity__u16 get_quantity_u16_of__quality_energy_of__entity(
-        Entity *p_entity);
+        Entity *p_entity,
+        bool should_only_count__quality_hearts);
 
 void set_energy_orbs_of__entity(
         Entity *p_entity,

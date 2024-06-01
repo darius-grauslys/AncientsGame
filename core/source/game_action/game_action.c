@@ -47,7 +47,7 @@ void invoke_action__apply_heart_healing_to__entity(
         Hearts_Healing_Specifier *p_hearts_healing_specifier) {
     Game_Action game_action;
     game_action.the_kind_of_game_action__this_action_is =
-        Game_Action_Kind__Entity__Energy__Apply_Healing;
+        Game_Action_Kind__Entity__Health__Apply_Healing;
     game_action.p_entity_source = p_entity_source;
     game_action.p_entity_target = p_entity_target;
     game_action.hearts_healing_specifier = *p_hearts_healing_specifier;
@@ -130,6 +130,36 @@ void invoke_action__decrease_sustenance_of__entity(
     game_action.p_entity_target = p_entity_target;
     game_action.kind_of_sustenance = kind_of_sustenance;
     game_action.change_in__sustenance = change_in__sustenance;
+
+    invoke_game_action(p_game, &game_action);
+}
+
+void invoke_action__increase_homeostasis_of__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Quantity__u8 change_in__homeostasis) {
+    Game_Action game_action;
+    game_action.the_kind_of_game_action__this_action_is =
+        Game_Action_Kind__Entity__Homeostasis__Increase;
+    game_action.p_entity_source = p_entity_source;
+    game_action.p_entity_target = p_entity_target;
+    game_action.change_in__homeostasis = change_in__homeostasis;
+
+    invoke_game_action(p_game, &game_action);
+}
+
+void invoke_action__decrease_homeostasis_of__entity(
+        Game *p_game,
+        Entity *p_entity_source,
+        Entity *p_entity_target,
+        Quantity__u8 change_in__homeostasis) {
+    Game_Action game_action;
+    game_action.the_kind_of_game_action__this_action_is =
+        Game_Action_Kind__Entity__Homeostasis__Decrease;
+    game_action.p_entity_source = p_entity_source;
+    game_action.p_entity_target = p_entity_target;
+    game_action.change_in__homeostasis = change_in__homeostasis;
 
     invoke_game_action(p_game, &game_action);
 }

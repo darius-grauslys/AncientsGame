@@ -11,7 +11,7 @@ void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager) {
     p_scene_manager->p_active_scene =
         get_scene_ptr_from__scene_manager(
                 p_scene_manager, 
-                SCENE_IDENTIFIER__MAIN_MENU);
+                SCENE_IDENTIFIER__GAME);
 
     init_scene_as__main_menu(
             get_scene_ptr_from__scene_manager(

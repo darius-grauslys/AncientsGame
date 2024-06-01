@@ -2,6 +2,7 @@
 #include "debug/debug.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/reserves.h"
 #include "game.h"
 #include "input/input.h"
 #include "platform_defines.h"
