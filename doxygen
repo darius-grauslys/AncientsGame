@@ -1,0 +1,6 @@
+CLANG_ASSISTED_PARSING = YES
+CLANG_DATABASE_PATH    = ./compile_commands.json
+
+INPUT =
+INCLUDE_PATH =
+

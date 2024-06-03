@@ -22,6 +22,16 @@ static void inline invoke_game_action(
     p_game->m_game_action_handler(p_game, p_game_action);
 }
 
+void invoke_action__allocate_entity(
+        Game *p_game,
+        enum Entity_Kind the_kind_of__entity,
+        Vector__3i32F4 position__3i32F4);
+
+void invoke_action__set_flags_of__entity(
+        Game *p_game,
+        Entity *p_entity,
+        Entity_Flags__u8 entity_flags);
+
 ///
 /// Sends a Game_Action which applies velocity.
 ///

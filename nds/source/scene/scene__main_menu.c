@@ -62,7 +62,7 @@ void m_main_menu__play_button__clicked_handler(
     UI_Element *p_this_button,
     Game *p_game) {
     p_game->scene_manager.p_active_scene =
-        get_scene_ptr_from__scene_manager(
+        get_p_scene_from__scene_manager(
                 &p_game->scene_manager, 
                 SCENE_IDENTIFIER__GAME);
 }
@@ -180,7 +180,7 @@ void m_unload_scene_as__main_menu_handler(
         Game *p_game) {
     debug_info("I am leaving main menu");
     p_game->scene_manager.p_active_scene =
-        get_scene_ptr_from__scene_manager(
+        get_p_scene_from__scene_manager(
                 &p_game->scene_manager, 
                 SCENE_IDENTIFIER__GAME);
 }

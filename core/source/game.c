@@ -50,7 +50,7 @@ int run_game(Game *p_game) {
         &p_game->scene_manager;
     Scene *p_active_scene;
     while ((p_active_scene =
-            get_active_scene_ptr_from__scene_manager(
+            get_p_active_scene_from__scene_manager(
                 p_scene_manager))) {
 #ifndef NDEBUG
     debug_info("TRANSITION p_active_scene -> %p",

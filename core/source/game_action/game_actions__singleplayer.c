@@ -3,11 +3,22 @@
 #include "vectors.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
+#include "world/world.h"
 #include <game_action/game_actions__singleplayer.h>
 #include <game_action/game_action.h>
 #include <entity/entity_manager.h>
 #include <collisions/hitbox_aabb.h>
 #include <entity/reserves.h>
+
+void handle_game_action__entity__allocate(
+        Game *p_game,
+        enum Entity_Kind the_kind_of__entity,
+        Vector__3i32F4 position) {
+    allocate_entity_into__world(
+            &p_game->world,
+            the_kind_of__entity,
+            position);
+}
 
 void handle_game_action__entity__flags__set(
         Entity *p_entity,
@@ -176,11 +187,11 @@ void handle_game_action__entity(
     Entity *p_entity_target = 0;
     if (is_game_action_using__id_or_ptr(p_game_action->game_action_flags)) {
         p_entity_source =
-            get_entity_ptr_from__entity_manager(
+            get_p_entity_from__entity_manager(
                     &p_game->world.entity_manager,
                     p_game_action->identifier__entity_source);
         p_entity_target =
-            get_entity_ptr_from__entity_manager(
+            get_p_entity_from__entity_manager(
                     &p_game->world.entity_manager,
                     p_game_action->identifier__entity_target);
     } else {
@@ -195,6 +206,12 @@ void handle_game_action__entity(
         default:
             debug_error("handle_game_action__entity, p_game_action is not an entity action.");
             return;
+        case Game_Action_Kind__Entity__Allocate:
+            handle_game_action__entity__allocate(
+                    p_game,
+                    p_game_action->allocate__kind_of__entity,
+                    p_game_action->allocate__position);
+            break;
         case Game_Action_Kind__Entity__Flags__Set:
         case Game_Action_Kind__Entity__Hitbox__Apply_Velocity:
         case Game_Action_Kind__Entity__Hitbox__Set_Velocity:

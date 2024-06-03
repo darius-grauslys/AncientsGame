@@ -1478,6 +1478,7 @@ typedef struct Game_t {
 ///
 enum Game_Action_Kind {
     Game_Action_Kind__None = 0,
+    Game_Action_Kind__Entity__Allocate,
     Game_Action_Kind__Entity__Flags__Set,
     Game_Action_Kind__Entity__Hitbox__Apply_Velocity,
     Game_Action_Kind__Entity__Hitbox__Set_Velocity,
@@ -1529,6 +1530,10 @@ typedef struct Game_Action_t {
                 };
             };
             union {
+                struct {//...Entity__Allocate
+                    enum Entity_Kind allocate__kind_of__entity;
+                    Vector__3i32F4 allocate__position;
+                };
                 struct { //...Entity__Flags
                     Entity_Flags__u8 entity_flags;
                 };

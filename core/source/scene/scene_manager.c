@@ -8,7 +8,7 @@ void initialize_scene_manager(
             scene_index<SCENE_MAX_QUANTITY_OF;
             scene_index++) {
         initialize_scene(
-                get_scene_ptr_from__scene_manager(
+                get_p_scene_from__scene_manager(
                     p_scene_manager, 
                     scene_index)
                 );

@@ -10,7 +10,9 @@
 #include "game_action/game_action.h"
 #include "input/input.h"
 #include "nds/arm9/background.h"
+#include "platform_defines.h"
 #include "rendering/nds_gfx_context.h"
+#include "scene/scene_manager.h"
 #include "ui/nds_ui.h"
 #include "ui/ui_button.h"
 #include "ui/ui_element.h"
@@ -990,12 +992,13 @@ void m_enter_scene_as__game_handler(
 
     // TODO: prob wanna remove some of the stuff below
     Entity *p_player = 
-        add_entity_to__world(
+        allocate_entity_into__world(
             &p_game->world,
             Entity_Kind__Player,
             get_vector__3i32F4(0, 0, 0));
 
-    p_game->world.entity_manager.p_local_player =
+    p_game->world.entity_manager
+        .p_local_player =
         p_player;
 
     move_chunk_manager(

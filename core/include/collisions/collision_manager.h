@@ -27,8 +27,8 @@ bool poll_collision_manager(
 /// will debug_error(...)
 ///
 void remove_entity_from__collision_manager__at(
-        Collision_Manager *collision_manager,
-        Entity *entity,
+        Collision_Manager *p_collision_manager,
+        Entity *p_entity,
         Signed_Index__i32 old_x__chunk__signed_index_i32,
         Signed_Index__i32 old_y__chunk__signed_index_i32);
 

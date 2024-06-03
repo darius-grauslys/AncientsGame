@@ -9,7 +9,7 @@ void initialize_entity_manager(Entity_Manager *p_entity_manager);
 /// Create a new entity instance within the entity_manager object pool.
 /// Return nullptr (0) if fails to get new entity.
 ///
-Entity *allocate__entity(
+Entity *allocate_entity_in__entity_manager(
         Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position);
@@ -24,7 +24,7 @@ void release_entity_from__entity_manager(
 ///
 /// Translate entity ID to entity ptr.
 ///
-static Entity inline *get_entity_ptr_from__entity_manager(
+static Entity inline *get_p_entity_from__entity_manager(
         Entity_Manager *p_entity_manager,
         Identifier__u16 id) {
 #ifndef NDEBUG

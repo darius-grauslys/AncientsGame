@@ -72,7 +72,7 @@ void m_entity_ai_handler__player(
     goto set_direction;
     if (is_input__game_settings_held(p_input) && !toggle) {
         toggle = true;
-        Entity *p_skeleton = add_entity_to__world(
+        Entity *p_skeleton = allocate_entity_into__world(
                 &p_game->world,
                 Entity_Kind__Skeleton,
                 get_vector__3i32F4(x, y, 0));

@@ -19,7 +19,7 @@ void initialize_entity_manager(Entity_Manager *entity_manager) {
     }
 }
 
-Entity *allocate__entity(Entity_Manager* entity_manager,
+Entity *allocate_entity_in__entity_manager(Entity_Manager* entity_manager,
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4) {
     // TODO: do better than bellow:
@@ -85,8 +85,14 @@ Entity *allocate__entity(Entity_Manager* entity_manager,
     return p_entity;
 }
 
-void release_entity_from__entity_manager(Entity_Manager* entity_manager, Entity* entity) {
-    entity_manager->entity_count__quantity_u32--;
-    set_entity__disabled(entity);
-    PLATFORM_release_sprite(&entity->sprite_wrapper.sprite);
+void release_entity_from__entity_manager(
+        Entity_Manager *p_entity_manager, 
+        Entity *p_entity) {
+    p_entity_manager->entity_count__quantity_u32--;
+    set_entity__disabled(p_entity);
+    if (p_entity_manager->p_local_player
+            == p_entity) {
+        p_entity_manager->p_local_player = 0;
+    }
+    PLATFORM_release_sprite(&p_entity->sprite_wrapper.sprite);
 }

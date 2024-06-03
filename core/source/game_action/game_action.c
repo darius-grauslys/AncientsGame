@@ -2,6 +2,40 @@
 #include "defines_weak.h"
 #include <game_action/game_action.h>
 
+void invoke_action__allocate_entity(
+        Game *p_game,
+        enum Entity_Kind the_kind_of__entity,
+        Vector__3i32F4 position__3i32F4) {
+    Game_Action game_action;
+
+    game_action.the_kind_of_game_action__this_action_is =
+        Game_Action_Kind__Entity__Allocate;
+    game_action.allocate__kind_of__entity = 
+        the_kind_of__entity;
+    game_action.allocate__position =
+        position__3i32F4;
+
+    invoke_game_action(
+            p_game,
+            &game_action);
+}
+
+void invoke_action__set_flags_of__entity(
+        Game *p_game,
+        Entity *p_entity,
+        Entity_Flags__u8 entity_flags) {
+    Game_Action game_action;
+
+    game_action.the_kind_of_game_action__this_action_is =
+        Game_Action_Kind__Entity__Flags__Set;
+    game_action.entity_flags =
+        entity_flags;
+
+    invoke_game_action(
+            p_game, 
+            &game_action);
+}
+
 ///
 /// Sends a Game_Action which applies velocity.
 ///

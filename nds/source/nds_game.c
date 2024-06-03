@@ -10,6 +10,8 @@ void PLATFORM_pre_render(Game *p_game) {
 void PLATFORM_post_render(Game *p_game) {
     Entity *p_player =
         p_game->world.entity_manager.p_local_player;
+    if (!p_player)
+        return;
     // TODO: magic numbers to put player in correct spot.
     bgSetScroll(
         p_game->gfx_context.background_ground

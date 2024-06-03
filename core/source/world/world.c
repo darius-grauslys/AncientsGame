@@ -7,6 +7,7 @@
 #include <world/generators/generator_flat_world.h>
 #include <world/generators/generator_test_world.h>
 #include <world/world_parameters.h>
+#include <game.h>
 
 #include <entity/entity.h>
 #include <debug/debug.h>
@@ -52,6 +53,11 @@ void manage_world__entities(Game *p_game) {
     Entity_Manager *p_entity_manager =
         &p_game->world.entity_manager;
 
+    if (!p_entity_manager->p_local_player) {
+        debug_abort("manage_world__entities, p_local_player == 0");
+        return;
+    }
+
     Hitbox_AABB *p_player__hitbox =
         &p_entity_manager
         ->p_local_player
@@ -65,7 +71,7 @@ void manage_world__entities(Game *p_game) {
     for (Quantity__u16 i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         Entity *p_entity =
-            get_entity_ptr_from__entity_manager(
+            get_p_entity_from__entity_manager(
                     p_entity_manager, i);
         if (!is_entity__enabled(p_entity)) {
             continue;
@@ -131,32 +137,50 @@ void manage_world__entities(Game *p_game) {
     }
 }
 
-Entity *add_entity_to__world(
+void add_entity_to__world(
         World *p_world,
-        enum Entity_Kind kind_of_entity,
-        Vector__3i32F4 position__3i32F4) {
-    Entity *p_entity =
-        allocate__entity(
-                &p_world->entity_manager,
-                kind_of_entity,
-                position__3i32F4);
+        Entity *p_entity) {
     add_entity_to__collision_manager(
             &p_world->collision_manager, 
             p_entity);
+}
+
+Entity *allocate_entity_into__world(
+        World *p_world,
+        enum Entity_Kind the_kind_of_entity,
+        Vector__3i32F4 position__3i32F4) {
+    Entity *p_entity =
+        allocate_entity_in__entity_manager(
+                &p_world->entity_manager,
+                the_kind_of_entity,
+                position__3i32F4);
+    add_entity_to__world(
+            p_world, 
+            p_entity);
     return p_entity;
+}
+
+void remove_entity_from__world(
+        World *p_world,
+        Entity *p_entity) {
+    remove_entity_from__collision_manager(
+            &p_world->collision_manager,
+            p_entity);
 }
 
 void release_entity_from__world(
         Game *p_game,
         Entity *p_entity) {
     if (p_entity->m_entity_dispose_handler) {
-        p_entity->m_entity_dispose_handler(p_entity, p_game);
-        debug_info("released entity with disposer.");
+        p_entity->m_entity_dispose_handler(
+                p_entity,
+                p_game);
     } else {
-        debug_info("released entity.");
+        debug_info("release_entity_from__world: %p",
+                p_entity);
     }
     release_entity_from__entity_manager(
-            &p_game->world.entity_manager,
+            get_p_entity_manager_from__game(p_game), 
             p_entity);
 }
 
