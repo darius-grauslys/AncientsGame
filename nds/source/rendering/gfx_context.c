@@ -15,29 +15,29 @@
 #include <assets/entities/skeleton.h>
 #include <assets/entities/zombie.h>
 
-void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
+void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 #ifndef NDEBUG
-    NDS_init_debug__sub();
+    NDS_initialize_debug__sub();
 #endif
 
-    NDS_init_background(&gfx_context->background_ground__sprite_cover);
-    NDS_init_background(&gfx_context->background_ground__overlay);
-    NDS_init_background(&gfx_context->background_ground);
+    NDS_initialize_background(&gfx_context->background_ground__sprite_cover);
+    NDS_initialize_background(&gfx_context->background_ground__overlay);
+    NDS_initialize_background(&gfx_context->background_ground);
 
-    NDS_init_background(&gfx_context->background_ui__overlay);
-    NDS_init_background(&gfx_context->background_ui);
+    NDS_initialize_background(&gfx_context->background_ui__overlay);
+    NDS_initialize_background(&gfx_context->background_ui);
 }
 
-void NDS_init_gfx_for__main_menu(
+void NDS_initialize_gfx_for__main_menu(
         PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
-    NDS_init_debug__main();
+    NDS_initialize_debug__main();
 }
 
-void NDS_init_gfx_for__world(
+void NDS_initialize_gfx_for__world(
         PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
@@ -56,11 +56,11 @@ void NDS_init_gfx_for__world(
 
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 
-    NDS_init_background_ground__for_game(
+    NDS_initialize_background_ground__for_game(
             &gfx_context->background_ground);
-    NDS_init_background_ground__sprite_cover__for_game(
+    NDS_initialize_background_ground__sprite_cover__for_game(
             &gfx_context->background_ground__sprite_cover);
-    NDS_init_background_ground__overlay__for_game(
+    NDS_initialize_background_ground__overlay__for_game(
             &gfx_context->background_ground__overlay);
 
 	dmaCopy(GFX_worldTiles, 
@@ -182,11 +182,11 @@ void PLATFORM_update_chunks(
     }
 }
 
-void NDS_init_gfx_for__ui(
+void NDS_initialize_gfx_for__ui(
         PLATFORM_Gfx_Context *gfx_context) {
-    NDS_init_background_ui__for_game(
+    NDS_initialize_background_ui__for_game(
             &gfx_context->background_ui);
-    NDS_init_background_ui__overlay__for_game(
+    NDS_initialize_background_ui__overlay__for_game(
             &gfx_context->background_ui__overlay);
 
 	dmaCopy(GFX_uiTiles, 

@@ -25,7 +25,7 @@ void f_chunk_generator__test_world(
 
     for (uint32_t y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
         for (uint32_t x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
-            init_tile(&p_chunk->tiles[
+            initialize_tile(&p_chunk->tiles[
                     x + y * CHUNK_WIDTH__IN_TILES],
                     kind_of_tile,
                     Tile_Cover_Kind__None,

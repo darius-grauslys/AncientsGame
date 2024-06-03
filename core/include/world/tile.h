@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <defines.h>
 
-static void inline init_tile(Tile *tile, 
+static void inline initialize_tile(Tile *tile, 
         enum Tile_Kind kind_of_tile,
         enum Tile_Cover_Kind kind_of_tile_cover,
         Tile_Flags__u8 flags) {

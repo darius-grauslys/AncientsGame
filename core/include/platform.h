@@ -47,29 +47,29 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 ///
 /// SECTION_rendering
 ///
-void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context);
+void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context);
 
 ///
 /// On NDS, this will init both main and sub.
 ///
-void PLATFORM_init_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
+void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
 /// 
 /// On NDS, this will init both main and sub.
 ///
-void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context);
+void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context);
 
-void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags);
+void PLATFORM_initialize_texture(PLATFORM_Texture *texture, Texture_Flags flags);
 void PLATFORM_free_texture(PLATFORM_Texture *texture);
 
 ///
 /// This is currently no-op on NDS. Later, if we need to,
 /// we can to nitroFS along with this.
 ///
-void PLATFORM_init_texture__with_path(PLATFORM_Texture *texture,
+void PLATFORM_initialize_texture__with_path(PLATFORM_Texture *texture,
         Texture_Flags flags,
         const char *path);
 
-void PLATFORM_init_texture__with_size(PLATFORM_Texture *texture, 
+void PLATFORM_initialize_texture__with_size(PLATFORM_Texture *texture, 
         Texture_Flags flags,
         uint32_t width, uint32_t height);
 
@@ -98,10 +98,10 @@ void PLATFORM_update_chunks(
         Chunk_Manager *chunk_manager);
 
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
-void PLATFORM_init_sprite(PLATFORM_Sprite *sprite,
+void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,
         bool perform_update);
-void PLATFORM_init_sprite_for__entity(Entity *entity);
+void PLATFORM_initialize_sprite_for__entity(Entity *entity);
 
 void PLATFORM_release_sprite(PLATFORM_Sprite *sprite);
 

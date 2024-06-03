@@ -10,7 +10,7 @@ static void inline clear_input(Input *p_input) {
     p_input->input_flags__released = INPUT_NONE;
     p_input->cursor__old__i32f4 =
         p_input->cursor__i32f4;
-    init_3iF32_vector(&p_input->cursor__i32f4);
+    initialize_3iF32_vector(&p_input->cursor__i32f4);
 }
 
 static bool inline is_input__forward_released(Input *p_input) {

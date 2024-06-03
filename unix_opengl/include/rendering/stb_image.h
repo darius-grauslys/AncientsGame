@@ -6688,7 +6688,7 @@ static void stbi__out_gif_code(stbi__gif *g, stbi__uint16 code)
 static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
 {
    stbi_uc lzw_cs;
-   stbi__int32 len, init_code;
+   stbi__int32 len, initialize_code;
    stbi__uint32 first;
    stbi__int32 codesize, codemask, avail, oldcode, bits, valid_bits, clear;
    stbi__gif_lzw *p;
@@ -6701,10 +6701,10 @@ static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
    codemask = (1 << codesize) - 1;
    bits = 0;
    valid_bits = 0;
-   for (init_code = 0; init_code < clear; init_code++) {
-      g->codes[init_code].prefix = -1;
-      g->codes[init_code].first = (stbi_uc) init_code;
-      g->codes[init_code].suffix = (stbi_uc) init_code;
+   for (initialize_code = 0; initialize_code < clear; initialize_code++) {
+      g->codes[initialize_code].prefix = -1;
+      g->codes[initialize_code].first = (stbi_uc) initialize_code;
+      g->codes[initialize_code].suffix = (stbi_uc) initialize_code;
    }
 
    // support no starting clear code

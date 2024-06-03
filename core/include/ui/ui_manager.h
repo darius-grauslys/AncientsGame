@@ -4,7 +4,7 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-void init_ui_manager(
+void initialize_ui_manager(
         UI_Manager *p_ui_manager);
 
 void poll_ui_manager__update(

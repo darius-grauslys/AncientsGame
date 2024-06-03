@@ -10,7 +10,7 @@ typedef Shader_2D Shader_2D_Passthrough;
 void get_source__shader_passthrough(
         const char **source_vertex,
         const char **source_fragment);
-void init_shader_2d_as__shader_passthrough(
+void initialize_shader_2d_as__shader_passthrough(
         Shader_2D_Passthrough *shader);
 
 void inline render_with__shader_passthrough(

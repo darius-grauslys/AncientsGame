@@ -3,6 +3,6 @@
 
 #include <defines.h>
 
-void init_scene_as__main_menu(Scene *p_scene);
+void initialize_scene_as__main_menu(Scene *p_scene);
 
 #endif

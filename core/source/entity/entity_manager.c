@@ -12,7 +12,7 @@
 #include <entity/implemented/skeleton/entity__skeleton.h>
 #include <entity/implemented/zombie/entity__zombie.h>
 
-void init_entity_manager(Entity_Manager *entity_manager) {
+void initialize_entity_manager(Entity_Manager *entity_manager) {
     entity_manager->entity_count__quantity_u32 = 0;
     for (uint32_t i=0;i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         set_entity__disabled(&entity_manager->entities[i]);

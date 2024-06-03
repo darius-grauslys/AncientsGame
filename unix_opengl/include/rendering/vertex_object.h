@@ -10,7 +10,7 @@ typedef struct Vertex_Object_t {
     uint32_t vertex_count;
 } Vertex_Object;
 
-void init_vertex_object(Vertex_Object *vertex_object);
+void initialize_vertex_object(Vertex_Object *vertex_object);
 void buffer_vertex_object(Vertex_Object *vertex_object,
         uint32_t size_in_bytes, uint32_t vertex_count, float *vertices);
 void buffer_vertex_object__element_buffer(

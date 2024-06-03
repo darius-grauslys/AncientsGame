@@ -4,7 +4,7 @@
 #include <defines.h>
 
 // TODO: move to private header
-void init_ui_slider(
+void initialize_ui_slider(
         UI_Element *p_ui_slider,
         Quantity__u8 width,
         Quantity__u8 height);

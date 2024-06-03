@@ -4,7 +4,7 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-void init_ui_element(
+void initialize_ui_element(
         UI_Element *p_ui_element,
         enum UI_Element_Kind kind_of_ui_element,
         UI_Flags__u8 ui_flags,

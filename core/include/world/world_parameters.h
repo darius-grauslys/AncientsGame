@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-void init_world_parameters(
+void initialize_world_parameters(
         World_Parameters *world_params,
         f_Chunk_Generator f_chunk_generator,
         Psuedo_Random_Seed__u32 seed__initial);

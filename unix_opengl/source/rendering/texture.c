@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <debug/debug.h>
 
-void init_texture(PLATFORM_Texture *texture,
+void initialize_texture(PLATFORM_Texture *texture,
         Texture_Flags flags) {
     texture->handle = 0;
     texture->width = 0;
@@ -21,7 +21,7 @@ void init_texture(PLATFORM_Texture *texture,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void init_texture__with_size(PLATFORM_Texture *texture,
+void initialize_texture__with_size(PLATFORM_Texture *texture,
         Texture_Flags flags,
         uint32_t width, uint32_t height) {
     glGenTextures(1, &texture->handle);
@@ -49,7 +49,7 @@ void init_texture__with_size(PLATFORM_Texture *texture,
     );
 }
 
-void init_texture__with_path(PLATFORM_Texture *texture, 
+void initialize_texture__with_path(PLATFORM_Texture *texture, 
         Texture_Flags flags,
         const char *path) {
     glGenTextures(1, &texture->handle);

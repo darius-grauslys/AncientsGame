@@ -7,7 +7,7 @@
 #include <ui/ui_element.h>
 #include <vectors.h>
 
-void init_ui_element(
+void initialize_ui_element(
         UI_Element *p_ui_element,
         enum UI_Element_Kind kind_of_ui_element,
         UI_Flags__u8 ui_flags,
@@ -19,7 +19,7 @@ void init_ui_element(
     p_ui_element->the_kind_of_ui_element__this_is =
         kind_of_ui_element;
     p_ui_element->ui_flags = ui_flags;
-    init_hitbox(
+    initialize_hitbox(
             &p_ui_element->ui_bounding_box__aabb, 
             width, 
             height, 

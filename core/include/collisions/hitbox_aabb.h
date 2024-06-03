@@ -110,7 +110,7 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
         Vector__3i32F4 *aa,
         Vector__3i32F4 *bb);
 
-static void inline init_hitbox(
+static void inline initialize_hitbox(
         Hitbox_AABB *hitbox,
         Quantity__u32 width, 
         Quantity__u32 height,

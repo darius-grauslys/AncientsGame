@@ -10,34 +10,34 @@
 #include <assets/entities/skeleton.h>
 #include <assets/entities/zombie.h>
 
-void PLATFORM_init_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
-    PLATFORM_init_texture(
+void PLATFORM_initialize_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
+    PLATFORM_initialize_texture(
             &sprite->sprite_texture,
             USE_TEXTURE_FLAGS__OAM__16x16(TEXTURE_FLAGS__USE_OAM_MAIN));
 }
 
-void PLATFORM_init_oam_sprite__8x8(PLATFORM_Sprite *sprite) {
-    PLATFORM_init_texture(
+void PLATFORM_initialize_oam_sprite__8x8(PLATFORM_Sprite *sprite) {
+    PLATFORM_initialize_texture(
             &sprite->sprite_texture,
             USE_TEXTURE_FLAGS__OAM__8x8(TEXTURE_FLAGS__USE_OAM_MAIN));
 }
 
-void PLATFORM_init_sprite(
+void PLATFORM_initialize_sprite(
         PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,
         bool perform_update) {
-    // TODO: debug_warning("PLATFORM_init_sprite is not finished yet:
+    // TODO: debug_warning("PLATFORM_initialize_sprite is not finished yet:
     //         doesn't support oamSub.");
     uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);
     switch (texture_flags_for__sprite) {
         default:
-            debug_abort("Texture_Flags %d not implemented for PLATFORM_init_sprite.",
+            debug_abort("Texture_Flags %d not implemented for PLATFORM_initialize_sprite.",
                     texture_flags_for__sprite);
             return;
         case TEXTURE_FLAG__SIZE_8x8:
             palette = 0;
-            PLATFORM_init_oam_sprite__8x8(sprite);
+            PLATFORM_initialize_oam_sprite__8x8(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
             dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__8x8__OFFSET);
@@ -59,7 +59,7 @@ void PLATFORM_init_sprite(
                 false);
         case TEXTURE_FLAG__SIZE_16x16:
             palette = 0;
-            PLATFORM_init_oam_sprite__16x16(sprite);
+            PLATFORM_initialize_oam_sprite__16x16(sprite);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
             dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
                     SPRITE_FRAME__16x16__OFFSET);
@@ -83,17 +83,17 @@ void PLATFORM_init_sprite(
     }
 }
 
-void PLATFORM_init_sprite_for__entity(Entity *entity) {
+void PLATFORM_initialize_sprite_for__entity(Entity *entity) {
     PLATFORM_Sprite *sprite =
         &entity->sprite_wrapper.sprite;
     uint8_t palette = 0;
     switch(entity->the_kind_of_entity__this_entity_is) {
         default:
-            debug_abort("Entity_Kind %d not implemented for PLATFORM_init_entity.",
+            debug_abort("Entity_Kind %d not implemented for PLATFORM_initialize_entity.",
                     entity->the_kind_of_entity__this_entity_is);
             return;
         case Entity_Kind__Player:
-            PLATFORM_init_sprite(&entity->sprite_wrapper.sprite,
+            PLATFORM_initialize_sprite(&entity->sprite_wrapper.sprite,
                     TEXTURE_FLAG__SIZE_16x16,
                     false);
             sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
@@ -101,7 +101,7 @@ void PLATFORM_init_sprite_for__entity(Entity *entity) {
                     SPRITE_FRAME__16x16__OFFSET);
             goto oam_16x16;
         case Entity_Kind__Skeleton:
-            PLATFORM_init_sprite(&entity->sprite_wrapper.sprite,
+            PLATFORM_initialize_sprite(&entity->sprite_wrapper.sprite,
                     TEXTURE_FLAG__SIZE_16x16,
                     false);
             sprite->gfx_sprite_sheet = (const uint16_t*)skeletonTiles;
@@ -109,7 +109,7 @@ void PLATFORM_init_sprite_for__entity(Entity *entity) {
                     SPRITE_FRAME__16x16__OFFSET);
             goto oam_16x16;
         case Entity_Kind__Zombie:
-            PLATFORM_init_sprite(&entity->sprite_wrapper.sprite,
+            PLATFORM_initialize_sprite(&entity->sprite_wrapper.sprite,
                     TEXTURE_FLAG__SIZE_16x16,
                     false);
             sprite->gfx_sprite_sheet = (const uint16_t*)zombieTiles;

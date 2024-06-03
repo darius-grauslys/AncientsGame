@@ -42,7 +42,7 @@ struct Main_Menu_Data_t {
     UI_Element *p_button_ptrs[4];
 } main_menu_data;
 
-void init_scene_as__main_menu(Scene *p_scene) {
+void initialize_scene_as__main_menu(Scene *p_scene) {
     p_scene->m_load_scene_handler =
         m_load_scene_as__main_menu_handler;
     p_scene->m_enter_scene_handler =
@@ -119,9 +119,9 @@ void m_main_menu__menu_button__clicked_handler(
 void m_load_scene_as__main_menu_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    NDS_init_gfx_for__main_menu(
+    NDS_initialize_gfx_for__main_menu(
             &p_game->gfx_context);
-    NDS_init_gfx_for__ui(
+    NDS_initialize_gfx_for__ui(
             &p_game->gfx_context);
     NDS_set_ui_to__menu_main(
             &p_game->gfx_context);
@@ -137,7 +137,7 @@ void m_load_scene_as__main_menu_handler(
             p_button_ptrs, 4);
 
     for (Quantity__u8 i=0;i<3;i++) {
-        init_ui_button(
+        initialize_ui_button(
                 p_button_ptrs[i],
                 80, 24);
         p_button_ptrs[i]->p_ui_data =
@@ -151,7 +151,7 @@ void m_load_scene_as__main_menu_handler(
                 p_button_ptrs[i], m_main_menu__menu_button__clicked_handler);
     }
 
-    init_ui_button(
+    initialize_ui_button(
             p_button_ptrs[3],
             104, 104);
     set_ui_element__clicked_handler(

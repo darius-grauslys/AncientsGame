@@ -11,23 +11,23 @@
 #include <entity/entity.h>
 #include <debug/debug.h>
 
-void init_world(World *p_world) {
-    init_weight_map();
-    // init_world_parameters(
+void initialize_world(World *p_world) {
+    initialize_weight_map();
+    // initialize_world_parameters(
     //         &world->world_parameters, 
     //         f_chunk_generator__test_world, 
     //         100);
-    init_world_parameters(
+    initialize_world_parameters(
             &p_world->world_parameters, 
             f_chunk_generator__flat_world, 
             100);
-    init_entity_manager(&p_world->entity_manager);
-    init_collision_manager(&p_world->collision_manager);
+    initialize_entity_manager(&p_world->entity_manager);
+    initialize_collision_manager(&p_world->collision_manager);
     set_collision_manager__center_chunk(
             &p_world->collision_manager, 
             0, 
             0);
-    init_chunk_manager(
+    initialize_chunk_manager(
             &p_world->chunk_manager,
             &p_world->world_parameters);
 }

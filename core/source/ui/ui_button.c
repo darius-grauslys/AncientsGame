@@ -3,11 +3,11 @@
 #include "ui/ui_element.h"
 #include <ui/ui_button.h>
 
-void init_ui_button(
+void initialize_ui_button(
         UI_Element *p_ui_button,
         Quantity__u8 width,
         Quantity__u8 height) {
-    init_ui_element(
+    initialize_ui_element(
             p_ui_button, 
             UI_Element_Kind__Button, 
             p_ui_button->ui_flags,

@@ -4,13 +4,13 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-void NDS_init_gfx_for__main_menu(
+void NDS_initialize_gfx_for__main_menu(
         PLATFORM_Gfx_Context *gfx_context);
 
-void NDS_init_gfx_for__world(
+void NDS_initialize_gfx_for__world(
         PLATFORM_Gfx_Context *gfx_context);
 
-void NDS_init_gfx_for__ui(
+void NDS_initialize_gfx_for__ui(
         PLATFORM_Gfx_Context *gfx_context);
 
 #endif

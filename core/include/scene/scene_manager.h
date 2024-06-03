@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-void init_scene_manager(
+void initialize_scene_manager(
         Scene_Manager *p_scene_manager);
 
 static Scene inline *get_active_scene_ptr_from__scene_manager(

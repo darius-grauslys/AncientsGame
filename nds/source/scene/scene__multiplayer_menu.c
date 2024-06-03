@@ -1,6 +1,6 @@
 #include <scene/scene__multiplayer_menu.h> 
 
-void init_scene_as__multiplayer_menu(Scene *p_scene) {
+void initialize_scene_as__multiplayer_menu(Scene *p_scene) {
 
 }
 

@@ -48,7 +48,7 @@ struct Game_Scene_Data_t {
     Timer__u8 hud_notification_timer;
 } game_scene_data;
 
-void init_scene_as__game(Scene *p_scene) {
+void initialize_scene_as__game(Scene *p_scene) {
     p_scene->m_load_scene_handler =
         m_load_scene_as__game_handler;
     p_scene->m_enter_scene_handler =
@@ -58,7 +58,7 @@ void init_scene_as__game(Scene *p_scene) {
 
     p_scene->p_scene_data =
         &game_scene_data;
-    init_timer_u8(
+    initialize_timer_u8(
             &game_scene_data.hud_notification_timer,
             30);
 }
@@ -92,12 +92,12 @@ void m_load_scene_as__game_handler(
     PLATFORM_Gfx_Context *gfx_context =
         &p_game->gfx_context;
 
-    NDS_init_gfx_for__world(gfx_context);
-    init_world(&p_game->world);
+    NDS_initialize_gfx_for__world(gfx_context);
+    initialize_world(&p_game->world);
 
-    // NDS_init_debug__sub();
+    // NDS_initialize_debug__sub();
     // return;
-    NDS_init_gfx_for__ui(&p_game->gfx_context);
+    NDS_initialize_gfx_for__ui(&p_game->gfx_context);
     NDS_set_ui_to__equip(&p_game->gfx_context);
 
     release_all__ui_elements_from__ui_manager(
@@ -113,7 +113,7 @@ void m_load_scene_as__game_handler(
             ui_index++) {
         UI_Element *p_ui_button = 
             game_scene_data.p_ui_state_buttons[ui_index];
-        init_ui_button(
+        initialize_ui_button(
                 p_ui_button,
                 52, 32);
         set_hitbox__position(

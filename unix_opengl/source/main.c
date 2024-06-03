@@ -30,7 +30,7 @@ void create_rect(Vertex_Object *vertex_object) {
     uint32_t *vbo = &vertex_object->handle__vertex_buffer;
     uint32_t *ebo = &vertex_object->handle__element_buffer;
 
-    init_vertex_object(vertex_object);
+    initialize_vertex_object(vertex_object);
 
     buffer_vertex_object(vertex_object, sizeof(rect_vertices),
             sizeof(rect_vertices) / (sizeof(float) * 5), rect_vertices);
@@ -102,17 +102,17 @@ int main(void) {
 
     PLATFORM_Texture texture;
     PLATFORM_Texture texture_chunk;
-    init_texture__with_size(&texture_chunk, 
+    initialize_texture__with_size(&texture_chunk, 
             TEXTURE_FLAGS__NONE,
             TILE_PIXEL_WIDTH * CHUNK__WIDTH,
             TILE_PIXEL_HEIGHT * CHUNK__HEIGHT);
-    init_texture__with_path(&texture, 
+    initialize_texture__with_path(&texture, 
             TEXTURE_FLAGS__NONE,
             "/home/shalidor/Projects/AncientsGame/build/unix_opengl/assets/tiles.png");
 
     Chunk chunk;
 
-    init_chunk(&chunk, 0, 0);
+    initialize_chunk(&chunk, 0, 0);
     for (int i=0;i<CHUNK__QUANTITY_OF_TILES;i++) {
         chunk.tiles[i].the_kind_of_tile__this_tile_is =
             (enum Tile_Kind)(i / CHUNK__WIDTH);
@@ -125,8 +125,8 @@ int main(void) {
     source.x = source.y = 0;
     target.x = target.y = 0;
 
-    init_framebuffer(&source.framebuffer);
-    init_framebuffer(&target.framebuffer);
+    initialize_framebuffer(&source.framebuffer);
+    initialize_framebuffer(&target.framebuffer);
 
     set_framebuffer__color_attachment__with_a_texture(
             &source.framebuffer,
@@ -144,7 +144,7 @@ int main(void) {
     release_framebuffer(&target.framebuffer);
 
     Shader_2D shader;
-    init_shader_2d_as__shader_passthrough(&shader);
+    initialize_shader_2d_as__shader_passthrough(&shader);
 
     while(!glfwWindowShouldClose(window))
     {

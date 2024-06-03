@@ -74,7 +74,7 @@ void flip_x__weight_matrix(
     p_dest->D = p_source->D;
 }
 
-void init_weight_map(void) {
+void initialize_weight_map(void) {
     weight_map.map[0].A = 6;
     weight_map.map[0].B = 4;
     weight_map.map[0].C = 3;
@@ -412,7 +412,7 @@ void f_chunk_generator__flat_world(
 
             Tile *p_tile = 
                 &p_chunk->tiles[tile_index];
-            init_tile(
+            initialize_tile(
                     p_tile,
                     Tile_Kind__Oak_Wood,
                     Tile_Cover_Kind__None,

@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-static void inline init_scene(Scene* scene) {
+static void inline initialize_scene(Scene* scene) {
     scene->m_enter_scene_handler = 0;
     scene->m_load_scene_handler = 0;
     scene->m_unload_scene_handler = 0;

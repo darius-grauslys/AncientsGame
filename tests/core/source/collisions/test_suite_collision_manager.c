@@ -202,14 +202,14 @@ TEST_FUNCTION(update_collision_manager__layer_two) {
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(init_collision_manager__layer_three) {
+TEST_FUNCTION(initialize_collision_manager__layer_three) {
     Collision_Manager__Layer_Three layer_three;
     Collision_Manager collision_manager;
 
     layer_three.x__center_chunk = 1;
     layer_three.y__center_chunk = 7;
 
-    init_collision_manager__layer_three(
+    initialize_collision_manager__layer_three(
             &layer_three,
             &collision_manager);
 
@@ -231,7 +231,7 @@ TEST_FUNCTION(init_collision_manager__layer_three) {
     layer_three.x__center_chunk = 7;
     layer_three.y__center_chunk = 7;
 
-    init_collision_manager__layer_three(
+    initialize_collision_manager__layer_three(
             &layer_three,
             &collision_manager);
 
@@ -257,16 +257,16 @@ TEST_FUNCTION(init_collision_manager__layer_three) {
     return MUNIT_OK;
 }
 
-// unless init_collision_manager__layer_two makes use
+// unless initialize_collision_manager__layer_two makes use
 // of other function calls than those already tested
 // there isn't much need to test this.
-TEST_FUNCTION(init_collision_manager__layer_two) {
+TEST_FUNCTION(initialize_collision_manager__layer_two) {
     return MUNIT_OK;
 }
 
-TEST_FUNCTION(init_collision_manager) {
+TEST_FUNCTION(initialize_collision_manager) {
     Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
+    initialize_collision_manager(&collision_manager);
 
     munit_assert_ptr_equal(
             collision_manager.most_north_western__node,
@@ -412,7 +412,7 @@ TEST_FUNCTION(init_collision_manager) {
 
 TEST_FUNCTION(get_collision_node_for__this_position) {
     Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
+    initialize_collision_manager(&collision_manager);
 
     int32_t x__chunk,y__chunk;
     Collision_Manager__Collision_Node *node, *actual_node;
@@ -461,7 +461,7 @@ TEST_FUNCTION(get_collision_node_for__this_position) {
 TEST_FUNCTION(remove_entity_from__collision_node) {
     Entity entity;
     Collision_Manager__Collision_Node collision_node;
-    init_collision_manager__collision_node(&collision_node);
+    initialize_collision_manager__collision_node(&collision_node);
     collision_node.entity_ptrs[0] = &entity;
 
     remove_entity_from__collision_node(
@@ -485,7 +485,7 @@ TEST_FUNCTION(remove_entity_from__collision_node) {
 
 TEST_FUNCTION(add_entity_to__collision_node) {
     Collision_Manager__Collision_Node collision_node;
-    init_collision_manager__collision_node(&collision_node);
+    initialize_collision_manager__collision_node(&collision_node);
     Entity entity;
 
     add_entity_to__collision_node(
@@ -512,7 +512,7 @@ TEST_FUNCTION(add_entity_to__collision_node) {
 
 TEST_FUNCTION(add_entity_to__collision_manager) {
     Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
+    initialize_collision_manager(&collision_manager);
     Entity entity;
 
     entity.hitbox.x__chunk = munit_rand_int_range(
@@ -545,7 +545,7 @@ TEST_FUNCTION(add_entity_to__collision_manager) {
 
 TEST_FUNCTION(remove_entity_from__collision_manager__at) {
     Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
+    initialize_collision_manager(&collision_manager);
     Entity entity;
 
     entity.hitbox.x__chunk = munit_rand_int_range(
@@ -594,7 +594,7 @@ TEST_FUNCTION(move_collision_manager__nodes) {
     // we will receive nodes based on old (x/y)__center_chunk values.
     //
     Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
+    initialize_collision_manager(&collision_manager);
 
     Collision_Manager__Collision_Node 
         *node_travelled, *node_received;
@@ -743,7 +743,7 @@ void assert_legal_directions(
 
     Collision_Manager__Collision_Node *current_node;
 
-    init_collision_manager(collision_manager);
+    initialize_collision_manager(collision_manager);
     seed_collision_manager_nodes_with__dummy_entity(
             collision_manager);
 
@@ -1074,7 +1074,7 @@ TEST_FUNCTION(update_collision_manager__nodes_legal_directions) {
 
 TEST_FUNCTION(set_collision_manager__center_chunk) {
     Collision_Manager collision_manager;
-    init_collision_manager(&collision_manager);
+    initialize_collision_manager(&collision_manager);
 
     Collision_Manager__Collision_Node 
         *node_test, *node_actual;
@@ -1141,9 +1141,9 @@ DEFINE_SUITE(collision_manager,
         INCLUDE_TEST__STATELESS
             (update_collision_manager__layer_two), 
         INCLUDE_TEST__STATELESS
-            (init_collision_manager__layer_three),
+            (initialize_collision_manager__layer_three),
         INCLUDE_TEST__STATELESS
-            (init_collision_manager),
+            (initialize_collision_manager),
         INCLUDE_TEST__STATELESS
             (get_collision_node_for__this_position),
         INCLUDE_TEST__STATELESS

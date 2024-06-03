@@ -10,7 +10,7 @@ typedef struct Framebuffer_t {
     uint32_t handle__render_buffer;
 } Framebuffer;
 
-void init_framebuffer(Framebuffer *framebuffer);
+void initialize_framebuffer(Framebuffer *framebuffer);
 void set_framebuffer__color_attachment__with_a_texture(
         Framebuffer *framebuffer,
         PLATFORM_Texture *texture);

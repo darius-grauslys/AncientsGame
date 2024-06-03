@@ -5,7 +5,7 @@
 #include <world/tile.h>
 #include <collisions/hitbox_aabb.h>
 
-void init_chunk_manager(
+void initialize_chunk_manager(
         Chunk_Manager *p_chunk_manager,
         World_Parameters *p_world_parameters) {
     p_chunk_manager->x__center_chunk__signed_index_i32 =
@@ -25,7 +25,7 @@ void init_chunk_manager(
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
                     + x];
 
-            init_chunk(p_chunk__here, x, -y);
+            initialize_chunk(p_chunk__here, x, -y);
 
             p_world_parameters->f_chunk_generator(
                     p_world_parameters, 

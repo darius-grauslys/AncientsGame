@@ -8,7 +8,7 @@
 #include <debug/nds_debug.h>
 #include <nds.h>
 
-void NDS_init_debug__main(void) {
+void NDS_initialize_debug__main(void) {
 #ifndef NDEBUG
     PrintConsole *console =
         consoleGetDefault();
@@ -23,7 +23,7 @@ void NDS_init_debug__main(void) {
             true);
 #endif
 }
-void NDS_init_debug__sub(void) {
+void NDS_initialize_debug__sub(void) {
 #ifndef NDEBUG
     PrintConsole *console =
         consoleGetDefault();

@@ -3,7 +3,7 @@
 #include <debug/debug.h>
 #include <stddef.h>
 
-int init_shader_2d(Shader_2D *shader, const char *source_vertex,
+int initialize_shader_2d(Shader_2D *shader, const char *source_vertex,
         const char *source_fragment) {
     shader->handle = 0;
     shader->vertex_handle = 0;

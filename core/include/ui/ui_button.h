@@ -3,7 +3,7 @@
 #include <defines.h>
 
 // TODO: move to private header
-void init_ui_button(
+void initialize_ui_button(
         UI_Element *p_ui_button,
         Quantity__u8 width,
         Quantity__u8 height);

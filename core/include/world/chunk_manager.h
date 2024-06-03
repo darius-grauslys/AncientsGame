@@ -4,7 +4,7 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-void init_chunk_manager(
+void initialize_chunk_manager(
         Chunk_Manager* p_chunk_manager,
         World_Parameters *p_world_parameters);
 

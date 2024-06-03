@@ -3,7 +3,7 @@
 #include <rendering/glad/glad.h>
 #include <debug/debug.h>
 
-void init_framebuffer(Framebuffer *framebuffer) {
+void initialize_framebuffer(Framebuffer *framebuffer) {
     glGenFramebuffers(1, &framebuffer->handle);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer->handle);
     // glGenRenderbuffers(1, &framebuffer->handle__render_buffer);

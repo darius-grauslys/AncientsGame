@@ -1,6 +1,6 @@
 #include <scene/scene__settings_menu.h>
 
-void init_scene_as__settings_menu(Scene *p_scene) {
+void initialize_scene_as__settings_menu(Scene *p_scene) {
 
 }
 

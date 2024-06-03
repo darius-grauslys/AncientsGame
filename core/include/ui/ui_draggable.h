@@ -3,7 +3,7 @@
 #include <defines.h>
 
 // TODO: move to private header
-void init_ui_draggable(
+void initialize_ui_draggable(
         UI_Element *p_ui_draggable,
         Quantity__u8 width,
         Quantity__u8 height);

@@ -6,7 +6,7 @@
 #include <ui/ui_element.h>
 #include <ui/ui_manager.h>
 
-void init_ui_manager(
+void initialize_ui_manager(
         UI_Manager *p_ui_manager) {
     p_ui_manager->p_ui_element__focused = 0;
     for (Quantity__u8 ui_index=0;
@@ -14,7 +14,7 @@ void init_ui_manager(
             ui_index++) {
         UI_Element *p_ui_element =
             &p_ui_manager->ui_elements[ui_index];
-        init_ui_element(
+        initialize_ui_element(
                 p_ui_element, 
                 UI_Element_Kind__None, 
                 UI_FLAGS__NONE,
@@ -259,7 +259,7 @@ UI_Element *get_new__ui_element_from__ui_manager(
             *p_ui_element_ptr =
                 p_ui_element;
             p_ui_manager->quantity_of__ui_elements__quantity_u8++;
-            init_ui_element(
+            initialize_ui_element(
                     p_ui_element, 
                     UI_Element_Kind__None,
                     UI_FLAGS__NONE,
@@ -345,7 +345,7 @@ void release_all__ui_elements_from__ui_manager(
             return;
         }
 
-        init_ui_element(
+        initialize_ui_element(
                 p_ui_element, 
                 UI_Element_Kind__None, 
                 UI_FLAGS__NONE,

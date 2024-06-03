@@ -28,7 +28,7 @@ static Entity inline
     return p_world->entity_manager.p_local_player;
 }
 
-void init_world(World *p_world);
+void initialize_world(World *p_world);
 void manage_world(Game *p_game);
 void manage_world__entities(Game *p_game);
 

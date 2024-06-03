@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-void init_entity_manager(Entity_Manager *p_entity_manager);
+void initialize_entity_manager(Entity_Manager *p_entity_manager);
 
 ///
 /// Create a new entity instance within the entity_manager object pool.

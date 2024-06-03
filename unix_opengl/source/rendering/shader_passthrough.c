@@ -36,8 +36,8 @@ void get_source__shader_passthrough(
         _source_shader_passthrough__fragment;
 }
 
-void init_shader_2d_as__shader_passthrough(
+void initialize_shader_2d_as__shader_passthrough(
         Shader_2D_Passthrough *shader) {
-    init_shader_2d(shader, _source_shader_passthrough__vertex,
+    initialize_shader_2d(shader, _source_shader_passthrough__vertex,
             _source_shader_passthrough__fragment);
 }

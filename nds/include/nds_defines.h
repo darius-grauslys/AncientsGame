@@ -4,7 +4,7 @@
 #include <nds.h>
 #include <debug/debug.h>
 
-static void inline NDS_init_background_ground__for_game(
+static void inline NDS_initialize_background_ground__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");
     background->map_base = 0;
@@ -19,7 +19,7 @@ static void inline NDS_init_background_ground__for_game(
         bgGetGfxPtr(background->background_index);
 }
 
-static void inline NDS_init_background_ground__overlay__for_game(
+static void inline NDS_initialize_background_ground__overlay__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");
     background->map_base = 4;
@@ -34,7 +34,7 @@ static void inline NDS_init_background_ground__overlay__for_game(
         bgGetGfxPtr(background->background_index);
 }
 
-static void inline NDS_init_background_ground__sprite_cover__for_game(
+static void inline NDS_initialize_background_ground__sprite_cover__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");
     background->map_base = 8;
@@ -49,7 +49,7 @@ static void inline NDS_init_background_ground__sprite_cover__for_game(
         bgGetGfxPtr(background->background_index);
 }
 
-static void inline NDS_init_background_ui__for_game(
+static void inline NDS_initialize_background_ui__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");
     background->map_base = 0;
@@ -64,7 +64,7 @@ static void inline NDS_init_background_ui__for_game(
         bgGetGfxPtr(background->background_index);
 }
 
-static void inline NDS_init_background_ui__overlay__for_game(
+static void inline NDS_initialize_background_ui__overlay__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");
     background->map_base = 4;

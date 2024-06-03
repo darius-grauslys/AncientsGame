@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-void init_scene_as__multiplayer_menu(Scene *p_scene);
+void initialize_scene_as__multiplayer_menu(Scene *p_scene);
 
 void m_load_scene_as__multiplayer_menu_handler(
         Scene *p_this_scene,

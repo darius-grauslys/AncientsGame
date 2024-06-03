@@ -86,7 +86,7 @@ void initialize_entity(
     set_entity__is_updating_position(p_entity);
     set_entity__is_updating_graphics(p_entity);
 
-    init_sprite_wrapper_for__entity(
+    initialize_sprite_wrapper_for__entity(
             p_entity);
 }
 

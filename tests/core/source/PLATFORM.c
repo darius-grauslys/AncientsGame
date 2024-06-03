@@ -65,7 +65,7 @@ void debug_abort(const char *msg_fmt, ...) {
 }
 
 // rendering/PLATFORM_sprite.c
-void PLATFORM_init_sprite(
+void PLATFORM_initialize_sprite(
         PLATFORM_Sprite *sprite) { }
 void PLATFORM_release_sprite(
         PLATFORM_Sprite *sprite) { }
@@ -73,9 +73,9 @@ void PLATFORM_release_sprite(
 void PLATFORM_update_sprite_gfx__to_current_frame(
         Sprite_Wrapper *sprite_wrapper) { }
 // rendering/PLATFORM_gfx_context.c
-void PLATFORM_init_gfx_context(PLATFORM_Gfx_Context *gfx_context) { }
-void PLATFORM_init_rendering__menu(PLATFORM_Gfx_Context *gfx_context) { }
-void PLATFORM_init_rendering__game(PLATFORM_Gfx_Context *gfx_context) { }
+void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) { }
+void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context) { }
+void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context) { }
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager) { }

@@ -3,7 +3,7 @@
 
 #include <defines.h>
 
-void init_collision_manager(
+void initialize_collision_manager(
         Collision_Manager *collision_manager);
 
 ///

@@ -3,10 +3,10 @@
 
 #include <defines.h>
 
-static void inline init_sprite_wrapper(
+static void inline initialize_sprite_wrapper(
         Sprite_Wrapper *sprite_wrapper,
         Texture_Flags texture_flags_for__sprite) {
-    PLATFORM_init_sprite(
+    PLATFORM_initialize_sprite(
             &sprite_wrapper->sprite,
             texture_flags_for__sprite,
             false);
@@ -28,9 +28,9 @@ static void inline init_sprite_wrapper(
         frame__final = 1;
 }
 
-static void inline init_sprite_wrapper_for__entity(
+static void inline initialize_sprite_wrapper_for__entity(
         Entity *entity) {
-    PLATFORM_init_sprite_for__entity(
+    PLATFORM_initialize_sprite_for__entity(
             entity);
     Sprite_Wrapper *sprite_wrapper =
         &entity->sprite_wrapper;

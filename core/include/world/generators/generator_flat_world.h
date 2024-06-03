@@ -6,6 +6,6 @@ void f_chunk_generator__flat_world(
         Chunk *p_chunk);
 
 
-void init_weight_map(void);
+void initialize_weight_map(void);
 
 #endif

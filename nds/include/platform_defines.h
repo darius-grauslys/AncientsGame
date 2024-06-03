@@ -125,7 +125,7 @@ typedef struct NDS_Background_t {
     uint8_t map_base, tile_base;
 } NDS_Background;
 
-static void inline NDS_init_background(
+static void inline NDS_initialize_background(
         NDS_Background *background) {
     background->background_index = -1;
     background->gfx_map = 0;

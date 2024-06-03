@@ -15,7 +15,7 @@ static void inline invoke_game_action(
 #ifndef NDEBUG
     if (!p_game->m_game_action_handler) {
         debug_abort("p_game->m_game_action_handler == 0.");
-        debug_warning("Did you forget to init_game(...)?");
+        debug_warning("Did you forget to initialize_game(...)?");
         return;
     }
 #endif

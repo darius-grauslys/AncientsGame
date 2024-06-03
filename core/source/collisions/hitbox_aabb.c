@@ -58,7 +58,7 @@ void commit_hitbox_velocity(
     hitbox->chunk_index__3i32.z__i32 += dz;
 }
 
-void init_hitbox_point__without_velocity(Vector__3i32F4 *hitbox_point,
+void initialize_hitbox_point__without_velocity(Vector__3i32F4 *hitbox_point,
         Hitbox_AABB *hitbox,
         Direction__u8 corner_direction) {
 
@@ -93,7 +93,7 @@ void init_hitbox_point__without_velocity(Vector__3i32F4 *hitbox_point,
         ;
 }
 
-void init_hitbox_point(Vector__3i32F4 *hitbox_point,
+void initialize_hitbox_point(Vector__3i32F4 *hitbox_point,
         Hitbox_AABB *hitbox,
         Direction__u8 corner_direction) {
 
@@ -148,10 +148,10 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
 
-    init_hitbox_point(
+    initialize_hitbox_point(
             aa, hitbox, 
             DIRECTION__SOUTH_WEST);
-    init_hitbox_point(
+    initialize_hitbox_point(
             bb, hitbox, 
             DIRECTION__NORTH_EAST);
 
@@ -199,20 +199,20 @@ Direction__u8 is_this_hitbox__inside_this_hitbox(
     Vector__3i32F4 aa__one_moving;
     Vector__3i32F4 bb__one_moving;
 
-    init_hitbox_point(
+    initialize_hitbox_point(
             &aa__one_moving, hitbox__one, 
             DIRECTION__SOUTH_WEST);
-    init_hitbox_point(
+    initialize_hitbox_point(
             &bb__one_moving, hitbox__one, 
             DIRECTION__NORTH_EAST);
 
     Vector__3i32F4 aa__two;
     Vector__3i32F4 bb__two;
 
-    init_hitbox_point__without_velocity(
+    initialize_hitbox_point__without_velocity(
             &aa__two, hitbox__two, 
             DIRECTION__SOUTH_WEST);
-    init_hitbox_point__without_velocity(
+    initialize_hitbox_point__without_velocity(
             &bb__two, hitbox__two, 
             DIRECTION__NORTH_EAST);
 
@@ -267,10 +267,10 @@ Direction__u8 is_this_hitbox__inside_this_hitbox(
 get_direction:
     Vector__3i32F4 aa__one_still;
     Vector__3i32F4 bb__one_still;
-    init_hitbox_point__without_velocity(
+    initialize_hitbox_point__without_velocity(
             &aa__one_still, hitbox__one, 
             DIRECTION__SOUTH_WEST);
-    init_hitbox_point__without_velocity(
+    initialize_hitbox_point__without_velocity(
             &bb__one_still, hitbox__one, 
             DIRECTION__NORTH_EAST);
 
@@ -361,6 +361,6 @@ void get_points_aabb_from__hitbox(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 *aa,
         Vector__3i32F4 *bb) {
-    init_hitbox_point(aa, hitbox, DIRECTION__SOUTH_WEST);
-    init_hitbox_point(bb, hitbox, DIRECTION__NORTH_EAST);
+    initialize_hitbox_point(aa, hitbox, DIRECTION__SOUTH_WEST);
+    initialize_hitbox_point(bb, hitbox, DIRECTION__NORTH_EAST);
 }

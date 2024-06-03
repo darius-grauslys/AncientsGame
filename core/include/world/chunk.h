@@ -9,7 +9,7 @@
 #include "tile.h"
 #include "vectors.h"
 
-static inline void init_chunk(
+static inline void initialize_chunk(
         Chunk *chunk, 
         Signed_Index__i32 x__signed_index_i32, 
         Signed_Index__i32 y__signed_index_i32) {

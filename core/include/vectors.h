@@ -6,7 +6,7 @@
 
 #include <defines.h>
 
-static void inline init_3iF32_vector(
+static void inline initialize_3iF32_vector(
         Vector__3i32F4 *vector) {
     vector->x__i32F4 =
         vector->y__i32F4 =

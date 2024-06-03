@@ -2,7 +2,7 @@
 #include <debug/debug.h>
 #include <nds.h>
 
-void PLATFORM_init_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
+void PLATFORM_initialize_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
     texture->gfx = 0;
     texture->width =
         texture->height = 0;
@@ -115,17 +115,17 @@ void PLATFORM_free_texture(PLATFORM_Texture *texture) {
             texture->gfx);
 }
 
-void PLATFORM_init_texture__with_path(PLATFORM_Texture *texture,
+void PLATFORM_initialize_texture__with_path(PLATFORM_Texture *texture,
         Texture_Flags flags,
         const char *path) {
     // no-op
-    debug_error("init_texture__with_path not defined on NDS.");
+    debug_error("initialize_texture__with_path not defined on NDS.");
 }
 
-void PLATFORM_init_texture__with_size(PLATFORM_Texture *texture, 
+void PLATFORM_initialize_texture__with_size(PLATFORM_Texture *texture, 
         Texture_Flags flags,
         uint32_t width, uint32_t height) {
-    debug_error("init_texture__with_size not supported on NDS.");
+    debug_error("initialize_texture__with_size not supported on NDS.");
 }
 
 void PLATFORM_use_texture(PLATFORM_Texture *texture) {

@@ -1,6 +1,6 @@
 #include <scene/scene__single_player_menu.h>
 
-void init_scene_as__single_player_menu(Scene *p_scene) {
+void initialize_scene_as__single_player_menu(Scene *p_scene) {
 
 }
 

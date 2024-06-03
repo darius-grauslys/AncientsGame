@@ -11,11 +11,11 @@ TEST_FUNCTION(is_hitbox__colliding__small_box_in_big) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             6, 6,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__two, 
@@ -28,7 +28,7 @@ TEST_FUNCTION(is_hitbox__colliding__small_box_in_big) {
             ==,
             DIRECTION__EAST);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             6, 6,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__two, 
@@ -41,7 +41,7 @@ TEST_FUNCTION(is_hitbox__colliding__small_box_in_big) {
             ==,
             DIRECTION__WEST);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             6, 6,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__two, 
@@ -54,7 +54,7 @@ TEST_FUNCTION(is_hitbox__colliding__small_box_in_big) {
             ==,
             DIRECTION__NORTH);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             6, 6,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__two, 
@@ -74,13 +74,13 @@ TEST_FUNCTION(is_hitbox__colliding__perfect_overlap) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             -1, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             1, 0, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             0, 0, 0);
 
@@ -98,13 +98,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_inside) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             1, 0, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             7, 1, 0);
 
@@ -115,13 +115,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_inside) {
             ==,
             DIRECTION__EAST);
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             -1, 0, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             -7, 1, 0);
 
@@ -132,13 +132,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_inside) {
             ==,
             DIRECTION__WEST);
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             0, 1, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             1, 7, 0);
 
@@ -149,13 +149,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_inside) {
             ==,
             DIRECTION__NORTH);
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             0, -1, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             1, -7, 0);
 
@@ -173,13 +173,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_entering) {
     Hitbox_AABB hitbox__one;
     Hitbox_AABB hitbox__two;
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             ENTITY_VELOCITY__PLAYER * 2, 0, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             8, 1, 0);
 
@@ -190,13 +190,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_entering) {
             ==,
             DIRECTION__EAST);
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             -ENTITY_VELOCITY__PLAYER * 2, 0, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             -8, -1, 0);
 
@@ -207,13 +207,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_entering) {
             ==,
             DIRECTION__WEST);
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             0, ENTITY_VELOCITY__PLAYER * 2, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             1, 8, 0);
 
@@ -224,13 +224,13 @@ TEST_FUNCTION(is_hitbox__colliding__edge_entering) {
             ==,
             DIRECTION__NORTH);
 
-    init_hitbox(&hitbox__one, 
+    initialize_hitbox(&hitbox__one, 
             8, 8,
             0, 0, 0);
     apply_velocity_to__hitbox(&hitbox__one, 
             0, -ENTITY_VELOCITY__PLAYER * 2, 0);
 
-    init_hitbox(&hitbox__two, 
+    initialize_hitbox(&hitbox__two, 
             8, 8,
             1, -8, 0);
 
