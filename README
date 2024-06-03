@@ -1,160 +1,175 @@
-build           -   the output directory for building with make
-core            -   platform independent game logic resides here
-include         -   all core header files.
-unix_opengl     -   implementation for unix opengl
-nds             -   implementation for the nintendo DS
+About:
+
+Name is temporary and subject to change.
+
+A fun little adventure game with the goal to make playing on the NDS 
+enjoyable once more. I CRAVE for a game with replay value, and a good local
+multiplayer experience. I also wanted this game to be easily portable, and I
+have done my best to write portable code. Always welcome to suggestions.
+
+The game will be broken up into three versions:
+    1) Exploration
+    2) 3D world / Towns
+    3) Building / Gathering
+
+Currently, the project is close to reaching completion of 
+the Exploration version!
 
 -------
 
 Building:
-Only ever run make from the base directory.
-So, if your current directory doesn't have the directory
-"build" in it, do not run make.
+Run build commands from the base directory of the project.
+In otherwords, your directory in which you run make commands
+should include "build" as a sub-folder.
 
-For each platform, there are the given make targets:
-make <platform name>
-make test_<platform name>
+When building, provide the name of the backend implementation.
+So for example, if you want to build with the nds backend:
 
-Even if a platform doesn't have a test suite, it still has
-a test_<platform name> just to inform the user that it
-has no test suite.
+make nds
 
-The base directory Makefile is to expose build targets as
-well as establishing some environment variables.
-
-Always be sure to check the platform directory's README
-before building.
-
-NOTE:
-    unix_opengl does not compile at the moment.
-    I wont be working on this until after
-    the next push to master.
+See Porting for more information about the list of supported
+backends, and how to create your own backend.
 
 -------
 
 Contributing:
-Whenever you make a contribution to the project, make sure
-to test your contribution within unix_opengl/test/
+Whenever you make a contribution to the project, if you
+modify/extend core, be sure to reflect your changes
+in the ./tests/ directory. See Testing.
 
-LOL - I haven't wrote jack shit for tests yet.
-Writting tests for platform specific code isn't
-always straightforward, or even desired (go ahead and test
-all the GL calls in unix_opengl, for example.)
-
-I will write tests for core at some point, and that is
-only after I determine everything I need for core.
-
-Please use my coding style. (Or refactor all my stuff
-to your style, if you maintain your own fork.)
+You're not required to write tests for backend functionality
+though it is recommended if it is not too difficult to do.
 
 -------
 
 Coding Paradigm:
-OOP can so easily become hot steaming garbage.
-That isn't to say it's all bad but, with that said:
+I think OOP is a pyramid scheme. Rust is great for
+it's usage of interfaces. Inheritance is yuck.
+
 Djikstra was right. Cry about it.
 
-Honestly, OOP without inheritance/polymorphism is OKAY.
-Rust has the right idea with traits.
 You get serious problems when you express program structure
 in the form of objects. 99 times out of 100 you can express
 whatever program structure you're trying to express in the
 form of functions as opposed to methods. (functions exist outside 
 of objects, methods exist inside objects.)
 
-I have a programming language in the works,
-Xerxes, which I will present at LLVM 2024
-which intends to do what OOP wishes it could do.
-
-Imperative programming just works, and when done
-correctly, is a much easier beast to maintain.
-
 -------
 
 Coding Style:
 
-I like dense code to an extent.
--   When naming a struct field, put __ at the end followed
-    by an abbreviation of that field's type.
-    Why: So you can easily tell the type without checking
-    it's declaration, or cursoring over it with LSP.
+Note: 
+    Don't let yourself be paralyzed by my coding style. If you make a pull
+    request that violates the conventions, I will be NICE and do my best to
+    rename things to fit. This is only a delicate matter with ./core/*
+    and ./tests/ but for backend implementations, I will probably accept
+    pull requests that violate the coding style - so long as they are confined
+    to just their backend, and whatever style used in said backend is consistent.
 
-    Note: This is ONLY for struct fields! You do not
-    need to do this for local fields of functions.
-    Otherwise code gets TOO dense. You wont be in trouble
-    for doing it, but only do it sparingly. An example where
-    its good to do this, is if the function exceeds 100 lines
-    and the local field is used extensively.
+Thanks to IDEs, or even the most basic of modern text editors
+we have access to tab completion, so it's not difficult to
+write long descriptive names. You will notice my code is filled
+with descriptive names. Here are some guidelines:
+    
+Naming Structs:
+    - The first letter of each word is capitialized.
+    - Include any "parent" relation within the struct name. See below example.
+    - Each word is seperated with an underscore. With the exception
+    of nouns which are usually followed by two under scores.
+    Group nouns with just one underscore when it makes sense. Example:
 
--   Wrap primitives in typedefs
-    Why: Sometimes primitives are treated differently
-    under certain contexts, such as the fixed point fractional
-    primitives. Using typedef wrappers helps inform the
-    developer how to use that primitive type.
+        Chunk_Manager__Chunk_Map_Node
 
--   Underscores between words.
-    Why: Camel case is a MEME.
+    The nouns Chunk, are descriptive, so we group them. Chunk Manager reasons
+    about Chunk_Map_Nodes, so it has a sort of "parent" relationship. We therefore
+    represent this in the struct's name. Manager and Map Node are distinctly
+    different, and are seperated with two underscores.
 
--   Capitialize first letter of each word in type names.
-    Why: because
+    I would like to be more rigorous in formally defining how this naming
+    convention functions, but right now it's mainly based on vibes.
 
--   Lowercase first letter of each word in function names.
-    Why: because!
+Primitive Wrapping:
+    We wrap primitives in this project, with the exception of bool.
+    Quantity__u8 is a unsigned 8 bit integer that deals with quantities.
+    Good for for-loops that do not use it's itterative value.
+    For for-loops which use its itterative value, use Index__u8.
+    - If the underlying typedef is a primitive, include the primitive
+      at the end, so for Quantity__u8, the underlying type is uint8_t
+      and therefore __u8 is added to the end.
 
--   POINTERS, prefix the name of every pointer with p_.
-    If your pointer is a double or more pointer, just
-    do a single p_, and include "ptr" in the noun of
-    the pointer name.
-
-    double pointer:
-    p_x__ptr
-    triple pointer (why?):
-    p_x__ptr_ptr
-
-    p_'s job is to signify the variable is a pointer
-    but not how deep that pointer is. Use ptr_...ptr_ to do the later.
-
--   When naming callback functions, prepend a f_ if the callback
-    does not include a pointer to it's encapsulating struct otherwise
-    prepend a m_. When typedefing, the m_ and f_ are lowercased while
-    the typical type naming convention still holds.
-    Why: because >:(
-
--   When positioning parameters, parameters which find themselves in
-    the name of the function should come first. For example,
-    get_entity__blah_blah(Entity *entity, ...)
-    Notice get_entity, this should mean entity comes first.
-    Notable exception,
-    get_entity__with_id__from_entity_manager(entity_manager, id)
-    entity_manager is at the end of the name, but it's significant
-    to the function such that it comes first.
-
-    Don't worry too much about this, you will pick up the logic behind it.
-
-
-    NOTE:
-    verb_noun_preposition__noun_preposition__...
-    boolean-preposition_noun_preposition__noun_preposision__...
-
+Function Names:
+    - First letter of each word is lowercase. 
+    - Each word is seperated by one underscore with the exception of 
+      nouns followed by prepositions.
     Example:
-    is_apple__red(apple)
-    get_apple__color(apple)
-    does_apple_have__taste(apple)
 
--   Math.
+    get_p_entity_from__entity_manager(...)
+
+    Be descriptive! You will notice there is not a whole lot of comments in
+    the code at times, and this is because of the coding style. You should be
+    easily able to tell what's happening.
+
+    Boolean Functions:
+        Function which return boolean values should be prefixed with one of
+        the following:
+        - is_
+        - does_
+        - has_
+
+Pointers (Struct, Function, etc):
+    - Prefix struct pointers with "p_" ALWAYS.
+    - Prefix function pointers with "f_" with the notable exception:
+        - Prefix method function pointers with "m_" where a method function
+          pointer, is a function pointer that is expected to reside within
+          a struct and take that struct as an argument.
+
+    - When it comes to double pointers, put ptr after the noun.
+        p_x_ptr
+    - Triple pointer:
+        p_x_ptr_ptr
+
+Parameter Position:
+    Note:
+        I am guilty of breaking my own rules on this. Partily due to some
+        old code still needing refactoring.
+
+    Order parameters by the following:
+    - Significance first
+    - Size second
+
+    For method functions, the p_this_XYZ pointer should be first.
+
+Parameter Names:
+    - Method function pointers should prefix the parameter which houses
+      said method function pointer with p_this_
+    - If the parameter is a primitive wrap, reflect this. Example:
+        
+        function(Quantity__u8 quantity_of__thingy__u8);
+    
+    - If the parameter is a quantity, prefix with quantity_of__
+    - If the parameter is an index, include index somewhere in the name,
+    - If the parameter is an enum, prefix with the_kind_of__
+
+    This is not too big of a deal, except the 
+    prim wrapping case, don't violate it.
+
+Math:
     When you do math, if you need to break it out into multiple lines
-    you should do so before an operator. Additionally, and I don't
-    care HOW YOU FEEL about it, the semicolon is on a new line! Example,
-    3 + 2 * 5 / 3;, becomes:
-    3
-    + 2
-    * 5
-    / 3
-    ;
+    you should do so before an operator. Additionally, the semicolon
+    should appear on a new line during such instances. Example:
+        3 + 2 * 5 / 3;
+    becomes:
+        3
+        + 2
+        * 5
+        / 3
+        ;
     Why: If your statement is this complicated that it warrents new lines
     then you're likely going to update it, and often enough you update
     it at the end. So you will move the semi-colon onto a new line anyways.
--   Ternaries, same deal as above. Except you ALWAYS expand it.
+
+Ternaries: 
+    Same deal as above. Except you ALWAYS expand it.
     x = (bool statement) ? 0 : 1;, should be:
     x =
         (bool statement)
@@ -173,42 +188,13 @@ I like dense code to an extent.
 -------
 
 Testing:
-All game logic testing will occur in core.
-All other platform directories will only have testing
-for platform specific logic (as seen in the above list.)
+I wrote a handly little script for this!
+If you created new files, or directories in ./core
+run the following WHILE you're in the ./tests/ directory.
 
-unix_opengl should be considered as "the correct" implementation.
-Meaning, if your platform implementation doesn't work but unix_opengl
-does, then it's a you problem, not a game logic problem.
+    update.sh
 
-unix_opengl must have a test suite. All other platform directories
-do not require a test suite, but should have one whenever possible.
-For example, nds will not have a test suite (for now anyways.)
+This should include your files into the test suite automatically.
+Then inside of the generated files, you will implement your own tests.
 
 -------
-
-Notes:
-This project is my first serious attempt to learn and use Makefile.
-As a result the Makefiles will have a LOT of comments (maybe helpful to you
-if you are learning aswell.)
-
-^ This is a lie, I will go back and add comments later.
-
-In short, the libnds Makefile relies on recurison, and so will the Makefiles
-in this project. It works. That's all I'll say in advocation of a recursive 
-build system. Personally, I think using recursion is a pretty poor idea for 
-project maintenance but it is what it is. I think this is one reason why Cmake 
-is a better option overall.
-
--------
-
-Build Configuration:
--e GENERATE_COMPILE_COMMANDS    -   This should produce a compile_commands.json file
-                                    the target platform's build directory.
-
-Use the FLAGS Makefile variable override to pass flags to gcc.
-For example, if we want to define NDEBUG for unix_opengl, do the following:
-make unix_opengl -e FLAGS="-DNDEBUG"
-
-Now, as a result any invocations of helpers defined in debug.h
-will be optimized out.
