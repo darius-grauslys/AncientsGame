@@ -1,9 +1,10 @@
+#include "defines.h"
 #include <entity/entity.h>
+#include <entity/handlers/entity_handlers.h>
 #include <debug/debug.h>
 #include <rendering/sprite.h>
 #include <rendering/animate_entity.h>
 #include <collisions/hitbox_aabb.h>
-
 #include <debug/debug.h>
 
 bool can_entity_kind_have__armor(enum Entity_Kind kind_of_entity) {
@@ -46,24 +47,40 @@ bool is_entity__humanoid(enum Entity_Kind kind_of_entity) {
     }
 }
 
-void init_entity(
+void initialize_entity(
         Entity *p_entity, 
-        enum Entity_Kind kind_of_entity) {
+        enum Entity_Kind kind_of_entity,
+        Vector__3i32F4 position__3i32F4,
+        m_Entity_Dispose_Handler m_entity_dispose_handler,
+        m_Entity_Body_Handler m_entity_body_handler,
+        m_Entity_AI_Handler m_entity_ai_handler,
+        m_Entity_Collision_Handler m_entity_collision_handler,
+        m_Entity_Tile_Collision_Handler m_entity_tile_collision_handler,
+        m_Entity_Animation_Handler m_entity_animation_handler) {
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    p_entity->hitbox.chunk_index__3i32.x__i32 =
-        p_entity->hitbox.position__3i32F4.x__i32F4 = 0;
-    p_entity->hitbox.chunk_index__3i32.y__i32 =
-        p_entity->hitbox.position__3i32F4.y__i32F4 = 0;
-    p_entity->hitbox.chunk_index__3i32.z__i32 =
-        p_entity->hitbox.position__3i32F4.z__i32F4 = 0;
+    set_hitbox__position(
+            &p_entity->hitbox, 
+            position__3i32F4);
 
-    p_entity->m_dispose_handler = 0;
-    p_entity->m_body_handler = 0;
-    p_entity->m_ai_handler = 0;
-    p_entity->m_collision_handler = 0;
-    p_entity->m_tile_collision_handler = 0;
+    p_entity->m_entity_dispose_handler = 
+        (m_entity_dispose_handler)
+        ? m_entity_dispose_handler
+        : m_entity_dispose_handler__default
+        ;
+    p_entity->m_entity_body_handler = 
+        m_entity_body_handler;
+    p_entity->m_entity_ai_handler = 
+        m_entity_ai_handler;
+    p_entity->m_entity_collision_handler = 
+        m_entity_collision_handler;
+    p_entity->m_entity_tile_collision_handler =
+        m_entity_tile_collision_handler;
+    p_entity->m_entity_animation_handler =
+        m_entity_animation_handler;
+
+    p_entity->entity_flags = ENTITY_FLAG__NONE;
 
     set_entity__enabled(p_entity);
     set_entity__is_updating_position(p_entity);

@@ -536,8 +536,8 @@ bool poll_chunk_manager_for__tile_collision(
                     0);
 
         if (is_tile__unpassable(p_tile)) {
-            if (p_entity->m_tile_collision_handler) {
-                p_entity->m_tile_collision_handler(
+            if (p_entity->m_entity_tile_collision_handler) {
+                p_entity->m_entity_tile_collision_handler(
                         p_entity,
                         p_tile);
             }

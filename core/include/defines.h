@@ -604,7 +604,7 @@ typedef struct Armor_Properties_t {
         the_kind_of_modification__this_armor_has;
 } Armor_Properties;
 
-typedef void (*m_Dispose_Entity)(
+typedef void (*m_Entity_Dispose_Handler)(
         Entity *p_entity_self, 
         Game *p_game);
 ///
@@ -634,7 +634,7 @@ typedef void (*m_Entity_Collision_Handler)(
 
 typedef struct Tile_t Tile;
 
-typedef void (*m_Entity_Tile_Collision)(
+typedef void (*m_Entity_Tile_Collision_Handler)(
         Entity *p_entity_self,
         Tile *p_tile_collided);
 
@@ -974,35 +974,47 @@ enum Sustenance_State {
 };
 
 typedef struct Entity_t {
-    Sprite_Wrapper          sprite_wrapper;
+    Sprite_Wrapper                      sprite_wrapper;
 
-    // DO NOT INVOKE! Called automatically in release_entity(...)
-    m_Dispose_Entity            m_dispose_handler;
+    ///
+    /// DO NOT INVOKE! Called automatically
+    ///
+    m_Entity_Dispose_Handler            m_entity_dispose_handler;
+    //
     // DO NOT INVOKE! Called automatically
-    m_Entity_Body_Handler    m_body_handler;
+    //
+    m_Entity_Body_Handler               m_entity_body_handler;
+    //
     // DO NOT INVOKE! Called automatically
-    m_Entity_AI_Handler      m_ai_handler;
+    //
+    m_Entity_AI_Handler                 m_entity_ai_handler;
+    //
     // DO NOT INVOKE! Called automatically
-    m_Entity_Collision_Handler          m_collision_handler;
+    //
+    m_Entity_Collision_Handler          m_entity_collision_handler;
+    //
     // DO NOT INVOKE! Called automatically
-    m_Entity_Tile_Collision     m_tile_collision_handler;
+    //
+    m_Entity_Tile_Collision_Handler     m_entity_tile_collision_handler;
+    //
     // DO NOT INVOKE! Called automatically
-    m_Entity_Animation_Handler          m_animation_handler;
+    //
+    m_Entity_Animation_Handler          m_entity_animation_handler;
 
-    Hitbox_AABB hitbox;
+    Hitbox_AABB                         hitbox;
 
-    Entity_Flags__u8            entity_flags;
+    Entity_Flags__u8                    entity_flags;
 
-    Identifier__u16             identifier;
+    Identifier__u16                     identifier;
 
-    enum Entity_Kind            the_kind_of_entity__this_entity_is;
+    enum Entity_Kind                    the_kind_of_entity__this_entity_is;
     union {
         struct { // "living" entity (including undead)
-            Direction__u8 direction;
-            Resource_Reserve hearts;
-            Resource_Reserve energy_orbs;
-            Humanoid_Flags humanoid_flags;
-            Timer__u8 stun__timer_u8;
+            Direction__u8       direction;
+            Resource_Reserve    hearts;
+            Resource_Reserve    energy_orbs;
+            Humanoid_Flags      humanoid_flags;
+            Timer__u8           stun__timer_u8;
             enum Homeostasis_Update_Kind kind_of_homeostasis__update;
             union {
                 struct { // humanoid union
@@ -1011,7 +1023,7 @@ typedef struct Entity_t {
                     Sustenance__u8      humanoid__secondary_sustenance__u8;
                     Inventory           humanoid__inventory;
                     Homeostasis__i8     humanoid__homeostasis__i8;
-                    Timer__u16           humanoid__homeostasis__timer_u16;
+                    Timer__u16          humanoid__homeostasis__timer_u16;
                 };
             };
         };

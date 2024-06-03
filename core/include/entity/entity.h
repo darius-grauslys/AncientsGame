@@ -75,25 +75,25 @@ static void inline set_entity_as__visible(Entity *entity) {
 static void inline set_entity__ai_handler(
         Entity *p_entity,
         m_Entity_AI_Handler m_ai_handler) {
-    p_entity->m_ai_handler = m_ai_handler;
+    p_entity->m_entity_ai_handler = m_ai_handler;
 }
 
 static void inline set_entity__body_handler(
         Entity *p_entity,
         m_Entity_Body_Handler m_body_handler) {
-    p_entity->m_body_handler = m_body_handler;
+    p_entity->m_entity_body_handler = m_body_handler;
 }
 
 static void inline set_entity__disposer(
         Entity *p_entity,
-        m_Dispose_Entity m_disposer) {
-    p_entity->m_dispose_handler = m_disposer;
+        m_Entity_Dispose_Handler m_disposer) {
+    p_entity->m_entity_dispose_handler = m_disposer;
 }
 
 static void inline set_entity__collider(
         Entity *p_entity,
         m_Entity_Collision_Handler m_collision_handler) {
-    p_entity->m_collision_handler = m_collision_handler;
+    p_entity->m_entity_collision_handler = m_collision_handler;
     if (!m_collision_handler) {
         set_entity__collidable(p_entity);
     } else {
@@ -103,17 +103,26 @@ static void inline set_entity__collider(
 
 static void inline set_entity__tile_collider(
         Entity *p_entity,
-        m_Entity_Tile_Collision m_collision_handler) {
-    p_entity->m_tile_collision_handler = m_collision_handler;
+        m_Entity_Tile_Collision_Handler m_collision_handler) {
+    p_entity->m_entity_tile_collision_handler = m_collision_handler;
 }
 
 static void inline set_entity__animator(
         Entity *p_entity,
         m_Entity_Animation_Handler m_animation_handler) {
-    p_entity->m_animation_handler = m_animation_handler;
+    p_entity->m_entity_animation_handler = m_animation_handler;
 }
 
-void init_entity(Entity *entity, enum Entity_Kind kind_of_entity);
+void initialize_entity(
+        Entity *p_entity, 
+        enum Entity_Kind kind_of_entity,
+        Vector__3i32F4 position__3i32F4,
+        m_Entity_Dispose_Handler m_entity_dispose_handler,
+        m_Entity_Body_Handler m_entity_body_handler,
+        m_Entity_AI_Handler m_entity_ai_handler,
+        m_Entity_Collision_Handler m_entity_collision_handler,
+        m_Entity_Tile_Collision_Handler m_entity_tile_collision_handler,
+        m_Entity_Animation_Handler m_entity_animation_handler);
 
 void set_entity__armor(Entity *entity,
         enum Entity_Armor_Kind kind_of_armor,

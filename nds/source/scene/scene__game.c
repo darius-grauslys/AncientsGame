@@ -358,7 +358,6 @@ void update_ui_homeostasis(
         tile_index+1;
 }
 
-uint16_t _index_tmp = 0;
 void update_ui_sustenance_primary_as__bloated(
         Entity *p_player,
         TileMapEntry16 *p_ui_overlay__tile_map,
@@ -990,10 +989,14 @@ void m_enter_scene_as__game_handler(
         Game *p_game) {
 
     // TODO: prob wanna remove some of the stuff below
-    add_entity_to__world(
+    Entity *p_player = 
+        add_entity_to__world(
             &p_game->world,
             Entity_Kind__Player,
             get_vector__3i32F4(0, 0, 0));
+
+    p_game->world.entity_manager.p_local_player =
+        p_player;
 
     move_chunk_manager(
             &p_game->world.chunk_manager, 
@@ -1005,8 +1008,6 @@ void m_enter_scene_as__game_handler(
             &p_game->gfx_context,
             &p_game->world.chunk_manager);
 
-    Entity *p_player =
-        p_game->world.entity_manager.p_local_player;
     while (1) {
         if (p_game->scene_manager.p_active_scene == 0)
             break;

@@ -455,8 +455,8 @@ void check_collision_node_for__collisions(
             entity,
             collision_node->p_entity_ptrs[i]);
         if (direction_of_collision != DIRECTION__NONE) {
-            if (entity->m_collision_handler) {
-                entity->m_collision_handler(entity,
+            if (entity->m_entity_collision_handler) {
+                entity->m_entity_collision_handler(entity,
                         collision_node->p_entity_ptrs[i],
                         direction_of_collision);
             }

@@ -8,11 +8,7 @@
 #include <world/generators/generator_test_world.h>
 #include <world/world_parameters.h>
 
-// temp:
-#include <entity/controllers/ai/controller_player.h>
-#include <entity/controllers/ai/controller_dummy.h>
 #include <entity/entity.h>
-#include <rendering/rendering.h>
 #include <debug/debug.h>
 
 void init_world(World *p_world) {
@@ -79,12 +75,12 @@ void manage_world__entities(Game *p_game) {
             continue;
         }
 
-        if (p_entity->m_body_handler) {
-            p_entity->m_body_handler(p_entity, p_game);
+        if (p_entity->m_entity_body_handler) {
+            p_entity->m_entity_body_handler(p_entity, p_game);
         }
 
-        if (p_entity->m_ai_handler) {
-            p_entity->m_ai_handler(p_entity, p_game);
+        if (p_entity->m_entity_ai_handler) {
+            p_entity->m_entity_ai_handler(p_entity, p_game);
         }
 
         if (!poll_collision_manager(
@@ -119,8 +115,8 @@ void manage_world__entities(Game *p_game) {
             }
         }
 
-        if (p_entity->m_animation_handler) {
-            p_entity->m_animation_handler(
+        if (p_entity->m_entity_animation_handler) {
+            p_entity->m_entity_animation_handler(
                     p_entity, 
                     &p_game->tick__timer_u32);
         }
@@ -140,7 +136,7 @@ Entity *add_entity_to__world(
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4) {
     Entity *p_entity =
-        get_new__entity(
+        allocate__entity(
                 &p_world->entity_manager,
                 kind_of_entity,
                 position__3i32F4);
@@ -153,8 +149,8 @@ Entity *add_entity_to__world(
 void release_entity_from__world(
         Game *p_game,
         Entity *p_entity) {
-    if (p_entity->m_dispose_handler) {
-        p_entity->m_dispose_handler(p_entity, p_game);
+    if (p_entity->m_entity_dispose_handler) {
+        p_entity->m_entity_dispose_handler(p_entity, p_game);
         debug_info("released entity with disposer.");
     } else {
         debug_info("released entity.");

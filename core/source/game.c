@@ -13,11 +13,12 @@
 #include <world/world.h>
 #include <timer.h>
 
-#include <entity/controllers/body/collidable_entity_handlers.h>
-#include <entity/controllers/entity_handlers.h>
-#include <entity/controllers/ai/controller_player.h>
-#include <entity/controllers/ai/controller_dummy.h>
-#include <entity/controllers/animation/humanoid_animation_handler.h>
+#include <entity/handlers/collision/collision_handler__default.h>
+#include <entity/handlers/entity_handlers.h>
+#include <entity/handlers/ai/ai_handler__dummy.h>
+#include <entity/handlers/animation/animation_handler__humanoid.h>
+
+#include <entity/implemented/player/ai/ai_handler__player.h>
 
 #include <collisions/hitbox_aabb.h>
 #include <collisions/collision_manager.h>
