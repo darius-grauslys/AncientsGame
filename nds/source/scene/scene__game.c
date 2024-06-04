@@ -71,19 +71,19 @@ void m_ui_button__clicked_handler__game_button(
         *((enum Game_Scene_UI_State*)p_this_button->p_ui_data);
     debug_info("clicked - %d", state);
     if (state == game_scene_data.ui_state) {
-        NDS_set_ui_to__equip(&p_game->gfx_context);
+        NDS_set_ui_background_to__equip(&p_game->gfx_context);
         return;
     }
     switch (state) {
         default:
         case Game_Scene_UI_State__Equip:
-            NDS_set_ui_to__equip(&p_game->gfx_context);
+            NDS_set_ui_background_to__equip(&p_game->gfx_context);
             break;
         case Game_Scene_UI_State__Ground:
-            NDS_set_ui_to__ground(&p_game->gfx_context);
+            NDS_set_ui_background_to__ground(&p_game->gfx_context);
             break;
         case Game_Scene_UI_State__Work:
-            NDS_set_ui_to__work(&p_game->gfx_context);
+            NDS_set_ui_background_to__work(&p_game->gfx_context);
             break;
     }
 }
@@ -100,7 +100,7 @@ void m_load_scene_as__game_handler(
     // NDS_initialize_debug__sub();
     // return;
     NDS_initialize_gfx_for__ui(&p_game->gfx_context);
-    NDS_set_ui_to__equip(&p_game->gfx_context);
+    NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
     release_all__ui_elements_from__ui_manager(
             &p_game->ui_manager);

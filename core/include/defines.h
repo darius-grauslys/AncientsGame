@@ -1196,6 +1196,10 @@ typedef struct UI_Element_t {
 } UI_Element;
 
 #define UI_ELEMENT_MAXIMUM_QUANTITY_OF 128
+#define UI_CONTAINER_PTR_ENTRIES_MAXIMUM_QUANTITY_OF 8
+
+typedef UI_Element UI_Container_Entries[
+    UI_CONTAINER_PTR_ENTRIES_MAXIMUM_QUANTITY_OF];
 
 typedef struct UI_Manager_t {
     Quantity__u8 quantity_of__ui_elements__quantity_u8;
