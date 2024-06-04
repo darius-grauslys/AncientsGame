@@ -28,6 +28,13 @@
 /// for every platform.
 
 ///
+/// SECTION_debug
+///
+
+void PLATFORM_coredump(void);
+void PLATFORM_abort(void);
+
+///
 /// SECTION_entity
 ///
 void PLATFORM_render_entity(

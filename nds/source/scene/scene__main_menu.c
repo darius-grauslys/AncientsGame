@@ -20,6 +20,8 @@ void m_load_scene_as__main_menu_handler(
             &p_game->gfx_context);
     NDS_set_ui_manager_to__menu(
             &p_game->ui_manager);
+    NDS_set_ui_background_to__menu_main(
+            &p_game->gfx_context);
 }
 
 void initialize_scene_as__main_menu(Scene *p_scene) {

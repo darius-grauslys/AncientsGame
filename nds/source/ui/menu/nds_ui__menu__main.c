@@ -29,9 +29,9 @@ void NDS_set_ui_manager_to__menu(
         initialize_ui_button(
                 p_button,
                 80, 24);
-        set_hitbox__position(
+        set_hitbox__position_with__3i32F4(
                 &p_button->ui_bounding_box__aabb,
-                get_vector__3i32F4(52, 72 + 44 * i, 0));
+                get_vector__3i32F4_with__3i32(52, 72 + 44 * i, 0));
         switch (i) {
             case 0:
                 set_ui_element__clicked_handler(
@@ -64,9 +64,9 @@ void NDS_set_ui_manager_to__menu(
     set_ui_element_as__disabled(
             p_button);
 
-    set_hitbox__position(
+    set_hitbox__position_with__3i32F4(
             &p_button->ui_bounding_box__aabb, 
-            get_vector__3i32F4(184, 118, 0));
+            get_vector__3i32F4_with__3i32(184, 118, 0));
 }
 
 void NDS_set_ui_background_to__menu_main(

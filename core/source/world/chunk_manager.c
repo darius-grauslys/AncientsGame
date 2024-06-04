@@ -4,6 +4,7 @@
 
 #include <world/tile.h>
 #include <collisions/hitbox_aabb.h>
+#include <vectors.h>
 
 void initialize_chunk_manager(
         Chunk_Manager *p_chunk_manager,

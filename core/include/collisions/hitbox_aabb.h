@@ -75,15 +75,21 @@ static Signed_Index__i32 inline get_global_z_from__hitbox__without_velocity(
 void commit_hitbox_velocity(
         Hitbox_AABB *hitbox);
 
+/// If the hitbox resides in an entity which is
+/// registered to the collision system, DO NOT invoke this.
+/// Instead invoke using game_action.h .
 ///
-/// BE CAREFUL!!!
-/// Whenever you call this, you need to
-/// make sure the entity's record in the collision_manager
-/// is updated!!!
-///
-void set_hitbox__position(
+void set_hitbox__position_with__3i32F4(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 position__3i32F4);
+
+/// If the hitbox resides in an entity which is
+/// registered to the collision system, DO NOT invoke this.
+/// Instead invoke using game_action.h .
+///
+void set_hitbox__position_with__3i32(
+        Hitbox_AABB *hitbox,
+        Vector__3i32 position__3i32);
 
 static Direction__u8 inline get_movement_direction_of__hitbox(
         Hitbox_AABB *hitbox) {
@@ -120,7 +126,7 @@ static void inline initialize_hitbox(
     hitbox->velocity__3i32F4.x__i32F4 = 0;
     hitbox->velocity__3i32F4.y__i32F4 = 0;
     hitbox->velocity__3i32F4.z__i32F4 = 0;
-    set_hitbox__position(hitbox, 
+    set_hitbox__position_with__3i32F4(hitbox, 
             position__3i32F4);
 }
 

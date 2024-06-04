@@ -1,3 +1,5 @@
+#include "nds/ndstypes.h"
+#include "nds/arm9/exceptions.h"
 #include "scene/scene__game.h"
 #include "scene/scene__main_menu.h"
 #include "scene/scene__multiplayer_menu.h"
@@ -7,7 +9,15 @@
 #include <platform.h>
 #include <debug/nds_debug.h>
 
+extern Game game;
+
+void _abort(void) {
+    game.scene_manager.p_active_scene = 0;
+}
+
 void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager) {
+    setExceptionHandler(_abort);
+
     p_scene_manager->p_active_scene =
         get_p_scene_from__scene_manager(
                 p_scene_manager, 

@@ -60,7 +60,7 @@ void initialize_entity(
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    set_hitbox__position(
+    set_hitbox__position_with__3i32F4(
             &p_entity->hitbox, 
             position__3i32F4);
 

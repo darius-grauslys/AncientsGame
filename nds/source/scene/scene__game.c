@@ -118,9 +118,9 @@ void m_load_scene_as__game_handler(
         initialize_ui_button(
                 p_ui_button,
                 52, 32);
-        set_hitbox__position(
+        set_hitbox__position_with__3i32F4(
                 &p_ui_button->ui_bounding_box__aabb, 
-                get_vector__3i32F4(56 + 72 * ui_index, 64, 0));
+                get_vector__3i32F4_with__3i32(56 + 72 * ui_index, 64, 0));
         p_ui_button->p_ui_data =
             &game_scene_data.button_states[ui_index];
         game_scene_data.button_states[ui_index] =
@@ -995,7 +995,7 @@ void m_enter_scene_as__game_handler(
         allocate_entity_into__world(
             &p_game->world,
             Entity_Kind__Player,
-            get_vector__3i32F4(0, 0, 0));
+            get_vector__3i32F4_with__3i32(0, 0, 0));
 
     p_game->world.entity_manager
         .p_local_player =

@@ -1,5 +1,6 @@
 #include "nds/arm9/background.h"
 #include "nds/arm9/console.h"
+#include "platform.h"
 #include <debug/debug.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -74,7 +75,7 @@ void debug_error(const char *msg_fmt, ...) {
     printf("\n");
 
     // create core dump, but keep going.
-    if (!fork()) { abort(); }
+    PLATFORM_coredump();
 #endif
 }
 
@@ -88,6 +89,6 @@ void debug_abort(const char *msg_fmt, ...) {
 
     printf("\n");
 
-    abort();
+    PLATFORM_abort();
 #endif
 }

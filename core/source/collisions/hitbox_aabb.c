@@ -1,20 +1,28 @@
 #include "defines.h"
+#include "vectors.h"
 #include <collisions/hitbox_aabb.h>
 #include <debug/debug.h>
 
-void set_hitbox__position(
+static void inline normalize_hitbox__position_plus_velocity_with__chunk_space(
+        Hitbox_AABB *p_hitbox,
+        Chunk_Vector__3i32 d_chunk_vector) {
+    p_hitbox->position__3i32F4.x__i32F4 += p_hitbox->velocity__3i32F4.x__i32F4
+        - (d_chunk_vector.x__i32 << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    p_hitbox->position__3i32F4.y__i32F4 += p_hitbox->velocity__3i32F4.y__i32F4
+        - (d_chunk_vector.y__i32 << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    p_hitbox->position__3i32F4.z__i32F4 += p_hitbox->velocity__3i32F4.z__i32F4
+        - (d_chunk_vector.z__i32 << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+}
+
+void set_hitbox__position_with__3i32F4(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 position__3i32F4) {
     i32F4 x__global = position__3i32F4.x__i32F4;
     i32F4 y__global = position__3i32F4.y__i32F4;
     i32F4 z__global = position__3i32F4.z__i32F4;
 
-    hitbox->chunk_index__3i32.x__i32 = 
-        x__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
-    hitbox->chunk_index__3i32.y__i32 = 
-        y__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
-    hitbox->chunk_index__3i32.z__i32 = 
-        z__global / (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
+    hitbox->chunk_index__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(position__3i32F4);
 
     hitbox->position__3i32F4.x__i32F4 =
         (x__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
@@ -27,35 +35,53 @@ void set_hitbox__position(
         << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
 }
 
+void set_hitbox__position_with__3i32(
+        Hitbox_AABB *hitbox,
+        Vector__3i32 position__3i32) {
+    i32F4 x__global = position__3i32.x__i32;
+    i32F4 y__global = position__3i32.y__i32;
+    i32F4 z__global = position__3i32.z__i32;
+
+    hitbox->chunk_index__3i32 =
+        vector_3i32_to__chunk_vector_3i32(position__3i32);
+
+    hitbox->position__3i32F4.x__i32F4 =
+        (x__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1));
+    hitbox->position__3i32F4.y__i32F4 =
+        (y__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1));
+    hitbox->position__3i32F4.z__i32F4 =
+        (z__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1));
+}
+
 void commit_hitbox_velocity(
         Hitbox_AABB *hitbox) {
 
-    Signed_Index__i32 dx, dy, dz;
+    Vector__3i32F4 velocity_commit_vector =
+        add_vectors__3i32F4(
+                hitbox->position__3i32F4, 
+                hitbox->velocity__3i32F4);
+    Chunk_Vector__3i32 velocity_commit___chunk_vector =
+        vector_3i32F4_to__chunk_vector_3i32(
+                velocity_commit_vector);
+    Chunk_Vector__3i32 hitbox_position__chunk_vector =
+        vector_3i32F4_to__chunk_vector_3i32(
+                hitbox->position__3i32F4);
+    Chunk_Vector__3i32 d_chunk_vector =
+        subtract_vectors__3i32(
+                velocity_commit___chunk_vector, 
+                hitbox_position__chunk_vector);
 
-    dx = ((hitbox->position__3i32F4.x__i32F4 + hitbox->velocity__3i32F4.x__i32F4) 
-            >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->position__3i32F4.x__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dy = ((hitbox->position__3i32F4.y__i32F4 + hitbox->velocity__3i32F4.y__i32F4) 
-            >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->position__3i32F4.y__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    dz = ((hitbox->position__3i32F4.z__i32F4 + hitbox->velocity__3i32F4.z__i32F4) 
-            >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE)
-        - (hitbox->position__3i32F4.z__i32F4 >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-
-    hitbox->position__3i32F4.x__i32F4 += hitbox->velocity__3i32F4.x__i32F4
-        - (dx << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    hitbox->position__3i32F4.y__i32F4 += hitbox->velocity__3i32F4.y__i32F4
-        - (dy << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
-    hitbox->position__3i32F4.z__i32F4 += hitbox->velocity__3i32F4.z__i32F4
-        - (dz << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+    normalize_hitbox__position_plus_velocity_with__chunk_space(
+        hitbox, 
+        d_chunk_vector);
 
     hitbox->velocity__3i32F4.x__i32F4 = 0;
     hitbox->velocity__3i32F4.y__i32F4 = 0;
     hitbox->velocity__3i32F4.z__i32F4 = 0;
 
-    hitbox->chunk_index__3i32.x__i32 += dx;
-    hitbox->chunk_index__3i32.y__i32 += dy;
-    hitbox->chunk_index__3i32.z__i32 += dz;
+    add_p_vectors__3i32(
+            &hitbox->chunk_index__3i32, 
+            &d_chunk_vector);
 }
 
 void initialize_hitbox_point__without_velocity(Vector__3i32F4 *hitbox_point,

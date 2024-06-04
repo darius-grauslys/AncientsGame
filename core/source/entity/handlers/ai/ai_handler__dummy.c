@@ -26,7 +26,7 @@ void m_handler_for__ai_dummy(
             invoke_action__set_velocity_of__entity(
                     p_game,
                     p_this_dummy,
-                    get_vector__3i32F4(0, 0, 0));
+                    get_vector__3i32F4_with__3i32(0, 0, 0));
             animate_humanoid__idle(p_this_dummy);
             return;
         case DIRECTION__NORTH:
@@ -34,9 +34,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        0, 
-                        ENTITY_VELOCITY__PLAYER, 
-                        0));
+                        0, 0, 
+                        0, ENTITY_VELOCITY__PLAYER, 
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__EAST:
@@ -44,9 +44,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        ENTITY_VELOCITY__PLAYER, 
-                        0,
-                        0));
+                        0, ENTITY_VELOCITY__PLAYER, 
+                        0, 0,
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__SOUTH:
@@ -54,9 +54,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        0, 
-                        -ENTITY_VELOCITY__PLAYER, 
-                        0));
+                        0, 0, 
+                        0, -ENTITY_VELOCITY__PLAYER, 
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__WEST:
@@ -64,9 +64,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        -ENTITY_VELOCITY__PLAYER, 
-                        0,
-                        0));
+                        0, -ENTITY_VELOCITY__PLAYER, 
+                        0, 0,
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__NORTH_EAST:
@@ -74,9 +74,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        0));
+                        0, ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__SOUTH_EAST:
@@ -84,9 +84,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        0));
+                        0, ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__SOUTH_WEST:
@@ -94,9 +94,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        0));
+                        0, -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
         case DIRECTION__NORTH_WEST:
@@ -104,9 +104,9 @@ void m_handler_for__ai_dummy(
                     p_game,
                     p_this_dummy,
                     get_vector__3i32F4(
-                        -ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        ENTITY_VELOCITY__PLAYER_DIAGONAL,
-                        0));
+                        0, -ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, ENTITY_VELOCITY__PLAYER_DIAGONAL,
+                        0, 0));
             animate_humanoid__walk(p_this_dummy);
             break;
     }
