@@ -78,7 +78,7 @@ static Vector__3i32F4 inline get_vector__3i32F4(
     };
 }
 
-static Vector__3i32F4 inline get_vector__3i32F4_with__3i32(
+static Vector__3i32F4 inline get_vector__3i32F4_using__i32(
         i32F4 x,
         i32F4 y,
         i32F4 z) {
@@ -97,6 +97,39 @@ static Vector__3i32 inline get_vector__3i32(
         x, 
         y, 
         z
+    };
+}
+
+static Tile_Vector__3i32 inline get_tile_vector__3i32(
+        Signed_Index__i32 x,
+        Signed_Index__i32 y,
+        Signed_Index__i32 z) {
+    return (Vector__3i32) {
+        x >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
+        y >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
+        z >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE
+    };
+}
+
+static Chunk_Vector__3i32 inline get_chunk_vector__3i32(
+        Signed_Index__i32 x,
+        Signed_Index__i32 y,
+        Signed_Index__i32 z) {
+    return (Vector__3i32) {
+        x, 
+        y, 
+        z
+    };
+}
+
+static Chunk_Vector__3i32 inline get_chunk_vector__3i32_with__i32F4(
+        i32F4 x,
+        i32F4 y,
+        i32F4 z) {
+    return (Vector__3i32) {
+        x >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE, 
+        y >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE, 
+        z >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE
     };
 }
 
@@ -211,7 +244,7 @@ static Chunk_Vector__3i32 inline vector_3i32_to__chunk_vector_3i32(
 ///
 /// Returns a Vector__3u8 with x,y,z signlessly indexing tiles
 ///
-static inline Vector__3u8 vector_3i32F4_to__local_chunk_vector_3u8(
+static inline Local_Tile_Vector__3u8 vector_3i32F4_to__local_tile_vector_3u8(
         Vector__3i32F4 vector) {
     Vector__3i32 vector__3i32 =
         vector_3i32F4_to__vector_3i32(vector);

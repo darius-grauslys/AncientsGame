@@ -75,7 +75,7 @@ void m_entity_ai_handler__player(
         Entity *p_skeleton = allocate_entity_into__world(
                 &p_game->world,
                 Entity_Kind__Skeleton,
-                get_vector__3i32F4_with__3i32(x, y, 0));
+                get_vector__3i32F4_using__i32(x, y, 0));
 
         set_entity__ai_handler(
                 p_skeleton, 
@@ -137,7 +137,7 @@ void m_entity_ai_handler__player(
         toggle = true;
 
         Chunk *p_chunk =
-            get_chunk_ptr_from__chunk_manager(
+            get_p_chunk_from__chunk_manager_using__i32(
                     &p_game->world.chunk_manager,
                     x >> 6,
                     y >> 6,
@@ -146,7 +146,7 @@ void m_entity_ai_handler__player(
         if (p_chunk) {
             Tile *p_tile =
                 //TODO: consolidate these bit manips
-                get_tile_ptr_from__chunk(
+                get_p_tile_from__chunk_using__u8(
                         p_chunk,
                         (x >> 3) & ((1 << 3) - 1),
                         (y >> 3) & ((1 << 3) - 1),

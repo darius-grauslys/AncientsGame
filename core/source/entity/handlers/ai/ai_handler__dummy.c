@@ -26,7 +26,7 @@ void m_handler_for__ai_dummy(
             invoke_action__set_velocity_of__entity(
                     p_game,
                     p_this_dummy,
-                    get_vector__3i32F4_with__3i32(0, 0, 0));
+                    get_vector__3i32F4_using__i32(0, 0, 0));
             animate_humanoid__idle(p_this_dummy);
             return;
         case DIRECTION__NORTH:

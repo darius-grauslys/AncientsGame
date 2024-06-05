@@ -136,7 +136,6 @@ static void inline set_tile__up_or_down_stairs(Tile *tile, bool value) {
 // TODO: make Tile_Render_Result into PLATFORM_Tile_Render_Result
 Tile_Render_Result get_tile_render_result(
         Chunk_Manager__Chunk_Map_Node *chunk_node,
-        Signed_Index__i32 x__local__signed_index_i32,
-        Signed_Index__i32 y__local__signed_index_i32);
+        Local_Tile_Vector__3u8 local_tile_vector__3u8);
 
 #endif

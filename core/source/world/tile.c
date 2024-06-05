@@ -1,17 +1,18 @@
 #include <world/tile.h>
 #include <defines.h>
 #include <world/chunk_manager.h>
+#include <vectors.h>
 
-static Tile inline *get_tile_ptr_from__chunk_node_for__tile_render(
+static Tile inline *get_p_tile_from__chunk_node_for__tile_render(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,
-        int32_t x__local,
-        int32_t y__local,
+        Local_Tile_Vector__3u8 local_tile_vector__3u8,
         Tile_Render_Result *p_render_result) {
+    Index__u8 x__local = local_tile_vector__3u8.x__u8;
+    Index__u8 y__local = local_tile_vector__3u8.y__u8;
     Tile *p_tile =
-        get_tile_ptr_from__chunk_node(
+        get_p_tile_from__chunk_node(
                 p_chunk_node,
-                x__local,
-                y__local);
+                local_tile_vector__3u8);
 
     Tile *p_north, *p_east, *p_south, *p_west;
 
@@ -19,37 +20,37 @@ static Tile inline *get_tile_ptr_from__chunk_node_for__tile_render(
     //with how the chunk_nodes are connected
     p_north =
         (y__local == 0)
-        ? get_tile_ptr_from__chunk_node(
+        ? get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node->p_south__chunk_map_node,
                 x__local, CHUNK_WIDTH__IN_TILES - 1)
-        : get_tile_ptr_from__chunk_node(
+        : get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node,
                 x__local, y__local - 1)
         ;
     p_south =
         (y__local == CHUNK_WIDTH__IN_TILES - 1)
-        ? get_tile_ptr_from__chunk_node(
+        ? get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node->p_north__chunk_map_node,
                 x__local, 0)
-        : get_tile_ptr_from__chunk_node(
+        : get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node,
                 x__local, y__local + 1)
         ;
     p_west =
         (x__local == 0)
-        ? get_tile_ptr_from__chunk_node(
+        ? get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node->p_west__chunk_map_node,
                 CHUNK_WIDTH__IN_TILES - 1, y__local)
-        : get_tile_ptr_from__chunk_node(
+        : get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node,
                 x__local - 1, y__local)
         ;
     p_east =
         (x__local == CHUNK_WIDTH__IN_TILES - 1)
-        ? get_tile_ptr_from__chunk_node(
+        ? get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node->p_east__chunk_map_node,
                 0, y__local)
-        : get_tile_ptr_from__chunk_node(
+        : get_p_tile_from__chunk_node_using__u8(
                 p_chunk_node,
                 x__local + 1, y__local)
         ;
@@ -318,15 +319,13 @@ wall:
 // TODO: move this to nds
 Tile_Render_Result get_tile_render_result(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,
-        int32_t x__local,
-        int32_t y__local) {
+        Local_Tile_Vector__3u8 local_tile_vector__3u8) {
     Tile_Render_Result render_result;
 
     Tile *p_tile = 
-        get_tile_ptr_from__chunk_node_for__tile_render(
+        get_p_tile_from__chunk_node_for__tile_render(
             p_chunk_node,
-            x__local,
-            y__local,
+            local_tile_vector__3u8,
             &render_result);
 
     get_tile_texture_sheet_index(

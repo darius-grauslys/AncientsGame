@@ -23,7 +23,7 @@ void initialize_ui_element(
             &p_ui_element->ui_bounding_box__aabb, 
             width, 
             height, 
-            get_vector__3i32F4_with__3i32(0, 0, 0));
+            get_vector__3i32F4_using__i32(0, 0, 0));
     p_ui_element->m_ui_clicked_handler = 0;
     p_ui_element->m_ui_dragged_handler = 0;
     p_ui_element->m_ui_dropped_handler = 0;

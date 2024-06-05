@@ -191,11 +191,7 @@ bool poll_world_for__scrolling(
             &p_world->chunk_manager,
             &p_world->world_parameters,
             p_world->entity_manager.p_local_player
-                ->hitbox.chunk_index__3i32.x__i32,
-            p_world->entity_manager.p_local_player
-                ->hitbox.chunk_index__3i32.y__i32,
-            p_world->entity_manager.p_local_player
-                ->hitbox.chunk_index__3i32.z__i32);
+                ->hitbox.chunk_index__3i32);
 
     return is_chunks_moved;
 }

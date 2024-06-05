@@ -143,8 +143,8 @@ void PLATFORM_update_chunks(
             // Everything is based on the implementation of
             // TileMapEntry16 of background.h in the arm9
             // folder of libnds.
-            for (int y=0;y<8;y++) {
-                for (int x=0;x<8;x++) {
+            for (Index__u8 y=0;y<8;y++) {
+                for (Index__u8 x=0;x<8;x++) {
                     Quantity__u32 background_tile_index = 
                         y * 32 + x;
                     background_tile_index += 
@@ -161,10 +161,11 @@ void PLATFORM_update_chunks(
                         &p_overlay_tile_map[background_tile_index];
                     TileMapEntry16 *p_tile_sprite_cover_entry =
                         &p_sprite_cover_tile_map[background_tile_index];
+                    Local_Tile_Vector__3u8 local_tile_vector = {x, y, 0};
                     Tile_Render_Result render_result =
                         get_tile_render_result(
                                 p_current_sub__chunk_map_node,
-                                x, y);
+                                local_tile_vector);
                     *(uint16_t*)p_tile_entry = 
                         render_result.tile_index__ground;
                     *(uint16_t*)p_tile_cover_entry = 

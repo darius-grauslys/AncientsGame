@@ -1219,15 +1219,9 @@ typedef struct UI_Manager_t {
 
 typedef uint8_t Chunk_Tile_Index__u8;
 ///
-/// The localized version of Vector_3i32.
-/// It is local to a chunk.
+/// Local to a chunk.
 ///
-typedef struct Local_Chunk_Vector_t {
-    Chunk_Tile_Index__u8 
-        x__chunk_index_u8, 
-        y__chunk_index_u8, 
-        z__chunk_index_u8;
-} Local_Chunk_Vector;
+typedef Vector__3u8 Local_Tile_Vector__3u8;
 
 #define TILE_PIXEL_HEIGHT 8
 #define TILE_PIXEL_WIDTH 8

@@ -6,6 +6,8 @@
 #include <collisions/hitbox_aabb.h>
 #include <vectors.h>
 
+#include <world/chunk_manager.h>
+
 void initialize_chunk_manager(
         Chunk_Manager *p_chunk_manager,
         World_Parameters *p_world_parameters) {
@@ -26,7 +28,8 @@ void initialize_chunk_manager(
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
                     + x];
 
-            initialize_chunk(p_chunk__here, x, -y);
+            initialize_chunk(p_chunk__here, 
+                    get_chunk_vector__3i32(x, -y, 0));
 
             p_world_parameters->f_chunk_generator(
                     p_world_parameters, 
@@ -104,27 +107,27 @@ void initialize_chunk_manager(
         ];
 }
 
-uint32_t get_chunk_index_at__xyz_from__chunk_manager(
+uint32_t get_chunk_index_from__chunk_manager(
         Chunk_Manager *p_chunk_manager,
-        Signed_Index__i32 x__chunk, 
-        Signed_Index__i32 y__chunk,
-        Signed_Index__i32 z__chunk) {
+        Chunk_Vector__3i32 chunk_vector__3i32) {
     // TODO: extend to use z
 
-    if (x__chunk < p_chunk_manager
+    if (chunk_vector__3i32.x__i32 < p_chunk_manager
             ->p_most_north_western__chunk_map_node
                 ->p_chunk__here->x__signed_index_i32
-            || y__chunk > p_chunk_manager
+            || chunk_vector__3i32.y__i32 > p_chunk_manager
                 ->p_most_north_western__chunk_map_node
                     ->p_chunk__here->y__signed_index_i32
-            || x__chunk > p_chunk_manager
+            || chunk_vector__3i32.x__i32 > p_chunk_manager
                 ->p_most_south_eastern__chunk_map_node
                     ->p_chunk__here->x__signed_index_i32
-            || y__chunk < p_chunk_manager
+            || chunk_vector__3i32.y__i32 < p_chunk_manager
                 ->p_most_south_eastern__chunk_map_node
                     ->p_chunk__here->y__signed_index_i32) {
         debug_error("chunk index out of bounds: (%d, %d, %d)",
-                x__chunk, y__chunk, z__chunk);
+                chunk_vector__3i32.x__i32, 
+                chunk_vector__3i32.y__i32, 
+                chunk_vector__3i32.z__i32);
         debug_info("bounds are: (%d, %d) - (%d, %d)",
             p_chunk_manager->p_most_north_western__chunk_map_node
                 ->p_chunk__here->x__signed_index_i32,
@@ -138,19 +141,20 @@ uint32_t get_chunk_index_at__xyz_from__chunk_manager(
     }
 
     Signed_Index__i32 local_x =
-        x__chunk - p_chunk_manager
+        chunk_vector__3i32.x__i32 - p_chunk_manager
         ->p_most_north_western__chunk_map_node
             ->p_chunk__here->x__signed_index_i32;
     Signed_Index__i32 local_y =
-        y__chunk - p_chunk_manager
+        chunk_vector__3i32.y__i32 - p_chunk_manager
         ->p_most_south_eastern__chunk_map_node
             ->p_chunk__here->y__signed_index_i32;
 
-    return  local_y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
-            + local_x;
+    return  local_y 
+        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
+        + local_x;
 }
 
-Chunk* get_chunk_ptr_from__chunk_manager(
+Chunk* get_p_chunk_from__chunk_manager_using__i32(
         Chunk_Manager *p_chunk_manager, 
         Signed_Index__i32 x__chunk, 
         Signed_Index__i32 y__chunk, 
@@ -437,32 +441,36 @@ void move_chunk_manager(
 bool poll_chunk_manager_for__chunk_movement(
         Chunk_Manager *p_chunk_manager,
         World_Parameters *p_world_parameters,
-        Signed_Index__i32 x__chunk, 
-        Signed_Index__i32 y__chunk,
-        Signed_Index__i32 z__chunk) {
+        Chunk_Vector__3i32 chunk_vector__3i32) {
 
     Direction__u8 direction__move_chunks = DIRECTION__NONE;
 
-    if (x__chunk != p_chunk_manager->x__center_chunk__signed_index_i32 
-        || y__chunk != p_chunk_manager->y__center_chunk__signed_index_i32) {
-        if (p_chunk_manager->x__center_chunk__signed_index_i32 < x__chunk) {
+    if (chunk_vector__3i32.x__i32 
+            != p_chunk_manager->x__center_chunk__signed_index_i32 
+            || chunk_vector__3i32.y__i32 
+            != p_chunk_manager->y__center_chunk__signed_index_i32) {
+        if (p_chunk_manager->x__center_chunk__signed_index_i32 
+                < chunk_vector__3i32.x__i32) {
             direction__move_chunks |=
                 DIRECTION__EAST;
         } else if (p_chunk_manager->x__center_chunk__signed_index_i32 
-                > x__chunk) {
+                > chunk_vector__3i32.x__i32) {
             direction__move_chunks |=
                 DIRECTION__WEST;
         }
-        if (p_chunk_manager->y__center_chunk__signed_index_i32 > y__chunk) {
+        if (p_chunk_manager->y__center_chunk__signed_index_i32 
+                > chunk_vector__3i32.y__i32) {
             direction__move_chunks |=
                 DIRECTION__NORTH;
         } else if (p_chunk_manager->y__center_chunk__signed_index_i32 
-                < y__chunk) {
+                < chunk_vector__3i32.y__i32) {
             direction__move_chunks |=
                 DIRECTION__SOUTH;
         }
-        p_chunk_manager->x__center_chunk__signed_index_i32 = x__chunk;
-        p_chunk_manager->y__center_chunk__signed_index_i32 = y__chunk;
+        p_chunk_manager->x__center_chunk__signed_index_i32 = 
+            chunk_vector__3i32.x__i32;
+        p_chunk_manager->y__center_chunk__signed_index_i32 = 
+            chunk_vector__3i32.y__i32;
     }
 
     if(direction__move_chunks != DIRECTION__NONE) {
@@ -514,7 +522,7 @@ bool poll_chunk_manager_for__tile_collision(
             global_positions[index+1] >> 6; //entity->hitbox.y__chunk;
 
         Chunk *p_chunk =
-            get_chunk_ptr_from__chunk_manager(
+            get_p_chunk_from__chunk_manager_using__i32(
                     p_chunk_manager,
                     x__chunk,
                     y__chunk,
@@ -530,7 +538,7 @@ bool poll_chunk_manager_for__tile_collision(
         }
 
         Tile *p_tile =
-            get_tile_ptr_from__chunk(
+            get_p_tile_from__chunk_using__u8(
                     p_chunk,
                     local_positions[index],
                     local_positions[index+1],
@@ -549,28 +557,24 @@ bool poll_chunk_manager_for__tile_collision(
     return true;
 }
 
-Tile *get_tile_ptr_from__chunk_manager_with__v__3i32F4(
+Tile *get_p_tile_from__chunk_manager_with__3i32F4(
         Chunk_Manager *p_chunk_manager,
         Vector__3i32F4 position) {
 
     Vector__3i32 chunk_index =
         vector_3i32F4_to__chunk_vector_3i32(position);
     Vector__3u8 local_position =
-        vector_3i32F4_to__local_chunk_vector_3u8(
+        vector_3i32F4_to__local_tile_vector_3u8(
                 position);
 
     Chunk *p_chunk =
-        get_chunk_ptr_from__chunk_manager(
+        get_p_chunk_from__chunk_manager(
                 p_chunk_manager, 
-                chunk_index.x__i32, 
-                chunk_index.y__i32, 
-                chunk_index.z__i32);
+                chunk_index);
     Tile *p_tile =
-        get_tile_ptr_from__chunk(
+        get_p_tile_from__chunk(
                 p_chunk, 
-                local_position.x__u8, 
-                local_position.y__u8,
-                local_position.z__u8);
+                local_position);
 
     return p_tile;
 }

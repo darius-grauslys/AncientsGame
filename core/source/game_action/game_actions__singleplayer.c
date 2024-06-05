@@ -112,7 +112,7 @@ void handle_game_action__entity__place__tile(
             direction_to_place_the__tile);
 
     Tile *p_tile =
-        get_tile_ptr_from__chunk_manager_with__v__3i32F4(
+        get_p_tile_from__chunk_manager_with__3i32F4(
                 &p_game->world.chunk_manager, 
                 position);
 
