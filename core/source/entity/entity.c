@@ -51,6 +51,8 @@ void initialize_entity(
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
+        Quantity__u32 width,
+        Quantity__u32 height,
         m_Entity_Dispose_Handler m_entity_dispose_handler,
         m_Entity_Body_Handler m_entity_body_handler,
         m_Entity_AI_Handler m_entity_ai_handler,
@@ -60,8 +62,10 @@ void initialize_entity(
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
-    set_hitbox__position_with__3i32F4(
+    initialize_hitbox(
             &p_entity->hitbox, 
+            width, 
+            height, 
             position__3i32F4);
 
     p_entity->m_entity_dispose_handler = 

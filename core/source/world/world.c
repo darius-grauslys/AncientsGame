@@ -15,14 +15,14 @@
 
 void initialize_world(World *p_world) {
     initialize_weight_map();
-    initialize_world_parameters(
-            &p_world->world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
     // initialize_world_parameters(
     //         &p_world->world_parameters, 
-    //         f_chunk_generator__flat_world, 
+    //         f_chunk_generator__test_world, 
     //         100);
+    initialize_world_parameters(
+            &p_world->world_parameters, 
+            f_chunk_generator__flat_world, 
+            100);
     initialize_entity_manager(&p_world->entity_manager);
     initialize_collision_manager(&p_world->collision_manager);
     set_collision_manager__center_chunk(
@@ -80,6 +80,8 @@ void manage_world__entities(Game *p_game) {
             p_entity->m_entity_ai_handler(p_entity, p_game);
         }
 
+        //TODO: only do this for entities which
+        //are polling for collisions
         if (!poll_collision_manager(
                 &p_game->world.collision_manager, 
                 p_entity)) {
@@ -88,6 +90,8 @@ void manage_world__entities(Game *p_game) {
             continue;
         }
 
+        //TODO: only do this for entities which
+        //are polling for collisions
         if (!poll_chunk_manager_for__tile_collision(
                     &p_world->chunk_manager,
                     p_entity)) {
@@ -102,6 +106,8 @@ void manage_world__entities(Game *p_game) {
 
         commit_hitbox_velocity(&p_entity->hitbox);
 
+        //TODO: only do this for entities which
+        //are polling for collisions
         Chunk_Vector__3i32 new_chunk_vector =
             vector_3i32F4_to__chunk_vector_3i32(
                     p_entity->hitbox.position__3i32F4);

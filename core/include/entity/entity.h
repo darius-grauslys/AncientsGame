@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "collisions/hitbox_aabb.h"
+#include "defines_weak.h"
 #include <stdbool.h>
 #include <defines.h>
 
@@ -148,6 +149,8 @@ void initialize_entity(
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
+        Quantity__u32 width,
+        Quantity__u32 height,
         m_Entity_Dispose_Handler m_entity_dispose_handler,
         m_Entity_Body_Handler m_entity_body_handler,
         m_Entity_AI_Handler m_entity_ai_handler,

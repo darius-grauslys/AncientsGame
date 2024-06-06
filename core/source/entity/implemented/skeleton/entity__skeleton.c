@@ -14,6 +14,7 @@ void initialize_entity_as__skeleton(
             p_entity,
             Entity_Kind__Skeleton,
             position__3i32F4,
+            8, 8,
             m_entity_dispose_handler__default,
             m_entity_body_handler__living,
             0,

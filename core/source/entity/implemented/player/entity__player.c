@@ -15,6 +15,7 @@ void initialize_entity_as__player(
             p_entity,
             Entity_Kind__Player,
             position__3i32F4,
+            8, 8,
             m_entity_dispose_handler__default,
             m_entity_body_handler__living,
             m_entity_ai_handler__player,
