@@ -8,9 +8,9 @@ static void inline clear_input(Input *p_input) {
     p_input->input_flags__held = INPUT_NONE;
     p_input->input_flags__pressed = INPUT_NONE;
     p_input->input_flags__released = INPUT_NONE;
-    p_input->cursor__old__i32f4 =
-        p_input->cursor__i32f4;
-    initialize_3i32F4_vector(&p_input->cursor__i32f4);
+    p_input->cursor__old__3i32 =
+        p_input->cursor__3i32;
+    initialize_3i32_vector(&p_input->cursor__3i32);
 }
 
 static bool inline is_input__forward_released(Input *p_input) {
@@ -126,17 +126,17 @@ static bool inline is_input__consume_held(Input *p_input) {
 }
 static bool inline is_input__click_held(Input *p_input) {
     return p_input->input_flags__held & INPUT_CLICK
-        && is_3i32F4_vectors__equal(
-                p_input->cursor__i32f4,
-                p_input->cursor__old__i32f4)
+        && is_vectors_3i32__equal(
+                p_input->cursor__3i32,
+                p_input->cursor__old__3i32)
                 ;
 }
 
 static bool inline is_input__click_dragged(Input *p_input) {
     return p_input->input_flags__held & INPUT_CLICK
-        && !is_3i32F4_vectors__equal(
-                p_input->cursor__i32f4,
-                p_input->cursor__old__i32f4)
+        && !is_vectors_3i32__equal(
+                p_input->cursor__3i32,
+                p_input->cursor__old__3i32)
                 ;
 }
 

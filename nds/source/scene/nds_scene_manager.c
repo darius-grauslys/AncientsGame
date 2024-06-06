@@ -1,5 +1,6 @@
 #include "nds/ndstypes.h"
 #include "nds/arm9/exceptions.h"
+#include "platform_defines.h"
 #include "scene/scene__game.h"
 #include "scene/scene__main_menu.h"
 #include "scene/scene__multiplayer_menu.h"

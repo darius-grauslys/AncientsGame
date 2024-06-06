@@ -2,75 +2,52 @@
 #define HITBOX_AABB_H
 
 #include <defines.h>
+#include <vectors.h>
+#include <world/chunk_vectors.h>
+
+static Signed_Index__i32 inline get_x_i32_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_x_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static Signed_Index__i32 inline get_y_i32_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_y_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static Signed_Index__i32 inline get_z_i32_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_z_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static Signed_Index__i32 inline get_chunk_x_i32_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_chunk_x_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static Signed_Index__i32 inline get_chunk_y_i32_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_chunk_y_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static Signed_Index__i32 inline get_chunk_z_i32_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_chunk_z_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
 
 Direction__u8 is_hitbox__colliding(
         Hitbox_AABB *hitbox__checking,
         Hitbox_AABB *hitbox__other);
 
-void get_points_aabb_from__hitbox(
+void get_aa_bb_as__vectors_3i32F4_from__hitbox(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 *aa,
         Vector__3i32F4 *bb);
 
-static Signed_Index__i32 inline get_global_x_from__hitbox(
-        Hitbox_AABB *hitbox) {
-    return
-    ((hitbox->chunk_index__3i32.x__i32) 
-     << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->position__3i32F4.x__i32F4 + hitbox->velocity__3i32F4.x__i32F4) 
-                >> FRACTIONAL_PERCISION_4__BIT_SIZE)
-        ;
-}
-
-static Signed_Index__i32 inline get_global_y_from__hitbox(
-        Hitbox_AABB *hitbox) {
-    return 
-    (((hitbox->chunk_index__3i32.y__i32) 
-      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->position__3i32F4.y__i32F4 + hitbox->velocity__3i32F4.y__i32F4) 
-            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
-    ;
-}
-
-static Signed_Index__i32 inline get_global_z_from__hitbox(
-        Hitbox_AABB *hitbox) {
-    return 
-    (((hitbox->chunk_index__3i32.z__i32) 
-      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->position__3i32F4.z__i32F4 + hitbox->velocity__3i32F4.z__i32F4) 
-            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
-    ;
-}
-
-static Signed_Index__i32 inline get_global_x_from__hitbox__without_velocity(
-        Hitbox_AABB *hitbox) {
-    return
-    ((hitbox->chunk_index__3i32.x__i32) 
-     << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->position__3i32F4.x__i32F4) 
-                >> FRACTIONAL_PERCISION_4__BIT_SIZE)
-        ;
-}
-
-static Signed_Index__i32 inline get_global_y_from__hitbox__without_velocity(
-        Hitbox_AABB *hitbox) {
-    return 
-    (((hitbox->chunk_index__3i32.y__i32) 
-      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->position__3i32F4.y__i32F4) 
-            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
-    ;
-}
-
-static Signed_Index__i32 inline get_global_z_from__hitbox__without_velocity(
-        Hitbox_AABB *hitbox) {
-    return 
-    (((hitbox->chunk_index__3i32.z__i32) 
-      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
-        + ((hitbox->position__3i32F4.z__i32F4) 
-            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
-    ;
-}
+void get_aa_bb_as__vectors_3i32_from__hitbox(
+        Hitbox_AABB *hitbox,
+        Vector__3i32 *aa,
+        Vector__3i32 *bb);
 
 void commit_hitbox_velocity(
         Hitbox_AABB *hitbox);
@@ -187,11 +164,11 @@ static void inline set_z_velocity_to__hitbox(
     hitbox->velocity__3i32F4.z__i32F4 = z__velocity;
 }
 
-static bool inline is_vector_inside__hitbox(
+static bool inline is_vector_3i32F4_inside__hitbox(
         Vector__3i32F4 vector,
         Hitbox_AABB *p_hitbox) {
     Vector__3i32F4 aa, bb;
-    get_points_aabb_from__hitbox(
+    get_aa_bb_as__vectors_3i32F4_from__hitbox(
             p_hitbox, 
             &aa, 
             &bb);
@@ -208,6 +185,30 @@ static bool inline is_vector_inside__hitbox(
             >= aa.z__i32F4
             && vector.z__i32F4
             <= aa.z__i32F4
+            );
+}
+
+static bool inline is_vector_3i32_inside__hitbox(
+        Vector__3i32 vector,
+        Hitbox_AABB *p_hitbox) {
+    Vector__3i32 aa, bb;
+    get_aa_bb_as__vectors_3i32_from__hitbox(
+            p_hitbox, 
+            &aa, 
+            &bb);
+    return (
+            vector.x__i32
+            >= aa.x__i32
+            && vector.x__i32
+            <= bb.x__i32
+            && vector.y__i32
+            >= aa.y__i32
+            && vector.y__i32
+            <= bb.y__i32
+            && vector.z__i32
+            >= aa.z__i32
+            && vector.z__i32
+            <= aa.z__i32
             );
 }
 

@@ -1,8 +1,39 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "collisions/hitbox_aabb.h"
 #include <stdbool.h>
 #include <defines.h>
+
+static Signed_Index__i32 inline get_x_i32_from__entity(
+        Entity *p_entity) {
+    return get_x_i32_from__hitbox(&p_entity->hitbox);
+}
+
+static Signed_Index__i32 inline get_y_i32_from__entity(
+        Entity *p_entity) {
+    return get_y_i32_from__hitbox(&p_entity->hitbox);
+}
+
+static Signed_Index__i32 inline get_z_i32_from__entity(
+        Entity *p_entity) {
+    return get_z_i32_from__hitbox(&p_entity->hitbox);
+}
+
+static Signed_Index__i32 inline get_chunk_x_i32_from__entity(
+        Entity *p_entity) {
+    return get_chunk_x_i32_from__hitbox(&p_entity->hitbox);
+}
+
+static Signed_Index__i32 inline get_chunk_y_i32_from__entity(
+        Entity *p_entity) {
+    return get_chunk_y_i32_from__hitbox(&p_entity->hitbox);
+}
+
+static Signed_Index__i32 inline get_chunk_z_i32_from__entity(
+        Entity *p_entity) {
+    return get_chunk_z_i32_from__hitbox(&p_entity->hitbox);
+}
 
 bool can_entity_kind_have__armor(enum Entity_Kind kind_of_entity);
 bool can_entity__move(enum Entity_Kind kind_of_entity);
@@ -133,18 +164,5 @@ bool is_entity__moving(Entity *entity);
 void set_entity_as__moving(Entity *entity, 
         bool state_of_movement,
         enum Sprite_Animation_Kind fallback_animation);
-
-/// 
-/// DO NOT CALL THIS!
-/// TODO: make internal headers.
-///
-/// This will commit hitbox velocity
-/// and return true if a chunk transition
-/// has occured.
-///
-bool commit_entity_velocity(
-        Entity *entity,
-        int32_t *old_x__chunk,
-        int32_t *old_y__chunk);
 
 #endif

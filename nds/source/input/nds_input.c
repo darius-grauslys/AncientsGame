@@ -17,8 +17,8 @@ void PLATFORM_poll_input(Input *p_input) {
     p_input->input_flags__pressed = keys_pressed;
     p_input->input_flags__released = keys_released;
 
-    p_input->cursor__i32f4
-        .x__i32F4 = stylist.px;
-    p_input->cursor__i32f4
-        .y__i32F4 = stylist.py;
+    p_input->cursor__3i32
+        .x__i32 = stylist.px;
+    p_input->cursor__3i32
+        .y__i32 = stylist.py;
 }

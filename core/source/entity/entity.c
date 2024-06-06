@@ -98,20 +98,3 @@ void set_entity__armor(Entity *p_entity,
     p_entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has =
         kind_of_armor_modification;
 }
-
-bool commit_entity_velocity(
-        Entity *p_entity,
-        int32_t *old_x__chunk,
-        int32_t *old_y__chunk) {
-    *old_x__chunk = p_entity->hitbox.chunk_index__3i32.x__i32;
-    *old_y__chunk = p_entity->hitbox.chunk_index__3i32.y__i32;
-
-    commit_hitbox_velocity(&p_entity->hitbox);
-
-    if (*old_x__chunk != p_entity->hitbox.chunk_index__3i32.x__i32 
-            || *old_y__chunk
-            != p_entity->hitbox.chunk_index__3i32.y__i32) {
-        return true;
-    }
-    return false;
-}

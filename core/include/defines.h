@@ -153,11 +153,8 @@ typedef struct Hitbox_AABB_t {
     // Entities can't co-exist in the same tile
     // but they can stand on top of one in an
     // above tile.
-    Chunk_Vector__3i32 chunk_index__3i32;
-    // TODO: replace with Vector_3i32
     Vector__3i32F4 position__3i32F4;
-    // TODO: replace with Vector_3i32
-   Vector__3i32F4 velocity__3i32F4;
+    Vector__3i32F4 velocity__3i32F4;
 } Hitbox_AABB;
 
 /// When checking the distance between two collisions along each axis
@@ -1069,8 +1066,8 @@ typedef struct Input_t {
     Input_Flags__u32 input_flags__pressed;
     Input_Flags__u32 input_flags__held;
     Input_Flags__u32 input_flags__released;
-    Vector__3i32F4 cursor__i32f4;
-    Vector__3i32F4 cursor__old__i32f4;
+    Vector__3i32 cursor__3i32;
+    Vector__3i32 cursor__old__3i32;
 } Input;
 
 ///

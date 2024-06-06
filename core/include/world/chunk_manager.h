@@ -37,7 +37,7 @@ void move_chunk_manager(
 bool poll_chunk_manager_for__chunk_movement(
         Chunk_Manager *p_chunk_manager,
         World_Parameters *p_world_parameters,
-        Chunk_Vector__3i32 chunk_vector__3i32);
+        Vector__3i32F4 position__3i32F4);
 
 bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *p_chunk_manager,

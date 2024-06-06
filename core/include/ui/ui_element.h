@@ -1,8 +1,23 @@
 #ifndef UI_ELEMENT_H
 #define UI_ELEMENT_H
 
+#include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"
+#include "vectors.h"
 #include <defines.h>
+
+static Signed_Index__i32 inline get_x_i32_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return get_x_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
+}
+static Signed_Index__i32 inline get_y_i32_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return get_y_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
+}
+static Signed_Index__i32 inline get_z_i32_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return get_z_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
+}
 
 void initialize_ui_element(
         UI_Element *p_ui_element,

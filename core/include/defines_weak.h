@@ -18,6 +18,11 @@ typedef uint32_t    Quantity__u32;
 
 typedef int32_t     Fractional_with__4bit__i32;
 
+typedef struct Vector__3i32F4_t Vector__3i32F4;
+typedef struct Vector__3i32_t Vector__3i32;
+typedef struct Vector__3i32_t Chunk_Vector__3i32;
+typedef struct Vector__3i32_t Tile_Vector__3i32;
+
 ///
 /// SECTION_collisions
 ///

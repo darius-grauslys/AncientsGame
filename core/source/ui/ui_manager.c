@@ -58,8 +58,8 @@ UI_Element *get_highest_priority_ui_element_thats__under_the_cursor(
         }
 
         //TODO: look into why using cursor old.
-        if (is_vector_inside__hitbox(
-                    p_game->input.cursor__old__i32f4, 
+        if (is_vector_3i32_inside__hitbox(
+                    p_game->input.cursor__old__3i32, 
                     &p_ui_element->ui_bounding_box__aabb)) {
             return p_ui_element;
         }
@@ -181,8 +181,9 @@ void poll_ui_manager__update_for__clicked(
         get_highest_priority_ui_element_thats__under_the_cursor(
                 p_ui_manager, 
                 p_game);
-    if (!p_ui_element__focused)
+    if (!p_ui_element__focused) {
         return;
+    }
     if (!does_ui_element_have__clicked_handler(p_ui_element__focused))
         return;
     p_ui_element__focused->m_ui_clicked_handler(

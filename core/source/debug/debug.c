@@ -41,6 +41,7 @@ void NDS_initialize_debug__sub(void) {
 #endif
 }
 
+#define VERBOSE
 void debug_verbose(const char *msg_fmt, ...) {
 #ifdef VERBOSE
     va_list args_list;

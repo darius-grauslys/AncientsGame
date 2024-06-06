@@ -39,8 +39,7 @@ void PLATFORM_abort(void);
 ///
 void PLATFORM_render_entity(
         Entity *entity,
-        int32_t x__origin,
-        int32_t y__origin,
+        Vector__3i32F4 camera_position__3i32F4,
         Game *game);
 
 ///
@@ -149,6 +148,10 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 
 #include <platform_defines.h>
 
+#ifndef PLATFORM_DEFINES_H
+#error Cannot build AncientsGame without a backend implementation.
+#endif
+
 #ifndef PLATFORM__CHUNKS
 #define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 4
 #define GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS 3
@@ -200,10 +203,6 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 
 #include <stdint.h>
 #include <stdbool.h>
-
-#ifndef PLATFORM_DEFINES_H
-#error Cannot build AncientsGame without a backend implementation.
-#endif
 
 #ifndef PLATFORM__INPUT
 #define INPUT_NONE 0

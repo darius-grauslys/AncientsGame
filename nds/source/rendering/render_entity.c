@@ -2,11 +2,11 @@
 #include <entity/entity.h>
 #include <nds.h>
 #include <collisions/hitbox_aabb.h>
+#include <vectors.h>
 
 void PLATFORM_render_entity(
         Entity *entity,
-        int32_t x__origin,
-        int32_t y__origin,
+        Vector__3i32F4 camera_position__3i32F4,
         Game *game) {
     if (is_entity_not__updating_graphics(entity)) {
         return;
@@ -21,9 +21,13 @@ void PLATFORM_render_entity(
             sprite->sprite_texture.oam_index, 
             127 - 8, 96 - 8);
     } else {
+        int32_t x__origin, y__origin;
         int32_t x__global, y__global;
-        x__global = get_global_x_from__hitbox(&entity->hitbox);
-        y__global = get_global_y_from__hitbox(&entity->hitbox);
+        x__origin = get_x_i32_from__vector_3i32F4(camera_position__3i32F4);
+        y__origin = get_y_i32_from__vector_3i32F4(camera_position__3i32F4);
+
+        x__global = get_x_i32_from__entity(entity);
+        y__global = get_y_i32_from__entity(entity);
 
         if (abs(x__global - x__origin) > 256 / 2 + 16
                 || abs(y__global - y__origin) > 196 / 2 + 16) {

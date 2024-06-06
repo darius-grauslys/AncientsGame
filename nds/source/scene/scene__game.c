@@ -98,8 +98,8 @@ void m_load_scene_as__game_handler(
     NDS_initialize_gfx_for__world(gfx_context);
     initialize_world(&p_game->world);
 
-    NDS_initialize_debug__sub();
-    return;
+    // NDS_initialize_debug__sub();
+    // return;
     NDS_initialize_gfx_for__ui(&p_game->gfx_context);
     NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
@@ -121,7 +121,7 @@ void m_load_scene_as__game_handler(
                 52, 32);
         set_hitbox__position_with__3i32F4(
                 &p_ui_button->ui_bounding_box__aabb, 
-                get_vector__3i32F4_using__i32(72 + 96 * ui_index, 64, 0));
+                get_vector__3i32F4_using__i32(56 + 72 * ui_index, 40, 0));
         p_ui_button->p_ui_data =
             &game_scene_data.button_states[ui_index];
         game_scene_data.button_states[ui_index] =
@@ -129,12 +129,6 @@ void m_load_scene_as__game_handler(
         set_ui_element__clicked_handler(
                 p_ui_button, 
                 m_ui_button__clicked_handler__game_button);
-
-        Vector__3i32F4 aa, bb;
-        get_points_aabb_from__hitbox(
-                &p_ui_button->ui_bounding_box__aabb, 
-                &aa,
-                &bb);
     }
 }
 
@@ -1066,9 +1060,9 @@ void m_enter_scene_as__game_handler(
         //             p_player, 
         //             &damage);
         // }
-        // update_ui_for__player_resources(
-        //         p_this_scene, 
-        //         p_game);
+        update_ui_for__player_resources(
+                p_this_scene, 
+                p_game);
         manage_world(p_game);
     }
 }

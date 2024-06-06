@@ -11,17 +11,18 @@
 
 #include <entity/entity.h>
 #include <debug/debug.h>
+#include <vectors.h>
 
 void initialize_world(World *p_world) {
     initialize_weight_map();
-    // initialize_world_parameters(
-    //         &world->world_parameters, 
-    //         f_chunk_generator__test_world, 
-    //         100);
     initialize_world_parameters(
             &p_world->world_parameters, 
-            f_chunk_generator__flat_world, 
+            f_chunk_generator__test_world, 
             100);
+    // initialize_world_parameters(
+    //         &p_world->world_parameters, 
+    //         f_chunk_generator__flat_world, 
+    //         100);
     initialize_entity_manager(&p_world->entity_manager);
     initialize_collision_manager(&p_world->collision_manager);
     set_collision_manager__center_chunk(
@@ -58,16 +59,6 @@ void manage_world__entities(Game *p_game) {
         return;
     }
 
-    Hitbox_AABB *p_player__hitbox =
-        &p_entity_manager
-        ->p_local_player
-        ->hitbox;
-
-    Signed_Index__i32 x__origin = 
-        get_global_x_from__hitbox(p_player__hitbox);
-    Signed_Index__i32 y__origin = 
-        get_global_y_from__hitbox(p_player__hitbox);
-
     for (Quantity__u16 i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
         Entity *p_entity =
@@ -92,6 +83,7 @@ void manage_world__entities(Game *p_game) {
         if (!poll_collision_manager(
                 &p_game->world.collision_manager, 
                 p_entity)) {
+            debug_verbose("!poll_collision_manager, release entity");
             release_entity_from__world(p_game, p_entity);
             continue;
         }
@@ -99,20 +91,26 @@ void manage_world__entities(Game *p_game) {
         if (!poll_chunk_manager_for__tile_collision(
                     &p_world->chunk_manager,
                     p_entity)) {
+            debug_verbose("!poll_chunk_manager_for__tile_collision, release entity");
             release_entity_from__world(p_game, p_entity);
             continue;
         }
 
-        int32_t old_x__chunk, old_y__chunk;
-        if (commit_entity_velocity(
-                    p_entity, 
-                    &old_x__chunk,
-                    &old_y__chunk)) {
+        Chunk_Vector__3i32 old_chunk_vector =
+            vector_3i32F4_to__chunk_vector_3i32(
+                    p_entity->hitbox.position__3i32F4);
+
+        commit_hitbox_velocity(&p_entity->hitbox);
+
+        Chunk_Vector__3i32 new_chunk_vector =
+            vector_3i32F4_to__chunk_vector_3i32(
+                    p_entity->hitbox.position__3i32F4);
+        if (!is_chunk_vectors_3i32__equal(
+                    old_chunk_vector, new_chunk_vector)) {
             remove_entity_from__collision_manager__at(
                     &p_game->world.collision_manager, 
                     p_entity, 
-                    old_x__chunk, 
-                    old_y__chunk);
+                    old_chunk_vector);
             if (!add_entity_to__collision_manager(
                     &p_game->world.collision_manager, 
                     p_entity)) {
@@ -130,8 +128,8 @@ void manage_world__entities(Game *p_game) {
         if (!is_entity__hidden(p_entity)) {
             PLATFORM_render_entity(
                     p_entity,
-                    x__origin,
-                    y__origin,
+                    p_entity_manager
+                    ->p_local_player->hitbox.position__3i32F4,
                     p_game);
         }
     }
@@ -188,7 +186,7 @@ bool poll_world_for__scrolling(
             &p_world->chunk_manager,
             &p_world->world_parameters,
             p_world->entity_manager.p_local_player
-                ->hitbox.chunk_index__3i32);
+                ->hitbox.position__3i32F4);
 
     return is_chunks_moved;
 }

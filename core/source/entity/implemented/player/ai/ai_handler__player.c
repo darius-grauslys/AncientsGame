@@ -1,5 +1,9 @@
 #include "defines.h"
+#include "defines_weak.h"
 #include "game_action/game_action.h"
+#include "vectors.h"
+#include "world/chunk_vectors.h"
+#include "world/tile_vectors.h"
 #include "world/world.h"
 #include <entity/implemented/player/ai/ai_handler__player.h>
 #include <entity/handlers/ai/ai_handler__dummy.h>
@@ -52,9 +56,10 @@ void m_entity_ai_handler__player(
         direction__new |= DIRECTION__WEST;
     }
 
-    int32_t 
-        x = get_global_x_from__hitbox(&p_this_player->hitbox), 
-          y = get_global_y_from__hitbox(&p_this_player->hitbox);
+    int32_t x = 
+        get_x_i32_from__entity(p_this_player);
+    int32_t y = 
+        get_y_i32_from__entity(p_this_player);
     if (direction__old & DIRECTION__NORTH) {
         y += 32;
     }
@@ -128,11 +133,13 @@ void m_entity_ai_handler__player(
         }
     } 
     if (is_input__use_released(p_input)) {
+        Vector__3i32F4 tile_pos = 
+            get_vector__3i32F4_using__i32(x, y, 0);
         Chunk *p_chunk =
             get_p_chunk_from__chunk_manager_using__i32(
                     &p_game->world.chunk_manager,
-                    x >> 6,
-                    y >> 6,
+                    get_chunk_x_i32_from__vector_3i32F4(tile_pos),
+                    get_chunk_y_i32_from__vector_3i32F4(tile_pos),
                     0);
 
         if (p_chunk) {
@@ -140,8 +147,8 @@ void m_entity_ai_handler__player(
                 //TODO: consolidate these bit manips
                 get_p_tile_from__chunk_using__u8(
                         p_chunk,
-                        (x >> 3) & ((1 << 3) - 1),
-                        (y >> 3) & ((1 << 3) - 1),
+                        get_tile_x_u8_from__vector_3i32F4(tile_pos),
+                        get_tile_y_u8_from__vector_3i32F4(tile_pos),
                         0);
             switch(mode_of_use) {
                 default:

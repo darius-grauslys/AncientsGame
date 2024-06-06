@@ -4,7 +4,12 @@
 /// This file includes all static inline helpers
 /// to deal with vectors.
 
+#include "defines_weak.h"
 #include <defines.h>
+
+static Signed_Index__i32 inline i32F4_to__i32(i32F4 x) {
+    return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
+}
 
 static void inline initialize_3i32F4_vector(
         Vector__3i32F4 *vector) {
@@ -13,7 +18,14 @@ static void inline initialize_3i32F4_vector(
         vector->z__i32F4 = 0;
 }
 
-static bool inline is_3i32F4_vectors__equal(
+static void inline initialize_3i32_vector(
+        Vector__3i32 *vector) {
+    vector->x__i32 =
+        vector->y__i32 =
+        vector->z__i32 = 0;
+}
+
+static bool inline is_vectors_3i32F4__equal(
         Vector__3i32F4 vector_1,
         Vector__3i32F4 vector_2) {
     return
@@ -23,7 +35,7 @@ static bool inline is_3i32F4_vectors__equal(
         ;
 }
 
-static bool inline is_3i32F4_vectors__equal_without__fractional(
+static bool inline is_vectors_3i32F4__equal_without__fractional(
         Vector__3i32F4 vector_1,
         Vector__3i32F4 vector_2) {
     return
@@ -34,6 +46,22 @@ static bool inline is_3i32F4_vectors__equal_without__fractional(
         && (vector_1.z__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE) 
         == (vector_2.z__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         ;
+}
+
+static bool inline is_vectors_3i32__equal(
+        Vector__3i32 vector_1,
+        Vector__3i32 vector_2) {
+    return
+        vector_1.x__i32 == vector_2.x__i32
+        && vector_1.y__i32 == vector_2.y__i32
+        && vector_1.z__i32 == vector_2.z__i32
+        ;
+}
+
+static bool inline is_chunk_vectors_3i32__equal(
+        Chunk_Vector__3i32 vector_1,
+        Chunk_Vector__3i32 vector_2) {
+    return is_vectors_3i32__equal(vector_1, vector_2);
 }
 
 void offset_vector_by__direction(
@@ -89,6 +117,21 @@ static Vector__3i32F4 inline get_vector__3i32F4_using__i32(
     };
 }
 
+static Signed_Index__i32 inline get_x_i32_from__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return i32F4_to__i32(vector__3i32F4.x__i32F4);
+}
+
+static Signed_Index__i32 inline get_y_i32_from__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return i32F4_to__i32(vector__3i32F4.y__i32F4);
+}
+
+static Signed_Index__i32 inline get_z_i32_from__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return i32F4_to__i32(vector__3i32F4.z__i32F4);
+}
+
 static Vector__3i32 inline get_vector__3i32(
         Signed_Index__i32 x,
         Signed_Index__i32 y,
@@ -97,39 +140,6 @@ static Vector__3i32 inline get_vector__3i32(
         x, 
         y, 
         z
-    };
-}
-
-static Tile_Vector__3i32 inline get_tile_vector__3i32(
-        Signed_Index__i32 x,
-        Signed_Index__i32 y,
-        Signed_Index__i32 z) {
-    return (Vector__3i32) {
-        x >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
-        y >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
-        z >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE
-    };
-}
-
-static Chunk_Vector__3i32 inline get_chunk_vector__3i32(
-        Signed_Index__i32 x,
-        Signed_Index__i32 y,
-        Signed_Index__i32 z) {
-    return (Vector__3i32) {
-        x, 
-        y, 
-        z
-    };
-}
-
-static Chunk_Vector__3i32 inline get_chunk_vector__3i32_with__i32F4(
-        i32F4 x,
-        i32F4 y,
-        i32F4 z) {
-    return (Vector__3i32) {
-        x >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE, 
-        y >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE, 
-        z >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE
     };
 }
 
@@ -203,63 +213,6 @@ static void inline subtract_p_vectors__3i32(
     p_vector_one->x__i32 -= p_vector_two->x__i32;
     p_vector_one->y__i32 -= p_vector_two->y__i32;
     p_vector_one->z__i32 -= p_vector_two->z__i32;
-}
-
-static Tile_Vector__3i32 inline vector_3i32F4_to__tile_vector_3i32(
-        Vector__3i32F4 vector) {
-    return (Tile_Vector__3i32) {
-        vector.x__i32F4 
-            >> ENTITY_TILE_FRACTIONAL__BIT_SIZE,
-        vector.y__i32F4 
-            >> ENTITY_TILE_FRACTIONAL__BIT_SIZE,
-        vector.z__i32F4 
-            >> ENTITY_TILE_FRACTIONAL__BIT_SIZE,
-    };
-}
-
-static Chunk_Vector__3i32 inline vector_3i32F4_to__chunk_vector_3i32(
-        Vector__3i32F4 vector) {
-    return (Tile_Vector__3i32) {
-        vector.x__i32F4 
-            >> ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE,
-        vector.y__i32F4 
-            >> ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE,
-        vector.z__i32F4
-            >> ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE
-    };
-}
-
-static Chunk_Vector__3i32 inline vector_3i32_to__chunk_vector_3i32(
-        Vector__3i32 vector) {
-    return (Tile_Vector__3i32) {
-        vector.x__i32 
-            >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE,
-        vector.y__i32 
-            >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE,
-        vector.z__i32
-            >> ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE
-    };
-}
-
-///
-/// Returns a Vector__3u8 with x,y,z signlessly indexing tiles
-///
-static inline Local_Tile_Vector__3u8 vector_3i32F4_to__local_tile_vector_3u8(
-        Vector__3i32F4 vector) {
-    Vector__3i32 vector__3i32 =
-        vector_3i32F4_to__vector_3i32(vector);
-    vector__3i32.x__i32 = ((vector__3i32.x__i32 
-            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
-        % CHUNK_WIDTH__IN_TILES;
-    vector__3i32.y__i32 = ((vector__3i32.y__i32 
-            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
-        % CHUNK_WIDTH__IN_TILES;
-    vector__3i32.z__i32 = ((vector__3i32.z__i32 
-            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
-        % CHUNK_WIDTH__IN_TILES;
-    Vector__3u8 vector__3u8 =
-        vector_3i32F4_to__vector_3u8(vector);
-    return vector__3u8;
 }
 
 #endif

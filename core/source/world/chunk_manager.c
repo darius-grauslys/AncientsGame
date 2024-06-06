@@ -7,6 +7,8 @@
 #include <vectors.h>
 
 #include <world/chunk_manager.h>
+#include <world/chunk_vectors.h>
+#include <world/tile_vectors.h>
 
 void initialize_chunk_manager(
         Chunk_Manager *p_chunk_manager,
@@ -163,24 +165,32 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
     // Invert, TODO: look into why
     y__chunk *= -1;
 
-    Signed_Index__i32 north_west__x = p_chunk_manager
-                ->p_most_north_western__chunk_map_node
-                    ->p_chunk__here->x__signed_index_i32;
-    Signed_Index__i32 north_west__y = p_chunk_manager
-                ->p_most_north_western__chunk_map_node
-                    ->p_chunk__here->y__signed_index_i32;
-    Signed_Index__i32 south_east__x = p_chunk_manager
-                ->p_most_south_eastern__chunk_map_node
-                    ->p_chunk__here->x__signed_index_i32;
-    Signed_Index__i32 south_east__y = p_chunk_manager
-                ->p_most_south_eastern__chunk_map_node
-                    ->p_chunk__here->y__signed_index_i32;
+    Signed_Index__i32 north_west__x = 
+        p_chunk_manager
+        ->p_most_north_western__chunk_map_node
+        ->p_chunk__here->x__signed_index_i32
+        ;
+    Signed_Index__i32 north_west__y = 
+        p_chunk_manager
+        ->p_most_north_western__chunk_map_node
+        ->p_chunk__here->y__signed_index_i32
+        ;
+    Signed_Index__i32 south_east__x = 
+        p_chunk_manager
+        ->p_most_south_eastern__chunk_map_node
+        ->p_chunk__here->x__signed_index_i32
+        ;
+    Signed_Index__i32 south_east__y = 
+        p_chunk_manager
+        ->p_most_south_eastern__chunk_map_node
+        ->p_chunk__here->y__signed_index_i32
+        ;
 
     if (x__chunk < north_west__x
             || y__chunk > north_west__y
             || x__chunk > south_east__x
             || y__chunk < south_east__y) {
-        debug_error("chunk index out of bounds: (%d, %d, %d)",
+        debug_error("get_p_chunk_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
         debug_info("bounds are: (%d, %d) - (%d, %d)",
             p_chunk_manager->p_most_north_western__chunk_map_node
@@ -441,7 +451,10 @@ void move_chunk_manager(
 bool poll_chunk_manager_for__chunk_movement(
         Chunk_Manager *p_chunk_manager,
         World_Parameters *p_world_parameters,
-        Chunk_Vector__3i32 chunk_vector__3i32) {
+        Vector__3i32F4 position__3i32F4) {
+
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(position__3i32F4);
 
     Direction__u8 direction__move_chunks = DIRECTION__NONE;
 
@@ -494,32 +507,36 @@ bool poll_chunk_manager_for__tile_collision(
     }
 
     Vector__3i32F4 aa, bb;
-    get_points_aabb_from__hitbox(
+    get_aa_bb_as__vectors_3i32F4_from__hitbox(
             &p_entity->hitbox, &aa, &bb);
 
     //TODO: magic num
-    i32F4 global_positions[8] = {
-        aa.x__i32F4, aa.y__i32F4,
-        bb.x__i32F4, aa.y__i32F4,
-        aa.x__i32F4, bb.y__i32F4,
-        bb.x__i32F4, bb.y__i32F4
+    i32F4 chunk_xy_vectors[8] = {
+        get_chunk_x_i32_from__vector_3i32F4(aa),
+        get_chunk_y_i32_from__vector_3i32F4(aa),
+        get_chunk_x_i32_from__vector_3i32F4(bb),
+        get_chunk_y_i32_from__vector_3i32F4(aa),
+        get_chunk_x_i32_from__vector_3i32F4(aa),
+        get_chunk_y_i32_from__vector_3i32F4(bb),
+        get_chunk_x_i32_from__vector_3i32F4(bb),
+        get_chunk_y_i32_from__vector_3i32F4(bb),
     };
     Signed_Index__i32 local_positions[8] = {
-        (aa.x__i32F4 >> 3) & ((1 << 3) - 1), 
-        (aa.y__i32F4 >> 3) & ((1 << 3) - 1),
-        (bb.x__i32F4 >> 3) & ((1 << 3) - 1), 
-        (aa.y__i32F4 >> 3) & ((1 << 3) - 1),
-        (aa.x__i32F4 >> 3) & ((1 << 3) - 1), 
-        (bb.y__i32F4 >> 3) & ((1 << 3) - 1),
-        (bb.x__i32F4 >> 3) & ((1 << 3) - 1), 
-        (bb.y__i32F4 >> 3) & ((1 << 3) - 1)
+        get_tile_x_u8_from__vector_3i32F4(aa),
+        get_tile_y_u8_from__vector_3i32F4(aa),
+        get_tile_x_u8_from__vector_3i32F4(bb),
+        get_tile_y_u8_from__vector_3i32F4(aa),
+        get_tile_x_u8_from__vector_3i32F4(aa),
+        get_tile_y_u8_from__vector_3i32F4(bb),
+        get_tile_x_u8_from__vector_3i32F4(bb),
+        get_tile_y_u8_from__vector_3i32F4(bb),
     };
 
     for (Index_u32 index=0;index<8;index+=2) {
         Signed_Index__i32 x__chunk =
-            global_positions[index] >> 6; //entity->hitbox.x__chunk;
+            chunk_xy_vectors[index]; //entity->hitbox.x__chunk;
         Signed_Index__i32 y__chunk =
-            global_positions[index+1] >> 6; //entity->hitbox.y__chunk;
+            chunk_xy_vectors[index+1]; //entity->hitbox.y__chunk;
 
         Chunk *p_chunk =
             get_p_chunk_from__chunk_manager_using__i32(
@@ -531,8 +548,8 @@ bool poll_chunk_manager_for__tile_collision(
         //TODO: this error occurs regularly when entity off screen 
         //need to fix.
         if (!p_chunk) {
-            debug_warning("entity out of tile collision bounds.");
-            debug_info("access attempt: %d, %d",
+            debug_warning("poll_chunk_manager_for__tile_collision, entity out of tile collision bounds.");
+            debug_warning("access attempt: %d, %d",
                     x__chunk, y__chunk);
             return true;
         }
@@ -567,10 +584,17 @@ Tile *get_p_tile_from__chunk_manager_with__3i32F4(
         vector_3i32F4_to__local_tile_vector_3u8(
                 position);
 
+
     Chunk *p_chunk =
         get_p_chunk_from__chunk_manager(
                 p_chunk_manager, 
                 chunk_index);
+#ifndef NDEBUG
+    if (!p_chunk) {
+        debug_warning("nullptr: get_p_tile_from__chunk_manager_with__3i32F4");
+        return 0;
+    }
+#endif
     Tile *p_tile =
         get_p_tile_from__chunk(
                 p_chunk, 

@@ -1,3 +1,4 @@
+#include "entity/entity.h"
 #include "input/input.h"
 #include <nds.h>
 #include <game.h>
@@ -16,20 +17,20 @@ void PLATFORM_post_render(Game *p_game) {
     bgSetScroll(
         p_game->gfx_context.background_ground
         .background_index,
-        get_global_x_from__hitbox(&p_player->hitbox) - 126,
-        -get_global_y_from__hitbox(&p_player->hitbox) - 38
+        get_x_i32_from__entity(p_player) - 126,
+        -get_y_i32_from__entity(p_player) - 38
         );
     bgSetScroll(
         p_game->gfx_context.background_ground__overlay
         .background_index,
-        get_global_x_from__hitbox(&p_player->hitbox) - 126,
-        -get_global_y_from__hitbox(&p_player->hitbox) - 38
+        get_x_i32_from__entity(p_player) - 126,
+        -get_y_i32_from__entity(p_player) - 38
         );
     bgSetScroll(
         p_game->gfx_context.background_ground__sprite_cover
         .background_index,
-        get_global_x_from__hitbox(&p_player->hitbox) - 126,
-        -get_global_y_from__hitbox(&p_player->hitbox) - 30
+         get_x_i32_from__entity(p_player) - 126,
+        -get_y_i32_from__entity(p_player) - 30
         );
 	
     bgUpdate();

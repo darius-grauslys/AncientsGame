@@ -4,6 +4,9 @@
 #include <collisions/hitbox_aabb.h>
 #include <entity/entity.h>
 
+#include <world/chunk_vectors.h>
+#include <world/tile_vectors.h>
+
 #warning See TODO
 // TODO: prefix pointers with p_
 // TODO: check if the below TODO still needs work
@@ -467,11 +470,14 @@ void check_collision_node_for__collisions(
 bool poll_collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity) {
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(
+                entity->hitbox.position__3i32F4);
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
-                entity->hitbox.chunk_index__3i32.x__i32,
-                entity->hitbox.chunk_index__3i32.y__i32);
+                chunk_vector__3i32.x__i32,
+                chunk_vector__3i32.y__i32);
 
     if (!collision_node) {
         return false;
@@ -653,11 +659,14 @@ void add_entity_to__collision_node(
 bool add_entity_to__collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity) {
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(
+                entity->hitbox.position__3i32F4);
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
-                entity->hitbox.chunk_index__3i32.x__i32,
-                entity->hitbox.chunk_index__3i32.y__i32);
+                chunk_vector__3i32.x__i32,
+                chunk_vector__3i32.y__i32);
 
     if (!collision_node)
         return false;
@@ -686,8 +695,11 @@ bool DEBUG_is_in_node(Collision_Manager__Collision_Node *node,
 void remove_entity_from__collision_manager__at(
         Collision_Manager *collision_manager,
         Entity *entity,
-        Signed_Index__i32 old_x__chunk,
-        Signed_Index__i32 old_y__chunk) {
+        Chunk_Vector__3i32 chunk_vector__3i32) {
+    Signed_Index__i32 old_x__chunk =
+        chunk_vector__3i32.x__i32;
+    Signed_Index__i32 old_y__chunk =
+        chunk_vector__3i32.y__i32;
     Collision_Manager__Collision_Node *collision_node =
         get_collision_node_for__this_position(
                 collision_manager, 
