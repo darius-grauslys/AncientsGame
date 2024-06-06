@@ -7,7 +7,7 @@
 #include <entity/humanoid.h>
 #include <rendering/animate_humanoid.h>
 
-void m_handler_for__ai_dummy(
+void m_entity_ai_handler__dummy(
         Entity *p_this_dummy,
         Game *p_game) {
     int32_t random__result =

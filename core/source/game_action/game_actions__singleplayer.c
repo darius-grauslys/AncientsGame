@@ -347,8 +347,10 @@ void m_game_action_handler_for__singleplayer(
             debug_error("m_game_action_handler, recieved unknown game action.");
         case Game_Action_Kind__None:
             return;
+        case Game_Action_Kind__Entity__Allocate:
         case Game_Action_Kind__Entity__Flags__Set:
         case Game_Action_Kind__Entity__Hitbox__Apply_Velocity:
+        case Game_Action_Kind__Entity__Hitbox__Set_Velocity:
         case Game_Action_Kind__Entity__Health__Apply_Damage:
         case Game_Action_Kind__Entity__Health__Apply_Healing:
         case Game_Action_Kind__Entity__Health__Set:

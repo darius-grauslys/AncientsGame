@@ -18,7 +18,7 @@ static Signed_Index__i32 inline get_global_x_from__hitbox(
     ((hitbox->chunk_index__3i32.x__i32) 
      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->position__3i32F4.x__i32F4 + hitbox->velocity__3i32F4.x__i32F4) 
-                >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+                >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         ;
 }
 
@@ -28,7 +28,7 @@ static Signed_Index__i32 inline get_global_y_from__hitbox(
     (((hitbox->chunk_index__3i32.y__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->position__3i32F4.y__i32F4 + hitbox->velocity__3i32F4.y__i32F4) 
-            >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
     ;
 }
 
@@ -38,7 +38,7 @@ static Signed_Index__i32 inline get_global_z_from__hitbox(
     (((hitbox->chunk_index__3i32.z__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->position__3i32F4.z__i32F4 + hitbox->velocity__3i32F4.z__i32F4) 
-            >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
     ;
 }
 
@@ -48,7 +48,7 @@ static Signed_Index__i32 inline get_global_x_from__hitbox__without_velocity(
     ((hitbox->chunk_index__3i32.x__i32) 
      << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->position__3i32F4.x__i32F4) 
-                >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+                >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         ;
 }
 
@@ -58,7 +58,7 @@ static Signed_Index__i32 inline get_global_y_from__hitbox__without_velocity(
     (((hitbox->chunk_index__3i32.y__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->position__3i32F4.y__i32F4) 
-            >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
     ;
 }
 
@@ -68,7 +68,7 @@ static Signed_Index__i32 inline get_global_z_from__hitbox__without_velocity(
     (((hitbox->chunk_index__3i32.z__i32) 
       << ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE) 
         + ((hitbox->position__3i32F4.z__i32F4) 
-            >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE))
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE))
     ;
 }
 

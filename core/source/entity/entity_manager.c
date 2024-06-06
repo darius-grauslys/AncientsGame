@@ -53,7 +53,6 @@ Entity *allocate_entity_in__entity_manager(Entity_Manager* entity_manager,
             continue;
         }
 
-        entity_manager->entity_count__quantity_u32++;
         p_entity = &entity_manager->entities[i];
         break;
     }
@@ -63,6 +62,7 @@ Entity *allocate_entity_in__entity_manager(Entity_Manager* entity_manager,
         debug_warning("Is the entity limit reached?");
         return 0;
     }
+    entity_manager->entity_count__quantity_u32++;
     
     switch (kind_of_entity) {
         case Entity_Kind__Player:
@@ -88,7 +88,8 @@ Entity *allocate_entity_in__entity_manager(Entity_Manager* entity_manager,
 void release_entity_from__entity_manager(
         Entity_Manager *p_entity_manager, 
         Entity *p_entity) {
-    p_entity_manager->entity_count__quantity_u32--;
+    if (p_entity_manager->entity_count__quantity_u32 > 0)
+        p_entity_manager->entity_count__quantity_u32--;
     set_entity__disabled(p_entity);
     if (p_entity_manager->p_local_player
             == p_entity) {

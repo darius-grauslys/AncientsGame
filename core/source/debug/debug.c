@@ -9,6 +9,7 @@
 #include <debug/nds_debug.h>
 #include <nds.h>
 
+//TODO: move to nds
 void NDS_initialize_debug__main(void) {
 #ifndef NDEBUG
     PrintConsole *console =
@@ -37,6 +38,18 @@ void NDS_initialize_debug__sub(void) {
             console->gfxBase,
             false,
             true);
+#endif
+}
+
+void debug_verbose(const char *msg_fmt, ...) {
+#ifdef VERBOSE
+    va_list args_list;
+    va_start(args_list, msg_fmt);
+    printf("\033[37;1mverbose:\033[0m ");
+    vprintf(msg_fmt, args_list);
+    va_end(args_list);
+    
+    printf("\n");
 #endif
 }
 

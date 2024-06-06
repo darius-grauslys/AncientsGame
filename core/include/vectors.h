@@ -221,11 +221,11 @@ static Chunk_Vector__3i32 inline vector_3i32F4_to__chunk_vector_3i32(
         Vector__3i32F4 vector) {
     return (Tile_Vector__3i32) {
         vector.x__i32F4 
-            >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE,
+            >> ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE,
         vector.y__i32F4 
-            >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE,
+            >> ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE,
         vector.z__i32F4
-            >> ENTITY_CHUNK_FRACTIONAL__BIT_SIZE
+            >> ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE
     };
 }
 

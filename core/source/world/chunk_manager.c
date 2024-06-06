@@ -124,7 +124,7 @@ uint32_t get_chunk_index_from__chunk_manager(
             || chunk_vector__3i32.y__i32 < p_chunk_manager
                 ->p_most_south_eastern__chunk_map_node
                     ->p_chunk__here->y__signed_index_i32) {
-        debug_error("chunk index out of bounds: (%d, %d, %d)",
+        debug_error("get_chunk_index_from__chunk_manager chunk index out of bounds: (%d, %d, %d)",
                 chunk_vector__3i32.x__i32, 
                 chunk_vector__3i32.y__i32, 
                 chunk_vector__3i32.z__i32);

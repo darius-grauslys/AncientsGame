@@ -7,11 +7,11 @@ static void inline normalize_hitbox__position_plus_velocity_with__chunk_space(
         Hitbox_AABB *p_hitbox,
         Chunk_Vector__3i32 d_chunk_vector) {
     p_hitbox->position__3i32F4.x__i32F4 += p_hitbox->velocity__3i32F4.x__i32F4
-        - (d_chunk_vector.x__i32 << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+        - (d_chunk_vector.x__i32 << ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE);
     p_hitbox->position__3i32F4.y__i32F4 += p_hitbox->velocity__3i32F4.y__i32F4
-        - (d_chunk_vector.y__i32 << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+        - (d_chunk_vector.y__i32 << ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE);
     p_hitbox->position__3i32F4.z__i32F4 += p_hitbox->velocity__3i32F4.z__i32F4
-        - (d_chunk_vector.z__i32 << ENTITY_CHUNK_FRACTIONAL__BIT_SIZE);
+        - (d_chunk_vector.z__i32 << ENTITY_CHUNK_LOCAL_SPACE_FRACTIONAL__BIT_SIZE);
 }
 
 void set_hitbox__position_with__3i32F4(
@@ -24,15 +24,25 @@ void set_hitbox__position_with__3i32F4(
     hitbox->chunk_index__3i32 =
         vector_3i32F4_to__chunk_vector_3i32(position__3i32F4);
 
+    hitbox->position__3i32F4.x__i32F4 = x__global
+        % (8 << 7)
+        ;
+    hitbox->position__3i32F4.y__i32F4 = y__global
+        % (8 << 7)
+        ;
+    hitbox->position__3i32F4.z__i32F4 = z__global
+        % (8 << 7)
+        ;
+    return;
     hitbox->position__3i32F4.x__i32F4 =
-        (x__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
-        << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
+        (x__global) 
+        % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
     hitbox->position__3i32F4.y__i32F4 =
-        (y__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1))
-        << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE;
+        (y__global) 
+        % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
     hitbox->position__3i32F4.z__i32F4 =
-        (z__global % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1)
-        << ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE);
+        (z__global) 
+        % (ENTITY_CHUNK_LOCAL_SPACE__BIT_MASK + 1);
 }
 
 void set_hitbox__position_with__3i32(
@@ -166,11 +176,11 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
         DIRECTION__NONE;
 
     Signed_Index__i32 x__tile_pos =
-        (hitbox->position__3i32F4.x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (hitbox->position__3i32F4.x__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
     Signed_Index__i32 y__tile_pos =
-        (hitbox->position__3i32F4.y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (hitbox->position__3i32F4.y__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
 
@@ -183,19 +193,19 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
 
     // TODO: consolidate bit manips
     Signed_Index__i32 x__aa_tile_pos =
-        (aa->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (aa->x__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
     Signed_Index__i32 y__aa_tile_pos = 
-        (aa->y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (aa->y__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
     Signed_Index__i32 x__bb_tile_pos =
-        (bb->x__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (bb->x__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
     Signed_Index__i32 y__bb_tile_pos = 
-        (bb->y__i32F4 >> ENTITY_VELOCITY_FRACTIONAL__BIT_SIZE)
+        (bb->y__i32F4 >> FRACTIONAL_PERCISION_4__BIT_SIZE)
         >> TILE_PIXEL_WIDTH__BIT_SIZE
         ;
 

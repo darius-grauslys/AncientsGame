@@ -20,7 +20,6 @@ enum Use_Mode {
     Use_Mode__Remove_Wall
 };
 
-bool toggle = false;
 enum Tile_Kind kind_of_tile =
     Tile_Kind__Oak_Wood;
 enum Use_Mode mode_of_use =
@@ -69,19 +68,13 @@ void m_entity_ai_handler__player(
         x -= 32;
     }
 
-    goto set_direction;
-    if (is_input__game_settings_held(p_input) && !toggle) {
-        toggle = true;
-        Entity *p_skeleton = allocate_entity_into__world(
-                &p_game->world,
+    if (is_input__game_settings_released(p_input)) {
+        invoke_action__allocate_entity(
+                p_game,
                 Entity_Kind__Skeleton,
                 get_vector__3i32F4_using__i32(x, y, 0));
-
-        set_entity__ai_handler(
-                p_skeleton, 
-                m_handler_for__ai_dummy);
-    } else if (is_input__examine_held(p_input) && !toggle) {
-        toggle = true;
+    } 
+    if (is_input__examine_released(p_input)) {
         mode_of_use++;
         switch(mode_of_use) {
             default:
@@ -96,8 +89,8 @@ void m_entity_ai_handler__player(
                 debug_info("Use_Mode__Remove_Wall");
                 break;
         }
-    } else if (is_input__use_secondary_held(p_input) && !toggle) {
-        toggle = true;
+    } 
+    if (is_input__use_secondary_released(p_input)) {
         kind_of_tile++;
         switch(kind_of_tile) {
             default:
@@ -133,9 +126,8 @@ void m_entity_ai_handler__player(
                 debug_info("Tile_Kind__Sand");
                 break;
         }
-    } else if (is_input__use_held(p_input) && !toggle) {
-        toggle = true;
-
+    } 
+    if (is_input__use_released(p_input)) {
         Chunk *p_chunk =
             get_p_chunk_from__chunk_manager_using__i32(
                     &p_game->world.chunk_manager,
@@ -176,14 +168,8 @@ void m_entity_ai_handler__player(
 
         animate_humanoid__use(p_this_player);
         return;
-    } else if (!is_input__game_settings_held(p_input)
-            && !is_input__use_held(p_input)
-            && !is_input__use_secondary_held(p_input)
-            && !is_input__examine_held(p_input)) {
-        toggle = false;
     }
 
-set_direction:
     switch (direction__new) {
         default:
             // animate_humanoid__idle(p_this_player);

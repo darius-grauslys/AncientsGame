@@ -175,9 +175,6 @@ void release_entity_from__world(
         p_entity->m_entity_dispose_handler(
                 p_entity,
                 p_game);
-    } else {
-        debug_info("release_entity_from__world: %p",
-                p_entity);
     }
     release_entity_from__entity_manager(
             get_p_entity_manager_from__game(p_game), 

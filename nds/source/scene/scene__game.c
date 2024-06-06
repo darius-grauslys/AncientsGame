@@ -98,8 +98,8 @@ void m_load_scene_as__game_handler(
     NDS_initialize_gfx_for__world(gfx_context);
     initialize_world(&p_game->world);
 
-    // NDS_initialize_debug__sub();
-    // return;
+    NDS_initialize_debug__sub();
+    return;
     NDS_initialize_gfx_for__ui(&p_game->gfx_context);
     NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
@@ -121,7 +121,7 @@ void m_load_scene_as__game_handler(
                 52, 32);
         set_hitbox__position_with__3i32F4(
                 &p_ui_button->ui_bounding_box__aabb, 
-                get_vector__3i32F4_using__i32(56 + 72 * ui_index, 64, 0));
+                get_vector__3i32F4_using__i32(72 + 96 * ui_index, 64, 0));
         p_ui_button->p_ui_data =
             &game_scene_data.button_states[ui_index];
         game_scene_data.button_states[ui_index] =
@@ -1016,59 +1016,59 @@ void m_enter_scene_as__game_handler(
         if (p_game->scene_manager.p_active_scene == 0)
             break;
         manage_game(p_game);
-        if (is_input__game_settings_released(&p_game->input)) {
-            invoke_action__increase_homeostasis_of__entity(
-                    p_game,
-                    p_player,
-                    p_player,
-                    8);
-        }
-        if (is_input__lockon_released(&p_game->input)) {
-            invoke_action__decrease_homeostasis_of__entity(
-                    p_game,
-                    p_player,
-                    p_player,
-                    8);
-        }
-        if (is_input__consume_released(&p_game->input)) {
-            invoke_action__increase_sustenance_of__entity(
-                    p_game,
-                    p_player,
-                    p_player,
-                    Sustenance_Kind__Hunger,
-                    8);
-        }
-        if (is_input__examine_released(&p_game->input)) {
-            invoke_action__increase_sustenance_of__entity(
-                    p_game,
-                    p_player,
-                    p_player,
-                    Sustenance_Kind__Thirst,
-                    8);
-        }
-        if (is_input__use_released(&p_game->input)) {
-            Energy_Damaging_Specifier damage;
-            damage.energy_damaging__flags = 0;
-            damage.quantity_of__damage = 10;
-            invoke_action__apply_energy_damage_to__entity(
-                    p_game, 
-                    p_player, 
-                    p_player, 
-                    &damage);
-        }
-        if (is_input__use_secondary_released(&p_game->input)) {
-            Hearts_Damaging_Specifier damage;
-            damage.hearts_damaging__flags = 0;
-            damage.quantity_of__damage = 10;
-            invoke_action__apply_heart_damage_to__entity(
-                    p_game, 
-                    p_player, 
-                    p_player, 
-                    &damage);
-        }
-        update_ui_for__player_resources(
-                p_this_scene, 
-                p_game);
+        // if (is_input__game_settings_released(&p_game->input)) {
+        //     invoke_action__increase_homeostasis_of__entity(
+        //             p_game,
+        //             p_player,
+        //             p_player,
+        //             8);
+        // }
+        // if (is_input__lockon_released(&p_game->input)) {
+        //     invoke_action__decrease_homeostasis_of__entity(
+        //             p_game,
+        //             p_player,
+        //             p_player,
+        //             8);
+        // }
+        // if (is_input__consume_released(&p_game->input)) {
+        //     invoke_action__increase_sustenance_of__entity(
+        //             p_game,
+        //             p_player,
+        //             p_player,
+        //             Sustenance_Kind__Hunger,
+        //             8);
+        // }
+        // if (is_input__examine_released(&p_game->input)) {
+        //     invoke_action__increase_sustenance_of__entity(
+        //             p_game,
+        //             p_player,
+        //             p_player,
+        //             Sustenance_Kind__Thirst,
+        //             8);
+        // }
+        // if (is_input__use_released(&p_game->input)) {
+        //     Energy_Damaging_Specifier damage;
+        //     damage.energy_damaging__flags = 0;
+        //     damage.quantity_of__damage = 10;
+        //     invoke_action__apply_energy_damage_to__entity(
+        //             p_game, 
+        //             p_player, 
+        //             p_player, 
+        //             &damage);
+        // }
+        // if (is_input__use_secondary_released(&p_game->input)) {
+        //     Hearts_Damaging_Specifier damage;
+        //     damage.hearts_damaging__flags = 0;
+        //     damage.quantity_of__damage = 10;
+        //     invoke_action__apply_heart_damage_to__entity(
+        //             p_game, 
+        //             p_player, 
+        //             p_player, 
+        //             &damage);
+        // }
+        // update_ui_for__player_resources(
+        //         p_this_scene, 
+        //         p_game);
         manage_world(p_game);
     }
 }
