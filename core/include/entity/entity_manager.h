@@ -2,6 +2,7 @@
 #define ENTITY_MANAGER_H
 
 #include <defines.h>
+#include <debug/debug.h>
 
 void initialize_entity_manager(Entity_Manager *p_entity_manager);
 

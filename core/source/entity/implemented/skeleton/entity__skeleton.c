@@ -17,7 +17,7 @@ void initialize_entity_as__skeleton(
             8, 8,
             m_entity_dispose_handler__default,
             m_entity_body_handler__living,
-            0,
+            m_entity_ai_handler__dummy,
             m_entity_collision_handler__default,
             m_entity_tile_collision_handler__default,
             m_entity_animation_handler__humanoid);

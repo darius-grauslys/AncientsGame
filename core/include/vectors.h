@@ -117,19 +117,37 @@ static Vector__3i32F4 inline get_vector__3i32F4_using__i32(
     };
 }
 
+static Signed_Index__i32 inline get_x_i32F4_from__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return vector__3i32F4.x__i32F4;
+}
+
+static Signed_Index__i32 inline get_y_i32F4_from__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return vector__3i32F4.y__i32F4;
+}
+
+static Signed_Index__i32 inline get_z_i32F4_from__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return vector__3i32F4.z__i32F4;
+}
+
 static Signed_Index__i32 inline get_x_i32_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
-    return i32F4_to__i32(vector__3i32F4.x__i32F4);
+    return i32F4_to__i32(
+            get_x_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
 static Signed_Index__i32 inline get_y_i32_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
-    return i32F4_to__i32(vector__3i32F4.y__i32F4);
+    return i32F4_to__i32(
+            get_y_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
 static Signed_Index__i32 inline get_z_i32_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
-    return i32F4_to__i32(vector__3i32F4.z__i32F4);
+    return i32F4_to__i32(
+            get_z_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
 static Vector__3i32 inline get_vector__3i32(

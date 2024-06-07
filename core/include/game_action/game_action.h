@@ -1,7 +1,15 @@
 #ifndef GAME_ACTION_H
 #define GAME_ACTION_H
 
+#include "defines_weak.h"
 #include <defines.h>
+
+static void inline initialize_p_game_action(
+        Game_Action *p_game_action){
+    p_game_action->game_action_flags = 0;
+    p_game_action->the_kind_of_game_action__this_action_is =
+        Game_Action_Kind__None;
+}        
 
 static bool inline is_game_action_using__id_or_ptr(
         Game_Action_Flags game_action_flags) {

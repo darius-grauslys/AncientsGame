@@ -43,7 +43,7 @@ void initialize_vector_3i32F4_as__aa_bb_without__velocity(
         Direction__u8 corner_direction) {
 
     Signed_Index__i32 offset_half_width = 
-        (hitbox->width__quantity_32 >> 2)
+        (hitbox->width__quantity_u32 >> 2)
         << FRACTIONAL_PERCISION_4__BIT_SIZE;
     Signed_Index__i32 offset_half_height = 
         (hitbox->height__quantity_u32 >> 2)
@@ -98,7 +98,7 @@ void initialize_vector_3i32_as__aa_bb_without__velocity(
         Direction__u8 corner_direction) {
 
     Signed_Index__i32 offset_half_width = 
-        hitbox->width__quantity_32 >> 2;
+        hitbox->width__quantity_u32 >> 2;
     Signed_Index__i32 offset_half_height = 
         hitbox->height__quantity_u32 >> 2;
     switch (corner_direction) {
@@ -230,17 +230,6 @@ Direction__u8 is_this_hitbox__inside_this_hitbox(
     initialize_vector_3i32F4_as__aa_bb_without__velocity(
             &bb__two, hitbox__two, 
             DIRECTION__NORTH_EAST);
-
-    debug_verbose("box1: (%d, %d), (%d, %d)",
-            aa__one_moving.x__i32F4,
-            aa__one_moving.y__i32F4,
-            bb__one_moving.x__i32F4,
-            bb__one_moving.y__i32F4);
-    debug_verbose("box2: (%d, %d), (%d, %d)",
-            aa__two.x__i32F4,
-            aa__two.y__i32F4,
-            bb__two.x__i32F4,
-            bb__two.y__i32F4);
 
     bool is_aa__contained_along_x =
            aa__one_moving.x__i32F4 > aa__two.x__i32F4

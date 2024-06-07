@@ -11,8 +11,8 @@ void m_enter_scene_handler__default(
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         if (is_input__click_released(&p_game->input)) {
-            debug_verbose("scene.c, SCENE_UI_CLICK");
-            debug_verbose("click: (%d, %d)",
+            debug_info__verbose("scene.c, SCENE_UI_CLICK");
+            debug_info__verbose("click: (%d, %d)",
                     p_game->input.cursor__old__3i32.x__i32,
                     p_game->input.cursor__old__3i32.y__i32);
             for (Quantity__u8 ui_index=0;
@@ -24,7 +24,7 @@ void m_enter_scene_handler__default(
 
                 if (!p_ui_element)
                     continue;
-                debug_verbose("ui_element: (%d, %d)",
+                debug_info__verbose("ui_element: (%d, %d)",
                         get_x_i32_from__p_ui_element(p_ui_element),
                         get_y_i32_from__p_ui_element(p_ui_element)
                         );

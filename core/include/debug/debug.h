@@ -15,10 +15,16 @@
 ///
 
 /// 
-/// Displays a message, and nothing else.
+/// Displays a verbose message, and nothing else.
 /// Only if VERBOSE compilation const is defined.
 ///
-void debug_verbose(const char *msg_fmt, ...);
+void debug_info__verbose(const char *msg_fmt, ...);
+
+/// 
+/// Displays a verbose warning, and nothing else.
+/// Only if VERBOSE compilation const is defined.
+///
+void debug_warning__verbose(const char *msg_fmt, ...);
 
 /// 
 /// Displays a message, and nothing else.

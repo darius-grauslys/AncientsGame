@@ -23,6 +23,10 @@ typedef struct Vector__3i32_t Vector__3i32;
 typedef struct Vector__3i32_t Chunk_Vector__3i32;
 typedef struct Vector__3i32_t Tile_Vector__3i32;
 
+typedef struct Timer__u32_t Timer__u32;
+typedef struct Timer__u16_t Timer__u16;
+typedef struct Timer__u8_t Timer__u8;
+
 ///
 /// SECTION_collisions
 ///

@@ -1,5 +1,7 @@
 #include "debug/nds_debug.h"
 #include "defines_weak.h"
+#include "nds/dma.h"
+#include "timer.h"
 #include <defines.h>
 #include <nds_defines.h>
 #include <rendering/gfx_context.h>
@@ -18,9 +20,6 @@
 void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
-#ifndef NDEBUG
-    NDS_initialize_debug__sub();
-#endif
 
     NDS_initialize_background(&gfx_context->background_ground__sprite_cover);
     NDS_initialize_background(&gfx_context->background_ground__overlay);
@@ -34,7 +33,6 @@ void NDS_initialize_gfx_for__main_menu(
         PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
-    NDS_initialize_debug__main();
 }
 
 void NDS_initialize_gfx_for__world(

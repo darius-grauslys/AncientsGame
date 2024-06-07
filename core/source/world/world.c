@@ -85,7 +85,7 @@ void manage_world__entities(Game *p_game) {
         if (!poll_collision_manager(
                 &p_game->world.collision_manager, 
                 p_entity)) {
-            debug_verbose("!poll_collision_manager, release entity");
+            debug_info__verbose("!poll_collision_manager, release entity");
             release_entity_from__world(p_game, p_entity);
             continue;
         }
@@ -95,7 +95,7 @@ void manage_world__entities(Game *p_game) {
         if (!poll_chunk_manager_for__tile_collision(
                     &p_world->chunk_manager,
                     p_entity)) {
-            debug_verbose("!poll_chunk_manager_for__tile_collision, release entity");
+            debug_info__verbose("!poll_chunk_manager_for__tile_collision, release entity");
             release_entity_from__world(p_game, p_entity);
             continue;
         }

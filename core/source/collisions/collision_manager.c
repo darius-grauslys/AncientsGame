@@ -353,8 +353,10 @@ Collision_Manager__Collision_Node
         int32_t y__chunk
         ) {
     if (!is_in_bounds_of__collision_manager(
-                collision_manager, x__chunk, y__chunk))
+                collision_manager, x__chunk, y__chunk)) {
+        debug_warning__verbose("get_collision_node_for__this_position, out of bounds.");
         return 0;
+    }
 
     Collision_Manager__Layer_Two *layer_two;
 

@@ -6,6 +6,21 @@
 #include <stdbool.h>
 #include <defines.h>
 
+static i32F4 inline get_x_i32F4_from__entity(
+        Entity *p_entity) {
+    return get_x_i32F4_from__hitbox(&p_entity->hitbox);
+}
+
+static i32F4 inline get_y_i32F4_from__entity(
+        Entity *p_entity) {
+    return get_y_i32F4_from__hitbox(&p_entity->hitbox);
+}
+
+static i32F4 inline get_z_i32F4_from__entity(
+        Entity *p_entity) {
+    return get_z_i32F4_from__hitbox(&p_entity->hitbox);
+}
+
 static Signed_Index__i32 inline get_x_i32_from__entity(
         Entity *p_entity) {
     return get_x_i32_from__hitbox(&p_entity->hitbox);

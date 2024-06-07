@@ -7,6 +7,7 @@ void invoke_action__allocate_entity(
         enum Entity_Kind the_kind_of__entity,
         Vector__3i32F4 position__3i32F4) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
 
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Allocate;
@@ -25,6 +26,7 @@ void invoke_action__set_flags_of__entity(
         Entity *p_entity,
         Entity_Flags__u8 entity_flags) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
 
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Flags__Set;
@@ -44,6 +46,7 @@ void invoke_action__apply_velocity_to__entity(
         Entity *p_entity,
         Vector__3i32F4 velocity_vector) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
 
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Hitbox__Apply_Velocity;
@@ -63,6 +66,7 @@ void invoke_action__set_velocity_of__entity(
         Entity *p_entity,
         Vector__3i32F4 velocity_vector) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
 
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Hitbox__Set_Velocity;
@@ -80,6 +84,7 @@ void invoke_action__apply_heart_healing_to__entity(
         Entity *p_entity_target,
         Hearts_Healing_Specifier *p_hearts_healing_specifier) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Health__Apply_Healing;
     game_action.p_entity_source = p_entity_source;
@@ -95,6 +100,7 @@ void invoke_action__apply_energy_healing_to__entity(
         Entity *p_entity_target,
         Energy_Healing_Specifier *p_energy_healing_specifier) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Energy__Apply_Healing;
     game_action.p_entity_source = p_entity_source;
@@ -110,6 +116,7 @@ void invoke_action__apply_heart_damage_to__entity(
         Entity *p_entity_target,
         Hearts_Damaging_Specifier *p_hearts_damaging_specifier) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Health__Apply_Damage;
     game_action.p_entity_source = p_entity_source;
@@ -125,6 +132,7 @@ void invoke_action__apply_energy_damage_to__entity(
         Entity *p_entity_target,
         Energy_Damaging_Specifier *p_energy_damaging_specifier) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Energy__Apply_Damage;
     game_action.p_entity_source = p_entity_source;
@@ -141,6 +149,7 @@ void invoke_action__increase_sustenance_of__entity(
         enum Sustenance_Kind kind_of_sustenance,
         Sustenance__u8 change_in__sustenance) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Sustenance__Increase;
     game_action.p_entity_source = p_entity_source;
@@ -158,6 +167,7 @@ void invoke_action__decrease_sustenance_of__entity(
         enum Sustenance_Kind kind_of_sustenance,
         Sustenance__u8 change_in__sustenance) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Sustenance__Decrease;
     game_action.p_entity_source = p_entity_source;
@@ -174,6 +184,7 @@ void invoke_action__increase_homeostasis_of__entity(
         Entity *p_entity_target,
         Quantity__u8 change_in__homeostasis) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Homeostasis__Increase;
     game_action.p_entity_source = p_entity_source;
@@ -189,6 +200,7 @@ void invoke_action__decrease_homeostasis_of__entity(
         Entity *p_entity_target,
         Quantity__u8 change_in__homeostasis) {
     Game_Action game_action;
+    initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Homeostasis__Decrease;
     game_action.p_entity_source = p_entity_source;

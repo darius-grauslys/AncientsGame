@@ -5,6 +5,21 @@
 #include <vectors.h>
 #include <world/chunk_vectors.h>
 
+static i32F4 inline get_x_i32F4_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_x_i32F4_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static i32F4 inline get_y_i32F4_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_y_i32F4_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
+static i32F4 inline get_z_i32F4_from__hitbox(
+        Hitbox_AABB *p_hitbox) {
+    return get_z_i32F4_from__vector_3i32F4(p_hitbox->position__3i32F4);
+}
+
 static Signed_Index__i32 inline get_x_i32_from__hitbox(
         Hitbox_AABB *p_hitbox) {
     return get_x_i32_from__vector_3i32F4(p_hitbox->position__3i32F4);
@@ -93,12 +108,32 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
         Vector__3i32F4 *aa,
         Vector__3i32F4 *bb);
 
+void initialize_vector_3i32F4_as__aa_bb_without__velocity(
+        Vector__3i32F4 *hitbox_point,
+        Hitbox_AABB *hitbox,
+        Direction__u8 corner_direction);
+
+void initialize_vector_3i32F4_as__aa_bb(
+        Vector__3i32F4 *hitbox_point,
+        Hitbox_AABB *hitbox,
+        Direction__u8 corner_direction);
+
+void initialize_vector_3i32_as__aa_bb_without__velocity(
+        Vector__3i32 *hitbox_point,
+        Hitbox_AABB *hitbox,
+        Direction__u8 corner_direction);
+
+void initialize_vector_3i32_as__aa_bb(
+        Vector__3i32 *hitbox_point,
+        Hitbox_AABB *hitbox,
+        Direction__u8 corner_direction);
+
 static void inline initialize_hitbox(
         Hitbox_AABB *hitbox,
         Quantity__u32 width, 
         Quantity__u32 height,
         Vector__3i32F4 position__3i32F4) {
-    hitbox->width__quantity_32 = width;
+    hitbox->width__quantity_u32 = width;
     hitbox->height__quantity_u32 = height;
     hitbox->velocity__3i32F4.x__i32F4 = 0;
     hitbox->velocity__3i32F4.y__i32F4 = 0;

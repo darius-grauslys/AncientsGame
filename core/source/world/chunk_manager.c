@@ -190,9 +190,9 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
             || y__chunk > north_west__y
             || x__chunk > south_east__x
             || y__chunk < south_east__y) {
-        debug_error("get_p_chunk_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
+        debug_warning__verbose("get_p_chunk_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
-        debug_info("bounds are: (%d, %d) - (%d, %d)",
+        debug_info__verbose("bounds are: (%d, %d) - (%d, %d)",
             p_chunk_manager->p_most_north_western__chunk_map_node
                 ->p_chunk__here->x__signed_index_i32,
             p_chunk_manager->p_most_north_western__chunk_map_node
@@ -531,6 +531,18 @@ bool poll_chunk_manager_for__tile_collision(
         get_tile_x_u8_from__vector_3i32F4(bb),
         get_tile_y_u8_from__vector_3i32F4(bb),
     };
+    Signed_Index__i32 corner_positions[8] = {
+        i32F4_to__i32(aa.x__i32F4), i32F4_to__i32(aa.y__i32F4),
+        i32F4_to__i32(bb.x__i32F4), i32F4_to__i32(aa.y__i32F4),
+        i32F4_to__i32(aa.x__i32F4), i32F4_to__i32(bb.y__i32F4),
+        i32F4_to__i32(bb.x__i32F4), i32F4_to__i32(bb.y__i32F4)
+    };
+    Direction__u8 directions[4] = {
+        DIRECTION__SOUTH_EAST,
+        DIRECTION__SOUTH_WEST,
+        DIRECTION__NORTH_EAST,
+        DIRECTION__NORTH_WEST
+    };
 
     for (Index_u32 index=0;index<8;index+=2) {
         Signed_Index__i32 x__chunk =
@@ -545,13 +557,11 @@ bool poll_chunk_manager_for__tile_collision(
                     y__chunk,
                     0);
 
-        //TODO: this error occurs regularly when entity off screen 
-        //need to fix.
         if (!p_chunk) {
-            debug_warning("poll_chunk_manager_for__tile_collision, entity out of tile collision bounds.");
-            debug_warning("access attempt: %d, %d",
+            debug_warning__verbose("poll_chunk_manager_for__tile_collision, entity out of tile collision bounds.");
+            debug_warning__verbose("access attempt: %d, %d",
                     x__chunk, y__chunk);
-            return true;
+            return false;
         }
 
         Tile *p_tile =
@@ -565,9 +575,11 @@ bool poll_chunk_manager_for__tile_collision(
             if (p_entity->m_entity_tile_collision_handler) {
                 p_entity->m_entity_tile_collision_handler(
                         p_entity,
-                        p_tile);
+                        p_tile,
+                        corner_positions[index],
+                        corner_positions[index+1],
+                        directions[index>>2]);
             }
-            return true;
         }
     }
 

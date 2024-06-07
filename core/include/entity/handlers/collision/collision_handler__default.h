@@ -10,6 +10,9 @@ void m_entity_collision_handler__default(
 
 void m_entity_tile_collision_handler__default(
         Entity *entity_collision_source,
-        Tile *tile_collided);
+        Tile *tile_collided,
+        Signed_Index__i32 x_collision__i32,
+        Signed_Index__i32 y_collision__i32,
+        Direction__u8 direction_of__tile_collision);
 
 #endif

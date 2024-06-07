@@ -41,12 +41,23 @@ void NDS_initialize_debug__sub(void) {
 #endif
 }
 
-#define VERBOSE
-void debug_verbose(const char *msg_fmt, ...) {
+void debug_info__verbose(const char *msg_fmt, ...) {
 #ifdef VERBOSE
     va_list args_list;
     va_start(args_list, msg_fmt);
-    printf("\033[37;1mverbose:\033[0m ");
+    printf("\033[37;1m(V) info:\033[0m ");
+    vprintf(msg_fmt, args_list);
+    va_end(args_list);
+    
+    printf("\n");
+#endif
+}
+
+void debug_warning__verbose(const char *msg_fmt, ...) {
+#ifdef VERBOSE
+    va_list args_list;
+    va_start(args_list, msg_fmt);
+    printf("\033[33;1m(V) warning:\033[0m ");
     vprintf(msg_fmt, args_list);
     va_end(args_list);
     
@@ -103,6 +114,6 @@ void debug_abort(const char *msg_fmt, ...) {
 
     printf("\n");
 
-    PLATFORM_abort();
 #endif
+    PLATFORM_abort();
 }

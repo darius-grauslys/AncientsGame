@@ -44,6 +44,17 @@ static Tile_Vector__3i32 inline get_tile_vector__3i32(
     };
 }
 
+static Tile_Vector__3i32 inline get_tile_vector__3i32_using__i32F4(
+        i32F4 x,
+        i32F4 y,
+        i32F4 z) {
+    return (Vector__3i32) {
+        i32F4_to__i32(x) >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
+        i32F4_to__i32(y) >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
+        i32F4_to__i32(z) >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE
+    };
+}
+
 static Tile_Vector__3i32 inline vector_3i32F4_to__tile_vector_3i32(
         Vector__3i32F4 vector) {
     return (Tile_Vector__3i32) {

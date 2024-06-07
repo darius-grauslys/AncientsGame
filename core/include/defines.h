@@ -143,7 +143,7 @@ typedef uint8_t Identifier__u8;
 ///
 
 typedef struct Hitbox_AABB_t {
-    Quantity__u32 width__quantity_32;
+    Quantity__u32 width__quantity_u32;
     Quantity__u32 height__quantity_u32;
     // We don't have a z-axis height.
     // Why? Because even thought the world
@@ -161,7 +161,7 @@ typedef struct Hitbox_AABB_t {
 /// anything equal to or less than this value is ignored when determining
 /// displacement. This useful threshold is what allows a colliding player
 /// to move up while an entity is moving into them from the right.
-#define COLLISION_DELTA_THRESHOLD 20
+#define COLLISION_DELTA_THRESHOLD 4096
 #define COLLISION_MANAGER__LAYER_TWO__CHUNK_CENTER_OFFSET \
     (CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW / 4)
 #define COLLISION_MANAGER__LAYER_THREE__CHUNK_CENTER_OFFSET \
@@ -633,7 +633,10 @@ typedef struct Tile_t Tile;
 
 typedef void (*m_Entity_Tile_Collision_Handler)(
         Entity *p_entity_self,
-        Tile *p_tile_collided);
+        Tile *p_tile_collided,
+        Signed_Index__i32 x_collision__i32,
+        Signed_Index__i32 y_collision__i32,
+        Direction__u8 direction_of__tile_collision);
 
 typedef void (*m_Entity_Animation_Handler) 
     (Entity *p_entity_self, Timer__u32 *p_timer);
