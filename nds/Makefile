@@ -8,7 +8,7 @@ endif
 
 include $(DEVKITARM)/ds_rules
 
-GAME_TITLE := Minicraft DS Edition
+GAME_TITLE := AncientsGame 
 GAME_ICON := ../icon.bmp
 
 #---------------------------------------------------------------------------------

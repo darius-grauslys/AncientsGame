@@ -39,14 +39,24 @@
 #define BIT(n) (1 << (n))
 #define NEXT_BIT(symbol) (symbol << 1)
 #define MASK(n) (BIT(n) - 1)
+
+typedef int32_t     i32;
+typedef int16_t     i16;
+typedef int8_t      i8;
+
 #define FRACTIONAL_PERCISION_4__BIT_SIZE 4
+#define FRACTIONAL_PERCISION_8__BIT_SIZE 8
 /// FIXED POINT fractional, with 4 bits of percision.
 typedef int32_t     i32F4;
-typedef int32_t     i16F4;
-typedef int32_t     i8F4;
+typedef int16_t     i16F4;
+typedef int8_t     i8F4;
 typedef uint32_t    u32F4;
-typedef uint32_t    u16F4;
-typedef uint32_t    u8F4;
+typedef uint16_t    u16F4;
+typedef uint8_t    u8F4;
+
+typedef int32_t     i32F8;
+typedef int16_t     i16F8;
+typedef int8_t     i8F8;
 
 /// 
 /// Vector__3i32F4 is a 3-tuple of 32 bit FIXED POINT
@@ -58,6 +68,10 @@ typedef uint32_t    u8F4;
 typedef struct Vector__3i32F4_t {
     i32F4 x__i32F4, y__i32F4, z__i32F4;
 } Vector__3i32F4;
+
+typedef struct Vector__3i32F8_t {
+    i32F8 x__i32F8, y__i32F8, z__i32F8;
+} Vector__3i32F8;
 
 typedef int32_t Signed_Index__i32;
 
@@ -89,6 +103,12 @@ typedef struct Timer__u8_t {
 } Timer__u8;
 
 typedef uint8_t Direction__u8;
+typedef uint8_t Degree__u8;
+typedef struct Ray__3i32F8_t {
+    Vector__3i32F8 ray_starting_vector__3i32F8;
+    Vector__3i32F8 ray_current_vector__3i32F8;
+    Degree__u8 angle_of__ray;
+} Ray__3i32F8;
 
 #define INDEX__UNKNOWN__u32 (uint32_t)(-1)
 #define INDEX__UNKNOWN__u16 (uint16_t)(-1)

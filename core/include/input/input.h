@@ -43,6 +43,12 @@ static bool inline is_input__examine_released(Input *p_input) {
 static bool inline is_input__consume_released(Input *p_input) {
     return p_input->input_flags__released & INPUT_CONSUME;
 }
+static bool inline is_input__turn_left_released(Input *p_input) {
+    return p_input->input_flags__released & INPUT_TURN_LEFT;
+}
+static bool inline is_input__turn_right_released(Input *p_input) {
+    return p_input->input_flags__released & INPUT_TURN_RIGHT;
+}
 static bool inline is_input__none_released(Input *p_input) {
     return p_input->input_flags__released & INPUT_NONE;
 }
@@ -81,6 +87,12 @@ static bool inline is_input__examine_pressed(Input *p_input) {
 }
 static bool inline is_input__consume_pressed(Input *p_input) {
     return p_input->input_flags__pressed & INPUT_CONSUME;
+}
+static bool inline is_input__turn_left_pressed(Input *p_input) {
+    return p_input->input_flags__pressed & INPUT_TURN_LEFT;
+}
+static bool inline is_input__turn_right_pressed(Input *p_input) {
+    return p_input->input_flags__pressed & INPUT_TURN_RIGHT;
 }
 static bool inline is_input__none_pressed(Input *p_input) {
     return p_input->input_flags__pressed & INPUT_NONE;
@@ -123,6 +135,12 @@ static bool inline is_input__none_held(Input *p_input) {
 }
 static bool inline is_input__consume_held(Input *p_input) {
     return p_input->input_flags__held & INPUT_CONSUME;
+}
+static bool inline is_input__turn_left_held(Input *p_input) {
+    return p_input->input_flags__held & INPUT_TURN_LEFT;
+}
+static bool inline is_input__turn_right_held(Input *p_input) {
+    return p_input->input_flags__held & INPUT_TURN_RIGHT;
 }
 static bool inline is_input__click_held(Input *p_input) {
     return p_input->input_flags__held & INPUT_CLICK

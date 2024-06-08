@@ -7,6 +7,10 @@
 #include "defines_weak.h"
 #include <defines.h>
 
+static i32F4 inline i32_to__i32F4(Signed_Index__i32 x) {
+    return x << FRACTIONAL_PERCISION_4__BIT_SIZE;
+}
+
 static Signed_Index__i32 inline i32F4_to__i32(i32F4 x) {
     return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
 }
@@ -77,6 +81,42 @@ static Vector__3i32 inline vector_3i32F4_to__vector_3i32(
             >> FRACTIONAL_PERCISION_4__BIT_SIZE,
         vector.z__i32F4 
             >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+    };
+}
+
+static Vector__3i32F4 inline vector_3i32F8_to__vector_3i32F4(
+        Vector__3i32F8 vector) {
+    return (Vector__3i32F4){
+        vector.x__i32F8
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.y__i32F8
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.z__i32F8
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE,
+    };
+}
+
+static Vector__3i32F8 inline vector_3i32F4_to__vector_3i32F8(
+        Vector__3i32F4 vector) {
+    return (Vector__3i32F8){
+        vector.x__i32F4
+            << FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.y__i32F4
+            << FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.z__i32F4
+            << FRACTIONAL_PERCISION_4__BIT_SIZE,
+    };
+}
+
+static Vector__3i32F4 inline vector_3i32F8_to__vector_3i32(
+        Vector__3i32F8 vector) {
+    return (Vector__3i32F4){
+        vector.x__i32F8
+            >> FRACTIONAL_PERCISION_8__BIT_SIZE,
+        vector.y__i32F8
+            >> FRACTIONAL_PERCISION_8__BIT_SIZE,
+        vector.z__i32F8
+            >> FRACTIONAL_PERCISION_8__BIT_SIZE,
     };
 }
 
@@ -181,6 +221,16 @@ static Vector__3i32 inline add_vectors__3i32(
     };
 }
 
+static Vector__3i32F8 inline subtract_vectors__3i32F8(
+        Vector__3i32F8 vector_one,
+        Vector__3i32F8 vector_two) {
+    return (Vector__3i32F8) {
+        vector_one.x__i32F8 - vector_two.x__i32F8,
+        vector_one.y__i32F8 - vector_two.y__i32F8,
+        vector_one.z__i32F8 - vector_two.z__i32F8,
+    };
+}
+
 static Vector__3i32F4 inline subtract_vectors__3i32F4(
         Vector__3i32F4 vector_one,
         Vector__3i32F4 vector_two) {
@@ -209,6 +259,14 @@ static void inline add_p_vectors__3i32F4(
     p_vector_one->z__i32F4 += p_vector_two->z__i32F4;
 }
 
+static void inline add_p_vectors__3i32F8(
+        Vector__3i32F8 *p_vector_one,
+        Vector__3i32F8 *p_vector_two) {
+    p_vector_one->x__i32F8 += p_vector_two->x__i32F8;
+    p_vector_one->y__i32F8 += p_vector_two->y__i32F8;
+    p_vector_one->z__i32F8 += p_vector_two->z__i32F8;
+}
+
 static void inline add_p_vectors__3i32(
         Vector__3i32 *p_vector_one,
         Vector__3i32 *p_vector_two) {
@@ -231,6 +289,52 @@ static void inline subtract_p_vectors__3i32(
     p_vector_one->x__i32 -= p_vector_two->x__i32;
     p_vector_one->y__i32 -= p_vector_two->y__i32;
     p_vector_one->z__i32 -= p_vector_two->z__i32;
+}
+
+static bool inline is_vector_3i32F8_within__distance_i32F4(
+        Vector__3i32F8 vector,
+        i32F4 distance) {
+    i32F4 x = vector.x__i32F8 >> FRACTIONAL_PERCISION_4__BIT_SIZE;
+    i32F4 y = vector.y__i32F8 >> FRACTIONAL_PERCISION_4__BIT_SIZE;
+    i32F4 z = vector.z__i32F8 >> FRACTIONAL_PERCISION_4__BIT_SIZE;
+    return (x * x + y * y + z * z) <= distance * distance;
+    // return ((vector.x__i32F8 * vector.x__i32F8
+    //         + vector.y__i32F8 * vector.y__i32F8
+    //         + vector.z__i32F8 * vector.z__i32F8)
+    //         >> FRACTIONAL_PERCISION_4__BIT_SIZE)
+    //     <= distance * distance
+    //     ;
+}
+
+static bool inline is_vector_3i32F8_within__distance_i32(
+        Vector__3i32F8 vector,
+        Signed_Index__i32 distance) {
+    return ((vector.x__i32F8 * vector.x__i32F8
+            + vector.y__i32F8 * vector.y__i32F8
+            + vector.z__i32F8 * vector.z__i32F8)
+            >> FRACTIONAL_PERCISION_4__BIT_SIZE)
+        <= distance * distance
+        ;
+}
+
+static bool inline is_vector_3i32F4_within__distance_i32F4(
+        Vector__3i32F4 vector,
+        i32F4 distance) {
+    return (vector.x__i32F4 * vector.x__i32F4
+            + vector.y__i32F4 * vector.y__i32F4
+            + vector.z__i32F4 * vector.z__i32F4)
+        <= distance * distance
+        ;
+}
+
+static bool inline is_vector_3i32_within__distance_i32(
+        Vector__3i32 vector,
+        Signed_Index__i32 distance) {
+    return (vector.x__i32 * vector.x__i32
+            + vector.y__i32 * vector.y__i32
+            + vector.z__i32 * vector.z__i32)
+        <= distance * distance
+        ;
 }
 
 #endif

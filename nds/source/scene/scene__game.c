@@ -88,8 +88,8 @@ void m_load_scene_as__game_handler(
     NDS_initialize_gfx_for__world(gfx_context);
     initialize_world(&p_game->world);
 
-    // NDS_initialize_debug__sub();
-    // return;
+    NDS_initialize_debug__sub();
+    return;
     NDS_initialize_gfx_for__ui(&p_game->gfx_context);
     NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
@@ -151,10 +151,10 @@ void m_enter_scene_as__game_handler(
         if (p_game->scene_manager.p_active_scene == 0)
             break;
         manage_game(p_game);
-        NDS_update_ui_for__hud(
-                &p_game->gfx_context,
-                p_this_scene,
-                p_player);
+        // NDS_update_ui_for__hud(
+        //         &p_game->gfx_context,
+        //         p_this_scene,
+        //         p_player);
         manage_world(p_game);
     }
 }

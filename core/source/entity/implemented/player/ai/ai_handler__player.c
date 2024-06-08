@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game_action/game_action.h"
+#include "raycast/ray.h"
 #include "vectors.h"
 #include "world/chunk_vectors.h"
 #include "world/tile_vectors.h"
@@ -18,6 +19,8 @@
 #include <world/tile.h>
 #include <game.h>
 
+#include <degree.h>
+
 enum Use_Mode {
     Use_Mode__Place_Wall,
     Use_Mode__Place_Ground,
@@ -28,6 +31,8 @@ enum Tile_Kind kind_of_tile =
     Tile_Kind__Oak_Wood;
 enum Use_Mode mode_of_use =
     Use_Mode__Place_Wall;
+
+Degree__u8 angle_of__ray = 0;
 
 void m_entity_ai_handler__player(
         Entity *p_this_player,
@@ -73,6 +78,14 @@ void m_entity_ai_handler__player(
         x -= 32;
     }
 
+    if (is_input__turn_left_released(p_input)) {
+        angle_of__ray = subtract_angles(angle_of__ray, 1);    
+        debug_info("angle_of__ray: %d/255", angle_of__ray);
+    }
+    if (is_input__turn_right_released(p_input)) {
+        angle_of__ray = add_angles(angle_of__ray, 1);
+        debug_info("angle_of__ray: %d/255", angle_of__ray);
+    }
     if (is_input__game_settings_released(p_input)) {
         invoke_action__allocate_entity(
                 p_game,
@@ -133,45 +146,54 @@ void m_entity_ai_handler__player(
         }
     } 
     if (is_input__use_released(p_input)) {
-        Vector__3i32F4 tile_pos = 
-            get_vector__3i32F4_using__i32(x, y, 0);
-        Chunk *p_chunk =
-            get_p_chunk_from__chunk_manager_using__i32(
-                    &p_game->world.chunk_manager,
-                    get_chunk_x_i32_from__vector_3i32F4(tile_pos),
-                    get_chunk_y_i32_from__vector_3i32F4(tile_pos),
-                    0);
-
-        if (p_chunk) {
-            Tile *p_tile =
-                //TODO: consolidate these bit manips
-                get_p_tile_from__chunk_using__u8(
-                        p_chunk,
-                        get_tile_x_u8_from__vector_3i32F4(tile_pos),
-                        get_tile_y_u8_from__vector_3i32F4(tile_pos),
+        Ray__3i32F8 ray = get_ray(
+                p_this_player->hitbox.position__3i32F4, 
+                angle_of__ray); 
+        while (is_p_ray_within__length_i32F4(
+                    &ray, i32_to__i32F4(8 << 3))) {
+            step_p_ray_until__next_tile(&ray);
+            Vector__3i32F4 tile_pos = 
+                vector_3i32F8_to__vector_3i32F4(
+                        ray.ray_current_vector__3i32F8);
+            Chunk *p_chunk =
+                get_p_chunk_from__chunk_manager_using__i32(
+                        &p_game->world.chunk_manager,
+                        get_chunk_x_i32_from__vector_3i32F4(tile_pos),
+                        get_chunk_y_i32_from__vector_3i32F4(tile_pos),
                         0);
-            switch(mode_of_use) {
-                default:
-                case Use_Mode__Place_Wall:
-                    p_tile->the_kind_of_tile_cover__this_tile_has =
-                        get_tile_cover_wall_for__tile_kind(kind_of_tile);
-                    set_tile__is_unpassable(p_tile, true);
-                    break;
-                case Use_Mode__Place_Ground:
-                    p_tile->the_kind_of_tile__this_tile_is =
-                        kind_of_tile;
-                    break;
-                case Use_Mode__Remove_Wall:
-                    p_tile->the_kind_of_tile_cover__this_tile_has =
-                        Tile_Cover_Kind__None;
-                    set_tile__is_unpassable(p_tile, false);
-                    break;
+
+            if (p_chunk) {
+                Tile *p_tile =
+                    //TODO: consolidate these bit manips
+                    get_p_tile_from__chunk_using__u8(
+                            p_chunk,
+                            get_tile_x_u8_from__vector_3i32F4(tile_pos),
+                            get_tile_y_u8_from__vector_3i32F4(tile_pos),
+                            0);
+                switch(mode_of_use) {
+                    default:
+                    case Use_Mode__Place_Wall:
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            get_tile_cover_wall_for__tile_kind(kind_of_tile);
+                        set_tile__is_unpassable(p_tile, true);
+                        break;
+                    case Use_Mode__Place_Ground:
+                        p_tile->the_kind_of_tile__this_tile_is =
+                            kind_of_tile;
+                        break;
+                    case Use_Mode__Remove_Wall:
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__None;
+                        set_tile__is_unpassable(p_tile, false);
+                        break;
+                }
             }
 
-            PLATFORM_update_chunks(
-                    &p_game->gfx_context,
-                    &p_game->world.chunk_manager);
         }
+
+        PLATFORM_update_chunks(
+                &p_game->gfx_context,
+                &p_game->world.chunk_manager);
 
         animate_humanoid__use(p_this_player);
         return;
