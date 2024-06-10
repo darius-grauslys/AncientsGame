@@ -78,11 +78,11 @@ void m_entity_ai_handler__player(
         x -= 32;
     }
 
-    if (is_input__turn_left_released(p_input)) {
+    if (is_input__turn_left_held(p_input)) {
         angle_of__ray = subtract_angles(angle_of__ray, 1);    
         debug_info("angle_of__ray: %d/255", angle_of__ray);
     }
-    if (is_input__turn_right_released(p_input)) {
+    if (is_input__turn_right_held(p_input)) {
         angle_of__ray = add_angles(angle_of__ray, 1);
         debug_info("angle_of__ray: %d/255", angle_of__ray);
     }
