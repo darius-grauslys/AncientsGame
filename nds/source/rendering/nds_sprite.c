@@ -11,13 +11,13 @@
 #include <assets/entities/zombie.h>
 
 void PLATFORM_initialize_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
-    PLATFORM_initialize_texture(
+    PLATFORM_allocate_texture(
             &sprite->sprite_texture,
             USE_TEXTURE_FLAGS__OAM__16x16(TEXTURE_FLAGS__USE_OAM_MAIN));
 }
 
 void PLATFORM_initialize_oam_sprite__8x8(PLATFORM_Sprite *sprite) {
-    PLATFORM_initialize_texture(
+    PLATFORM_allocate_texture(
             &sprite->sprite_texture,
             USE_TEXTURE_FLAGS__OAM__8x8(TEXTURE_FLAGS__USE_OAM_MAIN));
 }
@@ -134,12 +134,4 @@ oam_16x16:
         false, false, 
         false);
     return;
-}
-
-void PLATFORM_release_sprite(PLATFORM_Sprite *sprite) {
-    oamSetHidden(
-            sprite->sprite_texture.oam,
-            sprite->sprite_texture.oam_index,
-            true);
-    PLATFORM_free_texture(&sprite->sprite_texture);
 }

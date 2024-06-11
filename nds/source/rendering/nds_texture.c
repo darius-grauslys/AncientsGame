@@ -2,7 +2,7 @@
 #include <debug/debug.h>
 #include <nds.h>
 
-void PLATFORM_initialize_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
+void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
     texture->gfx = 0;
     texture->width =
         texture->height = 0;
@@ -109,32 +109,33 @@ _abort:
     debug_abort("Invalid sprite size.");
 }
 
-void PLATFORM_free_texture(PLATFORM_Texture *texture) {
-    oamFreeGfx(
-            texture->oam,
-            texture->gfx);
-}
-
-void PLATFORM_initialize_texture__with_path(PLATFORM_Texture *texture,
+void PLATFORM_allocate_texture__with_path(PLATFORM_Texture *texture,
         Texture_Flags flags,
         const char *path) {
     // no-op
-    debug_error("initialize_texture__with_path not defined on NDS.");
+    debug_error("allocate_texture__with_path not defined on NDS.");
 }
 
-void PLATFORM_initialize_texture__with_size(PLATFORM_Texture *texture, 
+void PLATFORM_allocate_texture__with_size(PLATFORM_Texture *texture, 
         Texture_Flags flags,
         uint32_t width, uint32_t height) {
-    debug_error("initialize_texture__with_size not supported on NDS.");
+    debug_error("allocate_texture__with_size not supported on NDS.");
 }
 
 void PLATFORM_use_texture(PLATFORM_Texture *texture) {
     // no-op
 }
 
+void PLATFORM_release_texture_with__p_PLATFORM_sprite(PLATFORM_Sprite *p_PLATFORM_sprite) {
+    PLATFORM_release_texture(&p_PLATFORM_sprite->sprite_texture);
+}
+
 void PLATFORM_release_texture(PLATFORM_Texture *texture) {
-    if (!CHECK_TEXTURE_FLAG__USE_OAM(texture->flags))
+    if (!CHECK_TEXTURE_FLAG__USE_OAM(texture->flags)) {
+        //TODO: impl non-oam texture deallocation.
+        debug_error("PLATFORM_release_texture, cannot deallocate non-oam atm.");
         return;
+    }
 
     OamState *oam;
     if (CHECK_TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB(texture->flags))

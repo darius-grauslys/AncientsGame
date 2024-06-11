@@ -95,5 +95,6 @@ void release_entity_from__entity_manager(
             == p_entity) {
         p_entity_manager->p_local_player = 0;
     }
-    PLATFORM_release_sprite(&p_entity->sprite_wrapper.sprite);
+    PLATFORM_release_texture_with__p_PLATFORM_sprite(
+            &p_entity->sprite_wrapper.sprite);
 }

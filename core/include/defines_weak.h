@@ -96,5 +96,6 @@ typedef struct Game_Action_t Game_Action;
 
 typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
 typedef struct PLATFORM_Texture_t PLATFORM_Texture;
+typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 
 #endif
