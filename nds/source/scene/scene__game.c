@@ -4,6 +4,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "entity/entity_manager.h"
+#include "entity/handlers/entity_handlers.h"
 #include "entity/humanoid.h"
 #include "game.h"
 #include "game_action/game_action.h"
@@ -136,6 +137,10 @@ void m_enter_scene_as__game_handler(
     p_game->world.entity_manager
         .p_local_player =
         p_player;
+
+    set_camera_to__track_this__entity(
+            &p_game->world.camera, 
+            p_player);
 
     move_chunk_manager(
             &p_game->world.chunk_manager, 

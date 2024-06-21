@@ -163,6 +163,7 @@ typedef struct UI_Manager_t UI_Manager;
 /// SECTION_world
 ///
 
+typedef struct Camera_t Camera;
 typedef struct Chunk_Manager_t Chunk_Manager;
 typedef struct Chunk_t Chunk;
 typedef struct Tile_t Tile;

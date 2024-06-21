@@ -3,8 +3,15 @@
 
 #include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"
+#include "vectors.h"
 #include <stdbool.h>
 #include <defines.h>
+
+static inline
+Vector__3i32 get_vector_3i32_from__entity(
+        Entity *p_entity) {
+    return vector_3i32F4_to__vector_3i32(p_entity->hitbox.position__3i32F4);
+}
 
 static i32F4 inline get_x_i32F4_from__entity(
         Entity *p_entity) {

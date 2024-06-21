@@ -37,5 +37,5 @@ void initialize_entity_as__player(
 
     p_entity->humanoid__homeostasis__i8 = 0;
 
-    set_entity__is_not_updating_position(p_entity);
+    // set_entity__is_not_updating_position(p_entity);
 }

@@ -39,7 +39,6 @@ void PLATFORM_abort(void);
 ///
 void PLATFORM_render_entity(
         Entity *entity,
-        Vector__3i32F4 camera_position__3i32F4,
         Game *game);
 
 ///
@@ -162,6 +161,11 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.
+#endif
+
+#ifndef PLATFORM__CAMERA
+#define CAMERA_FULCRUM__WIDTH 256
+#define CAMERA_FULCRUM__HEIGHT 196
 #endif
 
 #ifndef PLATFORM__CHUNKS

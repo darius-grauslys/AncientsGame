@@ -3,6 +3,11 @@
 
 #include <defines.h>
 
+static inline
+Camera *get_p_camera_from__world(World *p_world) {
+    return &p_world->camera;
+}
+
 static Entity_Manager inline 
 *get_p_entity_manager_from__world(World *p_world) {
     return &p_world->entity_manager;

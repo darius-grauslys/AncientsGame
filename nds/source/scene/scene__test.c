@@ -16,17 +16,19 @@ void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
     NDS_initialize_gfx_for__world(&p_game->gfx_context);
-    initialize_world(&p_game->world);
     NDS_initialize_debug__main();
-    NDS_initialize_gfx_for__ui(
-            &p_game->gfx_context);
-    NDS_set_ui_background_to__equip(
-            &p_game->gfx_context);
 
     PLATFORM_initialize_sprite_for__item(
             &item_sprite,
             Item_Kind__Arrow__Iron,
             TEXTURE_FLAGS__NONE);
+
+    UI_Element *p_ui_draggable =
+        get_new__ui_element_from__ui_manager(
+                &p_game->ui_manager);
+
+    NDS_initialize_ui_element_as__nds_draggable(
+            p_ui_draggable, &item_sprite);
 }
 
 void m_enter_scene_as__game_handler(
@@ -37,5 +39,5 @@ void initialize_scene_as__test(Scene *p_scene) {
     p_scene->m_load_scene_handler =
         m_load_scene_as__test_handler;
     p_scene->m_enter_scene_handler =
-        m_enter_scene_as__game_handler;
+        m_enter_scene_handler__default;
 }

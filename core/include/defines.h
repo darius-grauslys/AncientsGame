@@ -1160,6 +1160,18 @@ typedef struct UI_Manager_t {
 /// SECTION_world
 ///
 
+typedef void (*m_Camera_Handler)(
+        Camera *p_this_camera,
+        Game *p_game);
+
+typedef struct Camera_t {
+    Vector__3i32F4 position;
+    m_Camera_Handler m_camera_handler;
+    void *p_camera_data;
+    Quantity__u32 width_of__fulcrum, height_of__fulcrum;
+    //TODO: add more things such as fulcrum
+} Camera;
+
 typedef uint8_t Chunk_Tile_Index__u8;
 ///
 /// Local to a chunk.
@@ -1385,6 +1397,8 @@ typedef struct World_t {
     Chunk_Manager chunk_manager;
     Collision_Manager collision_manager;
     World_Parameters world_parameters;
+
+    Camera camera;
 } World;
 
 ///

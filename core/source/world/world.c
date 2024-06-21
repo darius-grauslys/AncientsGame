@@ -1,5 +1,6 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
+#include "world/camera.h"
 #include <world/world.h>
 #include <entity/entity_manager.h>
 #include <collisions/collision_manager.h>
@@ -32,10 +33,24 @@ void initialize_world(World *p_world) {
     initialize_chunk_manager(
             &p_world->chunk_manager,
             &p_world->world_parameters);
+    initialize_camera(
+            &p_world->camera,
+            get_vector__3i32F4_using__i32(
+                0, 0, 0),
+            0, //nullptr handler
+            CAMERA_FULCRUM__WIDTH,
+            CAMERA_FULCRUM__HEIGHT
+            );
 }
 
 void manage_world(Game *p_game) {
     manage_world__entities(p_game);
+
+    if (p_game->world.camera.m_camera_handler) {
+        p_game->world.camera.m_camera_handler(
+                &p_game->world.camera,
+                p_game);
+    }
 
     if (poll_world_for__scrolling(&p_game->world)) {
         set_collision_manager__center_chunk(
@@ -53,11 +68,6 @@ void manage_world__entities(Game *p_game) {
         &p_game->world;
     Entity_Manager *p_entity_manager =
         &p_game->world.entity_manager;
-
-    if (!p_entity_manager->p_local_player) {
-        debug_abort("manage_world__entities, p_local_player == 0");
-        return;
-    }
 
     for (Quantity__u16 i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF;i++) {
@@ -134,8 +144,6 @@ void manage_world__entities(Game *p_game) {
         if (!is_entity__hidden(p_entity)) {
             PLATFORM_render_entity(
                     p_entity,
-                    p_entity_manager
-                    ->p_local_player->hitbox.position__3i32F4,
                     p_game);
         }
     }
@@ -191,8 +199,7 @@ bool poll_world_for__scrolling(
         poll_chunk_manager_for__chunk_movement(
             &p_world->chunk_manager,
             &p_world->world_parameters,
-            p_world->entity_manager.p_local_player
-                ->hitbox.position__3i32F4);
+            p_world->camera.position);
 
     return is_chunks_moved;
 }

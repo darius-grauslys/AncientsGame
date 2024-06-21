@@ -9,6 +9,11 @@
 #include <defines.h>
 #include <world/world.h>
 
+static inline
+Camera *get_p_camera_from__game(Game *p_game) {
+    return get_p_camera_from__world(&p_game->world);
+}
+
 static Entity_Manager inline 
 *get_p_entity_manager_from__game(Game *p_game) {
     return get_p_entity_manager_from__world(&p_game->world);
