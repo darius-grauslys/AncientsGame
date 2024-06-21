@@ -1,5 +1,7 @@
 #include "defines.h"
+#include "defines_weak.h"
 #include "nds/arm9/sprite.h"
+#include "platform_defines.h"
 #include <rendering/sprite.h>
 #include <rendering/texture.h>
 #include <entity/entity.h>
@@ -10,17 +12,8 @@
 #include <assets/entities/skeleton.h>
 #include <assets/entities/zombie.h>
 
-void PLATFORM_initialize_oam_sprite__16x16(PLATFORM_Sprite *sprite) {
-    PLATFORM_initialize_texture(
-            &sprite->sprite_texture,
-            USE_TEXTURE_FLAGS__OAM__16x16(TEXTURE_FLAGS__USE_OAM_MAIN));
-}
-
-void PLATFORM_initialize_oam_sprite__8x8(PLATFORM_Sprite *sprite) {
-    PLATFORM_initialize_texture(
-            &sprite->sprite_texture,
-            USE_TEXTURE_FLAGS__OAM__8x8(TEXTURE_FLAGS__USE_OAM_MAIN));
-}
+#include <assets/entities/items.h>
+#include <stdint.h>
 
 void PLATFORM_initialize_sprite(
         PLATFORM_Sprite *sprite,
@@ -30,116 +23,113 @@ void PLATFORM_initialize_sprite(
     //         doesn't support oamSub.");
     uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);
-    switch (texture_flags_for__sprite) {
-        default:
-            debug_abort("Texture_Flags %d not implemented for PLATFORM_initialize_sprite.",
-                    texture_flags_for__sprite);
-            return;
-        case TEXTURE_FLAG__SIZE_8x8:
-            palette = 0;
-            PLATFORM_initialize_oam_sprite__8x8(sprite);
-            sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
-            dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME__8x8__OFFSET);
-            if (!perform_update)
-                break;
-            oamSet(
-                sprite->sprite_texture.oam, 
-                sprite->sprite_texture.oam_index, 
-                127 - 8, 96 - 8, 
-                1, 
-                palette, 
-                SpriteSize_8x8, 
-                SpriteColorFormat_256Color, 
-                0, // null gfx
-                -1, 
-                false, 
-                false, 
-                false, false, 
-                false);
-        case TEXTURE_FLAG__SIZE_16x16:
-            palette = 0;
-            PLATFORM_initialize_oam_sprite__16x16(sprite);
-            sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
-            dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME__16x16__OFFSET);
-            if (!perform_update)
-                break;
-            oamSet(
-                sprite->sprite_texture.oam, 
-                sprite->sprite_texture.oam_index, 
-                127 - 8, 96 - 8, 
-                1, 
-                palette, 
-                SpriteSize_16x16, 
-                SpriteColorFormat_256Color, 
-                0, // null gfx
-                -1, 
-                false, 
-                false, 
-                false, false, 
-                false);
-            break;
-    }
+    PLATFORM_allocate_texture(
+            &sprite->sprite_texture,
+            texture_flags_for__sprite);
 }
 
-void PLATFORM_initialize_sprite_for__entity(Entity *entity) {
-    PLATFORM_Sprite *sprite =
-        &entity->sprite_wrapper.sprite;
+void PLATFORM_initialize_sprite_for__entity(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Entity_Kind the_kind_of__entity,
+        Texture_Flags texture_flags) {
+    // drop the size flags
+    texture_flags &= ~TEXTURE_FLAG__SIZE__MASK;
+    texture_flags |= TEXTURE_FLAG__USE_OAM;
+    texture_flags |= TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB;
     uint8_t palette = 0;
-    switch(entity->the_kind_of_entity__this_entity_is) {
+    while (DMA_CR(p_PLATFORM_sprite->sprite_texture.dma_channel) & DMA_BUSY);
+    switch(the_kind_of__entity) {
         default:
-            debug_abort("Entity_Kind %d not implemented for PLATFORM_initialize_entity.",
-                    entity->the_kind_of_entity__this_entity_is);
+            debug_abort("Entity_Kind %d not implemented for PLATFORM_initialize_sprite_for__entity.",
+                    the_kind_of__entity);
             return;
         case Entity_Kind__Player:
-            PLATFORM_initialize_sprite(&entity->sprite_wrapper.sprite,
-                    TEXTURE_FLAG__SIZE_16x16,
-                    false);
-            sprite->gfx_sprite_sheet = (const uint16_t*)playerTiles;
-            dmaCopy((u8*)playerTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME__16x16__OFFSET);
-            goto oam_16x16;
         case Entity_Kind__Skeleton:
-            PLATFORM_initialize_sprite(&entity->sprite_wrapper.sprite,
-                    TEXTURE_FLAG__SIZE_16x16,
-                    false);
-            sprite->gfx_sprite_sheet = (const uint16_t*)skeletonTiles;
-            dmaCopy((u8*)skeletonTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME__16x16__OFFSET);
-            goto oam_16x16;
         case Entity_Kind__Zombie:
-            PLATFORM_initialize_sprite(&entity->sprite_wrapper.sprite,
-                    TEXTURE_FLAG__SIZE_16x16,
-                    false);
-            sprite->gfx_sprite_sheet = (const uint16_t*)zombieTiles;
-            dmaCopy((u8*)zombieTiles, sprite->sprite_texture.gfx, 
-                    SPRITE_FRAME__16x16__OFFSET);
-            goto oam_16x16;
+            texture_flags |= TEXTURE_FLAG__SIZE_16x16;
+            break;
     }
 
-oam_16x16:
+    PLATFORM_initialize_sprite(
+            p_PLATFORM_sprite,
+            texture_flags,
+            false);
+
+    switch (the_kind_of__entity) {
+        default:
+            return;
+        case Entity_Kind__Player:
+            p_PLATFORM_sprite
+                ->gfx_sprite_sheet = (const uint16_t*)playerTiles;
+            dmaCopy((u8*)playerTiles, 
+                    p_PLATFORM_sprite->sprite_texture.gfx, 
+                    SPRITE_FRAME__16x16__OFFSET);
+            break;
+        case Entity_Kind__Skeleton:
+            texture_flags |= TEXTURE_FLAG__SIZE_16x16;
+            p_PLATFORM_sprite
+                ->gfx_sprite_sheet = (const uint16_t*)skeletonTiles;
+            dmaCopy((u8*)skeletonTiles, 
+                    p_PLATFORM_sprite->sprite_texture.gfx, 
+                    SPRITE_FRAME__16x16__OFFSET);
+            break;
+        case Entity_Kind__Zombie:
+            texture_flags |= TEXTURE_FLAG__SIZE_16x16;
+            p_PLATFORM_sprite
+                ->gfx_sprite_sheet = (const uint16_t*)zombieTiles;
+            dmaCopy((u8*)zombieTiles, 
+                    p_PLATFORM_sprite->sprite_texture.gfx, 
+                    SPRITE_FRAME__16x16__OFFSET);
+            break;
+    }
+
+    // TODO: move this to texture.
     oamSet(
-        sprite->sprite_texture.oam, 
-        sprite->sprite_texture.oam_index, 
+        p_PLATFORM_sprite->sprite_texture.oam, 
+        p_PLATFORM_sprite->sprite_texture.oam_index, 
         127 - 8, 96 - 8, 
         1, 
         palette, 
         SpriteSize_16x16, 
         SpriteColorFormat_256Color, 
-        sprite->sprite_texture.gfx, 
+        p_PLATFORM_sprite->sprite_texture.gfx, 
         -1, 
         false, 
         false, 
         false, false, 
         false);
-    return;
 }
 
-void PLATFORM_release_sprite(PLATFORM_Sprite *sprite) {
-    oamSetHidden(
-            sprite->sprite_texture.oam,
-            sprite->sprite_texture.oam_index,
-            true);
-    PLATFORM_free_texture(&sprite->sprite_texture);
+void PLATFORM_initialize_sprite_for__item(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Item_Kind the_kind_of__item,
+        Texture_Flags texture_flags) {
+    texture_flags &= ~TEXTURE_FLAG__SIZE__MASK;
+    texture_flags |= TEXTURE_FLAG__USE_OAM;
+    texture_flags |= TEXTURE_FLAG__SIZE_8x8;
+    uint8_t palette = 0;
+
+    PLATFORM_initialize_sprite(
+            p_PLATFORM_sprite,
+            texture_flags,
+            false);
+
+    dmaCopy((u8*)itemsTiles, 
+            p_PLATFORM_sprite->sprite_texture.gfx, 
+            SPRITE_FRAME__8x8__OFFSET * (uint32_t)the_kind_of__item);
+
+    oamSet(
+        p_PLATFORM_sprite->sprite_texture.oam, 
+        p_PLATFORM_sprite->sprite_texture.oam_index, 
+        127 - 8, 96 - 8, 
+        1, 
+        palette, 
+        SpriteSize_8x8, 
+        SpriteColorFormat_256Color, 
+        p_PLATFORM_sprite->sprite_texture.gfx, 
+        -1, 
+        false, 
+        false, 
+        false, false, 
+        false);
 }

@@ -164,6 +164,7 @@ typedef struct PLATFORM_Texture_t {
     OamState *oam;
     uint16_t *gfx;
     uint32_t width, height;
+    SpriteSize sprite_size;
     uint32_t oam_index;
     uint32_t flags;
     uint8_t dma_channel;

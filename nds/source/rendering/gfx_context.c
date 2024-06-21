@@ -1,5 +1,6 @@
 #include "debug/nds_debug.h"
 #include "defines_weak.h"
+#include "nds/arm9/video.h"
 #include "nds/dma.h"
 #include "timer.h"
 #include <defines.h>
@@ -53,6 +54,13 @@ void NDS_initialize_gfx_for__world(
             GFX_entitiesPalLen);
 
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
+	vramSetBankI(VRAM_I_LCD);
+
+	dmaCopy(GFX_entitiesPal, 
+            VRAM_I_EXT_SPR_PALETTE[0], 
+            GFX_entitiesPalLen);
+
+	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 
     NDS_initialize_background_ground__for_game(
             &gfx_context->background_ground);

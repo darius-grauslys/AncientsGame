@@ -20,6 +20,7 @@
 #include <game.h>
 
 #include <degree.h>
+#include <debug/debug.h>
 
 enum Use_Mode {
     Use_Mode__Place_Wall,

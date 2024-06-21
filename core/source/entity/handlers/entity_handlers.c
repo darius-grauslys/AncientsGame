@@ -1,6 +1,7 @@
 #include "world/world.h"
 #include <entity/handlers/entity_handlers.h>
 #include <game.h>
+#include <debug/debug.h>
 
 void m_entity_dispose_handler__default(
         Entity *p_this_entity,
