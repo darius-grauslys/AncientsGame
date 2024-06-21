@@ -6,6 +6,7 @@
 #include "scene/scene__multiplayer_menu.h"
 #include "scene/scene__settings_menu.h"
 #include "scene/scene__single_player_menu.h"
+#include "scene/scene__test.h"
 #include "scene/scene_manager.h"
 #include <platform.h>
 #include <debug/nds_debug.h>
@@ -22,7 +23,7 @@ void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager) {
     p_scene_manager->p_active_scene =
         get_p_scene_from__scene_manager(
                 p_scene_manager, 
-                SCENE_IDENTIFIER__MAIN_MENU);
+                SCENE_IDENTIFIER__TEST);
 
     initialize_scene_as__main_menu(
             get_p_scene_from__scene_manager(
@@ -44,4 +45,8 @@ void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager) {
             get_p_scene_from__scene_manager(
 				p_scene_manager,
 				SCENE_IDENTIFIER__GAME));
+    initialize_scene_as__test(
+            get_p_scene_from__scene_manager(
+				p_scene_manager,
+				SCENE_IDENTIFIER__TEST));
 }

@@ -55,6 +55,30 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 ///
 void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context);
 
+typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
+void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,
+        Texture_Flags texture_flags_for__sprite,
+        bool perform_update);
+void PLATFORM_initialize_sprite_for__entity(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Entity_Kind the_kind_of__entity,
+        Texture_Flags texture_flags);
+void PLATFORM_initialize_sprite_for__item(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Item_Kind the_kind_of__item,
+        Texture_Flags texture_flags);
+
+void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
+
+void PLATFORM_update_sprite_gfx__to_current_frame(
+        Sprite_Wrapper *sprite_wrapper);
+
+void PLATFORM_update_sprite(
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+void PLATFORM_set_sprite__position(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        Index__u16 x, Index__u16 y);
+
 ///
 /// On NDS, this will init both main and sub.
 ///
@@ -103,24 +127,6 @@ void PLATFORM_render_tile(
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager);
-
-typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
-void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,
-        Texture_Flags texture_flags_for__sprite,
-        bool perform_update);
-void PLATFORM_initialize_sprite_for__entity(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        enum Entity_Kind the_kind_of__entity,
-        Texture_Flags texture_flags);
-void PLATFORM_initialize_sprite_for__item(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        enum Item_Kind the_kind_of__item,
-        Texture_Flags texture_flags);
-
-void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
-
-void PLATFORM_update_sprite_gfx__to_current_frame(
-        Sprite_Wrapper *sprite_wrapper);
 
 ///
 /// SECTION_core

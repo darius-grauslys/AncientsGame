@@ -122,16 +122,9 @@ void m_load_scene_as__game_handler(
     }
 }
 
-Sprite_Wrapper item_sprite;
-
 void m_enter_scene_as__game_handler(
         Scene *p_this_scene,
         Game *p_game) {
-
-    PLATFORM_initialize_sprite_for__item(
-            &item_sprite.sprite,
-            Item_Kind__Arrow__Iron,
-            TEXTURE_FLAGS__NONE);
 
     // TODO: prob wanna remove some of the stuff below
     Entity *p_player = 

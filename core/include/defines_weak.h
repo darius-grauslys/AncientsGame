@@ -16,6 +16,10 @@ typedef uint8_t     Quantity__u8;
 typedef uint16_t    Quantity__u16;
 typedef uint32_t    Quantity__u32;
 
+typedef uint8_t Index__u8;
+typedef uint16_t Index__u16;
+typedef uint32_t Index_u32;
+
 typedef int32_t     Fractional_with__4bit__i32;
 
 typedef struct Vector__3i32F4_t Vector__3i32F4;
