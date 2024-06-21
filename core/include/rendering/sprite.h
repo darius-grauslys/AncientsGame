@@ -31,7 +31,9 @@ static void inline initialize_sprite_wrapper(
 static void inline initialize_sprite_wrapper_for__entity(
         Entity *entity) {
     PLATFORM_initialize_sprite_for__entity(
-            entity);
+            &entity->sprite_wrapper.sprite,
+            entity->the_kind_of_entity__this_entity_is,
+            TEXTURE_FLAGS__NONE);
     Sprite_Wrapper *sprite_wrapper =
         &entity->sprite_wrapper;
     sprite_wrapper->direction =

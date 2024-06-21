@@ -2,7 +2,9 @@
 #include <debug/debug.h>
 #include <nds.h>
 
-void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
+void PLATFORM_allocate_texture(
+        PLATFORM_Texture *texture, 
+        Texture_Flags flags) {
     texture->gfx = 0;
     texture->width =
         texture->height = 0;
@@ -11,8 +13,6 @@ void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
         GET_TEXTURE_FLAG__LENGTH__WIDTH(flags);
     uint8_t flags_height =
         GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags);
-
-    SpriteSize sprite_size;
 
     switch (flags_width) {
         default:
@@ -24,15 +24,15 @@ void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x8:
                     texture->height = 8;
-                    sprite_size = SpriteSize_8x8;
+                    texture->sprite_size = SpriteSize_8x8;
                     break;
                 case TEXTURE_FLAG__LENGTH_x16:
                     texture->height = 16;
-                    sprite_size = SpriteSize_8x16;
+                    texture->sprite_size = SpriteSize_8x16;
                     break;
                 case TEXTURE_FLAG__LENGTH_x32:
                     texture->height = 32;
-                    sprite_size = SpriteSize_8x32;
+                    texture->sprite_size = SpriteSize_8x32;
                     break;
             }
             break;
@@ -43,15 +43,15 @@ void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x8:
                     texture->height = 8;
-                    sprite_size = SpriteSize_16x8;
+                    texture->sprite_size = SpriteSize_16x8;
                     break;
                 case TEXTURE_FLAG__LENGTH_x16:
                     texture->height = 16;
-                    sprite_size = SpriteSize_16x16;
+                    texture->sprite_size = SpriteSize_16x16;
                     break;
                 case TEXTURE_FLAG__LENGTH_x32:
                     texture->height = 32;
-                    sprite_size = SpriteSize_16x32;
+                    texture->sprite_size = SpriteSize_16x32;
                     break;
             }
             break;
@@ -62,19 +62,19 @@ void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x8:
                     texture->height = 8;
-                    sprite_size = SpriteSize_32x8;
+                    texture->sprite_size = SpriteSize_32x8;
                     break;
                 case TEXTURE_FLAG__LENGTH_x16:
                     texture->height = 16;
-                    sprite_size = SpriteSize_32x16;
+                    texture->sprite_size = SpriteSize_32x16;
                     break;
                 case TEXTURE_FLAG__LENGTH_x32:
                     texture->height = 32;
-                    sprite_size = SpriteSize_32x32;
+                    texture->sprite_size = SpriteSize_32x32;
                     break;
                 case TEXTURE_FLAG__LENGTH_x64:
                     texture->height = 64;
-                    sprite_size = SpriteSize_32x64;
+                    texture->sprite_size = SpriteSize_32x64;
                     break;
             }
             break;
@@ -85,11 +85,11 @@ void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x32:
                     texture->height = 32;
-                    sprite_size = SpriteSize_64x32;
+                    texture->sprite_size = SpriteSize_64x32;
                     break;
                 case TEXTURE_FLAG__LENGTH_x64:
                     texture->height = 64;
-                    sprite_size = SpriteSize_64x64;
+                    texture->sprite_size = SpriteSize_64x64;
                     break;
             }
             break;
@@ -101,9 +101,29 @@ void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags) {
         texture->oam = &oamSub;
     }
 
-	texture->gfx = oamAllocateGfx(texture->oam, sprite_size, SpriteColorFormat_256Color);
-    texture->oam_index = oamGfxPtrToOffset(texture->oam, texture->gfx);
-
+	texture->gfx = 
+        oamAllocateGfx(
+                texture->oam, 
+                texture->sprite_size, 
+                SpriteColorFormat_256Color);
+    texture->oam_index = 
+        oamGfxPtrToOffset(
+                texture->oam, 
+                texture->gfx);
+    oamSet(
+        texture->oam, 
+        texture->oam_index, 
+        127 - 8, 96 - 8, 
+        1, 
+        0, 
+        texture->sprite_size, 
+        SpriteColorFormat_256Color, 
+        0, // null gfx source to copy
+        -1, 
+        false, 
+        false, 
+        false, false, 
+        false);
     return;
 _abort:
     debug_abort("Invalid sprite size.");

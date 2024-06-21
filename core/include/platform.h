@@ -108,7 +108,14 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,
         bool perform_update);
-void PLATFORM_initialize_sprite_for__entity(Entity *entity);
+void PLATFORM_initialize_sprite_for__entity(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Entity_Kind the_kind_of__entity,
+        Texture_Flags texture_flags);
+void PLATFORM_initialize_sprite_for__item(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Item_Kind the_kind_of__item,
+        Texture_Flags texture_flags);
 
 void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
 

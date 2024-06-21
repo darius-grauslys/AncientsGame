@@ -4,8 +4,10 @@
 #include "entity/reserves.h"
 #include "game.h"
 #include "input/input.h"
+#include "platform.h"
 #include "platform_defines.h"
 #include "rendering/nds_gfx_context.h"
+#include "rendering/sprite.h"
 #include "ui/menu/nds_ui__menu__main.h"
 #include <scene/scene__main_menu.h>
 #include <debug/nds_debug.h>

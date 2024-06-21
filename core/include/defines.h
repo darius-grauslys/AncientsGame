@@ -480,77 +480,6 @@ typedef uint32_t Texture_Flags;
 /// SECTION_inventory
 ///
 
-enum Item_Kind {
-    Item_Kind__None,
-    Item_Kind__Stick,
-    Item_Kind__Club,
-    Item_Kind__Sword__Rusted,
-    Item_Kind__Scimitar__Rusted,
-    Item_Kind__Dagger__Rusted,
-    Item_Kind__Rapier__Rusted,
-    Item_Kind__Battleaxe__Rusted,
-    Item_Kind__Hatchet__Rusted,
-    Item_Kind__Pickaxe__Rusted,
-    Item_Kind__Hoe__Rusted,
-    Item_Kind__Shovel__Rusted,
-    Item_Kind__Sword__Iron,
-    Item_Kind__Scimitar__Iron,
-    Item_Kind__Dagger__Iron,
-    Item_Kind__Rapier__Iron,
-    Item_Kind__Battleaxe__Iron,
-    Item_Kind__Hatchet__Iron,
-    Item_Kind__Pickaxe__Iron,
-    Item_Kind__Hoe__Iron,
-    Item_Kind__Shovel__Iron,
-    Item_Kind__Sword__Steel,
-    Item_Kind__Scimitar__Steel,
-    Item_Kind__Dagger__Steel,
-    Item_Kind__Rapier__Steel,
-    Item_Kind__Battleaxe__Steel,
-    Item_Kind__Hatchet__Steel,
-    Item_Kind__Pickaxe__Steel,
-    Item_Kind__Hoe__Steel,
-    Item_Kind__Shovel__Steel,
-    Item_Kind__Bow,
-    Item_Kind__Composite_Bow,
-    Item_Kind__Crossbow,
-    Item_Kind__Sling,
-    Item_Kind__Crossbow__Steel,
-    Item_Kind__Arrow__Iron,
-    Item_Kind__Arrow__Steel,
-    Item_Kind__Crossbow_Bolt__Iron,
-    Item_Kind__Crossbow_Bolt__Steel,
-    Item_Kind__Glass_Bottle,
-    Item_Kind__Bottle__Water,
-    Item_Kind__Bottle__Blood,
-    Item_Kind__Bottle__White, //TODO: determine exactly what it is
-    Item_Kind__Bottle__Gold, //TODO: determine exactly what it is
-    Item_Kind__Bottle__Blue, //TODO: determine exactly what it is
-    Item_Kind__Bottle__Purple, //TODO: determine exactly what it is
-    Item_Kind__Bottle__Sparkling, //TODO: determine exactly what it is
-    Item_Kind__Bottle__Grey, //TODO: determine exactly what it is
-    Item_Kind__Bomb,
-    Item_Kind__Bread,
-    Item_Kind__Seeds,
-    Item_Kind__String,
-    Item_Kind__Tongs__Iron,
-    Item_Kind__Hammer__Iron,
-    Item_Kind__Pile__Wood,
-    Item_Kind__Pile__Stone_Brick,
-    Item_Kind__Pile__Gold,
-    Item_Kind__Pile__Iron,
-    Item_Kind__Pile__Diamond,
-    Item_Kind__Pile__Amethyst,
-    Item_Kind__Pile__Sandstone,
-    Item_Kind__Pile__Stone,
-    Item_Kind__Pile__Dirt,
-    Item_Kind__Pile__Sand,
-    Item_Kind__Pile__Grass,
-    Item_Kind__Pile__Leaves,
-    Item_Kind__Pile__Snow,
-    Item_Kind__Unknown
-};
-
 typedef struct Item_t Item;
 
 typedef void (*m_Item_Use)(
@@ -592,14 +521,6 @@ typedef struct Inventory_t {
 ///
 
 typedef struct Entity_t Entity;
-
-enum Entity_Kind {
-    Entity_Kind__Particle,
-    Entity_Kind__Item,
-    Entity_Kind__Player,
-    Entity_Kind__Skeleton,
-    Entity_Kind__Zombie
-};
 
 enum Entity_Armor_Kind {
     Entity_Armor_Kind__None,
