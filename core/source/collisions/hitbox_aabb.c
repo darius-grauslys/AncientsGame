@@ -43,10 +43,10 @@ void initialize_vector_3i32F4_as__aa_bb_without__velocity(
         Direction__u8 corner_direction) {
 
     Signed_Index__i32 offset_half_width = 
-        (hitbox->width__quantity_u32 >> 2)
+        (hitbox->width__quantity_u32 >> 1)
         << FRACTIONAL_PERCISION_4__BIT_SIZE;
     Signed_Index__i32 offset_half_height = 
-        (hitbox->height__quantity_u32 >> 2)
+        (hitbox->height__quantity_u32 >> 1)
         << FRACTIONAL_PERCISION_4__BIT_SIZE;
     switch (corner_direction) {
         default:
@@ -98,9 +98,9 @@ void initialize_vector_3i32_as__aa_bb_without__velocity(
         Direction__u8 corner_direction) {
 
     Signed_Index__i32 offset_half_width = 
-        hitbox->width__quantity_u32 >> 2;
+        hitbox->width__quantity_u32 >> 1;
     Signed_Index__i32 offset_half_height = 
-        hitbox->height__quantity_u32 >> 2;
+        hitbox->height__quantity_u32 >> 1;
     switch (corner_direction) {
         default:
             // This should never be a problem...

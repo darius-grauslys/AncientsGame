@@ -20,4 +20,8 @@ void NDS_set_ui_background_to__menu_multiplayer(
 void NDS_set_ui_background_to__menu_settings(
         PLATFORM_Gfx_Context *p_gfx_context);
 
+void NDS_set_ui_element_size_using__sprite_size(
+        UI_Element *p_ui_element,
+        SpriteSize sprite_size);
+
 #endif

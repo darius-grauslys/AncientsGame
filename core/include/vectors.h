@@ -84,6 +84,18 @@ static Vector__3i32 inline vector_3i32F4_to__vector_3i32(
     };
 }
 
+static Vector__3i32F4 inline vector_3i32_to__vector_3i32F4(
+        Vector__3i32 vector) {
+    return (Vector__3i32F4){
+        vector.x__i32 
+            << FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.y__i32 
+            << FRACTIONAL_PERCISION_4__BIT_SIZE,
+        vector.z__i32 
+            << FRACTIONAL_PERCISION_4__BIT_SIZE,
+    };
+}
+
 static Vector__3i32F4 inline vector_3i32F8_to__vector_3i32F4(
         Vector__3i32F8 vector) {
     return (Vector__3i32F4){
