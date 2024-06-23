@@ -1,4 +1,5 @@
 #include <platform_defines.h>
+#include "defines.h"
 #include "ui/nds_ui.h"
 #include "ui/ui_draggable.h"
 #include "ui/ui_element.h"
@@ -7,7 +8,15 @@
 
 void NDS_initialize_ui_element_as__nds_draggable(
         UI_Element *p_ui_element,
+        Vector__3i32 position__3i32,
         PLATFORM_Sprite *p_sprite) {
+    initialize_ui_element(
+            p_ui_element, 
+            UI_Element_Kind__Draggable, 
+            p_ui_element->ui_flags,
+            0, 
+            0,
+            position__3i32);
     p_ui_element->p_ui_data = p_sprite;
     set_ui_element__dragged_handler(
             p_ui_element, 

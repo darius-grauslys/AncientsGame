@@ -5,6 +5,7 @@
 #include "input/input.h"
 #include <ui/ui_element.h>
 #include <ui/ui_manager.h>
+#include <vectors.h>
 
 void initialize_ui_manager(
         UI_Manager *p_ui_manager) {
@@ -19,7 +20,8 @@ void initialize_ui_manager(
                 UI_Element_Kind__None, 
                 UI_FLAGS__NONE,
                 1, 
-                1);
+                1,
+                get_vector__3i32(0,0,0));
         p_ui_element->ui_identifier = ui_index;
         p_ui_manager->ui_element_ptrs[ui_index] = 0;
     }
@@ -269,7 +271,8 @@ UI_Element *get_new__ui_element_from__ui_manager(
                     UI_Element_Kind__None,
                     UI_FLAGS__NONE,
                     1,
-                    1);
+                    1,
+                    get_vector__3i32(0,0,0));
             p_ui_element->ui_identifier = ui_index;
             set_ui_element_as__allocated(p_ui_element);
             set_ui_element_as__enabled(p_ui_element);
@@ -355,7 +358,8 @@ void release_all__ui_elements_from__ui_manager(
                 UI_Element_Kind__None, 
                 UI_FLAGS__NONE,
                 1,
-                1);
+                1,
+                get_vector__3i32(0,0,0));
     }
 }
 

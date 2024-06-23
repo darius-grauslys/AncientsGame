@@ -6,13 +6,16 @@
 void initialize_ui_draggable(
         UI_Element *p_ui_draggable,
         m_UI_Dragged m_ui_dragged_handler,
-        Quantity__u8 width,
-        Quantity__u8 height) {
+        Quantity__u8 width__u8,
+        Quantity__u8 height__u8,
+        Vector__3i32 position__3i32) {
     initialize_ui_element(
             p_ui_draggable, 
             UI_Element_Kind__Draggable, 
             UI_FLAGS__BIT_IS_ENABLED, 
-            width, height);
+            width__u8, 
+            height__u8,
+            position__3i32);
     p_ui_draggable->m_ui_dragged_handler =
         m_ui_dragged_handler;
 }

@@ -115,7 +115,7 @@ typedef struct Ray__3i32F8_t {
 #define INDEX__UNKNOWN__u8 (uint8_t)(-1)
 typedef uint8_t Index__u8;
 typedef uint16_t Index__u16;
-typedef uint32_t Index_u32;
+typedef uint32_t Index__u32;
 
 typedef struct Vector__3u8_t {
     Index__u8 x__u8, y__u8, z__u8;

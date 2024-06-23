@@ -8,11 +8,11 @@
 #include <nds.h>
 #include <debug/debug.h>
 
-#include <assets/entities/player.h>
-#include <assets/entities/skeleton.h>
-#include <assets/entities/zombie.h>
+#include <assets/entities/16x16/player.h>
+#include <assets/entities/16x16/skeleton.h>
+#include <assets/entities/16x16/zombie.h>
 
-#include <assets/entities/items.h>
+#include <assets/entities/8x8/items.h>
 #include <stdint.h>
 
 void PLATFORM_initialize_sprite(
@@ -101,11 +101,22 @@ void PLATFORM_initialize_sprite_for__item(
             texture_flags,
             false);
 
-    dmaCopy((u8*)itemsTiles, 
-            p_PLATFORM_sprite->sprite_texture.gfx, 
-            SPRITE_FRAME__8x8__OFFSET * (uint32_t)the_kind_of__item);
+    PLATFORM_set_sprite_graphics_to__item_kind(
+            p_PLATFORM_sprite,
+            the_kind_of__item);
 
     PLATFORM_update_sprite(p_PLATFORM_sprite);
+}
+
+void PLATFORM_set_sprite_graphics_to__item_kind(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Item_Kind the_kind_of__item) {
+    while (DMA_CR(p_PLATFORM_sprite->sprite_texture.dma_channel) & DMA_BUSY);
+    dmaCopy((u8*)(itemsTiles)
+            + (SPRITE_FRAME__8x8__OFFSET
+            * (Index__u32)the_kind_of__item), 
+            p_PLATFORM_sprite->sprite_texture.gfx, 
+            SPRITE_FRAME__8x8__OFFSET);
 }
 
 void PLATFORM_update_sprite(

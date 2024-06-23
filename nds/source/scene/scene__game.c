@@ -109,10 +109,8 @@ void m_load_scene_as__game_handler(
             scene_data__game.p_ui_state_buttons[ui_index];
         initialize_ui_button(
                 p_ui_button,
-                104, 32);
-        set_hitbox__position_with__3i32F4(
-                &p_ui_button->ui_bounding_box__aabb, 
-                get_vector__3i32F4_using__i32(56 + 72 * ui_index, 52, 0));
+                104, 32,
+                get_vector__3i32(56 + 72 * ui_index, 52, 0));
         p_ui_button->p_ui_data =
             &scene_data__game.button_states[ui_index];
         scene_data__game.button_states[ui_index] =

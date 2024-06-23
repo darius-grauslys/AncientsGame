@@ -13,10 +13,12 @@
 #include <assets/world/tiles.h>
 #include <assets/ui/GFX_ui.h>
 
-#include <assets/entities/GFX_entities.h>
-#include <assets/entities/player.h>
-#include <assets/entities/skeleton.h>
-#include <assets/entities/zombie.h>
+#include <assets/entities/16x16/GFX_16x16.h>
+#include <assets/entities/8x8/GFX_8x8.h>
+
+#include <assets/entities/16x16/player.h>
+#include <assets/entities/16x16/skeleton.h>
+#include <assets/entities/16x16/zombie.h>
 
 void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
@@ -49,16 +51,22 @@ void NDS_initialize_gfx_for__world(
 
 	vramSetBankF(VRAM_F_LCD);
 
-	dmaCopy(GFX_entitiesPal, 
-            VRAM_F_EXT_SPR_PALETTE[0], 
-            GFX_entitiesPalLen);
+	dmaCopy(GFX_8x8Pal, 
+            VRAM_F_EXT_SPR_PALETTE[0],
+            GFX_8x8PalLen);
+	dmaCopy(GFX_16x16Pal, 
+            VRAM_F_EXT_SPR_PALETTE[1],
+            GFX_16x16PalLen);
 
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 	vramSetBankI(VRAM_I_LCD);
 
-	dmaCopy(GFX_entitiesPal, 
-            VRAM_I_EXT_SPR_PALETTE[0], 
-            GFX_entitiesPalLen);
+	dmaCopy(GFX_8x8Pal, 
+            VRAM_I_EXT_SPR_PALETTE[0],
+            GFX_8x8PalLen);
+	dmaCopy(GFX_16x16Pal, 
+            VRAM_I_EXT_SPR_PALETTE[1],
+            GFX_16x16PalLen);
 
 	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 

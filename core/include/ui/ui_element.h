@@ -23,8 +23,9 @@ void initialize_ui_element(
         UI_Element *p_ui_element,
         enum UI_Element_Kind kind_of_ui_element,
         UI_Flags__u8 ui_flags,
-        Quantity__u8 width,
-        Quantity__u8 height);
+        Quantity__u8 width__u8,
+        Quantity__u8 height__u8,
+        Vector__3i32 position__3i32);
 
 static bool inline is_ui_element__allocated(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_ALLOCATED);

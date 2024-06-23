@@ -6,8 +6,9 @@
 void initialize_ui_draggable(
         UI_Element *p_ui_draggable,
         m_UI_Dragged m_ui_dragged_handler,
-        Quantity__u8 width,
-        Quantity__u8 height);
+        Quantity__u8 width__u8,
+        Quantity__u8 height__u8,
+        Vector__3i32 position__3i32);
 
 void m_ui_draggable__dragged_handler__default(
         UI_Element *p_this_draggable,

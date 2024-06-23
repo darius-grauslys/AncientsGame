@@ -66,6 +66,9 @@ void PLATFORM_initialize_sprite_for__item(
         PLATFORM_Sprite *p_PLATFORM_sprite,
         enum Item_Kind the_kind_of__item,
         Texture_Flags texture_flags);
+void PLATFORM_set_sprite_graphics_to__item_kind(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        enum Item_Kind the_kind_of__item);
 
 void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
 
