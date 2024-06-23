@@ -3,7 +3,7 @@
 #include "ui/ui_element.h"
 #include <ui/ui_button.h>
 
-void initialize_ui_button(
+void initialize_ui_element_as__button(
         UI_Element *p_ui_button,
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,

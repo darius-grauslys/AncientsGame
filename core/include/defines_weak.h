@@ -11,6 +11,26 @@
 /// SECTION_default
 ///
 
+typedef int32_t     i32;
+typedef int16_t     i16;
+typedef int8_t      i8;
+typedef uint32_t    u32;
+typedef uint16_t    u16;
+typedef uint8_t     u8;
+
+typedef int32_t     i32F4;
+typedef int16_t     i16F4;
+typedef int8_t      i8F4;
+typedef uint32_t    u32F4;
+typedef uint16_t    u16F4;
+typedef uint8_t     u8F4;
+
+typedef int32_t     i32F8;
+typedef int16_t     i16F8;
+typedef int8_t      i8F8;
+
+typedef int32_t     i32F20;
+
 typedef uint32_t    Texture_Flags;
 typedef uint8_t     Quantity__u8;
 typedef uint16_t    Quantity__u16;

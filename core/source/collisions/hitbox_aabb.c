@@ -1,4 +1,6 @@
 #include "defines.h"
+#include "defines_weak.h"
+#include "numerics.h"
 #include "vectors.h"
 #include <collisions/hitbox_aabb.h>
 #include <debug/debug.h>
@@ -398,4 +400,26 @@ void get_aa_bb_as__vectors_3i32_from__hitbox(
             bb, 
             hitbox, 
             DIRECTION__NORTH_EAST);
+}
+
+void clamp_p_vector_3i32_to__hitbox(
+        Hitbox_AABB *p_hitbox, 
+        Vector__3i32 *p_position__3i32) {
+    Vector__3i32 aa, bb;
+    get_aa_bb_as__vectors_3i32_from__hitbox(
+            p_hitbox, 
+            &aa, 
+            &bb);
+    clamp__p_i32(
+            get_p_x_i32_from__p_vector_3i32(p_position__3i32), 
+            aa.x__i32, 
+            bb.x__i32);
+    clamp__p_i32(
+            get_p_y_i32_from__p_vector_3i32(p_position__3i32), 
+            aa.y__i32, 
+            bb.y__i32);
+    clamp__p_i32(
+            get_p_z_i32_from__p_vector_3i32(p_position__3i32), 
+            aa.z__i32, 
+            bb.z__i32);
 }

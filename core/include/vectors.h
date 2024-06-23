@@ -202,6 +202,36 @@ static Signed_Index__i32 inline get_z_i32_from__vector_3i32F4(
             get_z_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
+static Signed_Index__i32 inline get_x_i32_from__vector_3i32(
+        Vector__3i32 vector__3i32) {
+    return vector__3i32.x__i32;
+}
+
+static Signed_Index__i32 inline get_y_i32_from__vector_3i32(
+        Vector__3i32 vector__3i32) {
+    return vector__3i32.y__i32;
+}
+
+static Signed_Index__i32 inline get_z_i32_from__vector_3i32(
+        Vector__3i32 vector__3i32) {
+    return vector__3i32.z__i32;
+}
+
+static Signed_Index__i32 inline *get_p_x_i32_from__p_vector_3i32(
+        Vector__3i32 *p_vector__3i32) {
+    return &p_vector__3i32->x__i32;
+}
+
+static Signed_Index__i32 inline *get_p_y_i32_from__p_vector_3i32(
+        Vector__3i32 *p_vector__3i32) {
+    return &p_vector__3i32->y__i32;
+}
+
+static Signed_Index__i32 inline *get_p_z_i32_from__p_vector_3i32(
+        Vector__3i32 *p_vector__3i32) {
+    return &p_vector__3i32->z__i32;
+}
+
 static Vector__3i32 inline get_vector__3i32(
         Signed_Index__i32 x,
         Signed_Index__i32 y,

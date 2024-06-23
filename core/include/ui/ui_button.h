@@ -2,8 +2,7 @@
 #define UI_BUTTON_H
 #include <defines.h>
 
-// TODO: move to private header
-void initialize_ui_button(
+void initialize_ui_element_as__button(
         UI_Element *p_ui_button,
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,

@@ -6,6 +6,7 @@
 #include "platform_defines.h"
 #include "rendering/nds_gfx_context.h"
 #include "ui/nds_ui.h"
+#include "ui/nds_ui__slider.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
 #include "world/world.h"
@@ -30,13 +31,16 @@ void m_load_scene_as__test_handler(
             item_kind,
             TEXTURE_FLAGS__NONE);
 
-    UI_Element *p_ui_draggable =
+    UI_Element *p_ui_slider =
         get_new__ui_element_from__ui_manager(
                 &p_game->ui_manager);
 
-    NDS_initialize_ui_element_as__nds_draggable(
-            p_ui_draggable, 
+    NDS_initialize_ui_element_as__nds_slider(
+            p_ui_slider, 
             get_vector__3i32(80,80,0),
+            100,
+            16,
+            true,
             &item_sprite);
 }
 
@@ -51,14 +55,12 @@ void m_enter_scene_handler_as__test(
             PLATFORM_set_sprite_graphics_to__item_kind(
                     &item_sprite, 
                     item_kind);
-            debug_info("===== %d", item_kind);
         }
         if (is_input__use_secondary_released(get_p_input_from__game(p_game))) {
             item_kind--;
             PLATFORM_set_sprite_graphics_to__item_kind(
                     &item_sprite, 
                     item_kind);
-            debug_info("===== %d", item_kind);
         }
     }
 }

@@ -41,7 +41,7 @@ void NDS_initialize_ui_element_as__nds_draggable(
 void m_NDS_ui_dragged__handler(
         UI_Element *p_this_ui_element,
         Game *p_game) {
-    m_ui_draggable__dragged_handler__default(
+    m_ui_dragged_handler__default(
             p_this_ui_element, p_game);
     PLATFORM_Sprite *p_sprite = 
         (p_this_ui_element->p_ui_data);

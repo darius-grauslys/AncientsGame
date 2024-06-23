@@ -20,7 +20,7 @@ void initialize_ui_draggable(
         m_ui_dragged_handler;
 }
 
-void m_ui_draggable__dragged_handler__default(
+void m_ui_dragged_handler__default(
         UI_Element *p_this_draggable,
         Game *p_game) {
     Vector__3i32F4 *p_position = 

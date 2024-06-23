@@ -107,7 +107,7 @@ void m_load_scene_as__game_handler(
             ui_index++) {
         UI_Element *p_ui_button = 
             scene_data__game.p_ui_state_buttons[ui_index];
-        initialize_ui_button(
+        initialize_ui_element_as__button(
                 p_ui_button,
                 104, 32,
                 get_vector__3i32(56 + 72 * ui_index, 52, 0));

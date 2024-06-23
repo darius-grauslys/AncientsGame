@@ -128,6 +128,10 @@ void initialize_vector_3i32_as__aa_bb(
         Hitbox_AABB *hitbox,
         Direction__u8 corner_direction);
 
+void clamp_p_vector_3i32_to__hitbox(
+        Hitbox_AABB *p_hitbox, 
+        Vector__3i32 *p_position__3i32);
+
 static void inline initialize_hitbox(
         Hitbox_AABB *hitbox,
         Quantity__u32 width, 

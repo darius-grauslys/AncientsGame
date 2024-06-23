@@ -1,3 +1,4 @@
+#include "entity/humanoid.h"
 #include <entity/implemented/skeleton/entity__skeleton.h>
 #include <entity/entity.h>
 
@@ -10,7 +11,7 @@
 void initialize_entity_as__skeleton(
         Entity *p_entity,
         Vector__3i32F4 position__3i32F4) {
-    initialize_entity(
+    initialize_entity_as__humanoid(
             p_entity,
             Entity_Kind__Skeleton,
             position__3i32F4,

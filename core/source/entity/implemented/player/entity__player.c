@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "entity/humanoid.h"
 #include <entity/implemented/player/entity__player.h>
 #include <entity/implemented/player/ai/ai_handler__player.h>
 #include <entity/entity.h>
@@ -11,7 +12,7 @@
 void initialize_entity_as__player(
         Entity *p_entity, 
         Vector__3i32F4 position__3i32F4) {
-    initialize_entity(
+    initialize_entity_as__humanoid(
             p_entity,
             Entity_Kind__Player,
             position__3i32F4,

@@ -3,6 +3,7 @@
 
 #include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"
+#include "numerics.h"
 #include "vectors.h"
 #include <defines.h>
 
@@ -17,6 +18,18 @@ static Signed_Index__i32 inline get_y_i32_from__p_ui_element(
 static Signed_Index__i32 inline get_z_i32_from__p_ui_element(
         UI_Element *p_ui_element) {
     return get_z_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
+}
+
+static inline
+Quantity__u32 get_width_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return p_ui_element->ui_bounding_box__aabb.width__quantity_u32;
+} 
+
+static inline
+Quantity__u32 get_height_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return p_ui_element->ui_bounding_box__aabb.height__quantity_u32;
 }
 
 void initialize_ui_element(
@@ -45,6 +58,10 @@ static bool inline is_ui_element__being_held(UI_Element *p_ui_element) {
 
 static bool inline is_ui_element__being_dragged(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_BEING_DRAGGED);
+}
+
+static bool inline is_ui_element__snapped_x_or_y_axis(UI_Element *p_ui_element) {
+    return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS);
 }
 
 static bool inline is_ui_element__focused(
@@ -84,6 +101,18 @@ static void inline set_ui_element_as__dropped(
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_BEING_HELD
         & ~UI_FLAGS__BIT_IS_BEING_DRAGGED;
+}
+
+static void inline set_ui_element_as__snapped_x_axis(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags |=
+        UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS;
+}
+
+static void inline set_ui_element_as__snapped_y_axis(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags &=
+        ~UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS;
 }
 
 static void inline set_ui_element_as__enabled(
@@ -144,6 +173,15 @@ static bool inline does_ui_element_have__dropped_handler(
 static bool inline does_ui_element_have__held_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_held_handler;
+}
+
+static inline
+void clamp_p_vector_3i32_to__ui_element(
+        UI_Element *p_ui_element,
+        Vector__3i32 *p_position__3i32) {
+    clamp_p_vector_3i32_to__hitbox(
+            &p_ui_element->ui_bounding_box__aabb, 
+            p_position__3i32);
 }
 
 #endif

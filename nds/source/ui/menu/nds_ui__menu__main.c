@@ -26,7 +26,7 @@ void NDS_set_ui_manager_to__menu(
         UI_Element *p_button =
             get_new__ui_element_from__ui_manager(
                     p_ui_manager);
-        initialize_ui_button(
+        initialize_ui_element_as__button(
                 p_button,
                 80, 24,
                 get_vector__3i32(52, 72 + 44 * i, 0));
@@ -53,7 +53,7 @@ void NDS_set_ui_manager_to__menu(
         get_new__ui_element_from__ui_manager(
                 p_ui_manager);
 
-    initialize_ui_button(
+    initialize_ui_element_as__button(
             p_button,
             104, 104,
             get_vector__3i32(184, 118, 0));

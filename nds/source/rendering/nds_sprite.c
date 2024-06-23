@@ -15,6 +15,9 @@
 #include <assets/entities/8x8/items.h>
 #include <stdint.h>
 
+/// no-op
+void PLATFORM_render_sprite(Sprite_Wrapper *sprite_wrapper) { }
+
 void PLATFORM_initialize_sprite(
         PLATFORM_Sprite *sprite,
         Texture_Flags texture_flags_for__sprite,

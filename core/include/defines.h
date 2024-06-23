@@ -482,38 +482,50 @@ typedef uint32_t Texture_Flags;
 
 typedef struct Item_t Item;
 
+typedef uint8_t Item_Filter_Flags;
+
+#define ITEM_FILTER_FLAGS__NONE
+#define ITEM_FILTER_FLAG__INTERACTABLE 1
+#define ITEM_FILTER_FLAG__ARMOR (\
+        (ITEM_FILTER_FLAG__INTERACTABLE << 1)
+#define ITEM_FILTER_FLAG__CONSUMABLE (\
+        (ITEM_FILTER_FLAG__ARMOR << 1)
+
 typedef void (*m_Item_Use)(
         Item *p_item_self, 
         Entity *p_entity_user, 
         Game *p_game);
-typedef void (*m_Item_Equip)(
+typedef struct Hearts_Damaging_Specifier_t Hearts_Damaging_Specifier;
+typedef void (*m_Item_Protect)(
         Item *p_item_self, 
         Entity *p_entity_user, 
-        Game *p_game);
-typedef void (*m_Item_Unequip)(
-        Item *p_item_self, 
-        Entity *p_entity_user, 
-        Game *p_game);
+        Game *p_game,
+        Hearts_Damaging_Specifier *p_hearts_damage);
 
 typedef struct Item_t {
-    enum Item_Kind the_kind_of_item__this_item_is;
-    m_Item_Use m_item_use;
-    m_Item_Equip m_item_equip;
-    m_Item_Unequip m_item_unequip;
+    m_Item_Use          m_item_use_handler;
+    m_Item_Protect      m_item_protect_handler;
+    enum Item_Kind      the_kind_of_item__this_item_is;
+    Item_Filter_Flags   item_filter_flags;
 } Item;
 
 typedef struct Item_Stack_t {
-    Item item;
-    Quantity__u8 quantity_of__this_item;
-    Quantity__u8 max_quantity_of__this_item;
-    Quantity__u16 weight_of_each__item;
+    Item            item;
+    i32F8           weight_of_each__item;
     Identifier__u16 identifier_for__item_stack;
+    Quantity__u8    quantity_of__items;
+    Quantity__u8    max_quantity_of__items;
 } Item_Stack;
 
-#define ITEM_MAXIMUM_QUANTITY_OF 32
+#define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 32
+#define INVENTORY_CONSUMABLES_QUANTITY_OF 3
 
 typedef struct Inventory_t {
-    Item_Stack items[ITEM_MAXIMUM_QUANTITY_OF];
+    Item_Stack slot__armor;
+    Item_Stack slot__main_hand;
+    Item_Stack slot__off_hand;
+    Item_Stack slot__consumable[INVENTORY_CONSUMABLES_QUANTITY_OF];
+    Item_Stack items[INVENTORY_ITEM_MAXIMUM_QUANTITY_OF];
 } Inventory;
 
 ///
@@ -1100,6 +1112,8 @@ typedef uint8_t UI_Flags__u8;
     (UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE + 1)
 #define UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED \
     (UI_FLAGS__BIT_SHIFT_IS_BEING_HELD + 1)
+#define UI_FLAGS__BIT_SHIFT_IS_SNAPPED_X_OR_Y_AXIS \
+    (UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED + 1)
 
 #define UI_FLAGS__NONE 0
 
@@ -1113,6 +1127,8 @@ typedef uint8_t UI_Flags__u8;
     BIT(UI_FLAGS__BIT_SHIFT_IS_BEING_HELD)
 #define UI_FLAGS__BIT_IS_BEING_DRAGGED \
     BIT(UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED )
+#define UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS \
+    BIT(UI_FLAGS__BIT_SHIFT_IS_SNAPPED_X_OR_Y_AXIS)
 
 typedef struct UI_Element_t {
     enum UI_Element_Kind the_kind_of_ui_element__this_is;
@@ -1551,6 +1567,7 @@ typedef struct Game_Action_t {
                 };
                 struct { //...Entity__Item
                     Item_Stack item_stack;
+                    Identifier__u16 identifier_for__item_stack;
                 };
             };
         };

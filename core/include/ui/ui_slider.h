@@ -3,21 +3,12 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-// TODO: move to private header
-void initialize_ui_slider(
+void initialize_ui_element_as__slider(
         UI_Element *p_ui_slider,
+        m_UI_Dragged m_ui_dragged_handler,
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,
-        Vector__3i32 position__3i32);
-
-void f_ui_slider__dragged_handler__default(
-        UI_Element *p_this_slider);
-
-static void inline set_ui_slider__dragged_handler(
-        UI_Element *p_ui_slider,
-        m_UI_Dragged m_ui_dragged_handler) {
-    p_ui_slider->m_ui_dragged_handler =
-        m_ui_dragged_handler;
-}
+        Vector__3i32 position__3i32,
+        bool is_snapped_x_or_y__axis);
 
 #endif
