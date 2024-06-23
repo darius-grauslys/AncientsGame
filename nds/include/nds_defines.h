@@ -4,6 +4,9 @@
 #include <nds.h>
 #include <debug/debug.h>
 
+#define NDS_SPRITE_PALLETE__8x8 0
+#define NDS_SPRITE_PALLETE__16x16 1
+
 static void inline NDS_initialize_background_ground__for_game(
         NDS_Background *background) {
     debug_warning("nds_defines init's use magic numbers.");

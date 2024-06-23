@@ -20,7 +20,9 @@ enum Item_Kind item_kind = Item_Kind__Stick;
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    NDS_initialize_gfx_for__world(&p_game->gfx_context);
+    NDS_initialize_gfx_for__sub_background();
+    NDS_initialize_gfx_for__sub_sprites();
+    NDS_load_sprite_palletes();
     NDS_initialize_debug__main();
 
     PLATFORM_initialize_sprite_for__item(

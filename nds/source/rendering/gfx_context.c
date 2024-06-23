@@ -38,17 +38,25 @@ void NDS_initialize_gfx_for__main_menu(
 	videoSetModeSub(MODE_0_2D);
 }
 
-void NDS_initialize_gfx_for__world(
-        PLATFORM_Gfx_Context *gfx_context) {
-    videoSetMode(MODE_0_2D);
-	videoSetModeSub(MODE_0_2D);
+void NDS_initialize_gfx_for__main_background() {
+    vramSetBankA(VRAM_A_MAIN_BG);
+}
 
-	vramSetPrimaryBanks(
-            VRAM_A_MAIN_BG,
-            VRAM_B_MAIN_SPRITE, 
-            VRAM_C_SUB_BG, 
-            VRAM_D_SUB_SPRITE);
+void NDS_initialize_gfx_for__sub_background() {
+    vramSetBankC(VRAM_C_SUB_BG);
+}
 
+void NDS_initialize_gfx_for__main_sprites() {
+    vramSetBankB(VRAM_B_MAIN_SPRITE);
+	oamInit(&oamMain, SpriteMapping_1D_256, true);
+}
+
+void NDS_initialize_gfx_for__sub_sprites() {
+    vramSetBankD(VRAM_D_SUB_SPRITE);
+	oamInit(&oamSub, SpriteMapping_1D_256, true);
+}
+
+void NDS_load_sprite_palletes() {
 	vramSetBankF(VRAM_F_LCD);
 
 	dmaCopy(GFX_8x8Pal, 
@@ -69,6 +77,18 @@ void NDS_initialize_gfx_for__world(
             GFX_16x16PalLen);
 
 	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
+}
+
+void NDS_initialize_gfx_for__world(
+        PLATFORM_Gfx_Context *gfx_context) {
+    videoSetMode(MODE_0_2D);
+	videoSetModeSub(MODE_0_2D);
+
+    NDS_initialize_gfx_for__main_background();
+    NDS_initialize_gfx_for__sub_background();
+    NDS_initialize_gfx_for__main_sprites();
+    NDS_initialize_gfx_for__sub_sprites();
+    NDS_load_sprite_palletes();
 
     NDS_initialize_background_ground__for_game(
             &gfx_context->background_ground);
@@ -104,9 +124,6 @@ void NDS_initialize_gfx_for__world(
     NDS_set_background_priority(
             &gfx_context->background_ground, 
             2);
-
-	oamInit(&oamMain, SpriteMapping_1D_256, true);
-	oamInit(&oamSub, SpriteMapping_1D_256, true);
 }
 
 void PLATFORM_update_chunks(

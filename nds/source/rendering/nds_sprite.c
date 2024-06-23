@@ -21,7 +21,6 @@ void PLATFORM_initialize_sprite(
         bool perform_update) {
     // TODO: debug_warning("PLATFORM_initialize_sprite is not finished yet:
     //         doesn't support oamSub.");
-    uint8_t palette = 0;
     while (DMA_CR(sprite->sprite_texture.dma_channel) & DMA_BUSY);
     PLATFORM_allocate_texture(
             &sprite->sprite_texture,
@@ -36,7 +35,6 @@ void PLATFORM_initialize_sprite_for__entity(
     texture_flags &= ~TEXTURE_FLAG__SIZE__MASK;
     texture_flags |= TEXTURE_FLAG__USE_OAM;
     texture_flags |= TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB;
-    uint8_t palette = 0;
     while (DMA_CR(p_PLATFORM_sprite->sprite_texture.dma_channel) & DMA_BUSY);
     switch(the_kind_of__entity) {
         default:
@@ -94,7 +92,6 @@ void PLATFORM_initialize_sprite_for__item(
     texture_flags &= ~TEXTURE_FLAG__SIZE__MASK;
     texture_flags |= TEXTURE_FLAG__USE_OAM;
     texture_flags |= TEXTURE_FLAG__SIZE_8x8;
-    uint8_t palette = 0;
 
     PLATFORM_initialize_sprite(
             p_PLATFORM_sprite,
@@ -121,39 +118,37 @@ void PLATFORM_set_sprite_graphics_to__item_kind(
 
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite) {
+    uint8_t palette = 0;
+    switch (p_PLATFORM_sprite->sprite_texture.sprite_size) {
+        default:
+        case SpriteSize_8x8:
+            break;
+        case SpriteSize_16x16:
+            palette = 1;
+            break;
+    }
     oamSet(
-        p_PLATFORM_sprite->sprite_texture.oam, 
-        p_PLATFORM_sprite->sprite_texture.oam_index, 
-        127 - 8, 96 - 8, 
-        1, 
-        0,  //pallete
-        p_PLATFORM_sprite->sprite_texture
-            .sprite_size, 
-        SpriteColorFormat_256Color, 
-        p_PLATFORM_sprite->sprite_texture.gfx, 
-        -1, 
-        false, 
-        false, 
-        false, false, 
-        false);
+            p_PLATFORM_sprite->sprite_texture.oam, 
+            p_PLATFORM_sprite->sprite_texture.oam_index, 
+            127 - 8, 96 - 8, 
+            1, 
+            palette,
+            p_PLATFORM_sprite->sprite_texture
+                .sprite_size, 
+            SpriteColorFormat_256Color, 
+            p_PLATFORM_sprite->sprite_texture.gfx, 
+            -1, 
+            false, 
+            false, 
+            false, false, 
+            false);
 }
 
 void PLATFORM_set_sprite__position(
         PLATFORM_Sprite *p_PLATFORM_sprite,
         Index__u16 x, Index__u16 y) {
-    oamSet(
-        p_PLATFORM_sprite->sprite_texture.oam, 
-        p_PLATFORM_sprite->sprite_texture.oam_index, 
-        x, y, 
-        1, 
-        0,  //pallete
-        p_PLATFORM_sprite->sprite_texture
-            .sprite_size, 
-        SpriteColorFormat_256Color, 
-        p_PLATFORM_sprite->sprite_texture.gfx, 
-        -1, 
-        false, 
-        false, 
-        false, false, 
-        false);
+    oamSetXY(
+            p_PLATFORM_sprite->sprite_texture.oam,
+            p_PLATFORM_sprite->sprite_texture.oam_index,
+            x, y);
 }
