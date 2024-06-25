@@ -1,0 +1,7 @@
+# extended palettes only work on 8bpp tiled bg with 16-bit map entries
+# this means you can only use BgType_Text8bpp or BgType_ExRotation
+-gB8
+-mRt
+-pS
+-OGFX_ui_sprite__8x8
+-SGFX_ui_sprite__8x8

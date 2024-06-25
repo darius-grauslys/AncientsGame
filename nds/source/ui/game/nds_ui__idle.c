@@ -1,4 +1,5 @@
 #include <ui/game/nds_ui__idle.h>
+#include <ui/game/nds_ui__hud.h>
 
 void NDS_set_ui_container_to__idle(
         UI_Element *p_ui_container) {

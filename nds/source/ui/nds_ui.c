@@ -1,17 +1,17 @@
 #include "nds/arm9/sprite.h"
 #include <nds.h>
 #include <ui/nds_ui.h>
-#include <assets/ui/_ui_tiles.h>
+#include <assets/ui/default/ui_tileset_default.h>
 
 void NDS_set_ui_to__debug(PLATFORM_Gfx_Context *p_gfx_context) {
-	dmaCopy(_ui_tilesMap, 
+	dmaCopy(ui_tileset_defaultMap, 
             p_gfx_context->background_ui
             .gfx_map,
-            _ui_tilesMapLen);
-	dmaCopy(_ui_tilesMap, 
+            ui_tileset_defaultMapLen);
+	dmaCopy(ui_tileset_defaultMap, 
             p_gfx_context->background_ui__overlay
             .gfx_map,
-            _ui_tilesMapLen);
+            ui_tileset_defaultMapLen);
 }
 
 void NDS_set_ui_element_size_using__sprite_size(

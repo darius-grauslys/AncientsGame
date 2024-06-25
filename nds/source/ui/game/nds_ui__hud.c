@@ -7,6 +7,8 @@
 #include <entity/humanoid.h>
 #include <scene/scene__game.h>
 
+#include <assets/ui/default/ui_map_hud.h>
+
 void update_ui_hearts(
         Entity *p_player,
         TileMapEntry16 *p_ui_overlay__tile_map,
@@ -847,4 +849,14 @@ void NDS_update_ui_for__hud(
             p_player,
             p_ui_overlay__tile_map,
             p_ui__tile_map);
+}
+
+void NDS_put_hud_onto__background(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        NDS_Background *p_NDS_background) {
+    //TODO: magic num, 288 corresponds to the
+    //number of map tile indices we are copying.
+    dmaCopy(ui_map_hudMap,
+            p_NDS_background->gfx_map,
+            288 * 2);
 }

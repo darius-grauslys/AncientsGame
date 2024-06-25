@@ -127,18 +127,6 @@ typedef struct NDS_Background_t {
     uint8_t map_base, tile_base;
 } NDS_Background;
 
-static void inline NDS_initialize_background(
-        NDS_Background *background) {
-    background->background_index = -1;
-    background->gfx_map = 0;
-    background->gfx_tileset = 0;
-    background->background__scroll_x =
-        background->background__scroll_y = 0;
-    background->priority = 0;
-    background->tile_base =
-        background->map_base = 0;
-}
-
 typedef struct NDS_Gfx_Context__Chunk_Record_t {
     int32_t x, y;
 } NDS_Gfx_Context__Chunk_Record;

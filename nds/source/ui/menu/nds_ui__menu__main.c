@@ -3,7 +3,7 @@
 #include <platform_defines.h>
 #include <nds.h>
 
-#include <assets/ui/ui_map_main_menu.h>
+#include <assets/ui/default/ui_map_main_menu.h>
 
 #include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"

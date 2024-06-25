@@ -8,11 +8,11 @@
 #include <nds.h>
 #include <debug/debug.h>
 
-#include <assets/entities/16x16/player.h>
-#include <assets/entities/16x16/skeleton.h>
-#include <assets/entities/16x16/zombie.h>
+#include <assets/entities/entity_sprite__16x16/player.h>
+#include <assets/entities/entity_sprite__16x16/skeleton.h>
+#include <assets/entities/entity_sprite__16x16/zombie.h>
 
-#include <assets/entities/8x8/items.h>
+#include <assets/entities/entity_sprite__8x8/items.h>
 #include <stdint.h>
 
 /// no-op

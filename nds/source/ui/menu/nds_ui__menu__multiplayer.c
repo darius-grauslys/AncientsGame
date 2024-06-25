@@ -1,5 +1,5 @@
 #include <ui/menu/nds_ui__menu__multiplayer.h>
-#include <assets/ui/ui_map_multiplayer.h>
+#include <assets/ui/default/ui_map_multiplayer.h>
 #include <nds.h>
 #include <platform_defines.h>
 

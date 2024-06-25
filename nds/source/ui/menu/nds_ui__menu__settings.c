@@ -1,5 +1,5 @@
 #include <ui/menu/nds_ui__menu__settings.h>
-#include <assets/ui/ui_map_settings.h>
+#include <assets/ui/default/ui_map_settings.h>
 #include <nds.h>
 #include <platform_defines.h>
 

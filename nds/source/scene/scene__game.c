@@ -24,7 +24,7 @@
 #include <timer.h>
 #include <vectors.h>
 
-#include <assets/ui/_ui_tiles.h>
+#include <assets/ui/default/ui_tileset_default.h>
 
 Scene_Data__Game scene_data__game;
 

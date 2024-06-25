@@ -9,16 +9,18 @@
 #include <rendering/nds_gfx_context.h>
 #include <world/tile.h>
 
+#include <rendering/nds_background.h>
+
 #include <assets/world/GFX_world.h>
 #include <assets/world/tiles.h>
-#include <assets/ui/GFX_ui.h>
+#include <assets/ui/default/GFX_default.h>
 
-#include <assets/entities/16x16/GFX_16x16.h>
-#include <assets/entities/8x8/GFX_8x8.h>
+#include <assets/entities/entity_sprite__16x16/GFX_entity_sprite__16x16.h>
+#include <assets/entities/entity_sprite__8x8/GFX_entity_sprite__8x8.h>
 
-#include <assets/entities/16x16/player.h>
-#include <assets/entities/16x16/skeleton.h>
-#include <assets/entities/16x16/zombie.h>
+#include <assets/entities/entity_sprite__16x16/player.h>
+#include <assets/entities/entity_sprite__16x16/skeleton.h>
+#include <assets/entities/entity_sprite__16x16/zombie.h>
 
 void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
@@ -59,22 +61,22 @@ void NDS_initialize_gfx_for__sub_sprites() {
 void NDS_load_sprite_palletes() {
 	vramSetBankF(VRAM_F_LCD);
 
-	dmaCopy(GFX_8x8Pal, 
+	dmaCopy(GFX_entity_sprite__8x8Pal, 
             VRAM_F_EXT_SPR_PALETTE[0],
-            GFX_8x8PalLen);
-	dmaCopy(GFX_16x16Pal, 
+            GFX_entity_sprite__8x8PalLen);
+	dmaCopy(GFX_entity_sprite__16x16Pal, 
             VRAM_F_EXT_SPR_PALETTE[1],
-            GFX_16x16PalLen);
+            GFX_entity_sprite__16x16PalLen);
 
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 	vramSetBankI(VRAM_I_LCD);
 
-	dmaCopy(GFX_8x8Pal, 
+	dmaCopy(GFX_entity_sprite__8x8Pal, 
             VRAM_I_EXT_SPR_PALETTE[0],
-            GFX_8x8PalLen);
-	dmaCopy(GFX_16x16Pal, 
+            GFX_entity_sprite__8x8PalLen);
+	dmaCopy(GFX_entity_sprite__16x16Pal, 
             VRAM_I_EXT_SPR_PALETTE[1],
-            GFX_16x16PalLen);
+            GFX_entity_sprite__16x16PalLen);
 
 	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 }
@@ -169,7 +171,6 @@ void PLATFORM_update_chunks(
                 % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
 
             //TODO: im am using magic numbers here atm.
-            //TODO: prim wrap
 
             // Everything is based on the implementation of
             // TileMapEntry16 of background.h in the arm9
@@ -216,18 +217,20 @@ void PLATFORM_update_chunks(
 
 void NDS_initialize_gfx_for__ui(
         PLATFORM_Gfx_Context *gfx_context) {
-    NDS_initialize_background_ui__for_game(
-            &gfx_context->background_ui);
-    NDS_initialize_background_ui__overlay__for_game(
-            &gfx_context->background_ui__overlay);
+    NDS_initialize_background_ui(
+            &gfx_context->background_ui,
+            0);
+    NDS_initialize_background_ui(
+            &gfx_context->background_ui__overlay,
+            1);
 
-	dmaCopy(GFX_uiTiles, 
+	dmaCopy(GFX_defaultTiles, 
             gfx_context->background_ui
-            .gfx_tileset, GFX_uiTilesLen);
-	dmaCopy(GFX_uiTiles, 
+            .gfx_tileset, GFX_defaultTilesLen);
+	dmaCopy(GFX_defaultTiles, 
             gfx_context->background_ui__overlay
-            .gfx_tileset, GFX_uiTilesLen);
-	dmaCopy(GFX_uiPal, BG_PALETTE_SUB, GFX_uiPalLen);
+            .gfx_tileset, GFX_defaultTilesLen);
+	dmaCopy(GFX_defaultPal, BG_PALETTE_SUB, GFX_defaultPalLen);
 
     NDS_set_background_priority(
             &gfx_context->background_ui, 
