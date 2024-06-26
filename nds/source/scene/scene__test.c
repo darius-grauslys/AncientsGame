@@ -4,7 +4,6 @@
 #include "input/input.h"
 #include "platform.h"
 #include "platform_defines.h"
-#include "rendering/nds_gfx_context.h"
 #include "ui/nds_ui.h"
 #include "ui/nds_ui__slider.h"
 #include "ui/ui_manager.h"
@@ -14,6 +13,7 @@
 #include <debug/nds_debug.h>
 #include <scene/scene.h>
 #include <ui/nds_ui__draggable.h>
+#include <rendering/gfx_context.h>
 
 PLATFORM_Sprite item_sprite;
 enum Item_Kind item_kind = Item_Kind__Stick;
@@ -21,9 +21,9 @@ enum Item_Kind item_kind = Item_Kind__Stick;
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    NDS_initialize_gfx_for__sub_background();
-    NDS_initialize_gfx_for__sub_sprites();
-    NDS_load_sprite_palletes();
+    NDS_initialize_backgrounds_for__sub();
+    NDS_initialize_sprites_for__sub();
+    NDS_load_default__sprite_palletes();
     NDS_initialize_debug__main();
 
     PLATFORM_initialize_sprite_for__item(

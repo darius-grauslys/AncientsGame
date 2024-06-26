@@ -326,6 +326,14 @@ typedef struct Scene_Manager_t Scene_Manager;
 typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;
 
+enum UI_Window_Kind {
+    UI_Window_Kind__None,
+    UI_Window_Kind__Idle,
+    UI_Window_Kind__Equip,
+    UI_Window_Kind__Trade,
+    UI_Window_Kind__Labor
+};
+
 ///
 /// SECTION_world
 ///

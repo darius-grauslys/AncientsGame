@@ -16,23 +16,23 @@ void NDS_set_ui_background_to__equip(
     //      each time. What happens if we don't? Currently
     //      the energy_orbs gets all messed up.
 	dmaCopy(GFX_defaultTiles, 
-            p_gfx_context->background_ui
+            p_gfx_context->backgrounds__sub[0]
             .gfx_tileset, GFX_defaultTilesLen);
 	dmaCopy(GFX_defaultTiles, 
-            p_gfx_context->background_ui__overlay
+            p_gfx_context->backgrounds__sub[1]
             .gfx_tileset, GFX_defaultTilesLen);
 	dmaCopy(ui_map_equipMap, 
-            p_gfx_context->background_ui
+            p_gfx_context->backgrounds__sub[0]
             .gfx_map,
             ui_map_equipMapLen);
 	dmaCopy(ui_map_equipMap, 
-            p_gfx_context->background_ui__overlay
+            p_gfx_context->backgrounds__sub[1]
             .gfx_map,
             ui_map_equipMapLen);
     NDS_put_hud_onto__background(
             p_gfx_context,
-            &p_gfx_context->background_ui);
+            &p_gfx_context->backgrounds__sub[0]);
     NDS_put_hud_onto__background(
             p_gfx_context,
-            &p_gfx_context->background_ui__overlay);
+            &p_gfx_context->backgrounds__sub[1]);
 }

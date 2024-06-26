@@ -15,19 +15,19 @@ void PLATFORM_post_render(Game *p_game) {
         &p_game->world.camera;
 
     bgSetScroll(
-        p_game->gfx_context.background_ground
+        p_game->gfx_context.backgrounds__main[0]
         .background_index,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.background_ground__overlay
+        p_game->gfx_context.backgrounds__main[1]
         .background_index,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.background_ground__sprite_cover
+        p_game->gfx_context.backgrounds__main[2]
         .background_index,
          get_x_i32_from__camera(p_camera)  - 126,
         -get_y_i32_from__camera(p_camera) - 30

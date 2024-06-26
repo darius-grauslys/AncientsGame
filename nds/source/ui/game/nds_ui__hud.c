@@ -816,12 +816,12 @@ void NDS_update_ui_for__hud(
     TileMapEntry16 *p_ui_overlay__tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
-                ->background_ui__overlay
+                ->backgrounds__sub[1]
                 .background_index);
     TileMapEntry16 *p_ui__tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
-                ->background_ui
+                ->backgrounds__sub[0]
                 .background_index);
 
     update_ui_hearts(

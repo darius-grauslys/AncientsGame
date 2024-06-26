@@ -9,11 +9,11 @@ void NDS_set_ui_manager_to__singleplayer(
 void NDS_set_ui_background_to__menu_single_player(
         PLATFORM_Gfx_Context *p_gfx_context) {
 	dmaCopy(ui_map_singleplayerMap, 
-            p_gfx_context->background_ui
+            p_gfx_context->backgrounds__sub[0]
             .gfx_map,
             ui_map_singleplayerMapLen);
 	dmaCopy(ui_map_singleplayerMap, 
-            p_gfx_context->background_ui__overlay
+            p_gfx_context->backgrounds__sub[1]
             .gfx_map,
             ui_map_singleplayerMapLen);
 }

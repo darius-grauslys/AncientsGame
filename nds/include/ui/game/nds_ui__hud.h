@@ -3,6 +3,7 @@
 
 #include "defines_weak.h"
 #include "nds_defines.h"
+#include <rendering/nds_background.h>
 
 void NDS_update_ui_for__hud(
         PLATFORM_Gfx_Context *p_gfx_context,

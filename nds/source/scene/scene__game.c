@@ -11,7 +11,6 @@
 #include "input/input.h"
 #include "nds/arm9/background.h"
 #include "platform_defines.h"
-#include "rendering/nds_gfx_context.h"
 #include "scene/scene_manager.h"
 #include "ui/game/nds_ui__hud.h"
 #include "ui/nds_ui.h"
@@ -23,6 +22,7 @@
 #include <stdint.h>
 #include <timer.h>
 #include <vectors.h>
+#include <rendering/gfx_context.h>
 
 #include <assets/ui/default/ui_tileset_default.h>
 

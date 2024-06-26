@@ -2,14 +2,15 @@
 #include "defines_weak.h"
 #include "nds/arm9/video.h"
 #include "nds/dma.h"
+#include "rendering/nds_sprite.h"
 #include "timer.h"
 #include <defines.h>
 #include <nds_defines.h>
 #include <rendering/gfx_context.h>
-#include <rendering/nds_gfx_context.h>
 #include <world/tile.h>
 
 #include <rendering/nds_background.h>
+#include <rendering/gfx_context.h>
 
 #include <assets/world/GFX_world.h>
 #include <assets/world/tiles.h>
@@ -26,59 +27,123 @@ void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
-    NDS_initialize_background(&gfx_context->background_ground__sprite_cover);
-    NDS_initialize_background(&gfx_context->background_ground__overlay);
-    NDS_initialize_background(&gfx_context->background_ground);
-
-    NDS_initialize_background(&gfx_context->background_ui__overlay);
-    NDS_initialize_background(&gfx_context->background_ui);
+    for (Index__u8 index_of__background = 0;
+            index_of__background < NDS_BACKGROUND_QUANTITY_OF__MAIN;
+            index_of__background++) {
+        NDS_initialize_background(
+                &gfx_context
+                ->backgrounds__main[index_of__background]);
+    }
+    for (Index__u8 index_of__background = 0;
+            index_of__background < NDS_BACKGROUND_QUANTITY_OF__SUB;
+            index_of__background++) {
+        NDS_initialize_background(
+                &gfx_context
+                ->backgrounds__sub[index_of__background]);
+    }
 }
 
-void NDS_initialize_gfx_for__main_menu(
-        PLATFORM_Gfx_Context *gfx_context) {
+void PLATFORM_open_ui(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        enum UI_Window_Kind the_kind_of__ui_window_to__open) {
+    switch (the_kind_of__ui_window_to__open) {
+        default:
+            debug_error("PLATFORM_open_ui, unsupported UI_Window_Kind.");
+            break;
+#warning impl
+    }
+}
+
+void NDS_set_video_modes_to__MODE_0_2D(void) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 }
 
-void NDS_initialize_gfx_for__main_background() {
+void NDS_initialize_backgrounds_for__main(void) {
     vramSetBankA(VRAM_A_MAIN_BG);
 }
 
-void NDS_initialize_gfx_for__sub_background() {
+void NDS_initialize_backgrounds_for__sub(void) {
     vramSetBankC(VRAM_C_SUB_BG);
 }
 
-void NDS_initialize_gfx_for__main_sprites() {
+void NDS_initialize_sprites_for__main(void) {
     vramSetBankB(VRAM_B_MAIN_SPRITE);
 	oamInit(&oamMain, SpriteMapping_1D_256, true);
 }
 
-void NDS_initialize_gfx_for__sub_sprites() {
+void NDS_initialize_sprites_for__sub(void) {
     vramSetBankD(VRAM_D_SUB_SPRITE);
 	oamInit(&oamSub, SpriteMapping_1D_256, true);
 }
 
-void NDS_load_sprite_palletes() {
-	vramSetBankF(VRAM_F_LCD);
-
-	dmaCopy(GFX_entity_sprite__8x8Pal, 
-            VRAM_F_EXT_SPR_PALETTE[0],
-            GFX_entity_sprite__8x8PalLen);
-	dmaCopy(GFX_entity_sprite__16x16Pal, 
-            VRAM_F_EXT_SPR_PALETTE[1],
-            GFX_entity_sprite__16x16PalLen);
-
-	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
+void NDS_load_sprite_palletes(
+        NDS_Sprite_Pallete *p_NDS_sprite_palletes,
+        Quantity__u32 quantity_of__sprite_palletes,
+        bool for_main_or_sub) {
+    if (for_main_or_sub) {
+        goto main;
+    }
 	vramSetBankI(VRAM_I_LCD);
 
-	dmaCopy(GFX_entity_sprite__8x8Pal, 
-            VRAM_I_EXT_SPR_PALETTE[0],
-            GFX_entity_sprite__8x8PalLen);
-	dmaCopy(GFX_entity_sprite__16x16Pal, 
-            VRAM_I_EXT_SPR_PALETTE[1],
-            GFX_entity_sprite__16x16PalLen);
+    for (Index__u32 index_of__sprite_pallete = 0;
+            index_of__sprite_pallete < quantity_of__sprite_palletes;
+            index_of__sprite_pallete++) {
+        const uint16_t *p_pallete =
+            p_NDS_sprite_palletes[index_of__sprite_pallete].p_pallete;
+        Index__u8 index_of__pallete_slot =
+            p_NDS_sprite_palletes->pallete_slot;
+        Quantity__u32 pallete_length =
+            p_NDS_sprite_palletes->pallete_length;
+
+        dmaCopy(p_pallete, 
+                VRAM_I_EXT_SPR_PALETTE[index_of__pallete_slot],
+                pallete_length);
+    }
 
 	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
+    return;
+
+main:
+	vramSetBankF(VRAM_F_LCD);
+
+    for (Index__u32 index_of__sprite_pallete = 0;
+            index_of__sprite_pallete < quantity_of__sprite_palletes;
+            index_of__sprite_pallete++) {
+        const uint16_t *p_pallete =
+            p_NDS_sprite_palletes[index_of__sprite_pallete].p_pallete;
+        Index__u8 index_of__pallete_slot =
+            p_NDS_sprite_palletes->pallete_slot;
+        Quantity__u32 pallete_length =
+            p_NDS_sprite_palletes->pallete_length;
+
+        dmaCopy(p_pallete, 
+                VRAM_F_EXT_SPR_PALETTE[index_of__pallete_slot],
+                pallete_length);
+    }
+
+	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
+}
+
+void NDS_load_default__sprite_palletes(void) {
+    NDS_Sprite_Pallete entity_sprite_palletes[2];
+
+    NDS_initialize_sprite_pallete(
+            &entity_sprite_palletes[NDS_PALLETE_SLOT__0], 
+            GFX_entity_sprite__8x8Pal, 
+            NDS_PALLETE_SLOT__0,
+            GFX_entity_sprite__8x8PalLen);
+    NDS_initialize_sprite_pallete(
+            &entity_sprite_palletes[NDS_PALLETE_SLOT__1], 
+            GFX_entity_sprite__16x16Pal, 
+            NDS_PALLETE_SLOT__1, 
+            GFX_entity_sprite__16x16PalLen);
+
+    NDS_load_sprite_palletes(
+            entity_sprite_palletes, 
+            NDS_SPRITE_PALLETE_QUANTITY_OF_FOR__DEFAULT,
+            true    // load onto main
+            );
 }
 
 void NDS_initialize_gfx_for__world(
@@ -86,45 +151,45 @@ void NDS_initialize_gfx_for__world(
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
-    NDS_initialize_gfx_for__main_background();
-    NDS_initialize_gfx_for__sub_background();
-    NDS_initialize_gfx_for__main_sprites();
-    NDS_initialize_gfx_for__sub_sprites();
-    NDS_load_sprite_palletes();
+    NDS_initialize_backgrounds_for__main();
+    NDS_initialize_backgrounds_for__sub();
+    NDS_initialize_sprites_for__main();
+    NDS_initialize_sprites_for__sub();
+    NDS_load_default__sprite_palletes();
 
     NDS_initialize_background_ground__for_game(
-            &gfx_context->background_ground);
+            &gfx_context->backgrounds__main[0]);
     NDS_initialize_background_ground__sprite_cover__for_game(
-            &gfx_context->background_ground__sprite_cover);
+            &gfx_context->backgrounds__main[1]);
     NDS_initialize_background_ground__overlay__for_game(
-            &gfx_context->background_ground__overlay);
+            &gfx_context->backgrounds__main[2]);
 
 	dmaCopy(GFX_worldTiles, 
-            gfx_context->background_ground
+            gfx_context->backgrounds__main[0]
             .gfx_tileset, GFX_worldTilesLen);
 	dmaCopy(GFX_worldPal, BG_PALETTE, GFX_worldPalLen);
 
 	dmaCopy(tilesMap,
-            gfx_context->background_ground
+            gfx_context->backgrounds__main[0]
             .gfx_map, 
             tilesMapLen);
 	dmaCopy(tilesMap, 
-            gfx_context->background_ground__overlay
+            gfx_context->backgrounds__main[1]
             .gfx_map,
             tilesMapLen);
 	dmaCopy(tilesMap, 
-            gfx_context->background_ground__sprite_cover
+            gfx_context->backgrounds__main[2]
             .gfx_map,
             tilesMapLen);
 
     NDS_set_background_priority(
-            &gfx_context->background_ground__sprite_cover, 
+            &gfx_context->backgrounds__main[1], 
             0);
     NDS_set_background_priority(
-            &gfx_context->background_ground__overlay, 
+            &gfx_context->backgrounds__main[2], 
             1);
     NDS_set_background_priority(
-            &gfx_context->background_ground, 
+            &gfx_context->backgrounds__main[0], 
             2);
 }
 
@@ -134,17 +199,17 @@ void PLATFORM_update_chunks(
     TileMapEntry16 *p_sprite_cover_tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
-                ->background_ground__sprite_cover
+                ->backgrounds__main[1]
                 .background_index);
     TileMapEntry16 *p_overlay_tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
-                ->background_ground__overlay
+                ->backgrounds__main[2]
                 .background_index);
     TileMapEntry16 *p_background_tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
-                ->background_ground
+                ->backgrounds__main[0]
                 .background_index);
     Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node;
@@ -218,24 +283,24 @@ void PLATFORM_update_chunks(
 void NDS_initialize_gfx_for__ui(
         PLATFORM_Gfx_Context *gfx_context) {
     NDS_initialize_background_ui(
-            &gfx_context->background_ui,
+            &gfx_context->backgrounds__sub[0],
             0);
     NDS_initialize_background_ui(
-            &gfx_context->background_ui__overlay,
+            &gfx_context->backgrounds__sub[1],
             1);
 
 	dmaCopy(GFX_defaultTiles, 
-            gfx_context->background_ui
+            gfx_context->backgrounds__sub[0]
             .gfx_tileset, GFX_defaultTilesLen);
 	dmaCopy(GFX_defaultTiles, 
-            gfx_context->background_ui__overlay
+            gfx_context->backgrounds__sub[1]
             .gfx_tileset, GFX_defaultTilesLen);
 	dmaCopy(GFX_defaultPal, BG_PALETTE_SUB, GFX_defaultPalLen);
 
     NDS_set_background_priority(
-            &gfx_context->background_ui, 
+            &gfx_context->backgrounds__sub[0], 
             1);
     NDS_set_background_priority(
-            &gfx_context->background_ui__overlay, 
+            &gfx_context->backgrounds__sub[1], 
             2);
 }

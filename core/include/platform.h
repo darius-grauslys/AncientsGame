@@ -52,7 +52,16 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 ///
 /// SECTION_rendering
 ///
-void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context);
+void PLATFORM_initialize_gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
+///
+/// Opens the specified UI. Depending on the backend this
+/// might close all other UI's.
+///
+void PLATFORM_open_ui(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        enum UI_Window_Kind the_kind_of__ui_window_to__open);
 
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,

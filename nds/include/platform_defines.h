@@ -1,6 +1,7 @@
 #ifndef PLATFORM_DEFINES_H
 #define PLATFORM_DEFINES_H
 
+#include "nds_defines.h"
 #include <nds.h>
 
 /*****************************************************
@@ -132,11 +133,8 @@ typedef struct NDS_Gfx_Context__Chunk_Record_t {
 } NDS_Gfx_Context__Chunk_Record;
 
 typedef struct PLATFORM_Gfx_Context_t {
-    NDS_Background background_ground;
-    NDS_Background background_ground__overlay;
-    NDS_Background background_ground__sprite_cover;
-    NDS_Background background_ui;
-    NDS_Background background_ui__overlay;
+    NDS_Background backgrounds__main[NDS_BACKGROUND_QUANTITY_OF__MAIN];
+    NDS_Background backgrounds__sub[NDS_BACKGROUND_QUANTITY_OF__SUB];
 
     NDS_Gfx_Context__Chunk_Record chunk_records
         [CHUNK_MANAGER__QUANTITY_OF_CHUNKS];

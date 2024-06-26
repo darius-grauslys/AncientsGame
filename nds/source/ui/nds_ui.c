@@ -5,11 +5,11 @@
 
 void NDS_set_ui_to__debug(PLATFORM_Gfx_Context *p_gfx_context) {
 	dmaCopy(ui_tileset_defaultMap, 
-            p_gfx_context->background_ui
+            p_gfx_context->backgrounds__sub[0]
             .gfx_map,
             ui_tileset_defaultMapLen);
 	dmaCopy(ui_tileset_defaultMap, 
-            p_gfx_context->background_ui__overlay
+            p_gfx_context->backgrounds__sub[1]
             .gfx_map,
             ui_tileset_defaultMapLen);
 }
