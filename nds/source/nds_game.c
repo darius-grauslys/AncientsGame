@@ -21,13 +21,13 @@ void PLATFORM_post_render(Game *p_game) {
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[1]
+        p_game->gfx_context.backgrounds__main[2]
         .background_index,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[2]
+        p_game->gfx_context.backgrounds__main[1]
         .background_index,
          get_x_i32_from__camera(p_camera)  - 126,
         -get_y_i32_from__camera(p_camera) - 30

@@ -92,9 +92,9 @@ void NDS_load_sprite_palletes(
         const uint16_t *p_pallete =
             p_NDS_sprite_palletes[index_of__sprite_pallete].p_pallete;
         Index__u8 index_of__pallete_slot =
-            p_NDS_sprite_palletes->pallete_slot;
+            p_NDS_sprite_palletes[index_of__sprite_pallete].pallete_slot;
         Quantity__u32 pallete_length =
-            p_NDS_sprite_palletes->pallete_length;
+            p_NDS_sprite_palletes[index_of__sprite_pallete].pallete_length;
 
         dmaCopy(p_pallete, 
                 VRAM_I_EXT_SPR_PALETTE[index_of__pallete_slot],
@@ -113,9 +113,9 @@ main:
         const uint16_t *p_pallete =
             p_NDS_sprite_palletes[index_of__sprite_pallete].p_pallete;
         Index__u8 index_of__pallete_slot =
-            p_NDS_sprite_palletes->pallete_slot;
+            p_NDS_sprite_palletes[index_of__sprite_pallete].pallete_slot;
         Quantity__u32 pallete_length =
-            p_NDS_sprite_palletes->pallete_length;
+            p_NDS_sprite_palletes[index_of__sprite_pallete].pallete_length;
 
         dmaCopy(p_pallete, 
                 VRAM_F_EXT_SPR_PALETTE[index_of__pallete_slot],
