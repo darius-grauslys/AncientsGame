@@ -32,6 +32,82 @@ Quantity__u32 get_height_from__p_ui_element(
     return p_ui_element->ui_bounding_box__aabb.height__quantity_u32;
 }
 
+///
+/// Logically associate a contiguous collection of
+/// UI_Element via p_next pointers. Forming a one-way
+/// linked list.
+///
+static inline
+void link_ui_element_to__this_ui_element(
+        UI_Element *p_predecessor,
+        UI_Element *p_successor) {
+    if (p_predecessor == p_successor)
+        p_predecessor->p_next = 0;
+    p_predecessor->p_next =
+        p_successor;
+}
+
+///
+/// Establish a form of ownership via p_parent.
+///
+static inline
+void set_ui_element_as__the_parent_of__this_ui_element(
+        UI_Element *p_parent,
+        UI_Element *p_child) {
+    if (p_parent == p_child)
+        p_parent->p_parent = 0;
+    p_child->p_parent =
+        p_parent;
+}
+
+static inline
+UI_Element *get_next__ui_element(
+        UI_Element *p_ui_element) {
+    return p_ui_element->p_next;
+}
+
+static inline
+UI_Element *get_parent_of__ui_element(
+        UI_Element *p_ui_element) {
+    return p_ui_element->p_parent;
+}
+
+static inline
+UI_Element *get_child_of__ui_element(
+        UI_Element *p_ui_element) {
+    return p_ui_element->p_child;
+}
+
+static inline
+UI_Element *itterate_to_next__ui_element(
+        UI_Element **p_ui_element_ptr) {
+    if (!(*p_ui_element_ptr)->p_next)
+        return 0;
+    *p_ui_element_ptr =
+        (*p_ui_element_ptr)->p_next;
+    return *p_ui_element_ptr;
+}
+
+static inline 
+UI_Element *itterate_to_parent_of__ui_element(
+        UI_Element **p_ui_element_ptr) {
+    if (!(*p_ui_element_ptr)->p_parent)
+        return 0;
+    *p_ui_element_ptr =
+        (*p_ui_element_ptr)->p_parent;
+    return *p_ui_element_ptr;
+}
+
+static inline 
+UI_Element *itterate_to_child_of__ui_element(
+        UI_Element **p_ui_element_ptr) {
+    if (!(*p_ui_element_ptr)->p_child)
+        return 0;
+    *p_ui_element_ptr =
+        (*p_ui_element_ptr)->p_child;
+    return *p_ui_element_ptr;
+}
+
 void initialize_ui_element(
         UI_Element *p_ui_element,
         enum UI_Element_Kind kind_of_ui_element,
@@ -39,6 +115,10 @@ void initialize_ui_element(
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,
         Vector__3i32 position__3i32);
+
+void m_ui_element__dispose_handler__default(
+        UI_Element *p_this_ui_element,
+        Game *p_game);
 
 static bool inline is_ui_element__allocated(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_ALLOCATED);
@@ -68,6 +148,21 @@ static bool inline is_ui_element__focused(
         UI_Element *p_ui_element) {
     return is_ui_element__being_held(p_ui_element)
         || is_ui_element__being_dragged(p_ui_element);
+}
+
+static bool inline does_ui_element_have__parent(
+        UI_Element *p_ui_element) {
+    return (bool)p_ui_element->p_parent;
+}
+
+static bool inline does_ui_element_have__child(
+        UI_Element *p_ui_element) {
+    return (bool)p_ui_element->p_child;
+}
+
+static bool inline does_ui_element_have__next(
+        UI_Element *p_ui_element) {
+    return (bool)p_ui_element->p_next;
 }
 
 //TODO: move to private header
@@ -153,6 +248,11 @@ static void inline set_ui_element__held_handler(
         m_UI_Dragged m_ui_held_handler) {
     p_ui_element->m_ui_held_handler =
         m_ui_held_handler;
+}
+
+static bool inline does_ui_element_have__dispose_handler(
+        UI_Element *p_ui_element) {
+    return (bool)p_ui_element->m_ui_dispose_handler;
 }
 
 static bool inline does_ui_element_have__clicked_handler(

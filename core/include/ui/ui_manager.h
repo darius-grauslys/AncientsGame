@@ -11,21 +11,50 @@ void poll_ui_manager__update(
         UI_Manager *p_ui_manager,
         Game *p_game);
 
-UI_Element *get_new__ui_element_from__ui_manager(
+UI_Element *allocate_ui_element_from__ui_manager(
         UI_Manager *p_ui_manager);
 
-void get_many_new__ui_elements_from__ui_manager(
+static inline
+UI_Element *allocate_ui_element_from__ui_manager_in__succession(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_predecessor) {
+    p_predecessor->p_next =
+        allocate_ui_element_from__ui_manager(p_ui_manager);
+    return p_predecessor->p_next;
+}
+
+static inline
+UI_Element *allocate_ui_element_from__ui_manager_as__child(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_parent) {
+    p_parent->p_child =
+        allocate_ui_element_from__ui_manager(p_ui_manager);
+    return p_parent->p_child;
+}
+
+void allocate_many_ui_elements_from__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element **p_ptr_buffer,
         Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
         );
 
+UI_Element *allocate_many_ui_elements_from__ui_manager_in__succession(
+        UI_Manager *p_ui_manager,
+        Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
+        );
+
+UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
+        UI_Manager *p_ui_manager,
+        Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
+        );
+
 void release__ui_element_from__ui_manager(
         UI_Element *p_ui_element,
-        UI_Manager *p_ui_manager);
+        Game *p_game);
 
 void release_all__ui_elements_from__ui_manager(
-        UI_Manager *p_ui_manager);
+        UI_Manager *p_ui_manager,
+        Game *p_game);
 
 ///
 /// You will want to call this whenever you're implementing a

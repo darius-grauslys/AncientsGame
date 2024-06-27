@@ -1,6 +1,7 @@
 #ifndef PLATFORM_DEFINES_H
 #define PLATFORM_DEFINES_H
 
+#include "defines_weak.h"
 #include "nds_defines.h"
 #include <nds.h>
 
@@ -119,13 +120,14 @@
  *****************************************************/
 
 typedef struct NDS_Background_t {
-    int background_index;
+    Signed_Index__i8 background_index_from__initializer;
+    Signed_Index__i8 background_index_from__hardware;
     uint16_t *gfx_map;
     uint16_t *gfx_tileset;
     // uint16_t *gfx_palette;
-    uint32_t background__scroll_x, background__scroll_y;
-    uint32_t priority;
-    uint8_t map_base, tile_base;
+    Quantity__u32 background__scroll_x, background__scroll_y;
+    Index__u32 priority;
+    Index__u8 map_base, tile_base;
 } NDS_Background;
 
 typedef struct NDS_Gfx_Context__Chunk_Record_t {

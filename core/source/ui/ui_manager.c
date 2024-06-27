@@ -6,6 +6,7 @@
 #include <ui/ui_element.h>
 #include <ui/ui_manager.h>
 #include <vectors.h>
+#include <game.h>
 
 void initialize_ui_manager(
         UI_Manager *p_ui_manager) {
@@ -248,7 +249,7 @@ UI_Element **get_next__available_slot_in__ui_element_ptrs(
     return 0;
 }
 
-UI_Element *get_new__ui_element_from__ui_manager(
+UI_Element *allocate_ui_element_from__ui_manager(
         UI_Manager *p_ui_manager) {
     UI_Element **p_ui_element_ptr =
         get_next__available_slot_in__ui_element_ptrs(
@@ -284,7 +285,7 @@ failure:
     return 0;
 }
 
-void get_many_new__ui_elements_from__ui_manager(
+void allocate_many_ui_elements_from__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element **p_ptr_buffer,
         Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
@@ -297,13 +298,57 @@ void get_many_new__ui_elements_from__ui_manager(
             buffer_index<quantity_of__ui_elements_in__ptr_buffer;
             buffer_index++) {
         p_ptr_buffer[buffer_index] =
-            get_new__ui_element_from__ui_manager(p_ui_manager);
+            allocate_ui_element_from__ui_manager(p_ui_manager);
     }
+}
+
+UI_Element *allocate_many_ui_elements_from__ui_manager_in__succession(
+        UI_Manager *p_ui_manager,
+        Quantity__u8 quantity_of__ui_elements_to__allocate
+        ) {
+    if (quantity_of__ui_elements_to__allocate == 0)
+        return 0;
+    UI_Element *p_head = allocate_ui_element_from__ui_manager(
+            p_ui_manager);
+    UI_Element *p_current = p_head;
+
+    for (Quantity__u8 quantity_of__ui_elements__allocated = 0;
+            quantity_of__ui_elements__allocated < 
+                quantity_of__ui_elements_to__allocate;
+            quantity_of__ui_elements__allocated++) {
+        p_current->p_next =
+            allocate_ui_element_from__ui_manager(p_ui_manager);
+        p_current = p_current->p_next;
+    }
+    return p_head;
+}
+
+UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
+        UI_Manager *p_ui_manager,
+        Quantity__u8 quantity_of__ui_elements_to__allocate
+        ) {
+    if (quantity_of__ui_elements_to__allocate == 0)
+        return 0;
+    UI_Element *p_parent = allocate_ui_element_from__ui_manager(
+            p_ui_manager);
+    UI_Element *p_current = p_parent;
+
+    for (Quantity__u8 quantity_of__ui_elements__allocated = 0;
+            quantity_of__ui_elements__allocated < 
+                quantity_of__ui_elements_to__allocate;
+            quantity_of__ui_elements__allocated++) {
+        p_current->p_child =
+            allocate_ui_element_from__ui_manager(p_ui_manager);
+        p_current = p_current->p_child;
+    }
+    return p_parent;
 }
 
 void release__ui_element_from__ui_manager(
         UI_Element *p_ui_element,
-        UI_Manager *p_ui_manager) {
+        Game *p_game) {
+    UI_Manager *p_ui_manager =
+        get_p_ui_manager_from__game(p_game);
     if (p_ui_manager->quantity_of__ui_elements__quantity_u8 == 0) {
 #ifndef NDEBUG
         debug_error("Tried to release UI_Element %p while ui_manager is empty.",
@@ -312,10 +357,14 @@ void release__ui_element_from__ui_manager(
 #endif
         return;
     }
-    if (p_ui_element->m_ui_dispose_handler) {
+    if (p_ui_element->m_ui_dispose_handler
+            && is_ui_element__allocated(p_ui_element)) {
+        // the second clause of the if statement
+        // is in the case of a p_next->m_ui_dispose_handler
+        // invocation chain.
         p_ui_element->m_ui_dispose_handler(
                 p_ui_element,
-                p_ui_manager);
+                p_game);
     }
     for (Quantity__u8 ui_index=0;
             ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
@@ -343,7 +392,8 @@ void release__ui_element_from__ui_manager(
 }
 
 void release_all__ui_elements_from__ui_manager(
-        UI_Manager *p_ui_manager) {
+        UI_Manager *p_ui_manager,
+        Game *p_game) {
     for (Quantity__u8 ui_index=0;
             ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
             ui_index++) {
@@ -353,13 +403,13 @@ void release_all__ui_elements_from__ui_manager(
             return;
         }
 
-        initialize_ui_element(
-                p_ui_element, 
-                UI_Element_Kind__None, 
-                UI_FLAGS__NONE,
-                1,
-                1,
-                get_vector__3i32(0,0,0));
+        if (does_ui_element_have__dispose_handler(p_ui_element)) {
+            p_ui_element->m_ui_dispose_handler(
+                    p_ui_element,
+                    p_game);
+        }
+        
+        set_ui_element_as__deallocated(p_ui_element);
     }
 }
 

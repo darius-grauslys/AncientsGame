@@ -1,6 +1,7 @@
 #include "defines_weak.h"
 #include "entity/entity.h"
 #include "input/input.h"
+#include "nds_defines.h"
 #include "world/camera.h"
 #include <nds.h>
 #include <game.h>
@@ -15,20 +16,23 @@ void PLATFORM_post_render(Game *p_game) {
         &p_game->world.camera;
 
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[0]
-        .background_index,
+        p_game->gfx_context.backgrounds__main[
+            NDS_BACKGROUND_SLOT__GAME__GROUND]
+        .background_index_from__hardware,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[2]
-        .background_index,
+        p_game->gfx_context.backgrounds__main[
+            NDS_BACKGROUND_SLOT__GAME__WALL_UPPER]
+        .background_index_from__hardware,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[1]
-        .background_index,
+        p_game->gfx_context.backgrounds__main[
+            NDS_BACKGROUND_SLOT__GAME__WALL_LOWER]
+        .background_index_from__hardware,
          get_x_i32_from__camera(p_camera)  - 126,
         -get_y_i32_from__camera(p_camera) - 30
         );

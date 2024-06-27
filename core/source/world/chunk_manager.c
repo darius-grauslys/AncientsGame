@@ -39,7 +39,7 @@ void initialize_chunk_manager(
 
             p_chunk_map_node->p_chunk__here = p_chunk__here;
 
-            Index_u32 x__east, x__west, y__north, y__south;
+            Index__u32 x__east, x__west, y__north, y__south;
 
             if (x == 0)
                 x__west = CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW - 1;
@@ -544,7 +544,7 @@ bool poll_chunk_manager_for__tile_collision(
         DIRECTION__NORTH_WEST
     };
 
-    for (Index_u32 index=0;index<8;index+=2) {
+    for (Index__u32 index=0;index<8;index+=2) {
         Signed_Index__i32 x__chunk =
             chunk_xy_vectors[index]; //entity->hitbox.x__chunk;
         Signed_Index__i32 y__chunk =

@@ -3,9 +3,9 @@
 #include <defines.h>
 #include "defines_weak.h"
 #include "entity/reserves.h"
+#include "scene__game.h"
 #include <timer.h>
 #include <entity/humanoid.h>
-#include <scene/scene__game.h>
 
 #include <assets/ui/default/ui_map_hud.h>
 
@@ -185,8 +185,7 @@ void update_ui_homeostasis(
     }
 
     Timer__u8 *timer = 
-        &((Scene_Data__Game*)p_scene->p_scene_data)
-        ->timer_for__hud_notification__u8;
+        get_hud_timer_from__scene__game(p_scene);
     Quantity__u8 timer_value =
         timer->remaining__u8;
     poll_timer_u8(timer);
@@ -817,12 +816,12 @@ void NDS_update_ui_for__hud(
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
                 ->backgrounds__sub[1]
-                .background_index);
+                .background_index_from__hardware);
     TileMapEntry16 *p_ui__tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
                 ->backgrounds__sub[0]
-                .background_index);
+                .background_index_from__hardware);
 
     update_ui_hearts(
             p_player,

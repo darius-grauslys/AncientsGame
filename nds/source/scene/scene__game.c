@@ -18,7 +18,7 @@
 #include "ui/ui_element.h"
 #include "ui/ui_manager.h"
 #include "world/chunk_manager.h"
-#include <scene/scene__game.h>
+#include <scene/nds_scene__game.h>
 #include <stdint.h>
 #include <timer.h>
 #include <vectors.h>
@@ -58,28 +58,6 @@ void initialize_scene_as__game(Scene *p_scene) {
             30);
 }
 
-void m_ui_button__clicked_handler__game_button(
-        UI_Element *p_this_button, Game *p_game) {
-    enum Game_Scene_UI_State state =
-        *((enum Game_Scene_UI_State*)p_this_button->p_ui_data);
-    if (state == scene_data__game.ui_state) {
-        NDS_set_ui_background_to__equip(&p_game->gfx_context);
-        return;
-    }
-    switch (state) {
-        default:
-        case Game_Scene_UI_State__Equip:
-            NDS_set_ui_background_to__equip(&p_game->gfx_context);
-            break;
-        case Game_Scene_UI_State__Ground:
-            NDS_set_ui_background_to__ground(&p_game->gfx_context);
-            break;
-        case Game_Scene_UI_State__Work:
-            NDS_set_ui_background_to__work(&p_game->gfx_context);
-            break;
-    }
-}
-
 void m_load_scene_as__game_handler(
         Scene *p_this_scene,
         Game *p_game) {
@@ -94,31 +72,9 @@ void m_load_scene_as__game_handler(
     NDS_initialize_gfx_for__ui(&p_game->gfx_context);
     NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
-    release_all__ui_elements_from__ui_manager(
-            &p_game->ui_manager);
-
-    get_many_new__ui_elements_from__ui_manager(
-            &p_game->ui_manager, 
-            scene_data__game.p_ui_state_buttons, 
-            3);
-
-    for (Quantity__u8 ui_index=0;
-            ui_index<3;
-            ui_index++) {
-        UI_Element *p_ui_button = 
-            scene_data__game.p_ui_state_buttons[ui_index];
-        initialize_ui_element_as__button(
-                p_ui_button,
-                104, 32,
-                get_vector__3i32(56 + 72 * ui_index, 52, 0));
-        p_ui_button->p_ui_data =
-            &scene_data__game.button_states[ui_index];
-        scene_data__game.button_states[ui_index] =
-            (enum Game_Scene_UI_State)(ui_index+1);
-        set_ui_element__clicked_handler(
-                p_ui_button, 
-                m_ui_button__clicked_handler__game_button);
-    }
+    PLATFORM_open_ui(
+            p_game,
+            UI_Window_Kind__Idle);
 }
 
 void m_enter_scene_as__game_handler(

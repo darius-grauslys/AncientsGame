@@ -74,6 +74,8 @@ typedef struct Vector__3i32F8_t {
 } Vector__3i32F8;
 
 typedef int32_t Signed_Index__i32;
+typedef int16_t Signed_Index__i16;
+typedef int8_t  Signed_Index__i8;
 
 ///
 /// Has three int32_t components.
@@ -1036,6 +1038,10 @@ typedef struct Input_t {
 
 typedef struct Scene_t Scene;
 
+typedef struct Scene_Data__Game_t {
+    Timer__u8 timer_for__hud_notification__u8;
+} Scene_Data__Game;
+
 ///
 /// Prepares p_game for scene entry.
 ///
@@ -1083,7 +1089,7 @@ typedef struct UI_Manager_t UI_Manager;
 
 typedef void (*m_UI_Dispose)(
         UI_Element *p_this_ui_element,
-        UI_Manager *p_ui_manager);
+        Game *p_game);
 
 typedef void (*m_UI_Clicked)(
         UI_Element *p_this_ui_element,
@@ -1133,12 +1139,21 @@ typedef uint8_t UI_Flags__u8;
 typedef struct UI_Element_t {
     enum UI_Element_Kind the_kind_of_ui_element__this_is;
     Hitbox_AABB ui_bounding_box__aabb;
+    /// DO NOT INVOKE
     m_UI_Clicked    m_ui_clicked_handler;
+    /// DO NOT INVOKE
     m_UI_Dragged    m_ui_dragged_handler;
+    /// DO NOT INVOKE
     m_UI_Dropped    m_ui_dropped_handler;
+    /// DO NOT INVOKE
     m_UI_Held       m_ui_held_handler;
+    /// DO NOT INVOKE, DO NOT REMOVE FROM UI_MANAGER
+    /// FROM WITHIN m_ui_dispose_handler!
+    /// When implementing your own, be sure to
+    /// also invoke m_ui_element__dispose_handler__default(...)
     m_UI_Dispose    m_ui_dispose_handler;
     void *p_ui_data;
+    UI_Element *p_parent, *p_child, *p_next;
     Identifier__u16 ui_identifier;
     UI_Flags__u8 ui_flags;
     union {

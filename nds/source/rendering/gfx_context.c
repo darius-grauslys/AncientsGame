@@ -32,25 +32,16 @@ void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
             index_of__background++) {
         NDS_initialize_background(
                 &gfx_context
-                ->backgrounds__main[index_of__background]);
+                ->backgrounds__main[index_of__background],
+                index_of__background);
     }
     for (Index__u8 index_of__background = 0;
             index_of__background < NDS_BACKGROUND_QUANTITY_OF__SUB;
             index_of__background++) {
         NDS_initialize_background(
                 &gfx_context
-                ->backgrounds__sub[index_of__background]);
-    }
-}
-
-void PLATFORM_open_ui(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open) {
-    switch (the_kind_of__ui_window_to__open) {
-        default:
-            debug_error("PLATFORM_open_ui, unsupported UI_Window_Kind.");
-            break;
-#warning impl
+                ->backgrounds__sub[index_of__background],
+                index_of__background);
     }
 }
 
@@ -59,25 +50,25 @@ void NDS_set_video_modes_to__MODE_0_2D(void) {
 	videoSetModeSub(MODE_0_2D);
 }
 
-void NDS_initialize_backgrounds_for__main(void) {
+void NDS_set_vram_for__backgrounds_on__main(void) {
     vramSetBankA(VRAM_A_MAIN_BG);
 }
 
-void NDS_initialize_backgrounds_for__sub(void) {
+void NDS_set_vram_for__backgrounds_on__sub(void) {
     vramSetBankC(VRAM_C_SUB_BG);
 }
 
-void NDS_initialize_sprites_for__main(void) {
+void NDS_set_vram_and__oam_for__sprites_on__main(void) {
     vramSetBankB(VRAM_B_MAIN_SPRITE);
 	oamInit(&oamMain, SpriteMapping_1D_256, true);
 }
 
-void NDS_initialize_sprites_for__sub(void) {
+void NDS_set_vram_and__oam_for__sprites_on__sub(void) {
     vramSetBankD(VRAM_D_SUB_SPRITE);
 	oamInit(&oamSub, SpriteMapping_1D_256, true);
 }
 
-void NDS_load_sprite_palletes(
+void NDS_load_sprite_palletes_into__vram(
         NDS_Sprite_Pallete *p_NDS_sprite_palletes,
         Quantity__u32 quantity_of__sprite_palletes,
         bool for_main_or_sub) {
@@ -125,7 +116,7 @@ main:
 	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
 }
 
-void NDS_load_default__sprite_palletes(void) {
+void NDS_load_sprite_palletes__default_into__vram(void) {
     NDS_Sprite_Pallete entity_sprite_palletes[2];
 
     NDS_initialize_sprite_pallete(
@@ -139,7 +130,7 @@ void NDS_load_default__sprite_palletes(void) {
             NDS_PALLETE_SLOT__1, 
             GFX_entity_sprite__16x16PalLen);
 
-    NDS_load_sprite_palletes(
+    NDS_load_sprite_palletes_into__vram(
             entity_sprite_palletes, 
             NDS_SPRITE_PALLETE_QUANTITY_OF_FOR__DEFAULT,
             true    // load onto main
@@ -151,143 +142,66 @@ void NDS_initialize_gfx_for__world(
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
-    NDS_initialize_backgrounds_for__main();
-    NDS_initialize_backgrounds_for__sub();
-    NDS_initialize_sprites_for__main();
-    NDS_initialize_sprites_for__sub();
-    NDS_load_default__sprite_palletes();
+    NDS_set_vram_for__backgrounds_on__main();
+    NDS_set_vram_for__backgrounds_on__sub();
+    NDS_set_vram_and__oam_for__sprites_on__main();
+    NDS_set_vram_and__oam_for__sprites_on__sub();
+    NDS_load_sprite_palletes__default_into__vram();
 
-    NDS_initialize_background_ground__for_game(
-            &gfx_context->backgrounds__main[0]);
-    NDS_initialize_background_ground__sprite_cover__for_game(
-            &gfx_context->backgrounds__main[1]);
-    NDS_initialize_background_ground__overlay__for_game(
-            &gfx_context->backgrounds__main[2]);
+    NDS_initialize_background_for__world_ground(
+            &gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__GROUND]);
+    NDS_initialize_background_for__world_wall_upper(
+            &gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__WALL_LOWER]);
+    NDS_initialize_background_for__world_wall_lower(
+            &gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__WALL_UPPER]);
 
 	dmaCopy(GFX_worldTiles, 
-            gfx_context->backgrounds__main[0]
+            gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__GROUND]
             .gfx_tileset, GFX_worldTilesLen);
 	dmaCopy(GFX_worldPal, BG_PALETTE, GFX_worldPalLen);
 
 	dmaCopy(tilesMap,
-            gfx_context->backgrounds__main[0]
+            gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__GROUND]
             .gfx_map, 
             tilesMapLen);
 	dmaCopy(tilesMap, 
-            gfx_context->backgrounds__main[1]
+            gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__WALL_LOWER]
             .gfx_map,
             tilesMapLen);
 	dmaCopy(tilesMap, 
-            gfx_context->backgrounds__main[2]
+            gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__WALL_UPPER]
             .gfx_map,
             tilesMapLen);
 
     NDS_set_background_priority(
-            &gfx_context->backgrounds__main[1], 
+            &gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__WALL_LOWER], 
             0);
     NDS_set_background_priority(
-            &gfx_context->backgrounds__main[2], 
+            &gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__WALL_UPPER], 
             1);
     NDS_set_background_priority(
-            &gfx_context->backgrounds__main[0], 
+            &gfx_context->backgrounds__main[
+                NDS_BACKGROUND_SLOT__GAME__GROUND], 
             2);
 }
 
-void PLATFORM_update_chunks(
-        PLATFORM_Gfx_Context *p_gfx_context,
-        Chunk_Manager *p_chunk_manager) {
-    TileMapEntry16 *p_sprite_cover_tile_map =
-        (TileMapEntry16*)
-        bgGetMapPtr(p_gfx_context
-                ->backgrounds__main[1]
-                .background_index);
-    TileMapEntry16 *p_overlay_tile_map =
-        (TileMapEntry16*)
-        bgGetMapPtr(p_gfx_context
-                ->backgrounds__main[2]
-                .background_index);
-    TileMapEntry16 *p_background_tile_map =
-        (TileMapEntry16*)
-        bgGetMapPtr(p_gfx_context
-                ->backgrounds__main[0]
-                .background_index);
-    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
-        p_chunk_manager->p_most_north_western__chunk_map_node;
-    Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node;
-
-    for (uint8_t y=0; y < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
-            y++) {
-        p_current_sub__chunk_map_node =
-            p_current__chunk_map_node;
-        for (uint8_t x=0; x < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
-                x++) {
-            //TODO: consolidate this to a helper
-            uint32_t x__index =
-                ((p_current_sub__chunk_map_node->p_chunk__here
-                  ->x__signed_index_i32
-                  % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-                 + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-                % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-            uint32_t y__index =
-                ((p_current_sub__chunk_map_node->p_chunk__here
-                  ->y__signed_index_i32
-                  % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-                 + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-                % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
-
-            //TODO: im am using magic numbers here atm.
-
-            // Everything is based on the implementation of
-            // TileMapEntry16 of background.h in the arm9
-            // folder of libnds.
-            for (Index__u8 y=0;y<8;y++) {
-                for (Index__u8 x=0;x<8;x++) {
-                    Quantity__u32 background_tile_index = 
-                        y * 32 + x;
-                    background_tile_index += 
-                        (x__index % 4) * 8;
-                    background_tile_index +=
-                        (y__index % 4) * 8 * 32;
-                    if (x__index >= 4)
-                        background_tile_index += 32 * 32;
-                    if (y__index >= 4)
-                        background_tile_index += 32 * 32 * 2;
-                    TileMapEntry16 *p_tile_entry =
-                        &p_background_tile_map[background_tile_index];
-                    TileMapEntry16 *p_tile_cover_entry =
-                        &p_overlay_tile_map[background_tile_index];
-                    TileMapEntry16 *p_tile_sprite_cover_entry =
-                        &p_sprite_cover_tile_map[background_tile_index];
-                    Local_Tile_Vector__3u8 local_tile_vector = {x, y, 0};
-                    Tile_Render_Result render_result =
-                        get_tile_render_result(
-                                p_current_sub__chunk_map_node,
-                                local_tile_vector);
-                    *(uint16_t*)p_tile_entry = 
-                        render_result.tile_index__ground;
-                    *(uint16_t*)p_tile_cover_entry = 
-                        render_result.tile_index__cover;
-                    *(uint16_t*)p_tile_sprite_cover_entry = 
-                        render_result.tile_index__sprite_cover;
-                }
-            }
-
-            p_current_sub__chunk_map_node =
-                p_current_sub__chunk_map_node->p_east__chunk_map_node;
-        }
-        p_current__chunk_map_node =
-            p_current__chunk_map_node->p_south__chunk_map_node;
-    }
-}
-
+#warning this should be replaced with NDS_open_ui(...);
+//          maybe NDS_initialize_ui(...) for a UI_Window_Kind.
 void NDS_initialize_gfx_for__ui(
         PLATFORM_Gfx_Context *gfx_context) {
     NDS_initialize_background_ui(
-            &gfx_context->backgrounds__sub[0],
-            0);
+            &gfx_context->backgrounds__sub[0]);
     NDS_initialize_background_ui(
-            &gfx_context->backgrounds__sub[1],
-            1);
+            &gfx_context->backgrounds__sub[1]);
 
 	dmaCopy(GFX_defaultTiles, 
             gfx_context->backgrounds__sub[0]

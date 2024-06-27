@@ -17,48 +17,44 @@
 
 #include "ui/menu/nds_ui__menu.h"
 
-void NDS_set_ui_manager_to__menu(
-        UI_Manager *p_ui_manager) {
-    release_all__ui_elements_from__ui_manager(
-            p_ui_manager);
-
+UI_Element *NDS_allocate_ui_for__ui_window__main_menu(
+        Game *p_game) {
+    UI_Manager *p_ui_manager =
+        get_p_ui_manager_from__game(p_game);
     for (Quantity__u8 i=0;i<3;i++) {
         UI_Element *p_button =
-            get_new__ui_element_from__ui_manager(
+            allocate_ui_element_from__ui_manager(
                     p_ui_manager);
+        m_UI_Clicked m_ui_clicked_handler;
+        switch (i) {
+            case 0:
+                m_ui_clicked_handler = 
+                    m_main_menu__singleplayer_button__clicked_handler;
+                break;
+            case 1:
+                m_ui_clicked_handler = 
+                    m_main_menu__multiplayer_button__clicked_handler;
+                break;
+            case 2:
+                m_ui_clicked_handler = 
+                    m_main_menu__settings_button__clicked_handler;
+                break;
+        }
         initialize_ui_element_as__button(
                 p_button,
                 80, 24,
-                get_vector__3i32(52, 72 + 44 * i, 0));
-        switch (i) {
-            case 0:
-                set_ui_element__clicked_handler(
-                        p_button, 
-                        m_main_menu__singleplayer_button__clicked_handler);
-                break;
-            case 1:
-                set_ui_element__clicked_handler(
-                        p_button, 
-                        m_main_menu__multiplayer_button__clicked_handler);
-                break;
-            case 2:
-                set_ui_element__clicked_handler(
-                        p_button, 
-                        m_main_menu__settings_button__clicked_handler);
-                break;
-        }
+                get_vector__3i32(52, 72 + 44 * i, 0),
+                m_ui_clicked_handler);
     }
 
     UI_Element *p_button =
-        get_new__ui_element_from__ui_manager(
+        allocate_ui_element_from__ui_manager(
                 p_ui_manager);
 
     initialize_ui_element_as__button(
             p_button,
             104, 104,
-            get_vector__3i32(184, 118, 0));
-    set_ui_element__clicked_handler(
-            p_button, 
+            get_vector__3i32(184, 118, 0),
             m_main_menu__play_button__clicked_handler);
     set_ui_element_as__disabled(
             p_button);

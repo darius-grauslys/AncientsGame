@@ -1,4 +1,4 @@
-#include <scene/scene__multiplayer_menu.h> 
+#include <scene/nds_scene__multiplayer_menu.h> 
 
 void initialize_scene_as__multiplayer_menu(Scene *p_scene) {
 

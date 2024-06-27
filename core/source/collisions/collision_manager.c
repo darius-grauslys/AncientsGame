@@ -685,7 +685,7 @@ bool add_entity_to__collision_manager(
 // remove later:
 bool DEBUG_is_in_node(Collision_Manager__Collision_Node *node,
         Entity *entity) {
-    for (Index_u32 index=0;
+    for (Index__u32 index=0;
             index<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
             index++) {
         if (node->p_entity_ptrs[index] == entity)

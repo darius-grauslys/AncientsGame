@@ -38,7 +38,11 @@ typedef uint32_t    Quantity__u32;
 
 typedef uint8_t Index__u8;
 typedef uint16_t Index__u16;
-typedef uint32_t Index_u32;
+typedef uint32_t Index__u32;
+
+typedef int32_t Signed_Index__i32;
+typedef int16_t Signed_Index__i16;
+typedef int8_t  Signed_Index__i8;
 
 typedef int32_t     Fractional_with__4bit__i32;
 
@@ -331,7 +335,13 @@ enum UI_Window_Kind {
     UI_Window_Kind__Idle,
     UI_Window_Kind__Equip,
     UI_Window_Kind__Trade,
-    UI_Window_Kind__Labor
+    UI_Window_Kind__Labor,
+    UI_Window_Kind__Typer,
+
+    UI_Window_Kind__Main_Menu,
+    UI_Window_Kind__Singleplayer,
+    UI_Window_Kind__Multiplayer,
+    UI_Window_Kind__Settings
 };
 
 ///

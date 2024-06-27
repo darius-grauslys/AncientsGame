@@ -344,7 +344,7 @@ void f_chunk_generator__flat_world(
     
     for (Signed_Index__i32 y=-1;y< 2;y++) {
         for (Signed_Index__i32 x=-1;x<2;x++) {
-            Index_u32 index = (x+1) + (3*(2 - (y+1)));
+            Index__u32 index = (x+1) + (3*(2 - (y+1)));
             random_results[index]
                 .random_result__local__u32 =
                 get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
@@ -381,7 +381,7 @@ void f_chunk_generator__flat_world(
 
     for (Signed_Index__i32 y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
         for (Signed_Index__i32 x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
-            Index_u32 tile_index =
+            Index__u32 tile_index =
                 y * CHUNK_WIDTH__IN_TILES + x;
             Quantity__u32 moisture = 0;
 

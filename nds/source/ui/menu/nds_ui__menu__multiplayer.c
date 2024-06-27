@@ -3,8 +3,8 @@
 #include <nds.h>
 #include <platform_defines.h>
 
-void NDS_set_ui_manager_to__multiplayer(
-        UI_Manager *p_ui_manager) {
+UI_Element *NDS_allocate_ui_for__ui_window__multiplayer(
+        Game *p_game) {
 
 }
 

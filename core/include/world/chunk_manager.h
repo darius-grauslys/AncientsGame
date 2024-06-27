@@ -8,7 +8,7 @@ void initialize_chunk_manager(
         Chunk_Manager* p_chunk_manager,
         World_Parameters *p_world_parameters);
 
-Index_u32 get_chunk_index_from__chunk_manager(
+Index__u32 get_chunk_index_from__chunk_manager(
         Chunk_Manager *p_chunk_manager,
         Chunk_Vector__3i32 chunk_vector__3i32);
 

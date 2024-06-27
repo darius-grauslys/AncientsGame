@@ -1,3 +1,4 @@
+#include "ui/nds_ui.h"
 #include <ui/game/nds_ui__labor.h>
 #include <nds.h>
 #include <platform_defines.h>
@@ -5,9 +6,9 @@
 #include <assets/ui/default/GFX_default.h>
 #include <ui/game/nds_ui__hud.h>
 
-void NDS_set_ui_container_to__work(
-        UI_Element *p_ui_container) {
-
+UI_Element *NDS_allocate_ui_for__ui_window__labor(
+        Game *p_game) {
+    NDS_allocate_ui_for__game_hud(p_game);
 }
 
 void NDS_set_ui_background_to__work(

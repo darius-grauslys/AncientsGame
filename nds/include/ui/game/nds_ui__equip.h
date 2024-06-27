@@ -3,8 +3,8 @@
 
 #include <defines_weak.h>
 
-void NDS_set_ui_container_to__equip(
-        UI_Element *p_ui_container);
+UI_Element *NDS_allocate_ui_for__ui_window__equip(
+        Game *p_game);
 
 void NDS_set_ui_background_to__equip(
         PLATFORM_Gfx_Context *p_gfx_context);

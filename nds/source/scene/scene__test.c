@@ -9,7 +9,7 @@
 #include "ui/ui_manager.h"
 #include "vectors.h"
 #include "world/world.h"
-#include <scene/scene__test.h>
+#include <scene/nds_scene__test.h>
 #include <debug/nds_debug.h>
 #include <scene/scene.h>
 #include <ui/nds_ui__draggable.h>
@@ -21,9 +21,9 @@ enum Item_Kind item_kind = Item_Kind__Stick;
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    NDS_initialize_backgrounds_for__sub();
-    NDS_initialize_sprites_for__sub();
-    NDS_load_default__sprite_palletes();
+    NDS_set_vram_for__backgrounds_on__sub();
+    NDS_set_vram_and__oam_for__sprites_on__sub();
+    NDS_load_sprite_palletes__default_into__vram();
     NDS_initialize_debug__main();
 
     PLATFORM_initialize_sprite_for__item(
@@ -32,7 +32,7 @@ void m_load_scene_as__test_handler(
             TEXTURE_FLAGS__NONE);
 
     UI_Element *p_ui_slider =
-        get_new__ui_element_from__ui_manager(
+        allocate_ui_element_from__ui_manager(
                 &p_game->ui_manager);
 
     NDS_initialize_ui_element_as__nds_slider(

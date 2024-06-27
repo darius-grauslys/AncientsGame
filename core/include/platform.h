@@ -60,8 +60,23 @@ void PLATFORM_initialize_gfx_context(
 /// might close all other UI's.
 ///
 void PLATFORM_open_ui(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
         enum UI_Window_Kind the_kind_of__ui_window_to__open);
+
+///
+/// Closes the specified UI. Depending on the backend this
+/// might cause a UI window to open. For example, on NDS
+/// this will close the specified UI Window, and transition
+/// to the UI Idle window.
+///
+void PLATFORM_close_ui(
+        Game *p_game,
+        enum UI_Window_Kind the_kind_of__ui_window_to__close);
+
+enum UI_Window_Kind PLATFORM_get_last_opened_ui(void);
+Quantity__u8 PLATFORM_get_all_opened_ui(
+        enum UI_Window_Kind *p_ui_window_kind__buffer,
+        Quantity__u8 size_of__buffer);
 
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,

@@ -3,8 +3,8 @@
 
 #include <defines_weak.h>
 
-void NDS_set_ui_manager_to__menu(
-        UI_Manager *p_ui_manager);
+UI_Element *NDS_allocate_ui_for__ui_window__main_menu(
+        Game *p_game);
 
 void NDS_set_ui_background_to__menu_main(
         PLATFORM_Gfx_Context *p_gfx_context);
