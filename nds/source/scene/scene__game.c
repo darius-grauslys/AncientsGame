@@ -56,6 +56,10 @@ void initialize_scene_as__game(Scene *p_scene) {
             &scene_data__game
             .timer_for__hud_notification__u8,
             30);
+    initialize_timer_u8(
+            &scene_data__game
+            .timer_for__typer_sliding__u8,
+            16);
 }
 
 void m_load_scene_as__game_handler(

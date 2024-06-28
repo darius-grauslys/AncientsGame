@@ -3,7 +3,7 @@
 #include <defines.h>
 #include "defines_weak.h"
 #include "entity/reserves.h"
-#include "scene__game.h"
+#include <scene/scene__game.h>
 #include <timer.h>
 #include <entity/humanoid.h>
 

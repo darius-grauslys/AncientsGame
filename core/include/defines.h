@@ -629,6 +629,7 @@ typedef uint8_t Humanoid_Flags;
 //TODO: if heart/energy_orb HUD breaks, its likely because
 //      the tileset got moved around. DON'T PANIC! Just change
 //      the values below. TODO, make this not a problem.
+//TODO: 6/27/2024, current required offset is 28 for most tiles
 #define UI_TILE_SHEET_INDEX__EMPTY_HEART (Index__u16)220
 #define UI_TILE_SHEET_INDEX__HALF_HEART (Index__u16)221
 #define UI_TILE_SHEET_INDEX__FULL_HEART (Index__u16)222
@@ -1040,6 +1041,7 @@ typedef struct Scene_t Scene;
 
 typedef struct Scene_Data__Game_t {
     Timer__u8 timer_for__hud_notification__u8;
+    Timer__u8 timer_for__typer_sliding__u8;
 } Scene_Data__Game;
 
 ///

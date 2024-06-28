@@ -40,12 +40,12 @@ void allocate_many_ui_elements_from__ui_manager(
 
 UI_Element *allocate_many_ui_elements_from__ui_manager_in__succession(
         UI_Manager *p_ui_manager,
-        Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
+        Quantity__u8 quantity_of__ui_elements_to__allocate
         );
 
 UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
         UI_Manager *p_ui_manager,
-        Quantity__u8 quantity_of__ui_elements_in__ptr_buffer
+        Quantity__u8 quantity_of__ui_elements_to__allocate
         );
 
 void release__ui_element_from__ui_manager(
