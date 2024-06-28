@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+    <config>
+        <include sub_dir="ui/game/">
+            <header path="ui/nds_ui.h"/>
+            <header path="ui/ui_element.h"/>
+            <header path="ui/ui_button.h"/>
+            <header path="ui/ui_manager.h"/>
+            <header path="vectors.h"/>
+            <header path="defines.h"/>
+            <header path="game.h"/>
+        </include>
+        <code>
+            NDS_allocate_ui_for__game_hud(p_game);
+        </code>
+        <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__labor.c" h_path="./nds/include/ui/game/nds_ui_window__game__labor.h"/>
+        <platform target="NDS" size="256,196"/>
+        <background layer="0" path="./core/assets/ui/default/ui_map_labor.png"/>
+        <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
+        <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>
+    </config>
+    <ui>
+    </ui>
+</root>
+
+

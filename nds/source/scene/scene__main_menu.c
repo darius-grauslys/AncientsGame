@@ -7,7 +7,7 @@
 #include "platform.h"
 #include "platform_defines.h"
 #include "rendering/sprite.h"
-#include "ui/menu/nds_ui__menu__main.h"
+#include "ui/menu/nds_ui_window__menu__main.h"
 #include <scene/nds_scene__main_menu.h>
 #include <debug/nds_debug.h>
 #include <scene/scene.h>
@@ -19,8 +19,9 @@ void m_load_scene_as__main_menu_handler(
     NDS_set_video_modes_to__MODE_0_2D();
     NDS_initialize_gfx_for__ui(
             &p_game->gfx_context);
-    NDS_set_ui_background_to__menu_main(
-            &p_game->gfx_context);
+    // TODO: re-impl
+    // NDS_set_ui_background_to__menu_main(
+    //         &p_game->gfx_context);
     PLATFORM_open_ui(
             p_game,
             UI_Window_Kind__Main_Menu);

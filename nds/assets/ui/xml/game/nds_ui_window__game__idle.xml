@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+    <config>
+        <include sub_dir="ui/game/">
+            <header path="ui/nds_ui.h"/>
+            <header path="ui/ui_element.h"/>
+            <header path="ui/ui_button.h"/>
+            <header path="ui/ui_manager.h"/>
+            <header path="vectors.h"/>
+            <header path="defines.h"/>
+            <header path="game.h"/>
+        </include>
+        <code>
+            NDS_allocate_ui_for__game_hud(p_game);
+        </code>
+        <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__idle.c" h_path="./nds/include/ui/game/nds_ui_window__game__idle.h"/>
+        <platform target="NDS" size="256,192"/>
+        <background layer="0" path="./core/assets/ui/log/ui_map_log.png"/>
+        <background layer="1" path="./core/assets/ui/default/ui_map_idle.png"/>
+        <background layer="2" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" x="8" y="54"/>
+        <ui_func_signature for="grid"/>
+        <ui_func_signature for="child" c_signature="allocate_ui_element_from__ui_manager_as__child"/>
+        <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
+        <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>
+    </config>
+    <ui>
+        <allocate_ui name="p_slider">
+            <button x="220" y="92" width="16" height="80"/>
+        </allocate_ui>
+        <allocate_ui name="p_button__chat">
+            <button x="204" y="178" width="32" height="16" color="64,64,196"/>
+        </allocate_ui>
+        <allocate_ui_container x="20" y="90" size="4" stride__y="24">
+            <button width="16" height="12" color="64,196,64"/>
+        </allocate_ui_container>
+    </ui>
+</root>
+
+

@@ -1,4 +1,4 @@
-#include <ui/menu/nds_ui__menu.h>
+#include <ui/menu/nds_ui_window__menu.h>
 #include <defines.h>
 #include <scene/scene_manager.h>
 

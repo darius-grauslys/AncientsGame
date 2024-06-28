@@ -2,15 +2,15 @@
 #include "defines_weak.h"
 #include "nds/arm9/sprite.h"
 #include "platform.h"
-#include "ui/game/nds_ui__equip.h"
-#include "ui/game/nds_ui__idle.h"
-#include "ui/game/nds_ui__labor.h"
-#include "ui/game/nds_ui__trade.h"
-#include "ui/game/nds_ui__typer.h"
-#include "ui/menu/nds_ui__menu__main.h"
-#include "ui/menu/nds_ui__menu__multiplayer.h"
-#include "ui/menu/nds_ui__menu__settings.h"
-#include "ui/menu/nds_ui__menu__singleplayer.h"
+#include "ui/game/nds_ui_window__game__equip.h"
+#include "ui/game/nds_ui_window__game__idle.h"
+#include "ui/game/nds_ui_window__game__labor.h"
+#include "ui/game/nds_ui_window__game__trade.h"
+#include "ui/game/nds_ui_window__game__typer.h"
+#include "ui/menu/nds_ui_window__menu__main.h"
+#include "ui/menu/nds_ui_window__menu__multiplayer.h"
+#include "ui/menu/nds_ui_window__menu__settings.h"
+#include "ui/menu/nds_ui_window__menu__singleplayer.h"
 #include "ui/ui_button.h"
 #include "ui/ui_element.h"
 #include "vectors.h"
@@ -180,31 +180,31 @@ void PLATFORM_open_ui(
             debug_error("NDS, PLATFORM_open_ui, unsupported UI_Window_Kind.");
             break;
         case UI_Window_Kind__Idle:
-            NDS_allocate_ui_for__ui_window__idle(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__idle(p_game);
             break;
         case UI_Window_Kind__Equip:
-            NDS_allocate_ui_for__ui_window__equip(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__equip(p_game);
             break;
         case UI_Window_Kind__Trade:
-            NDS_allocate_ui_for__ui_window__trade(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__trade(p_game);
             break;
         case UI_Window_Kind__Labor:
-            NDS_allocate_ui_for__ui_window__labor(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__labor(p_game);
             break;
         case UI_Window_Kind__Typer:
-            NDS_allocate_ui_for__ui_window__typer(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__typer(p_game);
             break;
         case UI_Window_Kind__Main_Menu:
-            NDS_allocate_ui_for__ui_window__main_menu(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__main(p_game);
             break;
         case UI_Window_Kind__Multiplayer:
-            NDS_allocate_ui_for__ui_window__multiplayer(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__multiplayer(p_game);
             break;
         case UI_Window_Kind__Settings:
-            NDS_allocate_ui_for__ui_window__settings(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__settings(p_game);
             break;
         case UI_Window_Kind__Singleplayer:
-            NDS_allocate_ui_for__ui_window__singleplayer(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__singleplayer(p_game);
             break;
     }
 }

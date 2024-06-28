@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+    <config>
+        <include sub_dir="ui/menu/">
+            <header path="ui/nds_ui.h"/>
+            <header path="ui/ui_element.h"/>
+            <header path="ui/ui_button.h"/>
+            <header path="ui/ui_manager.h"/>
+            <header path="vectors.h"/>
+            <header path="defines.h"/>
+            <header path="game.h"/>
+        </include>
+        <output base_dir="./" c_path="./nds/source/ui/menu/nds_ui_window__menu__main.c" h_path="./nds/include/ui/menu/nds_ui_window__menu__main.h"/>
+        <platform target="NDS" size="256,196"/>
+        <background layer="0" path="./core/assets/ui/default/ui_map_main_menu.png"/>
+        <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
+        <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>
+    </config>
+    <ui>
+        <allocate_ui_container x="12" y="60" stride__y="44">
+            <allocate_ui name="p_button__singleplayer">
+                <button width="80" height="24"/>
+            </allocate_ui>
+            <allocate_ui name="p_button__multiplayer">
+                <button width="80" height="24"/>
+            </allocate_ui>
+            <allocate_ui name="p_button__settings">
+                <button width="80" height="24"/>
+            </allocate_ui>
+        </allocate_ui_container>
+    </ui>
+</root>
+
+

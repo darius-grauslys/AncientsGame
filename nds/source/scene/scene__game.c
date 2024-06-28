@@ -12,7 +12,7 @@
 #include "nds/arm9/background.h"
 #include "platform_defines.h"
 #include "scene/scene_manager.h"
-#include "ui/game/nds_ui__hud.h"
+#include "ui/game/nds_ui_background__game__hud.h"
 #include "ui/nds_ui.h"
 #include "ui/ui_button.h"
 #include "ui/ui_element.h"
@@ -74,7 +74,8 @@ void m_load_scene_as__game_handler(
     // NDS_initialize_debug__sub();
     // return;
     NDS_initialize_gfx_for__ui(&p_game->gfx_context);
-    NDS_set_ui_background_to__equip(&p_game->gfx_context);
+    // TODO: re-impl
+    // NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
     PLATFORM_open_ui(
             p_game,

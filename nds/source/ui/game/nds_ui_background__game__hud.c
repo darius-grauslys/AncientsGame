@@ -1,4 +1,4 @@
-#include <ui/game/nds_ui__hud.h>
+#include <ui/game/nds_ui_background__game__hud.h>
 #include <nds/arm9/background.h>
 #include <defines.h>
 #include "defines_weak.h"
