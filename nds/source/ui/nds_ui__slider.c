@@ -46,10 +46,10 @@ void NDS_initialize_ui_element_as__nds_slider(
         PLATFORM_Sprite *p_PLATFORM_sprite) {
     initialize_ui_element_as__slider(
             p_ui_element,
-            m_NDS_ui_dragged_handler_for__slider,
             width,
             height,
             position,
+            m_NDS_ui_dragged_handler_for__slider,
             is_snapped_x_or_y__axis);
     p_ui_element->p_ui_data =
         p_PLATFORM_sprite;

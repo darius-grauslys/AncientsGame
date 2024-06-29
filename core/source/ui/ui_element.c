@@ -30,7 +30,7 @@ void initialize_ui_element(
             vector_3i32_to__vector_3i32F4(position__3i32));
     p_ui_element->m_ui_clicked_handler = 0;
     p_ui_element->m_ui_dragged_handler = 0;
-    p_ui_element->m_ui_dropped_handler = 0;
+    p_ui_element->m_ui_recieve_drop_handler = 0;
     p_ui_element->m_ui_held_handler = 0;
     p_ui_element->m_ui_dispose_handler = 0;
 }

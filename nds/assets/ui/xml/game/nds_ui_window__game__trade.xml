@@ -5,6 +5,9 @@
             <header path="ui/nds_ui.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
+            <header path="ui/ui_draggable.h"/>
+            <header path="ui/ui_drop_zone.h"/>
+            <header path="ui/ui_slider.h"/>
             <header path="ui/ui_manager.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>
@@ -22,28 +25,31 @@
         <ui_func_signature for="child" c_signature="allocate_ui_element_from__ui_manager_as__child"/>
         <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="button" c_signature="initialize_ui_element_as__button"/>
+        <ui_func_signature for="slider" c_signature="initialize_ui_element_as__slider"/>
+        <ui_func_signature for="draggable" c_signature="initialize_ui_element_as__draggable"/>
+        <ui_func_signature for="drop_zone" c_signature="initialize_ui_element_as__drop_zone"/>
     </config>
     <ui>
         <allocate_ui name="p_slider_left">
-            <button x="20" y="92" width="16" height="80"/>
+            <slider x="20" y="92" width="16" height="80"/>
         </allocate_ui>
         <allocate_ui name="p_slider_right">
-            <button x="220" y="92" width="16" height="80"/>
+            <slider x="220" y="92" width="16" height="80"/>
         </allocate_ui>
         <grid x="46" y="1" size="9" stride__y="28">
             <allocate_ui_container size="3" stride__x="24">
-                <button width="23" height="27" color="55,55,96"/>
+                <drop_zone width="23" height="27" color="55,55,96"/>
                 <child>
-                    <button x="2" y="2" width="18" height="22" color="196,64,64"/>
+                    <draggable x="2" y="2" width="18" height="22" color="196,64,64"/>
                 </child>
             </allocate_ui_container>
         </grid>
         <grid x="138" y="1" size="9" stride__y="28">
             <allocate_ui_container size="3" stride__x="24">
-                <button width="23" height="27" color="55,55,96"/>
+                <drop_zone width="23" height="27" color="55,55,96"/>
                 <child>
-                    <button x="2" y="2" width="18" height="22" color="196,64,64"/>
+                    <draggable x="2" y="2" width="18" height="22" color="196,64,64"/>
                 </child>
             </allocate_ui_container>
         </grid>
