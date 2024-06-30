@@ -5,6 +5,8 @@
             <header path="ui/nds_ui.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
+            <header path="ui/ui_drop_zone.h"/>
+            <header path="ui/ui_draggable.h"/>
             <header path="ui/ui_manager.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>
@@ -15,34 +17,32 @@
         </code>
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__typer.c" h_path="./nds/include/ui/game/nds_ui_window__game__typer.h"/>
         <platform target="NDS" size="256,196"/>
-<<<<<<< Updated upstream
         <background layer="0" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" y="-60"/>
-=======
         <background layer="0" path="./core/assets/ui/default/ui_map_idle.png"/>
         <background layer="1" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" y="4"/>
         <ui_func_signature for="group"/>
->>>>>>> Stashed changes
+        <ui_func_signature for="group"/>
         <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="button" c_signature="initialize_ui_element_as__button"/>
     </config>
     <ui>
         <allocate_ui name="p_hide" x="196" y="64">
             <button width="32" height="16"/>
         </allocate_ui>
-        <allocate_ui x="27" y="112" stride__y="13">
+        <group x="27" y="112" stride__y="13">
             <allocate_ui_container size="12" stride__x="15">
                 <button width="14" height="12"/>
             </allocate_ui_container>
-            <allocate_ui>
+            <group>
                 <allocate_ui_container x="6" size="10" stride__x="15">
                     <button width="14" height="12"/>
                 </allocate_ui_container>
                 <allocate_ui name="p_backspace" x="156">
                     <button width="29" height="12"/>
                 </allocate_ui>
-            </allocate_ui>
-            <allocate_ui x="-7">
+            </group>
+            <group x="-7">
                 <allocate_ui name="p_shift">
                     <button width="18" height="12"/>
                 </allocate_ui>
@@ -52,16 +52,16 @@
                 <allocate_ui name="p_send" x="154">
                     <button width="29" height="12"/>
                 </allocate_ui>
-            </allocate_ui>
-            <allocate_ui x="-7">
+            </group>
+            <group x="-7">
                 <allocate_ui name="p_sym">
                     <button width="23" height="12"/>
                 </allocate_ui>
                 <allocate_ui_container x="24" size="10" stride__x="15">
                     <button width="14" height="12"/>
                 </allocate_ui_container>
-            </allocate_ui>
-            <allocate_ui>
+            </group>
+            <group>
                 <allocate_ui_container x="27" size="2" stride__x="15">
                     <button width="14" height="12"/>
                 </allocate_ui_container>
@@ -71,8 +71,8 @@
                 <allocate_ui_container x="117" size="2" stride__x="15">
                     <button width="14" height="12"/>
                 </allocate_ui_container>
-            </allocate_ui>
-        </allocate_ui>
+            </group>
+        </group>
     </ui>
 </root>
 

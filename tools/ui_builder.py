@@ -117,6 +117,7 @@ source_c=""
 source_h=""
 tab="    "
 error=""
+current_element_id=0
 
 def set_error(msg):
     global error
@@ -178,6 +179,7 @@ class Context:
         self.quantity_of__elements = quantity_of__elements
         self.index_of__itteration = ""
         self.index_of__element = 0
+        self.quantity_of__sub_elements = 0
         self.indentation_level = 0
         self.p_ui_element = ""
 
@@ -211,7 +213,7 @@ class Context:
         context.indentation_level = context_stack[-1].indentation_level
         return context
 
-class Button:
+class RectangleSpec:
     def __init__(self, xml_element, context_stack):
         self.x = 0 \
                 if "x" not in xml_element.attrib \
@@ -225,15 +227,19 @@ class Button:
         self.height = 0 \
             if "height" not in xml_element.attrib \
             else int(xml_element.attrib["height"])
-        self.m_ui_clicked_handler = "m_ui_button__clicked_handler__default" \
-            if "m_UI_Clicked" not in xml_element.attrib \
-            else int(xml_element.attrib["m_UI_Clicked"])
         self.color = get_int_tuple_from_xml_or__use_this(\
                 xml_element, "color", (55,55,55))
 
 def generate_source_h__with_literal(literal):
     global source_h
     source_h += literal
+
+def generate_source_h__named_ui_index(name, unique_id):
+    generate_source_h__with_literal(\
+            "#define {0}_{1}_{2} {2}".format(\
+                config.source_name.upper(),\
+                name.upper(),\
+                unique_id))
 
 def generate_source_c__tabs(quantity_of__tabs):
     global source_c
@@ -247,7 +253,7 @@ def generate_source__arguments(args, source_c_or__source_h):
     global source_h
     if source_c_or__source_h:
         source_c += "("
-        if (len(args) == 0):
+        if len(args) == 0:
             source_c += ")"
             return
         for i in range(len(args) - 1):
@@ -309,25 +315,66 @@ def generate_source_c__loop_end__for(context_stack):
 def generate_source_c__include(include):
     generate_source_c__with_literal("#include <{}>".format(include.path))
 
+def generate_source_h__named_ui_index_if__has_name(xml_element):
+    name = get_str_from_xml_or__use_this(xml_element, "name", None)
+    if name is not None:
+        generate_source_h__named_ui_index(name, current_element_id)
+
+def generate_source_c__ui_signature_with_args(signature, rectangle_spec, context_stack, extra_args):
+    itteration_multiplication_string = \
+            "" if context_stack[-1].index_of__itteration == ""\
+            else "* {}".format(context_stack[-1].index_of__itteration)
+    generate_source_c__signature(signature, [\
+            context_stack[-1].p_ui_element,\
+            rectangle_spec.width, rectangle_spec.height,\
+            "get_vector__3i32({}, {}, {})".format(\
+                "{} + {}{}".format(\
+                    rectangle_spec.x + context_stack[-1].x, \
+                    context_stack[-1].stride__x, \
+                    itteration_multiplication_string), \
+                "{} + {}{}".format(
+                    rectangle_spec.y + context_stack[-1].y, \
+                    context_stack[-1].stride__y, \
+                    itteration_multiplication_string), \
+                0)] + extra_args)
+
 def allocate_square(x, y, width, height, color):
     squares.append(shapes.Rectangle(\
             x=x, y=get_y(y, height), width=width, height=height, color=color))
 
+def allocate_many_squares_with__context_stack(rectangle_spec, context_stack):
+    for i in range(context_stack[-1].quantity_of__elements):
+        allocate_square(\
+                rectangle_spec.x \
+                    + context_stack[-1].x \
+                    + i * context_stack[-1].stride__x, \
+                rectangle_spec.y \
+                    + context_stack[-1].y \
+                    + i * context_stack[-1].stride__y, \
+                rectangle_spec.width, \
+                rectangle_spec.height, \
+                rectangle_spec.color)
+
 def allocate_ui(signature, xml_element, context_stack):
+    global current_element_id
     context_stack.append(Context.allocate_context_from__xml_element(\
             xml_element, context_stack))
-    name = get_str_from_xml_or__use_this(xml_element, "name", None)
-    if name is not None:
-        generate_source_c__tabs(context_stack[-1].indentation_level)
+    name = get_str_from_xml_or__use_this(xml_element, "name", p_ui_itterator)
+    generate_source_h__named_ui_index_if__has_name(xml_element)
+    generate_source_h__with_literal("\n")
+    generate_source_c__tabs(context_stack[-1].indentation_level)
+    if name != p_ui_itterator:
         generate_source_c__local_field__p_ui_element(name)
-        context_stack[-1].p_ui_element = name
-        generate_source_c__signature(signature, [p_ui_manager])
-        generate_source_c__new_line()
+    else:
+        generate_source_c__local_assignment__itterator()
+    context_stack[-1].p_ui_element = name
+    generate_source_c__signature(signature, [p_ui_manager])
+    generate_source_c__new_line()
     for sub_xml_element in xml_element:
-        if name is not None:
-            generate_source_c__tabs(context_stack[-1].indentation_level)
+        generate_source_c__tabs(context_stack[-1].indentation_level)
         construct_ui_from__xml_element(sub_xml_element, context_stack)
     context_stack.pop()
+    current_element_id += 1
 
 def generate_source_c__itteration_by__succession(context_stack):
     context_stack[-1].index_of__itteration = \
@@ -338,6 +385,22 @@ def generate_source_c__itteration_by__succession(context_stack):
                 p_ui_itterator),\
             "++")
 
+def get_unique_id_for__element(context_stack):
+    id = 0
+    for context in context_stack:
+        id += context.index_of__element + context.quantity_of__sub_elements
+    return id
+
+def group(signature, xml_element, context_stack):
+    context = Context.allocate_context_from__xml_element(\
+            xml_element, context_stack)
+    context_stack.append(context)
+    generate_source_h__named_ui_index_if__has_name(xml_element)
+    for sub_xml_element in xml_element:
+        construct_ui_from__xml_element(sub_xml_element, context_stack)
+        generate_source_c__with_literal("\n")
+    context_stack[-2].quantity_of__sub_elements += context_stack.pop().quantity_of__elements
+
 def grid(signature, xml_element, context_stack):
     context = Context.allocate_context_from__xml_element(\
             xml_element, context_stack)
@@ -346,7 +409,7 @@ def grid(signature, xml_element, context_stack):
         for sub_xml_element in xml_element:
             construct_ui_from__xml_element(sub_xml_element, context_stack)
             generate_source_c__with_literal("\n")
-    context_stack.pop()
+    context_stack[-2].quantity_of__sub_elements += context_stack.pop().quantity_of__elements
 
 def child(signature, xml_element, context_stack):
     context_stack[-1].index_of__element -= 1
@@ -360,8 +423,11 @@ def child(signature, xml_element, context_stack):
         construct_ui_from__xml_element(sub_xml_element, context_stack)
 
 def allocate_ui_container(signature, xml_element, context_stack):
+    global current_element_id
     context = Context.allocate_context_from__xml_element(\
             xml_element, context_stack)
+    generate_source_h__named_ui_index_if__has_name(xml_element)
+    generate_source_h__with_literal("\n")
     context_stack.append(context)
     size = context.quantity_of__elements
     generate_source_c__tabs(context_stack[-1].indentation_level)
@@ -376,47 +442,79 @@ def allocate_ui_container(signature, xml_element, context_stack):
         context_stack[-1].p_ui_element = p_ui_itterator
         generate_source_c__tabs(context_stack[-1].indentation_level)
         construct_ui_from__xml_element(sub_xml_element, context_stack)
+    current_element_id += size
     context_stack[-1].indentation_level -= 1
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__loop_end__for(context_stack)
-    context_stack.pop()
+    context_stack[-2].quantity_of__sub_elements += context_stack.pop().quantity_of__elements
 
 def button(signature, xml_element, context_stack):
-    xml_button = Button(xml_element, context_stack)
+    rectangle_spec = RectangleSpec(xml_element, context_stack)
 
-    itteration_multiplication_string = \
-            "" if context_stack[-1].index_of__itteration == ""\
-            else "* {}".format(context_stack[-1].index_of__itteration)
-
-    generate_source_c__with_literal(\
-            "initialize_ui_element_as__button")
-    generate_source_c__arguments([\
-            context_stack[-1].p_ui_element,\
-            xml_button.width, xml_button.height,\
-            "get_vector__3i32({}, {}, {})".format(\
-                "{} + {}{}".format(\
-                    xml_button.x + context_stack[-1].x, \
-                    context_stack[-1].stride__x, \
-                    itteration_multiplication_string), \
-                "{} + {}{}".format(
-                    xml_button.y + context_stack[-1].y, \
-                    context_stack[-1].stride__y, \
-                    itteration_multiplication_string), \
-                0),\
-            xml_button.m_ui_clicked_handler])
+    generate_source_c__ui_signature_with_args(\
+            signature,\
+            rectangle_spec,\
+            context_stack,\
+            [\
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "m_UI_Clicked", \
+                    "m_ui_button__clicked_handler__default")\
+            ])
     generate_source_c__new_line()
+    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
-    for i in range(context_stack[-1].quantity_of__elements):
-        allocate_square(\
-                xml_button.x \
-                    + context_stack[-1].x \
-                    + i * context_stack[-1].stride__x, \
-                xml_button.y \
-                    + context_stack[-1].y \
-                    + i * context_stack[-1].stride__y, \
-                xml_button.width, \
-                xml_button.height, \
-                xml_button.color)
+def slider(signature, xml_element, context_stack):
+    rectangle_spec = RectangleSpec(xml_element, context_stack)
+
+    generate_source_c__ui_signature_with_args(\
+            signature,\
+            rectangle_spec,\
+            context_stack,\
+            [\
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "m_UI_Clicked", \
+                    "m_ui_slider__dragged_handler__default"), \
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "snapped_x_or__y", \
+                    "true")\
+            ])
+    generate_source_c__new_line()
+    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
+
+def draggable(signature, xml_element, context_stack):
+    rectangle_spec = RectangleSpec(xml_element, context_stack)
+
+    generate_source_c__ui_signature_with_args(\
+            signature,\
+            rectangle_spec,\
+            context_stack,\
+            [\
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "m_UI_Clicked", \
+                    "m_ui_draggable__dragged_handler__default")\
+            ])
+    generate_source_c__new_line()
+    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
+
+def drop_zone(signature, xml_element, context_stack):
+    rectangle_spec = RectangleSpec(xml_element, context_stack)
+
+    generate_source_c__ui_signature_with_args(\
+            signature,\
+            rectangle_spec,\
+            context_stack,\
+            [\
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "m_UI_Clicked", \
+                    "m_ui_drop_zone__recieve_drop_handler__default")\
+            ])
+    generate_source_c__new_line()
+    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def construct_ui_from__xml_element(xml_element, context_stack):
     matched_signature = list(filter(\
@@ -442,17 +540,18 @@ def generate_source__ui(xml_node__ui):
     generate_source_h__with_literal(\
             "\n#include <defines.h>\n".format(config.BACKEND.upper(), config.source_name.upper()))
     generate_source_h__with_literal(\
-            "// THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.\n")
+            "// THIS CODE IS AUTO GENERATED. Go to ./{}/assets/ui/xml/ instead of modifying this file.\n".format(\
+            config.BACKEND.lower()))
     generate_source_h__with_literal(\
             "\nUI_Element *{}_allocate_ui_for__{}".format(\
             config.BACKEND,\
             config.source_name))
     generate_source_h__arguments(["Game *p_game"])
     generate_source_h__with_literal(";\n")
-    generate_source_h__with_literal("#endif\n")
 
     generate_source_c__with_literal(\
-            "// THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.\n")
+            "// THIS CODE IS AUTO GENERATED. Go to ./{}/assets/ui/xml/ instead of modifying this file.\n".format(\
+            config.BACKEND.lower()))
     generate_source_c__with_literal(\
             "\nUI_Element *{}_allocate_ui_for__{}".format(\
             config.BACKEND,\
@@ -481,6 +580,7 @@ def generate_source__ui(xml_node__ui):
     for element in xml_node__ui:
         construct_ui_from__xml_element(element, context_stack)
     generate_source_c__with_literal("}\n")
+    generate_source_h__with_literal("#endif\n")
 
 
 def read_ui(path):

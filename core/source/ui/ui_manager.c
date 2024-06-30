@@ -175,7 +175,7 @@ void poll_ui_manager__update_for__drop(
         return;
     p_ui_manager
         ->p_ui_element__focused
-        ->m_ui_dropped_handler(
+        ->m_ui_recieve_drop_handler(
                 p_ui_manager
                 ->p_ui_element__focused,
                 p_game);

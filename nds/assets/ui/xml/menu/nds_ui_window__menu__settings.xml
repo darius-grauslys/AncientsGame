@@ -13,12 +13,13 @@
         <output base_dir="./" c_path="./nds/source/ui/menu/nds_ui_window__menu__settings.c" h_path="./nds/include/ui/menu/nds_ui_window__menu__settings.h"/>
         <platform target="NDS" size="256,196"/>
         <background layer="0" path="./core/assets/ui/default/ui_map_settings.png"/>
+        <ui_func_signature for="group"/>
         <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="button" c_signature="initialize_ui_element_as__button"/>
     </config>
     <ui>
-        <allocate_ui_container x="12" y="60" stride__y="44">
+        <group x="12" y="60" stride__y="44">
             <allocate_ui name="p_button__singleplayer">
                 <button width="80" height="24"/>
             </allocate_ui>
@@ -28,8 +29,6 @@
             <allocate_ui name="p_button__settings">
                 <button width="80" height="24"/>
             </allocate_ui>
-        </allocate_ui_container>
+        </group>
     </ui>
 </root>
-
-
