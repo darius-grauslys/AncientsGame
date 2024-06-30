@@ -237,15 +237,16 @@ void poll_ui_manager__update(
 
 UI_Element **get_next__available_slot_in__ui_element_ptrs(
         UI_Manager *p_ui_manager) {
-    for (Quantity__u8 ui_ptr_index=0;
-            ui_ptr_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
+    Quantity__u8 ui_ptr_index = 0;
+    for (;ui_ptr_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
             ui_ptr_index++) {
         UI_Element **p_ui_element_ptr =
             &p_ui_manager->ui_element_ptrs[ui_ptr_index];
         if (!(*p_ui_element_ptr))
             return p_ui_element_ptr;
     }
-    debug_abort("Next ui_element_ptrs slot unavailable.");
+    debug_abort("Next ui_element_ptrs slot unavailable. ui_ptr_index = %d.", 
+            ui_ptr_index);
     return 0;
 }
 
@@ -371,21 +372,23 @@ void release__ui_element_from__ui_manager(
             ui_index++) {
         UI_Element **p_ui_element_ptr =
             &p_ui_manager->ui_element_ptrs[ui_index];
+        UI_Element **p_ui_element_ptr__for_swap =
+            &p_ui_manager->ui_element_ptrs[ui_index];
         if (*p_ui_element_ptr != p_ui_element)
             continue;
         // swap with last ui_element_ptr
-        for (Quantity__u8 ui_sub_index=ui_index+1;
+        for (Quantity__u8 ui_sub_index=ui_index;
                 ui_sub_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
                 ui_sub_index++) {
-            UI_Element **p_ui_element_ptr__for_swap =
+            p_ui_element_ptr__for_swap =
                 &p_ui_manager->ui_element_ptrs[ui_sub_index];
             if (!*p_ui_element_ptr__for_swap) {
-                *p_ui_element_ptr =
-                    *p_ui_element_ptr__for_swap;
-                *p_ui_element_ptr__for_swap = 0;
                 break;
             }
         }
+        *p_ui_element_ptr =
+            *p_ui_element_ptr__for_swap;
+        *p_ui_element_ptr__for_swap = 0;
         break;
     }
     p_ui_manager->quantity_of__ui_elements__quantity_u8--;
@@ -397,20 +400,23 @@ void release_all__ui_elements_from__ui_manager(
     for (Quantity__u8 ui_index=0;
             ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
             ui_index++) {
-        UI_Element *p_ui_element = 
-            &p_ui_manager->ui_elements[ui_index];
-        if (!is_ui_element__allocated(p_ui_element)) {
+        UI_Element **p_ui_element_ptr = 
+            &p_ui_manager->ui_element_ptrs[ui_index];
+        if (!p_ui_element_ptr) {
             return;
         }
 
-        if (does_ui_element_have__dispose_handler(p_ui_element)) {
-            p_ui_element->m_ui_dispose_handler(
-                    p_ui_element,
+        if (does_ui_element_have__dispose_handler(*p_ui_element_ptr)) {
+            (*p_ui_element_ptr)->m_ui_dispose_handler(
+                    *p_ui_element_ptr,
                     p_game);
         }
         
-        set_ui_element_as__deallocated(p_ui_element);
+        set_ui_element_as__deallocated(*p_ui_element_ptr);
+        *p_ui_element_ptr = 0;
     }
+    p_ui_manager
+        ->quantity_of__ui_elements__quantity_u8 = 0;
 }
 
 void swap_priority_of__ui_elenents_within__ui_manager(

@@ -73,7 +73,7 @@ void NDS_initialize_background_with__allocation_specification(
         ->background_slot;
 
     switch (p_background_allocation_specification
-            ->the_kind_of__ui_background_allocation) {
+            ->the_kind_of__background_allocation) {
         default:
             p_background->map_base = layer;
             p_background->tile_base = 1;

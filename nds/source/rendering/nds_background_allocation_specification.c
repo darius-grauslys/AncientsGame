@@ -11,6 +11,7 @@ const NDS_Background_Allocation_Specification
 void NDS_initialize_background_allocation_specification(
         NDS_Background_Allocation_Specification
             *p_NDS_background_allocation_specification,
+        enum NDS_Background_Allocation_Kind the_kind_of__background_allocation,
         Index__u8 background_slot,
         const unsigned int *p_gfx_background,
         Quantity__u32 length_of__p_background_gfx,
@@ -18,6 +19,9 @@ void NDS_initialize_background_allocation_specification(
         Quantity__u32 length_of__p_background_map,
         Index__u8 priority) {
     clamp__p_u8(&priority, 0, 3);
+    p_NDS_background_allocation_specification
+        ->the_kind_of__background_allocation =
+        the_kind_of__background_allocation;
     p_NDS_background_allocation_specification
         ->background_slot = background_slot;
     p_NDS_background_allocation_specification

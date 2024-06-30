@@ -182,8 +182,10 @@ void PLATFORM_open_ui(
             p_game);
     switch (the_kind_of__ui_window_to__open) {
         default:
-            debug_error("NDS, PLATFORM_open_ui, unsupported UI_Window_Kind.");
+            debug_error("NDS, PLATFORM_open_ui, unsupported UI_Window_Kind %d.",
+                    the_kind_of__ui_window_to__open);
             break;
+        case UI_Window_Kind__None:
         case UI_Window_Kind__Idle:
             NDS_allocate_ui_for__nds_ui_window__game__idle(p_game);
             break;
@@ -338,6 +340,13 @@ void NDS_set_background_for__ui_window(
             &nds_background_engine_allocation_context, 
             the_kind_of__ui_window);
 
+    for (Index__u8 backgroud_index=0;
+            backgroud_index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+            backgroud_index++) {
+        bgHide(p_PLATFORM_gfx_context->backgrounds__sub[backgroud_index]
+                .background_index_from__hardware);
+    }
+
 #warning impl extended background palletes
     //TODO: need to add extended background palletes
     dmaCopy(nds_background_engine_allocation_context
@@ -365,8 +374,7 @@ void NDS_set_background_for__ui_window(
 
         if (UI_Window_Kind__None
                 == p_background_allocation_specification
-                ->the_kind_of__ui_background_allocation) {
-            bgHide(p_background->background_index_from__hardware);
+                ->the_kind_of__background_allocation) {
             continue;
         }
         bgShow(p_background->background_index_from__hardware);

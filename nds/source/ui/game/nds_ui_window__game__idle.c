@@ -2,6 +2,8 @@
 #include <ui/nds_ui.h>
 #include <ui/ui_element.h>
 #include <ui/ui_button.h>
+#include <ui/ui_drop_zone.h>
+#include <ui/ui_draggable.h>
 #include <ui/ui_manager.h>
 #include <vectors.h>
 #include <defines.h>

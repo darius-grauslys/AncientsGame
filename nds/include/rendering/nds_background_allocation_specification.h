@@ -10,6 +10,7 @@ extern const NDS_Background_Allocation_Specification
 void NDS_initialize_background_allocation_specification(
         NDS_Background_Allocation_Specification
             *p_NDS_background_allocation_specification,
+        enum NDS_Background_Allocation_Kind the_kind_of__background_allocation,
         Index__u8 background_slot,
         const unsigned int *p_gfx_background,
         Quantity__u32 length_of__p_background_gfx,

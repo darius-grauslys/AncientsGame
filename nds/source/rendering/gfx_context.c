@@ -135,6 +135,11 @@ void NDS_load_sprite_palletes__default_into__vram(void) {
             NDS_SPRITE_PALLETE_QUANTITY_OF_FOR__DEFAULT,
             true    // load onto main
             );
+    NDS_load_sprite_palletes_into__vram(
+            entity_sprite_palletes, 
+            NDS_SPRITE_PALLETE_QUANTITY_OF_FOR__DEFAULT,
+            false   // load onto main
+            );
 }
 
 void NDS_initialize_gfx_for__world(

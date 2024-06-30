@@ -4,6 +4,21 @@
 #include "defines_weak.h"
 #include <nds_defines.h>
 
+bool NDS_does_NOT_bg_alloc_spec_share__palette_with__another_bg_alloc_spec(
+        NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
+        NDS_Background_Engine_Allocation_Context 
+            *p_NDS_bg_engine_alloc_context);
+
+bool NDS_does_NOT_bg_alloc_spec_share__map_offset_with__another_bg_alloc_spec(
+        NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
+        NDS_Background_Engine_Allocation_Context 
+            *p_NDS_bg_engine_alloc_context);
+
+bool NDS_does_NOT_bg_alloc_spec_share__tileset_offset_with__another_bg_alloc_spec(
+        NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
+        NDS_Background_Engine_Allocation_Context 
+            *p_NDS_bg_engine_alloc_context);
+
 void NDS_initialize_background_engine_allocation_context(
         NDS_Background_Engine_Allocation_Context
             *p_NDS_background_engine_allocation_context,

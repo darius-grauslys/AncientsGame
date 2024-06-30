@@ -77,6 +77,18 @@ u32 subtract_u32__no_overflow(
 }
 
 static inline
+u8 clamp__u8(
+        u8 value__u8,
+        u8 min__u8,
+        u8 max__u8) {
+    if (value__u8 < min__u8)
+        return min__u8;
+    if (value__u8 > max__u8)
+        return max__u8;
+    return value__u8;
+}
+
+static inline
 void clamp__p_u8(
         u8 *p_value__u8,
         u8 min__u8,
