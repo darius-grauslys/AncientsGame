@@ -210,6 +210,17 @@ static void inline set_ui_element_as__snapped_y_axis(
         ~UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS;
 }
 
+static inline
+void set_ui_element__snapped_state(
+        UI_Element *p_ui_slider,
+        bool is_snapped_x_or_y__axis) {
+    if (is_snapped_x_or_y__axis) {
+        set_ui_element_as__snapped_x_axis(p_ui_slider);
+    } else {
+        set_ui_element_as__snapped_y_axis(p_ui_slider);
+    }
+}
+
 static void inline set_ui_element_as__enabled(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags |=
@@ -248,6 +259,32 @@ static void inline set_ui_element__held_handler(
         m_UI_Dragged m_ui_held_handler) {
     p_ui_element->m_ui_held_handler =
         m_ui_held_handler;
+}
+
+static void inline set_ui_element__position(
+        UI_Element *p_ui_element,
+        Vector__3i32 position__3i32) {
+    p_ui_element->ui_bounding_box__aabb
+        .position__3i32F4 = 
+            vector_3i32_to__vector_3i32F4(position__3i32);
+}
+
+static void inline set_ui_element__size(
+        UI_Element *p_ui_element,
+        Quantity__u32 width, Quantity__u32 height) {
+    p_ui_element->ui_bounding_box__aabb
+        .width__quantity_u32 = width;
+    p_ui_element->ui_bounding_box__aabb
+        .height__quantity_u32 = height;
+}
+
+static void inline set_ui_element__hitbox(
+        UI_Element *p_ui_element,
+        Quantity__u32 width, 
+        Quantity__u32 height,
+        Vector__3i32 position__3i32) {
+    set_ui_element__position(p_ui_element, position__3i32);
+    set_ui_element__size(p_ui_element, width, height);
 }
 
 static bool inline does_ui_element_have__dispose_handler(

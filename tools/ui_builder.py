@@ -70,7 +70,7 @@ class Config:
             if element.tag == "ui_func_signature":
                 self.signatures.append(UI_Signature(\
                         get_str_from_xml_or__use_this(element, "for", ""),\
-                        get_str_from_xml_or__use_this(element, "c_signature", "")\
+                        get_str_from_xml_or__use_this(element, "c_signatures", "")\
                         ))
             if element.tag == "platform":
                 self.BACKEND = get_str_from_xml_or__use_this(element, "target", self.BACKEND)
@@ -158,13 +158,9 @@ def get_y(y, height):
     return window.height - y - height
 
 class UI_Signature:
-    xml_tag:""
-    c_signature:""
-    callback:None
-
-    def __init__(self, xml_tag, c_signature):
+    def __init__(self, xml_tag, c_signatures):
         self.xml_tag = xml_tag
-        self.c_signature = c_signature
+        self.c_signatures = c_signatures.split(',')
         self.callback = globals()[xml_tag]
 
 class Context:
@@ -276,10 +272,20 @@ def generate_source_c__arguments(args):
 def generate_source_h__arguments(args):
     generate_source__arguments(args, False)
 
-def generate_source_c__signature(signature, args):
+def generate_source_c__signature(c_signature, args):
     global source_c
-    source_c += signature.c_signature
+    source_c += c_signature
     generate_source_c__arguments(args)
+
+def generate_source_c__signatures(signature, context_stack, many_args):
+    if len(signature.c_signatures) < 2:
+        generate_source_c__signature(signature.c_signatures[0], many_args[0])
+    else:
+        for index, c_signature in enumerate(signature.c_signatures):
+            generate_source_c__signature(c_signature, many_args[index])
+            if index+1 < len(signature.c_signatures):
+                generate_source_c__new_line()
+                generate_source_c__tabs(context_stack[-1].indentation_level)
 
 def generate_source_c__new_line():
     global source_c
@@ -307,8 +313,8 @@ def get_source_string__loop__itterator(context_stack):
 
 def generate_source_c__loop_begin__for(literal__itterator, literal__comparison, literal__increment):
     generate_source_c__with_literal(\
-            "for (Index__u32 {0}=0;{1};{0}{2}) {{\n".format(\
-            literal__itterator, literal__comparison, literal__increment))
+            "for (Index__u32 {2}=0;{0};{1} && (++{2})) {{\n".format(\
+            literal__comparison, literal__increment, literal__itterator))
 def generate_source_c__loop_end__for(context_stack):
     generate_source_c__with_literal("}\n")
 
@@ -319,24 +325,6 @@ def generate_source_h__named_ui_index_if__has_name(xml_element):
     name = get_str_from_xml_or__use_this(xml_element, "name", None)
     if name is not None:
         generate_source_h__named_ui_index(name, current_element_id)
-
-def generate_source_c__ui_signature_with_args(signature, rectangle_spec, context_stack, extra_args):
-    itteration_multiplication_string = \
-            "" if context_stack[-1].index_of__itteration == ""\
-            else "* {}".format(context_stack[-1].index_of__itteration)
-    generate_source_c__signature(signature, [\
-            context_stack[-1].p_ui_element,\
-            rectangle_spec.width, rectangle_spec.height,\
-            "get_vector__3i32({}, {}, {})".format(\
-                "{} + {}{}".format(\
-                    rectangle_spec.x + context_stack[-1].x, \
-                    context_stack[-1].stride__x, \
-                    itteration_multiplication_string), \
-                "{} + {}{}".format(
-                    rectangle_spec.y + context_stack[-1].y, \
-                    context_stack[-1].stride__y, \
-                    itteration_multiplication_string), \
-                0)] + extra_args)
 
 def allocate_square(x, y, width, height, color):
     squares.append(shapes.Rectangle(\
@@ -368,7 +356,7 @@ def allocate_ui(signature, xml_element, context_stack):
     else:
         generate_source_c__local_assignment__itterator()
     context_stack[-1].p_ui_element = name
-    generate_source_c__signature(signature, [p_ui_manager])
+    generate_source_c__signatures(signature, context_stack, [[p_ui_manager]])
     generate_source_c__new_line()
     for sub_xml_element in xml_element:
         generate_source_c__tabs(context_stack[-1].indentation_level)
@@ -381,9 +369,9 @@ def generate_source_c__itteration_by__succession(context_stack):
             get_source_string__loop__itterator(context_stack)
     generate_source_c__loop_begin__for(\
             get_source_string__loop__itterator(context_stack),\
+            p_ui_itterator,
             "itterate_to_next__ui_element(&{})".format(\
-                p_ui_itterator),\
-            "++")
+                p_ui_itterator))
 
 def get_unique_id_for__element(context_stack):
     id = 0
@@ -415,7 +403,7 @@ def child(signature, xml_element, context_stack):
     context_stack[-1].index_of__element -= 1
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__local_assignment__itterator_with__literal("_child")
-    generate_source_c__signature(signature, [p_ui_manager, p_ui_itterator])
+    generate_source_c__signatures(signature, context_stack, [[p_ui_manager, p_ui_itterator]])
     generate_source_c__new_line()
     context_stack[-1].p_ui_element = "{}{}".format(p_ui_itterator, "_child")
     for sub_xml_element in xml_element:
@@ -432,7 +420,7 @@ def allocate_ui_container(signature, xml_element, context_stack):
     size = context.quantity_of__elements
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__local_assignment__itterator()
-    generate_source_c__signature(signature, [p_ui_manager, size])
+    generate_source_c__signatures(signature, context_stack, [[p_ui_manager, size]])
     generate_source_c__new_line()
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__itteration_by__succession(context_stack)
@@ -448,71 +436,99 @@ def allocate_ui_container(signature, xml_element, context_stack):
     generate_source_c__loop_end__for(context_stack)
     context_stack[-2].quantity_of__sub_elements += context_stack.pop().quantity_of__elements
 
+def get_rect_spec_args(context_stack, rectangle_spec):
+    itteration_multiplication_string = \
+            "" if context_stack[-1].index_of__itteration == ""\
+            else "* {}".format(context_stack[-1].index_of__itteration)
+    return [\
+            context_stack[-1].p_ui_element,\
+            rectangle_spec.width, rectangle_spec.height,\
+            "get_vector__3i32({}, {}, {})".format(\
+                "{} + {}{}".format(\
+                    rectangle_spec.x + context_stack[-1].x, \
+                    context_stack[-1].stride__x, \
+                    itteration_multiplication_string), \
+                "{} + {}{}".format(
+                    rectangle_spec.y + context_stack[-1].y, \
+                    context_stack[-1].stride__y, \
+                    itteration_multiplication_string), \
+                0)\
+        ]
+
 def button(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
 
-    generate_source_c__ui_signature_with_args(\
+    generate_source_c__signatures(\
             signature,\
-            rectangle_spec,\
-            context_stack,\
-            [\
+            context_stack,
+            [[\
+                context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "m_UI_Clicked", \
                     "m_ui_button__clicked_handler__default")\
-            ])
+            ], \
+            get_rect_spec_args(context_stack, rectangle_spec)])
+    
     generate_source_c__new_line()
     allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def slider(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
 
-    generate_source_c__ui_signature_with_args(\
+    generate_source_c__signatures(\
             signature,\
-            rectangle_spec,\
-            context_stack,\
-            [\
+            context_stack,
+            [[\
+                context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "m_UI_Clicked", \
                     "m_ui_slider__dragged_handler__default"), \
+            ],\
+            [\
+                context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "snapped_x_or__y", \
                     "true")\
-            ])
+            ], \
+            get_rect_spec_args(context_stack, rectangle_spec)])
+    
     generate_source_c__new_line()
     allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def draggable(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
 
-    generate_source_c__ui_signature_with_args(\
+    generate_source_c__signatures(\
             signature,\
-            rectangle_spec,\
-            context_stack,\
-            [\
+            context_stack,
+            [[\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "m_UI_Clicked", \
                     "m_ui_draggable__dragged_handler__default")\
-            ])
+            ], \
+            get_rect_spec_args(context_stack, rectangle_spec)])
+    
     generate_source_c__new_line()
     allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def drop_zone(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
 
-    generate_source_c__ui_signature_with_args(\
+    generate_source_c__signatures(\
             signature,\
-            rectangle_spec,\
-            context_stack,\
-            [\
+            context_stack,
+            [[\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "m_UI_Clicked", \
                     "m_ui_drop_zone__recieve_drop_handler__default")\
-            ])
+            ], \
+            get_rect_spec_args(context_stack, rectangle_spec)])
+    
     generate_source_c__new_line()
     allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
