@@ -15,7 +15,13 @@
         </code>
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__typer.c" h_path="./nds/include/ui/game/nds_ui_window__game__typer.h"/>
         <platform target="NDS" size="256,196"/>
+<<<<<<< Updated upstream
         <background layer="0" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" y="-60"/>
+=======
+        <background layer="0" path="./core/assets/ui/default/ui_map_idle.png"/>
+        <background layer="1" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" y="4"/>
+        <ui_func_signature for="group"/>
+>>>>>>> Stashed changes
         <ui_func_signature for="allocate_ui" c_signature="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signature="allocate_many_ui_elements_from__ui_manager_in__succession"/>
         <ui_func_signature for="button" c_signature="allocate_ui_element_from__ui_manager"/>

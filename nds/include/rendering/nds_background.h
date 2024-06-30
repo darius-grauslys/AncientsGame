@@ -17,11 +17,10 @@ void NDS_initialize_background_for__world_wall_lower(
 void NDS_initialize_background_for__world_wall_upper(
         NDS_Background *background);
 
-void NDS_initialize_background_ui(
-        NDS_Background *background);
-
-void NDS_initialize_background_ui_for__text_log(
-        NDS_Background *background);
+void NDS_initialize_background_with__allocation_specification(
+        NDS_Background *p_background,
+        NDS_Background_Allocation_Specification
+            *p_NDS_background_allocation_specification);
 
 void NDS_set_background_priority(
         NDS_Background *background,

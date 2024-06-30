@@ -1,3 +1,4 @@
+#include "nds_defines.h"
 #include <rendering/nds_background.h>
 
 void NDS_initialize_background(
@@ -63,43 +64,45 @@ void NDS_initialize_background_for__world_wall_upper(
         bgGetGfxPtr(background->background_index_from__hardware);
 }
 
-void NDS_initialize_background_ui(
-        NDS_Background *background) {
-    debug_warning("nds_background.c init's use magic numbers.");
-    background->map_base = 
-        background->background_index_from__initializer;
-    background->tile_base = 1;
-    background->background_index_from__hardware =
-        bgInitSub(
-                background->background_index_from__initializer, 
-                BgType_Text8bpp, 
-                BgSize_T_256x256, 
-                background->map_base, 
-                background->tile_base);
-    background->gfx_map = 
-        bgGetMapPtr(background->background_index_from__hardware);
-    background->gfx_tileset = 
-        bgGetGfxPtr(background->background_index_from__hardware);
-}
-
-void NDS_initialize_background_ui_for__text_log(
-        NDS_Background *background) {
-    debug_warning("nds_background.c init's use magic numbers.");
+void NDS_initialize_background_with__allocation_specification(
+        NDS_Background *p_background,
+        NDS_Background_Allocation_Specification
+            *p_background_allocation_specification) {
     Signed_Index__i8 layer =
-        background->background_index_from__initializer;
-    background->map_base = layer * 2;
-    background->tile_base = layer * 2;
-    background->background_index_from__hardware =
-        bgInitSub(
-                layer, 
-                BgType_Text8bpp, 
-                BgSize_T_256x512, 
-                background->map_base, 
-                background->tile_base);
-    background->gfx_map = 
-        bgGetMapPtr(background->background_index_from__hardware);
-    background->gfx_tileset = 
-        bgGetGfxPtr(background->background_index_from__hardware);
+        p_background_allocation_specification
+        ->background_slot;
+
+    switch (p_background_allocation_specification
+            ->the_kind_of__ui_background_allocation) {
+        default:
+            p_background->map_base = layer;
+            p_background->tile_base = 1;
+            p_background->background_index_from__hardware =
+                bgInitSub(
+                        p_background->background_index_from__initializer, 
+                        BgType_Text8bpp, 
+                        BgSize_T_256x256, 
+                        p_background->map_base, 
+                        p_background->tile_base);
+            break;
+        case NDS_UI_Background_Allocation_Kind__Log_Lower:
+        case NDS_UI_Background_Allocation_Kind__Log_Upper:
+            p_background->map_base = layer * 2;
+            p_background->tile_base = layer * 2;
+            p_background->background_index_from__hardware =
+                bgInitSub(
+                        layer, 
+                        BgType_Text8bpp, 
+                        BgSize_T_256x512, 
+                        p_background->map_base, 
+                        p_background->tile_base);
+            break;
+    }
+
+    p_background->gfx_map = 
+        bgGetMapPtr(p_background->background_index_from__hardware);
+    p_background->gfx_tileset = 
+        bgGetGfxPtr(p_background->background_index_from__hardware);
 }
 
 void NDS_set_background_priority(

@@ -11,6 +11,16 @@ void poll_ui_manager__update(
         UI_Manager *p_ui_manager,
         Game *p_game);
 
+static inline
+Index__u16 get_index_of__p_ui_element_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_ui_element) {
+    return (Index__u16)(
+            p_ui_element 
+            - p_ui_manager->ui_elements)
+        /(sizeof(UI_Element));
+}
+
 UI_Element *allocate_ui_element_from__ui_manager(
         UI_Manager *p_ui_manager);
 

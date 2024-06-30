@@ -21,7 +21,7 @@ enum Item_Kind item_kind = Item_Kind__Stick;
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    NDS_set_vram_for__backgrounds_on__sub();
+    // NDS_set_vram_for__backgrounds_on__sub();
     NDS_set_vram_and__oam_for__sprites_on__sub();
     NDS_load_sprite_palletes__default_into__vram();
     NDS_initialize_debug__main();

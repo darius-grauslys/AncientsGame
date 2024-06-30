@@ -5,6 +5,8 @@
             <header path="ui/nds_ui.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
+            <header path="ui/ui_drop_zone.h"/>
+            <header path="ui/ui_draggable.h"/>
             <header path="ui/ui_manager.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>

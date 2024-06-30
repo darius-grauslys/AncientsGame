@@ -198,23 +198,23 @@ void NDS_initialize_gfx_for__world(
 //          maybe NDS_initialize_ui(...) for a UI_Window_Kind.
 void NDS_initialize_gfx_for__ui(
         PLATFORM_Gfx_Context *gfx_context) {
-    NDS_initialize_background_ui(
-            &gfx_context->backgrounds__sub[0]);
-    NDS_initialize_background_ui(
-            &gfx_context->backgrounds__sub[1]);
+    // NDS_initialize_background_ui(
+    //         &gfx_context->backgrounds__sub[0]);
+    // NDS_initialize_background_ui(
+    //         &gfx_context->backgrounds__sub[1]);
 
-	dmaCopy(GFX_defaultTiles, 
-            gfx_context->backgrounds__sub[0]
-            .gfx_tileset, GFX_defaultTilesLen);
-	dmaCopy(GFX_defaultTiles, 
-            gfx_context->backgrounds__sub[1]
-            .gfx_tileset, GFX_defaultTilesLen);
-	dmaCopy(GFX_defaultPal, BG_PALETTE_SUB, GFX_defaultPalLen);
+	// dmaCopy(GFX_defaultTiles, 
+    //         gfx_context->backgrounds__sub[0]
+    //         .gfx_tileset, GFX_defaultTilesLen);
+	// dmaCopy(GFX_defaultTiles, 
+    //         gfx_context->backgrounds__sub[1]
+    //         .gfx_tileset, GFX_defaultTilesLen);
+	// dmaCopy(GFX_defaultPal, BG_PALETTE_SUB, GFX_defaultPalLen);
 
-    NDS_set_background_priority(
-            &gfx_context->backgrounds__sub[0], 
-            1);
-    NDS_set_background_priority(
-            &gfx_context->backgrounds__sub[1], 
-            2);
+    // NDS_set_background_priority(
+    //         &gfx_context->backgrounds__sub[0], 
+    //         1);
+    // NDS_set_background_priority(
+    //         &gfx_context->backgrounds__sub[1], 
+    //         2);
 }

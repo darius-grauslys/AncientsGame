@@ -1,7 +1,12 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "nds/arm9/sprite.h"
+#include "nds_defines.h"
 #include "platform.h"
+#include "rendering/nds_background.h"
+#include "rendering/nds_background_allocation_specification.h"
+#include "rendering/nds_background_engine_allocation_context.h"
+#include "ui/game/nds_ui_background__game__hud.h"
 #include "ui/game/nds_ui_window__game__equip.h"
 #include "ui/game/nds_ui_window__game__idle.h"
 #include "ui/game/nds_ui_window__game__labor.h"
@@ -207,6 +212,10 @@ void PLATFORM_open_ui(
             NDS_allocate_ui_for__nds_ui_window__menu__singleplayer(p_game);
             break;
     }
+
+    NDS_set_background_for__ui_window(
+            get_p_PLATFORM_gfx_context_from__game(p_game), 
+            the_kind_of__ui_window_to__open);
 }
 
 void PLATFORM_close_ui(
@@ -318,4 +327,74 @@ Quantity__u8 PLATFORM_get_all_opened_ui(
     p_ui_window_kind__buffer[0] = 
         _ui__state_machine.the_kind_of__active_ui_window;
     return 1;
+}
+
+void NDS_set_background_for__ui_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        enum UI_Window_Kind the_kind_of__ui_window) {
+    NDS_Background_Engine_Allocation_Context
+        nds_background_engine_allocation_context;
+    NDS_initialize_background_engine_allocation_context(
+            &nds_background_engine_allocation_context, 
+            the_kind_of__ui_window);
+
+#warning impl extended background palletes
+    //TODO: need to add extended background palletes
+    dmaCopy(nds_background_engine_allocation_context
+                .pal_background,
+            BG_PALETTE_SUB, 
+            nds_background_engine_allocation_context
+                .length_of__background_pal);
+
+    for (Index__u8 index=0;
+            index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+            index++) {
+        NDS_Background_Allocation_Specification 
+            *p_background_allocation_specification =
+            &nds_background_engine_allocation_context
+                .nds_background_allocation_specifications[index];
+
+        NDS_Background *p_background =
+                &p_PLATFORM_gfx_context->backgrounds__sub[
+                    p_background_allocation_specification
+                        ->background_slot];
+
+        NDS_initialize_background_with__allocation_specification(
+                p_background,
+                p_background_allocation_specification);
+
+        if (UI_Window_Kind__None
+                == p_background_allocation_specification
+                ->the_kind_of__ui_background_allocation) {
+            bgHide(p_background->background_index_from__hardware);
+            continue;
+        }
+        bgShow(p_background->background_index_from__hardware);
+
+        dmaCopy(p_background_allocation_specification
+                    ->p_gfx_background, 
+                p_background
+                ->gfx_tileset, 
+                p_background_allocation_specification
+                    ->length_of__p_background_gfx);
+        dmaCopy(p_background_allocation_specification
+                    ->p_map_background,
+                p_background
+                ->gfx_map, 
+                p_background_allocation_specification
+                    ->length_of__p_background_map);
+        NDS_set_background_priority(
+                p_background,
+                p_background_allocation_specification
+                    ->priority_of__background);
+
+        if (p_background_allocation_specification
+                ->background_slot == NDS_BACKGROUND_SLOT__UI__BASE) {
+            NDS_put_hud_onto__background(
+                    p_PLATFORM_gfx_context, 
+                    &p_PLATFORM_gfx_context->backgrounds__sub[
+                        p_background_allocation_specification
+                            ->background_slot]);
+        }
+    }
 }

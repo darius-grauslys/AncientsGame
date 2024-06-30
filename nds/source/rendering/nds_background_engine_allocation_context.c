@@ -1,0 +1,167 @@
+#include "defines_weak.h"
+#include "nds_defines.h"
+#include "rendering/nds_background_allocation_specification.h"
+#include <rendering/nds_background_engine_allocation_context.h>
+
+#include <assets/ui/default/GFX_default.h>
+#include <assets/ui/typer/GFX_typer.h>
+
+#include <assets/ui/default/ui_map_idle.h>
+#include <assets/ui/default/ui_map_equip.h>
+#include <assets/ui/default/ui_map_equipment.h>
+#include <assets/ui/default/ui_map_trade.h>
+#include <assets/ui/default/ui_map_labor.h>
+#include <assets/ui/default/ui_map_inventory_column.h>
+
+#include <assets/ui/log/GFX_log.h>
+#include <assets/ui/log/ui_map_log.h>
+
+#include <assets/ui/typer/ui_map_typer__locked.h>
+#include <assets/ui/typer/ui_map_typer__lowercase.h>
+#include <assets/ui/typer/ui_map_typer__uppercase.h>
+
+#include <assets/ui/default/ui_map_main_menu.h>
+#include <assets/ui/default/ui_map_multiplayer.h>
+#include <assets/ui/default/ui_map_singleplayer.h>
+#include <assets/ui/default/ui_map_settings.h>
+
+void NDS_initialize_background_engine_allocation_context(
+        NDS_Background_Engine_Allocation_Context
+            *p_NDS_background_engine_allocation_context,
+        enum UI_Window_Kind the_kind_of__ui_window_to__allocate_for) {
+
+    for (Index__u8 index=0;
+            index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+            index++) {
+        p_NDS_background_engine_allocation_context
+            ->nds_background_allocation_specifications[index] =
+            nds_background_allocation_specification__none;
+    }
+
+    p_NDS_background_engine_allocation_context
+        ->pal_background = GFX_defaultPal;
+    p_NDS_background_engine_allocation_context
+        ->length_of__background_pal = GFX_defaultPalLen;
+
+    switch (the_kind_of__ui_window_to__allocate_for) {
+        default:
+        case UI_Window_Kind__Idle:
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__BASE],
+                    NDS_BACKGROUND_SLOT__UI__BASE, 
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_idleMap, 
+                    ui_map_idleMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__BASE);
+            // NDS_initialize_background_allocation_specification(
+            //         &p_NDS_background_engine_allocation_context
+            //             ->nds_background_allocation_specifications[
+            //                 NDS_BACKGROUND_SLOT__UI__LOG_LOWER],
+            //         NDS_BACKGROUND_SLOT__UI__LOG_LOWER, 
+            //         GFX_logTiles, 
+            //         GFX_logTilesLen, 
+            //         ui_map_logMap, 
+            //         ui_map_logMapLen,
+            //         NDS_BACKGROUND_PRIORITY__UI__LOG_LOWER);
+            // NDS_initialize_background_allocation_specification(
+            //         &p_NDS_background_engine_allocation_context
+            //             ->nds_background_allocation_specifications[
+            //                 NDS_BACKGROUND_SLOT__UI__LOG_UPPER],
+            //         NDS_BACKGROUND_SLOT__UI__LOG_UPPER, 
+            //         GFX_logTiles, 
+            //         GFX_logTilesLen, 
+            //         ui_map_logMap, 
+            //         ui_map_logMapLen,
+            //         NDS_BACKGROUND_PRIORITY__UI__LOG_UPPER);
+            // NDS_initialize_background_allocation_specification(
+            //         &p_NDS_background_engine_allocation_context
+            //             ->nds_background_allocation_specifications[
+            //                 NDS_BACKGROUND_SLOT__UI__TYPER],
+            //         NDS_BACKGROUND_SLOT__UI__TYPER, 
+            //         GFX_typerTiles, 
+            //         GFX_typerTilesLen, 
+            //         ui_map_typer__lockedMap, 
+            //         ui_map_typer__lockedMapLen,
+            //         NDS_BACKGROUND_PRIORITY__UI__SCROLL_TYPER);
+            break;
+        case UI_Window_Kind__Equip:
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__BASE],
+                    NDS_BACKGROUND_SLOT__UI__BASE, 
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_equipMap, 
+                    ui_map_equipMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__BASE);
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__SUB_BASE],
+                    NDS_BACKGROUND_SLOT__UI__SUB_BASE, 
+                    GFX_typerTiles, 
+                    GFX_typerTilesLen, 
+                    ui_map_equipmentMap, 
+                    ui_map_equipmentMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__SUB_BASE);
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__SCROLL],
+                    NDS_BACKGROUND_SLOT__UI__SCROLL, 
+                    GFX_typerTiles, 
+                    GFX_typerTilesLen, 
+                    ui_map_inventory_columnMap, 
+                    ui_map_inventory_columnMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__SCROLL);
+            break;
+        case UI_Window_Kind__Trade:
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__BASE],
+                    NDS_BACKGROUND_SLOT__UI__BASE, 
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_idleMap, 
+                    ui_map_idleMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__BASE);
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__SCROLL],
+                    NDS_BACKGROUND_SLOT__UI__SCROLL, 
+                    GFX_typerTiles, 
+                    GFX_typerTilesLen, 
+                    ui_map_inventory_columnMap, 
+                    ui_map_inventory_columnMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__SCROLL);
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY],
+                    NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY, 
+                    GFX_typerTiles, 
+                    GFX_typerTilesLen, 
+                    ui_map_inventory_columnMap, 
+                    ui_map_inventory_columnMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__SCROLL_SECONDARY);
+            break;
+        case UI_Window_Kind__Labor:
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__BASE],
+                    NDS_BACKGROUND_SLOT__UI__BASE, 
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_idleMap, 
+                    ui_map_idleMapLen,
+                    NDS_BACKGROUND_PRIORITY__UI__BASE);
+            break;
+    }
+}
