@@ -71,6 +71,9 @@ void NDS_initialize_background_with__allocation_specification(
     Signed_Index__i8 layer =
         p_background_allocation_specification
         ->background_slot;
+    p_background->background_index_from__initializer =
+        p_background_allocation_specification
+        ->background_slot;
 
     switch (p_background_allocation_specification
             ->the_kind_of__background_allocation) {

@@ -81,7 +81,7 @@ UI_Element *get_child_of__ui_element(
 static inline
 UI_Element *itterate_to_next__ui_element(
         UI_Element **p_ui_element_ptr) {
-    if (!(*p_ui_element_ptr)->p_next)
+    if (!(*p_ui_element_ptr) || !((*p_ui_element_ptr)->p_next))
         return 0;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_next;
@@ -91,7 +91,7 @@ UI_Element *itterate_to_next__ui_element(
 static inline 
 UI_Element *itterate_to_parent_of__ui_element(
         UI_Element **p_ui_element_ptr) {
-    if (!(*p_ui_element_ptr)->p_parent)
+    if (!(*p_ui_element_ptr) || !((*p_ui_element_ptr)->p_parent))
         return 0;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_parent;

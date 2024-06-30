@@ -16,6 +16,8 @@ void NDS_initialize_background_allocation_specification(
         Quantity__u32 length_of__p_background_gfx,
         const uint16_t *p_map_background,
         Quantity__u32 length_of__p_background_map,
+        const uint16_t *p_pal_background,
+        Quantity__u32 length_of__p_background_pal,
         Index__u8 priority);
 
 #endif

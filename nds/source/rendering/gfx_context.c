@@ -1,5 +1,6 @@
 #include "debug/nds_debug.h"
 #include "defines_weak.h"
+#include "nds/arm9/background.h"
 #include "nds/arm9/video.h"
 #include "nds/dma.h"
 #include "rendering/nds_sprite.h"
@@ -56,6 +57,7 @@ void NDS_set_vram_for__backgrounds_on__main(void) {
 
 void NDS_set_vram_for__backgrounds_on__sub(void) {
     vramSetBankC(VRAM_C_SUB_BG);
+    bgExtPaletteEnableSub();
 }
 
 void NDS_set_vram_and__oam_for__sprites_on__main(void) {

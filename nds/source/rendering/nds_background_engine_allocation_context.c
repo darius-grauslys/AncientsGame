@@ -36,7 +36,7 @@ bool NDS_does_NOT_bg_alloc_spec_share__palette_with__another_bg_alloc_spec(
             &p_NDS_bg_engine_alloc_context
             ->nds_background_allocation_specifications[index];
         if (p_NDS_bg_alloc_spec == p_NDS_bg_alloc_spec__other)
-            continue;
+            return true;
         if (p_NDS_bg_alloc_spec__other
                 ->slot_for__extended_palette
                 == p_NDS_bg_alloc_spec
@@ -46,7 +46,7 @@ bool NDS_does_NOT_bg_alloc_spec_share__palette_with__another_bg_alloc_spec(
     return true;
 }
 
-bool NDS_does_NOT_bg_alloc_spec_share__map_offset_with__another_bg_alloc_spec(
+bool NDS_does_NOT_bg_alloc_spec_have_shared_map_offset(
         NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
         NDS_Background_Engine_Allocation_Context 
             *p_NDS_bg_engine_alloc_context) {
@@ -57,7 +57,7 @@ bool NDS_does_NOT_bg_alloc_spec_share__map_offset_with__another_bg_alloc_spec(
             &p_NDS_bg_engine_alloc_context
             ->nds_background_allocation_specifications[index];
         if (p_NDS_bg_alloc_spec == p_NDS_bg_alloc_spec__other)
-            continue;
+            return true;
         if (p_NDS_bg_alloc_spec__other
                 ->offset_for__map
                 == p_NDS_bg_alloc_spec
@@ -67,7 +67,7 @@ bool NDS_does_NOT_bg_alloc_spec_share__map_offset_with__another_bg_alloc_spec(
     return true;
 }
 
-bool NDS_does_NOT_bg_alloc_spec_share__tileset_offset_with__another_bg_alloc_spec(
+bool NDS_does_NOT_bg_alloc_spec__shared_tileset_offset(
         NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
         NDS_Background_Engine_Allocation_Context 
             *p_NDS_bg_engine_alloc_context) {
@@ -78,7 +78,7 @@ bool NDS_does_NOT_bg_alloc_spec_share__tileset_offset_with__another_bg_alloc_spe
             &p_NDS_bg_engine_alloc_context
             ->nds_background_allocation_specifications[index];
         if (p_NDS_bg_alloc_spec == p_NDS_bg_alloc_spec__other)
-            continue;
+            return true;
         if (p_NDS_bg_alloc_spec__other
                 ->offset_for__tileset
                 == p_NDS_bg_alloc_spec
@@ -101,11 +101,6 @@ void NDS_initialize_background_engine_allocation_context(
             nds_background_allocation_specification__none;
     }
 
-    p_NDS_background_engine_allocation_context
-        ->pal_background = GFX_defaultPal;
-    p_NDS_background_engine_allocation_context
-        ->length_of__background_pal = GFX_defaultPalLen;
-
     switch (the_kind_of__ui_window_to__allocate_for) {
         default:
         case UI_Window_Kind__Idle:
@@ -119,6 +114,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_idleMap, 
                     ui_map_idleMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__BASE);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -130,6 +127,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_logTilesLen, 
                     ui_map_logMap, 
                     ui_map_logMapLen,
+                    GFX_logPal,
+                    GFX_logPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__LOG_LOWER);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -141,6 +140,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_logTilesLen, 
                     ui_map_logMap, 
                     ui_map_logMapLen,
+                    GFX_logPal,
+                    GFX_logPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__LOG_UPPER);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -152,6 +153,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_typerTilesLen, 
                     ui_map_typer__lockedMap, 
                     ui_map_typer__lockedMapLen,
+                    GFX_typerPal,
+                    GFX_typerPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__SCROLL_TYPER);
             break;
         case UI_Window_Kind__Equip:
@@ -165,6 +168,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_equipMap, 
                     ui_map_equipMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__BASE);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -176,6 +181,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_equipmentMap, 
                     ui_map_equipmentMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__SUB_BASE);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -187,6 +194,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_inventory_columnMap, 
                     ui_map_inventory_columnMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__SCROLL);
             break;
         case UI_Window_Kind__Trade:
@@ -200,6 +209,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_tradeMap, 
                     ui_map_tradeMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__BASE);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -211,6 +222,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_inventory_columnMap, 
                     ui_map_inventory_columnMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__SCROLL);
             NDS_initialize_background_allocation_specification(
                     &p_NDS_background_engine_allocation_context
@@ -222,6 +235,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_inventory_columnMap, 
                     ui_map_inventory_columnMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__SCROLL_SECONDARY);
             break;
         case UI_Window_Kind__Labor:
@@ -235,6 +250,8 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultTilesLen, 
                     ui_map_laborMap, 
                     ui_map_laborMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__BASE);
             break;
     }

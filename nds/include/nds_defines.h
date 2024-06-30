@@ -46,8 +46,10 @@ typedef struct NDS_Background_Allocation_Specification_t {
 
     const unsigned int *p_gfx_background;
     const uint16_t *p_map_background;
+    const uint16_t *p_pal_background;
     Quantity__u32 length_of__p_background_gfx;
     Quantity__u32 length_of__p_background_map;
+    Quantity__u16 length_of__p_background_pal;
     Index__u8 priority_of__background;
 } NDS_Background_Allocation_Specification;
 
@@ -57,8 +59,6 @@ typedef struct NDS_Background_Engine_Allocation_Context_t {
             NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE];
     //TODO: We will MOST likely need to make
     //extended background palletes a thing.
-    const uint16_t *pal_background;
-    Quantity__u16 length_of__background_pal;
 } NDS_Background_Engine_Allocation_Context;
 
 ///

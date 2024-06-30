@@ -1,4 +1,5 @@
 #include <defines.h>
+#include "debug/debug.h"
 #include "defines_weak.h"
 #include "game.h"
 #include "input/input.h"
@@ -16,6 +17,8 @@
 #include <rendering/gfx_context.h>
 #include <numerics.h>
 
+Quantity__u16 __x = 0;
+Quantity__u16 __y = 0;
 PLATFORM_Sprite item_sprite;
 enum Item_Kind item_kind = Item_Kind__Stick;
 enum UI_Window_Kind ui_window_kind = UI_Window_Kind__None;
@@ -23,7 +26,7 @@ enum UI_Window_Kind ui_window_kind = UI_Window_Kind__None;
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    // NDS_set_vram_for__backgrounds_on__sub();
+    NDS_set_vram_for__backgrounds_on__sub();
     NDS_set_vram_and__oam_for__sprites_on__sub();
     NDS_load_sprite_palletes__default_into__vram();
     NDS_initialize_debug__main();
@@ -56,10 +59,26 @@ void m_enter_scene_handler_as__test(
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         manage_game(p_game);
+        if (is_input__forward_held(get_p_input_from__game(p_game))) {
+            __y += 1;
+        }
+        if (is_input__backward_held(get_p_input_from__game(p_game))) {
+            __y -= 1;
+        }
+        if (is_input__left_held(get_p_input_from__game(p_game))) {
+            __x -= 1;
+        }
+        if (is_input__right_held(get_p_input_from__game(p_game))) {
+            __x += 1;
+        }
+        PLATFORM_set_sprite__position(
+                &item_sprite, 
+                __x, __y);
         if (is_input__use_released(get_p_input_from__game(p_game))) {
             item_kind++;
-            ui_window_kind = (ui_window_kind + 1)
-                % UI_Window_Kind__Typer;
+            ui_window_kind =
+                clamp__u8((uint8_t)(ui_window_kind + 1), 0,
+                        UI_Window_Kind__Typer);
             PLATFORM_set_sprite_graphics_to__item_kind(
                     &item_sprite, 
                     item_kind);

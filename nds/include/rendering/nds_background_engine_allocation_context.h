@@ -9,12 +9,12 @@ bool NDS_does_NOT_bg_alloc_spec_share__palette_with__another_bg_alloc_spec(
         NDS_Background_Engine_Allocation_Context 
             *p_NDS_bg_engine_alloc_context);
 
-bool NDS_does_NOT_bg_alloc_spec_share__map_offset_with__another_bg_alloc_spec(
+bool NDS_does_NOT_bg_alloc_spec_have_shared_map_offset(
         NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
         NDS_Background_Engine_Allocation_Context 
             *p_NDS_bg_engine_alloc_context);
 
-bool NDS_does_NOT_bg_alloc_spec_share__tileset_offset_with__another_bg_alloc_spec(
+bool NDS_does_NOT_bg_alloc_spec__shared_tileset_offset(
         NDS_Background_Allocation_Specification *p_NDS_bg_alloc_spec,
         NDS_Background_Engine_Allocation_Context 
             *p_NDS_bg_engine_alloc_context);

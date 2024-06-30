@@ -313,7 +313,7 @@ UI_Element *allocate_many_ui_elements_from__ui_manager_in__succession(
             p_ui_manager);
     UI_Element *p_current = p_head;
 
-    for (Quantity__u8 quantity_of__ui_elements__allocated = 0;
+    for (Quantity__u8 quantity_of__ui_elements__allocated = 1;
             quantity_of__ui_elements__allocated < 
                 quantity_of__ui_elements_to__allocate;
             quantity_of__ui_elements__allocated++) {
@@ -334,7 +334,7 @@ UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
             p_ui_manager);
     UI_Element *p_current = p_parent;
 
-    for (Quantity__u8 quantity_of__ui_elements__allocated = 0;
+    for (Quantity__u8 quantity_of__ui_elements__allocated = 1;
             quantity_of__ui_elements__allocated < 
                 quantity_of__ui_elements_to__allocate;
             quantity_of__ui_elements__allocated++) {

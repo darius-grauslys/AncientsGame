@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "nds/arm9/sprite.h"
+#include "nds/arm9/video.h"
 #include "nds_defines.h"
 #include "platform.h"
 #include "rendering/nds_background.h"
@@ -343,17 +344,17 @@ void NDS_set_background_for__ui_window(
     for (Index__u8 backgroud_index=0;
             backgroud_index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
             backgroud_index++) {
-        bgHide(p_PLATFORM_gfx_context->backgrounds__sub[backgroud_index]
-                .background_index_from__hardware);
+        if (p_PLATFORM_gfx_context->backgrounds__sub[backgroud_index]
+                .background_index_from__hardware
+                != -1) {
+            bgHide(p_PLATFORM_gfx_context->backgrounds__sub[backgroud_index]
+                    .background_index_from__hardware);
+        }
     }
 
 #warning impl extended background palletes
     //TODO: need to add extended background palletes
-    dmaCopy(nds_background_engine_allocation_context
-                .pal_background,
-            BG_PALETTE_SUB, 
-            nds_background_engine_allocation_context
-                .length_of__background_pal);
+	vramSetBankH(VRAM_H_LCD);
 
     for (Index__u8 index=0;
             index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
@@ -368,29 +369,47 @@ void NDS_set_background_for__ui_window(
                     p_background_allocation_specification
                         ->background_slot];
 
-        NDS_initialize_background_with__allocation_specification(
-                p_background,
-                p_background_allocation_specification);
-
         if (UI_Window_Kind__None
                 == p_background_allocation_specification
                 ->the_kind_of__background_allocation) {
             continue;
         }
+
+        NDS_initialize_background_with__allocation_specification(
+                p_background,
+                p_background_allocation_specification);
+
         bgShow(p_background->background_index_from__hardware);
 
         dmaCopy(p_background_allocation_specification
-                    ->p_gfx_background, 
-                p_background
-                ->gfx_tileset, 
+                    ->p_pal_background,
+                VRAM_H_EXT_PALETTE[
+                    p_background_allocation_specification
+                        ->background_slot], 
                 p_background_allocation_specification
-                    ->length_of__p_background_gfx);
-        dmaCopy(p_background_allocation_specification
-                    ->p_map_background,
-                p_background
-                ->gfx_map, 
-                p_background_allocation_specification
-                    ->length_of__p_background_map);
+                    ->length_of__p_background_pal);
+
+        // if (NDS_does_NOT_bg_alloc_spec_have_shared_map_offset(
+        //             p_background_allocation_specification, 
+        //             &nds_background_engine_allocation_context)) {
+            dmaCopy(p_background_allocation_specification
+                        ->p_map_background,
+                    p_background
+                    ->gfx_map, 
+                    p_background_allocation_specification
+                        ->length_of__p_background_map);
+        // }
+        // if (NDS_does_NOT_bg_alloc_spec__shared_tileset_offset(
+        //             p_background_allocation_specification, 
+        //             &nds_background_engine_allocation_context)) {
+            dmaCopy(p_background_allocation_specification
+                        ->p_gfx_background, 
+                    p_background
+                    ->gfx_tileset, 
+                    p_background_allocation_specification
+                        ->length_of__p_background_gfx);
+        // }
+
         NDS_set_background_priority(
                 p_background,
                 p_background_allocation_specification
@@ -405,4 +424,6 @@ void NDS_set_background_for__ui_window(
                             ->background_slot]);
         }
     }
+
+	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 }
