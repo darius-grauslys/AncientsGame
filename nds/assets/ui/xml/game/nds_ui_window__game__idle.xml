@@ -2,7 +2,7 @@
 <root>
     <config>
         <include sub_dir="ui/game/">
-            <header path="ui/nds_ui.h"/>
+            <header path="ui/game/nds_ui_window__game__hud.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
@@ -13,31 +13,31 @@
             <header path="game.h"/>
         </include>
         <code>
-            NDS_allocate_ui_for__game_hud(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__hud(p_game);
         </code>
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__idle.c" h_path="./nds/include/ui/game/nds_ui_window__game__idle.h"/>
         <platform target="NDS" size="256,192"/>
         <background layer="0" path="./core/assets/ui/log/ui_map_log.png"/>
         <background layer="1" path="./core/assets/ui/default/ui_map_idle.png"/>
-        <background layer="2" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" x="8" y="54"/>
+        <background layer="2" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" x="8" y="118"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
         <ui_func_signature for="child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
         <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_element__hitbox"/>
+        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_button_as__toggleable_or__non_toggleable,set_ui_button_as__toggled_or__not_toggled,set_ui_element__hitbox"/>
         <ui_func_signature for="slider" c_signatures="set_ui_element__dragged_handler,set_ui_element__snapped_state,set_ui_element__hitbox"/>
         <ui_func_signature for="draggable" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
         <ui_func_signature for="drop_zone" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
     </config>
-    <ui>
+    <ui offset_of__ui_index="3">
         <allocate_ui name="p_slider">
-            <button x="220" y="92" width="16" height="80"/>
+            <button x="228" y="132" width="16" height="80"/>
         </allocate_ui>
         <allocate_ui name="p_button__chat">
-            <button x="204" y="178" width="32" height="16" color="64,64,196"/>
+            <button x="220" y="186" width="32" height="16" color="64,64,196"/>
         </allocate_ui>
-        <allocate_ui_container x="20" y="90" size="4" stride__y="24">
+        <allocate_ui_container x="28" y="96" size="4" stride__y="24">
             <button width="16" height="12" color="64,196,64"/>
         </allocate_ui_container>
     </ui>

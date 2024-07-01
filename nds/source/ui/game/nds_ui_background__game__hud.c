@@ -3,6 +3,7 @@
 #include <defines.h>
 #include "defines_weak.h"
 #include "entity/reserves.h"
+#include "nds_defines.h"
 #include <scene/scene__game.h>
 #include <timer.h>
 #include <entity/humanoid.h>
@@ -11,10 +12,7 @@
 
 void update_ui_hearts(
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_hearts_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 3 + 3);
     TileMapEntry16 *p_ui_hearts_on__tile_map =
         p_ui__tile_map + (32 * 3 + 3);
     Index__u16 tile_index = 0;
@@ -58,22 +56,16 @@ void update_ui_hearts(
                 tile_index = UI_TILE_SHEET_INDEX__LOCKED_HEART;
                 break;
         }
-        *(uint16_t*)p_ui_hearts_overlay_on__tile_map =
-            tile_index;
         *(uint16_t*)p_ui_hearts_on__tile_map =
             tile_index;
 
-        p_ui_hearts_overlay_on__tile_map++;
         p_ui_hearts_on__tile_map++;
     }
 }
 
 void update_ui_energy_orbs(
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_energy_orbs_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 3 + 19);
     TileMapEntry16 *p_ui_energy_orbs_on__tile_map =
         p_ui__tile_map + (32 * 3 + 19);
     Index__u16 tile_index = 0;
@@ -118,12 +110,9 @@ void update_ui_energy_orbs(
                 tile_index = UI_TILE_SHEET_INDEX__LOCKED_ENERGY_ORB;
                 break;
         }
-        *(uint16_t*)p_ui_energy_orbs_overlay_on__tile_map =
-            tile_index;
         *(uint16_t*)p_ui_energy_orbs_on__tile_map =
             tile_index;
 
-        p_ui_energy_orbs_overlay_on__tile_map++;
         p_ui_energy_orbs_on__tile_map++;
     }
 }
@@ -131,10 +120,7 @@ void update_ui_energy_orbs(
 void update_ui_homeostasis(
         Scene *p_scene,
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_homeostasis_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 3 + 15);
     TileMapEntry16 *p_ui_homeostasis_on__tile_map =
         p_ui__tile_map + (32 * 3 + 15);
     Index__u16 tile_index = 0;
@@ -221,22 +207,15 @@ void update_ui_homeostasis(
             break;
     }
 
-    *(uint16_t*)p_ui_homeostasis_overlay_on__tile_map =
-        tile_index;
     *(uint16_t*)p_ui_homeostasis_on__tile_map =
         tile_index;
-    *(uint16_t*)++p_ui_homeostasis_overlay_on__tile_map =
-        tile_index+1;
     *(uint16_t*)++p_ui_homeostasis_on__tile_map =
         tile_index+1;
 }
 
 void update_ui_sustenance_primary_as__bloated(
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_sustenance_primary_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 4);
     TileMapEntry16 *p_ui_sustenance_primary_on__tile_map =
         p_ui__tile_map + (32 * 4);
     bool is_player__undead =
@@ -248,17 +227,12 @@ void update_ui_sustenance_primary_as__bloated(
         : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_BLOATED
         ;
 
-    *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-        tile_index;
     *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
         tile_index;
 
-    *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-        ++tile_index;
     *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
         tile_index;
 
-    p_ui_sustenance_primary_overlay_on__tile_map += 31;
     p_ui_sustenance_primary_on__tile_map += 31;
 
     tile_index += 7;
@@ -266,20 +240,13 @@ void update_ui_sustenance_primary_as__bloated(
     for (Quantity__u8 step=0;step<3;step++) {
         // we do a little loop unrolling
         // we do a little loop unrolling
-        *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-            tile_index;
         *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
             tile_index;
-        *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-            ++tile_index;
         *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
             tile_index;
-        *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-            ++tile_index;
         *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
             tile_index;
 
-        p_ui_sustenance_primary_overlay_on__tile_map += 30;
         p_ui_sustenance_primary_on__tile_map += 30;
 
         tile_index += 8 * 2;
@@ -291,22 +258,15 @@ void update_ui_sustenance_primary_as__bloated(
         : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_DESPERATE
         ;
 
-    *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-        tile_index;
     *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
         tile_index;
-    *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-        ++tile_index;
     *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
         tile_index;
 }
 
 void update_ui_sustenance_primary(
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_sustenance_primary_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 4);
     TileMapEntry16 *p_ui_sustenance_primary_on__tile_map =
         p_ui__tile_map + (32 * 4);
     Index__u16 tile_index = 0;
@@ -315,7 +275,6 @@ void update_ui_sustenance_primary(
 
     update_ui_sustenance_primary_as__bloated(
             p_player, 
-            p_ui_overlay__tile_map, 
             p_ui__tile_map);
 
     enum Sustenance_State state_of__sustenance =
@@ -326,17 +285,14 @@ void update_ui_sustenance_primary(
     switch (state_of__sustenance) {
         case Sustenance_State__Dying:
         case Sustenance_State__Desperate:
-            p_ui_sustenance_primary_overlay_on__tile_map += 32 * 3;
             p_ui_sustenance_primary_on__tile_map += 32 * 3;
             break;
         case Sustenance_State__Wanting:
         case Sustenance_State__Needing:
-            p_ui_sustenance_primary_overlay_on__tile_map += 32 * 2;
             p_ui_sustenance_primary_on__tile_map += 32 * 2;
             break;
         case Sustenance_State__Indifferent:
         case Sustenance_State__Well:
-            p_ui_sustenance_primary_overlay_on__tile_map += 32;
             p_ui_sustenance_primary_on__tile_map += 32;
             break;
         default:
@@ -356,19 +312,12 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_BOTTOM_MIDDLE
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_BOTTOM_MIDDLE
                 ;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_primary_overlay_on__tile_map -= 34;
             p_ui_sustenance_primary_on__tile_map -= 34;
         case Sustenance_State__Wanting:
         case Sustenance_State__Needing:
@@ -377,19 +326,12 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_MIDDLE
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_MIDDLE
                 ;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_primary_overlay_on__tile_map -= 34;
             p_ui_sustenance_primary_on__tile_map -= 34;
         case Sustenance_State__Indifferent:
         case Sustenance_State__Well:
@@ -398,19 +340,12 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_TOP_MIDDLE
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_TOP_MIDDLE
                 ;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_primary_overlay_on__tile_map -= 34;
             p_ui_sustenance_primary_on__tile_map -= 34;
         default:
             tile_index = 
@@ -418,17 +353,12 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_TOP
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_TOP
                 ;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
     }
 
-    p_ui_sustenance_primary_overlay_on__tile_map--;
     p_ui_sustenance_primary_on__tile_map--;
 
     switch (state_of__sustenance) {
@@ -440,18 +370,11 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_SATISFIED
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_SATISFIED
                 ;
-            p_ui_sustenance_primary_overlay_on__tile_map += 32;
             p_ui_sustenance_primary_on__tile_map += 32;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
             break;
@@ -461,18 +384,11 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_INDIFFERENT
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_INDIFFERENT
                 ;
-            p_ui_sustenance_primary_overlay_on__tile_map += 32 * 2;
             p_ui_sustenance_primary_on__tile_map += 32 * 2;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
             break;
@@ -482,18 +398,11 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_NEEDING
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_NEEDING
                 ;
-            p_ui_sustenance_primary_overlay_on__tile_map += 32 * 3;
             p_ui_sustenance_primary_on__tile_map += 32 * 3;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
             break;
@@ -503,14 +412,9 @@ void update_ui_sustenance_primary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_BOTTOM
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_BOTTOM
                 ;
-            p_ui_sustenance_primary_overlay_on__tile_map += 32 * 4;
             p_ui_sustenance_primary_on__tile_map += 32 * 4;
-            *(uint16_t*)p_ui_sustenance_primary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_primary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_primary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_primary_on__tile_map) =
                 tile_index;
             break;
@@ -519,10 +423,7 @@ void update_ui_sustenance_primary(
 
 void update_ui_sustenance_secondary_as__bloated(
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_sustenance_secondary_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 5) - 2;
     TileMapEntry16 *p_ui_sustenance_secondary_on__tile_map =
         p_ui__tile_map + (32 * 5) - 2;
     bool is_player__undead =
@@ -534,17 +435,12 @@ void update_ui_sustenance_secondary_as__bloated(
         : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_BLOATED
         ;
 
-    *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-        tile_index;
     *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
         tile_index;
 
-    *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-        ++tile_index;
     *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
         tile_index;
 
-    p_ui_sustenance_secondary_overlay_on__tile_map += 30;
     p_ui_sustenance_secondary_on__tile_map += 30;
 
     tile_index += 8;
@@ -552,26 +448,18 @@ void update_ui_sustenance_secondary_as__bloated(
     for (Quantity__u8 step=0;step<3;step++) {
         // we do a little loop unrolling
         // we do a little loop unrolling
-        *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-            tile_index;
         *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
             tile_index;
-        *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-            ++tile_index;
         *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
             tile_index;
-        *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-            ++tile_index;
         *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
             tile_index;
 
-        p_ui_sustenance_secondary_overlay_on__tile_map += 30;
         p_ui_sustenance_secondary_on__tile_map += 30;
 
         tile_index += 8 * 2;
     }
 
-    p_ui_sustenance_secondary_overlay_on__tile_map++;
     p_ui_sustenance_secondary_on__tile_map++;
 
     tile_index =
@@ -580,22 +468,15 @@ void update_ui_sustenance_secondary_as__bloated(
         : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_DESPERATE
         ;
 
-    *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-        tile_index;
     *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
         tile_index;
-    *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-        ++tile_index;
     *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
         tile_index;
 }
 
 void update_ui_sustenance_secondary(
         Entity *p_player,
-        TileMapEntry16 *p_ui_overlay__tile_map,
         TileMapEntry16 *p_ui__tile_map) {
-    TileMapEntry16 *p_ui_sustenance_secondary_overlay_on__tile_map =
-        p_ui_overlay__tile_map + (32 * 5) - 2;
     TileMapEntry16 *p_ui_sustenance_secondary_on__tile_map =
         p_ui__tile_map + (32 * 5) - 2;
     Index__u16 tile_index = 0;
@@ -604,7 +485,6 @@ void update_ui_sustenance_secondary(
 
     update_ui_sustenance_secondary_as__bloated(
             p_player, 
-            p_ui_overlay__tile_map, 
             p_ui__tile_map);
 
     enum Sustenance_State state_of__sustenance =
@@ -615,17 +495,14 @@ void update_ui_sustenance_secondary(
     switch (state_of__sustenance) {
         case Sustenance_State__Dying:
         case Sustenance_State__Desperate:
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32 * 3 - 1;
             p_ui_sustenance_secondary_on__tile_map += 32 * 3 - 1;
             break;
         case Sustenance_State__Wanting:
         case Sustenance_State__Needing:
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32 * 2 - 1;
             p_ui_sustenance_secondary_on__tile_map += 32 * 2 - 1;
             break;
         case Sustenance_State__Indifferent:
         case Sustenance_State__Well:
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32 - 1;
             p_ui_sustenance_secondary_on__tile_map += 32 - 1;
             break;
         default:
@@ -645,19 +522,12 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_BOTTOM_MIDDLE
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_BOTTOM_MIDDLE
                 ;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_secondary_overlay_on__tile_map -= 34;
             p_ui_sustenance_secondary_on__tile_map -= 34;
         case Sustenance_State__Wanting:
         case Sustenance_State__Needing:
@@ -666,19 +536,12 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_MIDDLE
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_MIDDLE
                 ;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_secondary_overlay_on__tile_map -= 34;
             p_ui_sustenance_secondary_on__tile_map -= 34;
         case Sustenance_State__Indifferent:
         case Sustenance_State__Well:
@@ -687,19 +550,12 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_TOP_MIDDLE
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_TOP_MIDDLE
                 ;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_secondary_overlay_on__tile_map -= 33;
             p_ui_sustenance_secondary_on__tile_map -= 33;
         default:
             tile_index = 
@@ -707,19 +563,13 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_TOP
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_TOP
                 ;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            p_ui_sustenance_secondary_overlay_on__tile_map--;
             p_ui_sustenance_secondary_on__tile_map--;
     }
 
-    p_ui_sustenance_secondary_overlay_on__tile_map--;
     p_ui_sustenance_secondary_on__tile_map--;
 
     switch (state_of__sustenance) {
@@ -731,18 +581,11 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_SATISFIED
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_SATISFIED
                 ;
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32;
             p_ui_sustenance_secondary_on__tile_map += 32;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
             break;
@@ -752,18 +595,11 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_INDIFFERENT
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_INDIFFERENT
                 ;
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32 * 2;
             p_ui_sustenance_secondary_on__tile_map += 32 * 2;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
             break;
@@ -773,18 +609,11 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_NEEDING
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_NEEDING
                 ;
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32 * 3;
             p_ui_sustenance_secondary_on__tile_map += 32 * 3;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
             break;
@@ -794,14 +623,9 @@ void update_ui_sustenance_secondary(
                 ? UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_BOTTOM
                 : UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_BOTTOM
                 ;
-            p_ui_sustenance_secondary_overlay_on__tile_map += 32 * 4 + 1;
             p_ui_sustenance_secondary_on__tile_map += 32 * 4 + 1;
-            *(uint16_t*)p_ui_sustenance_secondary_overlay_on__tile_map =
-                tile_index;
             *(uint16_t*)p_ui_sustenance_secondary_on__tile_map =
                 tile_index;
-            *(uint16_t*)(++p_ui_sustenance_secondary_overlay_on__tile_map) =
-                ++tile_index;
             *(uint16_t*)(++p_ui_sustenance_secondary_on__tile_map) =
                 tile_index;
             break;
@@ -812,41 +636,31 @@ void NDS_update_ui_for__hud(
         PLATFORM_Gfx_Context *p_gfx_context,
         Scene *p_scene,
         Entity *p_player) {
-    TileMapEntry16 *p_ui_overlay__tile_map =
-        (TileMapEntry16*)
-        bgGetMapPtr(p_gfx_context
-                ->backgrounds__sub[1]
-                .background_index_from__hardware);
     TileMapEntry16 *p_ui__tile_map =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
-                ->backgrounds__sub[0]
+                ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__BASE]
                 .background_index_from__hardware);
 
     update_ui_hearts(
             p_player,
-            p_ui_overlay__tile_map,
             p_ui__tile_map);
 
     update_ui_energy_orbs(
             p_player,
-            p_ui_overlay__tile_map,
             p_ui__tile_map);
 
     update_ui_homeostasis(
             p_scene,
             p_player, 
-            p_ui_overlay__tile_map, 
             p_ui__tile_map);
 
     update_ui_sustenance_primary(
             p_player,
-            p_ui_overlay__tile_map,
             p_ui__tile_map);
 
     update_ui_sustenance_secondary(
             p_player,
-            p_ui_overlay__tile_map,
             p_ui__tile_map);
 }
 

@@ -335,10 +335,12 @@ def allocate_many_squares_with__context_stack(rectangle_spec, context_stack):
         allocate_square(\
                 rectangle_spec.x \
                     + context_stack[-1].x \
-                    + i * context_stack[-1].stride__x, \
+                    + i * context_stack[-1].stride__x \
+                    - rectangle_spec.width / 2, \
                 rectangle_spec.y \
                     + context_stack[-1].y \
-                    + i * context_stack[-1].stride__y, \
+                    + i * context_stack[-1].stride__y \
+                    - rectangle_spec.height / 2, \
                 rectangle_spec.width, \
                 rectangle_spec.height, \
                 rectangle_spec.color)
@@ -465,8 +467,22 @@ def button(signature, xml_element, context_stack):
                 context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
-                    "m_UI_Clicked", \
+                    "m_Clicked_Handler", \
                     "m_ui_button__clicked_handler__default")\
+            ], \
+            [\
+                context_stack[-1].p_ui_element,\
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "is_toggleable", \
+                    "false")\
+            ], \
+            [\
+                context_stack[-1].p_ui_element,\
+                get_str_from_xml_or__use_this(\
+                    xml_element, \
+                    "is_toggled", \
+                    "false")\
             ], \
             get_rect_spec_args(context_stack, rectangle_spec)])
     
@@ -483,7 +499,7 @@ def slider(signature, xml_element, context_stack):
                 context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
-                    "m_UI_Clicked", \
+                    "m_Dragged_Handler", \
                     "m_ui_slider__dragged_handler__default"), \
             ],\
             [\
@@ -508,7 +524,7 @@ def draggable(signature, xml_element, context_stack):
                 context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
-                    "m_UI_Clicked", \
+                    "m_Dragged_Handler", \
                     "m_ui_draggable__dragged_handler__default")\
             ], \
             get_rect_spec_args(context_stack, rectangle_spec)])
@@ -526,7 +542,7 @@ def drop_zone(signature, xml_element, context_stack):
                 context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
-                    "m_UI_Clicked", \
+                    "m_Receive_Drop_Handler", \
                     "m_ui_drop_zone__recieve_drop_handler__default")\
             ], \
             get_rect_spec_args(context_stack, rectangle_spec)])
@@ -544,6 +560,7 @@ def construct_ui_from__xml_element(xml_element, context_stack):
     context_stack[-1].index_of__element += 1
 
 def generate_source__ui(xml_node__ui):
+    global current_element_id
     config.includes.insert(0, Include("{}{}.h".format(\
             config.associated_header_sub_dir_in__include_folder,\
             config.source_name)))
@@ -580,10 +597,6 @@ def generate_source__ui(xml_node__ui):
     context_stack = deque()
     context_stack.append(Context(0, 0, 0, 0, (0,0,0), 1))
     context_stack[-1].indentation_level = 1
-    for statement in config.user_defined__statements:
-        generate_source_c__tabs(context_stack[-1].indentation_level)
-        generate_source_c__with_literal(statement)
-        generate_source_c__with_literal("\n")
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__local_field__p_ui_element(p_ui_itterator)
     generate_source_c__with_literal("0")
@@ -595,6 +608,11 @@ def generate_source__ui(xml_node__ui):
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__with_literal("UI_Manager *p_ui_manager = get_p_ui_manager_from__game(p_game)")
     generate_source_c__new_line()
+    for statement in config.user_defined__statements:
+        generate_source_c__tabs(context_stack[-1].indentation_level)
+        generate_source_c__with_literal(statement)
+        generate_source_c__with_literal("\n")
+    current_element_id = get_int_from_xml_or__use_this(xml_node__ui, "offset_of__ui_index", 0)
     for element in xml_node__ui:
         construct_ui_from__xml_element(element, context_stack)
     generate_source_c__with_literal("}\n")

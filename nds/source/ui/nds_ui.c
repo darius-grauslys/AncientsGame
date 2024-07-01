@@ -283,42 +283,6 @@ void m_ui_button__clicked_handler__navigate_to__labor(
             UI_Window_Kind__Labor);
 }
 
-UI_Element *NDS_allocate_ui_for__game_hud(
-        Game *p_game) {
-    UI_Element *p_buttons = 
-        allocate_many_ui_elements_from__ui_manager_in__succession(
-                get_p_ui_manager_from__game(p_game),
-                3);
-    UI_Element *p_current = p_buttons;
-    for (Index__u8 index_of__next_itteration = 0;
-            itterate_to_next__ui_element(&p_current);
-            index_of__next_itteration++) {
-        m_UI_Clicked m_ui_clicked_handler;
-        switch (index_of__next_itteration) {
-            default:
-            case 0:
-                m_ui_clicked_handler =
-                    m_ui_button__clicked_handler__navigate_to__equip;
-                break;
-            case 1:
-                m_ui_clicked_handler =
-                    m_ui_button__clicked_handler__navigate_to__trade;
-                break;
-            case 2:
-                m_ui_clicked_handler =
-                    m_ui_button__clicked_handler__navigate_to__labor;
-                break;
-        }
-        initialize_ui_element_as__button(
-                p_current, 
-                104, 32,
-                get_vector__3i32(56 + 72 
-                    * index_of__next_itteration, 52, 0),
-                m_ui_clicked_handler
-                );
-    }
-}
-
 enum UI_Window_Kind PLATFORM_get_last_opened_ui(void) {
     return _ui__state_machine.the_kind_of__active_ui_window;
 }
@@ -352,10 +316,9 @@ void NDS_set_background_for__ui_window(
         }
     }
 
-#warning impl extended background palletes
-    //TODO: need to add extended background palletes
 	vramSetBankH(VRAM_H_LCD);
 
+    debug_info("load backgrounds");
     for (Index__u8 index=0;
             index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
             index++) {
@@ -364,6 +327,9 @@ void NDS_set_background_for__ui_window(
             &nds_background_engine_allocation_context
                 .nds_background_allocation_specifications[index];
 
+        debug_info("bgSlot: %d",
+                p_background_allocation_specification
+                ->background_slot);
         NDS_Background *p_background =
                 &p_PLATFORM_gfx_context->backgrounds__sub[
                     p_background_allocation_specification
@@ -419,9 +385,7 @@ void NDS_set_background_for__ui_window(
                 ->background_slot == NDS_BACKGROUND_SLOT__UI__BASE) {
             NDS_put_hud_onto__background(
                     p_PLATFORM_gfx_context, 
-                    &p_PLATFORM_gfx_context->backgrounds__sub[
-                        p_background_allocation_specification
-                            ->background_slot]);
+                    p_background);
         }
     }
 

@@ -82,7 +82,18 @@ void NDS_initialize_background_with__allocation_specification(
             p_background->tile_base = 1;
             p_background->background_index_from__hardware =
                 bgInitSub(
-                        p_background->background_index_from__initializer, 
+                        layer,
+                        BgType_Text8bpp, 
+                        BgSize_T_256x256, 
+                        p_background->map_base, 
+                        p_background->tile_base);
+            break;
+        case NDS_UI_Background_Allocation_Kind__Typer:
+            p_background->map_base = layer;
+            p_background->tile_base = 5;
+            p_background->background_index_from__hardware =
+                bgInitSub(
+                        layer,
                         BgType_Text8bpp, 
                         BgSize_T_256x256, 
                         p_background->map_base, 

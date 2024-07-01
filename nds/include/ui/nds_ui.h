@@ -24,9 +24,6 @@ void NDS_set_ui_element_size_using__sprite_size(
         UI_Element *p_ui_element,
         SpriteSize sprite_size);
 
-UI_Element *NDS_allocate_ui_for__game_hud(
-        Game *p_game);
-
 void NDS_set_background_for__ui_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         enum UI_Window_Kind the_kind_of__ui_window);

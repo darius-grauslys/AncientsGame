@@ -1,4 +1,4 @@
--gS -gt -gB8
+-gS -gt -gB8 -gT FF00FF
 -m -mRt
 -pS
 

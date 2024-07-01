@@ -1107,6 +1107,7 @@ typedef void (*m_UI_Held)(
         Game *p_game);
 
 typedef uint8_t UI_Flags__u8;
+typedef uint8_t UI_Button_Flags__u8;
 
 #define UI_HUD_NOTIFICATION_LIFESPAN_IN__SECONDS 4
 #define UI_HUD_MESSAGE_LIFESPAN_IN__SECONDS 20
@@ -1138,6 +1139,16 @@ typedef uint8_t UI_Flags__u8;
 #define UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS \
     BIT(UI_FLAGS__BIT_SHIFT_IS_SNAPPED_X_OR_Y_AXIS)
 
+#define UI_BUTTON_FLAGS__NONE 0
+#define UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLEABLE 0
+#define UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLED \
+    (UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLEABLE + 1)
+
+#define UI_BUTTON_FLAGS__BIT_IS_TOGGLEABLE \
+    BIT(UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLEABLE)
+#define UI_BUTTON_FLAGS__BIT_IS_TOGGLED \
+    BIT(UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLED)
+
 typedef struct UI_Element_t {
     enum UI_Element_Kind the_kind_of_ui_element__this_is;
     Hitbox_AABB         ui_bounding_box__aabb;
@@ -1161,8 +1172,7 @@ typedef struct UI_Element_t {
     union {
         union {
             struct { // UI_Button
-                bool button__is_held_down;
-                bool button__is_toggleable;
+                UI_Button_Flags__u8 ui_button_flags;
             };
             // struct { // UI_Draggable
             // };

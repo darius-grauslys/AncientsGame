@@ -18,13 +18,13 @@
         <ui_func_signature for="child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
         <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_element__hitbox"/>
+        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_button_as__toggleable_or__non_toggleable,set_ui_button_as__toggled_or__not_toggled,set_ui_element__hitbox"/>
         <ui_func_signature for="slider" c_signatures="set_ui_element__dragged_handler,set_ui_element__snapped_state,set_ui_element__hitbox"/>
         <ui_func_signature for="draggable" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
         <ui_func_signature for="drop_zone" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
     </config>
     <ui>
-        <group x="12" y="60" stride__y="44">
+        <group x="52" y="72" stride__y="44">
             <allocate_ui name="p_button__singleplayer">
                 <button width="80" height="24"/>
             </allocate_ui>
@@ -34,10 +34,10 @@
             <allocate_ui name="p_button__settings">
                 <button width="80" height="24"/>
             </allocate_ui>
+            <allocate_ui x="132" y="-88" name="p_button__play">
+                <button width="104" height="96"/>
+            </allocate_ui>
         </group>
-        <allocate_ui x="132" y="68" name="p_button__play">
-            <button width="104" height="96"/>
-        </allocate_ui>
     </ui>
 </root>
 

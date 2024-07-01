@@ -61,8 +61,9 @@ bool NDS_does_NOT_bg_alloc_spec_have_shared_map_offset(
         if (p_NDS_bg_alloc_spec__other
                 ->offset_for__map
                 == p_NDS_bg_alloc_spec
-                ->offset_for__map)
+                ->offset_for__map) {
             return false;
+        }
     }
     return true;
 }
@@ -82,8 +83,9 @@ bool NDS_does_NOT_bg_alloc_spec__shared_tileset_offset(
         if (p_NDS_bg_alloc_spec__other
                 ->offset_for__tileset
                 == p_NDS_bg_alloc_spec
-                ->offset_for__tileset)
+                ->offset_for__tileset) {
             return false;
+        }
     }
     return true;
 }

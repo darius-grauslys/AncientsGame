@@ -2,7 +2,7 @@
 <root>
     <config>
         <include sub_dir="ui/game/">
-            <header path="ui/nds_ui.h"/>
+            <header path="ui/handlers/hud/nds_ui_handler__hud_button.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_manager.h"/>
@@ -18,12 +18,17 @@
         <ui_func_signature for="child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
         <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_element__hitbox"/>
+        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_button_as__toggleable_or__non_toggleable,set_ui_button_as__toggled_or__not_toggled,set_ui_element__hitbox"/>
         <ui_func_signature for="slider" c_signatures="set_ui_element__dragged_handler,set_ui_element__snapped_state,set_ui_element__hitbox"/>
         <ui_func_signature for="draggable" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
         <ui_func_signature for="drop_zone" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
     </config>
     <ui>
+        <group x="56" y="52">
+            <allocate_ui_container size="3" name="p_HUD_buttons" stride__x="72">
+                <button width="56" height="16" m_Clicked_Handler="m_NDS_ui_button__clicked_handler__hud" is_toggleable="true"/>
+            </allocate_ui_container>
+        </group>
     </ui>
 </root>
 

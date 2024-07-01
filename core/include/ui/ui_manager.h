@@ -17,8 +17,21 @@ Index__u16 get_index_of__p_ui_element_in__ui_manager(
         UI_Element *p_ui_element) {
     return (Index__u16)(
             p_ui_element 
-            - p_ui_manager->ui_elements)
-        /(sizeof(UI_Element));
+            - p_ui_manager->ui_elements);
+}
+
+static inline
+UI_Element *get_p_ui_element_by__index_from__ui_manager(
+        UI_Manager *p_ui_manager,
+        Index__u16 index_of__ui_element) {
+#ifndef NDEBUG
+    if (index_of__ui_element >=
+            UI_ELEMENT_MAXIMUM_QUANTITY_OF) {
+        debug_abort("get_p_ui_element_by__index_from__ui_manager, index of out bounds: %d", index_of__ui_element);
+        return &p_ui_manager->ui_elements[0];
+    }
+#endif
+    return &p_ui_manager->ui_elements[index_of__ui_element];
 }
 
 UI_Element *allocate_ui_element_from__ui_manager(
