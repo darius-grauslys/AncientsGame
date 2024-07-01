@@ -30,83 +30,83 @@ UI_Element *NDS_allocate_ui_for__nds_ui_window__game__equip(Game *p_game){
     set_ui_element__clicked_handler(p_button_filter__consumable, m_ui_button__clicked_handler__default);
     set_ui_element__hitbox(p_button_filter__consumable, 16, 16, get_vector__3i32(220 + 0, 152 + 0, 0));
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 1 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 3 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 29 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 31 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 57 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 59 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 85 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 87 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 113 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 115 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 141 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 143 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 169 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 171 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 197 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 199 + 0* index_of__itteration__2, 0));
     }
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator) && (++index_of__itteration__2)) {
-        set_ui_element__dragged_handler(m_ui_drop_zone__recieve_drop_handler__default);
+    for (Index__u32 index_of__itteration__2=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__2++) {
+        set_ui_element__dragged_handler(p_ui_itterator, m_ui_drop_zone__recieve_drop_handler__default);
         set_ui_element__hitbox(p_ui_itterator, 23, 27, get_vector__3i32(92 + 24* index_of__itteration__2, 225 + 0* index_of__itteration__2, 0));
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
-        set_ui_element__dragged_handler(m_ui_draggable__dragged_handler__default);
+        set_ui_element__dragged_handler(p_ui_itterator_child, m_ui_draggable__dragged_handler__default);
         set_ui_element__hitbox(p_ui_itterator_child, 18, 22, get_vector__3i32(94 + 24* index_of__itteration__2, 227 + 0* index_of__itteration__2, 0));
     }
 

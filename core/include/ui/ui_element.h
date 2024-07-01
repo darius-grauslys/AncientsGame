@@ -80,32 +80,35 @@ UI_Element *get_child_of__ui_element(
 
 static inline
 UI_Element *itterate_to_next__ui_element(
-        UI_Element **p_ui_element_ptr) {
-    if (!(*p_ui_element_ptr) || !((*p_ui_element_ptr)->p_next))
+        UI_Element * volatile *p_ui_element_ptr) {
+    if (!(*p_ui_element_ptr))
         return 0;
+    UI_Element *p_itterated_element = *p_ui_element_ptr;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_next;
-    return *p_ui_element_ptr;
+    return p_itterated_element;
 }
 
 static inline 
 UI_Element *itterate_to_parent_of__ui_element(
-        UI_Element **p_ui_element_ptr) {
-    if (!(*p_ui_element_ptr) || !((*p_ui_element_ptr)->p_parent))
+        UI_Element * volatile *p_ui_element_ptr) {
+    if (!(*p_ui_element_ptr))
         return 0;
+    UI_Element *p_itterated_element = *p_ui_element_ptr;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_parent;
-    return *p_ui_element_ptr;
+    return p_itterated_element;
 }
 
 static inline 
 UI_Element *itterate_to_child_of__ui_element(
-        UI_Element **p_ui_element_ptr) {
-    if (!(*p_ui_element_ptr)->p_child)
+        UI_Element * volatile *p_ui_element_ptr) {
+    if (!(*p_ui_element_ptr))
         return 0;
+    UI_Element *p_itterated_element = *p_ui_element_ptr;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_child;
-    return *p_ui_element_ptr;
+    return p_itterated_element;
 }
 
 void initialize_ui_element(

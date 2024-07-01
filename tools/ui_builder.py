@@ -311,10 +311,10 @@ def generate_source_c__local_assignment__itterator_with__literal(literal):
 def get_source_string__loop__itterator(context_stack):
     return "index_of__itteration__{}".format(len(context_stack) - 1)
 
-def generate_source_c__loop_begin__for(literal__itterator, literal__comparison, literal__increment):
+def generate_source_c__loop_begin__for(literal__index, literal__comparison, literal__increment):
     generate_source_c__with_literal(\
-            "for (Index__u32 {2}=0;{0};{1} && (++{2})) {{\n".format(\
-            literal__comparison, literal__increment, literal__itterator))
+            "for (Index__u32 {0}=0;{1};{2},{0}++) {{\n".format(\
+            literal__index, literal__comparison, literal__increment))
 def generate_source_c__loop_end__for(context_stack):
     generate_source_c__with_literal("}\n")
 
@@ -369,7 +369,7 @@ def generate_source_c__itteration_by__succession(context_stack):
             get_source_string__loop__itterator(context_stack)
     generate_source_c__loop_begin__for(\
             get_source_string__loop__itterator(context_stack),\
-            p_ui_itterator,
+            p_ui_itterator,\
             "itterate_to_next__ui_element(&{})".format(\
                 p_ui_itterator))
 
@@ -505,6 +505,7 @@ def draggable(signature, xml_element, context_stack):
             signature,\
             context_stack,
             [[\
+                context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "m_UI_Clicked", \
@@ -522,6 +523,7 @@ def drop_zone(signature, xml_element, context_stack):
             signature,\
             context_stack,
             [[\
+                context_stack[-1].p_ui_element,\
                 get_str_from_xml_or__use_this(\
                     xml_element, \
                     "m_UI_Clicked", \
