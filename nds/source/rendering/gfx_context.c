@@ -4,6 +4,9 @@
 #include "nds/arm9/video.h"
 #include "nds/dma.h"
 #include "rendering/nds_sprite.h"
+#include "rendering/nds_sprite_manager.h"
+#include "rendering/sprite.h"
+#include "rendering/texture.h"
 #include "timer.h"
 #include <defines.h>
 #include <nds_defines.h>
@@ -24,26 +27,43 @@
 #include <assets/entities/entity_sprite__16x16/skeleton.h>
 #include <assets/entities/entity_sprite__16x16/zombie.h>
 
-void PLATFORM_initialize_gfx_context(PLATFORM_Gfx_Context *gfx_context) {
+static inline
+void NDS_initialize_backgrounds(
+        NDS_Backgrounds a_NDS_backgrounds) {
+    for (Index__u8 index_of__background = 0;
+            index_of__background 
+            < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+            index_of__background++) {
+        NDS_initialize_background(
+                &a_NDS_backgrounds[index_of__background],
+                index_of__background);
+    }
+}
+
+void NDS_initialize_gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
-    for (Index__u8 index_of__background = 0;
-            index_of__background < NDS_BACKGROUND_QUANTITY_OF__MAIN;
-            index_of__background++) {
-        NDS_initialize_background(
-                &gfx_context
-                ->backgrounds__main[index_of__background],
-                index_of__background);
-    }
-    for (Index__u8 index_of__background = 0;
-            index_of__background < NDS_BACKGROUND_QUANTITY_OF__SUB;
-            index_of__background++) {
-        NDS_initialize_background(
-                &gfx_context
-                ->backgrounds__sub[index_of__background],
-                index_of__background);
-    }
+    NDS_initialize_backgrounds(
+            p_PLATFORM_gfx_context
+            ->backgrounds__main);
+    NDS_initialize_backgrounds(
+            p_PLATFORM_gfx_context
+            ->backgrounds__sub);
+
+    initialize_sprite_gfx_allocator__lookup_table_for__entities(
+            p_PLATFORM_gfx_context
+            ->F_sprite_gfx_allocator__lookup_table_for__entities);
+
+    initialize_sprite_gfx_allocator__lookup_table_for__particles(
+            p_PLATFORM_gfx_context
+            ->F_sprite_gfx_allocator__lookup_table_for__particles);
+
+#warning impl, but not here, after initializer is called.
+    p_PLATFORM_gfx_context
+        ->f_sprite_gfx_allocator__handler_for__items =
+        f_sprite_gfx_allocator__handler__default;
 }
 
 void NDS_set_video_modes_to__MODE_0_2D(void) {
@@ -224,4 +244,102 @@ void NDS_initialize_gfx_for__ui(
     // NDS_set_background_priority(
     //         &gfx_context->backgrounds__sub[1], 
     //         2);
+}
+
+Quantity__u32 NDS_get_quantity_of__allocated_background_slots(
+        NDS_Backgrounds nds_backgrounds) {
+    Quantity__u32 quantity_of__allocated_background_slots = 0;
+    for (Index__u8 index_of__background = 0;
+            index_of__background
+            < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+            index_of__background++) {
+        if (nds_backgrounds[index_of__background]
+                .gfx_tileset) {
+            quantity_of__allocated_background_slots++;
+        }
+    }
+
+    return quantity_of__allocated_background_slots;
+}
+
+Quantity__u32 PLATFORM_get_max_quantity_of__allocations_for__texture_flags(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags) {
+    Texture_Flags render_method_flags =
+        get_texture_flags__rendering_method(texture_flags);
+
+    switch (render_method_flags) {
+        default:
+            return 0;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN:
+            return NDS_QUANTITY_OF__SPRITES_IN__OAM_ENGINE;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_SUB:
+            return NDS_QUANTITY_OF__SPRITES_IN__OAM_ENGINE;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__BACKGROUND_MAIN:
+            return NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__BACKGROUND_SUB:
+            return NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+    }
+}
+
+Quantity__u32 PLATFORM_get_quantity_of__available_allocations_for__texture_flags(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags) {
+    Texture_Flags render_method_flags =
+        get_texture_flags__rendering_method(texture_flags);
+
+    switch (render_method_flags) {
+        default:
+            return 0;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN:
+            return 
+                NDS_get_quantity_of__available_sprite_allocations_on__oam_main(
+                        NDS_get_p_NDS_sprite_manager_from__gfx_context(
+                            p_PLATFORM_gfx_context));
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_SUB:
+            return 
+                NDS_get_quantity_of__available_sprite_allocations_on__oam_sub(
+                        NDS_get_p_NDS_sprite_manager_from__gfx_context(
+                            p_PLATFORM_gfx_context));
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__BACKGROUND_MAIN:
+            return 
+                NDS_get_quantity_of__allocated_background_slots(
+                        p_PLATFORM_gfx_context
+                        ->backgrounds__main);
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__BACKGROUND_SUB:
+            return 
+                NDS_get_quantity_of__allocated_background_slots(
+                        p_PLATFORM_gfx_context
+                        ->backgrounds__sub);
+    }
+}
+
+bool PLATFORM_has_support_for__texture_flag__render_method(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags) {
+    switch (get_texture_flags__rendering_method(texture_flags)) {
+        default:
+            return false;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN:
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_SUB:
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__BACKGROUND_MAIN:
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__BACKGROUND_SUB:
+            return true;
+    }
+}
+
+Quantity__u32 PLATFORM_get_quantity_of__allocated_sprites(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return 
+        NDS_get_quantity_of__allocated_sprites(
+                NDS_get_p_NDS_sprite_manager_from__gfx_context(
+                    p_PLATFORM_gfx_context));
+}
+
+Quantity__u32 PLATFORM_get_max_quantity_of__allocated_sprites(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return 
+        NDS_QUANTITY_OF__SPRITES_IN__OAM_ENGINE 
+        << 2
+        ;
 }

@@ -65,15 +65,16 @@ void initialize_scene_as__game(Scene *p_scene) {
 void m_load_scene_as__game_handler(
         Scene *p_this_scene,
         Game *p_game) {
-    PLATFORM_Gfx_Context *gfx_context =
-        &p_game->gfx_context;
+    PLATFORM_Gfx_Context *p_gfx_context =
+        get_p_PLATFORM_gfx_context_from__game(p_game);
 
-    NDS_initialize_gfx_for__world(gfx_context);
+    NDS_initialize_gfx_for__world(p_gfx_context);
     initialize_world(&p_game->world);
 
-    // NDS_initialize_debug__sub();
-    // return;
-    NDS_initialize_gfx_for__ui(&p_game->gfx_context);
+    NDS_initialize_debug__sub();
+    return;
+    NDS_initialize_gfx_for__ui(
+            get_p_PLATFORM_gfx_context_from__game(p_game));
     // TODO: re-impl
     // NDS_set_ui_background_to__equip(&p_game->gfx_context);
 
@@ -89,7 +90,7 @@ void m_enter_scene_as__game_handler(
     // TODO: prob wanna remove some of the stuff below
     Entity *p_player = 
         allocate_entity_into__world(
-            &p_game->world,
+            p_game,
             Entity_Kind__Player,
             get_vector__3i32F4_using__i32(0, 0, 0));
 
@@ -108,17 +109,17 @@ void m_enter_scene_as__game_handler(
             2);
 
     PLATFORM_update_chunks(
-            &p_game->gfx_context,
-            &p_game->world.chunk_manager);
+            get_p_PLATFORM_gfx_context_from__game(p_game),
+            get_p_chunk_manager_from__game(p_game));
 
     while (1) {
         if (p_game->scene_manager.p_active_scene == 0)
             break;
         manage_game(p_game);
-        NDS_update_ui_for__hud(
-                &p_game->gfx_context,
-                p_this_scene,
-                p_player);
+        // NDS_update_ui_for__hud(
+        //         get_p_PLATFORM_gfx_context_from__game(p_game),
+        //         p_this_scene,
+        //         p_player);
         manage_world(p_game);
     }
 }

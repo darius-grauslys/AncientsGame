@@ -1,122 +1,134 @@
+#include "defines.h"
+#include "defines_weak.h"
 #include <rendering/texture.h>
 #include <debug/debug.h>
 #include <nds.h>
+#include <nds_defines.h>
 
 void PLATFORM_allocate_texture(
-        PLATFORM_Texture *texture, 
-        Texture_Flags flags) {
-    texture->gfx = 0;
-    texture->width =
-        texture->height = 0;
+        PLATFORM_Texture *p_texture, 
+        Texture_Allocation_Specification
+            *p_texture_allocation_specification) {
+    p_texture->gfx = 0;
+    p_texture->width =
+        p_texture->height = 0;
+
+    Texture_Flags texture_flags =
+        p_texture_allocation_specification
+        ->texture_flags;
 
     uint8_t flags_width = 
-        GET_TEXTURE_FLAG__LENGTH__WIDTH(flags);
+        GET_TEXTURE_FLAG__LENGTH__WIDTH(texture_flags);
     uint8_t flags_height =
-        GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags);
+        GET_TEXTURE_FLAG__LENGTH__HEIGHT(texture_flags);
 
     switch (flags_width) {
         default:
             goto _abort;
         case TEXTURE_FLAG__LENGTH_x8:
-            texture->width = 8;
+            p_texture->width = 8;
             switch (flags_height) {
                 default:
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x8:
-                    texture->height = 8;
-                    texture->sprite_size = SpriteSize_8x8;
+                    p_texture->height = 8;
+                    p_texture->sprite_size = SpriteSize_8x8;
                     break;
                 case TEXTURE_FLAG__LENGTH_x16:
-                    texture->height = 16;
-                    texture->sprite_size = SpriteSize_8x16;
+                    p_texture->height = 16;
+                    p_texture->sprite_size = SpriteSize_8x16;
                     break;
                 case TEXTURE_FLAG__LENGTH_x32:
-                    texture->height = 32;
-                    texture->sprite_size = SpriteSize_8x32;
+                    p_texture->height = 32;
+                    p_texture->sprite_size = SpriteSize_8x32;
                     break;
             }
             break;
         case TEXTURE_FLAG__LENGTH_x16:
-            texture->width = 16;
+            p_texture->width = 16;
             switch (flags_height) {
                 default:
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x8:
-                    texture->height = 8;
-                    texture->sprite_size = SpriteSize_16x8;
+                    p_texture->height = 8;
+                    p_texture->sprite_size = SpriteSize_16x8;
                     break;
                 case TEXTURE_FLAG__LENGTH_x16:
-                    texture->height = 16;
-                    texture->sprite_size = SpriteSize_16x16;
+                    p_texture->height = 16;
+                    p_texture->sprite_size = SpriteSize_16x16;
                     break;
                 case TEXTURE_FLAG__LENGTH_x32:
-                    texture->height = 32;
-                    texture->sprite_size = SpriteSize_16x32;
+                    p_texture->height = 32;
+                    p_texture->sprite_size = SpriteSize_16x32;
                     break;
             }
             break;
         case TEXTURE_FLAG__LENGTH_x32:
-            texture->width = 32;
+            p_texture->width = 32;
             switch (flags_height) {
                 default:
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x8:
-                    texture->height = 8;
-                    texture->sprite_size = SpriteSize_32x8;
+                    p_texture->height = 8;
+                    p_texture->sprite_size = SpriteSize_32x8;
                     break;
                 case TEXTURE_FLAG__LENGTH_x16:
-                    texture->height = 16;
-                    texture->sprite_size = SpriteSize_32x16;
+                    p_texture->height = 16;
+                    p_texture->sprite_size = SpriteSize_32x16;
                     break;
                 case TEXTURE_FLAG__LENGTH_x32:
-                    texture->height = 32;
-                    texture->sprite_size = SpriteSize_32x32;
+                    p_texture->height = 32;
+                    p_texture->sprite_size = SpriteSize_32x32;
                     break;
                 case TEXTURE_FLAG__LENGTH_x64:
-                    texture->height = 64;
-                    texture->sprite_size = SpriteSize_32x64;
+                    p_texture->height = 64;
+                    p_texture->sprite_size = SpriteSize_32x64;
                     break;
             }
             break;
         case TEXTURE_FLAG__LENGTH_x64:
-            texture->width = 64;
+            p_texture->width = 64;
             switch (flags_height) {
                 default:
                     goto _abort;
                 case TEXTURE_FLAG__LENGTH_x32:
-                    texture->height = 32;
-                    texture->sprite_size = SpriteSize_64x32;
+                    p_texture->height = 32;
+                    p_texture->sprite_size = SpriteSize_64x32;
                     break;
                 case TEXTURE_FLAG__LENGTH_x64:
-                    texture->height = 64;
-                    texture->sprite_size = SpriteSize_64x64;
+                    p_texture->height = 64;
+                    p_texture->sprite_size = SpriteSize_64x64;
                     break;
             }
             break;
     }
 
-    if (CHECK_TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB(flags)) {
-        texture->oam = &oamMain;
-    } else {
-        texture->oam = &oamSub;
+    switch (get_texture_flags__rendering_method(texture_flags)) {
+        default:
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN:
+            p_texture->oam = &oamMain;
+            break;
+        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_SUB:
+            p_texture->oam = &oamSub;
+            break;
     }
 
-	texture->gfx = 
+	p_texture->gfx = 
         oamAllocateGfx(
-                texture->oam, 
-                texture->sprite_size, 
+                p_texture->oam, 
+                p_texture->sprite_size, 
                 SpriteColorFormat_256Color);
-    texture->oam_index = 
+    p_texture->oam_index = 
         oamGfxPtrToOffset(
-                texture->oam, 
-                texture->gfx);
+                p_texture->oam, 
+                p_texture->gfx);
     oamSet(
-        texture->oam, 
-        texture->oam_index, 
+        p_texture->oam, 
+        p_texture->oam_index, 
         127 - 8, 96 - 8, 
         1, 
         0, 
-        texture->sprite_size, 
+        p_texture->sprite_size, 
         SpriteColorFormat_256Color, 
         0, // null gfx source to copy
         -1, 
@@ -124,6 +136,10 @@ void PLATFORM_allocate_texture(
         false, 
         false, false, 
         false);
+
+   p_texture->flags |=
+        TEXTURE_FLAG__IS_ALLOCATED
+        ;
     return;
 _abort:
     debug_abort("Invalid sprite size.");
@@ -166,6 +182,6 @@ void PLATFORM_release_texture(PLATFORM_Texture *texture) {
     oamFreeGfx(oam, texture->gfx);
 }
 
-uint32_t *PLATFORM_get_texture_flags_ptr(PLATFORM_Texture *texture) {
+uint32_t *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(PLATFORM_Texture *texture) {
     return &texture->flags;
 }

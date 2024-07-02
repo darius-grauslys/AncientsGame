@@ -42,7 +42,7 @@ void add_entity_to__world(
         Entity *p_entity);
 
 Entity *allocate_entity_into__world(
-        World *p_world,
+        Game *p_game,
         enum Entity_Kind the_kind_of_entity,
         Vector__3i32F4 position__3i32F4);
 

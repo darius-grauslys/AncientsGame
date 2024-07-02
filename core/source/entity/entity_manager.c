@@ -19,7 +19,9 @@ void initialize_entity_manager(Entity_Manager *entity_manager) {
     }
 }
 
-Entity *allocate_entity_in__entity_manager(Entity_Manager* entity_manager,
+Entity *allocate_entity_in__entity_manager(
+        Game *p_game,
+        Entity_Manager* entity_manager,
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4) {
     // TODO: do better than bellow:
@@ -67,16 +69,19 @@ Entity *allocate_entity_in__entity_manager(Entity_Manager* entity_manager,
     switch (kind_of_entity) {
         case Entity_Kind__Player:
             initialize_entity_as__player(
+                    p_game,
                     p_entity,
                     position__3i32F4);
             break;
         case Entity_Kind__Skeleton:
             initialize_entity_as__skeleton(
+                    p_game,
                     p_entity,
                     position__3i32F4);
             break;
         case Entity_Kind__Zombie:
             initialize_entity_as__zombie(
+                    p_game,
                     p_entity,
                     position__3i32F4);
             break;
@@ -96,5 +101,5 @@ void release_entity_from__entity_manager(
         p_entity_manager->p_local_player = 0;
     }
     PLATFORM_release_texture_with__p_PLATFORM_sprite(
-            &p_entity->sprite_wrapper.sprite);
+            p_entity->sprite_wrapper.p_sprite);
 }

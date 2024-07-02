@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "nds_defines.h"
 #include "nds/arm9/background.h"
 #include <rendering/render_chunk.h>
 #include <rendering/render_tile.h>

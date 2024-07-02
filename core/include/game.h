@@ -24,6 +24,11 @@ static Chunk_Manager inline
     return get_p_chunk_manager_from__world(&p_game->world);
 }
 
+static World inline 
+*get_p_world_from__game(Game *p_game) {
+    return &p_game->world;
+}
+
 static Collision_Manager inline 
 *get_p_collision_manager_from__game(Game *p_game) {
     return get_p_collision_manager_from__world(&p_game->world);    
@@ -31,7 +36,7 @@ static Collision_Manager inline
 
 static PLATFORM_Gfx_Context inline
 *get_p_PLATFORM_gfx_context_from__game(Game *p_game) {
-    return &p_game->gfx_context;
+    return p_game->p_gfx_context;
 }
 
 static Input inline

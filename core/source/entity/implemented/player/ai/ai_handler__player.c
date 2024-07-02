@@ -193,8 +193,8 @@ void m_entity_ai_handler__player(
         }
 
         PLATFORM_update_chunks(
-                &p_game->gfx_context,
-                &p_game->world.chunk_manager);
+                get_p_PLATFORM_gfx_context_from__game(p_game),
+                get_p_chunk_manager_from__game(p_game));
 
         animate_humanoid__use(p_this_player);
         return;

@@ -4,6 +4,7 @@
 #include <nds.h>
 #include <collisions/hitbox_aabb.h>
 #include <vectors.h>
+#include <nds_defines.h>
 
 void PLATFORM_render_entity(
         Entity *p_entity,
@@ -12,15 +13,15 @@ void PLATFORM_render_entity(
         return;
     }
 
-    PLATFORM_Sprite *sprite =
-        &p_entity->sprite_wrapper.sprite;
+    PLATFORM_Sprite *p_sprite =
+        p_entity->sprite_wrapper.p_sprite;
     Camera *p_camera =
         get_p_camera_from__game(p_game);
 
     if (is_entity_not__updating_position(p_entity)) {
         oamSetXY(
-            sprite->sprite_texture.oam, 
-            sprite->sprite_texture.oam_index, 
+            p_sprite->sprite_texture.oam, 
+            p_sprite->sprite_texture.oam_index, 
             127 - 8, 96 - 8);
     } else {
         int32_t x__origin, y__origin;
@@ -35,36 +36,36 @@ void PLATFORM_render_entity(
                 || abs(y__global - y__origin) > 196 / 2 + 16) {
             set_entity_as__hidden(p_entity);
             oamSetHidden(
-                    sprite->sprite_texture.oam,
-                    sprite->sprite_texture.oam_index,
+                    p_sprite->sprite_texture.oam,
+                    p_sprite->sprite_texture.oam_index,
                     true);
             return;
         } else {
             set_entity_as__visible(p_entity);
             oamSetHidden(
-                    sprite->sprite_texture.oam,
-                    sprite->sprite_texture.oam_index,
+                    p_sprite->sprite_texture.oam,
+                    p_sprite->sprite_texture.oam_index,
                     false);
         }
 
         oamSetXY(
-            sprite->sprite_texture.oam, 
-            sprite->sprite_texture.oam_index, 
+            p_sprite->sprite_texture.oam, 
+            p_sprite->sprite_texture.oam_index, 
             x__global - x__origin + 127 - 8,
             -(y__global - y__origin - 96 + 8));
     }
 
     if (p_entity->sprite_wrapper.direction & DIRECTION__WEST) {
         oamSetFlip(
-                sprite->sprite_texture.oam,
-                sprite->sprite_texture.oam_index,
+                p_sprite->sprite_texture.oam,
+                p_sprite->sprite_texture.oam_index,
                 true,
                 false);
 
     } else {
         oamSetFlip(
-                sprite->sprite_texture.oam,
-                sprite->sprite_texture.oam_index,
+                p_sprite->sprite_texture.oam,
+                p_sprite->sprite_texture.oam_index,
                 false,
                 false);
     }

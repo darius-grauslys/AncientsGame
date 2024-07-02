@@ -52,8 +52,6 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 ///
 /// SECTION_rendering
 ///
-void PLATFORM_initialize_gfx_context(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
 ///
 /// Opens the specified UI. Depending on the backend this
@@ -78,21 +76,23 @@ Quantity__u8 PLATFORM_get_all_opened_ui(
         enum UI_Window_Kind *p_ui_window_kind__buffer,
         Quantity__u8 size_of__buffer);
 
-typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
-void PLATFORM_initialize_sprite(PLATFORM_Sprite *sprite,
-        Texture_Flags texture_flags_for__sprite,
-        bool perform_update);
-void PLATFORM_initialize_sprite_for__entity(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        enum Entity_Kind the_kind_of__entity,
-        Texture_Flags texture_flags);
-void PLATFORM_initialize_sprite_for__item(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        enum Item_Kind the_kind_of__item,
-        Texture_Flags texture_flags);
-void PLATFORM_set_sprite_graphics_to__item_kind(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        enum Item_Kind the_kind_of__item);
+Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
+PLATFORM_Sprite *PLATFORM_allocate_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Sprite_Allocation_Specification *p_sprite_allocation_specification);
+
+void PLATFORM_release_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
+void PLATFORM_release_all__sprites(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
+void PLATFORM_release_all__sprites_using__this_render_method(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags_for__render_method);
 
 void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
 
@@ -105,6 +105,12 @@ void PLATFORM_set_sprite__position(
         PLATFORM_Sprite *p_PLATFORM_sprite,
         Index__u16 x, Index__u16 y);
 
+Quantity__u32 PLATFORM_get_quantity_of__allocated_sprites(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
+Quantity__u32 PLATFORM_get_max_quantity_of__allocated_sprites(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
 ///
 /// On NDS, this will init both main and sub.
 ///
@@ -114,7 +120,10 @@ void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
 ///
 void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context);
 
-void PLATFORM_allocate_texture(PLATFORM_Texture *texture, Texture_Flags flags);
+void PLATFORM_allocate_texture(
+        PLATFORM_Texture *texture, 
+        Texture_Allocation_Specification
+            *p_texture_allocation_specification);
 
 ///
 /// This is currently no-op on NDS. Later, if we need to,
@@ -136,7 +145,20 @@ void PLATFORM_release_texture(PLATFORM_Texture *texture);
 void PLATFORM_release_texture_with__p_PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
-uint32_t *PLATFORM_get_texture_flags_ptr(PLATFORM_Texture *texture);
+Texture_Flags *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
+        PLATFORM_Texture *texture);
+
+Quantity__u32 PLATFORM_get_max_quantity_of__allocations_for__texture_flags(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags);
+
+Quantity__u32 PLATFORM_get_quantity_of__available_allocations_for__texture_flags(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags);
+
+bool PLATFORM_has_support_for__texture_flag__render_method(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags);
 
 ///
 /// SECTION_world
@@ -158,6 +180,8 @@ void PLATFORM_update_chunks(
 /// SECTION_core
 ///
 
+int PLATFORM_main(Game *p_game);
+
 void PLATFORM_pre_render(Game *game);
 
 void PLATFORM_post_render(Game *game);
@@ -169,8 +193,6 @@ void PLATFORM_post_render(Game *game);
 ///
 /// SECTION_scene
 ///
-
-void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager);
 
 ///
 /// SECTION_input

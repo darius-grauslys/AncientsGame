@@ -3,6 +3,7 @@
 
 #include "defines_weak.h"
 #include <defines.h>
+#include <nds_defines.h>
 
 void NDS_set_ui_background_to__equip(
         PLATFORM_Gfx_Context *p_gfx_context);

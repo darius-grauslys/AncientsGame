@@ -277,7 +277,7 @@ typedef Quantity__u32 (*f_Animation_Duration_Lookup) (
         enum Sprite_Animation_Kind animation_kind);
 
 typedef struct Sprite_Wrapper_t {
-    PLATFORM_Sprite sprite;
+    PLATFORM_Sprite *p_sprite;
     Timer__u32 time_elapsed;
     Timer__u32 time_limit;
     Direction__u8 direction;
@@ -287,6 +287,20 @@ typedef struct Sprite_Wrapper_t {
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
     enum Sprite_Animation_Kind the_kind_of_animation__thats_upcomming;
 } Sprite_Wrapper;
+
+typedef void (*f_Sprite_Gfx_Allocator)(
+        PLATFORM_Sprite *p_PLATFORM_sprite,
+        Sprite_Allocation_Specification 
+            *p_sprite_allocation_specification);
+
+typedef f_Sprite_Gfx_Allocator 
+    F_Sprite_Gfx_Allocator__Lookup_Table_For__Entities[
+    6];
+
+#warning need to impl for particle enum:
+typedef f_Sprite_Gfx_Allocator 
+    F_Sprite_Gfx_Allocator__Lookup_Table_For__Particles[
+    Entity_Kind__Unknown];
 
 #define SPRITE_FRAME__16x16__OFFSET (16 * 16)
 #define SPRITE_FRAME__8x8__OFFSET (8 * 8)
@@ -353,8 +367,9 @@ typedef uint32_t Texture_Flags;
 ///
 /// TEXTURE_FLAGS:
 /// Bit orderings, from most significant to least:
-/// [32 <-> 11 bits,    PLATFORM specific flags]
-/// [10th bit,          is hidden]
+/// [32 <-> 14 bits,    PLATFORM specific flags]
+/// [13th bit,          is hidden]
+/// [12-10 bits,        format]
 /// [9-7 bits,          render method] 
 /// [6-4 bits,          width] 
 /// [3-1 bits,          height]
@@ -465,10 +480,15 @@ typedef uint32_t Texture_Flags;
 #define TEXTURE_FLAG__FORMAT__6 0b110
 #define TEXTURE_FLAG__FORMAT__7 0b111
 
-#define TEXTURE_FLAG__IS_HIDDEN \
-    (1 << (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \
+#define TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS \
+    (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \
            + TEXTURE_FLAG__SIZE__BIT_COUNT \
-           + TEXTURE_FLAG__FORMAT__BIT_COUNT))
+           + TEXTURE_FLAG__FORMAT__BIT_COUNT)
+
+#define TEXTURE_FLAG__IS_HIDDEN \
+    BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS)
+#define TEXTURE_FLAG__IS_ALLOCATED \
+    BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS + 1)
 
 #define GET_TEXTURE_FLAG__LENGTH__WIDTH(flags) \
     ((flags & (TEXTURE_FLAG__LENGTH__MASK \
@@ -477,6 +497,40 @@ typedef uint32_t Texture_Flags;
 
 #define GET_TEXTURE_FLAG__LENGTH__HEIGHT(flags) \
     (flags & TEXTURE_FLAG__LENGTH__MASK)
+
+typedef struct Texture_Allocation_Specification_t {
+    Texture_Flags texture_flags;
+} Texture_Allocation_Specification;
+
+typedef uint8_t Sprite_Flags;
+
+#define SPRITE_FLAGS__NONE 0
+
+#define SPRITE_FLAG__BIT_SHIFT_IS_ALLOCATED 0
+#define SPRITE_FLAG__BIT_IS_ALLOCATED BIT(\
+        SPRITE_FLAG__BIT_SHIFT_IS_ALLOCATED)
+
+enum Sprite_Allocation_Kind {
+    Sprite_Allocation_Kind__None,
+    Sprite_Allocation_Kind__Entity,
+    Sprite_Allocation_Kind__Item,
+    Sprite_Allocation_Kind__Particle
+};
+
+typedef struct Sprite_Allocation_Specification_t {
+    enum Sprite_Allocation_Kind the_kind_of__sprite_allocation;
+    Texture_Allocation_Specification texture_allocation_specification;
+    union {
+        struct { // Sprite_Allocation_Kind__Entity
+            enum Entity_Kind the_kind_of__entity_this__sprite_is;
+        };
+        struct { // Sprite_Allocation_Kind__Item
+            enum Item_Kind the_kind_of__item_this__sprite_is;
+        };
+        struct { // Sprite_Allocation_Kind__Particle
+        };
+    };
+} Sprite_Allocation_Specification;
 
 ///
 /// SECTION_inventory
@@ -624,108 +678,6 @@ typedef uint8_t Humanoid_Flags;
 
 #define RESOURCE_SYMBOL__EMPTY 0
 #define RESOURCE_SYMBOL__LOCKED ((uint8_t)-1)
-
-//TODO: move to nds.
-//TODO: if heart/energy_orb HUD breaks, its likely because
-//      the tileset got moved around. DON'T PANIC! Just change
-//      the values below. TODO, make this not a problem.
-//TODO: 6/27/2024, current required offset is 28 for most tiles
-#define UI_TILE_SHEET_INDEX__EMPTY_HEART (Index__u16)220-28
-#define UI_TILE_SHEET_INDEX__HALF_HEART (Index__u16)221-28
-#define UI_TILE_SHEET_INDEX__FULL_HEART (Index__u16)222-28
-#define UI_TILE_SHEET_INDEX__HALF_POISON_HEART (Index__u16)223-28
-#define UI_TILE_SHEET_INDEX__FULL_POISON_HEART (Index__u16)224-28
-#define UI_TILE_SHEET_INDEX__NORMAL_POISON_HEART (Index__u16)225-28
-#define UI_TILE_SHEET_INDEX__HALF_IMMORTAL_HEART (Index__u16)226-28
-#define UI_TILE_SHEET_INDEX__FULL_IMMORTAL_HEART (Index__u16)227-28
-#define UI_TILE_SHEET_INDEX__IMMORTAL_NORMAL_HEART (Index__u16)228-28
-#define UI_TILE_SHEET_INDEX__IMMORTAL_POISON_HEART (Index__u16)229-28
-#define UI_TILE_SHEET_INDEX__LOCKED_HEART (Index__u16)230-28
-
-#define UI_TILE_SHEET_INDEX__EMPTY_ENERGY_ORB (Index__u16)209-28
-#define UI_TILE_SHEET_INDEX__HALF_ENERGY_ORB (Index__u16)210-28
-#define UI_TILE_SHEET_INDEX__FULL_ENERGY_ORB (Index__u16)211-28
-#define UI_TILE_SHEET_INDEX__HALF_POISON_ENERGY_ORB (Index__u16)212-28
-#define UI_TILE_SHEET_INDEX__FULL_POISON_ENERGY_ORB (Index__u16)213-28
-#define UI_TILE_SHEET_INDEX__NORMAL_POISON_ENERGY_ORB (Index__u16)214-28
-#define UI_TILE_SHEET_INDEX__HALF_DEMONIC_ENERGY_ORB (Index__u16)215-28
-#define UI_TILE_SHEET_INDEX__FULL_DEMONIC_ENERGY_ORB (Index__u16)216-28
-#define UI_TILE_SHEET_INDEX__DEMONIC_NORMAL_ENERGY_ORB (Index__u16)217-28
-#define UI_TILE_SHEET_INDEX__DEMONIC_POISON_ENERGY_ORB (Index__u16)218-28
-#define UI_TILE_SHEET_INDEX__LOCKED_ENERGY_ORB (Index__u16)219-28
-
-#define UI_TILE_SHEET_INDEX__EXTREME_FREEZING   (Index__u16)377+98 
-#define UI_TILE_SHEET_INDEX__FREEZING           (Index__u16)379+102
-#define UI_TILE_SHEET_INDEX__COLD               (Index__u16)385+106
-#define UI_TILE_SHEET_INDEX__NEUTRAL            (Index__u16)391+110
-#define UI_TILE_SHEET_INDEX__HOT                (Index__u16)397+114
-#define UI_TILE_SHEET_INDEX__BURNING            (Index__u16)403+118
-#define UI_TILE_SHEET_INDEX__EXTREME_BURNING    (Index__u16)405+122
-#define UI_TILE_SHEET_INDEX__DIVINE_PROVIDENCE  (Index__u16)407+122
-#define UI_TILE_SHEET_INDEX__SOULFULL           (Index__u16)409+122
-#define UI_TILE_SHEET_INDEX__FLEETING_SOUL      (Index__u16)411+122
-#define UI_TILE_SHEET_INDEX__SOULLESS           (Index__u16)413+122
-#define UI_TILE_SHEET_INDEX__LICHLING           (Index__u16)415+122
-#define UI_TILE_SHEET_INDEX__LICH               (Index__u16)417+122
-
-//sub 53
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_BLOATED (Index__u16)427
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_BLOATED (Index__u16)429
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_TOP (Index__u16)419
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_TOP (Index__u16)421
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_FULL (Index__u16)435
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_FULL (Index__u16)438
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_TOP_MIDDLE (Index__u16)447
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_TOP_MIDDLE (Index__u16)450
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_SATISFIED (Index__u16)441
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_SATISFIED (Index__u16)444
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_MIDDLE (Index__u16)465
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_MIDDLE (Index__u16)468
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_WELL (Index__u16)453
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_WELL (Index__u16)466
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_INDIFFERENT (Index__u16)459
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_INDIFFERENT (Index__u16)462
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_BOTTOM_MIDDLE \
-    (Index__u16)483
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_BOTTOM_MIDDLE \
-    (Index__u16)486
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_WANTING (Index__u16)471
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_WANTING (Index__u16)474
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_NEEDING (Index__u16)477
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_NEEDING (Index__u16)480
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_DESPERATE (Index__u16)431
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_DESPERATE (Index__u16)433
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BRAIN_EMPTY_BOTTOM (Index__u16)423
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__BLOOD_EMPTY_BOTTOM (Index__u16)425
-
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_BLOATED (Index__u16)497
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_BLOATED (Index__u16)499
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_TOP (Index__u16)489
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_TOP (Index__u16)491
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_FULL (Index__u16)501
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_FULL (Index__u16)504
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_TOP_MIDDLE (Index__u16)517
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_TOP_MIDDLE (Index__u16)520
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_SATISFIED (Index__u16)511
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_SATISFIED (Index__u16)514
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_MIDDLE (Index__u16)535
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_MIDDLE (Index__u16)538
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_WELL (Index__u16)529
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_WELL (Index__u16)532
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_INDIFFERENT (Index__u16)529
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_INDIFFERENT (Index__u16)532
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_BOTTOM_MIDDLE \
-    (Index__u16)553
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_BOTTOM_MIDDLE \
-    (Index__u16)556
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_WANTING (Index__u16)535
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_WANTING (Index__u16)538
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_NEEDING (Index__u16)547
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_NEEDING (Index__u16)550
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_DESPERATE (Index__u16)501
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_DESPERATE (Index__u16)503
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__STOMACH_EMPTY_BOTTOM (Index__u16)493
-#define UI_TILE_SHEET_INDEX__SUSTENANCE__THIRST_EMPTY_BOTTOM (Index__u16)495
 
 typedef uint8_t Resource_Symbol__u8;
 typedef uint8_t Heart__u8;
@@ -1455,7 +1407,7 @@ typedef void (*m_Game_Action_Handler)(
 
 typedef struct Game_t {
     Input input;
-    PLATFORM_Gfx_Context gfx_context;
+    PLATFORM_Gfx_Context *p_gfx_context;
     Scene_Manager scene_manager;
     UI_Manager ui_manager;
 

@@ -168,6 +168,7 @@ static void inline set_entity__animator(
 }
 
 void initialize_entity(
+        Game *p_game,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,

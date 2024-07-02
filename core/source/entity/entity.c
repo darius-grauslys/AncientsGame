@@ -1,4 +1,6 @@
 #include "defines.h"
+#include "defines_weak.h"
+#include "game.h"
 #include <entity/entity.h>
 #include <entity/handlers/entity_handlers.h>
 #include <debug/debug.h>
@@ -48,6 +50,7 @@ bool is_entity__humanoid(enum Entity_Kind kind_of_entity) {
 }
 
 void initialize_entity(
+        Game *p_game,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
@@ -90,7 +93,8 @@ void initialize_entity(
     set_entity__is_updating_position(p_entity);
     set_entity__is_updating_graphics(p_entity);
 
-    initialize_sprite_wrapper_for__entity(
+    initialize_sprite_wrapper_for__entity_with__sprite_allocation(
+            get_p_PLATFORM_gfx_context_from__game(p_game),
             p_entity);
 }
 

@@ -9,9 +9,11 @@
 #include <entity/handlers/collision/collision_handler__default.h>
 
 void initialize_entity_as__skeleton(
+        Game *p_game,
         Entity *p_entity,
         Vector__3i32F4 position__3i32F4) {
     initialize_entity_as__humanoid(
+            p_game,
             p_entity,
             Entity_Kind__Skeleton,
             position__3i32F4,

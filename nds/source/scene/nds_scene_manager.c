@@ -17,7 +17,7 @@ void _abort(void) {
     game.scene_manager.p_active_scene = 0;
 }
 
-void PLATFORM_establish_scenes(Scene_Manager *p_scene_manager) {
+void NDS_establish_scenes(Scene_Manager *p_scene_manager) {
     setExceptionHandler(_abort);
 
     p_scene_manager->p_active_scene =

@@ -16,21 +16,21 @@ void PLATFORM_post_render(Game *p_game) {
         &p_game->world.camera;
 
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[
+        p_game->p_gfx_context->backgrounds__main[
             NDS_BACKGROUND_SLOT__GAME__GROUND]
         .background_index_from__hardware,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[
+        p_game->p_gfx_context->backgrounds__main[
             NDS_BACKGROUND_SLOT__GAME__WALL_UPPER]
         .background_index_from__hardware,
          get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 38
         );
     bgSetScroll(
-        p_game->gfx_context.backgrounds__main[
+        p_game->p_gfx_context->backgrounds__main[
             NDS_BACKGROUND_SLOT__GAME__WALL_LOWER]
         .background_index_from__hardware,
          get_x_i32_from__camera(p_camera)  - 126,

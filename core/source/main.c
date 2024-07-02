@@ -6,5 +6,5 @@ Game game;
 
 int main(void) {
     initialize_game(&game, m_game_action_handler_for__singleplayer);
-    return run_game(&game);
+    return PLATFORM_main(&game);
 }

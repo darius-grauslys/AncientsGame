@@ -4,6 +4,7 @@
 #include <inventory/inventory.h>
 
 void initialize_entity_as__humanoid(
+        Game *p_game,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
@@ -16,6 +17,7 @@ void initialize_entity_as__humanoid(
         m_Entity_Tile_Collision_Handler m_entity_tile_collision_handler,
         m_Entity_Animation_Handler m_entity_animation_handler) {
     initialize_entity(
+            p_game,
             p_entity, 
             kind_of_entity, 
             position__3i32F4, 

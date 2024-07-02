@@ -15,7 +15,7 @@ void handle_game_action__entity__allocate(
         enum Entity_Kind the_kind_of__entity,
         Vector__3i32F4 position) {
     allocate_entity_into__world(
-            &p_game->world,
+            p_game,
             the_kind_of__entity,
             position);
 }

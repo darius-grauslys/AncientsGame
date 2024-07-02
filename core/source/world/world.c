@@ -58,8 +58,8 @@ void manage_world(Game *p_game) {
                 p_game->world.chunk_manager.x__center_chunk__signed_index_i32,
                 p_game->world.chunk_manager.y__center_chunk__signed_index_i32);
         PLATFORM_update_chunks(
-                &p_game->gfx_context,
-                &p_game->world.chunk_manager);
+                get_p_PLATFORM_gfx_context_from__game(p_game),
+                get_p_chunk_manager_from__game(p_game));
     }
 }
 
@@ -158,16 +158,17 @@ void add_entity_to__world(
 }
 
 Entity *allocate_entity_into__world(
-        World *p_world,
+        Game *p_game,
         enum Entity_Kind the_kind_of_entity,
         Vector__3i32F4 position__3i32F4) {
     Entity *p_entity =
         allocate_entity_in__entity_manager(
-                &p_world->entity_manager,
+                p_game,
+                get_p_entity_manager_from__game(p_game),
                 the_kind_of_entity,
                 position__3i32F4);
     add_entity_to__world(
-            p_world, 
+            get_p_world_from__game(p_game), 
             p_entity);
     return p_entity;
 }

@@ -32,6 +32,7 @@ typedef int8_t      i8F8;
 typedef int32_t     i32F20;
 
 typedef uint32_t    Texture_Flags;
+typedef uint8_t     Sprite_Flags;
 typedef uint8_t     Quantity__u8;
 typedef uint16_t    Quantity__u16;
 typedef uint32_t    Quantity__u32;
@@ -67,12 +68,27 @@ typedef struct Timer__u8_t Timer__u8;
 /// SECTION_entity
 ///
 
+///
+/// All possible entity kinds.
+/// Feel free to add your own, but put it
+/// before Entity_Kind__Unknown. Putting it
+/// after Entity_Kind__Unknown will cause
+/// undefined behavior.
+///
+/// Furthermore DO NOT explicitly assign values to
+/// any Entity_Kind, even your own.
+///
 enum Entity_Kind {
+    Entity_Kind__None,
     Entity_Kind__Particle,
     Entity_Kind__Item,
     Entity_Kind__Player,
     Entity_Kind__Skeleton,
-    Entity_Kind__Zombie
+    Entity_Kind__Zombie,
+    // Entity_Kind__Unknown is used as an array size
+    // specifier, or if an Entity_Kind enum doesn't
+    // match any defined enum.
+    Entity_Kind__Unknown
 };
 
 typedef struct Entity_t Entity;
@@ -315,6 +331,10 @@ enum Item_Kind {
 ///
 
 typedef struct Sprite_Wrapper_t Sprite_Wrapper;
+typedef struct Sprite_Allocation_Specification_t 
+               Sprite_Allocation_Specification;
+typedef struct Texture_Allocation_Specification_t
+               Texture_Allocation_Specification;
 
 ///
 /// SECTION_scene
