@@ -53,6 +53,15 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 /// SECTION_rendering
 ///
 
+PLATFORM_Graphics_Window 
+*PLATFORM_get_p_graphics_window_with__graphics_window_kind(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        enum Graphics_Window_Kind the_kind_of__graphics_window,
+        Identifier__u32 identifier_of__graphics_window);
+
+PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
+
 ///
 /// Opens the specified UI. Depending on the backend this
 /// might close all other UI's.

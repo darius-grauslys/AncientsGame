@@ -170,9 +170,17 @@ typedef struct NDS_Sprite_Manager_t {
 typedef NDS_Background NDS_Backgrounds[
     NDS_QUANTITY_OF__BACKGROUND_IN__2D_ENGINE];
 
+typedef struct PLATFORM_Graphics_Window_t {
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    OamState *p_oam_state;
+} PLATFORM_Graphics_Window;
+
 typedef struct PLATFORM_Gfx_Context_t {
     NDS_Backgrounds backgrounds__main;
     NDS_Backgrounds backgrounds__sub;
+
+    PLATFORM_Graphics_Window graphics_window__main;
+    PLATFORM_Graphics_Window graphics_window__sub;
 
     //TODO: is this needed? is it used by anything?
     NDS_Gfx_Context__Chunk_Record chunk_records

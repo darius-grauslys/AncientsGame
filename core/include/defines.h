@@ -253,16 +253,6 @@ typedef struct Collision_Manager__t {
 /// SECTION_rendering
 ///
 
-enum Sprite_Animation_Kind {
-    Sprite_Animation_Kind__None,
-    Sprite_Animation_Kind__Idle,
-    Sprite_Animation_Kind__Humanoid__Walk,
-    Sprite_Animation_Kind__Humanoid__Use,
-    Sprite_Animation_Kind__Humanoid__Hurt,
-    Sprite_Animation_Kind__Humanoid__Die,
-    Sprite_Animation_Kind__Player__Sleep,
-};
-
 typedef uint8_t Sprite_Frame_Index__u8;
 
 typedef Sprite_Frame_Index__u8 (*f_Sprite_Frame_Lookup) (
@@ -499,6 +489,7 @@ typedef uint32_t Texture_Flags;
     (flags & TEXTURE_FLAG__LENGTH__MASK)
 
 typedef struct Texture_Allocation_Specification_t {
+    PLATFORM_Graphics_Window *p_PLATFORM_graphics_window;
     Texture_Flags texture_flags;
 } Texture_Allocation_Specification;
 
@@ -509,13 +500,6 @@ typedef uint8_t Sprite_Flags;
 #define SPRITE_FLAG__BIT_SHIFT_IS_ALLOCATED 0
 #define SPRITE_FLAG__BIT_IS_ALLOCATED BIT(\
         SPRITE_FLAG__BIT_SHIFT_IS_ALLOCATED)
-
-enum Sprite_Allocation_Kind {
-    Sprite_Allocation_Kind__None,
-    Sprite_Allocation_Kind__Entity,
-    Sprite_Allocation_Kind__Item,
-    Sprite_Allocation_Kind__Particle
-};
 
 typedef struct Sprite_Allocation_Specification_t {
     enum Sprite_Allocation_Kind the_kind_of__sprite_allocation;
@@ -590,19 +574,6 @@ typedef struct Inventory_t {
 
 typedef struct Entity_t Entity;
 
-enum Entity_Armor_Kind {
-    Entity_Armor_Kind__None,
-    Entity_Armor_Kind__Cloth,
-    Entity_Armor_Kind__Iron,
-    Entity_Armor_Kind__Gold,
-};
-
-enum Entity_Armor_Modification_Kind {
-    Entity_Armor_Modification_Kind__None,
-    Entity_Armor_Modification_Kind__Diamond,
-    Entity_Armor_Modification_Kind__Amethyst
-};
-
 typedef struct Armor_Properties_t {
     enum Entity_Armor_Kind                  
         the_kind_of_armor__this_armor_is;
@@ -676,58 +647,9 @@ typedef uint8_t Humanoid_Flags;
 
 #define ENTITY_RESOURCE_SYMBOL_MAX_QUANTITY_OF 32
 
-#define RESOURCE_SYMBOL__EMPTY 0
-#define RESOURCE_SYMBOL__LOCKED ((uint8_t)-1)
-
 typedef uint8_t Resource_Symbol__u8;
 typedef uint8_t Heart__u8;
-enum Heart_Kind {
-    Heart_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
-    Heart_Kind__Half_Normal,
-    Heart_Kind__Full_Normal,
-    Heart_Kind__Half_Poison,
-    Heart_Kind__Full_Poison,
-    Heart_Kind__Normal_Poison,
-    Heart_Kind__Half_Immortal,
-    Heart_Kind__Full_Immortal,
-    Heart_Kind__Immortal_Normal,
-    Heart_Kind__Immortal_Poison,
-    Heart_Kind__Locked = RESOURCE_SYMBOL__LOCKED
-};
-
-enum Health_State {
-    Health_State__None = 0,
-    Health_State__Normal,
-    Health_State__Hurt,
-    Health_State__Injured,
-    Health_State__Dying,
-    Health_State__Dead,     // health == 0
-    Health_State__Unknown = (uint8_t)(-1)
-};
-
 typedef uint8_t Energy_Orb__u8;
-enum Energy_Orb_Kind {
-    Energy_Orb_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
-    Energy_Orb_Kind__Half_Normal,
-    Energy_Orb_Kind__Full_Normal,
-    Energy_Orb_Kind__Half_Poison,
-    Energy_Orb_Kind__Full_Poison,
-    Energy_Orb_Kind__Normal_Poison,
-    Energy_Orb_Kind__Half_Demonic,
-    Energy_Orb_Kind__Full_Demonic,
-    Energy_Orb_Kind__Demonic_Normal,
-    Energy_Orb_Kind__Demonic_Poison,
-    Energy_Orb_Kind__Locked = RESOURCE_SYMBOL__LOCKED
-};
-
-enum Energy_State {
-    Energy_State__None = 0,
-    Energy_State__Normal,
-    Energy_State__Tired,
-    Energy_State__Exhausted,
-    Energy_State__Exerted,      // energy == 0
-    Energy_State__Unknown = (uint8_t)(-1)
-};
 
 typedef struct Resource_Reserve_t {
     Resource_Symbol__u8 resource_symbols
@@ -817,45 +739,9 @@ typedef int8_t Homeostasis__i8;
 #define HOMEOSTASIS__LICHLING 120
 #define HOMEOSTASIS__LICH 128
 
-enum Homeostasis_State {
-    Homeostasis_State__None = 0,
-    Homeostasis_State__Extreme_Burning,
-    Homeostasis_State__Burning,
-    Homeostasis_State__Hot,
-    Homeostasis_State__Neutral,
-    Homeostasis_State__Cold,
-    Homeostasis_State__Freezing,
-    Homeostasis_State__Extreme_Freezing,
-    Homeostasis_State__Divine_Providence,
-    Homeostasis_State__Soulfull,
-    Homeostasis_State__Fleeting_Soul,
-    Homeostasis_State__Soulless,
-    Homeostasis_State__Lichling,
-    Homeostasis_State__Lich,
-    Homeostasis_State__Unknown = -1
-};
-
-enum Homeostasis_Update_Kind {
-    Homeostasis_Update_Kind__None = 0,
-    Homeostasis_Update_Kind__Increasing,
-    Homeostasis_Update_Kind__Decreasing,
-    Homeostasis_Update_Kind__Unknown = -1
-};
-
 typedef uint8_t Sustenance__u8;
 #define SUSTENANCE_MAX_QUANTITY_OF (uint8_t)MASK(8)
 #define SUSTENANCE_MIN_QUANTITY_OF 0
-
-enum Sustenance_Kind {
-    Sustenance_Kind__None = 0,
-    Sustenance_Kind__Primary = 1,
-    Sustenance_Kind__Secondary = 2,
-    Sustenance_Kind__Hunger = 1,    // primary
-    Sustenance_Kind__Thirst = 2,    // secondary
-    Sustenance_Kind__Sanity = 1,    // primary
-    Sustenance_Kind__Blood = 2,     // secondary
-    Sustenance_Kind__Unknown = (uint8_t)(-1)
-};
 
 #define SUSTENANCE__BLOATED 240
 #define SUSTENANCE__FULL 234
@@ -866,20 +752,6 @@ enum Sustenance_Kind {
 #define SUSTENANCE__NEEDING 84
 #define SUSTENANCE__DESPERATE 56
 #define SUSTENANCE__DYING 28
-
-enum Sustenance_State {
-    Sustenance_State__None = 0,
-    Sustenance_State__Bloated,
-    Sustenance_State__Full,
-    Sustenance_State__Satisifed,
-    Sustenance_State__Well,
-    Sustenance_State__Indifferent,
-    Sustenance_State__Wanting,
-    Sustenance_State__Needing,
-    Sustenance_State__Desperate,
-    Sustenance_State__Dying,
-    Sustenance_State__Unknown = (uint8_t)(-1)
-};
 
 typedef struct Entity_t {
     Sprite_Wrapper                      sprite_wrapper;
@@ -1031,13 +903,6 @@ typedef struct Scene_Manager_t {
 /// SECTION_ui
 ///
 
-enum UI_Element_Kind {
-    UI_Element_Kind__None,
-    UI_Element_Kind__Button,
-    UI_Element_Kind__Draggable,
-    UI_Element_Kind__Slider,
-};
-
 typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;
 
@@ -1149,6 +1014,9 @@ typedef struct UI_Manager_t {
     UI_Element ui_elements[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
     UI_Element *ui_element_ptrs[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
     UI_Element *p_ui_element__focused;
+
+    PLATFORM_Graphics_Window 
+        *p_PLATFORM_graphics_window_for__ui_manager;
 } UI_Manager;
 
 ///
@@ -1241,24 +1109,6 @@ typedef Vector__3u8 Local_Tile_Vector__3u8;
 
 typedef struct Tile_t Tile;
 
-enum Tile_Kind {
-    Tile_Kind__Void,
-    Tile_Kind__Oak_Wood,
-    Tile_Kind__Stone_Brick,
-    Tile_Kind__Gold,
-    Tile_Kind__Iron,
-    Tile_Kind__Diamond,
-    Tile_Kind__Amethyst,
-    Tile_Kind__Sandstone,
-    Tile_Kind__Stone,
-    Tile_Kind__Dirt,
-    Tile_Kind__Sand,
-    Tile_Kind__Grass,
-    Tile_Kind__Leaves,
-    Tile_Kind__Snow,
-    Tile_Kind__Water,
-};
-
 #define TILE_COVER_SHEET_INDEX__WALL (1 + TILE_SHEET_TILE_WIDTH * 14)
 
 #define TILE_COVER_SHEET_INDEX__PLANT (25 + TILE_SHEET_TILE_WIDTH * 21)
@@ -1270,30 +1120,6 @@ enum Tile_Kind {
 #define TILE_COVER__BIT_SHIFT_IS_WALL 6
 #define TILE_COVER__BIT_IS_WALL \
     BIT(TILE_COVER__BIT_SHIFT_IS_WALL)
-
-enum Tile_Cover_Kind {
-    Tile_Cover_Kind__None               = 0b00000,
-    Tile_Cover_Kind__Plant,
-    Tile_Cover_Kind__Flower_Red,
-    Tile_Cover_Kind__Flower_Blue,
-    Tile_Cover_Kind__Flower_Yellow,
-    Tile_Cover_Kind__Cactus,
-    Tile_Cover_Kind__Oak_Trunk,
-    Tile_Cover_Kind__Oak_Root,
-    Tile_Cover_Kind__Oak_Branch,
-    Tile_Cover_Kind__Oak_Leaves,
-    Tile_Cover_Kind__Leaf_Clutter,
-    Tile_Cover_Kind__Wall__Oak_Wood     = 0b1000001,
-    Tile_Cover_Kind__Wall__Stone_Brick  = 0b1000010,
-    Tile_Cover_Kind__Wall__Gold         = 0b1000011,
-    Tile_Cover_Kind__Wall__Iron         = 0b1000100,
-    Tile_Cover_Kind__Wall__Diamond      = 0b1000101,
-    Tile_Cover_Kind__Wall__Amethyst     = 0b1000110,
-    Tile_Cover_Kind__Wall__Sandstone    = 0b1000111,
-    Tile_Cover_Kind__Wall__Stone        = 0b1001000,
-    Tile_Cover_Kind__Wall__Dirt         = 0b1001001,
-    Tile_Cover_Kind__Wall__Sand         = 0b1001010,
-};
 
 typedef uint8_t Tile_Flags__u8;
 
@@ -1394,6 +1220,7 @@ typedef struct World_t {
     World_Parameters world_parameters;
 
     Camera camera;
+    PLATFORM_Graphics_Window *p_PLATFORM_grpahics_window_for__world;
 } World;
 
 ///
@@ -1418,42 +1245,6 @@ typedef struct Game_t {
     Timer__u32 tick__timer_u32;
     bool is_world__initialized;
 } Game;
-
-///
-/// These specify the various kinds of Game_Actions
-/// which can exist. m_Game_Action_Handler will
-/// manage the game actions. 
-///
-/// See m_Game_Action_Handler for how you should
-/// implement such a handler.
-///
-/// Rules:
-/// You can add new kinds, but it must be of value greater
-/// than zero, and less than the value of Game_Action_Kind__Unknown.
-///
-enum Game_Action_Kind {
-    Game_Action_Kind__None = 0,
-    Game_Action_Kind__Entity__Allocate,
-    Game_Action_Kind__Entity__Flags__Set,
-    Game_Action_Kind__Entity__Hitbox__Apply_Velocity,
-    Game_Action_Kind__Entity__Hitbox__Set_Velocity,
-    Game_Action_Kind__Entity__Health__Apply_Damage,
-    Game_Action_Kind__Entity__Health__Apply_Healing,
-    Game_Action_Kind__Entity__Health__Set,
-    Game_Action_Kind__Entity__Energy__Apply_Damage,
-    Game_Action_Kind__Entity__Energy__Apply_Healing,
-    Game_Action_Kind__Entity__Energy__Set,
-    Game_Action_Kind__Entity__Sustenance__Increase,
-    Game_Action_Kind__Entity__Sustenance__Decrease,
-    Game_Action_Kind__Entity__Homeostasis__Increase,
-    Game_Action_Kind__Entity__Homeostasis__Decrease,
-    Game_Action_Kind__Entity__Place_Tile,
-    Game_Action_Kind__Entity__Item_Stack__Pick_Up,
-    Game_Action_Kind__Entity__Item_Stack__Drop,
-    Game_Action_Kind__Entity__Item_Stack__Consume,
-    Game_Action_Kind__Entity__Item_Stack__Equip,
-    Game_Action_Kind__Unknown
-};
 
 typedef uint8_t Game_Action_Flags;
 

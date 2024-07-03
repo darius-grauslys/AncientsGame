@@ -50,18 +50,11 @@ bool is_entity__humanoid(enum Entity_Kind kind_of_entity) {
 }
 
 void initialize_entity(
-        Game *p_game,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
         Quantity__u32 width,
-        Quantity__u32 height,
-        m_Entity_Dispose_Handler m_entity_dispose_handler,
-        m_Entity_Body_Handler m_entity_body_handler,
-        m_Entity_AI_Handler m_entity_ai_handler,
-        m_Entity_Collision_Handler m_entity_collision_handler,
-        m_Entity_Tile_Collision_Handler m_entity_tile_collision_handler,
-        m_Entity_Animation_Handler m_entity_animation_handler) {
+        Quantity__u32 height) {
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 
@@ -72,30 +65,13 @@ void initialize_entity(
             position__3i32F4);
 
     p_entity->m_entity_dispose_handler = 
-        (m_entity_dispose_handler)
-        ? m_entity_dispose_handler
-        : m_entity_dispose_handler__default
-        ;
-    p_entity->m_entity_body_handler = 
-        m_entity_body_handler;
-    p_entity->m_entity_ai_handler = 
-        m_entity_ai_handler;
-    p_entity->m_entity_collision_handler = 
-        m_entity_collision_handler;
-    p_entity->m_entity_tile_collision_handler =
-        m_entity_tile_collision_handler;
-    p_entity->m_entity_animation_handler =
-        m_entity_animation_handler;
+        m_entity_dispose_handler__default;
 
     p_entity->entity_flags = ENTITY_FLAG__NONE;
 
     set_entity__enabled(p_entity);
     set_entity__is_updating_position(p_entity);
     set_entity__is_updating_graphics(p_entity);
-
-    initialize_sprite_wrapper_for__entity_with__sprite_allocation(
-            get_p_PLATFORM_gfx_context_from__game(p_game),
-            p_entity);
 }
 
 void set_entity__armor(Entity *p_entity,

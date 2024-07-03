@@ -53,4 +53,17 @@ Texture_Flags get_texture_flags__rendering_method(
         & TEXTURE_FLAG__RENDER_METHOD__MASK;
 }
 
+static inline
+void initialize_texture_allocation_specification(
+        Texture_Allocation_Specification
+            *p_texture_allocation_specification,
+        Texture_Flags texture_flags,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
+    p_texture_allocation_specification
+        ->texture_flags = texture_flags;
+    p_texture_allocation_specification
+        ->p_PLATFORM_graphics_window = 
+        p_PLATFORM_graphics_window;
+}
+
 #endif

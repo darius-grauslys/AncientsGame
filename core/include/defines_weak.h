@@ -45,6 +45,10 @@ typedef int32_t Signed_Index__i32;
 typedef int16_t Signed_Index__i16;
 typedef int8_t  Signed_Index__i8;
 
+typedef uint32_t Identifier__u32;
+typedef uint16_t Identifier__u16;
+typedef uint8_t Identifier__u8;
+
 typedef int32_t     Fractional_with__4bit__i32;
 
 typedef struct Vector__3i32F4_t Vector__3i32F4;
@@ -67,6 +71,119 @@ typedef struct Timer__u8_t Timer__u8;
 ///
 /// SECTION_entity
 ///
+
+enum Entity_Armor_Kind {
+    Entity_Armor_Kind__None,
+    Entity_Armor_Kind__Cloth,
+    Entity_Armor_Kind__Iron,
+    Entity_Armor_Kind__Gold,
+};
+
+enum Entity_Armor_Modification_Kind {
+    Entity_Armor_Modification_Kind__None,
+    Entity_Armor_Modification_Kind__Diamond,
+    Entity_Armor_Modification_Kind__Amethyst
+};
+
+#define RESOURCE_SYMBOL__EMPTY 0
+#define RESOURCE_SYMBOL__LOCKED ((uint8_t)-1)
+
+enum Heart_Kind {
+    Heart_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
+    Heart_Kind__Half_Normal,
+    Heart_Kind__Full_Normal,
+    Heart_Kind__Half_Poison,
+    Heart_Kind__Full_Poison,
+    Heart_Kind__Normal_Poison,
+    Heart_Kind__Half_Immortal,
+    Heart_Kind__Full_Immortal,
+    Heart_Kind__Immortal_Normal,
+    Heart_Kind__Immortal_Poison,
+    Heart_Kind__Locked = RESOURCE_SYMBOL__LOCKED
+};
+
+enum Health_State {
+    Health_State__None = 0,
+    Health_State__Normal,
+    Health_State__Hurt,
+    Health_State__Injured,
+    Health_State__Dying,
+    Health_State__Dead,     // health == 0
+    Health_State__Unknown = (uint8_t)(-1)
+};
+
+enum Energy_Orb_Kind {
+    Energy_Orb_Kind__Empty = RESOURCE_SYMBOL__EMPTY,
+    Energy_Orb_Kind__Half_Normal,
+    Energy_Orb_Kind__Full_Normal,
+    Energy_Orb_Kind__Half_Poison,
+    Energy_Orb_Kind__Full_Poison,
+    Energy_Orb_Kind__Normal_Poison,
+    Energy_Orb_Kind__Half_Demonic,
+    Energy_Orb_Kind__Full_Demonic,
+    Energy_Orb_Kind__Demonic_Normal,
+    Energy_Orb_Kind__Demonic_Poison,
+    Energy_Orb_Kind__Locked = RESOURCE_SYMBOL__LOCKED
+};
+
+enum Energy_State {
+    Energy_State__None = 0,
+    Energy_State__Normal,
+    Energy_State__Tired,
+    Energy_State__Exhausted,
+    Energy_State__Exerted,      // energy == 0
+    Energy_State__Unknown = (uint8_t)(-1)
+};
+
+enum Homeostasis_State {
+    Homeostasis_State__None = 0,
+    Homeostasis_State__Extreme_Burning,
+    Homeostasis_State__Burning,
+    Homeostasis_State__Hot,
+    Homeostasis_State__Neutral,
+    Homeostasis_State__Cold,
+    Homeostasis_State__Freezing,
+    Homeostasis_State__Extreme_Freezing,
+    Homeostasis_State__Divine_Providence,
+    Homeostasis_State__Soulfull,
+    Homeostasis_State__Fleeting_Soul,
+    Homeostasis_State__Soulless,
+    Homeostasis_State__Lichling,
+    Homeostasis_State__Lich,
+    Homeostasis_State__Unknown = -1
+};
+
+enum Homeostasis_Update_Kind {
+    Homeostasis_Update_Kind__None = 0,
+    Homeostasis_Update_Kind__Increasing,
+    Homeostasis_Update_Kind__Decreasing,
+    Homeostasis_Update_Kind__Unknown = -1
+};
+
+enum Sustenance_Kind {
+    Sustenance_Kind__None = 0,
+    Sustenance_Kind__Primary = 1,
+    Sustenance_Kind__Secondary = 2,
+    Sustenance_Kind__Hunger = 1,    // primary
+    Sustenance_Kind__Thirst = 2,    // secondary
+    Sustenance_Kind__Sanity = 1,    // primary
+    Sustenance_Kind__Blood = 2,     // secondary
+    Sustenance_Kind__Unknown = (uint8_t)(-1)
+};
+
+enum Sustenance_State {
+    Sustenance_State__None = 0,
+    Sustenance_State__Bloated,
+    Sustenance_State__Full,
+    Sustenance_State__Satisifed,
+    Sustenance_State__Well,
+    Sustenance_State__Indifferent,
+    Sustenance_State__Wanting,
+    Sustenance_State__Needing,
+    Sustenance_State__Desperate,
+    Sustenance_State__Dying,
+    Sustenance_State__Unknown = (uint8_t)(-1)
+};
 
 ///
 /// All possible entity kinds.
@@ -330,6 +447,41 @@ enum Item_Kind {
 /// SECTION_rendering
 ///
 
+///
+/// This is an abstraction for a "sub-context" for graphics.
+///
+typedef struct PLATFORM_Graphics_Window_t PLATFORM_Graphics_Window;
+
+///
+/// Types of graphical window abstractions
+/// supported. There can possibly be multiple
+/// Graphics_Window_Kind__UI windows open on a
+/// given platform, while there is likely only
+/// one Graphics_Window_Kind__World window context.
+///
+enum Graphics_Window_Kind {
+    Graphics_Window_Kind__None,
+    Graphics_Window_Kind__World,
+    Graphics_Window_Kind__UI
+};
+
+enum Sprite_Animation_Kind {
+    Sprite_Animation_Kind__None,
+    Sprite_Animation_Kind__Idle,
+    Sprite_Animation_Kind__Humanoid__Walk,
+    Sprite_Animation_Kind__Humanoid__Use,
+    Sprite_Animation_Kind__Humanoid__Hurt,
+    Sprite_Animation_Kind__Humanoid__Die,
+    Sprite_Animation_Kind__Player__Sleep,
+};
+
+enum Sprite_Allocation_Kind {
+    Sprite_Allocation_Kind__None,
+    Sprite_Allocation_Kind__Entity,
+    Sprite_Allocation_Kind__Item,
+    Sprite_Allocation_Kind__Particle
+};
+
 typedef struct Sprite_Wrapper_t Sprite_Wrapper;
 typedef struct Sprite_Allocation_Specification_t 
                Sprite_Allocation_Specification;
@@ -364,9 +516,94 @@ enum UI_Window_Kind {
     UI_Window_Kind__Settings
 };
 
+enum UI_Element_Kind {
+    UI_Element_Kind__None,
+    UI_Element_Kind__Button,
+    UI_Element_Kind__Draggable,
+    UI_Element_Kind__Slider,
+};
+
 ///
 /// SECTION_world
 ///
+
+enum Tile_Kind {
+    Tile_Kind__Void,
+    Tile_Kind__Oak_Wood,
+    Tile_Kind__Stone_Brick,
+    Tile_Kind__Gold,
+    Tile_Kind__Iron,
+    Tile_Kind__Diamond,
+    Tile_Kind__Amethyst,
+    Tile_Kind__Sandstone,
+    Tile_Kind__Stone,
+    Tile_Kind__Dirt,
+    Tile_Kind__Sand,
+    Tile_Kind__Grass,
+    Tile_Kind__Leaves,
+    Tile_Kind__Snow,
+    Tile_Kind__Water,
+};
+
+enum Tile_Cover_Kind {
+    Tile_Cover_Kind__None               = 0b00000,
+    Tile_Cover_Kind__Plant,
+    Tile_Cover_Kind__Flower_Red,
+    Tile_Cover_Kind__Flower_Blue,
+    Tile_Cover_Kind__Flower_Yellow,
+    Tile_Cover_Kind__Cactus,
+    Tile_Cover_Kind__Oak_Trunk,
+    Tile_Cover_Kind__Oak_Root,
+    Tile_Cover_Kind__Oak_Branch,
+    Tile_Cover_Kind__Oak_Leaves,
+    Tile_Cover_Kind__Leaf_Clutter,
+    Tile_Cover_Kind__Wall__Oak_Wood     = 0b1000001,
+    Tile_Cover_Kind__Wall__Stone_Brick  = 0b1000010,
+    Tile_Cover_Kind__Wall__Gold         = 0b1000011,
+    Tile_Cover_Kind__Wall__Iron         = 0b1000100,
+    Tile_Cover_Kind__Wall__Diamond      = 0b1000101,
+    Tile_Cover_Kind__Wall__Amethyst     = 0b1000110,
+    Tile_Cover_Kind__Wall__Sandstone    = 0b1000111,
+    Tile_Cover_Kind__Wall__Stone        = 0b1001000,
+    Tile_Cover_Kind__Wall__Dirt         = 0b1001001,
+    Tile_Cover_Kind__Wall__Sand         = 0b1001010,
+};
+
+///
+/// These specify the various kinds of Game_Actions
+/// which can exist. m_Game_Action_Handler will
+/// manage the game actions. 
+///
+/// See m_Game_Action_Handler for how you should
+/// implement such a handler.
+///
+/// Extending:
+/// You can add new kinds, but it must be of value greater
+/// than zero, and less than the value of Game_Action_Kind__Unknown.
+///
+enum Game_Action_Kind {
+    Game_Action_Kind__None = 0,
+    Game_Action_Kind__Entity__Allocate,
+    Game_Action_Kind__Entity__Flags__Set,
+    Game_Action_Kind__Entity__Hitbox__Apply_Velocity,
+    Game_Action_Kind__Entity__Hitbox__Set_Velocity,
+    Game_Action_Kind__Entity__Health__Apply_Damage,
+    Game_Action_Kind__Entity__Health__Apply_Healing,
+    Game_Action_Kind__Entity__Health__Set,
+    Game_Action_Kind__Entity__Energy__Apply_Damage,
+    Game_Action_Kind__Entity__Energy__Apply_Healing,
+    Game_Action_Kind__Entity__Energy__Set,
+    Game_Action_Kind__Entity__Sustenance__Increase,
+    Game_Action_Kind__Entity__Sustenance__Decrease,
+    Game_Action_Kind__Entity__Homeostasis__Increase,
+    Game_Action_Kind__Entity__Homeostasis__Decrease,
+    Game_Action_Kind__Entity__Place_Tile,
+    Game_Action_Kind__Entity__Item_Stack__Pick_Up,
+    Game_Action_Kind__Entity__Item_Stack__Drop,
+    Game_Action_Kind__Entity__Item_Stack__Consume,
+    Game_Action_Kind__Entity__Item_Stack__Equip,
+    Game_Action_Kind__Unknown
+};
 
 typedef struct Camera_t Camera;
 typedef struct Chunk_Manager_t Chunk_Manager;

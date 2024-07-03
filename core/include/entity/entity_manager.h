@@ -1,6 +1,7 @@
 #ifndef ENTITY_MANAGER_H
 #define ENTITY_MANAGER_H
 
+#include "defines_weak.h"
 #include <defines.h>
 #include <debug/debug.h>
 
@@ -11,10 +12,11 @@ void initialize_entity_manager(Entity_Manager *p_entity_manager);
 /// Return nullptr (0) if fails to get new entity.
 ///
 Entity *allocate_entity_in__entity_manager(
-        Game *p_game,
         Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
-        Vector__3i32F4 position);
+        Vector__3i32F4 position,
+        PLATFORM_Graphics_Window
+            *p_PLATFORM_graphics_window);
 
 ///
 /// Release entity from the entity_manager object pool.

@@ -1,6 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "defines_weak.h"
 #include <defines.h>
 
 static inline
@@ -33,7 +34,10 @@ static Entity inline
     return p_world->entity_manager.p_local_player;
 }
 
-void initialize_world(World *p_world);
+void initialize_world(
+        World *p_world,
+        PLATFORM_Graphics_Window 
+            *p_PLATFORM_grpahics_window_for__world);
 void manage_world(Game *p_game);
 void manage_world__entities(Game *p_game);
 
@@ -42,7 +46,7 @@ void add_entity_to__world(
         Entity *p_entity);
 
 Entity *allocate_entity_into__world(
-        Game *p_game,
+        World *p_world,
         enum Entity_Kind the_kind_of_entity,
         Vector__3i32F4 position__3i32F4);
 

@@ -6,6 +6,20 @@
 #include "defines_weak.h"
 #include "nds_defines.h"
 
+static inline
+PLATFORM_Graphics_Window *NDS_get_graphics_window__main_from__gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context
+        ->graphics_window__main;
+}
+
+static inline
+PLATFORM_Graphics_Window *NDS_get_graphics_window__sub_from__gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context
+        ->graphics_window__sub;
+}
+
 void NDS_initialize_gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 

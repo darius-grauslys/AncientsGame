@@ -52,6 +52,17 @@ void NDS_initialize_gfx_context(
             p_PLATFORM_gfx_context
             ->backgrounds__sub);
 
+    p_PLATFORM_gfx_context
+        ->graphics_window__main = (PLATFORM_Graphics_Window){
+            p_PLATFORM_gfx_context,
+            &oamMain
+        };
+    p_PLATFORM_gfx_context
+        ->graphics_window__sub = (PLATFORM_Graphics_Window){
+            p_PLATFORM_gfx_context,
+            &oamSub
+        };
+
     initialize_sprite_gfx_allocator__lookup_table_for__entities(
             p_PLATFORM_gfx_context
             ->F_sprite_gfx_allocator__lookup_table_for__entities);
@@ -64,6 +75,25 @@ void NDS_initialize_gfx_context(
     p_PLATFORM_gfx_context
         ->f_sprite_gfx_allocator__handler_for__items =
         f_sprite_gfx_allocator__handler__default;
+}
+
+PLATFORM_Graphics_Window 
+*PLATFORM_get_p_graphics_window_with__graphics_window_kind(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        enum Graphics_Window_Kind the_kind_of__graphics_window,
+        Identifier__u32 identifier_of__graphics_window) {
+    switch (the_kind_of__graphics_window) {
+        default:
+            return &p_PLATFORM_gfx_context->graphics_window__main;
+        case Graphics_Window_Kind__UI:
+            return &p_PLATFORM_gfx_context->graphics_window__sub;
+    }
+}
+
+PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
+    return p_PLATFORM_graphics_window
+        ->p_PLATFORM_gfx_context;
 }
 
 void NDS_set_video_modes_to__MODE_0_2D(void) {

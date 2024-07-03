@@ -20,10 +20,11 @@ void initialize_entity_manager(Entity_Manager *entity_manager) {
 }
 
 Entity *allocate_entity_in__entity_manager(
-        Game *p_game,
         Entity_Manager* entity_manager,
         enum Entity_Kind kind_of_entity,
-        Vector__3i32F4 position__3i32F4) {
+        Vector__3i32F4 position__3i32F4,
+        PLATFORM_Graphics_Window 
+            *p_PLATFORM_graphics_window) {
     // TODO: do better than bellow:
     switch (kind_of_entity) {
         default:
@@ -69,19 +70,19 @@ Entity *allocate_entity_in__entity_manager(
     switch (kind_of_entity) {
         case Entity_Kind__Player:
             initialize_entity_as__player(
-                    p_game,
+                    p_PLATFORM_graphics_window,
                     p_entity,
                     position__3i32F4);
             break;
         case Entity_Kind__Skeleton:
             initialize_entity_as__skeleton(
-                    p_game,
+                    p_PLATFORM_graphics_window,
                     p_entity,
                     position__3i32F4);
             break;
         case Entity_Kind__Zombie:
             initialize_entity_as__zombie(
-                    p_game,
+                    p_PLATFORM_graphics_window,
                     p_entity,
                     position__3i32F4);
             break;

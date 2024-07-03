@@ -103,15 +103,9 @@ void PLATFORM_allocate_texture(
             break;
     }
 
-    switch (get_texture_flags__rendering_method(texture_flags)) {
-        default:
-        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN:
-            p_texture->oam = &oamMain;
-            break;
-        case NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_SUB:
-            p_texture->oam = &oamSub;
-            break;
-    }
+    p_texture->oam =
+        p_texture_allocation_specification
+        ->p_PLATFORM_graphics_window->p_oam_state;
 
 	p_texture->gfx = 
         oamAllocateGfx(

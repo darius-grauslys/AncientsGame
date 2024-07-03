@@ -1,5 +1,6 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
+#include "defines_weak.h"
 #include "world/camera.h"
 #include <world/world.h>
 #include <entity/entity_manager.h>
@@ -14,7 +15,11 @@
 #include <debug/debug.h>
 #include <vectors.h>
 
-void initialize_world(World *p_world) {
+void initialize_world(World *p_world,
+        PLATFORM_Graphics_Window 
+            *p_PLATFORM_graphics_window_for__world) {
+    p_world->p_PLATFORM_grpahics_window_for__world =
+        p_PLATFORM_graphics_window_for__world;
     initialize_weight_map();
     // initialize_world_parameters(
     //         &p_world->world_parameters, 
@@ -158,17 +163,17 @@ void add_entity_to__world(
 }
 
 Entity *allocate_entity_into__world(
-        Game *p_game,
+        World *p_world,
         enum Entity_Kind the_kind_of_entity,
         Vector__3i32F4 position__3i32F4) {
     Entity *p_entity =
         allocate_entity_in__entity_manager(
-                p_game,
-                get_p_entity_manager_from__game(p_game),
+                get_p_entity_manager_from__world(p_world),
                 the_kind_of_entity,
-                position__3i32F4);
+                position__3i32F4,
+                p_world->p_PLATFORM_grpahics_window_for__world);
     add_entity_to__world(
-            get_p_world_from__game(p_game), 
+            p_world,
             p_entity);
     return p_entity;
 }
