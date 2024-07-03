@@ -123,6 +123,14 @@ void m_ui_element__dispose_handler__default(
         UI_Element *p_this_ui_element,
         Game *p_game);
 
+static inline
+bool is_ui_element_of__this_kind(
+        UI_Element *p_ui_element,
+        enum UI_Element_Kind the_kind_of_ui_element) {
+    return p_ui_element->the_kind_of_ui_element__this_is
+        == the_kind_of_ui_element;
+}
+
 static bool inline is_ui_element__allocated(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_ALLOCATED);
 }

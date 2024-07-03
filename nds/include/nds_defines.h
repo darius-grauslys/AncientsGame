@@ -14,6 +14,8 @@ typedef struct NDS_Background_t {
     // uint16_t *gfx_palette;
     Quantity__u32 background__scroll_x, background__scroll_y;
     Index__u32 priority;
+    Vector__3i32 starting_position__3i32;
+    Vector__3i32 spanning_scroll_lengths__3i32;
     Index__u8 map_base, tile_base;
 } NDS_Background;
 
@@ -122,11 +124,17 @@ typedef struct NDS_Background_Engine_Allocation_Context_t {
 #define NDS_BACKGROUND_SLOT__UI__SUB_BASE 1
 #define NDS_BACKGROUND_PRIORITY__UI__SUB_BASE 2
 
+#define NDS_BACKGROUND_STARTING_X_I32__UI__EQUIPMENT 0
+#define NDS_BACKGROUND_STARTING_Y_I32__UI__EQUIPMENT 0
+
 ///
 /// For UI that involves constantly changing text.
 ///
 #define NDS_BACKGROUND_SLOT__UI__LOG_UPPER 2
 #define NDS_BACKGROUND_PRIORITY__UI__LOG_UPPER 3
+
+#define NDS_BACKGROUND_STARTING_X_I32__UI__LOG_UPPER 0
+#define NDS_BACKGROUND_STARTING_Y_I32__UI__LOG_UPPER 0
 
 ///
 /// For UI that extends constantly changing text.
@@ -134,17 +142,27 @@ typedef struct NDS_Background_Engine_Allocation_Context_t {
 #define NDS_BACKGROUND_SLOT__UI__LOG_LOWER 3
 #define NDS_BACKGROUND_PRIORITY__UI__LOG_LOWER 3
 
+#define NDS_BACKGROUND_STARTING_X_I32__UI__LOG_LOWER 0
+#define NDS_BACKGROUND_STARTING_Y_I32__UI__LOG_LOWER 256
+
 ///
 /// For UI that requires scrolling.
 ///
 #define NDS_BACKGROUND_SLOT__UI__SCROLL 2
 #define NDS_BACKGROUND_PRIORITY__UI__SCROLL 3
 
+#define NDS_BACKGROUND_SPAN_Y_I32__UI__INVENTORY 176
+#define NDS_BACKGROUND_STARTING_X_I32__UI__INVENTORY_LEFT -44
+#define NDS_BACKGROUND_STARTING_Y_I32__UI__INVENTORY_LEFT -88
+
 ///
 /// For a separate UI background that also needs scrolling.
 ///
 #define NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY 3
 #define NDS_BACKGROUND_PRIORITY__UI__SCROLL_SECONDARY 3
+
+#define NDS_BACKGROUND_STARTING_X_I32__UI__INVENTORY_RIGHT 44
+#define NDS_BACKGROUND_STARTING_Y_I32__UI__INVENTORY_RIGHT -88
 
 ///
 /// The only background slot available for the typer background.

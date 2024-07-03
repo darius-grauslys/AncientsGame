@@ -991,13 +991,12 @@ typedef struct UI_Element_t {
             struct { // UI_Button
                 UI_Button_Flags__u8 ui_button_flags;
             };
-            // struct { // UI_Draggable
-            // };
+            struct { // UI_Draggable
+                PLATFORM_Sprite *p_PLATFORM_sprite_for__draggable;
+            };
             struct { // UI_Slider
-                UI_Element *p_slider_bar;
-                u16F4      slider__position__u16F4;
-                u16F4      slider__position_min__u16F4;
-                u16F4      slider__position_max__u16F4;
+                PLATFORM_Sprite *p_PLATFORM_sprite_for__slider;
+                u32      slider__distance__u32;
             };
         };
     };

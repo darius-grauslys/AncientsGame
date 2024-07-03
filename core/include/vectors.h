@@ -15,6 +15,14 @@ static Signed_Index__i32 inline i32F4_to__i32(i32F4 x) {
     return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
 }
 
+static i32F8 inline i32_to__i32F8(Signed_Index__i32 x) {
+    return x << FRACTIONAL_PERCISION_8__BIT_SIZE;
+}
+
+static Signed_Index__i32 inline i32F8_to__i32(i32F8 x) {
+    return x >> FRACTIONAL_PERCISION_8__BIT_SIZE;
+}
+
 static void inline initialize_3i32F4_vector(
         Vector__3i32F4 *vector) {
     vector->x__i32F4 =
