@@ -9,7 +9,11 @@
 #include <game.h>
 
 void initialize_ui_manager(
-        UI_Manager *p_ui_manager) {
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window 
+            *p_PLATFORM_graphics_window_for__ui_manager) {
+    p_ui_manager->p_PLATFORM_graphics_window_for__ui_manager =
+        p_PLATFORM_graphics_window_for__ui_manager;
     p_ui_manager->p_ui_element__focused = 0;
     for (Quantity__u8 ui_index=0;
             ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;

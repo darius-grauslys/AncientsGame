@@ -10,7 +10,9 @@
 #include "game_action/game_action.h"
 #include "input/input.h"
 #include "nds/arm9/background.h"
+#include "platform.h"
 #include "platform_defines.h"
+#include "rendering/sprite.h"
 #include "scene/scene_manager.h"
 #include "ui/game/nds_ui_background__game__hud.h"
 #include "ui/nds_ui.h"
@@ -70,7 +72,7 @@ void m_load_scene_as__game_handler(
 
     NDS_initialize_gfx_for__world(p_gfx_context);
     initialize_world(
-            &p_game->world,
+            get_p_world_from__game(p_game),
             NDS_get_graphics_window__main_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
 

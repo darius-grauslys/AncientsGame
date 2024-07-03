@@ -136,6 +136,20 @@ void NDS_initialize_sprite_for__item(
         ->f_sprite_gfx_allocator__handler_for__items(
                 p_PLATFORM_sprite,
                 p_sprite_allocation_specification);
+
+#ifndef NDEBUG
+    if (!is_texture_flags__allocated(
+                p_PLATFORM_sprite
+                ->sprite_texture
+                .flags)) {
+        debug_error("Failed to allocate sprite gfx for: %d",
+                p_sprite_allocation_specification
+                ->the_kind_of__item_this__sprite_is);
+        debug_warning("Did you forget to load a sprite_gfx_allocator__lookup_table?");
+    }
+#endif
+
+    PLATFORM_update_sprite(p_PLATFORM_sprite);
 }
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite(
@@ -157,7 +171,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                     ->the_kind_of__sprite_allocation);
             return 0;
         case Sprite_Allocation_Kind__Item:
-            NDS_initialize_sprite_for__entity(
+            NDS_initialize_sprite_for__item(
                     p_PLATFORM_gfx_context, 
                     p_PLATFORM_sprite,
                     p_sprite_allocation_specification);

@@ -5,7 +5,9 @@
 #include <defines.h>
 
 void initialize_ui_manager(
-        UI_Manager *p_ui_manager);
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window
+            *p_PLATFORM_graphics_window_for__ui_manager);
 
 void poll_ui_manager__update(
         UI_Manager *p_ui_manager,

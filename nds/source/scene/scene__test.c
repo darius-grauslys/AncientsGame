@@ -5,6 +5,7 @@
 #include "input/input.h"
 #include "platform.h"
 #include "platform_defines.h"
+#include "rendering/sprite.h"
 #include "ui/nds_ui.h"
 #include "ui/nds_ui__slider.h"
 #include "ui/ui_manager.h"
@@ -20,6 +21,8 @@
 enum Item_Kind item_kind = Item_Kind__Stick;
 enum UI_Window_Kind ui_window_kind = UI_Window_Kind__None;
 
+PLATFORM_Sprite *p_item_sprite;
+
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
@@ -28,9 +31,26 @@ void m_load_scene_as__test_handler(
     NDS_load_sprite_palletes__default_into__vram();
     NDS_initialize_debug__main();
 
-    PLATFORM_open_ui(
-            p_game,
-            UI_Window_Kind__Trade);
+    Sprite_Allocation_Specification
+        sprite_allocation_specification;
+
+    initialize_sprite_allocation_specification_for__item(
+            &sprite_allocation_specification, 
+            TEXTURE_FLAGS__NONE, 
+            get_p_ui_manager_from__game(p_game)
+                ->p_PLATFORM_graphics_window_for__ui_manager, 
+            Item_Kind__Stick);
+
+    p_item_sprite = PLATFORM_allocate_sprite(
+            get_p_PLATFORM_gfx_context_from__game(p_game), 
+            &sprite_allocation_specification);
+
+    PLATFORM_set_sprite__position(
+            p_item_sprite, 40, 40);
+
+    // PLATFORM_open_ui(
+    //         p_game,
+    //         UI_Window_Kind__Trade);
 }
 
 void m_enter_scene_handler_as__test(
