@@ -22,6 +22,7 @@ void initialize_ui_manager(
             &p_ui_manager->ui_elements[ui_index];
         initialize_ui_element(
                 p_ui_element, 
+                0, 0, 0,
                 UI_Element_Kind__None, 
                 UI_FLAGS__NONE,
                 1, 
@@ -101,6 +102,8 @@ void poll_ui_manager_for__focused_ui_element_with__cursor_dragging(
         get_highest_priority_ui_element_thats__under_the_cursor(
                 p_ui_manager, 
                 p_game);
+    if (!p_ui_element__focused)
+        return;
     if (!does_ui_element_have__dragged_handler(p_ui_element__focused))
         return;
     p_ui_manager->p_ui_element__focused =
@@ -274,6 +277,7 @@ UI_Element *allocate_ui_element_from__ui_manager(
             p_ui_manager->quantity_of__ui_elements__quantity_u8++;
             initialize_ui_element(
                     p_ui_element, 
+                    0, 0, 0,
                     UI_Element_Kind__None,
                     UI_FLAGS__NONE,
                     1,
@@ -326,6 +330,22 @@ UI_Element *allocate_many_ui_elements_from__ui_manager_in__succession(
         p_current = p_current->p_next;
     }
     return p_head;
+}
+
+UI_Element **get_p_ui_element_ptr_from__ptr_table_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_ui_element) {
+    for (Index__u8 index_of__ptr = 0;
+            index_of__ptr < UI_ELEMENT_MAXIMUM_QUANTITY_OF;
+            index_of__ptr++) {
+        UI_Element **p_ui_element_ptr =
+            &p_ui_manager->ui_element_ptrs[index_of__ptr];
+        if (!*p_ui_element_ptr)
+            return 0;
+        if (*p_ui_element_ptr == p_ui_element)
+            return p_ui_element_ptr;
+    }
+    return 0;
 }
 
 UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
@@ -395,6 +415,14 @@ void release__ui_element_from__ui_manager(
         *p_ui_element_ptr__for_swap = 0;
         break;
     }
+    initialize_ui_element(
+            p_ui_element, 
+            0, 0, 0,
+            UI_Element_Kind__None, 
+            UI_FLAGS__NONE,
+            1, 
+            1,
+            get_vector__3i32(0,0,0));
     p_ui_manager->quantity_of__ui_elements__quantity_u8--;
 }
 
@@ -415,43 +443,57 @@ void release_all__ui_elements_from__ui_manager(
                     *p_ui_element_ptr,
                     p_game);
         }
-        
-        set_ui_element_as__deallocated(*p_ui_element_ptr);
+
         *p_ui_element_ptr = 0;
     }
     p_ui_manager
         ->quantity_of__ui_elements__quantity_u8 = 0;
 }
 
+Quantity__u8 get_ui_element__priority(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_ui_element) {
+    UI_Element **p_ui_element_ptr =
+        get_p_ui_element_ptr_from__ptr_table_in__ui_manager(
+                p_ui_manager, 
+                p_ui_element);
+    return p_ui_element_ptr
+        - p_ui_manager->ui_element_ptrs;
+}
+
 void swap_priority_of__ui_elenents_within__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element__this,
         UI_Element *p_ui_element__other) {
-    UI_Element **p_ui_element_ptr__this = 0;
-    UI_Element **p_ui_element_ptr__other = 0;
-    for (Quantity__u8 ui_index=0;
-            ui_index<UI_ELEMENT_MAXIMUM_QUANTITY_OF;
-            ui_index++) {
-        UI_Element **p_ui_element_ptr =
-            &p_ui_manager->ui_element_ptrs[ui_index];
-        if (*p_ui_element_ptr == p_ui_element__this) {
-            // Check if p_ui_element_this already has higher priority.
-            if (!p_ui_element_ptr__other)
-                return;
-            p_ui_element_ptr__this =
-                p_ui_element_ptr;
-            continue;
-        }
-        if (*p_ui_element_ptr == p_ui_element__other) {
-            if (!p_ui_element_ptr__this) {
-                *p_ui_element_ptr__other =
-                    p_ui_element__this;
-                *p_ui_element_ptr__this =
-                    p_ui_element__other;
-                return;
-            }
-            p_ui_element_ptr__other =
-                p_ui_element_ptr;
-        }
-    }
+    UI_Element **p_ui_element_ptr__this = 
+        get_p_ui_element_ptr_from__ptr_table_in__ui_manager(
+                p_ui_manager, p_ui_element__this);
+    UI_Element **p_ui_element_ptr__other =
+        get_p_ui_element_ptr_from__ptr_table_in__ui_manager(
+                p_ui_manager, p_ui_element__other);
+
+    *p_ui_element_ptr__this =
+        p_ui_element__other;
+    *p_ui_element_ptr__other =
+        p_ui_element__this;
+}
+
+void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_ui_element__higher_priority,
+        UI_Element *p_ui_element__lower_priortiy) {
+    Quantity__u8 priority_of__former =
+        get_ui_element__priority(
+                p_ui_manager, 
+                p_ui_element__higher_priority);
+    Quantity__u8 priority_of__later =
+        get_ui_element__priority(
+                p_ui_manager, 
+                p_ui_element__lower_priortiy);
+    if (priority_of__former <= priority_of__later)
+        return;
+    swap_priority_of__ui_elenents_within__ui_manager(
+            p_ui_manager, 
+            p_ui_element__higher_priority, 
+            p_ui_element__lower_priortiy);
 }

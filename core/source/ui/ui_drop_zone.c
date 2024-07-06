@@ -11,6 +11,9 @@ void initialize_ui_element_as__drop_zone(
         m_UI_Recieve_Drop m_ui_recieve_drop_handler) {
     initialize_ui_element(
             p_ui_drop_zone, 
+            p_ui_drop_zone->p_parent,
+            p_ui_drop_zone->p_child,
+            p_ui_drop_zone->p_next,
             UI_Element_Kind__Button, 
             p_ui_drop_zone->ui_flags,
             width__u8, 

@@ -11,24 +11,30 @@ void initialize_ui_element_as__draggable(
         m_UI_Dragged m_ui_dragged_handler) {
     initialize_ui_element(
             p_ui_draggable, 
+            p_ui_draggable->p_parent,
+            p_ui_draggable->p_child,
+            p_ui_draggable->p_next,
             UI_Element_Kind__Draggable, 
-            UI_FLAGS__BIT_IS_ENABLED, 
+            p_ui_draggable->ui_flags, 
             width__u8, 
             height__u8,
             position__3i32);
-    p_ui_draggable->m_ui_dragged_handler =
-        m_ui_dragged_handler;
+    set_ui_element__dragged_handler(
+            p_ui_draggable, 
+            m_ui_dragged_handler);
 }
 
 void m_ui_draggable__dragged_handler__default(
         UI_Element *p_this_draggable,
         Game *p_game) {
-    Vector__3i32F4 *p_position = 
-        &p_this_draggable->ui_bounding_box__aabb.position__3i32F4;
-    *p_position =
-        vector_3i32_to__vector_3i32F4(p_game->input.cursor__3i32);
-    p_position->x__i32F4 -= 
-        p_this_draggable->ui_bounding_box__aabb.width__quantity_u32 >> 1;
-    p_position->y__i32F4 -= 
+    Vector__3i32 position =
+        p_game->input.cursor__3i32;
+    position.x__i32 -= 
+      p_this_draggable->ui_bounding_box__aabb.width__quantity_u32 >> 1;
+    position.y__i32 -= 
         p_this_draggable->ui_bounding_box__aabb.height__quantity_u32 >> 1;
+
+    set_ui_element__position(
+            p_this_draggable, 
+            position);
 }

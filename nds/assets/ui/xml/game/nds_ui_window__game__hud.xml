@@ -15,13 +15,14 @@
         <background layer="0" path="./core/assets/ui/default/ui_map_hud.png"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
-        <ui_func_signature for="child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
+        <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
         <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
-        <ui_func_signature for="button" c_signatures="set_ui_element__clicked_handler,set_ui_button_as__toggleable_or__non_toggleable,set_ui_button_as__toggled_or__not_toggled,set_ui_element__hitbox"/>
-        <ui_func_signature for="slider" c_signatures="set_ui_element__dragged_handler,set_ui_element__snapped_state,set_ui_element__hitbox"/>
-        <ui_func_signature for="draggable" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
-        <ui_func_signature for="drop_zone" c_signatures="set_ui_element__dragged_handler,set_ui_element__hitbox"/>
+        <ui_func_signature for="code"/>
+        <ui_func_signature for="button" c_signatures="initialize_ui_element_as__button"/>
+        <ui_func_signature for="slider" c_signatures="initialize_ui_element_as__slider"/>
+        <ui_func_signature for="draggable" c_signatures="initialize_ui_element_as__draggable"/>
+        <ui_func_signature for="drop_zone" c_signatures="initialize_ui_element_as__drop_zone"/>
     </config>
     <ui>
         <group x="56" y="52">

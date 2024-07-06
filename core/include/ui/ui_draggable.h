@@ -1,6 +1,7 @@
 #ifndef UI_DRAGGABLE_H
 #define UI_DRAGGABLE_H
 #include <defines.h>
+#include <ui/ui_element.h>
 
 // TODO: move to private header
 void initialize_ui_element_as__draggable(

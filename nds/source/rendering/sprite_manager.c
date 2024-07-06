@@ -103,9 +103,6 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
     switch (p_sprite_allocation_specification
             ->the_kind_of__sprite_allocation) {
         default:
-#warning impl particles:
-            //TODO: impl particles
-        case Sprite_Allocation_Kind__Particle:
             debug_abort("PLATFORM_allocate_sprite, unsupported sprite allocation kind: %d", 
                     p_sprite_allocation_specification
                     ->the_kind_of__sprite_allocation);
@@ -139,6 +136,17 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                 ->f_sprite_gfx_allocator__handler_for__ui(
                         p_PLATFORM_sprite,
                         p_sprite_allocation_specification);
+            break;
+        case Sprite_Allocation_Kind__Particle:
+            //TODO: bounds check the enum
+            enum Particle_Kind the_kind_of__particle =
+                p_sprite_allocation_specification
+                ->the_kind_of__particle_this__sprite_is;
+            p_PLATFORM_gfx_context
+                ->F_sprite_gfx_allocator__lookup_table_for__particles[
+                    the_kind_of__particle]
+                (p_PLATFORM_sprite, 
+                 p_sprite_allocation_specification);
             break;
         case Sprite_Allocation_Kind__Entity:
             //TODO: bounds check the enum

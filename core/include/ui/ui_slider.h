@@ -23,22 +23,6 @@ void m_ui_slider__dispose_handler__default(
         Game *p_game);
 
 static inline
-void set_ui_slider__PLATFORM_sprite(
-        UI_Element *p_ui_slider,
-        PLATFORM_Sprite *p_PLATFORM_sprite) {
-#ifndef NDEBUG
-    if (!is_ui_element_of__this_kind(
-                p_ui_slider,
-                UI_Element_Kind__Slider)) {
-        debug_error("set_ui_slider__PLATFORM_sprite, p_ui_slider is not of UI_Element_Kind__Slider.");
-        return;
-    }
-#endif
-    p_ui_slider->p_PLATFORM_sprite_for__slider =
-        p_PLATFORM_sprite;
-}
-
-static inline
 i32F8 get_percentage_i32F8_from__ui_slider(
         UI_Element *p_ui_slider) {
 #ifndef NDEBUG
@@ -98,7 +82,7 @@ void allocate_sprite_for__ui_slider(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
         UI_Element *p_ui_slider) {
-    set_ui_slider__PLATFORM_sprite(
+    set_ui_element__PLATFORM_sprite(
             p_ui_slider, 
             allocate_sprite_for__ui(
                 p_PLATFORM_gfx_context, 
@@ -107,9 +91,9 @@ void allocate_sprite_for__ui_slider(
                 ? UI_Sprite_Kind__16x16__Slider__Horizontal
                 : UI_Sprite_Kind__16x16__Slider__Vertical));
     PLATFORM_set_sprite__position(
-            p_ui_slider->p_PLATFORM_sprite_for__slider,
-            get_x_i32_from__p_ui_element(p_ui_slider) - 8,
-            get_y_i32_from__p_ui_element(p_ui_slider) + 8);
+            p_ui_slider->p_PLATFORM_sprite,
+            get_x_i32_from__p_ui_element(p_ui_slider),
+            get_y_i32_from__p_ui_element(p_ui_slider));
 }
 
 #endif

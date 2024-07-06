@@ -52,7 +52,8 @@ void PLATFORM_set_sprite__position(
     oamSetXY(
             p_PLATFORM_sprite->sprite_texture.oam,
             p_PLATFORM_sprite->sprite_texture.oam_index,
-            x, y);
+            x - (p_PLATFORM_sprite->sprite_texture.width >> 1), 
+            y - (p_PLATFORM_sprite->sprite_texture.height >> 1));
 }
 
 Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(

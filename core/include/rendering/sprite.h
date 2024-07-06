@@ -111,7 +111,7 @@ void initialize_sprite_allocation_specification_for__particle(
         ->the_kind_of__sprite_allocation =
         Sprite_Allocation_Kind__Particle;
     p_sprite_allocation_specification
-        ->the_kind_of__particle =
+        ->the_kind_of__particle_this__sprite_is =
         the_kind_of__particle;
 
     initialize_texture_allocation_specification(

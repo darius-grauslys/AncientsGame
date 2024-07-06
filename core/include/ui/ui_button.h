@@ -8,7 +8,9 @@ void initialize_ui_element_as__button(
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,
         Vector__3i32 position__3i32,
-        m_UI_Clicked m_ui_clicked_handler);
+        m_UI_Clicked m_ui_clicked_handler,
+        bool is_toggleable_or__non_toggleable,
+        bool is_toggled_or__not_toggled);
 
 void m_ui_button__clicked_handler__default(
         UI_Element *p_this_button,

@@ -4,6 +4,7 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"
 #include "numerics.h"
+#include "platform.h"
 #include "vectors.h"
 #include <defines.h>
 
@@ -45,19 +46,6 @@ void link_ui_element_to__this_ui_element(
         p_predecessor->p_next = 0;
     p_predecessor->p_next =
         p_successor;
-}
-
-///
-/// Establish a form of ownership via p_parent.
-///
-static inline
-void set_ui_element_as__the_parent_of__this_ui_element(
-        UI_Element *p_parent,
-        UI_Element *p_child) {
-    if (p_parent == p_child)
-        p_parent->p_parent = 0;
-    p_child->p_parent =
-        p_parent;
 }
 
 static inline
@@ -113,6 +101,9 @@ UI_Element *itterate_to_child_of__ui_element(
 
 void initialize_ui_element(
         UI_Element *p_ui_element,
+        UI_Element *p_ui_element__parent,
+        UI_Element *p_ui_element__child,
+        UI_Element *p_ui_element__next,
         enum UI_Element_Kind kind_of_ui_element,
         UI_Flags__u8 ui_flags,
         Quantity__u8 width__u8,
@@ -122,6 +113,10 @@ void initialize_ui_element(
 void m_ui_element__dispose_handler__default(
         UI_Element *p_this_ui_element,
         Game *p_game);
+
+void offset_ui_elements_in__succession(
+        UI_Element *p_ui_element__succession_collection,
+        Vector__3i32 offset__3i32);
 
 static inline
 bool is_ui_element_of__this_kind(
@@ -279,13 +274,13 @@ static void inline set_ui_element__held_handler(
         m_ui_held_handler;
 }
 
-static void inline set_ui_element__position(
+void set_ui_element__position(
         UI_Element *p_ui_element,
-        Vector__3i32 position__3i32) {
-    p_ui_element->ui_bounding_box__aabb
-        .position__3i32F4 = 
-            vector_3i32_to__vector_3i32F4(position__3i32);
-}
+        Vector__3i32 position__3i32);
+
+void offset_ui_element__position(
+        UI_Element *p_ui_element,
+        Vector__3i32 offset__3i32);
 
 static void inline set_ui_element__size(
         UI_Element *p_ui_element,
@@ -303,6 +298,18 @@ static void inline set_ui_element__hitbox(
         Vector__3i32 position__3i32) {
     set_ui_element__position(p_ui_element, position__3i32);
     set_ui_element__size(p_ui_element, width, height);
+}
+
+static inline
+void set_ui_element__PLATFORM_sprite(
+        UI_Element *p_ui_element,
+        PLATFORM_Sprite *p_PLATFORM_sprite) {
+    p_ui_element->p_PLATFORM_sprite =
+        p_PLATFORM_sprite;
+    PLATFORM_set_sprite__position(
+            p_PLATFORM_sprite, 
+            get_x_i32_from__p_ui_element(p_ui_element), 
+            get_y_i32_from__p_ui_element(p_ui_element));
 }
 
 static bool inline does_ui_element_have__dispose_handler(

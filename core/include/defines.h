@@ -512,7 +512,7 @@ typedef struct Sprite_Allocation_Specification_t {
             enum Item_Kind the_kind_of__item_this__sprite_is;
         };
         struct { // Sprite_Allocation_Kind__Particle
-            enum Particle_Kind the_kind_of__particle;
+            enum Particle_Kind the_kind_of__particle_this__sprite_is;
         };
         struct { // Sprite_Allocation_Kind__UI
             enum UI_Sprite_Kind the_kind_of__ui__this_sprite_is;
@@ -993,16 +993,15 @@ typedef struct UI_Element_t {
     UI_Element *p_parent, *p_child, *p_next;
     Identifier__u16 ui_identifier;
     UI_Flags__u8 ui_flags;
+    PLATFORM_Sprite *p_PLATFORM_sprite;
     union {
         union {
             struct { // UI_Button
                 UI_Button_Flags__u8 ui_button_flags;
             };
             struct { // UI_Draggable
-                PLATFORM_Sprite *p_PLATFORM_sprite_for__draggable;
             };
             struct { // UI_Slider
-                PLATFORM_Sprite *p_PLATFORM_sprite_for__slider;
                 u32      slider__distance__u32;
             };
         };

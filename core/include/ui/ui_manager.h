@@ -2,6 +2,7 @@
 #define UI_MANAGER_H
 
 #include "defines_weak.h"
+#include "ui/ui_element.h"
 #include <defines.h>
 
 void initialize_ui_manager(
@@ -30,7 +31,11 @@ UI_Element *get_p_ui_element_by__index_from__ui_manager(
     if (index_of__ui_element >=
             UI_ELEMENT_MAXIMUM_QUANTITY_OF) {
         debug_abort("get_p_ui_element_by__index_from__ui_manager, index of out bounds: %d", index_of__ui_element);
-        return &p_ui_manager->ui_elements[0];
+        return 0;
+    }
+    if (!is_ui_element__allocated(&p_ui_manager->ui_elements[index_of__ui_element])) {
+        debug_abort("get_p_ui_element_by__index_from__ui_manager, index not allocated: %d", index_of__ui_element);
+        return 0;
     }
 #endif
     return &p_ui_manager->ui_elements[index_of__ui_element];
@@ -48,13 +53,42 @@ UI_Element *allocate_ui_element_from__ui_manager_in__succession(
     return p_predecessor->p_next;
 }
 
+void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_ui_element__higher_priority,
+        UI_Element *p_ui_element__lower_priortiy);
+
+///
+/// Establish a form of ownership via p_parent.
+///
+static inline
+void set_ui_element_as__the_parent_of__this_ui_element(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_parent,
+        UI_Element *p_child) {
+    if (p_parent == p_child)
+        p_parent->p_parent = 0;
+    p_child->p_parent =
+        p_parent;
+    p_parent->p_child =
+        p_child;
+    set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
+            p_ui_manager, 
+            p_child, 
+            p_parent);
+}
+
 static inline
 UI_Element *allocate_ui_element_from__ui_manager_as__child(
         UI_Manager *p_ui_manager,
         UI_Element *p_parent) {
-    p_parent->p_child =
+    UI_Element *p_child =
         allocate_ui_element_from__ui_manager(p_ui_manager);
-    return p_parent->p_child;
+    set_ui_element_as__the_parent_of__this_ui_element(
+            p_ui_manager,
+            p_parent, 
+            p_child);
+    return p_child;
 }
 
 void allocate_many_ui_elements_from__ui_manager(
@@ -92,5 +126,10 @@ void swap_priority_of__ui_elenents_within__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element__this,
         UI_Element *p_ui_element__other);
+
+void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_ui_element__higher_priority,
+        UI_Element *p_ui_element__lower_priortiy);
 
 #endif
