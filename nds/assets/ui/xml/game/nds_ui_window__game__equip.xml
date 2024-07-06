@@ -8,6 +8,7 @@
             <header path="ui/ui_drop_zone.h"/>
             <header path="ui/ui_draggable.h"/>
             <header path="ui/ui_slider.h"/>
+            <header path="ui/nds_ui__slider.h"/>
             <header path="ui/ui_manager.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>
@@ -34,7 +35,7 @@
     <ui offset_of__ui_index="3">
         <group>
             <allocate_ui name="p_slider">
-                <slider x="196" y="132" width="16" height="80"/>
+                <slider x="196" y="132" width="16" height="80" m_UI_Dragged="m_NDS_ui_slider__dragged_handler_for__backgrounds"/>
             </allocate_ui>
             <allocate_ui name="p_button_filter__usable">
                 <button x="228" y="104" width="16" height="16" color="64,196,64"/>

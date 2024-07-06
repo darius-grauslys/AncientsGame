@@ -1,6 +1,7 @@
 #ifndef UI_SLIDER_H
 #define UI_SLIDER_H
 #include "defines_weak.h"
+#include "rendering/sprite.h"
 #include "ui/ui_element.h"
 #include "vectors.h"
 #include <defines.h>
@@ -15,6 +16,10 @@ void initialize_ui_element_as__slider(
 
 void m_ui_slider__dragged_handler__default(
         UI_Element *p_this_draggable,
+        Game *p_game);
+
+void m_ui_slider__dispose_handler__default(
+        UI_Element *p_this_slider,
         Game *p_game);
 
 static inline
@@ -86,6 +91,25 @@ void set_ui_slider_at__this_distance_u32(
 #endif
     p_ui_slider->slider__distance__u32 =
         slider__distance__u32;
+}
+
+static inline
+void allocate_sprite_for__ui_slider(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        UI_Element *p_ui_slider) {
+    set_ui_slider__PLATFORM_sprite(
+            p_ui_slider, 
+            allocate_sprite_for__ui(
+                p_PLATFORM_gfx_context, 
+                p_PLATFORM_graphics_window, 
+                (is_ui_element__snapped_x_or_y_axis(p_ui_slider))
+                ? UI_Sprite_Kind__16x16__Slider__Horizontal
+                : UI_Sprite_Kind__16x16__Slider__Vertical));
+    PLATFORM_set_sprite__position(
+            p_ui_slider->p_PLATFORM_sprite_for__slider,
+            get_x_i32_from__p_ui_element(p_ui_slider) - 8,
+            get_y_i32_from__p_ui_element(p_ui_slider) + 8);
 }
 
 #endif

@@ -3,30 +3,20 @@
 #include "nds/arm9/sprite.h"
 #include "platform_defines.h"
 #include <rendering/sprite.h>
+#include <rendering/nds_sprite.h>
 #include <rendering/texture.h>
 #include <entity/entity.h>
 #include <nds.h>
 #include <debug/debug.h>
 
 #include <assets/entities/entity_sprite__16x16/zombie.h>
-
 #include <assets/entities/entity_sprite__8x8/items.h>
+
 #include <stdint.h>
 #include <nds_defines.h>
 
 /// no-op
 void PLATFORM_render_sprite(Sprite_Wrapper *sprite_wrapper) { }
-
-void NDS_set_sprite_graphics_to__item_kind(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        enum Item_Kind the_kind_of__item) {
-    while (DMA_CR(p_PLATFORM_sprite->sprite_texture.dma_channel) & DMA_BUSY);
-    dmaCopy((u8*)(itemsTiles)
-            + (SPRITE_FRAME__8x8__OFFSET
-            * (Index__u32)the_kind_of__item), 
-            p_PLATFORM_sprite->sprite_texture.gfx, 
-            SPRITE_FRAME__8x8__OFFSET);
-}
 
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite) {

@@ -9,6 +9,8 @@ void NDS_update_texture_for__oam(
         Index__u8 palette,
         SpriteColorFormat color_format_for__sprite);
 
+
+
 static inline
 Texture_Flags *NDS_get_p_texture_flags_from__PLATFORM_texture(
         PLATFORM_Texture *p_PLATFORM_texture) {

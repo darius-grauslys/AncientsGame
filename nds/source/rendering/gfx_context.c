@@ -27,6 +27,8 @@
 #include <assets/entities/entity_sprite__16x16/skeleton.h>
 #include <assets/entities/entity_sprite__16x16/zombie.h>
 
+PLATFORM_Gfx_Context _NDS_gfx_context;
+
 static inline
 void NDS_initialize_backgrounds(
         NDS_Backgrounds a_NDS_backgrounds) {

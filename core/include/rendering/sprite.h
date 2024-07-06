@@ -80,17 +80,39 @@ void initialize_sprite_allocation_specification_for__item(
 }
 
 static inline
+void initialize_sprite_allocation_specification_for__ui(
+        Sprite_Allocation_Specification 
+            *p_sprite_allocation_specification, 
+        Texture_Flags texture_flags,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        enum UI_Sprite_Kind the_kind_of__ui_sprite) {
+    p_sprite_allocation_specification
+        ->the_kind_of__sprite_allocation =
+        Sprite_Allocation_Kind__UI;
+    p_sprite_allocation_specification
+        ->the_kind_of__ui__this_sprite_is =
+        the_kind_of__ui_sprite;
+
+    initialize_texture_allocation_specification(
+            &p_sprite_allocation_specification
+                ->texture_allocation_specification, 
+            texture_flags, 
+            p_PLATFORM_graphics_window);
+}
+
+static inline
 void initialize_sprite_allocation_specification_for__particle(
         Sprite_Allocation_Specification 
             *p_sprite_allocation_specification, 
         Texture_Flags texture_flags,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
-        enum Entity_Kind the_kind_of__entity) {
-#warning TODO: impl for particles
-    //TODO: impl for particles
+        enum Particle_Kind the_kind_of__particle) {
     p_sprite_allocation_specification
         ->the_kind_of__sprite_allocation =
-        Sprite_Allocation_Kind__None;
+        Sprite_Allocation_Kind__Particle;
+    p_sprite_allocation_specification
+        ->the_kind_of__particle =
+        the_kind_of__particle;
 
     initialize_texture_allocation_specification(
             &p_sprite_allocation_specification
@@ -155,6 +177,103 @@ void initialize_sprite_wrapper_for__entity_with__sprite_allocation(
             PLATFORM_get_p_gfx_context_from__graphics_window(
                 p_PLATFORM_graphics_window),
             &entity->sprite_wrapper, 
+            &sprite_allocation_specification);
+}
+
+static inline
+void initialize_sprite_allocation_specification_for__graphics_pointer(
+        Sprite_Allocation_Specification 
+            *p_sprite_allocation_specification, 
+        Texture_Flags texture_flags,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        void *p_gfx) {
+    p_sprite_allocation_specification
+        ->the_kind_of__sprite_allocation =
+        Sprite_Allocation_Kind__Graphics_Pointer;
+    p_sprite_allocation_specification
+        ->p_gfx = p_gfx;
+
+    initialize_texture_allocation_specification(
+            &p_sprite_allocation_specification
+                ->texture_allocation_specification, 
+            texture_flags, 
+            p_PLATFORM_graphics_window);
+}
+
+static inline
+PLATFORM_Sprite *allocate_sprite_for__entity(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        enum Entity_Kind the_kind_of__entity) {
+    Sprite_Allocation_Specification
+        sprite_allocation_specification;
+
+    initialize_sprite_allocation_specification_for__entity(
+            &sprite_allocation_specification, 
+            TEXTURE_FLAGS__NONE, 
+            p_PLATFORM_graphics_window, 
+            the_kind_of__entity);
+
+    return PLATFORM_allocate_sprite(
+            p_PLATFORM_gfx_context, 
+            &sprite_allocation_specification);
+}
+
+static inline
+PLATFORM_Sprite *allocate_sprite_for__item(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        enum Item_Kind the_kind_of__item) {
+    Sprite_Allocation_Specification
+        sprite_allocation_specification;
+
+    initialize_sprite_allocation_specification_for__item(
+            &sprite_allocation_specification, 
+            TEXTURE_FLAGS__NONE, 
+            p_PLATFORM_graphics_window, 
+            the_kind_of__item);
+
+    return PLATFORM_allocate_sprite(
+            p_PLATFORM_gfx_context, 
+            &sprite_allocation_specification);
+}
+
+static inline
+PLATFORM_Sprite *allocate_sprite_for__ui(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        enum UI_Sprite_Kind the_kind_of__ui_sprite) {
+    Sprite_Allocation_Specification
+        sprite_allocation_specification;
+
+    initialize_sprite_allocation_specification_for__ui(
+            &sprite_allocation_specification, 
+            TEXTURE_FLAGS__NONE, 
+            p_PLATFORM_graphics_window, 
+            the_kind_of__ui_sprite);
+
+    return PLATFORM_allocate_sprite(
+            p_PLATFORM_gfx_context, 
+            &sprite_allocation_specification);
+}
+
+static inline
+PLATFORM_Sprite *allocate_sprite_for__graphics_ptr(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        Texture_Flags texture_flags,
+        void *p_gfx) {
+    Sprite_Allocation_Specification
+        sprite_allocation_specification;
+
+    initialize_sprite_allocation_specification_for__graphics_pointer(
+            &sprite_allocation_specification, 
+            texture_flags, 
+            p_PLATFORM_graphics_window, 
+            p_gfx);
+
+    return PLATFORM_allocate_sprite(
+            p_PLATFORM_gfx_context, 
             &sprite_allocation_specification);
 }
 

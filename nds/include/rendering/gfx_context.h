@@ -33,6 +33,15 @@ void NDS_register_sprite_gfx_allocator_for__items(
 }
 
 static inline
+void NDS_register_sprite_gfx_allocator_for__ui(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        f_Sprite_Gfx_Allocator f_sprite_gfx_allocator__handler) {
+    p_PLATFORM_gfx_context
+        ->f_sprite_gfx_allocator__handler_for__ui = 
+            f_sprite_gfx_allocator__handler;
+}
+
+static inline
 void NDS_register_sprite_gfx_allocator_for__entity(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         enum Entity_Kind the_kind_of__entity,

@@ -335,7 +335,7 @@ void NDS_set_background_for__ui_window(
                     p_background_allocation_specification
                         ->background_slot];
 
-        if (UI_Window_Kind__None
+        if (NDS_UI_Background_Allocation_Kind__None
                 == p_background_allocation_specification
                 ->the_kind_of__background_allocation) {
             continue;

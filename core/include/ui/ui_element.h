@@ -244,6 +244,13 @@ static void inline set_ui_element_as__disabled(
         ~UI_FLAGS__BIT_IS_ENABLED;
 }
 
+static void inline set_ui_element__dispose_handler(
+        UI_Element *p_ui_element,
+        m_UI_Dispose m_ui_dispose_handler) {
+    p_ui_element->m_ui_dispose_handler =
+        m_ui_dispose_handler;
+}
+
 static void inline set_ui_element__clicked_handler(
         UI_Element *p_ui_element,
         m_UI_Clicked m_ui_clicked_handler) {

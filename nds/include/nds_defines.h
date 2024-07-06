@@ -206,12 +206,13 @@ typedef struct PLATFORM_Gfx_Context_t {
 
     NDS_Sprite_Manager nds_sprite_manager;
 
-    f_Sprite_Gfx_Allocator 
-        F_sprite_gfx_allocator__lookup_table_for__entities[6];
+    F_Sprite_Gfx_Allocator__Lookup_Table_For__Entities
+        F_sprite_gfx_allocator__lookup_table_for__entities;
     F_Sprite_Gfx_Allocator__Lookup_Table_For__Particles
         F_sprite_gfx_allocator__lookup_table_for__particles;
 
     f_Sprite_Gfx_Allocator f_sprite_gfx_allocator__handler_for__items;
+    f_Sprite_Gfx_Allocator f_sprite_gfx_allocator__handler_for__ui;
 } PLATFORM_Gfx_Context;
 
 #endif

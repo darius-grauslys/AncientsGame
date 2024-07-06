@@ -1,5 +1,5 @@
 
-$(OFILES_CORE):
+$(OFILES_CORE:.c=.o):
 	mkdir -p $(BUILD)/$$(dirname $@)
 	$(CC) $(CFLAGS) $(LIBS) $(INCLUDE) $(FLAGS) \
 		-o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c) 

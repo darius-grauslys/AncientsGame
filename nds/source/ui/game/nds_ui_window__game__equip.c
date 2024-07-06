@@ -1,3 +1,5 @@
+#include "defines_weak.h"
+#include "nds_defines.h"
 #include <ui/game/nds_ui_window__game__equip.h>
 #include <ui/game/nds_ui_window__game__hud.h>
 #include <ui/ui_element.h>
@@ -5,6 +7,7 @@
 #include <ui/ui_drop_zone.h>
 #include <ui/ui_draggable.h>
 #include <ui/ui_slider.h>
+#include <ui/nds_ui__slider.h>
 #include <ui/ui_manager.h>
 #include <vectors.h>
 #include <defines.h>
@@ -17,9 +20,24 @@ UI_Element *NDS_allocate_ui_for__nds_ui_window__game__equip(Game *p_game){
     UI_Manager *p_ui_manager = get_p_ui_manager_from__game(p_game);
     NDS_allocate_ui_for__nds_ui_window__game__hud(p_game);toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
-    set_ui_element__dragged_handler(p_slider, m_ui_slider__dragged_handler__default);
-    set_ui_element__snapped_state(p_slider, true);
-    set_ui_element__hitbox(p_slider, 16, 80, get_vector__3i32(196 + 0, 132 + 0, 0));
+    initialize_ui_element_as__slider(
+            p_slider,
+            16, 80,
+            get_vector__3i32(196 + 0, 132 + 0, 0),
+            m_NDS_ui_slider__dragged_handler_for__backgrounds,
+            true);
+    NDS_allocate_sprite_for__ui_slider(
+            get_p_PLATFORM_gfx_context_from__game(p_game),
+            p_slider);
+    p_slider->p_ui_data =
+        &get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->backgrounds__sub[2];
+
+    NDS_Background *p_NDS_background =
+        &get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->backgrounds__sub[2];
+    p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){0, 176, 0};
+    p_NDS_background->starting_position__3i32 = (Vector__3i32){0, 88, 0};
 
     UI_Element *p_button_filter__usable = allocate_ui_element_from__ui_manager(p_ui_manager);
     set_ui_element__clicked_handler(p_button_filter__usable, m_ui_button__clicked_handler__default);

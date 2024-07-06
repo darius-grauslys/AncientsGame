@@ -23,14 +23,27 @@ void initialize_ui_element_as__slider(
     set_ui_element__dragged_handler(
             p_ui_slider, 
             m_ui_dragged_handler);
+    set_ui_element__dispose_handler(
+            p_ui_slider, 
+            m_ui_slider__dispose_handler__default);
+
+    p_ui_slider->p_PLATFORM_sprite_for__slider = 0;
 
     if (is_snapped_x_or_y__axis) {
         set_ui_element_as__snapped_x_axis(p_ui_slider);
     } else {
         set_ui_element_as__snapped_y_axis(p_ui_slider);
     }
+}
 
-
+void m_ui_slider__dispose_handler__default(
+        UI_Element *p_this_slider,
+        Game *p_game) {
+    if (p_this_slider->p_PLATFORM_sprite_for__slider) {
+        PLATFORM_release_sprite(
+                get_p_PLATFORM_gfx_context_from__game(p_game), 
+                p_this_slider->p_PLATFORM_sprite_for__slider);
+    }
 }
 
 void m_ui_slider__dragged_handler__default(
@@ -72,15 +85,19 @@ void m_ui_slider__dragged_handler__default(
         ;
 
     *center = cursor_position;
+
+    clamp_p_vector_3i32_to__ui_element(
+            p_this_draggable, 
+            &sprite_position);
+
     p_this_draggable
         ->slider__distance__u32 = 
-        cursor_position
-        - *center 
+        *center 
         + offset;
 
     PLATFORM_set_sprite__position(
             p_this_draggable
             ->p_PLATFORM_sprite_for__draggable, 
-            sprite_position.x__i32, 
-            sprite_position.y__i32);
+            sprite_position.x__i32 - 8, 
+            sprite_position.y__i32 - 8);
 }

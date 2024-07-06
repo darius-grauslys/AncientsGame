@@ -208,6 +208,11 @@ enum Entity_Kind {
     Entity_Kind__Unknown
 };
 
+enum Particle_Kind {
+    Particle_Kind__None = 0,
+    Particle_Kind__Unknown
+};
+
 typedef struct Entity_t Entity;
 
 ///
@@ -438,7 +443,6 @@ enum Item_Kind {
     Item_Kind__Unknown
 };
 
-
 /// 
 /// SECTION_multiplayer
 ///
@@ -479,7 +483,9 @@ enum Sprite_Allocation_Kind {
     Sprite_Allocation_Kind__None,
     Sprite_Allocation_Kind__Entity,
     Sprite_Allocation_Kind__Item,
-    Sprite_Allocation_Kind__Particle
+    Sprite_Allocation_Kind__UI,
+    Sprite_Allocation_Kind__Particle,
+    Sprite_Allocation_Kind__Graphics_Pointer
 };
 
 typedef struct Sprite_Wrapper_t Sprite_Wrapper;
@@ -498,6 +504,80 @@ typedef struct Scene_Manager_t Scene_Manager;
 ///
 /// SECTION_ui
 ///
+
+enum UI_Sprite_Kind {
+    UI_Sprite_Kind__None = 0,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close_Below__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near_Below__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far_Below__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close_Above__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near_Above__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far_Above__Hostile,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close_Below__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near_Below__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far_Below__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close_Above__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near_Above__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far_Above__Friendly,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close_Below__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near_Below__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far_Below__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Close_Above__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Near_Above__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Far_Above__Neutral,
+    UI_Sprite_Kind__8x8__Nav__Indicator__North,
+    UI_Sprite_Kind__8x8__Nav__Indicator__East,
+    UI_Sprite_Kind__8x8__Nav__Indicator__South,
+    UI_Sprite_Kind__8x8__Nav__Indicator__West,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Notch_Large,
+    UI_Sprite_Kind__8x8__Nav__Indicator__Notch_Small,
+    UI_Sprite_Kind__8x8,
+    UI_Sprite_Kind__16x16__Nav__Cap 
+        = UI_Sprite_Kind__8x8,
+    UI_Sprite_Kind__16x16__Slider__Horizontal,
+    UI_Sprite_Kind__16x16__Slider__Vertical,
+    UI_Sprite_Kind__16x16,
+    UI_Sprite_Kind__32x32__Item_Stack__Iron_Border__3_Digit 
+        = UI_Sprite_Kind__16x16,
+    UI_Sprite_Kind__32x32__Item_Stack__Iron_Border__2_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Iron_Border__1_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Iron_Border__0_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Diamond_Border__3_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Diamond_Border__2_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Diamond_Border__1_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Diamond_Border__0_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Gold_Border__3_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Gold_Border__2_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Gold_Border__1_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Gold_Border__0_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Amethyst_Border__3_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Amethyst_Border__2_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Amethyst_Border__1_Digit,
+    UI_Sprite_Kind__32x32__Item_Stack__Amethyst_Border__0_Digit,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Up__28px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Up__20px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Up__16px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Up__12px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Select__28px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Select__20px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Select__16px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Select__12px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Down__28px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Down__20px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Down__16px,
+    UI_Sprite_Kind__32x32__Keyboard_Button__Down__12px,
+    UI_Sprite_Kind__32x32,
+    UI_Sprite_Kind__Unknown = UI_Sprite_Kind__32x32
+};
 
 typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;

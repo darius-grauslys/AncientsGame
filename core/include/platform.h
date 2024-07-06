@@ -99,9 +99,9 @@ void PLATFORM_release_sprite(
 void PLATFORM_release_all__sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
-void PLATFORM_release_all__sprites_using__this_render_method(
+void PLATFORM_release_all__sprites_using__this_graphics_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Flags texture_flags_for__render_method);
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
 void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
 

@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "nds/arm9/sprite.h"
 #include <rendering/texture.h>
 #include <debug/debug.h>
 #include <nds.h>
@@ -134,6 +135,10 @@ void PLATFORM_allocate_texture(
    p_texture->flags |=
         TEXTURE_FLAG__IS_ALLOCATED
         ;
+    oamSetHidden(
+            p_texture->oam, 
+            p_texture->oam_index, 
+            false);
     return;
 _abort:
     debug_abort("Invalid sprite size.");
@@ -161,19 +166,15 @@ void PLATFORM_release_texture_with__p_PLATFORM_sprite(PLATFORM_Sprite *p_PLATFOR
 }
 
 void PLATFORM_release_texture(PLATFORM_Texture *texture) {
-    if (!CHECK_TEXTURE_FLAG__USE_OAM(texture->flags)) {
-        //TODO: impl non-oam texture deallocation.
-        debug_error("PLATFORM_release_texture, cannot deallocate non-oam atm.");
+    if (!texture->oam) {
+        debug_abort("PLATFORM_release_texture, texture not allocated.");
         return;
     }
-
-    OamState *oam;
-    if (CHECK_TEXTURE_FLAG__USE_OAM_MAIN_OR_SUB(texture->flags))
-        oam = &oamMain;
-    else
-        oam = &oamSub;
-
-    oamFreeGfx(oam, texture->gfx);
+    oamFreeGfx(texture->oam, texture->gfx);
+    oamSetHidden(
+            texture->oam, 
+            texture->oam_index, 
+            true);
 }
 
 uint32_t *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(PLATFORM_Texture *texture) {

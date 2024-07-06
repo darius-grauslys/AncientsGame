@@ -287,11 +287,11 @@ typedef f_Sprite_Gfx_Allocator
     F_Sprite_Gfx_Allocator__Lookup_Table_For__Entities[
     6];
 
-#warning need to impl for particle enum:
 typedef f_Sprite_Gfx_Allocator 
     F_Sprite_Gfx_Allocator__Lookup_Table_For__Particles[
-    Entity_Kind__Unknown];
+    Particle_Kind__Unknown];
 
+#define SPRITE_FRAME__32x32__OFFSET (32 * 32)
 #define SPRITE_FRAME__16x16__OFFSET (16 * 16)
 #define SPRITE_FRAME__8x8__OFFSET (8 * 8)
 
@@ -512,6 +512,13 @@ typedef struct Sprite_Allocation_Specification_t {
             enum Item_Kind the_kind_of__item_this__sprite_is;
         };
         struct { // Sprite_Allocation_Kind__Particle
+            enum Particle_Kind the_kind_of__particle;
+        };
+        struct { // Sprite_Allocation_Kind__UI
+            enum UI_Sprite_Kind the_kind_of__ui__this_sprite_is;
+        };
+        struct { // Sprite_Allocation_Kind__Graphics_Pointer
+            void *p_gfx;
         };
     };
 } Sprite_Allocation_Specification;

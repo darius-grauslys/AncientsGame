@@ -1,3 +1,4 @@
+#include "ui/nds_ui__slider.h"
 #include <ui/game/nds_ui_window__game__trade.h>
 #include <ui/game/nds_ui_window__game__hud.h>
 #include <ui/ui_element.h>
@@ -36,14 +37,44 @@ UI_Element *NDS_allocate_ui_for__nds_ui_window__game__trade(Game *p_game){
 
 
     UI_Element *p_slider_left = allocate_ui_element_from__ui_manager(p_ui_manager);
-    set_ui_element__dragged_handler(p_slider_left, m_ui_slider__dragged_handler__default);
-    set_ui_element__snapped_state(p_slider_left, true);
-    set_ui_element__hitbox(p_slider_left, 16, 80, get_vector__3i32(28 + 0, 132 + 0, 0));
+    initialize_ui_element_as__slider(
+            p_slider_left,
+            16, 80,
+            get_vector__3i32(28 + 0, 132 + 0, 0),
+            m_NDS_ui_slider__dragged_handler_for__backgrounds,
+            true);
+    NDS_allocate_sprite_for__ui_slider(
+            get_p_PLATFORM_gfx_context_from__game(p_game),
+            p_slider_left);
+    p_slider_left->p_ui_data =
+        &get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->backgrounds__sub[2];
+
+    NDS_Background *p_NDS_background =
+        &get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->backgrounds__sub[2];
+    p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){0, 176, 0};
+    p_NDS_background->starting_position__3i32 = (Vector__3i32){44, 88, 0};
 
     UI_Element *p_slider_right = allocate_ui_element_from__ui_manager(p_ui_manager);
-    set_ui_element__dragged_handler(p_slider_right, m_ui_slider__dragged_handler__default);
-    set_ui_element__snapped_state(p_slider_right, true);
-    set_ui_element__hitbox(p_slider_right, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0));
+    initialize_ui_element_as__slider(
+            p_slider_right,
+            16, 80,
+            get_vector__3i32(228 + 0, 132 + 0, 0),
+            m_NDS_ui_slider__dragged_handler_for__backgrounds,
+            true);
+    NDS_allocate_sprite_for__ui_slider(
+            get_p_PLATFORM_gfx_context_from__game(p_game),
+            p_slider_right);
+    p_slider_right->p_ui_data =
+        &get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->backgrounds__sub[3];
+
+    p_NDS_background =
+        &get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->backgrounds__sub[3];
+    p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){0, 176, 0};
+    p_NDS_background->starting_position__3i32 = (Vector__3i32){-44, 88, 0};
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {

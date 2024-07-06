@@ -49,6 +49,7 @@ if [ -z "$XML" ]; then
 fi
 
 python ./tools/ui_builder.py $XML $ARGS &
+exit 1
 VISUALIZER_PID=$!
 if [ -z "$(echo $ARGS | grep "is_visualizing false")" ]; then
     nvim $XML &

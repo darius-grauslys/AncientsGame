@@ -2,6 +2,7 @@
 #include "game.h"
 #include "rendering/handlers/nds_gfx_handler__player.h"
 #include "rendering/handlers/nds_gfx_handler__skeleton.h"
+#include "rendering/handlers/nds_gfx_handler__ui.h"
 #include "rendering/handlers/nds_gfx_handler__zombie.h"
 #include "rendering/handlers/nds_gfx_handler__item.h"
 #include "ui/ui_manager.h"
@@ -10,7 +11,7 @@
 #include <scene/nds_scene_manager.h>
 #include <rendering/gfx_context.h>
 
-PLATFORM_Gfx_Context _NDS_gfx_context;
+extern PLATFORM_Gfx_Context _NDS_gfx_context;
 
 int PLATFORM_main(Game *p_game) {
     NDS_initialize_gfx_context(
@@ -34,6 +35,10 @@ int PLATFORM_main(Game *p_game) {
     NDS_register_sprite_gfx_allocator_for__items(
             &_NDS_gfx_context,
             f_sprite_gfx_allocator__handler_for__items);
+
+    NDS_register_sprite_gfx_allocator_for__ui(
+            &_NDS_gfx_context,
+            f_sprite_gfx_allocator__handler_for__ui);
 
     initialize_ui_manager(
             get_p_ui_manager_from__game(p_game),
