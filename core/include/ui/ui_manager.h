@@ -74,8 +74,8 @@ void set_ui_element_as__the_parent_of__this_ui_element(
         p_child;
     set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
             p_ui_manager, 
-            p_child, 
-            p_parent);
+            p_parent, 
+            p_child);
 }
 
 static inline

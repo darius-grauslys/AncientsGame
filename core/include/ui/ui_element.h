@@ -260,11 +260,18 @@ static void inline set_ui_element__dragged_handler(
         m_ui_dragged_handler;
 }
 
+static void inline set_ui_element__dropped_handler(
+        UI_Element *p_ui_element,
+        m_UI_Dropped m_ui_dropped_handler) {
+    p_ui_element->m_ui_dropped_handler =
+        m_ui_dropped_handler;
+}
+
 static void inline set_ui_element__receive_drop_handler(
         UI_Element *p_ui_element,
-        m_UI_Dragged m_ui_recieve_drop_handler) {
-    p_ui_element->m_ui_recieve_drop_handler =
-        m_ui_recieve_drop_handler;
+        m_UI_Receive_Drop m_ui_receive_drop_handler) {
+    p_ui_element->m_ui_receive_drop_handler =
+        m_ui_receive_drop_handler;
 }
 
 static void inline set_ui_element__held_handler(
@@ -329,7 +336,12 @@ static bool inline does_ui_element_have__dragged_handler(
 
 static bool inline does_ui_element_have__dropped_handler(
         UI_Element *p_ui_element) {
-    return (bool)p_ui_element->m_ui_recieve_drop_handler;
+    return (bool)p_ui_element->m_ui_dropped_handler;
+}
+
+static bool inline does_ui_element_have__receive_drop_handler(
+        UI_Element *p_ui_element) {
+    return (bool)p_ui_element->m_ui_receive_drop_handler;
 }
 
 static bool inline does_ui_element_have__held_handler(

@@ -544,7 +544,7 @@ def drop_zone(signature, xml_element, context_stack):
             get_str_from_xml_or__use_this(\
                 xml_element, \
                 "m_Receive_Drop_Handler", \
-                "m_ui_drop_zone__recieve_drop_handler__default"))
+                "m_ui_drop_zone__receive_drop_handler__default"))
 
     generate_source_c__signature(\
             signature,\

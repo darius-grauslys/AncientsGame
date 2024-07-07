@@ -15,4 +15,8 @@ void m_ui_draggable__dragged_handler__default(
         UI_Element *p_this_draggable,
         Game *p_game);
 
+void m_ui_draggable__dropped_handler__default(
+        UI_Element *p_this_draggable,
+        Game *p_game);
+
 #endif

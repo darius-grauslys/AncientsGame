@@ -923,7 +923,11 @@ typedef void (*m_UI_Clicked)(
 typedef void (*m_UI_Dragged)(
         UI_Element *p_this_ui_element,
         Game *p_game);
-typedef void (*m_UI_Recieve_Drop)(
+typedef void (*m_UI_Receive_Drop)(
+        UI_Element *p_this_ui_element,
+        UI_Element *p_ui_element__dropped,
+        Game *p_game);
+typedef void (*m_UI_Dropped)(
         UI_Element *p_this_ui_element,
         Game *p_game);
 typedef void (*m_UI_Held)(
@@ -981,7 +985,9 @@ typedef struct UI_Element_t {
     /// DO NOT INVOKE
     m_UI_Dragged        m_ui_dragged_handler;
     /// DO NOT INVOKE
-    m_UI_Recieve_Drop   m_ui_recieve_drop_handler;
+    m_UI_Dropped        m_ui_dropped_handler;
+    /// DO NOT INVOKE
+    m_UI_Receive_Drop   m_ui_receive_drop_handler;
     /// DO NOT INVOKE
     m_UI_Held           m_ui_held_handler;
     /// DO NOT INVOKE, DO NOT REMOVE FROM UI_MANAGER

@@ -94,7 +94,7 @@
                                 allocate_sprite_for__ui(
                                     get_p_PLATFORM_gfx_context_from__game(p_game),
                                     &amp;get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-                                    UI_Sprite_Kind__32x32__Item_Stack__Iron_Border__3_Digit));
+                                    UI_Sprite_Kind__16x16__Nav__Cap));
                             oamSetPriority(
                                 p_ui_itterator_child->p_PLATFORM_sprite->sprite_texture.oam,
                                 p_ui_itterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
