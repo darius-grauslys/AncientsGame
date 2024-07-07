@@ -7,16 +7,19 @@
 #include "platform_defines.h"
 
 typedef struct NDS_Background_t {
-    Signed_Index__i8 background_index_from__initializer;
-    Signed_Index__i8 background_index_from__hardware;
     uint16_t *gfx_map;
     uint16_t *gfx_tileset;
     // uint16_t *gfx_palette;
+    Texture_Flags background_texture_flags;
     Quantity__u32 background__scroll_x, background__scroll_y;
+    Quantity__u32 quantity_of__tiles_allocated;
+    Quantity__u32 quantity_of__tiles_allocated_in__reserve;
     Index__u32 priority;
     Vector__3i32 starting_position__3i32;
     Vector__3i32 spanning_scroll_lengths__3i32;
     Index__u8 map_base, tile_base;
+    Signed_Index__i8 background_index_from__initializer;
+    Signed_Index__i8 background_index_from__hardware;
 } NDS_Background;
 
 typedef struct NDS_Gfx_Context__Chunk_Record_t {
@@ -45,6 +48,12 @@ typedef struct NDS_Sprite_Pallete_t {
 
 typedef struct OamState OamState;
 
+enum NDS_Texture_Kind {
+    NDS_Texture_Kind__None = 0,
+    NDS_Texture_Kind__OAM,
+    NDS_Texture_Kind__Background
+};
+
 typedef struct PLATFORM_Texture_t {
     OamState *oam;
     uint16_t *gfx;
@@ -53,6 +62,7 @@ typedef struct PLATFORM_Texture_t {
     uint32_t oam_index;
     uint32_t flags;
     uint8_t dma_channel;
+    enum NDS_Texture_Kind the_kind_of__texture;
 } PLATFORM_Texture;
 
 #define NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN \
@@ -82,6 +92,18 @@ enum NDS_Background_Allocation_Kind {
 };
 
 typedef struct NDS_Background_Allocation_Specification_t {
+    Texture_Flags background_texture_flags;
+    const unsigned int *p_gfx_background;
+    const uint16_t *p_map_background;
+    const uint16_t *p_pal_background;
+    Quantity__u32 length_of__p_gfx_background;
+    Quantity__u32 length_of__p_map_background;
+    Quantity__u16 length_of__p_pal_background;
+
+    Quantity__u32 length_of__p_gfx_background__reservation;
+    Quantity__u32 length_of__p_map_background__reservation;
+    Quantity__u32 length_of__p_pal_background__reservation;
+
     enum NDS_Background_Allocation_Kind the_kind_of__background_allocation;
     Index__u8 background_slot;
 
@@ -89,12 +111,6 @@ typedef struct NDS_Background_Allocation_Specification_t {
     Index__u8 offset_for__map;
     Index__u8 slot_for__extended_palette;
 
-    const unsigned int *p_gfx_background;
-    const uint16_t *p_map_background;
-    const uint16_t *p_pal_background;
-    Quantity__u32 length_of__p_background_gfx;
-    Quantity__u32 length_of__p_background_map;
-    Quantity__u16 length_of__p_background_pal;
     Index__u8 priority_of__background;
 } NDS_Background_Allocation_Specification;
 

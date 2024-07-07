@@ -608,3 +608,57 @@ void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
             p_ui_element__higher_priority, 
             p_ui_element__lower_priortiy);
 }
+
+void set_ui_element_as__the_parent_of__this_ui_element(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_parent,
+        UI_Element *p_child) {
+    if (!p_parent) {
+        debug_abort("set_ui_element_as__the_parent_of__this_ui_element, p_parent is null.");
+        return;
+    }
+
+    if (p_parent == p_child) {
+        debug_warning("set_ui_element_as__the_parent_of__this_ui_element, p_parent == p_child.");
+        p_parent->p_parent = 0;
+        return;
+    }
+
+    if (p_parent->p_child)
+        p_parent->p_child->p_parent = 0;
+    p_parent->p_child =
+        p_child;
+
+
+    if (p_child) {
+        if (p_child->p_parent)
+            p_child->p_parent->p_child = 0;
+        p_child->p_parent =
+            p_parent;
+        set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
+                p_ui_manager, 
+                p_parent, 
+                p_child);
+    }
+}
+
+void swap_ui_element__children(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_parent__one,
+        UI_Element *p_parent__two) {
+
+    UI_Element *p_child__one =
+        p_parent__one->p_child;
+    UI_Element *p_child__two =
+        p_parent__two->p_child;
+
+    set_ui_element_as__the_parent_of__this_ui_element(
+            p_ui_manager, 
+            p_parent__one, 
+            p_child__two);
+    set_ui_element_as__the_parent_of__this_ui_element(
+            p_ui_manager, 
+            p_parent__two, 
+            p_child__one);
+
+}

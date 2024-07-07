@@ -111,6 +111,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__BASE],
                     NDS_UI_Background_Allocation_Kind__Base,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__BASE, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -124,6 +125,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__LOG_LOWER],
                     NDS_UI_Background_Allocation_Kind__Log_Lower,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__LOG_LOWER, 
                     GFX_logTiles, 
                     GFX_logTilesLen, 
@@ -137,6 +139,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__LOG_UPPER],
                     NDS_UI_Background_Allocation_Kind__Log_Upper,
+                    TEXTURE_FLAG__SIZE_256x512,
                     NDS_BACKGROUND_SLOT__UI__LOG_UPPER, 
                     GFX_logTiles, 
                     GFX_logTilesLen, 
@@ -150,6 +153,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__TYPER],
                     NDS_UI_Background_Allocation_Kind__Typer,
+                    TEXTURE_FLAG__SIZE_256x512,
                     NDS_BACKGROUND_SLOT__UI__TYPER, 
                     GFX_typerTiles, 
                     GFX_typerTilesLen, 
@@ -165,6 +169,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__BASE],
                     NDS_UI_Background_Allocation_Kind__Base,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__BASE, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -178,6 +183,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__SUB_BASE],
                     NDS_UI_Background_Allocation_Kind__Sub_Base,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__SUB_BASE, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -191,6 +197,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__SCROLL],
                     NDS_UI_Background_Allocation_Kind__Scroll,
+                    TEXTURE_FLAG__SIZE_256x512,
                     NDS_BACKGROUND_SLOT__UI__SCROLL, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -206,6 +213,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__BASE],
                     NDS_UI_Background_Allocation_Kind__Base,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__BASE, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -219,6 +227,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__SCROLL],
                     NDS_UI_Background_Allocation_Kind__Scroll,
+                    TEXTURE_FLAG__SIZE_256x512,
                     NDS_BACKGROUND_SLOT__UI__SCROLL, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -232,6 +241,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY],
                     NDS_UI_Background_Allocation_Kind__Scroll_Secondary,
+                    TEXTURE_FLAG__SIZE_256x512,
                     NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
@@ -247,6 +257,7 @@ void NDS_initialize_background_engine_allocation_context(
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__BASE],
                     NDS_UI_Background_Allocation_Kind__Base,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__BASE, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 

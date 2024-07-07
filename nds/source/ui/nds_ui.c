@@ -353,7 +353,7 @@ void NDS_set_background_for__ui_window(
                     p_background_allocation_specification
                         ->background_slot], 
                 p_background_allocation_specification
-                    ->length_of__p_background_pal);
+                    ->length_of__p_pal_background);
 
         // if (NDS_does_NOT_bg_alloc_spec_have_shared_map_offset(
         //             p_background_allocation_specification, 
@@ -363,7 +363,7 @@ void NDS_set_background_for__ui_window(
                     p_background
                     ->gfx_map, 
                     p_background_allocation_specification
-                        ->length_of__p_background_map);
+                        ->length_of__p_map_background);
         // }
         // if (NDS_does_NOT_bg_alloc_spec__shared_tileset_offset(
         //             p_background_allocation_specification, 
@@ -373,7 +373,7 @@ void NDS_set_background_for__ui_window(
                     p_background
                     ->gfx_tileset, 
                     p_background_allocation_specification
-                        ->length_of__p_background_gfx);
+                        ->length_of__p_gfx_background);
         // }
 
         NDS_set_background_priority(

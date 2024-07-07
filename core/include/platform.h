@@ -62,6 +62,11 @@ PLATFORM_Graphics_Window
 PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
+void PLATFORM_put_char_in__typer(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Typer *p_typer,
+        unsigned char letter);
+
 ///
 /// Opens the specified UI. Depending on the backend this
 /// might close all other UI's.

@@ -451,6 +451,10 @@ enum Item_Kind {
 /// SECTION_rendering
 ///
 
+typedef struct Font_Letter_t Font_Letter;
+typedef struct Font_t Font;
+typedef struct Typer_t Typer;
+
 ///
 /// This is an abstraction for a "sub-context" for graphics.
 ///

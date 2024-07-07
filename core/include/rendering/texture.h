@@ -54,6 +54,20 @@ Texture_Flags get_texture_flags__rendering_method(
 }
 
 static inline
+Texture_Flags get_texture_flags__width(
+        Texture_Flags texture_flags) {
+    return texture_flags
+        & TEXTURE_FLAG__LENGTH__MASK;
+}
+
+static inline
+Texture_Flags get_texture_flags__height(
+        Texture_Flags texture_flags) {
+    return ((texture_flags >> TEXTURE_FLAG__LENGTH__BIT_COUNT)
+        & TEXTURE_FLAG__LENGTH__MASK);
+}
+
+static inline
 void initialize_texture_allocation_specification(
         Texture_Allocation_Specification
             *p_texture_allocation_specification,

@@ -210,6 +210,52 @@ Direction__u8 get_tile_transition_direction_of__hitbox(
     return direction_of_transition;
 }
 
+bool is_this_hitbox__fully_inside_this_hitbox__without_velocity(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two) {
+    Vector__3i32F4 aa__one;
+    Vector__3i32F4 bb__one;
+
+    initialize_vector_3i32F4_as__aa_bb_without__velocity(
+            &aa__one, hitbox__one, 
+            DIRECTION__SOUTH_WEST);
+    initialize_vector_3i32F4_as__aa_bb_without__velocity(
+            &bb__one, hitbox__one, 
+            DIRECTION__NORTH_EAST);
+
+    Vector__3i32F4 aa__two;
+    Vector__3i32F4 bb__two;
+
+    initialize_vector_3i32F4_as__aa_bb_without__velocity(
+            &aa__two, hitbox__two, 
+            DIRECTION__SOUTH_WEST);
+    initialize_vector_3i32F4_as__aa_bb_without__velocity(
+            &bb__two, hitbox__two, 
+            DIRECTION__NORTH_EAST);
+
+    return
+        aa__one.x__i32F4
+        <= bb__two.x__i32F4
+        && aa__one.x__i32F4
+        >= aa__two.x__i32F4
+        
+        && aa__one.y__i32F4
+        <= bb__two.y__i32F4
+        && aa__one.y__i32F4
+        >= aa__two.y__i32F4
+
+        && bb__one.x__i32F4
+        <= bb__two.x__i32F4
+        && bb__one.x__i32F4
+        >= aa__two.x__i32F4
+        
+        && bb__one.y__i32F4
+        <= bb__two.y__i32F4
+        && bb__one.y__i32F4
+        >= aa__two.y__i32F4
+        ;
+}
+
 Direction__u8 is_this_hitbox__inside_this_hitbox(
         Hitbox_AABB *hitbox__one,
         Hitbox_AABB *hitbox__two) {

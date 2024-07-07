@@ -251,4 +251,8 @@ static bool inline is_vector_3i32_inside__hitbox(
             );
 }
 
+bool is_this_hitbox__fully_inside_this_hitbox__without_velocity(
+        Hitbox_AABB *hitbox__one,
+        Hitbox_AABB *hitbox__two);
+
 #endif

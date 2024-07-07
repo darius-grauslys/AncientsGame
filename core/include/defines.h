@@ -386,6 +386,8 @@ typedef uint32_t Texture_Flags;
         TEXTURE_FLAG__LENGTH_x64)   //0b100
 #define TEXTURE_FLAG__LENGTH_x256   (1+\
         TEXTURE_FLAG__LENGTH_x128)  //0b101
+#define TEXTURE_FLAG__LENGTH_x512   (1+\
+        TEXTURE_FLAG__LENGTH_x256)  //0b111
 
 // Texture size specifiers
 // Add these combinations in as needed:
@@ -440,6 +442,18 @@ typedef uint32_t Texture_Flags;
 #define TEXTURE_FLAG__SIZE_256x256 \
     TEXTURE_FLAG__LENGTH_x256 \
     | (TEXTURE_FLAG__LENGTH_x256 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_512x256 \
+    TEXTURE_FLAG__LENGTH_x256 \
+    | (TEXTURE_FLAG__LENGTH_x512 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_256x512 \
+    TEXTURE_FLAG__LENGTH_x512 \
+    | (TEXTURE_FLAG__LENGTH_x256 << \
+            TEXTURE_FLAG__LENGTH__BIT_COUNT)
+#define TEXTURE_FLAG__SIZE_512x512 \
+    TEXTURE_FLAG__LENGTH_x512 \
+    | (TEXTURE_FLAG__LENGTH_x512 << \
             TEXTURE_FLAG__LENGTH__BIT_COUNT)
 
 // We support up to 8 texture render methods 
@@ -522,6 +536,44 @@ typedef struct Sprite_Allocation_Specification_t {
         };
     };
 } Sprite_Allocation_Specification;
+
+typedef struct Font_Letter_t {
+    Quantity__u8 width_of__font_letter  :4;
+    Quantity__u8 height_of__font_letter :4;
+    Index__u8 index_of__character__in_font       :8;
+} Font_Letter;
+
+#define FONT_LETTER_MAX_QUANTITY_OF 256
+
+typedef struct Font_t {
+    Font_Letter font_lookup_table[
+        FONT_LETTER_MAX_QUANTITY_OF];
+    PLATFORM_Texture *p_PLATFORM_texture_of__font;
+    Quantity__u8 max_width_of__font_letter;
+    Quantity__u8 max_height_of__font_letter;
+} Font;
+
+#define FONT_MAX_QUANTITY_OF 2
+
+#define MESSAGE_MAX_LENGTH_OF 96
+#define MESSAGE_NAME_MAX_LENGTH_OF 16
+
+typedef struct Message_t {
+    unsigned char uchar_array_of__message_name[
+        MESSAGE_NAME_MAX_LENGTH_OF];
+    unsigned char uchar_array_of__message[
+        MESSAGE_MAX_LENGTH_OF];
+    Quantity__u8 length_of__message_name;
+    Quantity__u8 length_of__message;
+} Message;
+
+typedef struct Typer_t {
+    Message typer_message;
+    Hitbox_AABB text_bounding_box;
+    Vector__3i32 cursor_position__3i32;
+    Font *p_font;
+    PLATFORM_Texture *p_PLATFORM_texture__typer_target;
+} Typer;
 
 ///
 /// SECTION_inventory

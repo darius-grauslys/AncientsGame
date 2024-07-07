@@ -61,22 +61,15 @@ void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
 ///
 /// Establish a form of ownership via p_parent.
 ///
-static inline
 void set_ui_element_as__the_parent_of__this_ui_element(
         UI_Manager *p_ui_manager,
         UI_Element *p_parent,
-        UI_Element *p_child) {
-    if (p_parent == p_child)
-        p_parent->p_parent = 0;
-    p_child->p_parent =
-        p_parent;
-    p_parent->p_child =
-        p_child;
-    set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
-            p_ui_manager, 
-            p_parent, 
-            p_child);
-}
+        UI_Element *p_child);
+
+void swap_ui_element__children(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_parent__one,
+        UI_Element *p_parent__two);
 
 static inline
 UI_Element *allocate_ui_element_from__ui_manager_as__child(
