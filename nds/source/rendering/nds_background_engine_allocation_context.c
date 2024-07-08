@@ -255,7 +255,7 @@ void NDS_initialize_background_engine_allocation_context(
                     NDS_BACKGROUND_PRIORITY__UI__SCROLL_SECONDARY);
             break;
         case UI_Window_Kind__Labor:
-            NDS_initialize_background_allocation_specification(
+            NDS_initialize_background_allocation_specification_with__reservations(
                     &p_NDS_background_engine_allocation_context
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__BASE],
@@ -264,10 +264,13 @@ void NDS_initialize_background_engine_allocation_context(
                     NDS_BACKGROUND_SLOT__UI__BASE, 
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 
+                    64 << 6,
                     ui_map_laborMap, 
                     ui_map_laborMapLen,
+                    64 << 6,
                     GFX_defaultPal,
                     GFX_defaultPalLen,
+                    0,
                     NDS_BACKGROUND_PRIORITY__UI__BASE);
             break;
     }

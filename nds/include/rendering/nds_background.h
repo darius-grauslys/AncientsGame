@@ -4,6 +4,7 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "rendering/font/typer.h"
 #include <nds_defines.h>
 
 void NDS_initialize_background(
@@ -48,8 +49,10 @@ bool NDS_copy_tiles_into__reserved_tiles_of__background_for__typer(
         Typer *p_typer) {
     return NDS_copy_tiles_into__reserved_tiles_of__background(
             p_NDS_background, 
-            get_x_i32_from__hitbox(&p_typer->text_bounding_box), 
-            get_y_i32_from__hitbox(&p_typer->text_bounding_box), 
+            get_x_i32_from__hitbox(&p_typer->text_bounding_box)
+            - (p_typer->text_bounding_box.width__quantity_u32 >> 1), 
+            get_y_i32_from__hitbox(&p_typer->text_bounding_box)
+            - (p_typer->text_bounding_box.height__quantity_u32 >> 1), 
             p_typer->text_bounding_box.width__quantity_u32, 
             p_typer->text_bounding_box.height__quantity_u32);
 }
@@ -71,10 +74,15 @@ bool NDS_setup_typer_onto__background(
         return false;
     NDS_point_tile_entries_to__reserved_tiles_in__background(
             p_NDS_background, 
-            get_x_i32_from__hitbox(&p_typer->text_bounding_box), 
-            get_y_i32_from__hitbox(&p_typer->text_bounding_box), 
+            get_x_i32_from__hitbox(&p_typer->text_bounding_box)
+            - (p_typer->text_bounding_box.width__quantity_u32 >> 1), 
+            get_y_i32_from__hitbox(&p_typer->text_bounding_box)
+            - (p_typer->text_bounding_box.height__quantity_u32 >> 1), 
             p_typer->text_bounding_box.width__quantity_u32, 
             p_typer->text_bounding_box.height__quantity_u32);
+    set_PLATFORM_texture_target_for__typer(
+            p_typer,
+            &p_NDS_background->background_texture__reserved);
     return true;
 }
 

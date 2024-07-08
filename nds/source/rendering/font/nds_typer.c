@@ -15,35 +15,23 @@ void PLATFORM_put_char_in__typer(
         get_p_font_letter_from__typer(
                 p_typer, letter);
 
-    debug_info("poll cursor wrap");
     if (!poll_typer_for__cursor_wrapping(
             p_typer,
             p_font_letter)) {
-        debug_abort("fail");
         return;
     }
 
     u32 width_in__tiles =
-        get_texture_flags__width(
-                p_typer
-                ->p_PLATFORM_texture__typer_target
-                ->flags) >> 3;
+        (p_typer
+        ->p_PLATFORM_texture__typer_target
+        ->width) >> 3;
 
     u32 x__cursor =
-        get_x_i32_from__vector_3i32(p_typer->cursor_position__3i32);
+        get_x_i32_from__vector_3i32(
+                p_typer->cursor_position__3i32);
     u32 y__cursor =
-        get_y_i32_from__vector_3i32(p_typer->cursor_position__3i32);
-
-    u32 x__cursor_tile =
-        NDS_get_tile_x_from__i32(x__cursor);
-    u32 y__cursor_tile =
-        NDS_get_tile_y_from__i32(y__cursor);
-        ;
-
-    u32 x__cursor_pixel =
-        NDS_get_tile_pixel_x_from__i32(x__cursor) >> 1;
-    u32 y__cursor_pixel =
-        NDS_get_tile_pixel_y_from__i32(y__cursor);
+        get_y_i32_from__vector_3i32(
+                p_typer->cursor_position__3i32);
 
     const uint16_t *p_src;
     uint16_t *p_dest;
@@ -58,27 +46,14 @@ void PLATFORM_put_char_in__typer(
         ->p_PLATFORM_texture__typer_target
         ->gfx;
 
-    // debug_info("put c: %c", letter);
-    // p_src += (letter+1) << 5;
-    // dmaCopy(
-    //         p_src,
-    //         p_dest,
-    //         8*8);
-
-    // move_typer_cursor(
-    //         p_typer, 
-    //         p_font_letter);
-    // return;
-
-    debug_info("begin letter print");
     for (Index__u32 y__source_pixel = 0;
             y__source_pixel < p_font_letter->height_of__font_letter;
             y__source_pixel++) {
         for (Index__u32 x__source_pixel = 0;
-                x__source_pixel < p_font_letter->width_of__font_letter >> 1;
-                x__source_pixel++) {
+                x__source_pixel < p_font_letter->width_of__font_letter;
+                x__source_pixel+=2) {
             u32 index_of__source_pixel_in__font_tile = 
-                x__source_pixel
+                (x__source_pixel >> 1)
                 + (y__source_pixel << 2)
                 ;
             u32 index_of__source_pixel_in__font =
@@ -90,27 +65,35 @@ void PLATFORM_put_char_in__typer(
             u32 x__target_pixel =
                 NDS_get_tile_pixel_x_from__i32(
                         x__source_pixel
-                        + x__cursor_pixel);
+                        + x__cursor
+                        + p_font_letter
+                            ->x__offset_of__font_letter);
             u32 y__target_pixel =
                 NDS_get_tile_pixel_y_from__i32(
                         y__source_pixel
-                        + y__cursor_pixel);
+                        + y__cursor
+                        + p_font_letter
+                            ->y__offset_of__font_letter);
             u32 x__target_tile =
                 (x__source_pixel
-                 + x__cursor_pixel) >> 2;
+                 + x__cursor
+                 + p_font_letter
+                    ->x__offset_of__font_letter) >> 3;
             u32 y__target_tile =
                 (y__source_pixel
-                 + y__cursor_pixel) >> 2;
+                 + y__cursor
+                 + p_font_letter
+                    ->y__offset_of__font_letter) >> 3;
 
             u32 index_of__pixel_in__target_tile_8x8 =
-                x__target_pixel
+                (x__target_pixel >> 1)
                 + (y__target_pixel << 2)
                 ;
 
             u32 index_of__tile_pixel__in_target =
                 index_of__pixel_in__target_tile_8x8
-                + ((x__cursor_tile + x__target_tile) << 5)
-                + ((y__cursor_tile + y__target_tile) << 5)
+                + ((x__target_tile) << 5)
+                + ((y__target_tile) << 5)
                 * width_in__tiles
                 ;
 
@@ -123,7 +106,6 @@ void PLATFORM_put_char_in__typer(
         }
     }
 
-    debug_info("finished, move cursor");
     move_typer_cursor(
             p_typer, 
             p_font_letter);

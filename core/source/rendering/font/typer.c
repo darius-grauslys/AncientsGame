@@ -12,8 +12,6 @@ void initialize_typer(
         Quantity__u32 width,
         Quantity__u32 height,
         i32 x__cursor, i32 y__cursor) {
-    initialize_message_as__empty(
-            &p_typer->typer_message);
     initialize_hitbox(
             &p_typer->text_bounding_box, 
             width, height, 
@@ -21,8 +19,8 @@ void initialize_typer(
                 x, y, 0));
     p_typer->cursor_position__3i32 =
         get_vector__3i32(
-                x + x__cursor, 
-                y + y__cursor, 
+                x__cursor,
+                y__cursor, 
                 0);
     p_typer->p_font = 0;
     p_typer->p_PLATFORM_texture__typer_target = 0;
@@ -59,17 +57,54 @@ bool poll_typer_for__cursor_wrapping(
             p_font_letter->height_of__font_letter,
             get_vector__3i32F4_using__i32(0, 0, 0));
 
-    font_letter_hitbox.position__3i32F4.x__i32F4 =
-        p_typer->cursor_position__3i32.x__i32
-        + (p_font_letter->width_of__font_letter >> 1);
-    font_letter_hitbox.position__3i32F4.y__i32F4 =
-        p_typer->cursor_position__3i32.y__i32
-        + (p_font_letter->height_of__font_letter >> 1);
+    Vector__3i32F4 hitbox_position =
+        get_vector__3i32F4_using__i32(
+                p_typer->cursor_position__3i32.x__i32
+                + (p_font_letter->width_of__font_letter >> 1),
+                p_typer->cursor_position__3i32.y__i32
+                + (p_font_letter->height_of__font_letter >> 1),
+                0);
+
+    add_p_vectors__3i32F4(
+            &hitbox_position, 
+            &p_typer->text_bounding_box.position__3i32F4);
+
+    hitbox_position.x__i32F4 -=
+        i32_to__i32F4(p_typer->text_bounding_box.width__quantity_u32 >> 1);
+    hitbox_position.y__i32F4 -=
+        i32_to__i32F4(p_typer->text_bounding_box.height__quantity_u32 >> 1);
+
+    font_letter_hitbox.position__3i32F4 =
+        hitbox_position;
 
     if (is_this_hitbox__fully_inside_this_hitbox__without_velocity(
                 &font_letter_hitbox,
-                &p_typer->text_bounding_box))
+                &p_typer->text_bounding_box)) {
+        // debug_info(
+        //         "good: %d, %d",
+        //         hitbox_position.x__i32F4 >> 4,
+        //         hitbox_position.y__i32F4 >> 4);
         return true;
+    }
+
+    // debug_info(
+    //         "-- BAD -- %d, %d",
+    //         hitbox_position.x__i32F4 >> 4,
+    //         hitbox_position.y__i32F4 >> 4);
+    // debug_info(
+    //         "from: %d, %d",
+    //         (p_typer->text_bounding_box.position__3i32F4.x__i32F4 >> 4)
+    //         - (p_typer->text_bounding_box.width__quantity_u32 >> 1),
+    //         (p_typer->text_bounding_box.position__3i32F4.y__i32F4 >> 4)
+    //         - (p_typer->text_bounding_box.height__quantity_u32 >> 1)
+    //         );
+    // debug_abort(
+    //         "to: %d, %d",
+    //         (p_typer->text_bounding_box.position__3i32F4.x__i32F4 >> 4)
+    //         + (p_typer->text_bounding_box.width__quantity_u32 >> 1),
+    //         (p_typer->text_bounding_box.position__3i32F4.y__i32F4 >> 4)
+    //         + (p_typer->text_bounding_box.height__quantity_u32 >> 1)
+    //         );
 
     Vector__3i32 aa;
     initialize_vector_3i32_as__aa_bb_without__velocity(
@@ -77,17 +112,29 @@ bool poll_typer_for__cursor_wrapping(
             &p_typer->text_bounding_box, 
             DIRECTION__SOUTH_WEST);
 
-    p_typer->cursor_position__3i32.x__i32 =
-        aa.x__i32;
+    p_typer->cursor_position__3i32.x__i32 = 0;
     p_typer->cursor_position__3i32.y__i32 +=
         p_typer->p_font->max_height_of__font_letter;
 
-    font_letter_hitbox.position__3i32F4.x__i32F4 =
-        p_typer->cursor_position__3i32.x__i32
-        + (p_font_letter->width_of__font_letter >> 1);
-    font_letter_hitbox.position__3i32F4.y__i32F4 =
-        p_typer->cursor_position__3i32.y__i32
-        + (p_font_letter->height_of__font_letter >> 1);
+    hitbox_position =
+        get_vector__3i32F4_using__i32(
+                p_typer->cursor_position__3i32.x__i32
+                + (p_font_letter->width_of__font_letter >> 1),
+                p_typer->cursor_position__3i32.y__i32
+                + (p_font_letter->height_of__font_letter >> 1),
+                0);
+
+    add_p_vectors__3i32F4(
+            &hitbox_position, 
+            &p_typer->text_bounding_box.position__3i32F4);
+
+    hitbox_position.x__i32F4 -=
+        i32_to__i32F4(p_typer->text_bounding_box.width__quantity_u32 >> 1);
+    hitbox_position.y__i32F4 -=
+        i32_to__i32F4(p_typer->text_bounding_box.height__quantity_u32 >> 1);
+
+    font_letter_hitbox.position__3i32F4 =
+        hitbox_position;
 
     return is_this_hitbox__fully_inside_this_hitbox__without_velocity(
                 &font_letter_hitbox,
@@ -104,9 +151,7 @@ void put_c_string_in__typer(
     if (!*c_string)
         return;
 
-    debug_info("begin put_c_string loop");
     do {
-        debug_info("put: %c", *c_string);
         PLATFORM_put_char_in__typer(
                 p_PLATFORM_gfx_context, 
                 p_typer, 

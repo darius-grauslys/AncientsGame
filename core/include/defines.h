@@ -540,9 +540,11 @@ typedef struct Sprite_Allocation_Specification_t {
 } Sprite_Allocation_Specification;
 
 typedef struct Font_Letter_t {
-    Quantity__u8 width_of__font_letter  :4;
-    Quantity__u8 height_of__font_letter :4;
-    Index__u8 index_of__character__in_font       :8;
+    Quantity__u8 width_of__font_letter      :4;
+    Quantity__u8 height_of__font_letter     :4;
+    Quantity__u8 x__offset_of__font_letter   :4;
+    Quantity__u8 y__offset_of__font_letter   :4;
+    Index__u16 index_of__character__in_font :16;
 } Font_Letter;
 
 #define FONT_LETTER_MAX_QUANTITY_OF 256
@@ -577,7 +579,6 @@ typedef struct Message_t {
 } Message;
 
 typedef struct Typer_t {
-    Message typer_message;
     Hitbox_AABB text_bounding_box;
     Vector__3i32 cursor_position__3i32;
     Font *p_font;

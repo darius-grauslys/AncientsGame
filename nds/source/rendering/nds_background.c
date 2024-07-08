@@ -261,10 +261,10 @@ bool NDS_copy_tiles_into__reserved_tiles_of__background(
 
     p_NDS_background
         ->background_texture__reserved
-        .width = width;
+        .width = width << 3;
     p_NDS_background
         ->background_texture__reserved
-        .height = height;
+        .height = height << 3;
     return true;
 }
 
@@ -305,8 +305,8 @@ void NDS_point_tile_entries_to__reserved_tiles_in__background(
 
     p_NDS_background
         ->background_texture__reserved
-        .width = width;
+        .width = width << 3;
     p_NDS_background
         ->background_texture__reserved
-        .height = height;
+        .height = height << 3;
 }

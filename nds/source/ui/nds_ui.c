@@ -355,6 +355,16 @@ void NDS_set_background_for__ui_window(
                 p_background_allocation_specification
                     ->length_of__p_pal_background);
 
+        VRAM_H_EXT_PALETTE[
+            p_background_allocation_specification
+                ->background_slot][0][253] = 0;
+        VRAM_H_EXT_PALETTE[
+            p_background_allocation_specification
+                ->background_slot][0][254] = (uint16_t)0x5294;
+        VRAM_H_EXT_PALETTE[
+            p_background_allocation_specification
+                ->background_slot][0][255] = (uint16_t)0x6739;
+
         // if (NDS_does_NOT_bg_alloc_spec_have_shared_map_offset(
         //             p_background_allocation_specification, 
         //             &nds_background_engine_allocation_context)) {
