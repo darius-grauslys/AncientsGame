@@ -387,7 +387,7 @@ typedef uint32_t Texture_Flags;
 #define TEXTURE_FLAG__LENGTH_x256   (1+\
         TEXTURE_FLAG__LENGTH_x128)  //0b101
 #define TEXTURE_FLAG__LENGTH_x512   (1+\
-        TEXTURE_FLAG__LENGTH_x256)  //0b111
+        TEXTURE_FLAG__LENGTH_x256)  //0b110
 
 // Texture size specifiers
 // Add these combinations in as needed:
@@ -493,6 +493,8 @@ typedef uint32_t Texture_Flags;
     BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS)
 #define TEXTURE_FLAG__IS_ALLOCATED \
     BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS + 1)
+#define TEXTURE_FLAG__IS_READONLY \
+    BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS + 2)
 
 #define GET_TEXTURE_FLAG__LENGTH__WIDTH(flags) \
     ((flags & (TEXTURE_FLAG__LENGTH__MASK \
@@ -553,7 +555,14 @@ typedef struct Font_t {
     Quantity__u8 max_height_of__font_letter;
 } Font;
 
+#define FONT_SMALL__MAX_WIDTH 4
+#define FONT_SMALL__MAX_HEIGHT 6
+
+#define FONT_LARGE__MAX_WIDTH 8
+#define FONT_LARGE__MAX_HEIGHT 8
+
 #define FONT_MAX_QUANTITY_OF 2
+#define TYPER_MAX_QUANTITY_OF 2
 
 #define MESSAGE_MAX_LENGTH_OF 96
 #define MESSAGE_NAME_MAX_LENGTH_OF 16

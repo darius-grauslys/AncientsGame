@@ -26,7 +26,7 @@ bool poll_typer_for__cursor_wrapping(
 void put_c_string_in__typer(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Typer *p_typer,
-        const unsigned char *c_string,
+        const char *c_string,
         Quantity__u32 max_length_of__c_string);
 
 static inline
@@ -43,6 +43,14 @@ Font_Letter *get_p_font_letter_from__typer(
         Typer *p_typer,
         unsigned char letter) {
     return &p_typer->p_font->font_lookup_table[letter];
+}
+
+static inline
+void set_PLATFORM_texture_target_for__typer(
+        Typer *p_typer,
+        PLATFORM_Texture *p_PLATFORM_texture) {
+    p_typer->p_PLATFORM_texture__typer_target =
+        p_PLATFORM_texture;
 }
 
 #endif

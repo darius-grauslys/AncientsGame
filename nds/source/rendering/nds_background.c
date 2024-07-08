@@ -2,6 +2,7 @@
 #include "defines_weak.h"
 #include "nds_defines.h"
 #include "rendering/texture.h"
+#include "rendering/nds_texture.h"
 #include <rendering/nds_background.h>
 
 void NDS_initialize_background(
@@ -9,8 +10,10 @@ void NDS_initialize_background(
         Signed_Index__i8 background_index_for__initializer) {
     background->background_index_from__initializer = 
         background_index_for__initializer;
-    background->background_texture_flags =
-        TEXTURE_FLAG__SIZE_8x8;
+    NDS_initialize_texture_as__empty(
+            &background->background_texture);
+    NDS_initialize_texture_as__empty(
+            &background->background_texture__reserved);
     background->background_index_from__hardware = -1;
     background->gfx_map = 0;
     background->gfx_tileset = 0;
@@ -26,8 +29,8 @@ void NDS_initialize_background_for__world_ground(
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 0;
     background->tile_base = 2;
-    background->background_texture_flags =
-        TEXTURE_FLAG__SIZE_512x512;
+    NDS_initialize_texture_as__empty(
+            &background->background_texture__reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
                 BgType_Text8bpp, BgSize_T_512x512, 
@@ -37,6 +40,16 @@ void NDS_initialize_background_for__world_ground(
         bgGetMapPtr(background->background_index_from__hardware);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index_from__hardware);
+
+    NDS_initialize_texture(
+            &background->background_texture, 
+            0, 
+            background->gfx_tileset, 
+            0,
+            0, 
+            TEXTURE_FLAG__SIZE_512x512, 
+            0, 
+            NDS_Texture_Kind__Background);
 }
 
 void NDS_initialize_background_for__world_wall_lower(
@@ -44,8 +57,8 @@ void NDS_initialize_background_for__world_wall_lower(
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 4;
     background->tile_base = 2;
-    background->background_texture_flags =
-        TEXTURE_FLAG__SIZE_512x512;
+    NDS_initialize_texture_as__empty(
+            &background->background_texture__reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
                 BgType_Text8bpp, BgSize_T_512x512, 
@@ -55,6 +68,16 @@ void NDS_initialize_background_for__world_wall_lower(
         bgGetMapPtr(background->background_index_from__hardware);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index_from__hardware);
+
+    NDS_initialize_texture(
+            &background->background_texture, 
+            0, 
+            background->gfx_tileset, 
+            0,
+            0, 
+            TEXTURE_FLAG__SIZE_512x512, 
+            0, 
+            NDS_Texture_Kind__Background);
 }
 
 void NDS_initialize_background_for__world_wall_upper(
@@ -62,8 +85,8 @@ void NDS_initialize_background_for__world_wall_upper(
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 8;
     background->tile_base = 2;
-    background->background_texture_flags =
-        TEXTURE_FLAG__SIZE_512x512;
+    NDS_initialize_texture_as__empty(
+            &background->background_texture__reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
                 BgType_Text8bpp, BgSize_T_512x512, 
@@ -73,21 +96,49 @@ void NDS_initialize_background_for__world_wall_upper(
         bgGetMapPtr(background->background_index_from__hardware);
     background->gfx_tileset = 
         bgGetGfxPtr(background->background_index_from__hardware);
+
+    NDS_initialize_texture(
+            &background->background_texture, 
+            0, 
+            background->gfx_tileset, 
+            0,
+            0, 
+            TEXTURE_FLAG__SIZE_512x512, 
+            0, 
+            NDS_Texture_Kind__Background);
 }
 
 void NDS_initialize_background_with__allocation_specification(
         NDS_Background *p_background,
         NDS_Background_Allocation_Specification
             *p_background_allocation_specification) {
-    p_background->background_texture_flags =
-        p_background_allocation_specification
-        ->background_texture_flags;
     Signed_Index__i8 layer =
         p_background_allocation_specification
         ->background_slot;
     p_background->background_index_from__initializer =
         p_background_allocation_specification
         ->background_slot;
+
+    p_background->quantity_of__tiles_allocated =
+        p_background_allocation_specification
+        ->length_of__p_gfx_background >> 6;
+    p_background->quantity_of__tiles_allocated_in__reserve =
+        p_background_allocation_specification
+        ->length_of__p_gfx_background__reservation >> 6;
+
+    p_background->quantity_of__map_entries_allocated =
+        p_background_allocation_specification
+        ->length_of__p_map_background >> 6;
+    p_background->quantity_of__map_entries_allocated_in__reserve =
+        p_background_allocation_specification
+        ->length_of__p_map_background__reservation >> 6;
+    
+    p_background->quantity_of__pallete_colors_allocated =
+        p_background_allocation_specification
+        ->length_of__p_pal_background >> 1;
+    p_background->quantity_of__pallete_colors_allocated_in__reserve =
+        p_background_allocation_specification
+        ->length_of__p_pal_background__reservation >> 1;
 
     switch (p_background_allocation_specification
             ->the_kind_of__background_allocation) {
@@ -131,6 +182,28 @@ void NDS_initialize_background_with__allocation_specification(
         bgGetMapPtr(p_background->background_index_from__hardware);
     p_background->gfx_tileset = 
         bgGetGfxPtr(p_background->background_index_from__hardware);
+
+    NDS_initialize_texture(
+            &p_background->background_texture, 
+            0, 
+            p_background->gfx_tileset, 
+            0,
+            0, 
+            p_background_allocation_specification
+                ->background_texture_flags,
+            0, 
+            NDS_Texture_Kind__Background);
+
+    NDS_initialize_texture(
+            &p_background->background_texture__reserved, 
+            0, 
+            p_background->gfx_tileset
+            + (p_background->quantity_of__tiles_allocated << 5),
+            0,
+            0, 
+            TEXTURE_FLAGS__NONE, 
+            0, 
+            NDS_Texture_Kind__Background);
 }
 
 void NDS_set_background_priority(
@@ -145,34 +218,95 @@ bool NDS_copy_tiles_into__reserved_tiles_of__background(
         i32 x, i32 y,
         Quantity__u32 width,
         Quantity__u32 height) {
+    width >>= 3;
+    height >>= 3;
+
+    if (width * height >
+            p_NDS_background
+            ->quantity_of__tiles_allocated_in__reserve)
+        return false;
+
     x >>= 3;
     y >>= 3;
 
     Quantity__u16 background_width =
-        get_texture_flags__width(
                 p_NDS_background
-                ->background_texture_flags) >> 3;
+                ->background_texture.width >> 3;
     Quantity__u16 background_height =
-        get_texture_flags__height(
                 p_NDS_background
-                ->background_texture_flags) >> 3;
+                ->background_texture.height >> 3;
 
     Index__u16 index_of__reserved_tile =
         p_NDS_background
         ->quantity_of__tiles_allocated;
     for (Index__u16 y__tile = y;
             y__tile < background_height
-            && y__tile < y + width;
+            && y__tile < y + height;
+            y__tile++) {
+        for (Index__u16 x__tile = x;
+                x__tile < background_width
+                && x__tile < x + width;
+                x__tile++) {
+            Index__u16 index_of__map_tile =
+                p_NDS_background
+                    ->gfx_map[x__tile + y__tile * background_width];
+            dmaCopy(
+                    &p_NDS_background
+                        ->gfx_tileset[index_of__map_tile << 5],
+                    &p_NDS_background
+                        ->gfx_tileset[(index_of__reserved_tile++) << 5],
+                    8 * 8);
+        }
+    }
+
+    p_NDS_background
+        ->background_texture__reserved
+        .width = width;
+    p_NDS_background
+        ->background_texture__reserved
+        .height = height;
+    return true;
+}
+
+void NDS_point_tile_entries_to__reserved_tiles_in__background(
+        NDS_Background *p_NDS_background,
+        i32 x, i32 y,
+        Quantity__u32 width,
+        Quantity__u32 height) {
+    x >>= 3;
+    y >>= 3;
+
+    Quantity__u16 background_width =
+                p_NDS_background
+                ->background_texture.width >> 3;
+    Quantity__u16 background_height =
+                p_NDS_background
+                ->background_texture.height >> 3;
+
+    width >>= 3;
+    height >>= 3;
+
+    Index__u16 index_of__reserved_tiles =
+        p_NDS_background
+        ->quantity_of__tiles_allocated;
+    for (Index__u16 y__tile = y;
+            y__tile < background_height
+            && y__tile < y + height;
             y__tile++) {
         for (Index__u16 x__tile = x;
                 x__tile < background_width
                 && x__tile < x + width;
                 x__tile++) {
             p_NDS_background
-                ->gfx_tileset[index_of__reserved_tile++] =
-                p_NDS_background
-                ->gfx_tileset[x + y * background_width];
+                ->gfx_map[x__tile + y__tile * background_width] =
+                    index_of__reserved_tiles++;
         }
     }
-}
 
+    p_NDS_background
+        ->background_texture__reserved
+        .width = width;
+    p_NDS_background
+        ->background_texture__reserved
+        .height = height;
+}

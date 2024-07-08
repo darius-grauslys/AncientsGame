@@ -47,6 +47,27 @@ void set_texture_flags_as__deallocated(
 }
 
 static inline
+bool is_texture_flags__readonly(
+        Texture_Flags texture_flags) {
+    return texture_flags
+        & TEXTURE_FLAG__IS_READONLY;
+}
+
+static inline
+void set_texture_flags_as__readonly(
+        Texture_Flags *p_texture_flags) {
+    *p_texture_flags |=
+        TEXTURE_FLAG__IS_READONLY;
+}
+
+static inline
+void set_texture_flags_as__not_readonly(
+        Texture_Flags *p_texture_flags) {
+    *p_texture_flags &=
+        ~TEXTURE_FLAG__IS_READONLY;
+}
+
+static inline
 Texture_Flags get_texture_flags__rendering_method(
         Texture_Flags texture_flags) {
     return texture_flags

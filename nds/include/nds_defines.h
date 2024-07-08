@@ -6,14 +6,37 @@
 #include "defines_weak.h"
 #include "platform_defines.h"
 
+enum NDS_Texture_Kind {
+    NDS_Texture_Kind__None = 0,
+    NDS_Texture_Kind__OAM,
+    NDS_Texture_Kind__Background
+};
+
+typedef struct PLATFORM_Texture_t {
+    OamState *oam;
+    uint16_t *gfx;
+    const uint16_t *gfx__readonly;
+    uint32_t width, height;
+    SpriteSize sprite_size;
+    uint32_t oam_index;
+    Texture_Flags flags;
+    uint8_t dma_channel;
+    enum NDS_Texture_Kind the_kind_of__texture;
+} PLATFORM_Texture;
+
 typedef struct NDS_Background_t {
+    PLATFORM_Texture background_texture;
+    PLATFORM_Texture background_texture__reserved;
     uint16_t *gfx_map;
     uint16_t *gfx_tileset;
     // uint16_t *gfx_palette;
-    Texture_Flags background_texture_flags;
     Quantity__u32 background__scroll_x, background__scroll_y;
     Quantity__u32 quantity_of__tiles_allocated;
     Quantity__u32 quantity_of__tiles_allocated_in__reserve;
+    Quantity__u32 quantity_of__map_entries_allocated;
+    Quantity__u32 quantity_of__map_entries_allocated_in__reserve;
+    Quantity__u32 quantity_of__pallete_colors_allocated;
+    Quantity__u32 quantity_of__pallete_colors_allocated_in__reserve;
     Index__u32 priority;
     Vector__3i32 starting_position__3i32;
     Vector__3i32 spanning_scroll_lengths__3i32;
@@ -47,23 +70,6 @@ typedef struct NDS_Sprite_Pallete_t {
 #define NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE 4
 
 typedef struct OamState OamState;
-
-enum NDS_Texture_Kind {
-    NDS_Texture_Kind__None = 0,
-    NDS_Texture_Kind__OAM,
-    NDS_Texture_Kind__Background
-};
-
-typedef struct PLATFORM_Texture_t {
-    OamState *oam;
-    uint16_t *gfx;
-    uint32_t width, height;
-    SpriteSize sprite_size;
-    uint32_t oam_index;
-    uint32_t flags;
-    uint8_t dma_channel;
-    enum NDS_Texture_Kind the_kind_of__texture;
-} PLATFORM_Texture;
 
 #define NDS_TEXTURE_FLAG__RENDER_METHOD__OAM_MAIN \
     TEXTURE_FLAG__RENDER_METHOD__0
@@ -216,9 +222,7 @@ typedef struct PLATFORM_Gfx_Context_t {
     PLATFORM_Graphics_Window graphics_window__main;
     PLATFORM_Graphics_Window graphics_window__sub;
 
-    //TODO: is this needed? is it used by anything?
-    NDS_Gfx_Context__Chunk_Record chunk_records
-        [CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
+    Typer typers[TYPER_MAX_QUANTITY_OF];
 
     NDS_Sprite_Manager nds_sprite_manager;
 

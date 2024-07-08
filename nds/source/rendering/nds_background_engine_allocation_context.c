@@ -148,19 +148,22 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_logPal,
                     GFX_logPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__LOG_UPPER);
-            NDS_initialize_background_allocation_specification(
+            NDS_initialize_background_allocation_specification_with__reservations(
                     &p_NDS_background_engine_allocation_context
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__TYPER],
                     NDS_UI_Background_Allocation_Kind__Typer,
-                    TEXTURE_FLAG__SIZE_256x512,
+                    TEXTURE_FLAG__SIZE_256x256,
                     NDS_BACKGROUND_SLOT__UI__TYPER, 
                     GFX_typerTiles, 
                     GFX_typerTilesLen, 
+                    64 << 6,
                     ui_map_typer__lockedMap, 
                     ui_map_typer__lockedMapLen,
+                    64 << 6,
                     GFX_typerPal,
                     GFX_typerPalLen,
+                    0,
                     NDS_BACKGROUND_PRIORITY__UI__SCROLL_TYPER);
             break;
         case UI_Window_Kind__Equip:

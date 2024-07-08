@@ -1,6 +1,7 @@
 #ifndef NDS_BACKGROUND_H
 #define NDS_BACKGROUND_H
 
+#include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
 #include <nds_defines.h>
@@ -42,6 +43,42 @@ bool NDS_copy_tiles_into__reserved_tiles_of__background(
         Quantity__u32 height);
 
 static inline
+bool NDS_copy_tiles_into__reserved_tiles_of__background_for__typer(
+        NDS_Background *p_NDS_background,
+        Typer *p_typer) {
+    return NDS_copy_tiles_into__reserved_tiles_of__background(
+            p_NDS_background, 
+            get_x_i32_from__hitbox(&p_typer->text_bounding_box), 
+            get_y_i32_from__hitbox(&p_typer->text_bounding_box), 
+            p_typer->text_bounding_box.width__quantity_u32, 
+            p_typer->text_bounding_box.height__quantity_u32);
+}
+
+void NDS_point_tile_entries_to__reserved_tiles_in__background(
+        NDS_Background *p_NDS_background,
+        i32 x, i32 y,
+        Quantity__u32 width,
+        Quantity__u32 height);
+
+static inline
+bool NDS_setup_typer_onto__background(
+        NDS_Background *p_NDS_background,
+        Typer *p_typer) {
+    bool result =
+        NDS_copy_tiles_into__reserved_tiles_of__background_for__typer(
+                p_NDS_background, p_typer);
+    if (!result) 
+        return false;
+    NDS_point_tile_entries_to__reserved_tiles_in__background(
+            p_NDS_background, 
+            get_x_i32_from__hitbox(&p_typer->text_bounding_box), 
+            get_y_i32_from__hitbox(&p_typer->text_bounding_box), 
+            p_typer->text_bounding_box.width__quantity_u32, 
+            p_typer->text_bounding_box.height__quantity_u32);
+    return true;
+}
+
+static inline
 uint16_t *NDS_get_reserved_tile_as__p_u16_from__background(
         NDS_Background *p_NDS_background,
         i32 x, i32 y,
@@ -54,12 +91,12 @@ uint16_t *NDS_get_reserved_tile_as__p_u16_from__background(
 
 static inline
 i32 NDS_get_tile_x_from__i32(i32 x__i32) {
-    return (x__i32 >> 3) + (bool)(x__i32 & MASK(3));
+    return (x__i32 >> 3);
 }
 
 static inline
 i32 NDS_get_tile_y_from__i32(i32 y__i32) {
-    return (y__i32 >> 3) + (bool)(y__i32 & MASK(3));
+    return (y__i32 >> 3);
 }
 
 static inline

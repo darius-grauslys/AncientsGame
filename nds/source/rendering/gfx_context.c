@@ -3,6 +3,7 @@
 #include "nds/arm9/background.h"
 #include "nds/arm9/video.h"
 #include "nds/dma.h"
+#include "rendering/font/typer.h"
 #include "rendering/nds_sprite.h"
 #include "rendering/nds_sprite_manager.h"
 #include "rendering/sprite.h"
@@ -28,6 +29,8 @@
 #include <assets/entities/entity_sprite__16x16/zombie.h>
 
 PLATFORM_Gfx_Context _NDS_gfx_context;
+extern Font _font_small;
+extern Font _font_large;
 
 static inline
 void NDS_initialize_backgrounds(
@@ -53,6 +56,19 @@ void NDS_initialize_gfx_context(
     NDS_initialize_backgrounds(
             p_PLATFORM_gfx_context
             ->backgrounds__sub);
+
+    initialize_typer_with__font(
+            &p_PLATFORM_gfx_context->typers[0],
+            0, 0,
+            64, 16,
+            0, 0,
+            &_font_large);
+    initialize_typer_with__font(
+            &p_PLATFORM_gfx_context->typers[1],
+            0, 0,
+            64, 16,
+            0, 0,
+            &_font_small);
 
     p_PLATFORM_gfx_context
         ->graphics_window__main = (PLATFORM_Graphics_Window){

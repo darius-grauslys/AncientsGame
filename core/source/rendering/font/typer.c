@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "platform.h"
+#include "rendering/font/message.h"
 #include "vectors.h"
 #include <rendering/font/typer.h>
 
@@ -11,7 +12,20 @@ void initialize_typer(
         Quantity__u32 width,
         Quantity__u32 height,
         i32 x__cursor, i32 y__cursor) {
-	debug_abort("not impl");
+    initialize_message_as__empty(
+            &p_typer->typer_message);
+    initialize_hitbox(
+            &p_typer->text_bounding_box, 
+            width, height, 
+            get_vector__3i32F4_using__i32(
+                x, y, 0));
+    p_typer->cursor_position__3i32 =
+        get_vector__3i32(
+                x + x__cursor, 
+                y + y__cursor, 
+                0);
+    p_typer->p_font = 0;
+    p_typer->p_PLATFORM_texture__typer_target = 0;
 }
 
 void initialize_typer_with__font(
@@ -21,7 +35,17 @@ void initialize_typer_with__font(
         Quantity__u32 height,
         i32 x__cursor, i32 y__cursor,
         Font *p_font) {
-	debug_abort("not impl");
+    initialize_typer(
+            p_typer, 
+            x, 
+            y, 
+            width, 
+            height, 
+            x__cursor, 
+            y__cursor);
+
+    p_typer->p_font = p_font;
+    p_typer->p_PLATFORM_texture__typer_target = 0;
 }
 
 bool poll_typer_for__cursor_wrapping(
@@ -33,7 +57,14 @@ bool poll_typer_for__cursor_wrapping(
             &font_letter_hitbox, 
             p_font_letter->width_of__font_letter, 
             p_font_letter->height_of__font_letter,
-            vector_3i32_to__vector_3i32F4(p_typer->cursor_position__3i32));
+            get_vector__3i32F4_using__i32(0, 0, 0));
+
+    font_letter_hitbox.position__3i32F4.x__i32F4 =
+        p_typer->cursor_position__3i32.x__i32
+        + (p_font_letter->width_of__font_letter >> 1);
+    font_letter_hitbox.position__3i32F4.y__i32F4 =
+        p_typer->cursor_position__3i32.y__i32
+        + (p_font_letter->height_of__font_letter >> 1);
 
     if (is_this_hitbox__fully_inside_this_hitbox__without_velocity(
                 &font_letter_hitbox,
@@ -51,9 +82,12 @@ bool poll_typer_for__cursor_wrapping(
     p_typer->cursor_position__3i32.y__i32 +=
         p_typer->p_font->max_height_of__font_letter;
 
-    set_hitbox__position_with__3i32(
-            &font_letter_hitbox,
-            p_typer->cursor_position__3i32);
+    font_letter_hitbox.position__3i32F4.x__i32F4 =
+        p_typer->cursor_position__3i32.x__i32
+        + (p_font_letter->width_of__font_letter >> 1);
+    font_letter_hitbox.position__3i32F4.y__i32F4 =
+        p_typer->cursor_position__3i32.y__i32
+        + (p_font_letter->height_of__font_letter >> 1);
 
     return is_this_hitbox__fully_inside_this_hitbox__without_velocity(
                 &font_letter_hitbox,
@@ -63,14 +97,16 @@ bool poll_typer_for__cursor_wrapping(
 void put_c_string_in__typer(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Typer *p_typer,
-        const unsigned char *c_string,
+        const char *c_string,
         Quantity__u32 max_length_of__c_string) {
     if (!max_length_of__c_string)
         return;
     if (!*c_string)
         return;
 
+    debug_info("begin put_c_string loop");
     do {
+        debug_info("put: %c", *c_string);
         PLATFORM_put_char_in__typer(
                 p_PLATFORM_gfx_context, 
                 p_typer, 
