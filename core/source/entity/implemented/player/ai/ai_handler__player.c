@@ -33,8 +33,6 @@ enum Tile_Kind kind_of_tile =
 enum Use_Mode mode_of_use =
     Use_Mode__Place_Wall;
 
-Degree__u8 angle_of__ray = 0;
-
 void m_entity_ai_handler__player(
         Entity *p_this_player,
         Game *p_game) {
@@ -79,14 +77,6 @@ void m_entity_ai_handler__player(
         x -= 32;
     }
 
-    if (is_input__turn_left_held(p_input)) {
-        angle_of__ray = subtract_angles(angle_of__ray, 1);    
-        debug_info("angle_of__ray: %d/255", angle_of__ray);
-    }
-    if (is_input__turn_right_held(p_input)) {
-        angle_of__ray = add_angles(angle_of__ray, 1);
-        debug_info("angle_of__ray: %d/255", angle_of__ray);
-    }
     if (is_input__game_settings_released(p_input)) {
         invoke_action__allocate_entity(
                 p_game,
@@ -147,9 +137,20 @@ void m_entity_ai_handler__player(
         }
     } 
     if (is_input__use_released(p_input)) {
+        Vector__3i32F4 origin = get_vector__3i32F4_using__i32(0, 0, 0);
+        Degree__u8 angle_of__ray =
+            get_degree(
+                    &p_this_player->hitbox.position__3i32F4, 
+                    &origin);
         Ray__3i32F8 ray = get_ray(
                 p_this_player->hitbox.position__3i32F4, 
                 angle_of__ray); 
+
+        while (is_p_ray_within__length_i32F4(
+                    &ray, i32_to__i32F4(1 << 3))) {
+            step_p_ray_until__next_tile(&ray);
+        }
+        debug_info("angle_of__ray: %d/255", angle_of__ray);
         while (is_p_ray_within__length_i32F4(
                     &ray, i32_to__i32F4(8 << 3))) {
             step_p_ray_until__next_tile(&ray);

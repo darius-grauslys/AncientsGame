@@ -76,8 +76,8 @@ void m_load_scene_as__game_handler(
             NDS_get_graphics_window__main_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
 
-    //NDS_initialize_debug__sub();
-    //return;
+    // NDS_initialize_debug__sub();
+    // return;
     NDS_initialize_gfx_for__ui(
             get_p_PLATFORM_gfx_context_from__game(p_game));
     // TODO: re-impl

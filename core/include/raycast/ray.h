@@ -1,6 +1,7 @@
 #ifndef RAY_H
 #define RAY_H
 
+#include "defines_weak.h"
 #include "vectors.h"
 #include <defines.h>
 
@@ -11,6 +12,13 @@ Ray__3i32F8 get_ray(
 void step_p_ray(Ray__3i32F8 *p_ray);
 void step_p_ray_until__next_whole_integer(Ray__3i32F8 *p_ray);
 void step_p_ray_until__next_tile(Ray__3i32F8 *p_ray);
+
+///
+/// Log(N) complexity get degree.
+///
+Degree__u8 get_degree(
+        Vector__3i32F4 *p_source__3i32F4, 
+        Vector__3i32F4 *p_target__3i32F4);
 
 static Vector__3i32F4 inline get_endpoint_of__p_ray_as__vector_3i32F4(
         Ray__3i32F8 *p_ray) {
