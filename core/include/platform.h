@@ -235,6 +235,10 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 4
 #define GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS 3
 
+//16bpx, 8 pixels per row (of 8 rows)
+#define TILE_WIDTH__IN_BYTES (2 * 8)
+#define TILE_WIDTH__IN_PIXELS 8
+
 #define CHUNK_WIDTH__IN_TILES 8
 #define CHUNK_DEPTH__IN_TILES 1
 

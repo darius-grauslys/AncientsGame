@@ -1,0 +1,5 @@
+
+#include <test_util.h>
+
+DECLARE_SUITE(WORLD_STRUCTURES_IMPLEMENTED);
+

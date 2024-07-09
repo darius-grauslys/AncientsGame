@@ -8,7 +8,6 @@
 #include <debug/debug.h>
 #include <input/input.h>
 #include <world/chunk_manager.h>
-#include <rendering/gfx_context.h>
 #include <rendering/animate_entity.h>
 #include <rendering/render_entity.h>
 #include <world/world.h>

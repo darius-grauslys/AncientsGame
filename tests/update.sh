@@ -23,6 +23,7 @@ export ancientsgame_nds_dir=$(realpath "../nds/source")
 export ancientsgame_unix_opengl_dir=$(realpath "../unix_opengl/source")
 
 gen_main() {
+    find $2 -iname test_suite_main.c -exec sed -i "s/#include <main.c>//" {} \;
     output="$2/main.c"
     printf "#include <MAIN_TEST_SUITE_ANCIENTS_GAME.h>
 

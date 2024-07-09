@@ -3,7 +3,6 @@
 
 #include "defines_weak.h"
 #include "platform.h"
-#include "rendering/handlers/nds_gfx_handler__player.h"
 #include "rendering/texture.h"
 #include <defines.h>
 

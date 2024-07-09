@@ -38,7 +38,7 @@ if [ "$search_suffix" == "" ]; then
     main_suite_name="ANCIENTS_GAME"
     main_suite_name__full="MAIN_TEST_SUITE_ANCIENTS_GAME"
 else
-    main_suite_name=$(basename $main_suite_dir__include)
+    main_suite_name=$(realpath --relative-to=$search_base_dir $search_base_dir/$search_suffix | sed "s/\//_/g")
     main_suite_name="${main_suite_name~~}"
     main_suite_name__full="MAIN_TEST_SUITE_${main_suite_name}"
 fi
@@ -71,7 +71,7 @@ module_count=1
 for module in $modules; do
     module_count=$((module_count+1))
     test_suite__module_name="$(basename $module)"
-    test_suite__module_name__full="test_suite_$(basename $module)"
+    test_suite__module_name__full="test_suite_$(realpath --relative-to=$search_base_dir $search_base_dir/$module | sed "s/\//_/g")"
     test_sub_suite__header="${main_suite_dir__include}/\
 ${test_suite__module_name__full%.*}.h"
     test_sub_suite__source="${main_suite_dir__source}/\
@@ -109,9 +109,10 @@ subdirs=$(find $search_path -mindepth 1 -maxdepth 1 -type d -exec realpath {} \;
 for dir in $subdirs; do
     module_count=$((module_count+1))
     dir_basename=$(basename $dir)
-    printf "#include \"${dir_basename}/MAIN_TEST_SUITE_${dir_basename~~}.h\"\n" \
+    dir_relative_name=$(realpath --relative-to=$search_base_dir $dir | sed "s/\//_/g")
+    printf "#include \"${dir_basename}/MAIN_TEST_SUITE_${dir_relative_name~~}.h\"\n" \
         >> $main_test_suite__header
-    printf "\nINCLUDE_SUITE(${dir_basename~~})," \
+    printf "\nINCLUDE_SUITE(${dir_relative_name~~})," \
         >> $main_test_suite__source
 done
 printf "\n#include <test_util.h>

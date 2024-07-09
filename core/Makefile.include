@@ -2,7 +2,11 @@ export INCLUDE_CORE += $(BASE_DIR)/core/include
 
 export SOURCE_CORE := $(BASE_DIR)/core/source
 
+ifeq ($(CORE_OMIT),)
 export CFILES_CORE != realpath --relative-to=$(SOURCE_CORE) $$(find $(SOURCE_CORE) -name *.c)
+else
+export CFILES_CORE != realpath --relative-to=$(SOURCE_CORE) $$(find $(SOURCE_CORE) -name *.c ! -name $(CORE_OMIT))
+endif
 export OFILES_CORE := $(CFILES_CORE:.c=.o)
 
 export SPRITE_FILES != realpath --relative-to=$(BASE_DIR)/core \
