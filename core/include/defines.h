@@ -1271,6 +1271,60 @@ typedef struct Camera_t {
     //TODO: add more things such as fulcrum
 } Camera;
 
+#define PATH_VECTORS_MAX_QUANTITY_OF 8
+
+typedef struct Path_t {
+    Ray__3i32F8 leading_ray_of__path;
+    Vector__3i32F4 path_nodes__3i32F4
+        [PATH_VECTORS_MAX_QUANTITY_OF];
+    bool is_allocated;
+} Path;
+
+#define PATH_MAX_QUANTITY_OF 8
+
+typedef struct Path_List_t {
+    Path paths[PATH_MAX_QUANTITY_OF];
+    Sort_List *p_sort_list_for__paths;
+    bool is_allocated;
+} Path_List;
+
+#define PATH_LIST_MAX_QUANTITY_OF 42
+
+typedef struct Path_List_Manager {
+    Path_List path_lists[PATH_LIST_MAX_QUANTITY_OF];
+    Quantity__u32 quantity_of__path_lists;
+} Path_List_Manager;
+
+#define ROOM_ENTRANCE_MAX_QUANTITY_OF 4
+
+typedef struct Room_t {
+    Hitbox_AABB bounding_box_of__room;
+    Vector__3i32F4 entrances__3i32F4
+        [ROOM_ENTRANCE_MAX_QUANTITY_OF];
+    Quantity__u8 quantity_of__room_entrances;
+} Room;
+
+#define ROOM_MAX_QUANTITY_OF 128
+#define ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF 8
+
+typedef struct Structure_t {
+    Room *p_room_ptrs
+        [ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF];
+    Quantity__u8 quantity_of__rooms_in__structure;
+} Structure;
+
+#define STRUCTURE_MAX_QUANTITY_OF (\
+        ROOM_MAX_QUANTITY_OF \
+        / ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF)
+
+typedef struct Structure_Manager_t {
+    Room rooms[ROOM_MAX_QUANTITY_OF];
+    Structure structures[STRUCTURE_MAX_QUANTITY_OF];
+
+    Quantity__u32 quantity_of__allocated_rooms;
+    Quantity__u32 quantity_of__allocated_structures;
+} Structure_Manager;
+
 typedef uint8_t Chunk_Tile_Index__u8;
 ///
 /// Local to a chunk.
