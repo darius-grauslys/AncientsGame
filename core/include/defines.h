@@ -1,6 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #ifndef NDEBUG
 #include <debug/debug.h>
@@ -637,6 +638,13 @@ typedef struct Inventory_t {
     Item_Stack items[INVENTORY_ITEM_MAXIMUM_QUANTITY_OF];
 } Inventory;
 
+#define INVENTORY_MAX_QUANTITY_OF 64
+
+typedef struct Inventory_Manager_t {
+    Inventory inventories[INVENTORY_MAX_QUANTITY_OF];
+    Quantity__u8 quantity_of__active_inventories;
+} Inventory_Manager;
+
 ///
 /// SECTION_entity
 ///
@@ -1038,6 +1046,90 @@ typedef struct Scene_Manager_t {
     Scene scenes[SCENE_MAX_QUANTITY_OF];
     Scene *p_active_scene;
 } Scene_Manager;
+
+///
+/// SECTION_sort
+///
+
+#define INDEX__UNKNOWN__SORT_NODE (INDEX__UNKNOWN__u16 >> 1)
+
+typedef struct Sort_Node_t {
+    void                    *p_node_data;
+    Signed_Quantity__i16    heuristic_value;
+    Index__u16              index_for__next_node    :15;
+    bool                    is_allocated            :1;
+} Sort_Node;
+
+///
+/// Heuristic for sorting.
+///
+typedef Signed_Quantity__i32 (*f_Sort_Heuristic)(
+        Sort_Node *p_node__one,
+        Sort_Node *p_node__two);
+///
+/// Heurisitic for assigning values to node.
+///
+typedef Signed_Quantity__i16 (*f_Evaluation_Heuristic)(
+        Sort_Node *p_node);
+
+typedef struct Sort_List_t Sort_List;
+
+///
+/// Should be implemented to run just one
+/// step of the sort algorithm per invocation.
+///
+/// Return true if fully sorted, otherwise false.
+///
+typedef bool (*m_Sort)(
+        Sort_List *p_this_sort_list);
+
+///
+/// Auxiliary structures for Sort_List should
+/// be defined here, and then accesed via
+/// p_sort_list->sort_data
+///
+/// Note: Even if your algorithm has O(1)
+/// space complexity, you should still
+/// make sure of Sort_Data to leverage
+/// the task-scheduling system.
+///
+typedef union Sort_Data_t {
+    struct { // Heapsort
+        ///
+        /// if equals INDEX__UNKNOWN__SORT_NODE
+        /// then heapify is complete.
+        ///
+        Index__u16 index_of__heapification;
+        Index__u16 index_of__heap_sort;
+    };
+} Sort_Data;
+
+///
+/// NOTE: p_node_list is ASSUMED to be allocated
+/// CONTIGUOUSLY!!!
+///
+typedef struct Sort_List_t {
+    Sort_Node *p_node_list;
+    f_Sort_Heuristic f_sort_heuristic;
+    f_Evaluation_Heuristic f_evaluation_heuristic;
+    m_Sort m_sort;
+    Quantity__u32 size_of__p_node_list  :31;
+    bool is_allocated                   :1;
+
+    Sort_Data sort_data;
+} Sort_List;
+
+#define SORT_LIST__MAXIMUM_QUANTITY_OF 64
+#define SORT_NODE__MAXIMUM_QUANTITY_OF 512
+
+typedef struct Sort_List_Manager_t {
+    Quantity__u32 quantity_of__allocated_sort_lists;
+    Quantity__u32 quantity_of__allocated_sort_nodes;
+    Sort_List sort_lists 
+        [SORT_LIST__MAXIMUM_QUANTITY_OF];
+    Sort_Node sort_nodes
+        [SORT_NODE__MAXIMUM_QUANTITY_OF];
+} Sort_List_Manager;
 
 ///
 /// SECTION_ui

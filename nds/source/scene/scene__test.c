@@ -79,6 +79,10 @@ void m_load_scene_as__test_handler(
             p_NDS_background_typer, 
             p_typer);
 
+    debug_info("entity: %d", sizeof(Entity));
+    debug_info("ray: %d", sizeof(Ray__3i32F8));
+    debug_info("inv: %d", sizeof(Inventory));
+
     put_c_string_in__typer(
             p_PLATFORM_gfx_context, 
             p_typer, 

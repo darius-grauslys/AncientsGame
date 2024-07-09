@@ -23,7 +23,7 @@ void NDS_establish_scenes(Scene_Manager *p_scene_manager) {
     p_scene_manager->p_active_scene =
         get_p_scene_from__scene_manager(
                 p_scene_manager, 
-                SCENE_IDENTIFIER__GAME);
+                SCENE_IDENTIFIER__TEST);
 
     initialize_scene_as__main_menu(
             get_p_scene_from__scene_manager(
