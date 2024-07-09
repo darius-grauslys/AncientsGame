@@ -6,12 +6,23 @@
 /// You will need to compile with a backend.
 ///
 
+#include "timer.h"
 #include <defines.h>
 #include <world/world.h>
 
 static inline
+Quantity__u32 get_time_elapsed__game(Game *p_game) {
+    return get_time_elapsed_from__timer_u32(&p_game->tick__timer_u32);
+}
+
+static inline
 Camera *get_p_camera_from__game(Game *p_game) {
     return get_p_camera_from__world(&p_game->world);
+}
+
+static inline
+Process_Manager *get_p_process_manager_from__game(Game *p_game) {
+    return &p_game->process_manager;
 }
 
 static Entity_Manager inline 

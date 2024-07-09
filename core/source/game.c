@@ -1,5 +1,6 @@
 #include "defines_weak.h"
 #include "platform.h"
+#include "process/process_manager.h"
 #include "scene/scene_manager.h"
 #include <game.h>
 #include <entity/entity.h>
@@ -92,7 +93,10 @@ void manage_game__pre_render(Game *p_game) {
 
 void manage_game__post_render(Game *p_game) {
     PLATFORM_poll_input(&p_game->input);
-    poll_ui_manager__update(&p_game->ui_manager, p_game);
+    poll_process_manager(
+            get_p_process_manager_from__game(p_game), p_game);
+    poll_ui_manager__update(
+            get_p_ui_manager_from__game(p_game), p_game);
 
     PLATFORM_post_render(p_game);
 }

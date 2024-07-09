@@ -927,6 +927,77 @@ typedef struct Input_t {
 ///
 
 ///
+/// SECTION_process
+///
+
+typedef struct Process_t Process;
+
+enum Process_Status_Kind {
+    Process_Status_Kind__None = 0,
+    Process_Status_Kind__Stopped,
+    Process_Status_Kind__Idle,
+    Process_Status_Kind__Busy,
+    Process_Status_Kind__Complete,
+    Process_Status_Kind__Fail,
+    Process_Status_Kind__Removed,
+    Process_Status_Kind__Unknown
+};
+
+///
+/// This enum helps the process_manager sort processes
+/// as well as determine which ticks the processes run on.
+///
+/// On single threaded platforms:
+/// Low will run on every (8 * pid) ticks.
+/// Medium will run on every (2 * pid) ticks,
+/// High will run on every 8 ticks,
+/// Critical will run on every tick.
+///
+/// Additionally, if a Critical process is
+/// created, but there is no available space for
+/// it, the lowest priority process will be
+/// removed ungracefully. This only happens for
+/// Critical processes, while other process types
+/// will not be registered. 
+///
+/// The removed process
+/// will have it's m_process_removed__handler
+/// invoked. For processes of the same priority
+/// the longest lived process is selected for
+/// removal.
+///
+enum Process_Priority_Kind {
+    Process_Priority_Kind__None = 0,
+    Process_Priority_Kind__Low,
+    Process_Priority_Kind__Medium,
+    Process_Priority_Kind__High,
+    Process_Priority_Kind__Critical
+};
+
+typedef void (*m_Process)(
+        Process *p_this_process,
+        Game *p_game);
+
+///
+/// Multithreading abstraction.
+///
+typedef struct Process_t {
+    m_Process m_process_run__handler;
+    m_Process m_process_removed__handler;
+    void *p_process_data;
+    Timer__u32 process_timer__u32;
+    enum Process_Status_Kind the_kind_of_status__this_process_has;
+    enum Process_Priority_Kind the_kind_of_priority__this_process_has;
+} Process;
+
+#define PROCESS_MAX_QUANTITY_OF 16
+
+typedef struct Process_Manager_t {
+    Process processes[PROCESS_MAX_QUANTITY_OF];
+    Quantity__u32 quantity_of__running_processes;
+} Process_Manager;
+
+///
 /// SECTION_scene
 ///
 
@@ -1312,6 +1383,8 @@ typedef struct Game_t {
     UI_Manager ui_manager;
 
     World world;
+
+    Process_Manager process_manager;
 
     m_Game_Action_Handler m_game_action_handler;
 
