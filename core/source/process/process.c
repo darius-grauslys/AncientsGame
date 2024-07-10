@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "defines_weak.h"
 #include "timer.h"
 #include <process/process.h>
 
@@ -6,10 +7,13 @@ void initialize_process(
         Process *p_process,
         m_Process m_process_run__handler,
         m_Process m_process_removed__handler,
-        void *p_process_data) {
+        void *p_process_data,
+        Quantity__u32 quantity_of__steps_per_cycle) {
     initialize_timer_u32(
             get_p_timer_u32_from__process(p_process), 
             QUANTITY__UNKNOWN__u32);
+    p_process->quantity_of__steps_per_cycle =
+        quantity_of__steps_per_cycle;
     p_process->m_process_run__handler =
         m_process_run__handler;
     p_process->m_process_removed__handler =
@@ -25,5 +29,5 @@ void initialize_process(
 void initialize_process_as__empty_process(
         Process *p_process) {
     initialize_process(
-            p_process, 0, 0, 0);
+            p_process, 0, 0, 0, 0);
 }

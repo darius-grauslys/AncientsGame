@@ -9,15 +9,21 @@ void initialize_sort_list_as__allocated(
         Sort_List *p_sort_list,
         Sort_Node *p_node_list,
         f_Sort_Heuristic f_sort_heuristic,
-        f_Evaluation_Heuristic f_evaluation_heuristic,
         Quantity__u32 size_of__sort_list);
 
 void initialize_sort_list_as__empty(
         Sort_List *p_sort_list);
 
-Signed_Quantity__i32 f_heuristic__ptr_address_comparison(
-        Sort_Node *p_node__one,
-        Sort_Node *p_node__two);
+///
+/// Will have the entire sort list
+/// point to the given range in
+/// sequential order of nodes, regardless
+/// of each node's index_for__next_node.
+///
+void point_sort_list__sort_nodes_to__this_range(
+        Sort_List *p_sort_list,
+        void *p_node_data__range,
+        Quantity__u32 size_of__stride_in__bytes);
 
 ///
 /// O(lgN) time complexity.
@@ -88,6 +94,12 @@ Sort_Node *get_next_p_sort_node_from__sort_list(
 static inline
 Quantity__u32 get_length_of__sort_list(
         Sort_List *p_sort_list) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("get_length_of__sort_list, p_sort_list is null.");
+        return 0;
+    }
+#endif
     return p_sort_list->size_of__p_node_list;
 }
 
@@ -110,25 +122,63 @@ bool run_sort__once(
 static inline
 void set_sort_list_as__allocated(
         Sort_List *p_sort_list) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("set_sort_list_as__allocated, p_sort_list is null.");
+        return;
+    }
+#endif
     p_sort_list->is_allocated = true;
 }
 
 static inline
 void set_sort_list_as__deallocated(
         Sort_List *p_sort_list) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("set_sort_list_as__deallocated, p_sort_list is null.");
+        return;
+    }
+#endif
     p_sort_list->is_allocated = false;
 }
 
 static inline
 Sort_Node *get_p_node_list_from__sort_list(
         Sort_List *p_sort_list) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("get_p_node_list_from__sort_list, p_sort_list is null.");
+        return 0;
+    }
+#endif
     return p_sort_list->p_node_list;
 }
 
 static inline
 bool is_sort_list__allocated(
         Sort_List *p_sort_list) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("is_sort_list__allocated, p_sort_list is null.");
+        return 0;
+    }
+#endif
     return p_sort_list->is_allocated;
+}
+
+static inline
+void set_sort_list__sort_heuristic(
+        Sort_List *p_sort_list,
+        f_Sort_Heuristic f_sort_heuristic) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("set_sort_list__sort_heuristic, p_sort_list is null.");
+        return;
+    }
+#endif
+    p_sort_list->f_sort_heuristic =
+        f_sort_heuristic;
 }
 
 #endif

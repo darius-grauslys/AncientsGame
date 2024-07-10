@@ -1,6 +1,8 @@
 #ifndef COLLISION_MANAGER_H
 #define COLLISION_MANAGER_H
 
+#include "defines_weak.h"
+#include "raycast/ray.h"
 #include <defines.h>
 #include <vectors.h>
 #include <world/chunk_vectors.h>
@@ -32,6 +34,21 @@ void remove_entity_from__collision_manager__at(
         Collision_Manager *p_collision_manager,
         Entity *p_entity,
         Chunk_Vector__3i32 chunk_vector__3i32);
+
+Entity *get_p_entity_from__collision_manager_with__3i32F4(
+        Collision_Manager *p_collision_manager,
+        Vector__3i32F4 position__3i32F4);
+
+static inline
+Entity *get_p_entity_from__collision_manager_with__ray_3i32F8(
+        Collision_Manager *p_collision_manager,
+        Ray__3i32F8 *p_ray__3i32F8) {
+    return
+        get_p_entity_from__collision_manager_with__3i32F4(
+                p_collision_manager, 
+                get_endpoint_of__p_ray_as__vector_3i32F4(
+                    p_ray__3i32F8));
+}
 
 ///
 /// Does nothing if cannot find

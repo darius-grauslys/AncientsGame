@@ -90,4 +90,12 @@ Tile *get_p_tile_from__chunk_manager_with__3i32F4(
         Chunk_Manager *p_chunk_manager,
         Vector__3i32F4 position);
 
+///
+/// Returns a pointer to a tile if the end of the
+/// ray is on a tile, otherwise returns nullptr.
+///
+Tile *get_p_tile_from__chunk_manager_with__ray_3i32f8(
+        Chunk_Manager *p_chunk_manager,
+        Ray__3i32F8 *p_ray__3i32F8);
+
 #endif

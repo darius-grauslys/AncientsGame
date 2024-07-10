@@ -1,6 +1,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
+#include "defines_weak.h"
 #include "timer.h"
 #include <defines.h>
 
@@ -8,7 +9,8 @@ void initialize_process(
         Process *p_process,
         m_Process m_process_run__handler,
         m_Process m_process_removed__handler,
-        void *p_process_data);
+        void *p_process_data,
+        Quantity__u32 quantity_of__steps_per_cycle);
 
 void initialize_process_as__empty_process(
         Process *p_process);
@@ -179,6 +181,6 @@ bool does_process_have__removed_handler(
 #define LOOP_PROCESS(p_process) \
     loop_timer_u32(get_p_timer_u32_from__process(p_process)); \
     for (;get_p_timer_u32_from__process(p_process)->remaining__u32 \
-            & MASK(4); loop_timer_u32(get_p_timer_u32_from__process(p_process)))
+            < p_process->quantity_of__steps_per_cycle; loop_timer_u32(get_p_timer_u32_from__process(p_process)))
 
 #endif

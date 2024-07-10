@@ -2,6 +2,8 @@
 #include "platform.h"
 #include "process/process_manager.h"
 #include "scene/scene_manager.h"
+#include "sort/sort_list/sort_list_manager.h"
+#include "world/path_finding/path_list_manager.h"
 #include <game.h>
 #include <entity/entity.h>
 #include <entity/entity_manager.h>
@@ -32,6 +34,12 @@ void initialize_game(
         Game *p_game,
         m_Game_Action_Handler m_game_action_handler) {
     initialize_scene_manager(&p_game->scene_manager);
+    initialize_process_manager(
+            get_p_process_manager_from__game(p_game));
+    initialize_sort_list_manager(
+            get_p_sort_list_manager_from__game(p_game));
+    initialize_path_list_manager(
+            get_p_path_list_manager_from__game(p_game));
     p_game->is_world__initialized = false;
     p_game->m_game_action_handler = m_game_action_handler;
 }

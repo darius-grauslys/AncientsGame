@@ -7,7 +7,6 @@ void initialize_sort_list_as__allocated(
         Sort_List *p_sort_list,
         Sort_Node *p_node_list,
         f_Sort_Heuristic f_sort_heuristic,
-        f_Evaluation_Heuristic f_evaluation_heuristic,
         Quantity__u32 size_of__sort_list) {
 #ifndef NDEBUG
     if (size_of__sort_list >=
@@ -23,8 +22,6 @@ void initialize_sort_list_as__allocated(
         p_node_list;
     p_sort_list->f_sort_heuristic =
         f_sort_heuristic;
-    p_sort_list->f_evaluation_heuristic =
-        f_evaluation_heuristic;
     p_sort_list->size_of__p_node_list =
         size_of__sort_list;
     p_sort_list->is_allocated = true;
@@ -44,18 +41,32 @@ void initialize_sort_list_as__empty(
         Sort_List *p_sort_list) {
     p_sort_list->p_node_list = 0;
     p_sort_list->f_sort_heuristic = 0;
-    p_sort_list->f_evaluation_heuristic = 0;
     p_sort_list->size_of__p_node_list = 0;
     p_sort_list->is_allocated = false;
 }
 
-Signed_Quantity__i32 f_heuristic__ptr_address_comparison(
-        Sort_Node *p_node__one,
-        Sort_Node *p_node__two) {
-    return 
-        (Signed_Quantity__i32)p_node__one->p_node_data
-        - (Signed_Quantity__i32)p_node__two->p_node_data
-        ;
+void point_sort_list__sort_nodes_to__this_range(
+        Sort_List *p_sort_list,
+        void *p_node_data__range,
+        Quantity__u32 size_of__stride_in__bytes) {
+    uint8_t *p_node_data__range_as__p_uint8_t =
+        (uint8_t*)p_node_data__range;
+
+    for (Index__u16 index_of__sort_node = 0;
+            index_of__sort_node
+            < SORT_NODE__MAXIMUM_QUANTITY_OF
+            && index_of__sort_node
+            < get_length_of__sort_list(p_sort_list);
+            index_of__sort_node++) {
+        Sort_Node *p_sort_node =
+            get_p_sort_node_by__index_from__sort_list(
+                    p_sort_list, 
+                    index_of__sort_node);
+        p_sort_node->p_node_data =
+            p_node_data__range_as__p_uint8_t;
+        p_node_data__range_as__p_uint8_t += 
+            size_of__stride_in__bytes;
+    }
 }
 
 ///

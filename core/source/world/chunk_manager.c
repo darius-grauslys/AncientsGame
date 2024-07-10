@@ -614,3 +614,28 @@ Tile *get_p_tile_from__chunk_manager_with__3i32F4(
 
     return p_tile;
 }
+
+Tile *get_p_tile_from__chunk_manager_with__ray_3i32f8(
+        Chunk_Manager *p_chunk_manager,
+        Ray__3i32F8 *p_ray__3i32F8) {
+    Vector__3i32F4 tile_pos = 
+        vector_3i32F8_to__vector_3i32F4(
+                p_ray__3i32F8->ray_current_vector__3i32F8);
+    Chunk *p_chunk =
+        get_p_chunk_from__chunk_manager_using__i32(
+                p_chunk_manager,
+                get_chunk_x_i32_from__vector_3i32F4(tile_pos),
+                get_chunk_y_i32_from__vector_3i32F4(tile_pos),
+                0);
+
+    if (!p_chunk) {
+        return 0;
+    }
+    return
+        get_p_tile_from__chunk_using__u8(
+                p_chunk,
+                get_tile_x_u8_from__vector_3i32F4(tile_pos),
+                get_tile_y_u8_from__vector_3i32F4(tile_pos),
+                0);
+}
+

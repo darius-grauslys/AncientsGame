@@ -469,6 +469,67 @@ void check_collision_node_for__collisions(
     }
 }
 
+void poll_collision_node_and__neighbors(
+        Collision_Manager__Collision_Node *p_collision_node,
+        Entity *p_entity) {
+    check_collision_node_for__collisions(
+            p_collision_node, 
+            p_entity);
+
+    // north
+    if (p_collision_node->legal_directions & DIRECTION__NORTH) {
+        check_collision_node_for__collisions(
+                p_collision_node->p_north__collision_node, 
+                p_entity);
+        // north east
+        if (p_collision_node->legal_directions & DIRECTION__EAST) {
+            check_collision_node_for__collisions(
+                    p_collision_node->p_north__collision_node
+                        ->p_east__collision_node, 
+                    p_entity);
+        }
+        // north west
+        if (p_collision_node->legal_directions & DIRECTION__WEST) {
+            check_collision_node_for__collisions(
+                    p_collision_node->p_north__collision_node
+                        ->p_west__collision_node, 
+                    p_entity);
+        }
+    }
+    // south
+    if (p_collision_node->legal_directions & DIRECTION__SOUTH) {
+        check_collision_node_for__collisions(
+                p_collision_node->p_south__collision_node, 
+                p_entity);
+        // south east
+        if (p_collision_node->legal_directions & DIRECTION__EAST) {
+            check_collision_node_for__collisions(
+                    p_collision_node->p_south__collision_node
+                        ->p_east__collision_node, 
+                    p_entity);
+        }
+        // south west
+        if (p_collision_node->legal_directions & DIRECTION__WEST) {
+            check_collision_node_for__collisions(
+                    p_collision_node->p_south__collision_node
+                        ->p_west__collision_node, 
+                    p_entity);
+        }
+    }
+    // east
+    if (p_collision_node->legal_directions & DIRECTION__EAST) {
+        check_collision_node_for__collisions(
+                p_collision_node->p_east__collision_node, 
+                p_entity);
+    }
+    // west
+    if (p_collision_node->legal_directions & DIRECTION__WEST) {
+        check_collision_node_for__collisions(
+                p_collision_node->p_west__collision_node, 
+                p_entity);
+    }
+}
+
 bool poll_collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity) {
@@ -485,62 +546,9 @@ bool poll_collision_manager(
         return false;
     }
 
-    check_collision_node_for__collisions(
+    poll_collision_node_and__neighbors(
             collision_node, 
             entity);
-
-    // north
-    if (collision_node->legal_directions & DIRECTION__NORTH) {
-        check_collision_node_for__collisions(
-                collision_node->p_north__collision_node, 
-                entity);
-        // north east
-        if (collision_node->legal_directions & DIRECTION__EAST) {
-            check_collision_node_for__collisions(
-                    collision_node->p_north__collision_node
-                        ->p_east__collision_node, 
-                    entity);
-        }
-        // north west
-        if (collision_node->legal_directions & DIRECTION__WEST) {
-            check_collision_node_for__collisions(
-                    collision_node->p_north__collision_node
-                        ->p_west__collision_node, 
-                    entity);
-        }
-    }
-    // south
-    if (collision_node->legal_directions & DIRECTION__SOUTH) {
-        check_collision_node_for__collisions(
-                collision_node->p_south__collision_node, 
-                entity);
-        // south east
-        if (collision_node->legal_directions & DIRECTION__EAST) {
-            check_collision_node_for__collisions(
-                    collision_node->p_south__collision_node
-                        ->p_east__collision_node, 
-                    entity);
-        }
-        // south west
-        if (collision_node->legal_directions & DIRECTION__WEST) {
-            check_collision_node_for__collisions(
-                    collision_node->p_south__collision_node
-                        ->p_west__collision_node, 
-                    entity);
-        }
-    }
-    // east
-    if (collision_node->legal_directions & DIRECTION__EAST) {
-        check_collision_node_for__collisions(
-                collision_node->p_east__collision_node, 
-                entity);
-    }
-    // west
-    if (collision_node->legal_directions & DIRECTION__WEST) {
-        check_collision_node_for__collisions(
-                collision_node->p_west__collision_node, 
-                entity);
-    }
 
     return true;
 }
@@ -610,6 +618,41 @@ collision node.");
     *p_removed_entity_ptr_slot =
         *p_last_entity_ptr_slot;
     *p_last_entity_ptr_slot = 0;
+}
+
+Entity *get_p_entity_from__collision_manager_with__3i32F4(
+        Collision_Manager *p_collision_manager,
+        Vector__3i32F4 position__3i32F4) {
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(
+                position__3i32F4);
+    Collision_Manager__Collision_Node *collision_node =
+        get_collision_node_for__this_position(
+                p_collision_manager, 
+                chunk_vector__3i32.x__i32,
+                chunk_vector__3i32.y__i32);
+
+    if (!collision_node)
+        return 0;
+
+    for (uint32_t i=0;
+            i<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
+            i++) {
+        Entity *p_entity =
+            collision_node->p_entity_ptrs[i];
+        // All collisions checked.
+        if (!p_entity) {
+            return 0;
+        }
+
+        bool is_hitbox_containing__our_position =
+            is_vector_3i32F4_inside__hitbox(
+                    position__3i32F4, 
+                    &p_entity->hitbox);
+        if (is_hitbox_containing__our_position)
+            return p_entity;
+    }
+    return 0;
 }
 
 ///

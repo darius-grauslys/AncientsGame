@@ -24,6 +24,14 @@ void set_sort_node_as__deallocated(
 }
 
 static inline
+void set_sort_node__p_node_data(
+        Sort_Node *p_sort_node,
+        void *p_node_data) {
+    p_sort_node->p_node_data =
+        p_node_data;
+}
+
+static inline
 bool is_sort_node__allocated(
         Sort_Node *p_sort_node) {
     return p_sort_node->is_allocated;

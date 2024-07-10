@@ -194,6 +194,8 @@ void PLATFORM_update_chunks(
 /// SECTION_core
 ///
 
+int abs(int x);
+
 int PLATFORM_main(Game *p_game);
 
 void PLATFORM_pre_render(Game *game);

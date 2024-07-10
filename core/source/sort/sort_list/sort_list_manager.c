@@ -72,7 +72,7 @@ find_available_node:
                 lookahead_index_of__sort_node
                 < SORT_NODE__MAXIMUM_QUANTITY_OF
                 && lookahead_index_of__sort_node
-                < quantity_of__nodes;
+                < (quantity_of__nodes + index_of__sort_node);
                 lookahead_index_of__sort_node++) {
             Sort_Node *p_sort_node__lookahead =
                 get_p_sort_node_by__index_in__sort_list_manager(
@@ -116,7 +116,7 @@ Sort_List *allocate_sort_list_in__sort_list_manager(
         Sort_List_Manager *p_sort_list_manager,
         Quantity__u32 quantity_of__nodes) {
     Quantity__u32 quantity_of__remaining_nodes =
-        get_quantity_of__allocated_sort_nodes_in__sort_list_manager(
+        get_quantity_of__available_sort_nodes_in__sort_list_manager(
                 p_sort_list_manager);
     if (!get_quantity_of__available_sort_lists_in__sort_list_manager(
                 p_sort_list_manager)) {
@@ -127,8 +127,7 @@ Sort_List *allocate_sort_list_in__sort_list_manager(
             < quantity_of__nodes) {
         debug_error("allocate_sort_list_in__sort_list_manager, node size exceeds available: %d > %d",
                 quantity_of__nodes,
-                get_quantity_of__available_sort_nodes_in__sort_list_manager(
-                    p_sort_list_manager));
+                quantity_of__remaining_nodes);
         return 0;
     }
 

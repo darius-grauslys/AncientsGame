@@ -1,5 +1,22 @@
 #include "defines.h"
+#include "defines_weak.h"
 #include <vectors.h>
+
+const Vector__3i32 VECTOR__3i32__OUT_OF_BOUNDS = (Vector__3i32){
+    (BIT(31)),
+    (BIT(31)),
+    (BIT(31))
+};
+const Vector__3i32F4 VECTOR__3i32F4__OUT_OF_BOUNDS = (Vector__3i32F4){
+    (BIT(31)),
+    (BIT(31)),
+    (BIT(31))
+};
+const Vector__3i32F8 VECTOR__3i32F8__OUT_OF_BOUNDS = (Vector__3i32F8){
+    (BIT(31)),
+    (BIT(31)),
+    (BIT(31))
+};
 
 void offset_vector_by__direction(
         Vector__3i32F4 *p_vector,

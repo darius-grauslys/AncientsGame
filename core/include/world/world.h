@@ -1,7 +1,9 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include "collisions/collision_manager.h"
 #include "defines_weak.h"
+#include "world/chunk_manager.h"
 #include <defines.h>
 
 static inline
@@ -19,8 +21,8 @@ static Chunk_Manager inline
     return &p_world->chunk_manager;
 }
 
-static Collision_Manager inline 
-*get_p_collision_manager_from__world(World *p_world) {
+static inline
+Collision_Manager *get_p_collision_manager_from__world(World *p_world) {
     return &p_world->collision_manager;
 }
 
@@ -32,6 +34,32 @@ static World_Parameters inline
 static Entity inline
 *get_p_local_player_from__world(World *p_world) {
     return p_world->entity_manager.p_local_player;
+}
+
+///
+/// Returns tile ptr if ray is on a tile
+/// otherwise returns nullptr.
+///
+static inline
+Tile *get_p_tile_from__world_using__ray_3i32F8(
+        World *p_world,
+        Ray__3i32F8 *p_ray__3i32F8) {
+    return get_p_tile_from__chunk_manager_with__ray_3i32f8(
+            get_p_chunk_manager_from__world(p_world),
+            p_ray__3i32F8);
+}
+
+///
+/// Returns entity ptr if ray is on entity
+/// otherwise returns nullptr.
+///
+static inline
+Entity *get_p_entity_from__world_using__ray_3i32F8(
+        World *p_world,
+        Ray__3i32F8 *p_ray__3i32F8) {
+    return get_p_entity_from__collision_manager_with__ray_3i32F8(
+            get_p_collision_manager_from__world(p_world),
+            p_ray__3i32F8);
 }
 
 void initialize_world(

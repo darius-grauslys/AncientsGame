@@ -107,6 +107,12 @@ typedef struct Timer__u8_t {
 
 typedef uint8_t Direction__u8;
 typedef uint8_t Degree__u8;
+
+#define ANGLE__90 64
+#define ANGLE__180 128
+#define ANGLE__270 192
+#define LENGTH_OF_RAY__i32F8 0b11111111
+
 typedef struct Ray__3i32F8_t {
     Vector__3i32F8 ray_starting_vector__3i32F8;
     Vector__3i32F8 ray_current_vector__3i32F8;
@@ -994,6 +1000,7 @@ typedef struct Process_t {
     m_Process m_process_removed__handler;
     void *p_process_data;
     Timer__u32 process_timer__u32;
+    Quantity__u32 quantity_of__steps_per_cycle;
     enum Process_Status_Kind the_kind_of_status__this_process_has;
     enum Process_Priority_Kind the_kind_of_priority__this_process_has;
 } Process;
@@ -1066,11 +1073,6 @@ typedef struct Sort_Node_t {
 typedef Signed_Quantity__i32 (*f_Sort_Heuristic)(
         Sort_Node *p_node__one,
         Sort_Node *p_node__two);
-///
-/// Heurisitic for assigning values to node.
-///
-typedef Signed_Quantity__i16 (*f_Evaluation_Heuristic)(
-        Sort_Node *p_node);
 
 typedef struct Sort_List_t Sort_List;
 
@@ -1111,7 +1113,6 @@ typedef union Sort_Data_t {
 typedef struct Sort_List_t {
     Sort_Node *p_node_list;
     f_Sort_Heuristic f_sort_heuristic;
-    f_Evaluation_Heuristic f_evaluation_heuristic;
     m_Sort m_sort;
     Quantity__u32 size_of__p_node_list  :31;
     bool is_allocated                   :1;
@@ -1271,13 +1272,17 @@ typedef struct Camera_t {
     //TODO: add more things such as fulcrum
 } Camera;
 
-#define PATH_VECTORS_MAX_QUANTITY_OF 8
+#define PATH_VECTORS_MAX_QUANTITY_OF 6
 
 typedef struct Path_t {
     Ray__3i32F8 leading_ray_of__path;
     Vector__3i32F4 path_nodes__3i32F4
         [PATH_VECTORS_MAX_QUANTITY_OF];
-    bool is_allocated;
+    Vector__3i32F4 *p_path_node__newest__3i32F4;
+    struct Path_t *p_path__branching;
+    i32F8 distance__travelled__i32F8;
+    i32F4 distance_squared__from_target__i32F4;
+    i32F4 distance__hamming__i32F4;
 } Path;
 
 #define PATH_MAX_QUANTITY_OF 8
@@ -1285,7 +1290,7 @@ typedef struct Path_t {
 typedef struct Path_List_t {
     Path paths[PATH_MAX_QUANTITY_OF];
     Sort_List *p_sort_list_for__paths;
-    bool is_allocated;
+    Vector__3i32F4 destination__3i32F4;
 } Path_List;
 
 #define PATH_LIST_MAX_QUANTITY_OF 42
@@ -1531,6 +1536,8 @@ typedef struct Game_t {
     World world;
 
     Process_Manager process_manager;
+    Sort_List_Manager sort_list_manager;
+    Path_List_Manager path_list_manager;
 
     m_Game_Action_Handler m_game_action_handler;
 

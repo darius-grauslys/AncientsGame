@@ -6,10 +6,8 @@
 # options for code generation
 #---------------------------------------------------------------------------------
 CFLAGS := -Wall -O2
-#    -march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
-#    -ffast-math
 
-CFLAGS    += $(INCLUDE) #-DARM9
+CFLAGS    += $(INCLUDE)
 
 LDFLAGS  = 
 
@@ -88,14 +86,13 @@ export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
-	echo $(OFILES)
 	@[ -d $@ ] || mkdir -p $@
-	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-
-#---------------------------------------------------------------------------------
-clean:
-	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile \
+		 | grep -wE 'cc|gcc|g\+\+' \
+		 | grep -w '\-c' \
+		 | jq -nR '[inputs|{directory:"$(BUILD)", command:., file: match(" [^ ]+$$").string[1:]}]' \
+		 > $(BUILD)/compile_commands.json
+	@ln -f -s $(BUILD)/compile_commands.json $(BASE_DIR)/compile_commands.json
 
 #---------------------------------------------------------------------------------
 else

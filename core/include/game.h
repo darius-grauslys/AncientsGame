@@ -25,6 +25,16 @@ Process_Manager *get_p_process_manager_from__game(Game *p_game) {
     return &p_game->process_manager;
 }
 
+static inline
+Sort_List_Manager *get_p_sort_list_manager_from__game(Game *p_game) {
+    return &p_game->sort_list_manager;
+}
+
+static inline
+Path_List_Manager *get_p_path_list_manager_from__game(Game *p_game) {
+    return &p_game->path_list_manager;
+}
+
 static Entity_Manager inline 
 *get_p_entity_manager_from__game(Game *p_game) {
     return get_p_entity_manager_from__world(&p_game->world);

@@ -79,6 +79,11 @@ void m_load_scene_as__test_handler(
             p_NDS_background_typer, 
             p_typer);
 
+    debug_info("game: %d", sizeof(Game));
+    debug_info("process_manager: %d", sizeof(Process_Manager));
+    debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
+    debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
+    debug_info("path: %d", sizeof(Path));
     debug_info("entity: %d", sizeof(Entity));
     debug_info("ray: %d", sizeof(Ray__3i32F8));
     debug_info("inv: %d", sizeof(Inventory));

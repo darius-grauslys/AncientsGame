@@ -3,6 +3,13 @@
 
 #include <defines.h>
 
+///
+/// Log(N) complexity get degree.
+///
+Degree__u8 get_angle_between__vectors_3i32F4(
+        Vector__3i32F4 *p_source__3i32F4, 
+        Vector__3i32F4 *p_target__3i32F4);
+
 static Degree__u8 inline add_angles(
         Degree__u8 angle_1,
         Degree__u8 angle_2) {

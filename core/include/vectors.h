@@ -7,20 +7,72 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-static i32F4 inline i32_to__i32F4(Signed_Index__i32 x) {
+extern const Vector__3i32 VECTOR__3i32__OUT_OF_BOUNDS;
+extern const Vector__3i32F4 VECTOR__3i32F4__OUT_OF_BOUNDS;
+extern const Vector__3i32F8 VECTOR__3i32F8__OUT_OF_BOUNDS;
+
+static inline
+bool is_vectors_3i32__out_of_bounds(
+        const Vector__3i32 vector__3i32) {
+    return 
+        VECTOR__3i32__OUT_OF_BOUNDS.x__i32
+        == vector__3i32.x__i32
+        || VECTOR__3i32__OUT_OF_BOUNDS.y__i32
+        == vector__3i32.y__i32
+        || VECTOR__3i32__OUT_OF_BOUNDS.z__i32
+        == vector__3i32.z__i32
+        ;
+}
+
+static inline
+bool is_vectors_3i32F4__out_of_bounds(
+        const Vector__3i32F4 vector__3i32F4) {
+    return 
+        VECTOR__3i32F4__OUT_OF_BOUNDS.x__i32F4
+        == vector__3i32F4.x__i32F4
+        || VECTOR__3i32F4__OUT_OF_BOUNDS.y__i32F4
+        == vector__3i32F4.y__i32F4
+        || VECTOR__3i32F4__OUT_OF_BOUNDS.z__i32F4
+        == vector__3i32F4.z__i32F4
+        ;
+}
+
+static inline
+bool is_vectors_3i32F8__out_of_bounds(
+        const Vector__3i32F8 vector__3i32F8) {
+    return 
+        VECTOR__3i32F8__OUT_OF_BOUNDS.x__i32F8
+        == vector__3i32F8.x__i32F8
+        || VECTOR__3i32F8__OUT_OF_BOUNDS.y__i32F8
+        == vector__3i32F8.y__i32F8
+        || VECTOR__3i32F8__OUT_OF_BOUNDS.z__i32F8
+        == vector__3i32F8.z__i32F8
+        ;
+}
+
+static inline 
+i32F4 i32_to__i32F4(Signed_Index__i32 x) {
     return x << FRACTIONAL_PERCISION_4__BIT_SIZE;
 }
 
-static Signed_Index__i32 inline i32F4_to__i32(i32F4 x) {
+static inline 
+Signed_Index__i32 i32F4_to__i32(i32F4 x) {
     return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
 }
 
-static i32F8 inline i32_to__i32F8(Signed_Index__i32 x) {
+static inline 
+i32F8 i32_to__i32F8(Signed_Index__i32 x) {
     return x << FRACTIONAL_PERCISION_8__BIT_SIZE;
 }
 
-static Signed_Index__i32 inline i32F8_to__i32(i32F8 x) {
+static inline 
+Signed_Index__i32 i32F8_to__i32(i32F8 x) {
     return x >> FRACTIONAL_PERCISION_8__BIT_SIZE;
+}
+
+static inline 
+Signed_Index__i32 i32F8_to__i32F4(i32F8 x) {
+    return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
 }
 
 static void inline initialize_3i32F4_vector(
@@ -325,7 +377,8 @@ static void inline add_p_vectors__3i32(
     p_vector_one->z__i32 += p_vector_two->z__i32;
 }
 
-static void inline subtract_p_vectors__3i32F4(
+static inline 
+void subtract_p_vectors__3i32F4(
         Vector__3i32F4 *p_vector_one,
         Vector__3i32F4 *p_vector_two) {
     p_vector_one->x__i32F4 -= p_vector_two->x__i32F4;
@@ -333,7 +386,8 @@ static void inline subtract_p_vectors__3i32F4(
     p_vector_one->z__i32F4 -= p_vector_two->z__i32F4;
 }
 
-static void inline subtract_p_vectors__3i32(
+static inline 
+void subtract_p_vectors__3i32(
         Vector__3i32 *p_vector_one,
         Vector__3i32 *p_vector_two) {
     p_vector_one->x__i32 -= p_vector_two->x__i32;
@@ -341,7 +395,54 @@ static void inline subtract_p_vectors__3i32(
     p_vector_one->z__i32 -= p_vector_two->z__i32;
 }
 
-static bool inline is_vector_3i32F8_within__distance_i32F4(
+static inline
+i32 get_distance_squared_of__vector_3i32(
+        Vector__3i32 vector__3i32) {
+    return (vector__3i32.x__i32 * vector__3i32.x__i32
+            + vector__3i32.y__i32 * vector__3i32.y__i32
+            + vector__3i32.z__i32 * vector__3i32.z__i32)
+        ;
+}
+
+static inline
+i32F4 get_distance_squared_of__vector_3i32F4(
+        Vector__3i32F4 vector__3i32F4) {
+    return (vector__3i32F4.x__i32F4 * vector__3i32F4.x__i32F4
+            + vector__3i32F4.y__i32F4 * vector__3i32F4.y__i32F4
+            + vector__3i32F4.z__i32F4 * vector__3i32F4.z__i32F4)
+        ;
+}
+
+static inline
+i32F4 get_distance_hamming_of__vectors_3i32(
+        Vector__3i32 vector__one__3i32,
+        Vector__3i32 vector__two__3i32) {
+    return
+        abs(vector__one__3i32.x__i32
+                - vector__two__3i32.x__i32)
+        + abs(vector__one__3i32.y__i32
+                - vector__two__3i32.y__i32)
+        + abs(vector__one__3i32.z__i32
+                - vector__two__3i32.z__i32)
+        ;
+}
+
+static inline
+i32F4 get_distance_hamming_of__vectors_3i32F4(
+        Vector__3i32F4 vector__one__3i32F4,
+        Vector__3i32F4 vector__two__3i32F4) {
+    return
+        abs(vector__one__3i32F4.x__i32F4
+                - vector__two__3i32F4.x__i32F4)
+        + abs(vector__one__3i32F4.y__i32F4
+                - vector__two__3i32F4.y__i32F4)
+        + abs(vector__one__3i32F4.z__i32F4
+                - vector__two__3i32F4.z__i32F4)
+        ;
+}
+
+static inline 
+bool is_vector_3i32F8_within__distance_i32F4(
         Vector__3i32F8 vector,
         i32F4 distance) {
     i32F4 x = vector.x__i32F8 >> FRACTIONAL_PERCISION_4__BIT_SIZE;
@@ -356,7 +457,8 @@ static bool inline is_vector_3i32F8_within__distance_i32F4(
     //     ;
 }
 
-static bool inline is_vector_3i32F8_within__distance_i32(
+static inline 
+bool is_vector_3i32F8_within__distance_i32(
         Vector__3i32F8 vector,
         Signed_Index__i32 distance) {
     return ((vector.x__i32F8 * vector.x__i32F8
@@ -367,7 +469,8 @@ static bool inline is_vector_3i32F8_within__distance_i32(
         ;
 }
 
-static bool inline is_vector_3i32F4_within__distance_i32F4(
+static inline 
+bool is_vector_3i32F4_within__distance_i32F4(
         Vector__3i32F4 vector,
         i32F4 distance) {
     return (vector.x__i32F4 * vector.x__i32F4
@@ -377,7 +480,8 @@ static bool inline is_vector_3i32F4_within__distance_i32F4(
         ;
 }
 
-static bool inline is_vector_3i32_within__distance_i32(
+static inline 
+bool is_vector_3i32_within__distance_i32(
         Vector__3i32 vector,
         Signed_Index__i32 distance) {
     return (vector.x__i32 * vector.x__i32
