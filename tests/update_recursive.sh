@@ -87,9 +87,9 @@ ${search_suffix}/$(basename $test_sub_suite__header)"
         printf "#include <test_util.h>
 
 DECLARE_SUITE(${test_suite__module_name%.*})\n" > $test_sub_suite__header
-        printf "#include \"$(basename $test_sub_suite__header)\"\n" \
-            >> $main_test_suite__header
     fi
+    printf "#include \"$(basename $test_sub_suite__header)\"\n" \
+        >> $main_test_suite__header
     if ! test -f $test_sub_suite__source; then
         printf "#include <$test_sub_suite__header_include>\n
 #include <${module}>
@@ -100,9 +100,9 @@ DECLARE_SUITE(${test_suite__module_name%.*})\n" > $test_sub_suite__header
 // found in ./tests
 
 DEFINE_SUITE(${test_suite__module_name%.*}, END_TESTS)\n" > $test_sub_suite__source
-        printf "\nINCLUDE_SUITE(${test_suite__module_name%.*})," \
-            >> $main_test_suite__source
     fi
+    printf "\nINCLUDE_SUITE(${test_suite__module_name%.*})," \
+        >> $main_test_suite__source
 done
 # find $search_path -maxdepth 1 -type d -exec realpath {} \;
 subdirs=$(find $search_path -mindepth 1 -maxdepth 1 -type d -exec realpath {} \;)

@@ -96,7 +96,7 @@ void promote_process_in__process_manager(
 /// Gets the next available process.
 /// Return nullptr if no process is available.
 ///
-Process *get_available_p_process_in__process_manager(
+Process *allocate_process_in__process_manager(
         Process_Manager *p_process_manager);
 
 ///
@@ -105,7 +105,7 @@ Process *get_available_p_process_in__process_manager(
 /// are critical the game engine will panick
 /// then this function will return nullptr.
 ///
-Process *get_available_p_process_forcefully_in__process_manager(
+Process *allocate_process_forcefully_in__process_manager(
         Process_Manager *p_process_manager,
         Game *p_game);
 

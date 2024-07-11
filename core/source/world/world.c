@@ -18,8 +18,9 @@
 void initialize_world(World *p_world,
         PLATFORM_Graphics_Window 
             *p_PLATFORM_graphics_window_for__world) {
-    p_world->p_PLATFORM_grpahics_window_for__world =
+    p_world->p_PLATFORM_graphics_window_for__world =
         p_PLATFORM_graphics_window_for__world;
+    // TODO: modularize this better:
     initialize_weight_map();
     // initialize_world_parameters(
     //         &p_world->world_parameters, 
@@ -171,7 +172,7 @@ Entity *allocate_entity_into__world(
                 get_p_entity_manager_from__world(p_world),
                 the_kind_of_entity,
                 position__3i32F4,
-                p_world->p_PLATFORM_grpahics_window_for__world);
+                p_world->p_PLATFORM_graphics_window_for__world);
     add_entity_to__world(
             p_world,
             p_entity);

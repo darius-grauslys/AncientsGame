@@ -3,60 +3,82 @@
 #include "degree.h"
 #include "game.h"
 #include "process/process.h"
+#include "raycast/ray.h"
 #include "sort/sort_list/heap_sort.h"
 #include "sort/sort_list/sort_list.h"
+#include "vectors.h"
+#include "world/chunk_manager.h"
 #include "world/path_finding/path.h"
 #include "world/path_finding/path_list.h"
+#include "world/tile.h"
 #include <world/path_finding/process/process_path_finding.h>
 
 static inline
-void rotate_path_by__index_and_offset(
-        Path_List *p_path_list,
-        Path *p_path,
-        Index__u8 index_offset) {
-    Index__u8 index_of__path =
-        get_index_of__p_path_in__path_list(
-                p_path_list, 
-                p_path) + index_offset;
+void rotate_path__left(
+        Path *p_path) {
+    p_path
+        ->leading_ray_of__path
+        .angle_of__ray =
+        subtract_angles(
+                p_path
+                ->leading_ray_of__path
+                .angle_of__ray, 
+                1);
+}
 
-    // if even index, rotate ray left, otherwise right.
-    if (index_of__path & 0b1) {
-        p_path
-            ->leading_ray_of__path
-            .angle_of__ray =
-            subtract_angles(
-                    p_path
-                    ->leading_ray_of__path
-                    .angle_of__ray, 
-                    1);
+static inline
+void rotate_path__right(
+        Path *p_path) {
+    p_path
+        ->leading_ray_of__path
+        .angle_of__ray =
+        add_angles(
+                p_path
+                ->leading_ray_of__path
+                .angle_of__ray, 
+                1);
+}
+
+static inline
+void rotate_path(
+        Path *p_path) {
+    if (p_path->is_rotating__left_or__right) {
+        rotate_path__left(p_path);
     } else {
-        p_path
-            ->leading_ray_of__path
-            .angle_of__ray =
-            add_angles(
-                    p_path
-                    ->leading_ray_of__path
-                    .angle_of__ray, 
-                    1);
+        rotate_path__right(p_path);
     }
 }
 
-void rotate_path_by__index(
-        Path_List *p_path_list,
-        Path *p_path) {
-    rotate_path_by__index_and_offset(
-            p_path_list, 
-            p_path, 
-            0);
+static inline
+bool is_path_ray__within_destination_radius(
+        Path *p_path,
+        Vector__3i32 destination__3i32,
+        i32F4 destination_squared_radius__i32F4) {
+    i32F4 distance_squared__i32F4 =
+        get_distance_squared_of__vector_3i32F4(
+                subtract_vectors__3i32F4(
+                    vector_3i32_to__vector_3i32F4(
+                        destination__3i32), 
+                    vector_3i32F8_to__vector_3i32F4(
+                        p_path
+                        ->leading_ray_of__path
+                        .ray_current_vector__3i32F8)))
+        ;
+    return distance_squared__i32F4 
+        < destination_squared_radius__i32F4;
 }
 
-void counter_rotate_path_by__index(
-        Path_List *p_path_list,
+static inline
+bool is_path_ray__blockage_commited(
         Path *p_path) {
-    rotate_path_by__index_and_offset(
-            p_path_list, 
-            p_path, 
-            1);
+    return
+        is_vectors_3i32F8__equal(
+                p_path
+                    ->leading_ray_of__path
+                    .ray_starting_vector__3i32F8,
+                p_path
+                    ->leading_ray_of__path
+                    .ray_current_vector__3i32F8);
 }
 
 void m_process__path_find(
@@ -74,56 +96,20 @@ void m_process__path_find(
         return;
     }
 
-    if (is_path_routed_to__this_position(
-                p_path__next, 
-                p_path_list->destination__3i32F4)) {
-        complete_process(p_this_process);
-        return;
-    }
-
     LOOP_PROCESS(p_this_process) {
-        i32F4 old_squared_distance =
-            p_path__next
-            ->distance_squared__from_target__i32F4;
-
-        bool is_obstructed =
-            step_path(
-                    get_p_world_from__game(p_game), 
+        if (is_path_ray__within_destination_radius(
                     p_path__next, 
-                    p_path_list->destination__3i32F4);
-
-        if (old_squared_distance
-                < p_path__next
-                ->distance_squared__from_target__i32F4) {
-            counter_rotate_path_by__index(
-                    p_path_list, 
-                    p_path__next);
+                    p_path_list->destination__3i32, 
+                    p_path_list->destination_squared_radius__i32F4)) {
+            commit_path_node_in__path(
+                    p_path__next, 
+                    p_path__next
+                    ->leading_ray_of__path
+                    .angle_of__ray);
+            complete_process(p_this_process);
+            return;
         }
 
-        if (!is_obstructed)
-            continue;
-
-        bool is_branched =
-            is_path__branched(p_path__next);
-
-        if (!is_branched) {
-            Path *p_path__branch =
-                get_next_unused_path_in__path_list(
-                        p_path_list);
-            if (p_path__branch) {
-                set_branching_path_of__this_path(
-                        p_path__next, 
-                        p_path__branch, 
-                        p_path_list->destination__3i32F4, 
-                        p_path__next
-                            ->leading_ray_of__path
-                            .angle_of__ray);
-            }
-        }
-
-        rotate_path_by__index(
-                p_path_list, 
-                p_path__next);
     }
 
     request_heapification_of__path_list(
@@ -140,4 +126,9 @@ void initialize_process_for__path_finding(
             0,
             p_path_list,
             quantity_of__steps_per_cycle);
+    initialize_sort_list_as__heap(
+            p_path_list->p_sort_list_for__paths);
+    set_sort_list__sort_heuristic(
+            p_path_list->p_sort_list_for__paths, 
+            f_sort_heuristic__path);
 }

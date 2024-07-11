@@ -20,8 +20,9 @@ void initialize_path_list_manager(
 Path_List *allocate_and_initialize_path_list_with__managers(
         Path_List_Manager *p_path_list_manager,
         Sort_List_Manager *p_sort_list_manager,
-        Vector__3i32F4 starting_point__3i32F4, 
-        Vector__3i32F4 destination__3i32F4);
+        Vector__3i32 starting_point__3i32, 
+        Vector__3i32 destination__3i32,
+        i32F4 destination_squared_radius__i32F4);
 
 ///
 /// NOTE: This will allocate ONLY a path_list.

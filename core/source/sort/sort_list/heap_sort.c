@@ -91,7 +91,7 @@ void request_resorting_of__heap_sort(
         get_length_of__sort_list(p_sort_list);
 }
 
-void initialize_sort_list_as__heap_sort(
+void initialize_sort_list_as__heap(
         Sort_List *p_sort_list) {
 #ifndef NDEBUG
     if (!p_sort_list) {
@@ -116,8 +116,27 @@ void initialize_sort_list_as__heap_sort(
                 p_sort_node);
     }
 
+    p_sort_list->m_sort =
+        m_sort__heapify__sort_list;
+
     request_resorting_of__heap(p_sort_list);
     request_resorting_of__heap_sort(p_sort_list);
+}
+
+void initialize_sort_list_as__heap_sort(
+        Sort_List *p_sort_list) {
+#ifndef NDEBUG
+    if (!p_sort_list) {
+        debug_abort("initialize_sort_list_as__heap_sort, p_sort_list is null.");
+        return;
+    }
+    if (get_length_of__sort_list(p_sort_list) & 0b1) {
+        debug_abort("initialize_sort_list_as__heap_sort, p_sort_list has odd length.");
+        return;
+    }
+#endif
+    initialize_sort_list_as__heap(p_sort_list);
+    p_sort_list->m_sort = m_sort__heap_sort__sort_list;
 }
 
 void swap_sort_nodes_in__heap(
@@ -217,6 +236,11 @@ bool m_sort__heapify__sort_list(
     Index__u16 index_of__heapification =
         get_index_of__heapification_from__sort_list(
                 p_sort_list);
+    if (INDEX__UNKNOWN__SORT_NODE
+            == index_of__heapification) {
+        debug_warning("m_sort__heapify__sort_list, extraneous call.");
+        return true;
+    }
 
     sift_down_in__heap(
             p_sort_list, 

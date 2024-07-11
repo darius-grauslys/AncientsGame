@@ -10,8 +10,9 @@
 void initialize_path_list(
         Path_List *p_path_list,
         Sort_List *p_sort_list,
-        Vector__3i32F4 starting_point__3i32F4,
-        Vector__3i32F4 destination__3i32F4);
+        Vector__3i32 starting_point__3i32,
+        Vector__3i32 destination__3i32,
+        i32F4 destination_squared_radius__i32F4);
 
 static inline
 void initialize_path_list_as__deallocated(
@@ -19,8 +20,9 @@ void initialize_path_list_as__deallocated(
     initialize_path_list(
             p_path_list, 
             0, 
-            VECTOR__3i32F4__OUT_OF_BOUNDS, 
-            VECTOR__3i32F4__OUT_OF_BOUNDS);
+            VECTOR__3i32__OUT_OF_BOUNDS, 
+            VECTOR__3i32__OUT_OF_BOUNDS,
+            0);
 }
 
 static inline

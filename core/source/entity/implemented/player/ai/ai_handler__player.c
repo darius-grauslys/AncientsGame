@@ -140,8 +140,8 @@ void m_entity_ai_handler__player(
         Vector__3i32F4 origin = get_vector__3i32F4_using__i32(0, 0, 0);
         Degree__u8 angle_of__ray =
             get_angle_between__vectors_3i32F4(
-                    &p_this_player->hitbox.position__3i32F4, 
-                    &origin);
+                    p_this_player->hitbox.position__3i32F4, 
+                    origin);
         Ray__3i32F8 ray = get_ray(
                 p_this_player->hitbox.position__3i32F4, 
                 angle_of__ray); 

@@ -16,6 +16,16 @@ Ray__3i32F8 get_ray(
     };
 }
 
+Ray__3i32F8 get_ray_as__extension(
+        Ray__3i32F8 *p_ray,
+        Degree__u8 angle) {
+    return (Ray__3i32F8) {
+        p_ray->ray_current_vector__3i32F8,
+        p_ray->ray_current_vector__3i32F8,
+        angle
+    };
+}
+
 void step_p_ray(Ray__3i32F8 *p_ray) {
     add_p_vectors__3i32F8(
             &p_ray->ray_current_vector__3i32F8, 

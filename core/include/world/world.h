@@ -65,7 +65,7 @@ Entity *get_p_entity_from__world_using__ray_3i32F8(
 void initialize_world(
         World *p_world,
         PLATFORM_Graphics_Window 
-            *p_PLATFORM_grpahics_window_for__world);
+            *p_PLATFORM_graphics_window_for__world);
 void manage_world(Game *p_game);
 void manage_world__entities(Game *p_game);
 

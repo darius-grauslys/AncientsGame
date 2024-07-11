@@ -25,8 +25,9 @@ void initialize_path_list_manager(
 Path_List *allocate_and_initialize_path_list_with__managers(
         Path_List_Manager *p_path_list_manager,
         Sort_List_Manager *p_sort_list_manager,
-        Vector__3i32F4 starting_point__3i32F4, 
-        Vector__3i32F4 destination__3i32F4) {
+        Vector__3i32 starting_point__3i32, 
+        Vector__3i32 destination__3i32,
+        i32F4 destination_squared_radius__i32F4) {
     Path_List *p_path_list =
         allocate_path_list_in__path_list_manager(
                 p_path_list_manager);
@@ -48,8 +49,9 @@ Path_List *allocate_and_initialize_path_list_with__managers(
     initialize_path_list(
             p_path_list, 
             p_sort_list, 
-            starting_point__3i32F4, 
-            destination__3i32F4);
+            starting_point__3i32, 
+            destination__3i32,
+            destination_squared_radius__i32F4);
 
     return p_path_list;
 }

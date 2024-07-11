@@ -99,6 +99,16 @@ static bool inline is_vectors_3i32F4__equal(
         ;
 }
 
+static bool inline is_vectors_3i32F8__equal(
+        Vector__3i32F8 vector_1,
+        Vector__3i32F8 vector_2) {
+    return
+        vector_1.x__i32F8 == vector_2.x__i32F8
+        && vector_1.y__i32F8 == vector_2.y__i32F8
+        && vector_1.z__i32F8 == vector_2.z__i32F8
+        ;
+}
+
 static bool inline is_vectors_3i32F4__equal_without__fractional(
         Vector__3i32F4 vector_1,
         Vector__3i32F4 vector_2) {
@@ -180,9 +190,9 @@ static Vector__3i32F8 inline vector_3i32F4_to__vector_3i32F8(
     };
 }
 
-static Vector__3i32F4 inline vector_3i32F8_to__vector_3i32(
+static Vector__3i32 inline vector_3i32F8_to__vector_3i32(
         Vector__3i32F8 vector) {
-    return (Vector__3i32F4){
+    return (Vector__3i32){
         vector.x__i32F8
             >> FRACTIONAL_PERCISION_8__BIT_SIZE,
         vector.y__i32F8
@@ -410,6 +420,17 @@ i32F4 get_distance_squared_of__vector_3i32F4(
     return (vector__3i32F4.x__i32F4 * vector__3i32F4.x__i32F4
             + vector__3i32F4.y__i32F4 * vector__3i32F4.y__i32F4
             + vector__3i32F4.z__i32F4 * vector__3i32F4.z__i32F4)
+        >> FRACTIONAL_PERCISION_4__BIT_SIZE
+        ;
+}
+
+static inline
+i32F8 get_distance_squared_of__vector_3i32F8(
+        Vector__3i32F8 vector__3i32F8) {
+    return (vector__3i32F8.x__i32F8 * vector__3i32F8.x__i32F8
+            + vector__3i32F8.y__i32F8 * vector__3i32F8.y__i32F8
+            + vector__3i32F8.z__i32F8 * vector__3i32F8.z__i32F8)
+        >> FRACTIONAL_PERCISION_8__BIT_SIZE
         ;
 }
 

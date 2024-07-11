@@ -1274,15 +1274,28 @@ typedef struct Camera_t {
 
 #define PATH_VECTORS_MAX_QUANTITY_OF 6
 
+///
+/// Obstructed - path ray is blocked.
+/// Deviating - path ray is pointing away from destination.
+/// Progressing - path ray is progressing towards destination.
+///
+enum Path_Stepping_State {
+    Path_Stepping_State__Obstructed,
+    Path_Stepping_State__Deviating,
+    Path_Stepping_State__Progressing
+};
+
 typedef struct Path_t {
     Ray__3i32F8 leading_ray_of__path;
-    Vector__3i32F4 path_nodes__3i32F4
+    Vector__3i32 path_nodes__3i32
         [PATH_VECTORS_MAX_QUANTITY_OF];
-    Vector__3i32F4 *p_path_node__newest__3i32F4;
+    Vector__3i32 *p_path_node__newest__3i32;
     struct Path_t *p_path__branching;
     i32F8 distance__travelled__i32F8;
     i32F4 distance_squared__from_target__i32F4;
-    i32F4 distance__hamming__i32F4;
+    i32 distance__hamming__i32;
+    enum Path_Stepping_State state_of__path :7;
+    bool is_rotating__left_or__right    :1;
 } Path;
 
 #define PATH_MAX_QUANTITY_OF 8
@@ -1290,7 +1303,8 @@ typedef struct Path_t {
 typedef struct Path_List_t {
     Path paths[PATH_MAX_QUANTITY_OF];
     Sort_List *p_sort_list_for__paths;
-    Vector__3i32F4 destination__3i32F4;
+    Vector__3i32 destination__3i32;
+    i32F4 destination_squared_radius__i32F4;
 } Path_List;
 
 #define PATH_LIST_MAX_QUANTITY_OF 42
@@ -1515,7 +1529,7 @@ typedef struct World_t {
     World_Parameters world_parameters;
 
     Camera camera;
-    PLATFORM_Graphics_Window *p_PLATFORM_grpahics_window_for__world;
+    PLATFORM_Graphics_Window *p_PLATFORM_graphics_window_for__world;
 } World;
 
 ///

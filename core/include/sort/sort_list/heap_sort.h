@@ -3,6 +3,9 @@
 
 #include <defines.h>
 
+void initialize_sort_list_as__heap(
+        Sort_List *p_sort_list);
+
 void initialize_sort_list_as__heap_sort(
         Sort_List *p_sort_list);
 

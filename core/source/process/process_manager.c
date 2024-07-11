@@ -41,7 +41,7 @@ bool register_process_in__process_manager(
     }
 #endif
     Process *p_process__available =
-        get_available_p_process_in__process_manager(
+        allocate_process_in__process_manager(
                 p_process_manager);
 
     if (!p_process__available)
@@ -72,7 +72,7 @@ void register_process_as__critical_in__process_manager(
     }
 #endif
     Process *p_process__available =
-        get_available_p_process_forcefully_in__process_manager(
+        allocate_process_forcefully_in__process_manager(
                 p_process_manager,
                 p_game);
 
@@ -88,7 +88,7 @@ void register_process_as__critical_in__process_manager(
         *p_process;
 
 reset_process:
-    if (!is_process_active(p_process__available)) {
+    if (!is_process__active(p_process__available)) {
         p_process_manager->quantity_of__running_processes++;
     } else {
         remove_process_from__process_manager(
@@ -145,11 +145,11 @@ void promote_process_in__process_manager(
 /// Gets the next available process.
 /// Return nullptr if no process is available.
 ///
-Process *get_available_p_process_in__process_manager(
+Process *allocate_process_in__process_manager(
         Process_Manager *p_process_manager) {
 #ifndef NDEBUG
     if (!p_process_manager) {
-        debug_abort("get_available_p_process_in__process_manager, p_process_manager is null.");
+        debug_abort("allocate_process_in__process_manager, p_process_manager is null.");
         return 0;
     }
 #endif
@@ -160,7 +160,7 @@ Process *get_available_p_process_in__process_manager(
         Process *p_process__current =
             &p_process_manager
                 ->processes[index_of__process];
-        if (!is_process_available(p_process__current))
+        if (!is_process__available(p_process__current))
             continue;
         p_process__available = 
             p_process__current;
@@ -175,12 +175,12 @@ Process *get_available_p_process_in__process_manager(
 /// are critical the game engine will panick
 /// then this function will return nullptr.
 ///
-Process *get_available_p_process_forcefully_in__process_manager(
+Process *allocate_process_forcefully_in__process_manager(
         Process_Manager *p_process_manager,
         Game *p_game) {
 #ifndef NDEBUG
     if (!p_process_manager) {
-        debug_abort("get_available_p_process_forcefully_in__process_manager, p_process_manager is null.");
+        debug_abort("allocate_process_forcefully_in__process_manager, p_process_manager is null.");
         return 0;
     }
     if (!p_game) {
@@ -280,6 +280,15 @@ void poll_process_manager(
         u32 time_elapsed__high =
             get_time_elapsed__game(p_game)
             & MASK(6);
+
+        if (is_process__complete(p_process)) {
+            remove_process_from__process_manager(
+                    p_process_manager, 
+                    p_game, 
+                    p_process);
+            continue;
+        }
+
         switch (get_process_priority(p_process)) {
             case Process_Priority_Kind__None:
                 break;
@@ -328,6 +337,7 @@ void poll_process_manager(
                 initialize_process_as__empty_process(p_process);
                 break;
             case Process_Status_Kind__Complete:
+                break;
             case Process_Status_Kind__Fail:
                 remove_process_from__process_manager(
                         p_process_manager,

@@ -67,10 +67,10 @@ enum Process_Priority_Kind get_process_priority(
 }
 
 static inline
-bool is_process_active(Process *p_process) {
+bool is_process__active(Process *p_process) {
 #ifndef NDEBUG
     if (!p_process) {
-        debug_abort("is_process_active, p_process is null.");
+        debug_abort("is_process__active, p_process is null.");
         return false;
     }
 #endif
@@ -115,11 +115,24 @@ void stop_process(
 }
 
 static inline
-bool is_process_available(
+bool is_process__complete(
         Process *p_process) {
 #ifndef NDEBUG
     if (!p_process) {
-        debug_abort("is_process_available, p_process is null.");
+        debug_abort("is_process__complete, p_process is null.");
+        return false;
+    }
+#endif
+    return p_process && p_process->the_kind_of_status__this_process_has
+        == Process_Status_Kind__Complete;
+}
+
+static inline
+bool is_process__available(
+        Process *p_process) {
+#ifndef NDEBUG
+    if (!p_process) {
+        debug_abort("is_process__available, p_process is null.");
         return false;
     }
 #endif
@@ -179,8 +192,9 @@ bool does_process_have__removed_handler(
 }
 
 #define LOOP_PROCESS(p_process) \
-    loop_timer_u32(get_p_timer_u32_from__process(p_process)); \
-    for (;get_p_timer_u32_from__process(p_process)->remaining__u32 \
-            < p_process->quantity_of__steps_per_cycle; loop_timer_u32(get_p_timer_u32_from__process(p_process)))
+    for (Index__u32 index_of__process__loop = 0; index_of__process__loop \
+            < p_process->quantity_of__steps_per_cycle;\
+            index_of__process__loop++, \
+            loop_timer_u32(get_p_timer_u32_from__process(p_process)))
 
 #endif

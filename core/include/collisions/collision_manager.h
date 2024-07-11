@@ -46,7 +46,7 @@ Entity *get_p_entity_from__collision_manager_with__ray_3i32F8(
     return
         get_p_entity_from__collision_manager_with__3i32F4(
                 p_collision_manager, 
-                get_endpoint_of__p_ray_as__vector_3i32F4(
+                get_ray_endpoint_as__vector_3i32F4(
                     p_ray__3i32F8));
 }
 
