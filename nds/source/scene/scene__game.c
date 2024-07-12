@@ -19,7 +19,10 @@
 #include "ui/ui_button.h"
 #include "ui/ui_element.h"
 #include "ui/ui_manager.h"
+#include "world/chunk.h"
 #include "world/chunk_manager.h"
+#include "world/tile.h"
+#include "world/tile_vectors.h"
 #include <scene/nds_scene__game.h>
 #include <stdint.h>
 #include <timer.h>
@@ -76,8 +79,8 @@ void m_load_scene_as__game_handler(
             NDS_get_graphics_window__main_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
 
-    // NDS_initialize_debug__sub();
-    // return;
+    NDS_initialize_debug__sub();
+    return;
     NDS_initialize_gfx_for__ui(
             get_p_PLATFORM_gfx_context_from__game(p_game));
     // TODO: re-impl
@@ -110,7 +113,7 @@ void m_enter_scene_as__game_handler(
     move_chunk_manager(
             &p_game->world.chunk_manager, 
             &p_game->world.world_parameters, 
-            DIRECTION__NORTH_WEST,
+            DIRECTION__SOUTH_WEST,
             2);
 
     PLATFORM_update_chunks(
@@ -121,10 +124,10 @@ void m_enter_scene_as__game_handler(
         if (p_game->scene_manager.p_active_scene == 0)
             break;
         manage_game(p_game);
-        NDS_update_ui_for__hud(
-                get_p_PLATFORM_gfx_context_from__game(p_game),
-                p_this_scene,
-                p_player);
+        // NDS_update_ui_for__hud(
+        //         get_p_PLATFORM_gfx_context_from__game(p_game),
+        //         p_this_scene,
+        //         p_player);
         manage_world(p_game);
     }
 }

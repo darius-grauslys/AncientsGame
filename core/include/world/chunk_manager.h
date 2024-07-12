@@ -43,13 +43,13 @@ bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *p_chunk_manager,
         Entity *p_entity);
 
-static Tile inline *get_p_tile_from__chunk_node(
+static inline 
+Tile *get_p_tile_from__chunk_node(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,
         Local_Tile_Vector__3u8 local_tile_vector__3u8) {
 #ifndef NDEBUG
     if (local_tile_vector__3u8.x__u8 < 0 
             || local_tile_vector__3u8.x__u8 >= CHUNK_WIDTH__IN_TILES
-            || local_tile_vector__3u8.y__u8 < 0
             || local_tile_vector__3u8.y__u8 >= CHUNK_WIDTH__IN_TILES) {
         debug_error("get_tile_from__chunk_node out of bounds %d,%d", 
                 local_tile_vector__3u8.x__u8, local_tile_vector__3u8.y__u8);
@@ -94,8 +94,8 @@ Tile *get_p_tile_from__chunk_manager_with__3i32F4(
 /// Returns a pointer to a tile if the end of the
 /// ray is on a tile, otherwise returns nullptr.
 ///
-Tile *get_p_tile_from__chunk_manager_with__ray_3i32f8(
+Tile *get_p_tile_from__chunk_manager_with__ray_3i32F20(
         Chunk_Manager *p_chunk_manager,
-        Ray__3i32F8 *p_ray__3i32F8);
+        Ray__3i32F20 *p_ray__3i32F20);
 
 #endif

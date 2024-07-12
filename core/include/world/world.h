@@ -41,12 +41,12 @@ static Entity inline
 /// otherwise returns nullptr.
 ///
 static inline
-Tile *get_p_tile_from__world_using__ray_3i32F8(
+Tile *get_p_tile_from__world_using__ray_3i32F20(
         World *p_world,
-        Ray__3i32F8 *p_ray__3i32F8) {
-    return get_p_tile_from__chunk_manager_with__ray_3i32f8(
+        Ray__3i32F20 *p_ray__3i32F20) {
+    return get_p_tile_from__chunk_manager_with__ray_3i32F20(
             get_p_chunk_manager_from__world(p_world),
-            p_ray__3i32F8);
+            p_ray__3i32F20);
 }
 
 ///
@@ -54,12 +54,12 @@ Tile *get_p_tile_from__world_using__ray_3i32F8(
 /// otherwise returns nullptr.
 ///
 static inline
-Entity *get_p_entity_from__world_using__ray_3i32F8(
+Entity *get_p_entity_from__world_using__ray_3i32F20(
         World *p_world,
-        Ray__3i32F8 *p_ray__3i32F8) {
-    return get_p_entity_from__collision_manager_with__ray_3i32F8(
+        Ray__3i32F20 *p_ray__3i32F20) {
+    return get_p_entity_from__collision_manager_with__ray_3i32F20(
             get_p_collision_manager_from__world(p_world),
-            p_ray__3i32F8);
+            p_ray__3i32F20);
 }
 
 void initialize_world(

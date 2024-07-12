@@ -15,7 +15,7 @@ void initialize_inventory(
 void add_item_stack_to__inventory(
         Inventory *p_inventory,
         Item item,
-        i32F8 wieght_of_each__item,
+        i32F20 wieght_of_each__item,
         Identifier__u16 identifier_for__item_stack,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items);
@@ -70,7 +70,7 @@ Item_Stack *get_p_item_stack_from__inventory(
         Inventory *p_inventory,
         Identifier__u16 identifier_for__item_stack);
 
-i32F8 get_total_weight_of__inventory(
+i32F20 get_total_weight_of__inventory(
         Inventory *p_inventory);
 
 static inline

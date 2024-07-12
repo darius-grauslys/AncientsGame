@@ -40,14 +40,14 @@ Entity *get_p_entity_from__collision_manager_with__3i32F4(
         Vector__3i32F4 position__3i32F4);
 
 static inline
-Entity *get_p_entity_from__collision_manager_with__ray_3i32F8(
+Entity *get_p_entity_from__collision_manager_with__ray_3i32F20(
         Collision_Manager *p_collision_manager,
-        Ray__3i32F8 *p_ray__3i32F8) {
+        Ray__3i32F20 *p_ray__3i32F20) {
     return
         get_p_entity_from__collision_manager_with__3i32F4(
                 p_collision_manager, 
                 get_ray_endpoint_as__vector_3i32F4(
-                    p_ray__3i32F8));
+                    p_ray__3i32F20));
 }
 
 ///

@@ -10,7 +10,7 @@ void initialize_path(
         Path *p_path,
         Vector__3i32 starting_point__3i32,
         Vector__3i32 destination__3i32,
-        Degree__u8 starting_direction__degree_u8,
+        Degree__u9 starting_direction__degree_u8,
         bool is_rotating__left_or__right);
 
 void initialize_path_as__unusued(
@@ -20,14 +20,14 @@ void initialize_path_as__branching_path(
         Path *p_path,
         Path *p_path__branching_from,
         Vector__3i32 destination__3i32,
-        Degree__u8 starting_direction__degree_u8);
+        Degree__u9 starting_direction__degree_u8);
 
 static inline
 void set_branching_path_of__this_path(
         Path *p_this_path,
         Path *p_path_to_be_made_as__branching,
         Vector__3i32 destination_of__branching_path_3i32,
-        Degree__u8 starting_direction_of__branching_path) {
+        Degree__u9 starting_direction_of__branching_path) {
     p_this_path->p_path__branching =
         p_path_to_be_made_as__branching;
     initialize_path_as__branching_path(
@@ -74,7 +74,7 @@ bool is_path_stepping_result__deviating(
 }
 
 ///
-/// This makes the ray_current_vector__3i32F8
+/// This makes the ray_current_vector__3i32F20
 /// of the path the new path_node
 /// (overwritting oldest if needed.)
 ///
@@ -83,7 +83,7 @@ bool is_path_stepping_result__deviating(
 ///
 void commit_path_node_in__path(
         Path *p_path,
-        Degree__u8 new_direction__degree_u8);
+        Degree__u9 new_direction__degree_u8);
 
 static inline
 void commit_path_node_in__path_using__destination(
@@ -91,12 +91,11 @@ void commit_path_node_in__path_using__destination(
         Vector__3i32 destination__3i32) {
     commit_path_node_in__path(
             p_path, 
-            get_angle_between__vectors_3i32F4(
-                vector_3i32F8_to__vector_3i32F4(
+            get_angle_between__vectors_3i32(
+                vector_3i32F20_to__vector_3i32(
                     p_path->leading_ray_of__path
-                        .ray_current_vector__3i32F8), 
-                vector_3i32_to__vector_3i32F4(
-                    destination__3i32)));
+                        .ray_current_vector__3i32F20), 
+                destination__3i32));
 }
 
 Signed_Quantity__i32 f_sort_heuristic__path(
@@ -109,7 +108,7 @@ Signed_Quantity__i32 f_evaluation_heuristic__path(
 static inline
 void change_direction_of__path(
         Path *p_path,
-        Degree__u8 new_direction__degree_u8) {
+        Degree__u9 new_direction__degree_u8) {
     p_path->leading_ray_of__path.angle_of__ray =
         new_direction__degree_u8;
 }

@@ -18,7 +18,7 @@
 
 #include <world/path_finding/process/process_path_finding.c>
 
-extern Vector__3i32F8 __DEGREE_TO_2i32F10__LOOKUP_TABLE[256];
+extern Vector__3i32F20 __DEGREE_TO_2i32F10__LOOKUP_TABLE[256];
 
 TEST_FUNCTION(m_process__path_find__trivial) {
     Game game;

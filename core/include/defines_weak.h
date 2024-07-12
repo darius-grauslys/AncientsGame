@@ -25,7 +25,7 @@ typedef uint32_t    u32F4;
 typedef uint16_t    u16F4;
 typedef uint8_t     u8F4;
 
-typedef int32_t     i32F8;
+typedef int32_t     i32F20;
 typedef int16_t     i16F8;
 typedef int8_t      i8F8;
 

@@ -1,4 +1,5 @@
 #include "defines.h"
+#include "defines_weak.h"
 #include "nds_defines.h"
 #include "nds/arm9/background.h"
 #include <rendering/render_chunk.h>
@@ -12,13 +13,24 @@ void PLATFORM_render_chunk(
 }
 
 void NDS_render_chunk(
-        Index__u32 x__index,
-        Index__u32 y__index,
+        Signed_Index__i32 x__chunk_index_i32,
+        Signed_Index__i32 y__chunk_index_i32,
         TileMapEntry16 *p_background__ground,
         TileMapEntry16 *p_background__wall_lower,
         TileMapEntry16 *p_background__wall_upper,
         Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node) {
 
+    // normalize chunk indicies:
+    uint32_t x__chunk_index_u32 =
+        ((x__chunk_index_i32
+          % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+         + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
+        % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
+    uint32_t y__chunk_index_u32 =
+        ((y__chunk_index_i32
+          % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+         + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+        % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
 
             //TODO: im am using magic numbers here atm.
 
@@ -30,12 +42,12 @@ void NDS_render_chunk(
             Quantity__u32 background_tile_index = 
                 y * 32 + x;
             background_tile_index += 
-                (x__index % 4) * 8;
+                (x__chunk_index_u32 % 4) * 8;
             background_tile_index +=
-                (y__index % 4) * 8 * 32;
-            if (x__index >= 4)
+                (y__chunk_index_u32 % 4) * 8 * 32;
+            if (x__chunk_index_u32 >= 4)
                 background_tile_index += 32 * 32;
-            if (y__index >= 4)
+            if (y__chunk_index_u32 >= 4)
                 background_tile_index += 32 * 32 * 2;
             TileMapEntry16 *p_tile_entry =
                 &p_background__ground[background_tile_index];
@@ -43,7 +55,9 @@ void NDS_render_chunk(
                 &p_background__wall_upper[background_tile_index];
             TileMapEntry16 *p_tile_sprite_cover_entry =
                 &p_background__wall_lower[background_tile_index];
-            Local_Tile_Vector__3u8 local_tile_vector = {x, y, 0};
+            Local_Tile_Vector__3u8 local_tile_vector = {
+                x, 
+                y, 0};
             Tile_Render_Result render_result =
                 get_tile_render_result(
                         p_current_sub__chunk_map_node,
@@ -83,25 +97,23 @@ void PLATFORM_update_chunks(
         p_chunk_manager->p_most_north_western__chunk_map_node;
     Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node;
 
-    for (uint8_t y=0; y < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
+    for (uint8_t y=0; 
+            y 
+            < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
             y++) {
         p_current_sub__chunk_map_node =
             p_current__chunk_map_node;
-        for (uint8_t x=0; x < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
+        for (uint8_t x=0; 
+                x 
+                < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
                 x++) {
             //TODO: consolidate this to a helper
-            uint32_t x__index =
-                ((p_current_sub__chunk_map_node->p_chunk__here
-                  ->x__signed_index_i32
-                  % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-                 + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
-                % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
-            uint32_t y__index =
-                ((p_current_sub__chunk_map_node->p_chunk__here
-                  ->y__signed_index_i32
-                  % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-                 + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-                % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
+            Signed_Index__i32 x__index =
+                p_current_sub__chunk_map_node->p_chunk__here
+                  ->x__signed_index_i32;
+            Signed_Index__i32 y__index =
+                p_current_sub__chunk_map_node->p_chunk__here
+                  ->y__signed_index_i32;
 
             NDS_render_chunk(
                     x__index,

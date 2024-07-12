@@ -15,16 +15,10 @@ void initialize_path_list(
         Vector__3i32 starting_point__3i32,
         Vector__3i32 destination__3i32,
         i32F4 destination_squared_radius__i32F4) {
-    Vector__3i32F4 starting_point__3i32F4 =
-        vector_3i32_to__vector_3i32F4(
-                starting_point__3i32);
-    Vector__3i32F4 destination__3i32F4 =
-        vector_3i32_to__vector_3i32F4(
+    Degree__u9 starting_direction__degree_u8 =
+        get_angle_between__vectors_3i32(
+                starting_point__3i32,
                 destination__3i32);
-    Degree__u8 starting_direction__degree_u8 =
-        get_angle_between__vectors_3i32F4(
-                starting_point__3i32F4,
-                destination__3i32F4);
 
     if (p_sort_list) {
         set_sort_list__sort_heuristic(

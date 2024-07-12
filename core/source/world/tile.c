@@ -78,7 +78,8 @@ static Tile inline *get_p_tile_from__chunk_node_for__tile_render(
     return p_tile;
 }
 
-static void inline get_tile_texture_sheet_index(
+static inline 
+void get_tile_texture_sheet_index(
         Tile *p_tile,
         Tile_Render_Result *p_render_result) {
     switch (p_tile->the_kind_of_tile__this_tile_is) {
@@ -180,7 +181,8 @@ tile_structure:
     p_render_result->tile_index__ground = index;
 }
 
-static void inline get_tile_cover_texture_sheet_index(
+static inline 
+void get_tile_cover_texture_sheet_index(
         Tile *p_tile,
         Tile_Render_Result *p_render_result) {
     switch(p_tile->the_kind_of_tile_cover__this_tile_has) {

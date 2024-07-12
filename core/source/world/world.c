@@ -22,14 +22,14 @@ void initialize_world(World *p_world,
         p_PLATFORM_graphics_window_for__world;
     // TODO: modularize this better:
     initialize_weight_map();
-    // initialize_world_parameters(
-    //         &p_world->world_parameters, 
-    //         f_chunk_generator__test_world, 
-    //         100);
     initialize_world_parameters(
             &p_world->world_parameters, 
-            f_chunk_generator__flat_world, 
+            f_chunk_generator__test_world, 
             100);
+    // initialize_world_parameters(
+    //         &p_world->world_parameters, 
+    //         f_chunk_generator__flat_world, 
+    //         100);
     initialize_entity_manager(&p_world->entity_manager);
     initialize_collision_manager(&p_world->collision_manager);
     set_collision_manager__center_chunk(

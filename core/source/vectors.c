@@ -12,7 +12,7 @@ const Vector__3i32F4 VECTOR__3i32F4__OUT_OF_BOUNDS = (Vector__3i32F4){
     (BIT(31)),
     (BIT(31))
 };
-const Vector__3i32F8 VECTOR__3i32F8__OUT_OF_BOUNDS = (Vector__3i32F8){
+const Vector__3i32F20 VECTOR__3i32F20__OUT_OF_BOUNDS = (Vector__3i32F20){
     (BIT(31)),
     (BIT(31)),
     (BIT(31))

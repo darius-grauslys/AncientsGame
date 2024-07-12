@@ -47,6 +47,8 @@ typedef int8_t      i8;
 
 #define FRACTIONAL_PERCISION_4__BIT_SIZE 4
 #define FRACTIONAL_PERCISION_8__BIT_SIZE 8
+#define FRACTIONAL_PERCISION_16__BIT_SIZE 16
+#define FRACTIONAL_PERCISION_20__BIT_SIZE 20
 /// FIXED POINT fractional, with 4 bits of percision.
 typedef int32_t     i32F4;
 typedef int16_t     i16F4;
@@ -55,9 +57,7 @@ typedef uint32_t    u32F4;
 typedef uint16_t    u16F4;
 typedef uint8_t    u8F4;
 
-typedef int32_t     i32F8;
-typedef int16_t     i16F8;
-typedef int8_t     i8F8;
+typedef int32_t     i32F20;
 
 /// 
 /// Vector__3i32F4 is a 3-tuple of 32 bit FIXED POINT
@@ -70,9 +70,9 @@ typedef struct Vector__3i32F4_t {
     i32F4 x__i32F4, y__i32F4, z__i32F4;
 } Vector__3i32F4;
 
-typedef struct Vector__3i32F8_t {
-    i32F8 x__i32F8, y__i32F8, z__i32F8;
-} Vector__3i32F8;
+typedef struct Vector__3i32F20_t {
+    i32F20 x__i32F20, y__i32F20, z__i32F20;
+} Vector__3i32F20;
 
 typedef int32_t Signed_Index__i32;
 typedef int16_t Signed_Index__i16;
@@ -106,18 +106,26 @@ typedef struct Timer__u8_t {
 } Timer__u8;
 
 typedef uint8_t Direction__u8;
-typedef uint8_t Degree__u8;
+typedef uint16_t Degree__u9;
 
-#define ANGLE__90 64
-#define ANGLE__180 128
-#define ANGLE__270 192
-#define LENGTH_OF_RAY__i32F8 0b11111111
+#define ANGLE__0    0
+#define ANGLE__45   64
+#define ANGLE__90   128
+#define ANGLE__180  256
+#define ANGLE__270  384
+///
+/// Use this for bounds checking only!
+///
+#define ANGLE__360  512
+#define ANGLE__MASK MASK(5)
+#define ANGLE__OUT_OF_BOUNDS (uint16_t)(-1)
+#define LENGTH_OF_RAY__i32F20 0b11111111
 
-typedef struct Ray__3i32F8_t {
-    Vector__3i32F8 ray_starting_vector__3i32F8;
-    Vector__3i32F8 ray_current_vector__3i32F8;
-    Degree__u8 angle_of__ray;
-} Ray__3i32F8;
+typedef struct Ray__3i32F20_t {
+    Vector__3i32F20 ray_starting_vector__3i32F20;
+    Vector__3i32F20 ray_current_vector__3i32F20;
+    Degree__u9 angle_of__ray;
+} Ray__3i32F20;
 
 #define INDEX__UNKNOWN__u32 (uint32_t)(-1)
 #define INDEX__UNKNOWN__u16 (uint16_t)(-1)
@@ -627,7 +635,7 @@ typedef struct Item_t {
 
 typedef struct Item_Stack_t {
     Item            item;
-    i32F8           weight_of_each__item;
+    i32F20           weight_of_each__item;
     Identifier__u16 identifier_for__item_stack;
     Quantity__u8    quantity_of__items;
     Quantity__u8    max_quantity_of__items;
@@ -1286,12 +1294,12 @@ enum Path_Stepping_State {
 };
 
 typedef struct Path_t {
-    Ray__3i32F8 leading_ray_of__path;
+    Ray__3i32F20 leading_ray_of__path;
     Vector__3i32 path_nodes__3i32
         [PATH_VECTORS_MAX_QUANTITY_OF];
     Vector__3i32 *p_path_node__newest__3i32;
     struct Path_t *p_path__branching;
-    i32F8 distance__travelled__i32F8;
+    i32F20 distance__travelled__i32F20;
     i32F4 distance_squared__from_target__i32F4;
     i32 distance__hamming__i32;
     enum Path_Stepping_State state_of__path :7;

@@ -137,26 +137,34 @@ void m_entity_ai_handler__player(
         }
     } 
     if (is_input__use_released(p_input)) {
-        Vector__3i32F4 origin = get_vector__3i32F4_using__i32(0, 0, 0);
-        Degree__u8 angle_of__ray =
-            get_angle_between__vectors_3i32F4(
-                    p_this_player->hitbox.position__3i32F4, 
-                    origin);
-        Ray__3i32F8 ray = get_ray(
+        Vector__3i32 origin = get_vector__3i32(0, 0, 0);
+        Vector__3i32 player_vec = 
+                    vector_3i32F4_to__vector_3i32(
+                        p_this_player->hitbox.position__3i32F4);
+        Degree__u9 angle_of__ray =
+            get_angle_between__vectors_3i32(
+                    origin,
+                    player_vec);
+
+        debug_info(">> %d, %d <<",
+                player_vec.x__i32 >> 6,
+                player_vec.y__i32 >> 6
+                );
+        Ray__3i32F20 ray = get_ray(
                 p_this_player->hitbox.position__3i32F4, 
                 angle_of__ray); 
 
-        while (is_p_ray_within__length_i32F4(
-                    &ray, i32_to__i32F4(1 << 3))) {
+        while (is_p_ray_within__squared_length_i32(
+                    &ray, 256)) {
             step_p_ray_until__next_tile(&ray);
         }
-        debug_info("angle_of__ray: %d/255", angle_of__ray);
-        while (is_p_ray_within__length_i32F4(
-                    &ray, i32_to__i32F4(8 << 3))) {
+        while (is_p_ray_within__squared_length_i32(
+                    &ray, 
+                    1024)) {
             step_p_ray_until__next_tile(&ray);
             Vector__3i32F4 tile_pos = 
-                vector_3i32F8_to__vector_3i32F4(
-                        ray.ray_current_vector__3i32F8);
+                vector_3i32F20_to__vector_3i32F4(
+                        ray.ray_current_vector__3i32F20);
             Chunk *p_chunk =
                 get_p_chunk_from__chunk_manager_using__i32(
                         &p_game->world.chunk_manager,

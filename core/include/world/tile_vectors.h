@@ -46,10 +46,11 @@ static Tile_Vector__3i32 inline get_tile_vector(
         Signed_Index__i32 x,
         Signed_Index__i32 y,
         Signed_Index__i32 z) {
+    //TODO: magic number
     return (Vector__3i32) {
-        x >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
-        y >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
-        z >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE
+        x >> 3, 
+        y >> 3, 
+        z >> 3
     };
 }
 
@@ -57,10 +58,11 @@ static Tile_Vector__3i32 inline get_tile_vector_using__i32F4(
         i32F4 x,
         i32F4 y,
         i32F4 z) {
+    // TODO: magic number
     return (Vector__3i32) {
-        i32F4_to__i32(x) >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
-        i32F4_to__i32(y) >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE, 
-        i32F4_to__i32(z) >> ENTITY_TILE_LOCAL_SPACE__BIT_SIZE
+        i32F4_to__i32(x) >> 3, 
+        i32F4_to__i32(y) >> 3, 
+        i32F4_to__i32(z) >> 3
     };
 }
 
@@ -76,20 +78,20 @@ static Tile_Vector__3i32 inline vector_3i32F4_to__tile_vector(
     };
 }
 
-static Tile_Vector__3i32 inline vector_3i32F8_to__tile_vector(
-        Vector__3i32F8 vector) {
+static Tile_Vector__3i32 inline vector_3i32F20_to__tile_vector(
+        Vector__3i32F20 vector) {
     return (Tile_Vector__3i32) {
-        vector.x__i32F8 >> 11,
-        vector.y__i32F8 >> 11,
-        vector.z__i32F8 >> 11,
+        vector.x__i32F20 >> 11,
+        vector.y__i32F20 >> 11,
+        vector.z__i32F20 >> 11,
     };
 }
 
 static inline
 Tile_Vector__3i32 get_ray_endpoint_as__tile_vector(
-        Ray__3i32F8 *p_ray) {
-    return vector_3i32F8_to__tile_vector(
-            p_ray->ray_current_vector__3i32F8);
+        Ray__3i32F20 *p_ray) {
+    return vector_3i32F20_to__tile_vector(
+            p_ray->ray_current_vector__3i32F20);
 }
 
 ///

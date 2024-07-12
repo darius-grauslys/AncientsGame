@@ -8,7 +8,7 @@
 void initialize_item_stack(
         Item_Stack *p_item_stack,
         Item item,
-        i32F8 weight_of_each__item,
+        i32F20 weight_of_each__item,
         Identifier__u16 identifier_for__item_stack,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items);

@@ -31,7 +31,7 @@ void initialize_chunk_manager(
                     + x];
 
             initialize_chunk(p_chunk__here, 
-                    get_chunk_vector__3i32(x, -y, 0));
+                    get_chunk_vector__3i32(x, y, 0));
 
             p_world_parameters->f_chunk_generator(
                     p_world_parameters, 
@@ -50,14 +50,14 @@ void initialize_chunk_manager(
             else
                 x__east = x + 1;
 
-            if (y == 0)
-                y__north = CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1;
-            else
-                y__north = y - 1;
             if (y == CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1)
-                y__south = 0;
+                y__north = 0;
             else
-                y__south = y + 1;
+                y__north = y + 1;
+            if (y == 0)
+                y__south = CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - 1;
+            else
+                y__south = y - 1;
 
             // link north
             p_chunk_map_node->p_north__chunk_map_node =
@@ -90,23 +90,24 @@ void initialize_chunk_manager(
     }
 
     p_chunk_manager->p_most_north_western__chunk_map_node =
-        &p_chunk_manager->chunk_map[0];
-
-    p_chunk_manager->p_most_north_eastern__chunk_map_node =
-        &p_chunk_manager->chunk_map[
-        GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1];
-
-    p_chunk_manager->p_most_south_western__chunk_map_node =
         &p_chunk_manager->chunk_map[
         (GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS - 1)
-        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW];
+        * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
+        ];
 
-    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+    p_chunk_manager->p_most_north_eastern__chunk_map_node =
         &p_chunk_manager->chunk_map[
         (GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS - 1)
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
         + GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1
         ];
+
+    p_chunk_manager->p_most_south_western__chunk_map_node =
+        &p_chunk_manager->chunk_map[0];
+
+    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+        &p_chunk_manager->chunk_map[
+        GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS - 1];
 }
 
 uint32_t get_chunk_index_from__chunk_manager(
@@ -144,11 +145,11 @@ uint32_t get_chunk_index_from__chunk_manager(
 
     Signed_Index__i32 local_x =
         chunk_vector__3i32.x__i32 - p_chunk_manager
-        ->p_most_north_western__chunk_map_node
+        ->p_most_south_western__chunk_map_node
             ->p_chunk__here->x__signed_index_i32;
     Signed_Index__i32 local_y =
         chunk_vector__3i32.y__i32 - p_chunk_manager
-        ->p_most_south_eastern__chunk_map_node
+        ->p_most_south_western__chunk_map_node
             ->p_chunk__here->y__signed_index_i32;
 
     return  local_y 
@@ -615,12 +616,12 @@ Tile *get_p_tile_from__chunk_manager_with__3i32F4(
     return p_tile;
 }
 
-Tile *get_p_tile_from__chunk_manager_with__ray_3i32f8(
+Tile *get_p_tile_from__chunk_manager_with__ray_3i32F20(
         Chunk_Manager *p_chunk_manager,
-        Ray__3i32F8 *p_ray__3i32F8) {
+        Ray__3i32F20 *p_ray__3i32F20) {
     Vector__3i32F4 tile_pos = 
-        vector_3i32F8_to__vector_3i32F4(
-                p_ray__3i32F8->ray_current_vector__3i32F8);
+        vector_3i32F20_to__vector_3i32F4(
+                p_ray__3i32F20->ray_current_vector__3i32F20);
     Chunk *p_chunk =
         get_p_chunk_from__chunk_manager_using__i32(
                 p_chunk_manager,

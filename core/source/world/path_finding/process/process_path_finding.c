@@ -59,10 +59,10 @@ bool is_path_ray__within_destination_radius(
                 subtract_vectors__3i32F4(
                     vector_3i32_to__vector_3i32F4(
                         destination__3i32), 
-                    vector_3i32F8_to__vector_3i32F4(
+                    vector_3i32F20_to__vector_3i32F4(
                         p_path
                         ->leading_ray_of__path
-                        .ray_current_vector__3i32F8)))
+                        .ray_current_vector__3i32F20)))
         ;
     return distance_squared__i32F4 
         < destination_squared_radius__i32F4;
@@ -72,13 +72,13 @@ static inline
 bool is_path_ray__blockage_commited(
         Path *p_path) {
     return
-        is_vectors_3i32F8__equal(
+        is_vectors_3i32F20__equal(
                 p_path
                     ->leading_ray_of__path
-                    .ray_starting_vector__3i32F8,
+                    .ray_starting_vector__3i32F20,
                 p_path
                     ->leading_ray_of__path
-                    .ray_current_vector__3i32F8);
+                    .ray_current_vector__3i32F20);
 }
 
 void m_process__path_find(
