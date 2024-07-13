@@ -405,6 +405,8 @@ void f_chunk_generator__flat_world(
                 + random_results[2].random_result__local__u32 
                 * weight_map.map[tile_index].I
                 ;
+            tile_index =
+                (7-y) * CHUNK_WIDTH__IN_TILES + x;
 
             moisture = moisture >> 5;
             if (moisture >= 5)

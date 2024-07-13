@@ -93,7 +93,7 @@ TEST_FUNCTION(m_process__path_find__trivial) {
             i32_to__i32F4(
                 get_distance_squared_of__vector_3i32(
                     subtract_vectors__3i32(
-                        *p_path->p_path_node__newest__3i32,
+                        get_latest_path_node_in__path(p_path),
                         destination__3i32))),
             <=,
             destination_squared_radius__i32F4);
@@ -117,7 +117,7 @@ TEST_FUNCTION(m_process__path_find__wall_in_between) {
     move_chunk_manager(
             &game.world.chunk_manager, 
             &game.world.world_parameters, 
-            DIRECTION__NORTH_WEST,
+            DIRECTION__SOUTH_WEST,
             2);
 
     Tile *p_tile =
@@ -183,7 +183,7 @@ TEST_FUNCTION(m_process__path_find__wall_in_between) {
             i32_to__i32F4(
                 get_distance_squared_of__vector_3i32(
                     subtract_vectors__3i32(
-                        *p_path->p_path_node__newest__3i32,
+                        get_latest_path_node_in__path(p_path),
                         destination__3i32))),
             <=,
             destination_squared_radius__i32F4);

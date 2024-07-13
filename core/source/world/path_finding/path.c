@@ -47,13 +47,16 @@ void initialize_path(
                 vector_3i32_to__vector_3i32F4(
                     starting_point__3i32),
                 starting_direction__degree_u8);
-    p_path->p_path_node__newest__3i32 =
-        get_p_path_node_by__index_from__path(
-                p_path, 
-                0);
-    *p_path->p_path_node__newest__3i32 =
+    p_path->
+        is_rotating__left_or__right =
+        is_rotating__left_or__right;
+    p_path->state_of__path_progression =
+        Path_Progression_State__Progressing;
+    p_path->index_of__path_node = 0;
+    p_path->index_of__incident = 0;
+
+    p_path->path_nodes__3i32[0] =
         starting_point__3i32;
-    p_path->p_path__branching = 0;
 
     for (Index__u8 index_of__path_node = 1;
             index_of__path_node
@@ -62,6 +65,9 @@ void initialize_path(
         p_path->path_nodes__3i32
             [index_of__path_node] =
             VECTOR__3i32__OUT_OF_BOUNDS;
+        p_path->obstruction_indicent_stack
+            [index_of__path_node] =
+            ANGLE__OUT_OF_BOUNDS;
     }
 
     if (is_vectors_3i32__equal(
@@ -82,22 +88,6 @@ void initialize_path(
             p_path, 
             ray_endpoint__3i32F4,
             destination__3i32);
-    p_path->
-        is_rotating__left_or__right =
-        is_rotating__left_or__right;
-    p_path->state_of__path =
-        Path_Stepping_State__Progressing;
-}
-
-void initialize_path_as__unusued(
-        Path *p_path) {
-    initialize_path(
-            p_path, 
-            VECTOR__3i32__OUT_OF_BOUNDS, 
-            VECTOR__3i32__OUT_OF_BOUNDS, 
-            0, 
-            false);
-    p_path->p_path_node__newest__3i32 = 0;
 }
 
 void initialize_path_as__branching_path(
@@ -105,23 +95,73 @@ void initialize_path_as__branching_path(
         Path *p_path__branching_from,
         Vector__3i32 destination__3i32,
         Degree__u9 starting_direction__degree_u8) {
-    initialize_path(
-            p_path,
-            *p_path__branching_from
-            ->p_path_node__newest__3i32,
-            destination__3i32,
-            starting_direction__degree_u8,
-            !p_path->is_rotating__left_or__right);
+    for (Index__u8 index_of__path_node = 1;
+            index_of__path_node
+            < p_path__branching_from->index_of__path_node;
+            index_of__path_node++) {
+        p_path->path_nodes__3i32
+            [index_of__path_node] =
+            p_path__branching_from
+                ->path_nodes__3i32[index_of__path_node];
+        p_path->obstruction_indicent_stack
+            [index_of__path_node] =
+            p_path__branching_from
+                ->obstruction_indicent_stack[index_of__path_node];
+    }
+
     p_path->distance__travelled__i32F20 =
         p_path__branching_from
         ->distance__travelled__i32F20;
+    p_path->leading_ray_of__path =
+        p_path__branching_from->leading_ray_of__path;
+    p_path->
+        is_rotating__left_or__right =
+        !p_path__branching_from
+        ->is_rotating__left_or__right;
+    p_path->state_of__path_progression =
+        p_path__branching_from
+        ->state_of__path_progression;
+    p_path->index_of__path_node = 
+        p_path__branching_from
+        ->index_of__path_node;
+    p_path->index_of__incident =
+        p_path__branching_from
+        ->index_of__incident;
+}
+
+bool pop_obstruction_incident_from__path(
+        Path *p_path) {
+    p_path->obstruction_indicent_stack
+        [p_path->index_of__incident] =
+        ANGLE__OUT_OF_BOUNDS;
+    if (p_path->index_of__path_node == 0) {
+        return true;
+    }
+    p_path->index_of__incident--;
+
+    return false;
+}
+
+bool push_obstruction_incident_onto__path(
+        Path *p_path,
+        Degree__u9 angle_of__obstruction_incident) {
+    if (p_path->index_of__incident + 1
+            >= PATH_VECTORS_MAX_QUANTITY_OF) {
+        return true;
+    }
+
+    p_path->obstruction_indicent_stack
+        [p_path->index_of__incident] =
+        angle_of__obstruction_incident;
+
+    return false;
 }
 
 ///
 /// Returns true if path
 /// is not obstructed.
 ///
-enum Path_Stepping_State step_path(
+enum Path_Stepping_Result step_path(
         World *p_world,
         Path *p_path,
         Vector__3i32 destination) {
@@ -136,22 +176,13 @@ enum Path_Stepping_State step_path(
                 p_world, 
                 &ray__3i32F20);
     if (!p_tile || is_tile__unpassable(p_tile)) {
-        return Path_Stepping_State__Obstructed;
+        return Path_Stepping_Result__Obstructed;
     }
 
     Vector__3i32F4 ray_endpoint__3i32F4 =
         vector_3i32F20_to__vector_3i32F4(
                 ray__3i32F20
                 .ray_current_vector__3i32F20);
-    i32F4 stepping_distance =
-        get_distance_squared_of__path_ray_to__destination(
-                ray_endpoint__3i32F4,
-                destination);
-
-    if (stepping_distance
-            > p_path->distance_squared__from_target__i32F4) {
-        return Path_Stepping_State__Deviating;
-    }
 
     p_path->leading_ray_of__path =
         ray__3i32F20;
@@ -161,32 +192,25 @@ enum Path_Stepping_State step_path(
             ray_endpoint__3i32F4,
             destination);
 
-    return Path_Stepping_State__Progressing;
+    return Path_Stepping_Result__Unobstructed;
 }
 
-void commit_path_node_in__path(
+bool commit_path_node_in__path(
         Path *p_path,
         Degree__u9 new_direction__degree_u8) {
-    Index__u8 index_of__path_node =
-        (p_path->p_path_node__newest__3i32
-        - p_path->path_nodes__3i32) 
-        + 1
-        ;
+    if (p_path->index_of__path_node + 1
+            >= PATH_VECTORS_MAX_QUANTITY_OF) {
+        return true;
+    }
 
-    if (PATH_VECTORS_MAX_QUANTITY_OF
-            <= index_of__path_node)
-        index_of__path_node = 0;
-
-    p_path->p_path_node__newest__3i32 =
-        get_p_path_node_by__index_from__path(
-                p_path, 
-                index_of__path_node);
-
-    *p_path->p_path_node__newest__3i32 =
+    p_path->path_nodes__3i32
+        [p_path->index_of__path_node] =
         vector_3i32F20_to__vector_3i32(
                 p_path
                 ->leading_ray_of__path
                 .ray_current_vector__3i32F20);
+
+    p_path->index_of__path_node++;
 
     p_path->distance__travelled__i32F20 +=
         get_squared_length_i32F20_of__ray(
@@ -195,6 +219,8 @@ void commit_path_node_in__path(
         .ray_starting_vector__3i32F20 =
         p_path->leading_ray_of__path
         .ray_current_vector__3i32F20;
+
+    return false;
 }
 
 static inline
@@ -211,7 +237,7 @@ Signed_Quantity__i32 get_path_heuristic_value_from__sort_node(
     return quantity;
 }
 
-Signed_Quantity__i32 f_sort_heuristic__path(
+Signed_Quantity__i32 f_sort_heuristic__min_path(
         Sort_Node *p_sort_node__one,
         Sort_Node *p_sort_node__two) {
     Signed_Quantity__i32 difference =
@@ -220,5 +246,16 @@ Signed_Quantity__i32 f_sort_heuristic__path(
         - get_path_heuristic_value_from__sort_node(
                 p_sort_node__two);
     return (difference < 0) - (difference > 0);
+}
+
+Signed_Quantity__i32 f_sort_heuristic__max_path(
+        Sort_Node *p_sort_node__one,
+        Sort_Node *p_sort_node__two) {
+    Signed_Quantity__i32 difference =
+        get_path_heuristic_value_from__sort_node(
+                p_sort_node__one)
+        - get_path_heuristic_value_from__sort_node(
+                p_sort_node__two);
+    return (difference > 0) - (difference < 0);
 }
 

@@ -2,6 +2,7 @@
 #define RAY_H
 
 #include "defines_weak.h"
+#include <degree.h>
 #include "vectors.h"
 #include <defines.h>
 
@@ -12,6 +13,24 @@ Ray__3i32F20 get_ray(
 Ray__3i32F20 get_ray_as__extension(
         Ray__3i32F20 *p_ray,
         Degree__u9 angle);
+
+static inline
+Ray__3i32F20 get_ray__out_of_bounds() {
+    return (Ray__3i32F20){
+        VECTOR__3i32F20__OUT_OF_BOUNDS,
+        VECTOR__3i32F20__OUT_OF_BOUNDS,
+        ANGLE__OUT_OF_BOUNDS};
+}
+
+static inline
+bool is_ray__out_of_bouds(
+        Ray__3i32F20 ray) {
+    return
+        is_vectors_3i32F20__out_of_bounds(
+                ray.ray_current_vector__3i32F20)
+        || is_degree_u9__out_of_bounds(
+                ray.angle_of__ray);
+}
 
 void step_p_ray(Ray__3i32F20 *p_ray);
 void step_p_ray_until__next_whole_integer(Ray__3i32F20 *p_ray);

@@ -11,7 +11,8 @@
 
 void initialize_path_list(
         Path_List *p_path_list,
-        Sort_List *p_sort_list,
+        Sort_List *p_min_heap,
+        Sort_List *p_max_heap,
         Vector__3i32 starting_point__3i32,
         Vector__3i32 destination__3i32,
         i32F4 destination_squared_radius__i32F4) {
@@ -20,19 +21,30 @@ void initialize_path_list(
                 starting_point__3i32,
                 destination__3i32);
 
-    if (p_sort_list) {
+    if (p_min_heap) {
         set_sort_list__sort_heuristic(
-                p_sort_list, 
-                f_sort_heuristic__path);
+                p_min_heap, 
+                f_sort_heuristic__min_path);
         point_sort_list__sort_nodes_to__this_range(
-                p_sort_list, 
+                p_min_heap, 
+                p_path_list->paths, 
+                sizeof(Path));
+    }
+    if (p_max_heap) {
+        set_sort_list__sort_heuristic(
+                p_max_heap, 
+                f_sort_heuristic__max_path);
+        point_sort_list__sort_nodes_to__this_range(
+                p_max_heap, 
                 p_path_list->paths, 
                 sizeof(Path));
     }
     p_path_list->destination__3i32 =
         destination__3i32;
-    p_path_list->p_sort_list_for__paths =
-        p_sort_list;
+    p_path_list->p_min_heap_for__paths =
+        p_min_heap;
+    p_path_list->p_max_heap_for__paths =
+        p_max_heap;
     p_path_list
         ->destination_squared_radius__i32F4 =
         destination_squared_radius__i32F4;
@@ -59,6 +71,29 @@ void initialize_path_list(
     }
 }
 
+bool is_path_list_heaps__not_heapified(
+        Path_List *p_path_list) {
+    return !is_heap__heapifed(
+                p_path_list->p_min_heap_for__paths)
+        || !is_heap__heapifed(
+                    p_path_list->p_max_heap_for__paths);
+}
+
+void heapify_path_lists(
+        Path_List *p_path_list,
+        Quantity__u32 quantity_of__steps_per_cycle) {
+    if (!is_heap__heapifed(p_path_list->p_min_heap_for__paths)) {
+        run_sort_with__this_many_steps(
+                p_path_list->p_min_heap_for__paths, 
+                quantity_of__steps_per_cycle >> 1);
+    }
+    if (!is_heap__heapifed(p_path_list->p_max_heap_for__paths)) {
+        run_sort_with__this_many_steps(
+                p_path_list->p_max_heap_for__paths, 
+                quantity_of__steps_per_cycle >> 1);
+    }
+}
+
 Path *get_next_unused_path_in__path_list(
         Path_List *p_path_list) {
     for (Index__u8 index_of__path = 0;
@@ -78,13 +113,19 @@ Path *get_next_unused_path_in__path_list(
 
 Path *get_next_p_path_in__path_list(
         Path_List *p_path_list) {
-    if (!is_heap__heapifed(
-                p_path_list->p_sort_list_for__paths))
-        return 0;
-
     return 
         (Path*)p_path_list
-        ->p_sort_list_for__paths
+        ->p_min_heap_for__paths
+        ->p_node_list[0]
+        .p_node_data
+        ;
+}
+
+Path *get_worst_p_path_in__path_list(
+        Path_List *p_path_list) {
+    return 
+        (Path*)p_path_list
+        ->p_max_heap_for__paths
         ->p_node_list[0]
         .p_node_data
         ;

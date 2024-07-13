@@ -163,55 +163,46 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
         Signed_Index__i32 y__chunk, 
         Signed_Index__i32 z__chunk) {
 
-    // Invert, TODO: look into why
-    y__chunk *= -1;
-
-    Signed_Index__i32 north_west__x = 
+    Signed_Index__i32 north_east__x = 
         p_chunk_manager
-        ->p_most_north_western__chunk_map_node
+        ->p_most_north_eastern__chunk_map_node
         ->p_chunk__here->x__signed_index_i32
         ;
-    Signed_Index__i32 north_west__y = 
+    Signed_Index__i32 north_east__y = 
         p_chunk_manager
-        ->p_most_north_western__chunk_map_node
+        ->p_most_north_eastern__chunk_map_node
         ->p_chunk__here->y__signed_index_i32
         ;
-    Signed_Index__i32 south_east__x = 
+    Signed_Index__i32 south_west__x = 
         p_chunk_manager
-        ->p_most_south_eastern__chunk_map_node
+        ->p_most_south_western__chunk_map_node
         ->p_chunk__here->x__signed_index_i32
         ;
-    Signed_Index__i32 south_east__y = 
+    Signed_Index__i32 south_west__y = 
         p_chunk_manager
-        ->p_most_south_eastern__chunk_map_node
+        ->p_most_south_western__chunk_map_node
         ->p_chunk__here->y__signed_index_i32
         ;
 
-    if (x__chunk < north_west__x
-            || y__chunk > north_west__y
-            || x__chunk > south_east__x
-            || y__chunk < south_east__y) {
-        debug_warning__verbose("get_p_chunk_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
+    if (x__chunk < south_west__x
+            || y__chunk > north_east__y
+            || x__chunk > north_east__x
+            || y__chunk < south_west__y) {
+        debug_info("bounds are: (%d, %d) - (%d, %d)",
+                south_west__x, south_west__y,
+                north_east__x, north_east__y);
+        debug_error("get_p_chunk_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
-        debug_info__verbose("bounds are: (%d, %d) - (%d, %d)",
-            p_chunk_manager->p_most_north_western__chunk_map_node
-                ->p_chunk__here->x__signed_index_i32,
-            p_chunk_manager->p_most_north_western__chunk_map_node
-                ->p_chunk__here->y__signed_index_i32, 
-            p_chunk_manager->p_most_south_eastern__chunk_map_node
-                ->p_chunk__here->x__signed_index_i32,
-            p_chunk_manager->p_most_south_eastern__chunk_map_node
-                ->p_chunk__here->y__signed_index_i32);
         return 0;
     }
 
     Chunk_Manager__Chunk_Map_Node *p_node =
-        p_chunk_manager->p_most_north_western__chunk_map_node;
-    for (Signed_Index__i32 x = north_west__x; x < x__chunk; x++) {
+        p_chunk_manager->p_most_south_western__chunk_map_node;
+    for (Signed_Index__i32 x = south_west__x; x < x__chunk; x++) {
         p_node = p_node->p_east__chunk_map_node;
     }
-    for (Signed_Index__i32 y = north_west__y; y > y__chunk; y--) {
-        p_node = p_node->p_south__chunk_map_node;
+    for (Signed_Index__i32 y = south_west__y; y < y__chunk; y++) {
+        p_node = p_node->p_north__chunk_map_node;
     }
 
     return p_node->p_chunk__here;
@@ -473,11 +464,11 @@ bool poll_chunk_manager_for__chunk_movement(
                 DIRECTION__WEST;
         }
         if (p_chunk_manager->y__center_chunk__signed_index_i32 
-                > chunk_vector__3i32.y__i32) {
+                < chunk_vector__3i32.y__i32) {
             direction__move_chunks |=
                 DIRECTION__NORTH;
         } else if (p_chunk_manager->y__center_chunk__signed_index_i32 
-                < chunk_vector__3i32.y__i32) {
+                > chunk_vector__3i32.y__i32) {
             direction__move_chunks |=
                 DIRECTION__SOUTH;
         }

@@ -195,6 +195,8 @@ void PLATFORM_update_chunks(
 ///
 
 int abs(int x);
+void srand(unsigned int seed);
+int rand(void);
 
 int PLATFORM_main(Game *p_game);
 

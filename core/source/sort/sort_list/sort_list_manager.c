@@ -47,8 +47,10 @@ Sort_List *get_next_available__p_sort_list_in__sort_list_manager(
 Sort_Node *allocate_sort_nodes_in__sort_list_manager(
         Sort_List_Manager *p_sort_list_manager,
         Quantity__u32 quantity_of__nodes) {
-    Index__u16 index_of__sort_node = 0;
-    Index__u16 lookahead_index_of__sort_node = 0;
+    Index__u16 index_of__sort_node =
+        p_sort_list_manager->quantity_of__allocated_sort_nodes;
+    Index__u16 lookahead_index_of__sort_node = 
+        p_sort_list_manager->quantity_of__allocated_sort_nodes;
     while (true) {
         Sort_Node *p_sort_node = 0;
 find_available_node:
@@ -88,8 +90,7 @@ find_available_node:
                 <= lookahead_index_of__sort_node)
             return 0;
 
-        for (Index__u16 allocation_index_of__sort_node =
-                index_of__sort_node;
+        for (Index__u16 allocation_index_of__sort_node = 0;
                 allocation_index_of__sort_node
                 < SORT_NODE__MAXIMUM_QUANTITY_OF
                 && allocation_index_of__sort_node
@@ -98,7 +99,8 @@ find_available_node:
             p_sort_node =
                 get_p_sort_node_by__index_in__sort_list_manager(
                         p_sort_list_manager, 
-                        allocation_index_of__sort_node);
+                        index_of__sort_node
+                        + allocation_index_of__sort_node);
             set_sort_node_as__allocated(p_sort_node);
         }
         break;
@@ -163,6 +165,7 @@ Sort_List *allocate_sort_list_in__sort_list_manager(
     p_sort_list_manager
         ->quantity_of__allocated_sort_nodes +=
         quantity_of__nodes;
+    set_sort_list_as__allocated(p_sort_list);
     
     return p_sort_list;
 }

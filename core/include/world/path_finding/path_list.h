@@ -9,7 +9,8 @@
 
 void initialize_path_list(
         Path_List *p_path_list,
-        Sort_List *p_sort_list,
+        Sort_List *p_min_heap,
+        Sort_List *p_max_heap,
         Vector__3i32 starting_point__3i32,
         Vector__3i32 destination__3i32,
         i32F4 destination_squared_radius__i32F4);
@@ -20,6 +21,7 @@ void initialize_path_list_as__deallocated(
     initialize_path_list(
             p_path_list, 
             0, 
+            0,
             VECTOR__3i32__OUT_OF_BOUNDS, 
             VECTOR__3i32__OUT_OF_BOUNDS,
             0);
@@ -28,7 +30,7 @@ void initialize_path_list_as__deallocated(
 static inline
 bool is_path_list__allocated(
         Path_List *p_path_list) {
-    return (bool)p_path_list->p_sort_list_for__paths;
+    return (bool)p_path_list->p_min_heap_for__paths;
 }
 
 ///
@@ -72,6 +74,16 @@ Path *get_p_path_by__index_in__path_list(
 Path *get_next_p_path_in__path_list(
         Path_List *p_path_list);
 
+Path *get_worst_p_path_in__path_list(
+        Path_List *p_path_list);
+
+bool is_path_list_heaps__not_heapified(
+        Path_List *p_path_list);
+
+void heapify_path_lists(
+        Path_List *p_path_list,
+        Quantity__u32 quantity_of__steps_per_cycle);
+
 ///
 /// Invoke this if the path_list
 /// is sorted via task-scheduling.
@@ -81,7 +93,7 @@ void request_heapification_of__path_list(
         Path_List *p_path_list) {
     request_resorting_of__heap(
             p_path_list
-            ->p_sort_list_for__paths);
+            ->p_min_heap_for__paths);
 }
 
 ///
@@ -94,7 +106,7 @@ static inline
 void resort_path_list(
         Path_List *p_path_list) {
     run_sort(p_path_list
-            ->p_sort_list_for__paths);
+            ->p_min_heap_for__paths);
 }
 
 #endif

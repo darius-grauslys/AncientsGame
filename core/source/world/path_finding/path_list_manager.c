@@ -32,23 +32,39 @@ Path_List *allocate_and_initialize_path_list_with__managers(
         allocate_path_list_in__path_list_manager(
                 p_path_list_manager);
 
-    Sort_List *p_sort_list =
+    Sort_List *p_min_heap =
+        allocate_sort_list_in__sort_list_manager(
+                p_sort_list_manager, 
+                PATH_MAX_QUANTITY_OF);
+    Sort_List *p_max_heap =
         allocate_sort_list_in__sort_list_manager(
                 p_sort_list_manager, 
                 PATH_MAX_QUANTITY_OF);
 
-    if (!p_sort_list) {
-        debug_error("allocate_path_list_in__path_list_manager, failed to allocate p_sort_list.");
+    if (!p_min_heap) {
+        debug_error("allocate_path_list_in__path_list_manager, failed to allocate p_min_heap.");
         release_path_list_in__path_list_manager(
                 p_path_list_manager, 
                 p_sort_list_manager,
                 p_path_list);
         return 0;
     }
+    if (!p_max_heap) {
+        debug_error("allocate_path_list_in__path_list_manager, failed to allocate p_max_heap.");
+        release_path_list_in__path_list_manager(
+                p_path_list_manager, 
+                p_sort_list_manager,
+                p_path_list);
+        release_sort_list_in__sort_list_manager(
+                p_sort_list_manager, 
+                p_min_heap);
+        return 0;
+    }
 
     initialize_path_list(
             p_path_list, 
-            p_sort_list, 
+            p_min_heap, 
+            p_max_heap, 
             starting_point__3i32, 
             destination__3i32,
             destination_squared_radius__i32F4);
@@ -95,11 +111,17 @@ void release_path_list_in__path_list_manager(
         Path_List_Manager *p_path_list_manager,
         Sort_List_Manager *p_sort_list_manager,
         Path_List *p_path_list) {
-    if (p_path_list->p_sort_list_for__paths) {
+    if (p_path_list->p_min_heap_for__paths) {
         release_sort_list_in__sort_list_manager(
                 p_sort_list_manager, 
                 p_path_list
-                ->p_sort_list_for__paths);
+                ->p_min_heap_for__paths);
+    }
+    if (p_path_list->p_max_heap_for__paths) {
+        release_sort_list_in__sort_list_manager(
+                p_sort_list_manager, 
+                p_path_list
+                ->p_min_heap_for__paths);
     }
 
     initialize_path_list_as__deallocated(

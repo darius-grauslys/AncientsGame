@@ -2,6 +2,7 @@
 #include "defines_weak.h"
 #include "nds_defines.h"
 #include "nds/arm9/background.h"
+#include "platform_defines.h"
 #include <rendering/render_chunk.h>
 #include <rendering/render_tile.h>
 #include <world/chunk.h>
@@ -27,9 +28,9 @@ void NDS_render_chunk(
          + CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW)
         % CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW;
     uint32_t y__chunk_index_u32 =
-        ((y__chunk_index_i32
-          % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
-         + CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS)
+        (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS
+         - (y__chunk_index_i32
+          % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS))
         % CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS;
 
             //TODO: im am using magic numbers here atm.
@@ -37,31 +38,38 @@ void NDS_render_chunk(
             // Everything is based on the implementation of
             // TileMapEntry16 of background.h in the arm9
             // folder of libnds.
+    Quantity__u32 index_offset_of__chunk_in__background = 0;
+
+    index_offset_of__chunk_in__background +=
+        (x__chunk_index_u32 % 4) * 8;
+    index_offset_of__chunk_in__background +=
+        (y__chunk_index_u32 % 4) * 8 * 32;
+    if (x__chunk_index_u32 >= 4)
+        index_offset_of__chunk_in__background += 32 * 32;
+    if (y__chunk_index_u32 >= 4)
+        index_offset_of__chunk_in__background += 32 * 32 * 2;
+
     for (Index__u8 y=0;y<8;y++) {
         for (Index__u8 x=0;x<8;x++) {
             Quantity__u32 background_tile_index = 
-                y * 32 + x;
-            background_tile_index += 
-                (x__chunk_index_u32 % 4) * 8;
-            background_tile_index +=
-                (y__chunk_index_u32 % 4) * 8 * 32;
-            if (x__chunk_index_u32 >= 4)
-                background_tile_index += 32 * 32;
-            if (y__chunk_index_u32 >= 4)
-                background_tile_index += 32 * 32 * 2;
+                index_offset_of__chunk_in__background
+                + (7-y) * 32 + x;
+
             TileMapEntry16 *p_tile_entry =
                 &p_background__ground[background_tile_index];
             TileMapEntry16 *p_tile_cover_entry =
                 &p_background__wall_upper[background_tile_index];
             TileMapEntry16 *p_tile_sprite_cover_entry =
                 &p_background__wall_lower[background_tile_index];
+
             Local_Tile_Vector__3u8 local_tile_vector = {
                 x, 
-                y, 0};
+                (7-y), 0};
             Tile_Render_Result render_result =
                 get_tile_render_result(
                         p_current_sub__chunk_map_node,
                         local_tile_vector);
+
             *(uint16_t*)p_tile_entry = 
                 render_result.tile_index__ground;
             *(uint16_t*)p_tile_cover_entry = 

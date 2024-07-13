@@ -20,7 +20,7 @@ void PLATFORM_post_render(Game *p_game) {
             NDS_BACKGROUND_SLOT__GAME__GROUND]
         .background_index_from__hardware,
          get_x_i32_from__camera(p_camera) - 126,
-        -get_y_i32_from__camera(p_camera) - 38
+        -get_y_i32_from__camera(p_camera) - 30
         );
     bgSetScroll(
         p_game->p_gfx_context->backgrounds__main[
@@ -33,7 +33,7 @@ void PLATFORM_post_render(Game *p_game) {
         p_game->p_gfx_context->backgrounds__main[
             NDS_BACKGROUND_SLOT__GAME__WALL_LOWER]
         .background_index_from__hardware,
-         get_x_i32_from__camera(p_camera)  - 126,
+         get_x_i32_from__camera(p_camera) - 126,
         -get_y_i32_from__camera(p_camera) - 30
         );
 	

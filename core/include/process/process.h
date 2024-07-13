@@ -31,6 +31,21 @@ void complete_process(
 }
 
 static inline
+void fail_process(
+        Process *p_process) {
+#ifndef NDEBUG
+    if (!p_process) {
+        debug_abort("fail_process, p_process is null.");
+        return;
+    }
+#endif
+    p_process->the_kind_of_status__this_process_has =
+        Process_Status_Kind__Fail;
+    p_process->the_kind_of_priority__this_process_has =
+        Process_Priority_Kind__None;
+}
+
+static inline
 Timer__u32 *get_p_timer_u32_from__process(
         Process *p_process) {
 #ifndef NDEBUG
