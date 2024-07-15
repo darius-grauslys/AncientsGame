@@ -1,8 +1,10 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "nds/arm9/background.h"
 #include "nds_defines.h"
 #include "rendering/texture.h"
 #include "rendering/nds_texture.h"
+#include "scene/scene_manager.h"
 #include <rendering/nds_background.h>
 
 void NDS_initialize_background(
@@ -204,6 +206,19 @@ void NDS_initialize_background_with__allocation_specification(
             TEXTURE_FLAGS__NONE, 
             0, 
             NDS_Texture_Kind__Background);
+
+    p_background->starting_position__3i32 =
+        p_background_allocation_specification
+        ->starting_position__3i32;
+    p_background->spanning_scroll_lengths__3i32 =
+        p_background_allocation_specification
+        ->spanning_scroll_lengths__3i32;
+    bgSetScroll(
+            p_background->background_index_from__hardware,
+            p_background_allocation_specification
+            ->starting_position__3i32.x__i32, 
+            p_background_allocation_specification
+            ->starting_position__3i32.x__i32);
 }
 
 void NDS_set_background_priority(

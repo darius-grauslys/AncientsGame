@@ -27,6 +27,8 @@ typedef struct PLATFORM_Texture_t {
 typedef struct NDS_Background_t {
     PLATFORM_Texture background_texture;
     PLATFORM_Texture background_texture__reserved;
+    Vector__3i32 starting_position__3i32;
+    Vector__3i32 spanning_scroll_lengths__3i32;
     uint16_t *gfx_map;
     uint16_t *gfx_tileset;
     // uint16_t *gfx_palette;
@@ -38,8 +40,6 @@ typedef struct NDS_Background_t {
     Quantity__u32 quantity_of__pallete_colors_allocated;
     Quantity__u32 quantity_of__pallete_colors_allocated_in__reserve;
     Index__u32 priority;
-    Vector__3i32 starting_position__3i32;
-    Vector__3i32 spanning_scroll_lengths__3i32;
     Index__u8 map_base, tile_base;
     Signed_Index__i8 background_index_from__initializer;
     Signed_Index__i8 background_index_from__hardware;
@@ -98,6 +98,8 @@ enum NDS_Background_Allocation_Kind {
 };
 
 typedef struct NDS_Background_Allocation_Specification_t {
+    Vector__3i32 starting_position__3i32;
+    Vector__3i32 spanning_scroll_lengths__3i32;
     Texture_Flags background_texture_flags;
     const unsigned int *p_gfx_background;
     const uint16_t *p_map_background;

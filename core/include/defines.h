@@ -610,15 +610,16 @@ typedef uint8_t Item_Filter_Flags;
 
 #define ITEM_FILTER_FLAGS__NONE
 #define ITEM_FILTER_FLAG__INTERACTABLE 1
-#define ITEM_FILTER_FLAG__ARMOR (\
+#define ITEM_FILTER_FLAG__ARMOR \
         (ITEM_FILTER_FLAG__INTERACTABLE << 1)
-#define ITEM_FILTER_FLAG__CONSUMABLE (\
+#define ITEM_FILTER_FLAG__CONSUMABLE \
         (ITEM_FILTER_FLAG__ARMOR << 1)
 
 typedef void (*m_Item_Use)(
         Item *p_item_self, 
         Entity *p_entity_user, 
         Game *p_game);
+
 typedef struct Hearts_Damaging_Specifier_t Hearts_Damaging_Specifier;
 typedef void (*m_Item_Protect)(
         Item *p_item_self, 
@@ -629,17 +630,35 @@ typedef void (*m_Item_Protect)(
 typedef struct Item_t {
     m_Item_Use          m_item_use_handler;
     m_Item_Protect      m_item_protect_handler;
+    i32F20              weight_per__item;
     enum Item_Kind      the_kind_of_item__this_item_is;
     Item_Filter_Flags   item_filter_flags;
 } Item;
 
 typedef struct Item_Stack_t {
     Item            item;
-    i32F20           weight_of_each__item;
     Identifier__u16 identifier_for__item_stack;
     Quantity__u8    quantity_of__items;
     Quantity__u8    max_quantity_of__items;
 } Item_Stack;
+
+typedef void (*f_Item_Stack__Create)(Item_Stack *p_item_stack);
+// TODO: serialization methods;
+
+typedef struct Item_Stack_Allocation_Specifier_t {
+    enum Item_Kind the_kind_of_item__this_specifier_is_for  :15;
+    bool is_item_stack_allocation_specifier__allocated      :1;
+    f_Item_Stack__Create f_item_stack__create;
+} Item_Stack_Allocation_Specifier;
+
+#define ITEM_STACK_RECORD_MAX_QUANTITY_OF 256
+
+typedef struct Item_Stack_Manager_t {
+    Item_Stack_Allocation_Specifier item_stack_allocation_specifiers
+        [ITEM_STACK_RECORD_MAX_QUANTITY_OF];
+    Quantity__u32 quantity_of__item_stack_allocation_specifier;
+} Item_Stack_Manager;
+
 
 #define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 32
 #define INVENTORY_CONSUMABLES_QUANTITY_OF 3

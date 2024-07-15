@@ -58,13 +58,11 @@
                         p_slider_left);
                 p_slider_left->p_ui_data =
                     &amp;get_p_PLATFORM_gfx_context_from__game(p_game)
-                    ->backgrounds__sub[2];
+                    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
 
                 NDS_Background *p_NDS_background =
                     &amp;get_p_PLATFORM_gfx_context_from__game(p_game)
-                    ->backgrounds__sub[2];
-                p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){{0, 176, 0}};
-                p_NDS_background->starting_position__3i32 = (Vector__3i32){{44, 88, 0}};
+                    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
             </code>
             <allocate_ui name="p_slider_right">
                 <slider x="214" y="132" width="16" height="80" m_Dragged_Handler="m_NDS_ui_slider__dragged_handler_for__backgrounds"/>
@@ -75,13 +73,11 @@
                         p_slider_right);
                 p_slider_right->p_ui_data =
                     &amp;get_p_PLATFORM_gfx_context_from__game(p_game)
-                    ->backgrounds__sub[3];
+                    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
 
                 p_NDS_background =
                     &amp;get_p_PLATFORM_gfx_context_from__game(p_game)
-                    ->backgrounds__sub[3];
-                p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){{0, 176, 0}};
-                p_NDS_background->starting_position__3i32 = (Vector__3i32){{-44, 88, 0}};
+                    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
             </code>
             <grid x="44" y="15" size="9" stride__y="28" name="p_inventory_column__left">
                 <allocate_ui_container size="3" stride__x="24">

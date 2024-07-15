@@ -8,7 +8,6 @@
 void initialize_item_stack(
         Item_Stack *p_item_stack,
         Item item,
-        i32F20 weight_of_each__item,
         Identifier__u16 identifier_for__item_stack,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items);
@@ -33,7 +32,7 @@ bool is_p_item_stack__empty(
         Item_Stack *p_item_stack) {
     return 
         p_item_stack->quantity_of__items == 0
-        || is_p_item__void(&p_item_stack->item);
+        || is_p_item__empty(&p_item_stack->item);
 }
 
 static inline
@@ -45,7 +44,7 @@ bool is_p_item_stack_of__this_item_kind(
 }
 
 static inline
-bool is_p_item_stack__ful(
+bool is_p_item_stack__full(
         Item_Stack *p_item_stack) {
     return p_item_stack->quantity_of__items
         == p_item_stack->max_quantity_of__items;

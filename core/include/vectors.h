@@ -7,9 +7,29 @@
 #include "defines_weak.h"
 #include <defines.h>
 
-extern const Vector__3i32 VECTOR__3i32__OUT_OF_BOUNDS;
-extern const Vector__3i32F4 VECTOR__3i32F4__OUT_OF_BOUNDS;
-extern const Vector__3i32F20 VECTOR__3i32F20__OUT_OF_BOUNDS;
+#define VECTOR__0_0_0 {\
+        0,\
+        0,\
+        0}
+
+#define VECTOR__OUT_OF_BOUNDS {\
+        BIT(31),\
+        BIT(31),\
+        BIT(31)}
+
+#define VECTOR__3i32__0_0_0 \
+    (const Vector__3i32) VECTOR__0_0_0
+#define VECTOR__3i32F4__0_0_0 \
+    (const Vector__3i32F4) VECTOR__0_0_0
+#define VECTOR__3i32F20__0_0_0 \
+    (const Vector__3i32F20) VECTOR__0_0_0
+
+#define VECTOR__3i32__OUT_OF_BOUNDS \
+    (const Vector__3i32) VECTOR__OUT_OF_BOUNDS
+#define VECTOR__3i32F4__OUT_OF_BOUNDS \
+    (const Vector__3i32F4) VECTOR__OUT_OF_BOUNDS
+#define VECTOR__3i32F20__OUT_OF_BOUNDS \
+    (const Vector__3i32F20) VECTOR__OUT_OF_BOUNDS
 
 static inline
 bool is_vectors_3i32__out_of_bounds(

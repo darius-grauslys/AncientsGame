@@ -1,6 +1,8 @@
 #include <inventory/MAIN_TEST_SUITE_INVENTORY.h>
 
-INCLUDE_SUB_SUITES(INVENTORY, 4,
+INCLUDE_SUB_SUITES(INVENTORY, 6,
+INCLUDE_SUITE(item_stack_manager),
+INCLUDE_SUITE(item_stack_allocation_specifier),
 INCLUDE_SUITE(item_stack),
 INCLUDE_SUITE(inventory),
 INCLUDE_SUITE(item),NULL);

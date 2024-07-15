@@ -32,9 +32,7 @@ NDS_allocate_sprite_for__ui_slider(
     ->backgrounds__sub[2];
     NDS_Background *p_NDS_background =
     &get_p_PLATFORM_gfx_context_from__game(p_game)
-    ->backgrounds__sub[2];
-    p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){0, 176, 0};
-    p_NDS_background->starting_position__3i32 = (Vector__3i32){0, 88, 0};
+    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
 
     UI_Element *p_button_filter__usable = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_button_filter__usable, 16, 16, get_vector__3i32(228 + 0, 104 + 0, 0), m_ui_button__clicked_handler__default, false, false);

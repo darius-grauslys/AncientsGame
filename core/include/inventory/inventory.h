@@ -15,7 +15,6 @@ void initialize_inventory(
 void add_item_stack_to__inventory(
         Inventory *p_inventory,
         Item item,
-        i32F20 wieght_of_each__item,
         Identifier__u16 identifier_for__item_stack,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items);
@@ -41,10 +40,7 @@ void remove_this_many_item_kinds_from__inventory(
         enum Item_Kind the_kind_of__item,
         Quantity__u32 quantity_of__items_to__remove);
 
-void remove_all_unequiped_item_stacks_from__inventory(
-        Inventory *p_inventory);
-
-void remove_all_equiped_item_stacks_from__inventory(
+void remove_all_item_stacks_from__inventory(
         Inventory *p_inventory);
 
 ///

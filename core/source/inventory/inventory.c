@@ -66,7 +66,6 @@ Item_Stack *get_next_available_p_item_stack_from__inventory(
 void add_item_stack_to__inventory(
         Inventory *p_inventory,
         Item item,
-        i32F20 weight_of_each__item,
         Identifier__u16 identifier_for__item_stack,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items) {
@@ -83,7 +82,6 @@ void add_item_stack_to__inventory(
     initialize_item_stack(
             p_item_stack,
             item,
-            weight_of_each__item,
             identifier_for__item_stack,
             quantity_of__items,
             max_quantity_of__items);
@@ -251,7 +249,7 @@ i32F20 get_total_weight_of__inventory(
                     index_of__item);
 
         total_weight += 
-            p_item_stack->weight_of_each__item
+            p_item_stack->item.weight_per__item
             * p_item_stack->quantity_of__items;
     }
 

@@ -13,7 +13,7 @@ u8 add_u8__clamped(
         u8 second__u8,
         u8 clamp__u8) {
     if (MAX__U8 - first__u8 < second__u8) {
-        return MAX__U8;
+        return clamp__u8;
     }
     if (first__u8 + second__u8 > clamp__u8) {
         return clamp__u8;

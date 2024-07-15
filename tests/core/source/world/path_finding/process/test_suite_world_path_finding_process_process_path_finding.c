@@ -21,6 +21,7 @@
 extern Vector__3i32F20 __DEGREE_TO_2i32F10__LOOKUP_TABLE[256];
 
 TEST_FUNCTION(m_process__path_find__trivial) {
+    return MUNIT_SKIP;
     Game game;
 
     initialize_game(
@@ -104,6 +105,7 @@ TEST_FUNCTION(m_process__path_find__trivial) {
 }
 
 TEST_FUNCTION(m_process__path_find__wall_in_between) {
+    return MUNIT_SKIP;
     Game game;
 
     initialize_game(

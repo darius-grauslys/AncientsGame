@@ -49,9 +49,7 @@
 
                 NDS_Background *p_NDS_background =
                     &amp;get_p_PLATFORM_gfx_context_from__game(p_game)
-                    ->backgrounds__sub[2];
-                p_NDS_background->spanning_scroll_lengths__3i32 = (Vector__3i32){{0, 176, 0}};
-                p_NDS_background->starting_position__3i32 = (Vector__3i32){{0, 88, 0}};
+                    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
             </code>
             <allocate_ui name="p_button_filter__usable">
                 <button x="228" y="104" width="16" height="16" color="64,196,64"/>
