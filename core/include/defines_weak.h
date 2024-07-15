@@ -11,6 +11,11 @@
 /// SECTION_default
 ///
 
+#define BIT(n) (1 << (n))
+#define NEXT_BIT(symbol) (symbol << 1)
+#define MASK(n) (BIT(n) - 1)
+
+
 typedef int32_t     i32;
 typedef int16_t     i16;
 typedef int8_t      i8;
@@ -224,6 +229,8 @@ typedef struct Input_t Input;
 ///
 /// SECTION_inventory
 ///
+
+typedef struct Inventory_t Inventory;
 
 enum Item_Kind {
     Item_Kind__None = 0,
@@ -440,7 +447,8 @@ enum Item_Kind {
     Item_Kind__Pile__Grass__Plenty,
     Item_Kind__Pile__Leaves__Plenty,
     Item_Kind__Pile__Snow__Plenty,
-    Item_Kind__Unknown
+    Item_Kind__Unknown,
+    Item_Kind__MAX = BIT(13)
 };
 
 /// 
@@ -504,6 +512,20 @@ typedef struct Texture_Allocation_Specification_t
 
 typedef struct Scene_t Scene;
 typedef struct Scene_Manager_t Scene_Manager;
+
+///
+/// SECTION_serialization
+///
+
+
+typedef struct Serialized_Field_t Serialized_Field;
+typedef struct Serialized_Field_t Serialized_Inventory_Ptr;
+typedef struct Serialized_Field_t Serialized_Entity_Ptr;
+typedef struct Serialized_Field_t Serialized_Chunk_Ptr;
+
+///
+/// SECTION_sort
+///
 
 ///
 /// SECTION_ui

@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include <game_action/game_action.h>
+#include <serialization/serialized_field.h>
 
 void invoke_action__allocate_entity(
         Game *p_game,
@@ -50,7 +51,9 @@ void invoke_action__apply_velocity_to__entity(
 
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Hitbox__Apply_Velocity;
-    game_action.p_entity_target = p_entity;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity);
     game_action.velocity_vector__apply = velocity_vector;
 
     invoke_game_action(
@@ -70,7 +73,9 @@ void invoke_action__set_velocity_of__entity(
 
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Hitbox__Set_Velocity;
-    game_action.p_entity_target = p_entity;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity);
     game_action.velocity_vector__set = velocity_vector;
 
     invoke_game_action(
@@ -87,8 +92,12 @@ void invoke_action__apply_heart_healing_to__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Health__Apply_Healing;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.hearts_healing_specifier = *p_hearts_healing_specifier;
 
     invoke_game_action(p_game, &game_action);
@@ -103,8 +112,12 @@ void invoke_action__apply_energy_healing_to__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Energy__Apply_Healing;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.energy_healing_specifier = *p_energy_healing_specifier;
 
     invoke_game_action(p_game, &game_action);
@@ -119,8 +132,12 @@ void invoke_action__apply_heart_damage_to__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Health__Apply_Damage;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.hearts_damaging_specifier = *p_hearts_damaging_specifier;
 
     invoke_game_action(p_game, &game_action);
@@ -135,8 +152,12 @@ void invoke_action__apply_energy_damage_to__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Energy__Apply_Damage;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.energy_damage_specifier = *p_energy_damaging_specifier;
 
     invoke_game_action(p_game, &game_action);
@@ -152,8 +173,12 @@ void invoke_action__increase_sustenance_of__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Sustenance__Increase;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.kind_of_sustenance = kind_of_sustenance;
     game_action.change_in__sustenance = change_in__sustenance;
 
@@ -170,8 +195,12 @@ void invoke_action__decrease_sustenance_of__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Sustenance__Decrease;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.kind_of_sustenance = kind_of_sustenance;
     game_action.change_in__sustenance = change_in__sustenance;
 
@@ -187,8 +216,12 @@ void invoke_action__increase_homeostasis_of__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Homeostasis__Increase;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.change_in__homeostasis = change_in__homeostasis;
 
     invoke_game_action(p_game, &game_action);
@@ -203,8 +236,12 @@ void invoke_action__decrease_homeostasis_of__entity(
     initialize_p_game_action(&game_action);
     game_action.the_kind_of_game_action__this_action_is =
         Game_Action_Kind__Entity__Homeostasis__Decrease;
-    game_action.p_entity_source = p_entity_source;
-    game_action.p_entity_target = p_entity_target;
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__source,
+            p_entity_source);
+    point_serialized_field_to__this_serialized_struct(
+            &game_action.s_entity__target,
+            p_entity_target);
     game_action.change_in__homeostasis = change_in__homeostasis;
 
     invoke_game_action(p_game, &game_action);

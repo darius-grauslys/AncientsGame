@@ -37,6 +37,10 @@
 /// SECTION_defines
 ///
 
+#define BIT(n) (1 << (n))
+#define NEXT_BIT(symbol) (symbol << 1)
+#define MASK(n) (BIT(n) - 1)
+
 typedef int32_t     i32;
 typedef int16_t     i16;
 typedef int8_t      i8;
@@ -175,9 +179,6 @@ typedef uint8_t Identifier__u8;
 /// SECTION_serialization
 ///
 
-typedef void (*m_Serialize)(Serialized_Field *p_this_serialized_field);
-typedef void (*m_Deserialize)(Serialized_Field *p_this_serialized_field);
-
 ///
 /// This must be the FIRST field to appear
 /// in a serialized struct.
@@ -185,9 +186,10 @@ typedef void (*m_Deserialize)(Serialized_Field *p_this_serialized_field);
 typedef struct Serialization_Header_t {
     Identifier__u32 identifier_for__serialized_struct;
     Quantity__u32 size_of__serialized_struct;
-    m_Serialize m_serialize_handler;
-    m_Deserialize m_deserialize_handler;
 } Serialization_Header;
+
+typedef void (*m_Serialize)(Serialized_Field *p_this_serialized_field);
+typedef void (*m_Deserialize)(Serialized_Field *p_this_serialized_field);
 
 typedef struct Serialized_Field_t {
     union {
@@ -204,6 +206,8 @@ typedef struct Serialized_Field_t {
             Chunk *p_serialized_field__chunk;
         };
     };
+    m_Serialize m_serialize_handler;
+    m_Deserialize m_deserialize_handler;
     Identifier__u32 identifier_for__serialized_field;
 } Serialized_Field;
 
@@ -697,24 +701,12 @@ typedef struct Item_Stack_Manager_t {
 #define INVENTORY_CONSUMABLES_QUANTITY_OF 3
 
 typedef struct Inventory_t {
-    ///
-    /// Do not interact with this.
-    ///
-    Serialization_Header                _serialization_header;
-    Item_Stack items[INVENTORY_ITEM_MAXIMUM_QUANTITY_OF];
-    Quantity__u8 quantity_of__item_stacks;
-} Inventory;
-
-typedef struct Equipment_t {
-    ///
-    /// Do not interact with this.
-    ///
-    Serialization_Header                _serialization_header;
     Item_Stack slot__armor;
     Item_Stack slot__main_hand;
     Item_Stack slot__off_hand;
     Item_Stack slot__consumable[INVENTORY_CONSUMABLES_QUANTITY_OF];
-} Equipment;
+    Item_Stack items[INVENTORY_ITEM_MAXIMUM_QUANTITY_OF];
+} Inventory;
 
 #define INVENTORY_MAX_QUANTITY_OF 64
 
@@ -909,10 +901,6 @@ typedef uint8_t Sustenance__u8;
 #define SUSTENANCE__DYING 28
 
 typedef struct Entity_t {
-    ///
-    /// Do not interact with this.
-    ///
-    Serialization_Header                _serialization_header;
     Sprite_Wrapper                      sprite_wrapper;
 
     ///
@@ -955,20 +943,19 @@ typedef struct Entity_t {
             Humanoid_Flags      humanoid_flags;
             Timer__u8           stun__timer_u8;
             enum Homeostasis_Update_Kind kind_of_homeostasis__update;
-            Equipment           equipment;
             union {
                 struct { // humanoid union
                     Armor_Properties        humanoid__armor_properties;
                     Sustenance__u8          humanoid__primary_sustenance__u8;
                     Sustenance__u8          humanoid__secondary_sustenance__u8;
-                    Serialized_Inventory_Ptr    humanoid__serialized_inventory;    
+                    Serialized_Inventory    humanoid__serialized_inventory;    
                     Homeostasis__i8         humanoid__homeostasis__i8;
                     Timer__u16              humanoid__homeostasis__timer_u16;
                 };
             };
         };
         struct { // containers
-            Serialized_Inventory_Ptr container__serialized_inventory;
+            Serialized_Inventory container__serialized_inventory;
         };
     };
 } Entity;
@@ -1580,10 +1567,6 @@ typedef struct Position_Local_To_Chunk_2i8_t {
 } Position_Local_To_Chunk_2i8;
 
 typedef struct Chunk_t {
-    ///
-    /// Do not interact with this.
-    ///
-    Serialization_Header                _serialization_header;
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
     Signed_Index__i32 x__signed_index_i32, y__signed_index_i32;
     bool is_available;
@@ -1671,9 +1654,15 @@ typedef uint8_t Game_Action_Flags;
 typedef struct Game_Action_t {
     union {
         struct { //Game_Action_Kind__Entity
-            struct {
-                Serialized_Entity_Ptr s_entity__source;
-                Serialized_Entity_Ptr s_entity__target;
+            union {
+                struct { // Targetting method
+                    Identifier__u16 identifier__entity_source;
+                    Identifier__u16 identifier__entity_target;
+                };
+                struct {
+                    Entity *p_entity_source;
+                    Entity *p_entity_target;
+                };
             };
             union {
                 struct {//...Entity__Allocate

@@ -104,3 +104,12 @@ void release_entity_from__entity_manager(
     PLATFORM_release_texture_with__p_PLATFORM_sprite(
             p_entity->sprite_wrapper.p_sprite);
 }
+
+void resolve_p_serialized_entity_ptr_with__entity_manager(
+        Entity_Manager *p_entity_manager,
+        Serialized_Entity_Ptr *s_entity_ptr) {
+    link_serialized_field(
+            s_entity_ptr, 
+            p_entity_manager->entities, 
+            ENTITY_MAXIMUM_QUANTITY_OF);
+}

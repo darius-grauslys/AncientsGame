@@ -10,6 +10,7 @@
 #include <entity/entity_manager.h>
 #include <collisions/hitbox_aabb.h>
 #include <entity/reserves.h>
+#include <serialization/serialized_field.h>
 
 void handle_game_action__entity__allocate(
         Game *p_game,
@@ -184,23 +185,20 @@ void handle_game_action__entity__homeostasis_decrease(
 void handle_game_action__entity(
         Game *p_game,
         Game_Action *p_game_action) {
-    Entity *p_entity_source = 0;
-    Entity *p_entity_target = 0;
-    if (is_game_action_using__id_or_ptr(p_game_action->game_action_flags)) {
-        p_entity_source =
-            get_p_entity_from__entity_manager(
-                    &p_game->world.entity_manager,
-                    p_game_action->identifier__entity_source);
-        p_entity_target =
-            get_p_entity_from__entity_manager(
-                    &p_game->world.entity_manager,
-                    p_game_action->identifier__entity_target);
-    } else {
-        p_entity_source =
-            p_game_action->p_entity_source;
-        p_entity_target =
-            p_game_action->p_entity_target;
+    if (!is_p_serialized_field__linked(
+                &p_game_action->s_entity__source)) {
+        resolve_p_serialized_entity_ptr_with__entity_manager(
+                get_p_entity_manager_from__game(p_game), 
+                &p_game_action->s_entity__source);
     }
+    if (!is_p_serialized_field__linked(
+                &p_game_action->s_entity__target)) {
+        resolve_p_serialized_entity_ptr_with__entity_manager(
+                get_p_entity_manager_from__game(p_game), 
+                &p_game_action->s_entity__target);
+    }
+    Entity *p_entity_source = p_game_action->s_entity__source.p_serialized_field__entity;
+    Entity *p_entity_target = p_game_action->s_entity__target.p_serialized_field__entity;
     enum Game_Action_Kind the_kind_of_game_action__this_action_is =
         p_game_action->the_kind_of_game_action__this_action_is;
     switch (the_kind_of_game_action__this_action_is) {

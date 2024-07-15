@@ -13,26 +13,8 @@ void remove_all_unequiped_item_stacks_from__inventory(
     }
 }
 
-void remove_all_equiped_item_stacks_from__inventory(
-        Inventory *p_inventory) {
-    initialize_item_stack__as_empty(
-            &p_inventory->slot__armor);
-    initialize_item_stack__as_empty(
-            &p_inventory->slot__main_hand);
-    initialize_item_stack__as_empty(
-            &p_inventory->slot__off_hand);
-    for (Index__u8 consumable_index=0;
-            consumable_index < INVENTORY_CONSUMABLES_QUANTITY_OF;
-            consumable_index++) {
-        initialize_item_stack__as_empty(
-                &p_inventory->slot__consumable[consumable_index]);
-    }
-}
-
 void initialize_inventory(
         Inventory *p_inventory) {
-    remove_all_equiped_item_stacks_from__inventory(
-            p_inventory);
     remove_all_unequiped_item_stacks_from__inventory(
             p_inventory);
 }

@@ -15,8 +15,6 @@ void initialize_entity_as__humanoid(
             position__3i32F4, 
             width, 
             height);
-    initialize_inventory(
-            get_p_inventory_from__humanoid(p_entity));
 #warning TODO: impl armor init and homeo
 }
 

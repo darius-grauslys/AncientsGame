@@ -8,6 +8,7 @@
 #include <rendering/animate_entity.h>
 #include <collisions/hitbox_aabb.h>
 #include <debug/debug.h>
+#include <serialization/serialization_header.h>
 
 bool can_entity_kind_have__armor(enum Entity_Kind kind_of_entity) {
     switch (kind_of_entity) {
@@ -55,6 +56,12 @@ void initialize_entity(
         Vector__3i32F4 position__3i32F4,
         Quantity__u32 width,
         Quantity__u32 height) {
+    initialize_serialization_header(
+            &p_entity->_serialization_header,
+            IDENTIFIER__UNKNOWN__u32,
+            sizeof(Entity),
+            0, 0);
+
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
 

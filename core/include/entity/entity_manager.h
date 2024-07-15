@@ -25,6 +25,10 @@ void release_entity_from__entity_manager(
         Entity_Manager *p_manager, 
         Entity *p_entity);
 
+void resolve_p_serialized_entity_ptr_with__entity_manager(
+        Entity_Manager *p_entity_manager,
+        Serialized_Entity_Ptr *s_entity_ptr);
+
 ///
 /// Translate entity ID to entity ptr.
 ///

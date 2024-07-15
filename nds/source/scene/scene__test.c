@@ -84,6 +84,7 @@ void m_load_scene_as__test_handler(
     debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
     debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
     debug_info("path: %d", sizeof(Path));
+    debug_info("chunk: %d", sizeof(Chunk));
     debug_info("entity: %d", sizeof(Entity));
     debug_info("ray: %d", sizeof(Ray__3i32F20));
     debug_info("inv: %d", sizeof(Inventory));

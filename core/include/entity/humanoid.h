@@ -10,12 +10,6 @@ void initialize_entity_as__humanoid(
         Quantity__u32 width,
         Quantity__u32 height);
 
-static inline
-Inventory *get_p_inventory_from__humanoid(
-        Entity *p_entity) {
-    return &p_entity->humanoid__inventory;
-}
-
 bool is_entity_a__humanoid(Entity *entity);
     
 //TODO: this should be an entity thing
