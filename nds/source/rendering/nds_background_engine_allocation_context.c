@@ -215,7 +215,7 @@ void NDS_initialize_background_engine_allocation_context(
                     NDS_UI_Background_Allocation_Kind__Scroll,
                     TEXTURE_FLAG__SIZE_256x512,
                     NDS_BACKGROUND_SLOT__UI__SCROLL, 
-                    get_vector__3i32(0, 88, 0),
+                    get_vector__3i32(104, 88, 0),
                     get_vector__3i32(0, 176, 0),
                     GFX_defaultTiles, 
                     GFX_defaultTilesLen, 

@@ -40,6 +40,19 @@ class Background:
     def __init__(self, path, layer, x, y):
         self.path = path
         self.image = None if path == "" else image.load(path)
+        if self.image != None:
+            self.image.format = 'RGBA'
+            rawimage = self.image.get_image_data()
+            #rawimage.format = 'RGBA'
+            format = 'RGBA'
+            pitch = rawimage.width * len(format)
+            pixels = bytearray(rawimage.get_data(format, pitch))
+            for i in range((len(pixels) // 4) - 1):
+                if pixels[i*4] == 0xff and pixels[i*4+2] == 0xff:
+                    pixels[i*4+3] = 0x0
+                else:
+                    pixels[i*4+3] = 0xff
+            rawimage.set_data(format, pitch, bytes(pixels))
         self.layer = layer
         self.modification_time = get_mtime_if__file_exists__else_return_0(path)
         self.x = x
@@ -106,7 +119,7 @@ config = Config(sys.argv[1])
 modification_time = os.path.getmtime(config.source_xml)
 
 p_ui_manager="p_ui_manager"
-p_ui_itterator="p_ui_itterator"
+p_ui_iterator="p_ui_iterator"
 PLATFORM = "PLATFORM"
 squares = []
 source_c=""
@@ -169,7 +182,7 @@ class Context:
         self.stride__y = stride__y
         self.position = position
         self.quantity_of__elements = quantity_of__elements
-        self.index_of__itteration = ""
+        self.index_of__iteration = ""
         self.index_of__element = 0
         self.quantity_of__sub_elements = 0
         self.indentation_level = 0
@@ -288,14 +301,14 @@ def generate_source_c__local_field__p_ui_element(name_of__ui_element):
 def get_source_string__struct_field__p_next(ui_element_alias):
     return "{}->p_next".format(ui_element_alias)
 
-def generate_source_c__local_assignment__itterator():
-    generate_source_c__with_literal("{} = ".format(p_ui_itterator))
+def generate_source_c__local_assignment__iterator():
+    generate_source_c__with_literal("{} = ".format(p_ui_iterator))
 
-def generate_source_c__local_assignment__itterator_with__literal(literal):
-    generate_source_c__with_literal("{}{} = ".format(p_ui_itterator, literal))
+def generate_source_c__local_assignment__iterator_with__literal(literal):
+    generate_source_c__with_literal("{}{} = ".format(p_ui_iterator, literal))
 
-def get_source_string__loop__itterator(context_stack):
-    return "index_of__itteration__{}".format(len(context_stack) - 1)
+def get_source_string__loop__iterator(context_stack):
+    return "index_of__iteration__{}".format(len(context_stack) - 1)
 
 def generate_source_c__loop_begin__for(literal__index, literal__comparison, literal__increment):
     generate_source_c__with_literal(\
@@ -336,13 +349,13 @@ def allocate_ui(signature, xml_element, context_stack):
     global current_element_id
     context_stack.append(Context.allocate_context_from__xml_element(\
             xml_element, context_stack))
-    name = get_str_from_xml_or__use_this(xml_element, "name", p_ui_itterator)
+    name = get_str_from_xml_or__use_this(xml_element, "name", p_ui_iterator)
     generate_source_h__named_ui_index_if__has_name(xml_element)
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    if name != p_ui_itterator:
+    if name != p_ui_iterator:
         generate_source_c__local_field__p_ui_element(name)
     else:
-        generate_source_c__local_assignment__itterator()
+        generate_source_c__local_assignment__iterator()
     context_stack[-1].p_ui_element = name
     generate_source_c__signature(signature, [p_ui_manager])
     generate_source_c__new_line()
@@ -352,14 +365,14 @@ def allocate_ui(signature, xml_element, context_stack):
     context_stack.pop()
     current_element_id += context_stack[-1].quantity_of__elements
 
-def generate_source_c__itteration_by__succession(context_stack):
-    context_stack[-1].index_of__itteration = \
-            get_source_string__loop__itterator(context_stack)
+def generate_source_c__iteration_by__succession(context_stack):
+    context_stack[-1].index_of__iteration = \
+            get_source_string__loop__iterator(context_stack)
     generate_source_c__loop_begin__for(\
-            get_source_string__loop__itterator(context_stack),\
-            p_ui_itterator,\
-            "itterate_to_next__ui_element(&{})".format(\
-                p_ui_itterator))
+            get_source_string__loop__iterator(context_stack),\
+            p_ui_iterator,\
+            "iterate_to_next__ui_element(&{})".format(\
+                p_ui_iterator))
 
 def get_unique_id_for__element(context_stack):
     id = 0
@@ -389,15 +402,15 @@ def grid(signature, xml_element, context_stack):
             generate_source_c__with_literal("\n")
         if -1 != last_index:
             generate_source_c__tabs(context_stack[-1].indentation_level)
-            generate_source_c__local_assignment__itterator_with__literal("_previous_previous->p_next")
+            generate_source_c__local_assignment__iterator_with__literal("_previous_previous->p_next")
             generate_source_c__with_literal("get_p_ui_element_by__index_from__ui_manager({},{})"\
                     .format(p_ui_manager, \
                     last_index\
                     ))
             generate_source_c__new_line()
         generate_source_c__tabs(context_stack[-1].indentation_level)
-        generate_source_c__local_assignment__itterator_with__literal("_previous_previous")
-        generate_source_c__with_literal("{}{}".format(p_ui_itterator, "_previous"))
+        generate_source_c__local_assignment__iterator_with__literal("_previous_previous")
+        generate_source_c__with_literal("{}{}".format(p_ui_iterator, "_previous"))
         generate_source_c__new_line()
         last_index = current_element_id;
     context_stack[-2].quantity_of__sub_elements += context_stack.pop().quantity_of__elements
@@ -406,10 +419,10 @@ def alloc_child(signature, xml_element, context_stack):
     global current_element_id
     context_stack[-1].index_of__element -= 1
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_assignment__itterator_with__literal("_child")
-    generate_source_c__signature(signature, [p_ui_manager, p_ui_itterator])
+    generate_source_c__local_assignment__iterator_with__literal("_child")
+    generate_source_c__signature(signature, [p_ui_manager, p_ui_iterator])
     generate_source_c__new_line()
-    context_stack[-1].p_ui_element = "{}{}".format(p_ui_itterator, "_child")
+    context_stack[-1].p_ui_element = "{}{}".format(p_ui_iterator, "_child")
     for sub_xml_element in xml_element:
         generate_source_c__tabs(context_stack[-1].indentation_level)
         construct_ui_from__xml_element(sub_xml_element, context_stack)
@@ -423,19 +436,19 @@ def allocate_ui_container(signature, xml_element, context_stack):
     context_stack.append(context)
     size = context.quantity_of__elements
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_assignment__itterator()
+    generate_source_c__local_assignment__iterator()
     generate_source_c__signature(signature, [p_ui_manager, size])
     generate_source_c__new_line()
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__itteration_by__succession(context_stack)
+    generate_source_c__iteration_by__succession(context_stack)
     context_stack[-1].indentation_level += 1
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_assignment__itterator_with__literal("_previous")
-    generate_source_c__with_literal(p_ui_itterator)
+    generate_source_c__local_assignment__iterator_with__literal("_previous")
+    generate_source_c__with_literal(p_ui_iterator)
     generate_source_c__new_line()
     for sub_xml_element in xml_element:
-        # reset the p_ui_element in case we itterated in to a sub_container.
-        context_stack[-1].p_ui_element = p_ui_itterator
+        # reset the p_ui_element in case we iterated in to a sub_container.
+        context_stack[-1].p_ui_element = p_ui_iterator
         generate_source_c__tabs(context_stack[-1].indentation_level)
         construct_ui_from__xml_element(sub_xml_element, context_stack)
     current_element_id += size
@@ -445,20 +458,20 @@ def allocate_ui_container(signature, xml_element, context_stack):
     context_stack[-2].quantity_of__sub_elements += context_stack.pop().quantity_of__elements
 
 def get_rect_spec_args(context_stack, rectangle_spec):
-    itteration_multiplication_string = \
-            "" if context_stack[-1].index_of__itteration == ""\
-            else "* {}".format(context_stack[-1].index_of__itteration)
+    iteration_multiplication_string = \
+            "" if context_stack[-1].index_of__iteration == ""\
+            else "* {}".format(context_stack[-1].index_of__iteration)
     return [\
             rectangle_spec.width, rectangle_spec.height,\
             "get_vector__3i32({}, {}, {})".format(\
                 "{} + {}{}".format(\
                     rectangle_spec.x + context_stack[-1].x, \
                     context_stack[-1].stride__x, \
-                    itteration_multiplication_string), \
+                    iteration_multiplication_string), \
                 "{} + {}{}".format(
                     rectangle_spec.y + context_stack[-1].y, \
                     context_stack[-1].stride__y, \
-                    itteration_multiplication_string), \
+                    iteration_multiplication_string), \
                 0)\
         ]
 
@@ -612,19 +625,19 @@ def generate_source__ui(xml_node__ui):
     context_stack.append(Context(0, 0, 0, 0, (0,0,0), 1))
     context_stack[-1].indentation_level = 1
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_field__p_ui_element(p_ui_itterator)
+    generate_source_c__local_field__p_ui_element(p_ui_iterator)
     generate_source_c__with_literal("0")
     generate_source_c__new_line()
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_itterator, "_previous_previous"))
+    generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_iterator, "_previous_previous"))
     generate_source_c__with_literal("0")
     generate_source_c__new_line()
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_itterator, "_previous"))
+    generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_iterator, "_previous"))
     generate_source_c__with_literal("0")
     generate_source_c__new_line()
     generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_itterator, "_child"))
+    generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_iterator, "_child"))
     generate_source_c__with_literal("0")
     generate_source_c__new_line()
     generate_source_c__tabs(context_stack[-1].indentation_level)

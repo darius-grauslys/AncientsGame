@@ -18,7 +18,8 @@
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__equip.c" h_path="./nds/include/ui/game/nds_ui_window__game__equip.h"/>
         <platform target="NDS" size="256,256"/>
         <background layer="0" path="./core/assets/ui/default/ui_map_inventory_column.png"/>
-        <background layer="1" path="./core/assets/ui/default/ui_map_equip.png"/>
+        <background layer="1" path="./core/assets/ui/default/ui_map_equipment.png"/>
+        <background layer="2" path="./core/assets/ui/default/ui_map_equip.png"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
         <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
@@ -57,6 +58,26 @@
             <allocate_ui name="p_button_filter__consumable">
                 <button x="228" y="160" width="16" height="16" color="64,196,64"/>
             </allocate_ui>
+            <group x="32" y="100">
+                <allocate_ui name="p_item_slot__armor">
+                    <drop_zone width="20" height="20" color="55,55,96"/>
+                </allocate_ui>
+                <allocate_ui name="p_item_slot__main_hand">
+                    <drop_zone width="20" height="20" y="32" color="55,55,96"/>
+                </allocate_ui>
+                <allocate_ui name="p_item_slot__off_hand">
+                    <drop_zone width="20" height="20" y="64" color="55,55,96"/>
+                </allocate_ui>
+                <allocate_ui name="p_item_slot__consumable_1">
+                    <drop_zone width="20" height="20" x="28" color="55,55,96"/>
+                </allocate_ui>
+                <allocate_ui name="p_item_slot__consumable_2">
+                    <drop_zone width="20" height="20" x="28" y="32" color="55,55,96"/>
+                </allocate_ui>
+                <allocate_ui name="p_item_slot__consumeable_3">
+                    <drop_zone width="20" height="20" x="28" y="64" color="55,55,96"/>
+                </allocate_ui>
+            </group>
             <grid x="104" y="15" size="9" stride__y="28" name="p_inventory_column">
                 <allocate_ui_container size="3" stride__x="24">
                     <drop_zone width="23" height="27" color="55,55,96"/>
@@ -68,7 +89,7 @@
                     p_slider,
                     get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_7));
+                        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
             </code>
         </group>
     </ui>
