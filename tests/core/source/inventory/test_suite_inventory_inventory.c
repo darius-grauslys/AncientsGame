@@ -38,7 +38,7 @@ TEST_FUNCTION(initialize_inventory) {
 
 TEST_FUNCTION(add_item_stack_to__inventory) {
     Inventory inventory;
-    initialize_inventory(&inventory);
+    initialize_inventory_as__empty(&inventory);
     return MUNIT_OK;
 }
 

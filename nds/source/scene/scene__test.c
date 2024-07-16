@@ -46,10 +46,10 @@ void m_load_scene_as__test_handler(
 
     PLATFORM_open_ui(
             p_game,
-            UI_Window_Kind__Trade);
+            UI_Window_Kind__Equip);
 
     Inventory inventory;
-    initialize_inventory(&inventory);
+    initialize_inventory_as__empty(&inventory);
     Item item;
     initialize_item(
             &item, 
@@ -61,7 +61,6 @@ void m_load_scene_as__test_handler(
     add_item_stack_to__inventory(
             &inventory, 
             item, 
-            0, 
             16, 
             32);
 
@@ -75,29 +74,28 @@ void m_load_scene_as__test_handler(
     add_item_stack_to__inventory(
             &inventory, 
             item, 
-            4, 
             16, 
             32);
 
     UI_Element *p_ui_element__inventory_column =
         get_p_ui_element_by__index_from__ui_manager(
                 get_p_ui_manager_from__game(p_game), 
-                NDS_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8);
+                NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_7);
 
     NDS_load_inventory_column_for__inventory(
             p_game,
             p_ui_element__inventory_column,
             &inventory);
 
-    debug_info("game: %d", sizeof(Game));
-    debug_info("process_manager: %d", sizeof(Process_Manager));
-    debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
-    debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
-    debug_info("path: %d", sizeof(Path));
-    debug_info("chunk: %d", sizeof(Chunk));
-    debug_info("entity: %d", sizeof(Entity));
-    debug_info("ray: %d", sizeof(Ray__3i32F20));
-    debug_info("inv: %d", sizeof(Inventory));
+    // debug_info("game: %d", sizeof(Game));
+    // debug_info("process_manager: %d", sizeof(Process_Manager));
+    // debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
+    // debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
+    // debug_info("path: %d", sizeof(Path));
+    // debug_info("chunk: %d", sizeof(Chunk));
+    // debug_info("entity: %d", sizeof(Entity));
+    // debug_info("ray: %d", sizeof(Ray__3i32F20));
+    // debug_info("inv: %d", sizeof(Inventory));
 
 }
 

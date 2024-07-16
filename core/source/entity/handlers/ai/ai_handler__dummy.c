@@ -6,6 +6,7 @@
 #include <collisions/hitbox_aabb.h>
 #include <entity/humanoid.h>
 #include <rendering/animate_humanoid.h>
+#include <random.h>
 
 void m_entity_ai_handler__dummy(
         Entity *p_this_dummy,
@@ -14,10 +15,12 @@ void m_entity_ai_handler__dummy(
         get_humanoid__direction(p_this_dummy);
 
     if (p_game->tick__timer_u32.remaining__u32 % 20 == 0) {
-        srand(p_game->tick__timer_u32.remaining__u32 + (int32_t)p_this_dummy);
-        random__result = rand() & DIRECTION__ANY;
+        random__result =
+            get_psuedo_random__direction_u8__non_intrusively_with__seed(
+                    &p_game->repeatable_pseudo_random,
+                    p_game->tick__timer_u32.remaining__u32
+                        + (int32_t)p_this_dummy);
         if ((abs(rand()) % 100) < 60) { random__result = DIRECTION__ANY; }
-        srand(p_game->world.world_parameters.seed__current_random);
     }
 
     switch (random__result) {

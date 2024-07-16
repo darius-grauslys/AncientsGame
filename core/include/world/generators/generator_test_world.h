@@ -3,7 +3,7 @@
 #include <defines.h>
 
 void f_chunk_generator__test_world(
-        World_Parameters *p_world_parameters,
+        Game *p_game,
         Chunk *p_chunk);
 
 #endif

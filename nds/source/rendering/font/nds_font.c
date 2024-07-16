@@ -215,7 +215,7 @@ Font _font_large = {
                 FONT_LARGE__MAX_WIDTH, 
                 2,
 				0,
-				FONT_LARGE__MAX_HEIGHT - 2),
+				(FONT_LARGE__MAX_HEIGHT - 2)),
         DECLARE_FONT_LETTER(
                 '!', 
                 FONT_LARGE__MAX_WIDTH, 
@@ -1772,7 +1772,7 @@ Font _font_small = {
                 FONT_SMALL__MAX_WIDTH, 
                 2,
 				0,
-			    FONT_SMALL__MAX_HEIGHT - 2),
+			    (FONT_SMALL__MAX_HEIGHT - 2)),
         DECLARE_FONT_LETTER(
                 '!', 
                 2, 

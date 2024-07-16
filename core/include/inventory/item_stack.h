@@ -15,6 +15,27 @@ void initialize_item_stack(
 void initialize_item_stack__as_empty(
         Item_Stack *p_item_stack);
 
+void initialize_item_stack__as_allocated(
+        Item_Stack *p_item_stack,
+        Identifier__u32 identifier_for__item_stack__u32);
+
+void set_item_stack(
+        Item_Stack *p_item_stack,
+        Item item,
+        Quantity__u32 quantity_of__items,
+        Quantity__u32 max_quantity_of__items);
+
+static inline
+void copy_item_stack(
+        Item_Stack *p_item_stack__source,
+        Item_Stack *p_item_stack__destination) {
+    set_item_stack(
+            p_item_stack__destination, 
+            p_item_stack__source->item, 
+            p_item_stack__source->quantity_of__items, 
+            p_item_stack__source->max_quantity_of__items);
+}
+
 ///
 /// If the Item_Stacks are for the same Item_Kind
 /// then merge. Otherwise swap.

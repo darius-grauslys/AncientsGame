@@ -2,6 +2,7 @@
 #define SERIALIZED_FIELD_H
 
 #include "defines_weak.h"
+#include "serialization/serialization_header.h"
 #include <defines.h>
 
 void initialize_serialized_field(
@@ -27,9 +28,24 @@ bool link_serialized_field(
 /// structs that do not put Serialization_Header
 /// as their FIRST member field.
 ///
+static inline
 bool is_serialized_field_matching__serialization_header(
         Serialized_Field *p_serialization_field,
-        void *p_serialized_struct);
+        Serialization_Header *p_serialization_header) {
+#ifndef NDEBUG
+    if (!p_serialization_field) {
+        debug_abort("is_serialized_field_matching__serialization_header, p_serialized_field is null.");
+        return false;
+    }
+    if (!p_serialization_header) {
+        debug_abort("is_serialized_field_matching__serialization_header, p_serialized_header is null.");
+        return false;
+    }
+#endif
+    return is_identifier_u32_matching__serialization_header(
+            p_serialization_field->identifier_for__serialized_field,
+            p_serialization_header);
+}
 
 void point_serialized_field_to__this_serialized_struct(
         Serialized_Field *p_serialized_field,
@@ -57,7 +73,12 @@ void initialize_serialized_field_as__unlinked(
 static inline
 bool is_p_serialized_field__linked(
         Serialized_Field *p_serialized_field) {
-    return (bool)p_serialized_field->p_serialized_field__data;
+    return (bool)(
+            p_serialized_field->p_serialized_field__data
+            && p_serialized_field
+                ->p_serialized_field__serialization_header
+                ->uuid
+                != IDENTIFIER__UNKNOWN__u32);
 }
 
 static inline

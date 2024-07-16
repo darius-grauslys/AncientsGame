@@ -59,8 +59,7 @@ void initialize_entity(
     initialize_serialization_header(
             &p_entity->_serialization_header,
             IDENTIFIER__UNKNOWN__u32,
-            sizeof(Entity),
-            0, 0);
+            sizeof(Entity));
 
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;

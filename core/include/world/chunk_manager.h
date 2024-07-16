@@ -5,8 +5,8 @@
 #include <defines.h>
 
 void initialize_chunk_manager(
-        Chunk_Manager* p_chunk_manager,
-        World_Parameters *p_world_parameters);
+        Game *p_game,
+        Chunk_Manager* p_chunk_manager);
 
 Index__u32 get_chunk_index_from__chunk_manager(
         Chunk_Manager *p_chunk_manager,
@@ -29,14 +29,14 @@ static Chunk inline *get_p_chunk_from__chunk_manager(
 }
 
 void move_chunk_manager(
+        Game *p_game,
         Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters,
         Direction__u8 direction,
         Quantity__u32 steps);
 
 bool poll_chunk_manager_for__chunk_movement(
+        Game *p_game,
         Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters,
         Vector__3i32F4 position__3i32F4);
 
 bool poll_chunk_manager_for__tile_collision(

@@ -5,7 +5,7 @@
 #include <defines.h>
 
 void f_chunk_generator__test_world(
-        World_Parameters *p_world_parameters,
+        Game *p_game,
         Chunk *p_chunk) {
     int32_t x = p_chunk->x__signed_index_i32;
     int32_t y = p_chunk->y__signed_index_i32;

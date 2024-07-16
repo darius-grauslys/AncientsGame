@@ -1,6 +1,7 @@
 #include "defines_weak.h"
 #include "platform.h"
 #include "process/process_manager.h"
+#include "random.h"
 #include "scene/scene_manager.h"
 #include "sort/sort_list/sort_list_manager.h"
 #include "world/path_finding/path_list_manager.h"
@@ -33,6 +34,9 @@
 void initialize_game(
         Game *p_game,
         m_Game_Action_Handler m_game_action_handler) {
+    initialize_repeatable_psuedo_random(
+            &p_game->repeatable_pseudo_random, 
+            0);
     initialize_scene_manager(&p_game->scene_manager);
     initialize_process_manager(
             get_p_process_manager_from__game(p_game));

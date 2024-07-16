@@ -87,6 +87,13 @@ typedef struct Vector__3i32_t Chunk_Vector__3i32;
 typedef struct Vector__3i32_t Tile_Vector__3i32;
 
 typedef uint32_t Psuedo_Random_Seed__u32;
+typedef int32_t Psuedo_Random__i32;
+typedef uint32_t Psuedo_Random__u32;
+
+typedef struct Repeatable_Psuedo_Random_t {
+    Psuedo_Random_Seed__u32 seed__initial;
+    Psuedo_Random_Seed__u32 seed__current_random;
+} Repeatable_Psuedo_Random;
 
 typedef struct Timer__u32_t {
     uint32_t remaining__u32;
@@ -145,15 +152,17 @@ typedef int8_t  Signed_Quantity__i8;
 typedef int16_t Signed_Quantity__i16;
 typedef int32_t Signed_Quantity__i32;
 
-typedef int32_t Psuedo_Random__i32;
-typedef uint32_t Psuedo_Random__u32;
-
 #define IDENTIFIER__UNKNOWN__u32 (uint32_t)(-1)
 #define IDENTIFIER__UNKNOWN__u16 (uint16_t)(-1)
 #define IDENTIFIER__UNKNOWN__u8 (uint8_t)(-1)
 typedef uint32_t Identifier__u32;
 typedef uint16_t Identifier__u16;
 typedef uint8_t Identifier__u8;
+
+typedef struct Chunk_Identifier__u32_t {
+    Identifier__u16     x__chunk_identifier__u16;
+    Identifier__u16     y__chunk_identifier__u16;
+} Chunk_Identifier__u32;
 
 #define DIRECTION__NONE     0
 #define DIRECTION__NORTH    BIT(0)
@@ -183,16 +192,32 @@ typedef void (*m_Deserialize)(Serialized_Field *p_this_serialized_field);
 /// in a serialized struct.
 ///
 typedef struct Serialization_Header_t {
-    Identifier__u32 identifier_for__serialized_struct;
-    Quantity__u32 size_of__serialized_struct;
+    Identifier__u32     uuid;
+    Quantity__u32       size_of__struct;
+} Serialization_Header;
+
+typedef struct Serializer_t {
+    Serialization_Header _serialization_header;
     m_Serialize m_serialize_handler;
     m_Deserialize m_deserialize_handler;
-} Serialization_Header;
+} Serializer;
 
 typedef struct Serialized_Field_t {
     union {
         struct {
+            Serialization_Header _serialization_header;
+        };
+        struct {
+            Identifier__u32 identifier_for__serialized_field;
+            Quantity__u32   :32;
+        };
+    };
+    union {
+        struct {
             void *p_serialized_field__data;
+        };
+        struct {
+            Serialization_Header *p_serialized_field__serialization_header;
         };
         struct {
             Entity *p_serialized_field__entity;
@@ -201,12 +226,13 @@ typedef struct Serialized_Field_t {
             Inventory *p_serialized_field__inventory;
         };
         struct {
+            Item_Stack *p_serialized_field__item_stack;
+        };
+        struct {
             Chunk *p_serialized_field__chunk;
         };
     };
-    Identifier__u32 identifier_for__serialized_field;
 } Serialized_Field;
-
 
 ///
 /// SECTION_collisions
@@ -669,10 +695,11 @@ typedef struct Item_t {
 } Item;
 
 typedef struct Item_Stack_t {
-    Item            item;
-    Identifier__u16 identifier_for__item_stack;
-    Quantity__u8    quantity_of__items;
-    Quantity__u8    max_quantity_of__items;
+    Serialization_Header        _serialization_header;
+    Serialized_Inventory_Ptr    *s_inventory_ptr;
+    Item                        item;
+    Quantity__u8                quantity_of__items;
+    Quantity__u8                max_quantity_of__items;
 } Item_Stack;
 
 typedef void (*f_Item_Stack__Create)(Item_Stack *p_item_stack);
@@ -693,8 +720,18 @@ typedef struct Item_Stack_Manager_t {
 } Item_Stack_Manager;
 
 
-#define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 32
+#define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 33
 #define INVENTORY_CONSUMABLES_QUANTITY_OF 3
+
+#define INVENTORY_ITEM_STACK_SLOT__MAIN_HAND 0
+#define INVENTORY_ITEM_STACK_SLOT__OFF_HAND 1
+#define INVENTORY_ITEM_STACK_SLOT__ARMOR 2
+#define INVENTORY_ITEM_STACK_SLOT__CONSUMABLES 3
+
+///
+/// Leaves 6 bits (0-63) for item_stacks
+///
+#define INVENTORY_IDENTIFIER_BITS 26
 
 typedef struct Inventory_t {
     ///
@@ -704,17 +741,6 @@ typedef struct Inventory_t {
     Item_Stack items[INVENTORY_ITEM_MAXIMUM_QUANTITY_OF];
     Quantity__u8 quantity_of__item_stacks;
 } Inventory;
-
-typedef struct Equipment_t {
-    ///
-    /// Do not interact with this.
-    ///
-    Serialization_Header                _serialization_header;
-    Item_Stack slot__armor;
-    Item_Stack slot__main_hand;
-    Item_Stack slot__off_hand;
-    Item_Stack slot__consumable[INVENTORY_CONSUMABLES_QUANTITY_OF];
-} Equipment;
 
 #define INVENTORY_MAX_QUANTITY_OF 64
 
@@ -955,7 +981,6 @@ typedef struct Entity_t {
             Humanoid_Flags      humanoid_flags;
             Timer__u8           stun__timer_u8;
             enum Homeostasis_Update_Kind kind_of_homeostasis__update;
-            Equipment           equipment;
             union {
                 struct { // humanoid union
                     Armor_Properties        humanoid__armor_properties;
@@ -1281,28 +1306,29 @@ typedef uint8_t UI_Button_Flags__u8;
     BIT(UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLED)
 
 typedef struct UI_Element_t {
-    enum UI_Element_Kind the_kind_of_ui_element__this_is;
-    Hitbox_AABB         ui_bounding_box__aabb;
+    enum UI_Element_Kind    the_kind_of_ui_element__this_is;
+    Hitbox_AABB             ui_bounding_box__aabb;
     /// DO NOT INVOKE
-    m_UI_Clicked        m_ui_clicked_handler;
+    m_UI_Clicked            m_ui_clicked_handler;
     /// DO NOT INVOKE
-    m_UI_Dragged        m_ui_dragged_handler;
+    m_UI_Dragged            m_ui_dragged_handler;
     /// DO NOT INVOKE
-    m_UI_Dropped        m_ui_dropped_handler;
+    m_UI_Dropped            m_ui_dropped_handler;
     /// DO NOT INVOKE
-    m_UI_Receive_Drop   m_ui_receive_drop_handler;
+    m_UI_Receive_Drop       m_ui_receive_drop_handler;
     /// DO NOT INVOKE
-    m_UI_Held           m_ui_held_handler;
+    m_UI_Held               m_ui_held_handler;
     /// DO NOT INVOKE, DO NOT REMOVE FROM UI_MANAGER
     /// FROM WITHIN m_ui_dispose_handler!
     /// When implementing your own, be sure to
     /// also invoke m_ui_element__dispose_handler__default(...)
-    m_UI_Dispose    m_ui_dispose_handler;
-    void *p_ui_data;
-    UI_Element *p_parent, *p_child, *p_next;
-    Identifier__u16 ui_identifier;
-    UI_Flags__u8 ui_flags;
-    PLATFORM_Sprite *p_PLATFORM_sprite;
+    m_UI_Dispose            m_ui_dispose_handler;
+    void                    *p_ui_data;
+    Serialized_Field        s_serialized_field;
+    UI_Element *p_parent,   *p_child, *p_next;
+    Identifier__u16         ui_identifier;
+    UI_Flags__u8            ui_flags;
+    PLATFORM_Sprite         *p_PLATFORM_sprite;
     union {
         union {
             struct { // UI_Button
@@ -1563,13 +1589,11 @@ typedef struct World_Parameters_t World_Parameters;
 typedef struct Chunk_t Chunk;
 
 typedef void (*f_Chunk_Generator)(
-        World_Parameters *p_world_parameters,
+        Game *p_game,
         Chunk *p_chunk_to_generate);
 
 typedef struct World_Parameters_t {
     f_Chunk_Generator f_chunk_generator;
-    Psuedo_Random_Seed__u32 seed__initial;
-    Psuedo_Random_Seed__u32 seed__current_random;
 } World_Parameters;
 
 /// Should only be made from calls to inlined helpers
@@ -1641,6 +1665,9 @@ typedef struct Game_t {
     UI_Manager ui_manager;
 
     World world;
+    Repeatable_Psuedo_Random repeatable_pseudo_random;
+
+    Inventory_Manager inventory_manager;
 
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;

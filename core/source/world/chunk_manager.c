@@ -1,3 +1,4 @@
+#include "world/world.h"
 #include <defines.h>
 #include <world/chunk.h>
 #include <debug/debug.h>
@@ -9,10 +10,11 @@
 #include <world/chunk_manager.h>
 #include <world/chunk_vectors.h>
 #include <world/tile_vectors.h>
+#include <game.h>
 
 void initialize_chunk_manager(
-        Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters) {
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
     p_chunk_manager->x__center_chunk__signed_index_i32 =
         p_chunk_manager->y__center_chunk__signed_index_i32 = 0;
     for (Signed_Index__i32 y=0; y < 
@@ -33,8 +35,9 @@ void initialize_chunk_manager(
             initialize_chunk(p_chunk__here, 
                     get_chunk_vector__3i32(x, y, 0));
 
-            p_world_parameters->f_chunk_generator(
-                    p_world_parameters, 
+            get_p_world_parameters_from__game(p_game)
+                ->f_chunk_generator(
+                    p_game, 
                     p_chunk__here);
 
             p_chunk_map_node->p_chunk__here = p_chunk__here;
@@ -210,8 +213,8 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
 
 // TODO: find a way to consolidate this helpers without macros?
 void move_chunk_manager__chunks_north(
-        Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters) {
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
     Signed_Index__i32 x__old_most_north_western_chunk =
         p_chunk_manager->p_most_north_western__chunk_map_node
             ->p_chunk__here->x__signed_index_i32;
@@ -249,8 +252,9 @@ void move_chunk_manager__chunks_north(
             p_chunk__here->y__signed_index_i32 =
                 y__new_most_north_western_chunk;
 
-            p_world_parameters->f_chunk_generator(
-                    p_world_parameters,
+            get_p_world_parameters_from__game(p_game)
+                ->f_chunk_generator(
+                    p_game,
                     p_chunk__here);
         }
 
@@ -260,8 +264,8 @@ void move_chunk_manager__chunks_north(
 }
 
 void move_chunk_manager__chunks_east(
-        Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters) {
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
     int32_t x__new_most_north_eastern_chunk =
         p_chunk_manager->p_most_north_eastern__chunk_map_node
             ->p_chunk__here->x__signed_index_i32 + 1;
@@ -300,8 +304,9 @@ void move_chunk_manager__chunks_east(
             p_chunk__here->y__signed_index_i32 =
                 y__old_most_south_eastern_chunk + step;
 
-            p_world_parameters->f_chunk_generator(
-                    p_world_parameters,
+            get_p_world_parameters_from__game(p_game)
+                ->f_chunk_generator(
+                    p_game, 
                     p_chunk__here);
         }
 
@@ -311,8 +316,8 @@ void move_chunk_manager__chunks_east(
 }
 
 void move_chunk_manager__chunks_south(
-        Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters) {
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
     int32_t x__old_most_south_western_chunk=
         p_chunk_manager->p_most_south_western__chunk_map_node
             ->p_chunk__here->x__signed_index_i32;
@@ -350,8 +355,9 @@ void move_chunk_manager__chunks_south(
             p_chunk__here->y__signed_index_i32 =
                 y__new_most_south_western_chunk;
 
-            p_world_parameters->f_chunk_generator(
-                    p_world_parameters,
+            get_p_world_parameters_from__game(p_game)
+                ->f_chunk_generator(
+                    p_game, 
                     p_chunk__here);
         }
 
@@ -361,8 +367,8 @@ void move_chunk_manager__chunks_south(
 }
 
 void move_chunk_manager__chunks_west(
-        Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters) {
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
     int32_t x__new_most_north_western_chunk =
         p_chunk_manager->p_most_north_western__chunk_map_node
             ->p_chunk__here->x__signed_index_i32 - 1;
@@ -401,8 +407,9 @@ void move_chunk_manager__chunks_west(
             p_chunk__here->y__signed_index_i32 =
                 y__old_most_south_western_chunk + step;
 
-            p_world_parameters->f_chunk_generator(
-                    p_world_parameters,
+            get_p_world_parameters_from__game(p_game)
+                ->f_chunk_generator(
+                    p_game, 
                     p_chunk__here);
         }
 
@@ -412,37 +419,37 @@ void move_chunk_manager__chunks_west(
 }
 
 void move_chunk_manager(
+        Game *p_game,
         Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters,
         Direction__u8 direction,
         Quantity__u32 steps) {
     for (Quantity__u32 step=0; step < steps; step++) {
         if (direction & DIRECTION__NORTH) {
             move_chunk_manager__chunks_north(
-                    p_chunk_manager, 
-                    p_world_parameters);
+                    p_game,
+                    p_chunk_manager);
         }
         if (direction & DIRECTION__EAST) {
             move_chunk_manager__chunks_east(
-                    p_chunk_manager, 
-                    p_world_parameters);
+                    p_game,
+                    p_chunk_manager);
         }
         if (direction & DIRECTION__SOUTH) {
             move_chunk_manager__chunks_south(
-                    p_chunk_manager, 
-                    p_world_parameters);
+                    p_game,
+                    p_chunk_manager);
         }
         if (direction & DIRECTION__WEST) {
             move_chunk_manager__chunks_west(
-                    p_chunk_manager, 
-                    p_world_parameters);
+                    p_game,
+                    p_chunk_manager);
         }
     }
 }
 
 bool poll_chunk_manager_for__chunk_movement(
+        Game *p_game,
         Chunk_Manager *p_chunk_manager,
-        World_Parameters *p_world_parameters,
         Vector__3i32F4 position__3i32F4) {
 
     Chunk_Vector__3i32 chunk_vector__3i32 =
@@ -480,8 +487,8 @@ bool poll_chunk_manager_for__chunk_movement(
 
     if(direction__move_chunks != DIRECTION__NONE) {
         move_chunk_manager(
+                p_game,
                 p_chunk_manager, 
-                p_world_parameters, 
                 direction__move_chunks,
                 1);
         return true;

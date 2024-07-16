@@ -63,6 +63,7 @@ Entity *get_p_entity_from__world_using__ray_3i32F20(
 }
 
 void initialize_world(
+        Game *p_game,
         World *p_world,
         PLATFORM_Graphics_Window 
             *p_PLATFORM_graphics_window_for__world);
@@ -87,6 +88,7 @@ void release_entity_from__world(
         Entity *p_entity);
 
 bool poll_world_for__scrolling(
+        Game *p_game,
         World *p_world);
 
 #endif

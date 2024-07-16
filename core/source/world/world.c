@@ -15,7 +15,9 @@
 #include <debug/debug.h>
 #include <vectors.h>
 
-void initialize_world(World *p_world,
+void initialize_world(
+        Game *p_game,
+        World *p_world,
         PLATFORM_Graphics_Window 
             *p_PLATFORM_graphics_window_for__world) {
     p_world->p_PLATFORM_graphics_window_for__world =
@@ -28,8 +30,7 @@ void initialize_world(World *p_world,
     //         100);
     initialize_world_parameters(
             &p_world->world_parameters, 
-            f_chunk_generator__flat_world, 
-            100);
+            f_chunk_generator__flat_world);
     initialize_entity_manager(&p_world->entity_manager);
     initialize_collision_manager(&p_world->collision_manager);
     set_collision_manager__center_chunk(
@@ -37,8 +38,8 @@ void initialize_world(World *p_world,
             0, 
             0);
     initialize_chunk_manager(
-            &p_world->chunk_manager,
-            &p_world->world_parameters);
+            p_game,
+            &p_world->chunk_manager);
     initialize_camera(
             &p_world->camera,
             get_vector__3i32F4_using__i32(
@@ -58,7 +59,7 @@ void manage_world(Game *p_game) {
                 p_game);
     }
 
-    if (poll_world_for__scrolling(&p_game->world)) {
+    if (poll_world_for__scrolling(p_game, &p_game->world)) {
         set_collision_manager__center_chunk(
                 &p_game->world.collision_manager,
                 p_game->world.chunk_manager.x__center_chunk__signed_index_i32,
@@ -201,12 +202,13 @@ void release_entity_from__world(
 }
 
 bool poll_world_for__scrolling(
+        Game *p_game,
         World *p_world) {
     bool is_chunks_moved =
         poll_chunk_manager_for__chunk_movement(
-            &p_world->chunk_manager,
-            &p_world->world_parameters,
-            p_world->camera.position);
+                p_game,
+                &p_world->chunk_manager,
+                p_world->camera.position);
 
     return is_chunks_moved;
 }

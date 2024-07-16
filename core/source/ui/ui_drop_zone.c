@@ -17,7 +17,7 @@ void initialize_ui_element_as__drop_zone(
             p_ui_drop_zone->p_parent,
             p_ui_drop_zone->p_child,
             p_ui_drop_zone->p_next,
-            UI_Element_Kind__Button, 
+            UI_Element_Kind__Drop_Zone, 
             p_ui_drop_zone->ui_flags,
             width__u8, 
             height__u8,

@@ -5,6 +5,10 @@
 #include <defines.h>
 
 void initialize_inventory(
+        Inventory *p_inventory,
+        Identifier__u32 identifier_for__inventory);
+
+void initialize_inventory_as__empty(
         Inventory *p_inventory);
 
 ///
@@ -15,7 +19,6 @@ void initialize_inventory(
 void add_item_stack_to__inventory(
         Inventory *p_inventory,
         Item item,
-        Identifier__u16 identifier_for__item_stack,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items);
 

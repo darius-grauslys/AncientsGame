@@ -1,6 +1,7 @@
 #include <defines.h>
 #include <world/generators/generator_flat_world.h>
 #include <world/world_parameters.h>
+#include <game.h>
 
 #include <debug/debug.h>
 
@@ -336,7 +337,7 @@ void initialize_weight_map(void) {
 }
 
 void f_chunk_generator__flat_world(
-        World_Parameters *p_world_parameters,
+        Game *p_game,
         Chunk *p_chunk) {
     Local_Parameters random_results[9];
 
@@ -347,14 +348,14 @@ void f_chunk_generator__flat_world(
             Index__u32 index = (x+1) + (3*(2 - (y+1)));
             random_results[index]
                 .random_result__local__u32 =
-                get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
-                        p_world_parameters, 
+                get_pseudo_random_i32_with__xy_from__game(
+                        p_game, 
                         p_chunk->x__signed_index_i32 + x, 
                         p_chunk->y__signed_index_i32 + y);
             random_results[index]
                 .random_result__greater__u32 =
-                get_repeatable_pseudo_random_i32_with__xy_from__world_parameters(
-                        p_world_parameters, 
+                get_pseudo_random_i32_with__xy_from__game(
+                        p_game,
                         (p_chunk->x__signed_index_i32 + x) >> 4, 
                         (p_chunk->y__signed_index_i32 + y) >> 4);
 
@@ -421,8 +422,8 @@ void f_chunk_generator__flat_world(
                     TILE_FLAGS__NONE);
 
             Psuedo_Random__u32 chance_plant =
-                get_pseudo_random_i32__from_world_parameters(
-                        p_world_parameters)
+                get_pseudo_random_i32_from__game(
+                        p_game)
                 % 100;
             p_tile->the_kind_of_tile_cover__this_tile_has =
                 Tile_Cover_Kind__None;

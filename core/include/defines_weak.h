@@ -230,6 +230,8 @@ typedef struct Input_t Input;
 /// SECTION_inventory
 ///
 
+typedef struct Item_t Item;
+typedef struct Item_Stack_t Item_Stack;
 typedef struct Inventory_t Inventory;
 
 enum Item_Kind {
@@ -519,6 +521,7 @@ typedef struct Scene_Manager_t Scene_Manager;
 
 
 typedef struct Serialized_Field_t Serialized_Field;
+typedef struct Serialized_Field_t Serialized_Item_Stack_Ptr;
 typedef struct Serialized_Field_t Serialized_Inventory_Ptr;
 typedef struct Serialized_Field_t Serialized_Entity_Ptr;
 typedef struct Serialized_Field_t Serialized_Chunk_Ptr;
@@ -627,6 +630,7 @@ enum UI_Element_Kind {
     UI_Element_Kind__Button,
     UI_Element_Kind__Draggable,
     UI_Element_Kind__Slider,
+    UI_Element_Kind__Drop_Zone,
 };
 
 ///

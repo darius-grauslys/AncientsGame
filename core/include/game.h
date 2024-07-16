@@ -6,6 +6,7 @@
 /// You will need to compile with a backend.
 ///
 
+#include "random.h"
 #include "timer.h"
 #include <defines.h>
 #include <world/world.h>
@@ -13,6 +14,20 @@
 static inline
 Quantity__u32 get_time_elapsed__game(Game *p_game) {
     return get_time_elapsed_from__timer_u32(&p_game->tick__timer_u32);
+}
+
+static inline
+Psuedo_Random__i32 get_pseudo_random_i32_from__game(Game *p_game) {
+    return get_pseudo_random_i32__intrusively(&p_game->repeatable_pseudo_random);
+}
+
+static inline
+Psuedo_Random__i32 get_pseudo_random_i32_with__xy_from__game(
+        Game *p_game,
+        i32 x, i32 y) {
+    return get_pseudo_random_i32_with__xy__intrusively(
+            &p_game->repeatable_pseudo_random, 
+            x, y);
 }
 
 static inline
@@ -35,6 +50,11 @@ Path_List_Manager *get_p_path_list_manager_from__game(Game *p_game) {
     return &p_game->path_list_manager;
 }
 
+static inline
+Inventory_Manager *get_p_inventory_manager_from__game(Game *p_game) {
+    return &p_game->inventory_manager;
+}
+
 static Entity_Manager inline 
 *get_p_entity_manager_from__game(Game *p_game) {
     return get_p_entity_manager_from__world(&p_game->world);
@@ -45,9 +65,15 @@ static Chunk_Manager inline
     return get_p_chunk_manager_from__world(&p_game->world);
 }
 
-static World inline 
-*get_p_world_from__game(Game *p_game) {
+static inline 
+World *get_p_world_from__game(Game *p_game) {
     return &p_game->world;
+}
+
+static inline
+World_Parameters *get_p_world_parameters_from__game(Game *p_game) {
+    return get_p_world_parameters_from__world(
+            get_p_world_from__game(p_game));
 }
 
 static Collision_Manager inline 

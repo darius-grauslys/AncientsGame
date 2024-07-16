@@ -1,6 +1,7 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "serialization/serialized_field.h"
 #include "timer.h"
 #include <entity/entity_manager.h>
 #include <rendering/animate_entity.h>
@@ -110,6 +111,6 @@ void resolve_p_serialized_entity_ptr_with__entity_manager(
         Serialized_Entity_Ptr *s_entity_ptr) {
     link_serialized_field(
             s_entity_ptr, 
-            p_entity_manager->entities, 
+            (Serialization_Header*)p_entity_manager->entities, 
             ENTITY_MAXIMUM_QUANTITY_OF);
 }

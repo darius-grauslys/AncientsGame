@@ -2,7 +2,7 @@
 #define GENERATOR_FLAT_WORLD_H
 
 void f_chunk_generator__flat_world(
-        World_Parameters *p_world_parameters,
+        Game *p_game,
         Chunk *p_chunk);
 
 

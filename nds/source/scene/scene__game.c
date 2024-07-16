@@ -75,6 +75,7 @@ void m_load_scene_as__game_handler(
 
     NDS_initialize_gfx_for__world(p_gfx_context);
     initialize_world(
+            p_game,
             get_p_world_from__game(p_game),
             NDS_get_graphics_window__main_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
@@ -111,8 +112,8 @@ void m_enter_scene_as__game_handler(
             p_player);
 
     move_chunk_manager(
+            p_game,
             &p_game->world.chunk_manager, 
-            &p_game->world.world_parameters, 
             DIRECTION__SOUTH_WEST,
             2);
 
