@@ -4,6 +4,8 @@
 #include "defines_weak.h"
 #include "game.h"
 #include "input/input.h"
+#include "inventory/inventory.h"
+#include "inventory/item.h"
 #include "nds/arm9/background.h"
 #include "nds/arm9/video.h"
 #include "nds_defines.h"
@@ -15,7 +17,10 @@
 #include "rendering/font/typer.h"
 #include "rendering/nds_background.h"
 #include "rendering/sprite.h"
+#include "ui/game/nds_ui_window__game__equip.h"
+#include "ui/game/nds_ui_window__game__trade.h"
 #include "ui/nds_ui.h"
+#include "ui/nds_ui__inventory_column.h"
 #include "ui/nds_ui__slider.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
@@ -39,45 +44,50 @@ void m_load_scene_as__test_handler(
     NDS_load_sprite_palletes__default_into__vram();
     NDS_initialize_debug__main();
 
-    Sprite_Allocation_Specification
-        sprite_allocation_specification;
-
-    initialize_sprite_allocation_specification_for__item(
-            &sprite_allocation_specification, 
-            TEXTURE_FLAGS__NONE, 
-            get_p_ui_manager_from__game(p_game)
-                ->p_PLATFORM_graphics_window_for__ui_manager, 
-            Item_Kind__Stick);
-
-    p_item_sprite = PLATFORM_allocate_sprite(
-            get_p_PLATFORM_gfx_context_from__game(p_game), 
-            &sprite_allocation_specification);
-
-    PLATFORM_set_sprite__position(
-            p_item_sprite, 40, 40);
-
     PLATFORM_open_ui(
             p_game,
-            UI_Window_Kind__Idle);
+            UI_Window_Kind__Trade);
 
-    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__game(p_game);
-    NDS_Background *p_NDS_background_typer =
-        &p_PLATFORM_gfx_context->backgrounds__sub[
-        NDS_BACKGROUND_SLOT__UI__TYPER];
-
-    Typer *p_typer =
-        &p_PLATFORM_gfx_context->typers[1];
-    initialize_typer_with__font(
-            p_typer, 
-            108, 92, 
-            160, 24, 
+    Inventory inventory;
+    initialize_inventory(&inventory);
+    Item item;
+    initialize_item(
+            &item, 
             0, 0, 
-            p_typer->p_font);
+            0, 
+            Item_Kind__Stick, 
+            0);
 
-    NDS_setup_typer_onto__background(
-            p_NDS_background_typer, 
-            p_typer);
+    add_item_stack_to__inventory(
+            &inventory, 
+            item, 
+            0, 
+            16, 
+            32);
+
+    initialize_item(
+            &item, 
+            0, 0, 
+            0, 
+            Item_Kind__Battleaxe__Steel__Chaos, 
+            0);
+
+    add_item_stack_to__inventory(
+            &inventory, 
+            item, 
+            4, 
+            16, 
+            32);
+
+    UI_Element *p_ui_element__inventory_column =
+        get_p_ui_element_by__index_from__ui_manager(
+                get_p_ui_manager_from__game(p_game), 
+                NDS_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8);
+
+    NDS_load_inventory_column_for__inventory(
+            p_game,
+            p_ui_element__inventory_column,
+            &inventory);
 
     debug_info("game: %d", sizeof(Game));
     debug_info("process_manager: %d", sizeof(Process_Manager));
@@ -89,11 +99,6 @@ void m_load_scene_as__test_handler(
     debug_info("ray: %d", sizeof(Ray__3i32F20));
     debug_info("inv: %d", sizeof(Inventory));
 
-    put_c_string_in__typer(
-            p_PLATFORM_gfx_context, 
-            p_typer, 
-            //"abcd", 4);
-            "The quick brown fox jumped over the lazy dog again and again and again and again!", MESSAGE_MAX_LENGTH_OF);
 }
 
 void m_enter_scene_handler_as__test(

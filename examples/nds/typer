@@ -1,0 +1,26 @@
+
+
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__game(p_game);
+    NDS_Background *p_NDS_background_typer =
+        &p_PLATFORM_gfx_context->backgrounds__sub[
+        NDS_BACKGROUND_SLOT__UI__TYPER];
+
+    Typer *p_typer =
+        &p_PLATFORM_gfx_context->typers[0];
+    initialize_typer_with__font(
+            p_typer, 
+            108, 92, 
+            160, 24, 
+            0, 0, 
+            p_typer->p_font);
+
+    NDS_setup_typer_onto__background(
+            p_NDS_background_typer, 
+            p_typer);
+
+    put_c_string_in__typer(
+            p_PLATFORM_gfx_context, 
+            p_typer, 
+            //"abcd", 4);
+            "The quick brown fox jumped over the lazy dog again and again and again and again!", MESSAGE_MAX_LENGTH_OF);

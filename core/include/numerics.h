@@ -1,11 +1,42 @@
 #ifndef NUMERICS_H
 #define NUMERICS_H
 
+#include "defines.h"
 #include <defines_weak.h>
 
 static const u8 MAX__U8     = ((u8)-1);
 static const u16 MAX__U16   = ((u16)-1);
 static const u32 MAX__U32   = ((u32)-1);
+
+static inline 
+i32F4 i32_to__i32F4(Signed_Index__i32 x) {
+    return x << FRACTIONAL_PERCISION_4__BIT_SIZE;
+}
+
+static inline 
+Signed_Index__i32 i32F4_to__i32(i32F4 x) {
+    return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
+}
+
+static inline 
+i32F20 i32_to__i32F20(Signed_Index__i32 x) {
+    return x << FRACTIONAL_PERCISION_20__BIT_SIZE;
+}
+
+static inline 
+Signed_Index__i32 i32F20_to__i32(i32F20 x) {
+    return x >> FRACTIONAL_PERCISION_20__BIT_SIZE;
+}
+
+static inline 
+Signed_Index__i32 i32F20_to__i32F4(i32F20 x) {
+    return x >> FRACTIONAL_PERCISION_16__BIT_SIZE;
+}
+
+static inline 
+Signed_Index__i32 i32F4_to__i32F20(i32F4 x) {
+    return x << FRACTIONAL_PERCISION_16__BIT_SIZE;
+}
 
 static inline
 u8 add_u8__clamped(

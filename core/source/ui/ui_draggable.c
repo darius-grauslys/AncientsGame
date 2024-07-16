@@ -38,7 +38,7 @@ void m_ui_draggable__dragged_handler__default(
     position.y__i32 -= 
         p_this_draggable->ui_bounding_box__aabb.height__quantity_u32 >> 1;
 
-    set_ui_element__position(
+    set_position_3i32_of__ui_element(
             p_this_draggable, 
             position);
 }
@@ -52,10 +52,8 @@ void m_ui_draggable__dropped_handler__default(
         return;
     }
 
-    set_ui_element__position(
+    set_position_3i32_of__ui_element(
             p_this_draggable, 
-            vector_3i32F4_to__vector_3i32(p_this_draggable
-                ->p_parent
-                ->ui_bounding_box__aabb
-                .position__3i32F4));
+            get_position_3i32_from__p_ui_element(
+                p_this_draggable->p_parent));
 }

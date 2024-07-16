@@ -8,17 +8,29 @@
 #include "vectors.h"
 #include <defines.h>
 
-static Signed_Index__i32 inline get_x_i32_from__p_ui_element(
+static inline 
+Signed_Index__i32 get_x_i32_from__p_ui_element(
         UI_Element *p_ui_element) {
     return get_x_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
 }
-static Signed_Index__i32 inline get_y_i32_from__p_ui_element(
+static inline 
+Signed_Index__i32 get_y_i32_from__p_ui_element(
         UI_Element *p_ui_element) {
     return get_y_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
 }
-static Signed_Index__i32 inline get_z_i32_from__p_ui_element(
+static inline 
+Signed_Index__i32 get_z_i32_from__p_ui_element(
         UI_Element *p_ui_element) {
     return get_z_i32_from__hitbox(&p_ui_element->ui_bounding_box__aabb);
+}
+
+static inline 
+Vector__3i32 get_position_3i32_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return vector_3i32F4_to__vector_3i32(
+            p_ui_element
+            ->ui_bounding_box__aabb
+            .position__3i32F4);
 }
 
 static inline
@@ -67,36 +79,36 @@ UI_Element *get_child_of__ui_element(
 }
 
 static inline
-UI_Element *itterate_to_next__ui_element(
+UI_Element *iterate_to_next__ui_element(
         UI_Element * volatile *p_ui_element_ptr) {
     if (!(*p_ui_element_ptr))
         return 0;
-    UI_Element *p_itterated_element = *p_ui_element_ptr;
+    UI_Element *p_iterated_element = *p_ui_element_ptr;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_next;
-    return p_itterated_element;
+    return p_iterated_element;
 }
 
 static inline 
-UI_Element *itterate_to_parent_of__ui_element(
+UI_Element *iterate_to_parent_of__ui_element(
         UI_Element * volatile *p_ui_element_ptr) {
     if (!(*p_ui_element_ptr))
         return 0;
-    UI_Element *p_itterated_element = *p_ui_element_ptr;
+    UI_Element *p_iterated_element = *p_ui_element_ptr;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_parent;
-    return p_itterated_element;
+    return p_iterated_element;
 }
 
 static inline 
-UI_Element *itterate_to_child_of__ui_element(
+UI_Element *iterate_to_child_of__ui_element(
         UI_Element * volatile *p_ui_element_ptr) {
     if (!(*p_ui_element_ptr))
         return 0;
-    UI_Element *p_itterated_element = *p_ui_element_ptr;
+    UI_Element *p_iterated_element = *p_ui_element_ptr;
     *p_ui_element_ptr =
         (*p_ui_element_ptr)->p_child;
-    return p_itterated_element;
+    return p_iterated_element;
 }
 
 void initialize_ui_element(
@@ -114,9 +126,12 @@ void m_ui_element__dispose_handler__default(
         UI_Element *p_this_ui_element,
         Game *p_game);
 
-void offset_ui_elements_in__succession(
+void set_positions_of__ui_elements_in__succession(
         UI_Element *p_ui_element__succession_collection,
-        Vector__3i32 offset__3i32);
+        Vector__3i32 starting_position__3i32,
+        i32 x__stride,
+        Quantity__u32 quantity_of__elements_per_row,
+        i32 y__stride);
 
 static inline
 bool is_ui_element_of__this_kind(
@@ -281,13 +296,9 @@ static void inline set_ui_element__held_handler(
         m_ui_held_handler;
 }
 
-void set_ui_element__position(
+void set_position_3i32_of__ui_element(
         UI_Element *p_ui_element,
         Vector__3i32 position__3i32);
-
-void offset_ui_element__position(
-        UI_Element *p_ui_element,
-        Vector__3i32 offset__3i32);
 
 static void inline set_ui_element__size(
         UI_Element *p_ui_element,
@@ -303,7 +314,7 @@ static void inline set_ui_element__hitbox(
         Quantity__u32 width, 
         Quantity__u32 height,
         Vector__3i32 position__3i32) {
-    set_ui_element__position(p_ui_element, position__3i32);
+    set_position_3i32_of__ui_element(p_ui_element, position__3i32);
     set_ui_element__size(p_ui_element, width, height);
 }
 

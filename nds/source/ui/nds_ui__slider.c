@@ -2,6 +2,7 @@
 #include "nds/arm9/background.h"
 #include "platform.h"
 #include "ui/ui_element.h"
+#include "vectors.h"
 #include <ui/ui_slider.h>
 #include <ui/nds_ui__slider.h>
 #include <game.h>
@@ -36,12 +37,6 @@ void m_NDS_ui_slider__dragged_handler_for__backgrounds(
             ->spanning_scroll_lengths__3i32.x__i32
         ;
 
-    i32 delta =
-        get_offset_from__ui_slider_percentage(
-                p_this_draggable, 
-                spanning_length)
-        ;
-
     m_ui_slider__dragged_handler__default(
             p_this_draggable, 
             p_game);
@@ -51,23 +46,31 @@ void m_NDS_ui_slider__dragged_handler_for__backgrounds(
                 p_this_draggable, 
                 spanning_length);
 
+    debug_info("starting: %d, %d",
+            position_for__bgSetScroll.x__i32,
+            position_for__bgSetScroll.y__i32
+            );
+    debug_info("spanning: %d, %d",
+            p_NDS_background
+            ->spanning_scroll_lengths__3i32.x__i32,
+            p_NDS_background
+            ->spanning_scroll_lengths__3i32.y__i32
+            );
+    debug_info("offset: %d",
+            offset);
+
     *p_starting_distance +=
         offset;
-    
-    delta = offset
-        - delta
-        ;
 
-    offset_ui_elements_in__succession(
+    set_positions_of__ui_elements_in__succession(
             p_this_draggable->p_child, 
-            get_vector__3i32(
-                (is_snapped_x_or__y_axis)
-                ? 0
-                : delta, 
-                (is_snapped_x_or__y_axis)
-                ? delta
-                : 0,
-                0));
+            position_for__bgSetScroll, 
+            24, 
+            3, 
+            -28);
+    // debug_info("pos: %d, %d",
+    //             get_x_i32_from__vector_3i32(position_for__bgSetScroll), 
+    //             get_y_i32_from__vector_3i32(position_for__bgSetScroll));
 
     bgSetScroll(
             p_NDS_background

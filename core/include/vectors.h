@@ -6,6 +6,7 @@
 
 #include "defines_weak.h"
 #include <defines.h>
+#include <numerics.h>
 
 #define VECTOR__0_0_0 {\
         0,\
@@ -71,50 +72,23 @@ bool is_vectors_3i32F20__out_of_bounds(
 }
 
 static inline 
-i32F4 i32_to__i32F4(Signed_Index__i32 x) {
-    return x << FRACTIONAL_PERCISION_4__BIT_SIZE;
-}
-
-static inline 
-Signed_Index__i32 i32F4_to__i32(i32F4 x) {
-    return x >> FRACTIONAL_PERCISION_4__BIT_SIZE;
-}
-
-static inline 
-i32F20 i32_to__i32F20(Signed_Index__i32 x) {
-    return x << FRACTIONAL_PERCISION_20__BIT_SIZE;
-}
-
-static inline 
-Signed_Index__i32 i32F20_to__i32(i32F20 x) {
-    return x >> FRACTIONAL_PERCISION_20__BIT_SIZE;
-}
-
-static inline 
-Signed_Index__i32 i32F20_to__i32F4(i32F20 x) {
-    return x >> FRACTIONAL_PERCISION_16__BIT_SIZE;
-}
-
-static inline 
-Signed_Index__i32 i32F4_to__i32F20(i32F4 x) {
-    return x << FRACTIONAL_PERCISION_16__BIT_SIZE;
-}
-
-static void inline initialize_3i32F4_vector(
+void initialize_3i32F4_vector(
         Vector__3i32F4 *vector) {
     vector->x__i32F4 =
         vector->y__i32F4 =
         vector->z__i32F4 = 0;
 }
 
-static void inline initialize_3i32_vector(
+static inline 
+void initialize_3i32_vector(
         Vector__3i32 *vector) {
     vector->x__i32 =
         vector->y__i32 =
         vector->z__i32 = 0;
 }
 
-static bool inline is_vectors_3i32F4__equal(
+static inline 
+bool is_vectors_3i32F4__equal(
         Vector__3i32F4 vector_1,
         Vector__3i32F4 vector_2) {
     return
@@ -124,7 +98,8 @@ static bool inline is_vectors_3i32F4__equal(
         ;
 }
 
-static bool inline is_vectors_3i32F20__equal(
+static inline 
+bool is_vectors_3i32F20__equal(
         Vector__3i32F20 vector_1,
         Vector__3i32F20 vector_2) {
     return
@@ -147,7 +122,8 @@ static bool inline is_vectors_3i32F20__equal(
 //         ;
 // }
 
-static bool inline is_vectors_3i32__equal(
+static inline 
+bool is_vectors_3i32__equal(
         Vector__3i32 vector_1,
         Vector__3i32 vector_2) {
     return
@@ -157,7 +133,8 @@ static bool inline is_vectors_3i32__equal(
         ;
 }
 
-static bool inline is_chunk_vectors_3i32__equal(
+static inline 
+bool is_chunk_vectors_3i32__equal(
         Chunk_Vector__3i32 vector_1,
         Chunk_Vector__3i32 vector_2) {
     return is_vectors_3i32__equal(vector_1, vector_2);
@@ -167,7 +144,8 @@ void offset_vector_by__direction(
         Vector__3i32F4 *vector,
         Direction__u8 direction);
 
-static Vector__3i32 inline vector_3i32F4_to__vector_3i32(
+static inline 
+Vector__3i32 vector_3i32F4_to__vector_3i32(
         Vector__3i32F4 vector) {
     return (Vector__3i32){
         i32F4_to__i32(vector.x__i32F4),
@@ -176,7 +154,8 @@ static Vector__3i32 inline vector_3i32F4_to__vector_3i32(
     };
 }
 
-static Vector__3i32F4 inline vector_3i32_to__vector_3i32F4(
+static inline 
+Vector__3i32F4 vector_3i32_to__vector_3i32F4(
         Vector__3i32 vector) {
     return (Vector__3i32F4){
         i32_to__i32F4(vector.x__i32),
@@ -185,7 +164,8 @@ static Vector__3i32F4 inline vector_3i32_to__vector_3i32F4(
     };
 }
 
-static Vector__3i32F4 inline vector_3i32F20_to__vector_3i32F4(
+static inline 
+Vector__3i32F4 vector_3i32F20_to__vector_3i32F4(
         Vector__3i32F20 vector) {
     return (Vector__3i32F4){
         i32F20_to__i32F4(vector.x__i32F20),
@@ -194,7 +174,8 @@ static Vector__3i32F4 inline vector_3i32F20_to__vector_3i32F4(
     };
 }
 
-static Vector__3i32F20 inline vector_3i32F4_to__vector_3i32F20(
+static inline 
+Vector__3i32F20 vector_3i32F4_to__vector_3i32F20(
         Vector__3i32F4 vector) {
     return (Vector__3i32F20){
         i32F4_to__i32F20(vector.x__i32F4),
@@ -203,7 +184,8 @@ static Vector__3i32F20 inline vector_3i32F4_to__vector_3i32F20(
     };
 }
 
-static Vector__3i32 inline vector_3i32F20_to__vector_3i32(
+static inline 
+Vector__3i32 vector_3i32F20_to__vector_3i32(
         Vector__3i32F20 vector) {
     return (Vector__3i32){
         i32F20_to__i32(vector.x__i32F20),
@@ -212,7 +194,8 @@ static Vector__3i32 inline vector_3i32F20_to__vector_3i32(
     };
 }
 
-static Vector__3u8 inline vector_3i32F4_to__vector_3u8(
+static inline 
+Vector__3u8 vector_3i32F4_to__vector_3u8(
         Vector__3i32F4 vector) {
     return (Vector__3u8){
         vector.x__i32F4 
@@ -236,7 +219,8 @@ Vector__3u8 get_vector__3u8(
     };
 }
 
-static Vector__3i32F4 inline get_vector__3i32F4(
+static inline 
+Vector__3i32F4 get_vector__3i32F4(
         i32F4 x,
         i32F4 x__fractional,
         i32F4 y,
@@ -250,7 +234,8 @@ static Vector__3i32F4 inline get_vector__3i32F4(
     };
 }
 
-static Vector__3i32F4 inline get_vector__3i32F4_using__i32(
+static inline 
+Vector__3i32F4 get_vector__3i32F4_using__i32(
         i32F4 x,
         i32F4 y,
         i32F4 z) {
@@ -261,70 +246,83 @@ static Vector__3i32F4 inline get_vector__3i32F4_using__i32(
     };
 }
 
-static Signed_Index__i32 inline get_x_i32F4_from__vector_3i32F4(
+static inline 
+Signed_Index__i32 get_x_i32F4_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
     return vector__3i32F4.x__i32F4;
 }
 
-static Signed_Index__i32 inline get_y_i32F4_from__vector_3i32F4(
+static inline 
+Signed_Index__i32 get_y_i32F4_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
     return vector__3i32F4.y__i32F4;
 }
 
-static Signed_Index__i32 inline get_z_i32F4_from__vector_3i32F4(
+static inline 
+Signed_Index__i32 get_z_i32F4_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
     return vector__3i32F4.z__i32F4;
 }
 
-static Signed_Index__i32 inline get_x_i32_from__vector_3i32F4(
+static inline 
+Signed_Index__i32 get_x_i32_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
     return i32F4_to__i32(
             get_x_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
-static Signed_Index__i32 inline get_y_i32_from__vector_3i32F4(
+static inline 
+Signed_Index__i32 get_y_i32_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
     return i32F4_to__i32(
             get_y_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
-static Signed_Index__i32 inline get_z_i32_from__vector_3i32F4(
+static inline 
+Signed_Index__i32 get_z_i32_from__vector_3i32F4(
         Vector__3i32F4 vector__3i32F4) {
     return i32F4_to__i32(
             get_z_i32F4_from__vector_3i32F4(vector__3i32F4));
 }
 
-static Signed_Index__i32 inline get_x_i32_from__vector_3i32(
+static inline 
+Signed_Index__i32 get_x_i32_from__vector_3i32(
         Vector__3i32 vector__3i32) {
     return vector__3i32.x__i32;
 }
 
-static Signed_Index__i32 inline get_y_i32_from__vector_3i32(
+static inline 
+Signed_Index__i32 get_y_i32_from__vector_3i32(
         Vector__3i32 vector__3i32) {
     return vector__3i32.y__i32;
 }
 
-static Signed_Index__i32 inline get_z_i32_from__vector_3i32(
+static inline 
+Signed_Index__i32 get_z_i32_from__vector_3i32(
         Vector__3i32 vector__3i32) {
     return vector__3i32.z__i32;
 }
 
-static Signed_Index__i32 inline *get_p_x_i32_from__p_vector_3i32(
+static inline 
+Signed_Index__i32 *get_p_x_i32_from__p_vector_3i32(
         Vector__3i32 *p_vector__3i32) {
     return &p_vector__3i32->x__i32;
 }
 
-static Signed_Index__i32 inline *get_p_y_i32_from__p_vector_3i32(
+static inline 
+Signed_Index__i32 *get_p_y_i32_from__p_vector_3i32(
         Vector__3i32 *p_vector__3i32) {
     return &p_vector__3i32->y__i32;
 }
 
-static Signed_Index__i32 inline *get_p_z_i32_from__p_vector_3i32(
+static inline 
+Signed_Index__i32 *get_p_z_i32_from__p_vector_3i32(
         Vector__3i32 *p_vector__3i32) {
     return &p_vector__3i32->z__i32;
 }
 
-static Vector__3i32 inline get_vector__3i32(
+static inline 
+Vector__3i32 get_vector__3i32(
         Signed_Index__i32 x,
         Signed_Index__i32 y,
         Signed_Index__i32 z) {
@@ -335,7 +333,8 @@ static Vector__3i32 inline get_vector__3i32(
     };
 }
 
-static Vector__3i32F4 inline add_vectors__3i32F4(
+static inline 
+Vector__3i32F4 add_vectors__3i32F4(
         Vector__3i32F4 vector_one,
         Vector__3i32F4 vector_two) {
     return (Vector__3i32F4) {
@@ -345,7 +344,8 @@ static Vector__3i32F4 inline add_vectors__3i32F4(
     };
 }
 
-static Vector__3i32 inline add_vectors__3i32(
+static inline 
+Vector__3i32 add_vectors__3i32(
         Vector__3i32 vector_one,
         Vector__3i32 vector_two) {
     return (Vector__3i32) {
@@ -355,7 +355,8 @@ static Vector__3i32 inline add_vectors__3i32(
     };
 }
 
-static Vector__3i32F20 inline subtract_vectors__3i32F20(
+static inline 
+Vector__3i32F20 subtract_vectors__3i32F20(
         Vector__3i32F20 vector_one,
         Vector__3i32F20 vector_two) {
     return (Vector__3i32F20) {
@@ -365,7 +366,8 @@ static Vector__3i32F20 inline subtract_vectors__3i32F20(
     };
 }
 
-static Vector__3i32F4 inline subtract_vectors__3i32F4(
+static inline 
+Vector__3i32F4 subtract_vectors__3i32F4(
         Vector__3i32F4 vector_one,
         Vector__3i32F4 vector_two) {
     return (Vector__3i32F4) {
@@ -375,7 +377,8 @@ static Vector__3i32F4 inline subtract_vectors__3i32F4(
     };
 }
 
-static Vector__3i32 inline subtract_vectors__3i32(
+static inline 
+Vector__3i32 subtract_vectors__3i32(
         Vector__3i32 vector_one,
         Vector__3i32 vector_two) {
     return (Vector__3i32) {
@@ -385,7 +388,8 @@ static Vector__3i32 inline subtract_vectors__3i32(
     };
 }
 
-static void inline add_p_vectors__3i32F4(
+static inline 
+void add_p_vectors__3i32F4(
         Vector__3i32F4 *p_vector_one,
         Vector__3i32F4 *p_vector_two) {
     p_vector_one->x__i32F4 += p_vector_two->x__i32F4;
@@ -393,7 +397,8 @@ static void inline add_p_vectors__3i32F4(
     p_vector_one->z__i32F4 += p_vector_two->z__i32F4;
 }
 
-static void inline add_p_vectors__3i32F20(
+static inline 
+void add_p_vectors__3i32F20(
         Vector__3i32F20 *p_vector_one,
         Vector__3i32F20 *p_vector_two) {
     p_vector_one->x__i32F20 += p_vector_two->x__i32F20;
@@ -401,7 +406,8 @@ static void inline add_p_vectors__3i32F20(
     p_vector_one->z__i32F20 += p_vector_two->z__i32F20;
 }
 
-static void inline add_p_vectors__3i32(
+static inline 
+void add_p_vectors__3i32(
         Vector__3i32 *p_vector_one,
         Vector__3i32 *p_vector_two) {
     p_vector_one->x__i32 += p_vector_two->x__i32;

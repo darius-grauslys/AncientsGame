@@ -1,6 +1,7 @@
 #include "collisions/hitbox_aabb.h"
 #include "debug/debug.h"
 #include "defines.h"
+#include "defines_weak.h"
 #include "ui/ui_button.h"
 #include "ui/ui_draggable.h"
 #include "ui/ui_slider.h"
@@ -86,43 +87,46 @@ void m_ui_element__dispose_handler__default_collection(
     } while (p_next);
 }
 
-void offset_ui_elements_in__succession(
+void set_positions_of__ui_elements_in__succession(
         UI_Element *p_ui_element__succession_collection,
-        Vector__3i32 offset__3i32) {
+        Vector__3i32 starting_position__3i32,
+        i32 x__stride,
+        Quantity__u32 quantity_of__elements_per_row,
+        i32 y__stride) {
+    Index__u32 index_of__current_ui_element = 0;
+    Vector__3i32 current_position__3i32 = 
+        starting_position__3i32;
     do {
-        offset_ui_element__position(
+        set_position_3i32_of__ui_element(
                 p_ui_element__succession_collection, 
-                offset__3i32);
+                current_position__3i32);
+        if (++index_of__current_ui_element
+                == quantity_of__elements_per_row) {
+            index_of__current_ui_element = 0;
+            current_position__3i32.y__i32 += y__stride;
+            current_position__3i32.x__i32 =
+                starting_position__3i32.x__i32;
+        } else {
+            current_position__3i32.x__i32 += x__stride;
+        }
     } while (
-            itterate_to_next__ui_element(
+            iterate_to_next__ui_element(
                 &p_ui_element__succession_collection));
 }
 
-void offset_ui_element__position(
+void set_position_3i32_of__ui_element(
         UI_Element *p_ui_element,
-        Vector__3i32 offset__3i32) {
-    set_ui_element__position(
-            p_ui_element, 
-            add_vectors__3i32(
+        Vector__3i32 position__3i32) {
+    Vector__3i32 vector_of__child_relative_to__parent =
+        VECTOR__3i32__0_0_0;
+    if (does_ui_element_have__child(p_ui_element)) {
+        vector_of__child_relative_to__parent =
+            subtract_vectors__3i32(
+                position__3i32, 
                 vector_3i32F4_to__vector_3i32(
                     p_ui_element
                     ->ui_bounding_box__aabb
-                    .position__3i32F4), 
-                offset__3i32));
-}
-
-void set_ui_element__position(
-        UI_Element *p_ui_element,
-        Vector__3i32 position__3i32) {
-    if (p_ui_element->p_child) {
-        offset_ui_element__position(
-                p_ui_element->p_child, 
-                subtract_vectors__3i32(
-                    position__3i32, 
-                    vector_3i32F4_to__vector_3i32(
-                        p_ui_element
-                        ->ui_bounding_box__aabb
-                        .position__3i32F4)));
+                    .position__3i32F4));
     }
     p_ui_element->ui_bounding_box__aabb
         .position__3i32F4 = 
@@ -130,6 +134,13 @@ void set_ui_element__position(
     if (p_ui_element->p_PLATFORM_sprite)
         PLATFORM_set_sprite__position(
                 p_ui_element->p_PLATFORM_sprite, 
-                get_x_i32_from__vector_3i32(position__3i32), 
-                get_y_i32_from__vector_3i32(position__3i32));
+                get_x_i32_from__p_ui_element(p_ui_element), 
+                get_y_i32_from__p_ui_element(p_ui_element));
+    if (does_ui_element_have__child(p_ui_element)) {
+        set_position_3i32_of__ui_element(
+                p_ui_element->p_child,
+                add_vectors__3i32(
+                    vector_of__child_relative_to__parent, 
+                    get_position_3i32_from__p_ui_element(p_ui_element)));
+    }
 }

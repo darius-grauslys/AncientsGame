@@ -1,0 +1,18 @@
+
+
+    Sprite_Allocation_Specification
+        sprite_allocation_specification;
+
+    initialize_sprite_allocation_specification_for__item(
+            &sprite_allocation_specification, 
+            TEXTURE_FLAGS__NONE, 
+            get_p_ui_manager_from__game(p_game)
+                ->p_PLATFORM_graphics_window_for__ui_manager, 
+            Item_Kind__Stick);
+
+    p_item_sprite = PLATFORM_allocate_sprite(
+            get_p_PLATFORM_gfx_context_from__game(p_game), 
+            &sprite_allocation_specification);
+
+    PLATFORM_set_sprite__position(
+            p_item_sprite, 40, 40);

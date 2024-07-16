@@ -405,6 +405,20 @@ failure:
     return 0;
 }
 
+UI_Element *allocate_ui_element_from__ui_manager_as__child(
+        UI_Manager *p_ui_manager,
+        UI_Element *p_parent) {
+    UI_Element *p_child =
+        allocate_ui_element_from__ui_manager(p_ui_manager);
+    set_ui_element_as__the_parent_of__this_ui_element(
+            p_ui_manager,
+            p_parent, 
+            p_child);
+    p_child->ui_bounding_box__aabb.position__3i32F4 =
+        p_parent->ui_bounding_box__aabb.position__3i32F4;
+    return p_child;
+}
+
 void allocate_many_ui_elements_from__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element **p_ptr_buffer,

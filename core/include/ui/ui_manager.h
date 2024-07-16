@@ -71,18 +71,9 @@ void swap_ui_element__children(
         UI_Element *p_parent__one,
         UI_Element *p_parent__two);
 
-static inline
 UI_Element *allocate_ui_element_from__ui_manager_as__child(
         UI_Manager *p_ui_manager,
-        UI_Element *p_parent) {
-    UI_Element *p_child =
-        allocate_ui_element_from__ui_manager(p_ui_manager);
-    set_ui_element_as__the_parent_of__this_ui_element(
-            p_ui_manager,
-            p_parent, 
-            p_child);
-    return p_child;
-}
+        UI_Element *p_parent);
 
 void allocate_many_ui_elements_from__ui_manager(
         UI_Manager *p_ui_manager,

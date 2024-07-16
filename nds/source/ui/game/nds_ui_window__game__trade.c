@@ -38,12 +38,10 @@ NDS_allocate_ui_for__nds_ui_window__game__hud(p_game);
 NDS_allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_slider_left);
-    p_slider_left->p_ui_data =
-    &get_p_PLATFORM_gfx_context_from__game(p_game)
-    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
     NDS_Background *p_NDS_background =
     &get_p_PLATFORM_gfx_context_from__game(p_game)
     ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
+    p_slider_left->p_ui_data = p_NDS_background;
 
     UI_Element *p_slider_right = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__slider(p_slider_right, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), m_NDS_ui_slider__dragged_handler_for__backgrounds, true);
@@ -51,15 +49,13 @@ NDS_allocate_sprite_for__ui_slider(
 NDS_allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_slider_right);
-    p_slider_right->p_ui_data =
-    &get_p_PLATFORM_gfx_context_from__game(p_game)
-    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
     p_NDS_background =
     &get_p_PLATFORM_gfx_context_from__game(p_game)
     ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
+    p_slider_right->p_ui_data = p_NDS_background;
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 15 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -78,7 +74,7 @@ NDS_allocate_sprite_for__ui_slider(
 
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 43 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -98,7 +94,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,14);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 71 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -118,7 +114,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,20);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 99 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -138,7 +134,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,26);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 127 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -158,7 +154,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,32);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 155 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -178,7 +174,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,38);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 183 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -198,7 +194,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,44);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 211 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -218,7 +214,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,50);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(58 + 24* index_of__itteration__3, 239 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -239,7 +235,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
 
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 15 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -248,7 +244,7 @@ NDS_allocate_sprite_for__ui_slider(
 
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 43 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -258,7 +254,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,68);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 71 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -268,7 +264,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,74);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 99 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -278,7 +274,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,80);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 127 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -288,7 +284,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,86);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 155 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -298,7 +294,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,92);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 183 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -308,7 +304,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,98);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 211 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
@@ -318,7 +314,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_itterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,104);
     p_ui_itterator_previous_previous = p_ui_itterator_previous;
     p_ui_itterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
-    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;itterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
+    for (Index__u32 index_of__itteration__3=0;p_ui_itterator;iterate_to_next__ui_element(&p_ui_itterator),index_of__itteration__3++) {
         p_ui_itterator_previous = p_ui_itterator;
         initialize_ui_element_as__drop_zone(p_ui_itterator, 23, 27, get_vector__3i32(150 + 24* index_of__itteration__3, 239 + 0* index_of__itteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_itterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_itterator);
