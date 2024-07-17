@@ -46,7 +46,25 @@ void m_load_scene_as__test_handler(
 
     PLATFORM_open_ui(
             p_game,
-            UI_Window_Kind__Equip);
+            UI_Window_Kind__Idle);
+
+    // debug_info("game: %d", sizeof(Game));
+    // debug_info("process_manager: %d", sizeof(Process_Manager));
+    // debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
+    // debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
+    // debug_info("path: %d", sizeof(Path));
+    // debug_info("chunk: %d", sizeof(Chunk));
+    // debug_info("tile: %d", sizeof(Tile));
+    // debug_info("entity: %d", sizeof(Entity));
+    // debug_info("ray: %d", sizeof(Ray__3i32F20));
+    // debug_info("inv: %d", sizeof(Inventory));
+    // debug_info("nav cap: %d", UI_Sprite_Kind__16x16__Nav__Cap);
+}
+
+void m_enter_scene_handler_as__test(
+        Scene *p_this_scene,
+        Game *p_game) {
+    enum UI_Window_Kind ui_window_kind = UI_Window_Kind__Idle;
 
     Inventory inventory;
     initialize_inventory_as__empty(&inventory);
@@ -90,51 +108,48 @@ void m_load_scene_as__test_handler(
             16, 
             32);
 
-    UI_Element *p_ui_element__inventory_column =
-        get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
-                NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
-
-    NDS_load_inventory_column_for__inventory(
-            p_game,
-            p_ui_element__inventory_column,
-            &inventory);
-
-    debug_info("game: %d", sizeof(Game));
-    debug_info("process_manager: %d", sizeof(Process_Manager));
-    debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
-    debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
-    debug_info("path: %d", sizeof(Path));
-    debug_info("chunk: %d", sizeof(Chunk));
-    debug_info("tile: %d", sizeof(Tile));
-    debug_info("entity: %d", sizeof(Entity));
-    debug_info("ray: %d", sizeof(Ray__3i32F20));
-    debug_info("inv: %d", sizeof(Inventory));
-
-}
-
-void m_enter_scene_handler_as__test(
-        Scene *p_this_scene,
-        Game *p_game) {
-    enum UI_Window_Kind ui_window_kind = UI_Window_Kind__None;
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         manage_game(p_game);
         if (is_input__use_released(get_p_input_from__game(p_game))) {
             item_kind++;
             ui_window_kind++;
+            debug_info("ui_window_kind: %d", ui_window_kind);
             PLATFORM_open_ui(
                     p_game,
                     ui_window_kind);
-            debug_info("ui_window_kind: %d", ui_window_kind);
+            if (ui_window_kind
+                    == UI_Window_Kind__Equip) {
+                UI_Element *p_ui_element__inventory_column =
+                    get_p_ui_element_by__index_from__ui_manager(
+                            get_p_ui_manager_from__game(p_game), 
+                            NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
+
+                NDS_load_inventory_column_for__inventory(
+                        p_game,
+                        p_ui_element__inventory_column,
+                        &inventory);
+            }
         }
         if (is_input__use_secondary_released(get_p_input_from__game(p_game))) {
             item_kind--;
             ui_window_kind--;
+            debug_info("ui_window_kind: %d", ui_window_kind);
             PLATFORM_open_ui(
                     p_game,
                     ui_window_kind);
-            debug_info("ui_window_kind: %d", ui_window_kind);
+            if (ui_window_kind
+                    == UI_Window_Kind__Equip) {
+                UI_Element *p_ui_element__inventory_column =
+                    get_p_ui_element_by__index_from__ui_manager(
+                            get_p_ui_manager_from__game(p_game), 
+                            NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
+
+                NDS_load_inventory_column_for__inventory(
+                        p_game,
+                        p_ui_element__inventory_column,
+                        &inventory);
+            }
         }
     }
 }

@@ -235,6 +235,12 @@ typedef struct PLATFORM_Gfx_Context_t {
 
     f_Sprite_Gfx_Allocator f_sprite_gfx_allocator__handler_for__items;
     f_Sprite_Gfx_Allocator f_sprite_gfx_allocator__handler_for__ui;
+    // TODO:    this padding is needed for some reason
+    //          because f_ui is getting mangled by something.
+    //
+    //          search for: "f_ui mangling occurs here"
+    //          It's in nds_game.c
+    u8 :8;
 } PLATFORM_Gfx_Context;
 
 #endif

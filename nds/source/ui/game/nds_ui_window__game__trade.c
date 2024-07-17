@@ -53,9 +53,11 @@ NDS_allocate_sprite_for__ui_slider(
     &get_p_PLATFORM_gfx_context_from__game(p_game)
     ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
     p_slider_right->p_ui_data = p_NDS_background;
+debug_info("hit");
 
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
+        debug_info("loop %d", index_of__iteration__3);
         p_ui_iterator_previous = p_ui_iterator;
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 15 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);

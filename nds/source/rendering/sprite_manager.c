@@ -166,9 +166,39 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                 p_PLATFORM_sprite
                 ->sprite_texture
                 .flags)) {
-        debug_error("Failed to allocate sprite gfx for: %d",
-                p_sprite_allocation_specification
-                ->the_kind_of__item_this__sprite_is);
+        switch (p_sprite_allocation_specification
+                ->the_kind_of__sprite_allocation) {
+            default:
+                debug_error("PLATFORM_allocate_sprite, failed to allocate gfx for None, or %d", 
+                        p_sprite_allocation_specification
+                        ->the_kind_of__sprite_allocation);
+                return 0;
+            case Sprite_Allocation_Kind__Graphics_Pointer:
+                debug_error("PLATFORM_allocate_sprite, failed to allocate ptr gfx: %p", 
+                        p_sprite_allocation_specification
+                        ->p_gfx);
+                break;
+            case Sprite_Allocation_Kind__Item:
+                debug_error("PLATFORM_allocate_sprite, failed to allocate item gfx: %d", 
+                        p_sprite_allocation_specification
+                        ->the_kind_of__item_this__sprite_is);
+                break;
+            case Sprite_Allocation_Kind__UI:
+                debug_error("PLATFORM_allocate_sprite, failed to allocate ui gfx: %d", 
+                        p_sprite_allocation_specification
+                        ->the_kind_of__ui__this_sprite_is);
+                break;
+            case Sprite_Allocation_Kind__Particle:
+                debug_error("PLATFORM_allocate_sprite, failedt to allocate particle gfx: %d", 
+                        p_sprite_allocation_specification
+                        ->the_kind_of__particle_this__sprite_is);
+                break;
+            case Sprite_Allocation_Kind__Entity:
+                debug_error("PLATFORM_allocate_sprite, failed to allocate entity gfx: %d", 
+                        p_sprite_allocation_specification
+                        ->the_kind_of__entity_this__sprite_is);
+                break;
+        }
         debug_warning("Did you forget to load a sprite_gfx_allocator__lookup_table?");
         return 0;
     }
