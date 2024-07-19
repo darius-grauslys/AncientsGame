@@ -59,7 +59,7 @@ void initialize_entity(
         Quantity__u32 height) {
     initialize_serialization_header(
             &p_entity->_serialization_header,
-            IDENTIFIER__UNKNOWN__u32,
+            p_entity->_serialization_header.uuid,
             sizeof(Entity));
 
     p_entity->the_kind_of_entity__this_entity_is =

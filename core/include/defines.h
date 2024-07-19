@@ -1048,6 +1048,7 @@ typedef struct Entity_t {
 
 typedef struct Entity_Manager_t {
     Entity entities[ENTITY_MAXIMUM_QUANTITY_OF];
+    Repeatable_Psuedo_Random randomizer;
     Entity *p_local_player;
     Quantity__u32 entity_count__quantity_u32;
 } Entity_Manager;
@@ -1547,19 +1548,22 @@ typedef struct Tile_t Tile;
 #define TILE_COVER_SHEET_INDEX__FLOWER_BLUE (27 + TILE_SHEET_TILE_WIDTH * 21)
 #define TILE_COVER_SHEET_INDEX__FLOWER_YELLOW (28 + TILE_SHEET_TILE_WIDTH * 21)
 #define TILE_COVER_SHEET_INDEX__CACTUS (29 + TILE_SHEET_TILE_WIDTH * 21)
+#define TILE_COVER_SHEET_INDEX__CHEST_SINGLE (20 + TILE_SHEET_TILE_WIDTH * 29)
 
-#define TILE_COVER__BIT_SHIFT_IS_WALL 6
+#define TILE_COVER__BIT_SHIFT_IS_WALL 9
 #define TILE_COVER__BIT_IS_WALL \
     BIT(TILE_COVER__BIT_SHIFT_IS_WALL)
 
 typedef uint8_t Tile_Flags__u8;
 
 typedef struct Tile_t {
-    enum Tile_Kind                  the_kind_of_tile__this_tile_is;
-    enum Tile_Cover_Kind            the_kind_of_tile_cover__this_tile_has;
+    enum Tile_Kind                  
+        the_kind_of_tile__this_tile_is          :10;
+    enum Tile_Cover_Kind            
+        the_kind_of_tile_cover__this_tile_has   :10;
     //TODO: this structure is not padding friendly.
     // consider making flags 16 bit
-    Tile_Flags__u8 tile_flags;
+    Tile_Flags__u8 tile_flags                   :4;
     // bits 1 2 3, stair direction (values 0-7)
     // bit 4, is the stair inverted
     // bit 5, is the stair going up or down

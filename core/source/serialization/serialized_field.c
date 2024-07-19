@@ -72,12 +72,12 @@ void point_serialized_field_to__this_serialized_struct(
         Serialized_Field *p_serialized_field,
         void *p_serialized_struct) {
     if (!p_serialized_field) {
-        p_serialized_field->p_serialized_field__data = 0;
-        p_serialized_field->identifier_for__serialized_field =
-            IDENTIFIER__UNKNOWN__u32;
         return;
     }
     if (!p_serialized_struct) {
+        p_serialized_field->p_serialized_field__data = 0;
+        p_serialized_field->identifier_for__serialized_field =
+            IDENTIFIER__UNKNOWN__u32;
         return;
     }
     p_serialized_field->p_serialized_field__data =

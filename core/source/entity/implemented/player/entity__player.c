@@ -13,11 +13,13 @@
 #include <entity/handlers/collision/collision_handler__default.h>
 
 void initialize_entity_as__player(
+        Game *p_game,
         PLATFORM_Graphics_Window 
             *p_PLATFORM_graphics_window,
         Entity *p_entity, 
         Vector__3i32F4 position__3i32F4) {
     initialize_entity_as__humanoid(
+            p_game,
             p_entity,
             Entity_Kind__Player,
             position__3i32F4,

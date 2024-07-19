@@ -17,6 +17,7 @@ void handle_game_action__entity__allocate(
         enum Entity_Kind the_kind_of__entity,
         Vector__3i32F4 position) {
     allocate_entity_into__world(
+            p_game,
             get_p_world_from__game(p_game),
             the_kind_of__entity,
             position);
@@ -185,18 +186,12 @@ void handle_game_action__entity__homeostasis_decrease(
 void handle_game_action__entity(
         Game *p_game,
         Game_Action *p_game_action) {
-    if (!is_p_serialized_field__linked(
-                &p_game_action->s_entity__source)) {
-        resolve_p_serialized_entity_ptr_with__entity_manager(
-                get_p_entity_manager_from__game(p_game), 
-                &p_game_action->s_entity__source);
-    }
-    if (!is_p_serialized_field__linked(
-                &p_game_action->s_entity__target)) {
-        resolve_p_serialized_entity_ptr_with__entity_manager(
-                get_p_entity_manager_from__game(p_game), 
-                &p_game_action->s_entity__target);
-    }
+    resolve_p_serialized_entity_ptr_with__entity_manager(
+            get_p_entity_manager_from__game(p_game), 
+            &p_game_action->s_entity__source);
+    resolve_p_serialized_entity_ptr_with__entity_manager(
+            get_p_entity_manager_from__game(p_game), 
+            &p_game_action->s_entity__target);
     Entity *p_entity_source = p_game_action->s_entity__source.p_serialized_field__entity;
     Entity *p_entity_target = p_game_action->s_entity__target.p_serialized_field__entity;
     enum Game_Action_Kind the_kind_of_game_action__this_action_is =
@@ -225,6 +220,10 @@ void handle_game_action__entity(
         case Game_Action_Kind__Entity__Homeostasis__Decrease:
         case Game_Action_Kind__Entity__Homeostasis__Increase:
             if (!p_entity_target) {
+                debug_info("src ptr: %p", 
+                        &p_game_action->s_entity__source.p_serialized_field__entity);
+                debug_info("trg ptr: %p", 
+                        &p_game_action->s_entity__target.p_serialized_field__entity);
                 debug_error("Game_Action_Kind__Entity:%d, p_entity_target==0.",
                         the_kind_of_game_action__this_action_is);
                 return;

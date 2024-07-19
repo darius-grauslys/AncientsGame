@@ -1,10 +1,14 @@
 #include "ui/nds_ui__trade.h"
+#include "defines_weak.h"
 #include "game.h"
 #include "inventory/inventory_manager.h"
+#include "platform.h"
 #include "ui/game/nds_ui_window__game__trade.h"
 #include "ui/nds_ui__equipment.h"
 #include "ui/nds_ui__inventory_column.h"
 #include "ui/ui_manager.h"
+#include "vectors.h"
+#include "world/chunk_manager.h"
 
 void NDS_open_ui__trade(
         Game *p_game) {

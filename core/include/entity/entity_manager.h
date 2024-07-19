@@ -12,6 +12,7 @@ void initialize_entity_manager(Entity_Manager *p_entity_manager);
 /// Return nullptr (0) if fails to get new entity.
 ///
 Entity *allocate_entity_in__entity_manager(
+        Game *p_game,
         Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position,
@@ -25,7 +26,7 @@ void release_entity_from__entity_manager(
         Entity_Manager *p_manager, 
         Entity *p_entity);
 
-void resolve_p_serialized_entity_ptr_with__entity_manager(
+bool resolve_p_serialized_entity_ptr_with__entity_manager(
         Entity_Manager *p_entity_manager,
         Serialized_Entity_Ptr *s_entity_ptr);
 

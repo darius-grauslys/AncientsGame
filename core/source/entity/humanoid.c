@@ -8,6 +8,7 @@
 #include <serialization/serialized_field.h>
 
 void initialize_entity_as__humanoid(
+        Game *p_game,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
@@ -21,8 +22,14 @@ void initialize_entity_as__humanoid(
             height);
     initialize_equipment(
             &p_entity->equipment);
-    initialize_serialized_field_as__unassigned(
-            &p_entity->s_humanoid__inventory_ptr);
+    Inventory *p_inventory =
+        allocate_p_inventory_in__inventory_manager(
+                get_p_inventory_manager_from__game(p_game));
+    if (p_inventory) {
+        point_serialized_field_to__this_serialized_struct(
+                &p_entity->s_humanoid__inventory_ptr, 
+                p_inventory);
+    }
 }
 
 bool is_entity_a__humanoid(Entity *entity) {

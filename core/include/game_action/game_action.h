@@ -2,6 +2,7 @@
 #define GAME_ACTION_H
 
 #include "defines_weak.h"
+#include "game.h"
 #include <defines.h>
 
 static void inline initialize_p_game_action(

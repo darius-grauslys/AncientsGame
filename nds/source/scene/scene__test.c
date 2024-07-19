@@ -52,18 +52,6 @@ void m_load_scene_as__test_handler(
     PLATFORM_open_ui(
             p_game,
             UI_Window_Kind__Idle);
-
-    // debug_info("game: %d", sizeof(Game));
-    // debug_info("process_manager: %d", sizeof(Process_Manager));
-    // debug_info("sort_list_manager: %d", sizeof(Sort_List_Manager));
-    // debug_info("path_list_manager: %d", sizeof(Path_List_Manager));
-    // debug_info("path: %d", sizeof(Path));
-    // debug_info("chunk: %d", sizeof(Chunk));
-    // debug_info("tile: %d", sizeof(Tile));
-    // debug_info("entity: %d", sizeof(Entity));
-    // debug_info("ray: %d", sizeof(Ray__3i32F20));
-    // debug_info("inv: %d", sizeof(Inventory));
-    // debug_info("nav cap: %d", UI_Sprite_Kind__16x16__Nav__Cap);
 }
 
 void m_enter_scene_handler_as__test(
@@ -73,6 +61,7 @@ void m_enter_scene_handler_as__test(
 
     Entity humanoid;
     initialize_entity_as__humanoid(
+            p_game,
             &humanoid, 
             Entity_Kind__Player, 
             VECTOR__3i32F4__0_0_0, 

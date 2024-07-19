@@ -30,6 +30,28 @@ void initialize_inventory_manager(
     }
 }
 
+Inventory *allocate_p_inventory_using__this_uuid_in__inventory_manager(
+        Inventory_Manager *p_inventory_manager,
+        Identifier__u32 uuid) {
+    if (is_identifier_u32__invalid(uuid))
+        return 0;
+
+    // TODO: resolve uuid collisions!
+    uuid >>= ITEM_STACK_IDENTIFIER_BITS;
+    Inventory *p_inventory =
+        get_p_inventory_by__index_in__inventory_manager(
+                p_inventory_manager, 
+                bound_uuid_to__contiguous_array(
+                    uuid, 
+                    INVENTORY_MAX_QUANTITY_OF));
+
+    initialize_inventory(
+            p_inventory, 
+            uuid);
+
+    return p_inventory;
+}
+
 Inventory *allocate_p_inventory_in__inventory_manager(
         Inventory_Manager *p_inventory_manager) {
     p_inventory_manager->quantity_of__active_inventories++;
@@ -45,22 +67,11 @@ Inventory *allocate_p_inventory_in__inventory_manager(
                     ->inventories, 
                 INVENTORY_MAX_QUANTITY_OF, 
                 uuid);
-    
-    if (is_identifier_u32__invalid(uuid))
-        return 0;
 
-    Inventory *p_inventory =
-        get_p_inventory_by__index_in__inventory_manager(
+    return 
+        allocate_p_inventory_using__this_uuid_in__inventory_manager(
                 p_inventory_manager, 
-                bound_uuid_to__contiguous_array(
-                    uuid, 
-                    INVENTORY_MAX_QUANTITY_OF));
-
-    initialize_inventory(
-            p_inventory, 
-            uuid >> ITEM_STACK_IDENTIFIER_BITS);
-
-    return p_inventory;
+                uuid);
 }
 
 void release_p_inventory_in__inventory_manager(

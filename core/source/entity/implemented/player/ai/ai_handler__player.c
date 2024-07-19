@@ -2,6 +2,7 @@
 #include "defines_weak.h"
 #include "game_action/game_action.h"
 #include "inventory/inventory_manager.h"
+#include "platform.h"
 #include "raycast/ray.h"
 #include "serialization/serialized_field.h"
 #include "vectors.h"
@@ -57,32 +58,48 @@ void m_entity_ai_handler__player(
                 Vector__3i32F4 tile_vector__3i32F4 =
                     p_this_player
                     ->hitbox.position__3i32F4;
-                tile_vector__3i32F4.x__i32F4 += x;
-                tile_vector__3i32F4.y__i32F4 += y;
+                tile_vector__3i32F4.x__i32F4 += i32_to__i32F4(x << 3);
+                tile_vector__3i32F4.y__i32F4 += i32_to__i32F4(y << 3);
 
                 Tile *p_tile =
                     get_p_tile_from__chunk_manager_with__3i32F4(
                             get_p_chunk_manager_from__game(p_game), 
                             tile_vector__3i32F4);
 
-                if (!p_tile)
+                if (!p_tile) {
                     continue;
+                }
                 if (is_tile__container(p_tile)) {
+                    debug_info("flags: %x", p_tile->tile_flags);
+                    Tile_Vector__3i32 tv =
+                            vector_3i32F4_to__tile_vector(
+                                tile_vector__3i32F4);
+                    debug_info("found container: %d , %d",
+                            tv.x__i32,
+                            tv.y__i32);
                     Identifier__u32 uuid_of__container =
-                        get_container__uuid(
-                                vector_3i32F4_to__tile_vector(
-                                    tile_vector__3i32F4));
+                        get_container__uuid(tv);
 
                     Serialized_Field s_inventory__container;
                     initialize_serialized_field_as__unlinked(
                             &s_inventory__container, 
                             uuid_of__container);
+                    debug_info("uuid: %x", uuid_of__container);
 
                     if (!resolve_s_inventory_ptr_to__inventory_manager(
                             get_p_inventory_manager_from__game(p_game),
                             &s_inventory__container)) {
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Wall__Gold;
+                        PLATFORM_update_chunks(
+                                get_p_PLATFORM_gfx_context_from__game(p_game), 
+                                get_p_chunk_manager_from__game(p_game));
                         continue;
                     }
+                    debug_info("found inv: %x, %p",
+                            s_inventory__container
+                                .identifier_for__serialized_field,
+                            s_inventory__container.p_serialized_field__inventory);
 
                     p_this_player
                         ->s_humanoid__container_ptr =

@@ -88,7 +88,7 @@ void set_tile__sight_blocking(Tile *tile, bool value) {
 
 static inline 
 bool is_tile__container(Tile *tile) {
-    return (bool)(tile->tile_flags & TILE_FLAGS__BIT_IS_SIGHT_BLOCKING); 
+    return (bool)(tile->tile_flags & TILE_FLAGS__BIT_IS_CONTAINER); 
 }
 
 static inline 

@@ -4,6 +4,7 @@
 #include <defines.h>
 
 void initialize_entity_as__skeleton(
+        Game *p_game,
         PLATFORM_Graphics_Window
             *p_PLATFORM_graphics_window,
         Entity *p_entity,

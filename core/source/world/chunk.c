@@ -37,7 +37,8 @@ void m_serialize__chunk(
     for (u8 y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
         for (u8 x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
             Tile *p_tile =
-                &p_chunk->tiles[x + y * 8];
+                get_p_tile_from__chunk_using__u8(
+                        p_chunk, x, y, 0);
             if (!is_tile__container(p_tile))
                 continue;
 

@@ -9,6 +9,9 @@
 #include "game.h"
 #include "game_action/game_action.h"
 #include "input/input.h"
+#include "inventory/inventory.h"
+#include "inventory/inventory_manager.h"
+#include "inventory/item.h"
 #include "nds/arm9/background.h"
 #include "platform.h"
 #include "platform_defines.h"
@@ -21,6 +24,7 @@
 #include "ui/ui_manager.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
+#include "world/container.h"
 #include "world/tile.h"
 #include "world/tile_vectors.h"
 #include <scene/nds_scene__game.h>
@@ -99,9 +103,10 @@ void m_enter_scene_as__game_handler(
     // TODO: prob wanna remove some of the stuff below
     Entity *p_player = 
         allocate_entity_into__world(
-            get_p_world_from__game(p_game),
-            Entity_Kind__Player,
-            get_vector__3i32F4_using__i32(0, 0, 0));
+                p_game,
+                get_p_world_from__game(p_game),
+                Entity_Kind__Player,
+                get_vector__3i32F4_using__i32(0, 0, 0));
 
     p_game->world.entity_manager
         .p_local_player =
@@ -116,6 +121,37 @@ void m_enter_scene_as__game_handler(
             &p_game->world.chunk_manager, 
             DIRECTION__SOUTH_WEST,
             2);
+
+    Tile *p_tile =
+        get_p_tile_from__chunk_manager_with__3i32F4(
+                get_p_chunk_manager_from__game(p_game), 
+                get_vector__3i32F4_using__i32(0, 2, 0));
+
+    p_tile->the_kind_of_tile_cover__this_tile_has =
+        Tile_Cover_Kind__Chest_Single;
+    set_tile__container(p_tile, true);
+    set_tile__is_unpassable(p_tile, true);
+
+    Identifier__u32 uuid__u32 =
+        get_container__uuid(
+                get_vector__3i32(0, 2, 0));
+
+    Inventory *p_inventory =
+        allocate_p_inventory_using__this_uuid_in__inventory_manager(
+                get_p_inventory_manager_from__game(p_game),
+                uuid__u32);
+
+    Item item;
+    initialize_item(
+            &item, 0, 0, 0, 
+            Item_Kind__Stick, 
+            0);
+
+    add_item_stack_to__inventory(
+            p_inventory, 
+            item, 
+            1, 
+            1);
 
     PLATFORM_update_chunks(
             get_p_PLATFORM_gfx_context_from__game(p_game),

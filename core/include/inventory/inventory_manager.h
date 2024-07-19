@@ -7,6 +7,10 @@
 void initialize_inventory_manager(
         Inventory_Manager *p_inventory_manager);
 
+Inventory *allocate_p_inventory_using__this_uuid_in__inventory_manager(
+        Inventory_Manager *p_inventory_manager, 
+        Identifier__u32 uuid);
+
 Inventory *allocate_p_inventory_in__inventory_manager(
         Inventory_Manager *p_inventory_manager);
 

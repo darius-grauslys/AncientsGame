@@ -5,6 +5,7 @@
 #include <defines.h>
 
 void initialize_entity_as__humanoid(
+        Game *p_game,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,

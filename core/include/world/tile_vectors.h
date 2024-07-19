@@ -102,18 +102,19 @@ static inline Local_Tile_Vector__3u8 vector_3i32F4_to__local_tile_vector_3u8(
         Vector__3i32F4 vector) {
     Vector__3i32 vector__3i32 =
         vector_3i32F4_to__vector_3i32(vector);
-    vector__3i32.x__i32 = ((vector__3i32.x__i32 
+    vector__3i32.x__i32 = (((vector__3i32.x__i32 >> 3)
             % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
         % CHUNK_WIDTH__IN_TILES;
-    vector__3i32.y__i32 = ((vector__3i32.y__i32 
+    vector__3i32.y__i32 = (((vector__3i32.y__i32 >> 3)
             % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
         % CHUNK_WIDTH__IN_TILES;
-    vector__3i32.z__i32 = ((vector__3i32.z__i32 
+    vector__3i32.z__i32 = (((vector__3i32.z__i32 >> 3)
             % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
         % CHUNK_WIDTH__IN_TILES;
-    Vector__3u8 vector__3u8 =
-        vector_3i32F4_to__vector_3u8(vector);
-    return vector__3u8;
+    return get_vector__3u8(
+            vector__3i32.x__i32, 
+            vector__3i32.y__i32, 
+            vector__3i32.z__i32);
 }
 
 #endif

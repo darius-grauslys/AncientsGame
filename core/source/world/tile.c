@@ -1,3 +1,4 @@
+#include "defines_weak.h"
 #include <world/tile.h>
 #include <defines.h>
 #include <world/chunk_manager.h>
@@ -226,11 +227,10 @@ wall:
             p_render_result->tile_index__cover =
 				TILE_COVER_SHEET_INDEX__CACTUS;
 			break;
-        case Tile_Cover_Kind__Oak_Trunk:
-        case Tile_Cover_Kind__Oak_Root:
-        case Tile_Cover_Kind__Oak_Branch:
-        case Tile_Cover_Kind__Oak_Leaves:
-        case Tile_Cover_Kind__Leaf_Clutter:
+        case Tile_Cover_Kind__Chest_Single:
+            p_render_result->tile_index__cover =
+				TILE_COVER_SHEET_INDEX__CHEST_SINGLE;
+			break;
         default:
             p_render_result->tile_index__cover = 0;
 			break;

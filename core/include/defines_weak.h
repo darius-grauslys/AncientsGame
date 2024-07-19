@@ -785,8 +785,9 @@ enum UI_Element_Kind {
 /// SECTION_world
 ///
 
+// TODO: change this to reflect new tileset
 enum Tile_Kind {
-    Tile_Kind__Void,
+    Tile_Kind__None,
     Tile_Kind__Oak_Wood,
     Tile_Kind__Stone_Brick,
     Tile_Kind__Gold,
@@ -801,30 +802,28 @@ enum Tile_Kind {
     Tile_Kind__Leaves,
     Tile_Kind__Snow,
     Tile_Kind__Water,
+    Tile_Kind__MAX = MASK(10)
 };
 
+// TODO: change this to reflect new tileset
 enum Tile_Cover_Kind {
     Tile_Cover_Kind__None               = 0b00000,
-    Tile_Cover_Kind__Plant,
-    Tile_Cover_Kind__Flower_Red,
-    Tile_Cover_Kind__Flower_Blue,
-    Tile_Cover_Kind__Flower_Yellow,
-    Tile_Cover_Kind__Cactus,
-    Tile_Cover_Kind__Oak_Trunk,
-    Tile_Cover_Kind__Oak_Root,
-    Tile_Cover_Kind__Oak_Branch,
-    Tile_Cover_Kind__Oak_Leaves,
-    Tile_Cover_Kind__Leaf_Clutter,
-    Tile_Cover_Kind__Wall__Oak_Wood     = 0b1000001,
-    Tile_Cover_Kind__Wall__Stone_Brick  = 0b1000010,
-    Tile_Cover_Kind__Wall__Gold         = 0b1000011,
-    Tile_Cover_Kind__Wall__Iron         = 0b1000100,
-    Tile_Cover_Kind__Wall__Diamond      = 0b1000101,
-    Tile_Cover_Kind__Wall__Amethyst     = 0b1000110,
-    Tile_Cover_Kind__Wall__Sandstone    = 0b1000111,
-    Tile_Cover_Kind__Wall__Stone        = 0b1001000,
-    Tile_Cover_Kind__Wall__Dirt         = 0b1001001,
-    Tile_Cover_Kind__Wall__Sand         = 0b1001010,
+    Tile_Cover_Kind__Plant              = (22*32 + 19 + 5),
+    Tile_Cover_Kind__Flower_Red         = (22*32 + 19 + 6),
+    Tile_Cover_Kind__Flower_Blue        = (22*32 + 19 + 7),
+    Tile_Cover_Kind__Flower_Yellow      = (22*32 + 19 + 8),
+    Tile_Cover_Kind__Cactus             = (22*32 + 19 + 9),
+    Tile_Cover_Kind__Chest_Single       = (29*32 + 19),
+    Tile_Cover_Kind__Wall__Oak_Wood     = 0b1000000001,
+    Tile_Cover_Kind__Wall__Stone_Brick  = 0b1000000010,
+    Tile_Cover_Kind__Wall__Gold         = 0b1000000011,
+    Tile_Cover_Kind__Wall__Iron         = 0b1000000100,
+    Tile_Cover_Kind__Wall__Diamond      = 0b1000000101,
+    Tile_Cover_Kind__Wall__Amethyst     = 0b1000000110,
+    Tile_Cover_Kind__Wall__Sandstone    = 0b1000000111,
+    Tile_Cover_Kind__Wall__Stone        = 0b1000001000,
+    Tile_Cover_Kind__Wall__Dirt         = 0b1000001001,
+    Tile_Cover_Kind__Wall__Sand         = 0b1000001010,
 };
 
 ///
