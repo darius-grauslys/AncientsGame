@@ -48,6 +48,35 @@ Inventory *allocate_p_inventory_using__this_uuid_in__inventory_manager(
     initialize_inventory(
             p_inventory, 
             uuid);
+    p_inventory_manager
+        ->quantity_of__active_inventories++;
+
+    return p_inventory;
+}
+
+Inventory *allocate_p_inventory_for__container_uuid_in__inventory_manager(
+        Inventory_Manager *p_inventory_manager,
+        Identifier__u32 uuid) {
+    Index__u32 index_of__collision_resolution =
+        poll_for__uuid_collision(
+                (Serialization_Header*)p_inventory_manager->inventories, 
+                INVENTORY_MAX_QUANTITY_OF, 
+                uuid);
+
+    if (is_index_u32__out_of_bounds(index_of__collision_resolution)) {
+        return 0;
+    }
+
+    Inventory *p_inventory =
+        get_p_inventory_by__index_in__inventory_manager(
+                p_inventory_manager, 
+                index_of__collision_resolution);
+
+    initialize_inventory(
+            p_inventory, 
+            uuid);
+    p_inventory_manager
+        ->quantity_of__active_inventories++;
 
     return p_inventory;
 }
