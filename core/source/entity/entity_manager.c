@@ -109,7 +109,7 @@ void release_entity_from__entity_manager(
 void resolve_p_serialized_entity_ptr_with__entity_manager(
         Entity_Manager *p_entity_manager,
         Serialized_Entity_Ptr *s_entity_ptr) {
-    link_serialized_field(
+    link_serialized_field_against__contiguous_array(
             s_entity_ptr, 
             (Serialization_Header*)p_entity_manager->entities, 
             ENTITY_MAXIMUM_QUANTITY_OF);

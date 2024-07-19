@@ -319,16 +319,19 @@ static void inline set_ui_element__hitbox(
 }
 
 static inline
+void set_ui_element__p_data(
+        UI_Element *p_ui_element,
+        void *p_ui_data) {
+    p_ui_element->p_ui_data = p_ui_data;
+}
+
 void set_ui_element__PLATFORM_sprite(
         UI_Element *p_ui_element,
-        PLATFORM_Sprite *p_PLATFORM_sprite) {
-    p_ui_element->p_PLATFORM_sprite =
-        p_PLATFORM_sprite;
-    PLATFORM_set_sprite__position(
-            p_PLATFORM_sprite, 
-            get_x_i32_from__p_ui_element(p_ui_element), 
-            get_y_i32_from__p_ui_element(p_ui_element));
-}
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
+void release_ui_element__PLATFORM_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        UI_Element *p_ui_element);
 
 static bool inline does_ui_element_have__dispose_handler(
         UI_Element *p_ui_element) {
@@ -358,6 +361,12 @@ static bool inline does_ui_element_have__receive_drop_handler(
 static bool inline does_ui_element_have__held_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_held_handler;
+}
+
+static inline
+bool does_ui_element_have__PLATFORM_sprite(
+        UI_Element *p_ui_element){
+    return (bool)p_ui_element->p_PLATFORM_sprite;
 }
 
 static inline

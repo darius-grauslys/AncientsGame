@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "numerics.h"
 #include "serialization/hashing.h"
 #include <serialization/serialized_field.h>
 #include <serialization/serialization_header.h>
@@ -17,7 +18,7 @@ void initialize_serialized_field(
         p_serialized_field__data;
 }
 
-bool link_serialized_field(
+bool link_serialized_field_against__contiguous_array(
         Serialized_Field *p_serialized_field,
         Serialization_Header *p_serialization_structs,
         Quantity__u32 quantity_of__structs) {
@@ -36,10 +37,14 @@ bool link_serialized_field(
         return false;
 #endif
 
-    Identifier__u32 bounded_uuid =
-        bound_uuid_to__contiguous_array(
-                p_serialized_field->identifier_for__serialized_field,
-                quantity_of__structs);
+    Index__u32 index_of__resolved_entry_u32 =
+        poll_for__uuid_collision(
+                p_serialization_structs, 
+                quantity_of__structs, 
+                p_serialized_field->identifier_for__serialized_field);
+
+    if (is_index_u32__out_of_bounds(index_of__resolved_entry_u32))
+        return false;
 
     uint8_t *p_bytes = (uint8_t*)p_serialization_structs;
     Quantity__u32 size_of__struct = 
@@ -47,7 +52,7 @@ bool link_serialized_field(
 
     Serialization_Header *p_serialization_header =
         (Serialization_Header*)(
-                p_bytes + (size_of__struct * bounded_uuid));
+                p_bytes + (size_of__struct * index_of__resolved_entry_u32));
 
     if (is_serialized_struct__deallocated(p_serialization_header)) {
         initialize_serialized_field_as__unlinked(

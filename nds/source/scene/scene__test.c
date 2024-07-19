@@ -2,10 +2,14 @@
 #include "collisions/hitbox_aabb.h"
 #include "debug/debug.h"
 #include "defines_weak.h"
+#include "entity/humanoid.h"
 #include "game.h"
 #include "input/input.h"
+#include "inventory/equipment.h"
 #include "inventory/inventory.h"
+#include "inventory/inventory_manager.h"
 #include "inventory/item.h"
+#include "inventory/item_stack.h"
 #include "nds/arm9/background.h"
 #include "nds/arm9/video.h"
 #include "nds_defines.h"
@@ -20,6 +24,7 @@
 #include "ui/game/nds_ui_window__game__equip.h"
 #include "ui/game/nds_ui_window__game__trade.h"
 #include "ui/nds_ui.h"
+#include "ui/nds_ui__equipment.h"
 #include "ui/nds_ui__inventory_column.h"
 #include "ui/nds_ui__slider.h"
 #include "ui/ui_manager.h"
@@ -66,8 +71,18 @@ void m_enter_scene_handler_as__test(
         Game *p_game) {
     enum UI_Window_Kind ui_window_kind = UI_Window_Kind__Idle;
 
-    Inventory inventory;
-    initialize_inventory_as__empty(&inventory);
+    Entity humanoid;
+    initialize_entity_as__humanoid(
+            &humanoid, 
+            Entity_Kind__Player, 
+            VECTOR__3i32F4__0_0_0, 
+            1, 1);
+
+    Inventory *p_inventory =
+        resolve_p_inventory_of__humanoid(
+                p_game, 
+                &humanoid);
+
     Item item;
     initialize_item(
             &item, 
@@ -77,7 +92,7 @@ void m_enter_scene_handler_as__test(
             0);
 
     add_item_stack_to__inventory(
-            &inventory, 
+            p_inventory, 
             item, 
             16, 
             32);
@@ -90,10 +105,20 @@ void m_enter_scene_handler_as__test(
             0);
 
     add_item_stack_to__inventory(
-            &inventory, 
+            p_inventory, 
             item, 
             16, 
             32);
+
+    Item_Stack *p_item_stack__armor =
+        get_p_item_stack__armor_slot_from__equipment(
+                &humanoid.equipment);
+
+    initialize_item_stack(
+            p_item_stack__armor, 
+            item, 
+            p_item_stack__armor->_serialization_header.uuid, 
+            1, 1);
 
     initialize_item(
             &item, 
@@ -103,7 +128,7 @@ void m_enter_scene_handler_as__test(
             0);
 
     add_item_stack_to__inventory(
-            &inventory, 
+            p_inventory, 
             item, 
             16, 
             32);
@@ -125,10 +150,20 @@ void m_enter_scene_handler_as__test(
                             get_p_ui_manager_from__game(p_game), 
                             NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
 
-                NDS_load_inventory_column_for__inventory(
+                UI_Element *p_ui_element__equipment_column =
+                    get_p_ui_element_by__index_from__ui_manager(
+                            get_p_ui_manager_from__game(p_game), 
+                            NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
+
+                NDS_load_ui_inventory_column_for__inventory(
                         p_game,
                         p_ui_element__inventory_column,
-                        &inventory);
+                        p_inventory);
+
+                NDS_load_ui_equipment_column_for__equipment(
+                        p_game, 
+                        p_ui_element__equipment_column, 
+                        &humanoid.equipment);
             }
         }
         if (is_input__use_secondary_released(get_p_input_from__game(p_game))) {
@@ -145,10 +180,20 @@ void m_enter_scene_handler_as__test(
                             get_p_ui_manager_from__game(p_game), 
                             NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
 
-                NDS_load_inventory_column_for__inventory(
+                UI_Element *p_ui_element__equipment_column =
+                    get_p_ui_element_by__index_from__ui_manager(
+                            get_p_ui_manager_from__game(p_game), 
+                            NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
+
+                NDS_load_ui_inventory_column_for__inventory(
                         p_game,
                         p_ui_element__inventory_column,
-                        &inventory);
+                        p_inventory);
+
+                NDS_load_ui_equipment_column_for__equipment(
+                        p_game, 
+                        p_ui_element__equipment_column, 
+                        &humanoid.equipment);
             }
         }
     }

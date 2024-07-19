@@ -16,7 +16,7 @@ void initialize_inventory_as__empty(
 /// an empty spot in inventory. Does nothing
 /// if the inventory is already full.
 ///
-void add_item_stack_to__inventory(
+Item_Stack *add_item_stack_to__inventory(
         Inventory *p_inventory,
         Item item,
         Quantity__u8 quantity_of__items,
@@ -65,9 +65,13 @@ Item_Stack *get_next_p_item_stack_of__this_item_kind_from__inventory(
         Item_Stack *p_item_stack__start_from,
         enum Item_Kind the_kind_of__item);
 
+Item_Stack *get_p_item_stack_from__inventory_by__index(
+        Inventory *p_inventory,
+        Index__u8 index_of__item);
+
 Item_Stack *get_p_item_stack_from__inventory(
         Inventory *p_inventory,
-        Identifier__u16 identifier_for__item_stack);
+        Identifier__u32 identifier_for__item_stack);
 
 i32F20 get_total_weight_of__inventory(
         Inventory *p_inventory);

@@ -1,3 +1,4 @@
+#include "test_suite_ui_ui_drop_zone__inventory_slot.h"
 #include "test_suite_ui_ui_button.h"
 #include "test_suite_ui_ui_slider.h"
 #include "test_suite_ui_ui_draggable.h"

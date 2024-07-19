@@ -3,15 +3,18 @@
 
 #include "defines_weak.h"
 #include "game.h"
+#include "random.h"
 #include <defines.h>
 
 static inline
-Identifier__u32 get_random__uuid_u32(Game *p_game) {
+Identifier__u32 get_random__uuid_u32(
+        Repeatable_Psuedo_Random *p_randomizer) {
     // Would be pretty problematic if we didn't
     // XOR this wouldn't it? LOL
     //
     // Pretty unlikely to collide, but...
-    return get_pseudo_random_i32_from__game(p_game) 
+    return get_pseudo_random_i32__intrusively(
+            p_randomizer) 
         ^ IDENTIFIER__UNKNOWN__u32;
 }
 
@@ -21,7 +24,7 @@ Identifier__u32 merge_identifiers_u32(
         Quantity__u8 bits__left,
         Identifier__u32 identifier__right_half) {
     return
-        (identifier__left_half << (32 - bits__left))
+        (identifier__left_half & ~MASK(33 - bits__left))
         | (identifier__right_half & MASK(33 - bits__left))
         ;
 }

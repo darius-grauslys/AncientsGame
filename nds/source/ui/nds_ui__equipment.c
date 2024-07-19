@@ -1,50 +1,48 @@
-#include "defines_weak.h"
 #include "game.h"
+#include "inventory/equipment.h"
 #include "inventory/item_stack.h"
+#include "nds_defines.h"
 #include "rendering/sprite.h"
 #include "serialization/serialized_field.h"
 #include "ui/nds_ui__draggable.h"
+#include "ui/ui_draggable.h"
 #include "ui/ui_element.h"
 #include "ui/ui_manager.h"
-#include <ui/nds_ui__inventory_column.h>
-#include <inventory/inventory.h>
-#include "ui/ui_draggable.h"
-#include "vectors.h"
-#include "nds_defines.h"
+#include <ui/nds_ui__equipment.h>
 
-void NDS_load_ui_inventory_column_for__inventory(
+void NDS_load_ui_equipment_column_for__equipment(
         Game *p_game,
-        UI_Element *p_ui_element__inventory_column,
-        Inventory *p_inventory) {
+        UI_Element *p_ui_element__equipment_column,
+        Equipment *p_equipment) {
     PLATFORM_Graphics_Window *p_graphics_window =
         &get_p_PLATFORM_gfx_context_from__game(p_game)
         ->graphics_window__sub;
     UI_Manager *p_ui_manager =
         get_p_ui_manager_from__game(p_game);
-    UI_Element *p_ui_element__current_inventory_slot =
-        p_ui_element__inventory_column;
+    UI_Element *p_ui_element__current_equipment_slot =
+        p_ui_element__equipment_column;
     Index__u32 index_of__inventory_column_slot = 0;
     do {
         if (does_ui_element_have__child(
-                    p_ui_element__current_inventory_slot)) {
+                    p_ui_element__current_equipment_slot)) {
             release__ui_element_from__ui_manager(
-                    p_ui_element__current_inventory_slot
+                    p_ui_element__current_equipment_slot
                     ->p_child, 
                     p_game);
         }
-        if (p_inventory) {
+        if (p_equipment) {
             Item_Stack *p_item_stack =
-                get_p_item_stack_from__inventory_by__index(
-                        p_inventory, 
+                get_p_item_stack_by__index_in__equipment(
+                        p_equipment, 
                         index_of__inventory_column_slot);
             point_serialized_field_to__this_serialized_struct(
-                    &p_ui_element__current_inventory_slot->s_serialized_field, 
+                    &p_ui_element__current_equipment_slot->s_serialized_field, 
                     p_item_stack);
 
             UI_Element *p_child = 
                 allocate_ui_element_from__ui_manager_as__child(
                         p_ui_manager,
-                        p_ui_element__current_inventory_slot);
+                        p_ui_element__current_equipment_slot);
             initialize_ui_element_as__draggable(
                     p_child, 
                     16, 16, 
@@ -68,6 +66,6 @@ void NDS_load_ui_inventory_column_for__inventory(
         }
         index_of__inventory_column_slot++;
     } while (iterate_to_next__ui_element(
-                &p_ui_element__current_inventory_slot)
-            && p_ui_element__current_inventory_slot);
+                &p_ui_element__current_equipment_slot)
+            && p_ui_element__current_equipment_slot);
 }

@@ -7,7 +7,9 @@
 
 TEST_FUNCTION(initialize_inventory) {
     Inventory inventory;
-    initialize_inventory(&inventory);
+    initialize_inventory(
+            &inventory,
+            0);
 
     for (Index__u32 index_of__item_stack = 0;
             index_of__item_stack
@@ -16,9 +18,9 @@ TEST_FUNCTION(initialize_inventory) {
         Item_Stack *p_item_stack =
             &inventory.items[index_of__item_stack];
         munit_assert_int(
-                p_item_stack->identifier_for__item_stack,
+                p_item_stack->_serialization_header.uuid,
                 ==,
-                IDENTIFIER__UNKNOWN__u16);
+                index_of__item_stack);
         munit_assert_int(
                 p_item_stack->max_quantity_of__items, 
                 ==, 

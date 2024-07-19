@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "inventory/item_stack.h"
+#include "serialization/hashing.h"
 #include "serialization/identifiers.h"
 #include "serialization/serialization_header.h"
 #include "serialization/serialized_field.h"
@@ -9,11 +10,14 @@
 
 void remove_all_unequiped_item_stacks_from__inventory(
         Inventory *p_inventory) {
-    for (Index__u8 index_of__item=0;
-            index_of__item < INVENTORY_ITEM_MAXIMUM_QUANTITY_OF;
-            index_of__item++) {
-        initialize_item_stack__as_empty(
-                &p_inventory->items[index_of__item]);
+    for (Index__u8 index_of__item_stack=0;
+            index_of__item_stack < INVENTORY_ITEM_MAXIMUM_QUANTITY_OF;
+            index_of__item_stack++) {
+        initialize_item_stack_as__empty(
+                &p_inventory->items[index_of__item_stack], 
+                (p_inventory->_serialization_header.uuid
+                    << ITEM_STACK_IDENTIFIER_BITS)
+                + index_of__item_stack);
     }
 }
 
@@ -44,7 +48,7 @@ Item_Stack *get_p_item_stack_from__inventory_by__index(
     return &p_inventory->items[index_of__item];
 }
 
-Identifier__u32 get_next_available_uuid_for___item_stack_from__inventory(
+Index__u8 get_next_available_item_stack_by___index_from__inventory(
         Inventory *p_inventory) {
     for (Index__u8 index_of__item=0;
             index_of__item < INVENTORY_ITEM_MAXIMUM_QUANTITY_OF;
@@ -56,17 +60,17 @@ Identifier__u32 get_next_available_uuid_for___item_stack_from__inventory(
         if (is_p_item_stack__empty(p_item_stack))
             return index_of__item;
     }
-    return 0;
+    return INDEX__UNKNOWN__u8;
 }
 
-Item_Stack *allocate_item_stack_in__inventory(
+Item_Stack *get_next_available_item_stack_in__inventory(
         Inventory *p_inventory) {
-    Identifier__u32 next_uuid_for__item_stack =
-        get_next_available_uuid_for___item_stack_from__inventory(
+    Identifier__u32 uuid__u32 =
+        get_next_available_item_stack_by___index_from__inventory(
                 p_inventory);
 
-    if (is_identifier_u32__invalid(next_uuid_for__item_stack)) {
-        debug_warning("get_next_available_p_item_stack_from__inventory, fail to get next uuid.");
+    if (is_index_u8__out_of_bounds(uuid__u32)) {
+        debug_warning("get_next_available_p_item_stack_from__inventory, fail to get next item_stack.");
         debug_warning("is the inventory full?");
         return 0;
     }
@@ -74,11 +78,7 @@ Item_Stack *allocate_item_stack_in__inventory(
     Item_Stack *p_item_stack =
         get_p_item_stack_from__inventory_by__index(
                 p_inventory, 
-                next_uuid_for__item_stack);
-
-    initialize_item_stack__as_allocated(
-            p_item_stack, 
-            next_uuid_for__item_stack);
+                uuid__u32);
 
     p_inventory->quantity_of__item_stacks++;
 
@@ -90,7 +90,7 @@ Item_Stack *allocate_item_stack_in__inventory(
 /// an empty spot in inventory. Does nothing
 /// if the inventory is already full.
 ///
-void add_item_stack_to__inventory(
+Item_Stack *add_item_stack_to__inventory(
         Inventory *p_inventory,
         Item item,
         Quantity__u8 quantity_of__items,
@@ -98,16 +98,16 @@ void add_item_stack_to__inventory(
 #ifndef NDEBUG
     if (!p_inventory) {
         debug_abort("add_item_stack_to__inventory, p_inventory is null.");
-        return;
+        return 0;
     }
 #endif
     Item_Stack *p_item_stack =
-        allocate_item_stack_in__inventory(
+        get_next_available_item_stack_in__inventory(
                 p_inventory);
 
     if (!p_item_stack) {
         debug_error("add_item_stack_to__inventory, p_item_stack is null.");
-        return;
+        return 0;
     }
     
     set_item_stack(
@@ -115,13 +115,14 @@ void add_item_stack_to__inventory(
             item,
             quantity_of__items,
             max_quantity_of__items);
+    return p_item_stack;
 }
 
 void copy_p_item_stack_to__inventory(
         Inventory *p_inventory,
         Item_Stack *p_item_stack__copy_origin) {
     Item_Stack *p_item_stack =
-        allocate_item_stack_in__inventory(
+        get_next_available_item_stack_in__inventory(
                 p_inventory);
 
     if (!p_item_stack) {
@@ -141,8 +142,9 @@ void move_p_item_stack_to__inventory(
     copy_p_item_stack_to__inventory(
             p_inventory, 
             p_item_stack__move_origin);
-    initialize_item_stack__as_empty(
-            p_item_stack__move_origin);
+    initialize_item_stack_as__empty(
+            p_item_stack__move_origin,
+            p_item_stack__move_origin->_serialization_header.uuid);
 }
 
 void remove_p_item_stack_from__inventory(
@@ -166,8 +168,9 @@ void remove_p_item_stack_from__inventory(
         return;
     }
 #endif
-    initialize_item_stack__as_empty(
-            p_item_stack);
+    initialize_item_stack_as__empty(
+            p_item_stack,
+            p_item_stack->_serialization_header.uuid);
     p_inventory->quantity_of__item_stacks--;
 }
 
@@ -265,22 +268,10 @@ Item_Stack *get_next_p_item_stack_of__this_item_kind_from__inventory(
 
 Item_Stack *get_p_item_stack_from__inventory(
         Inventory *p_inventory,
-        Identifier__u16 identifier_for__item_stack) {
-    Serialized_Item_Stack_Ptr s_item_stack_ptr;
-    initialize_serialized_field_as__unlinked(
-            &s_item_stack_ptr, 
-            identifier_for__item_stack);
-
-    link_serialized_field(
-            &s_item_stack_ptr, 
-            (Serialization_Header*)p_inventory->items, 
-            INVENTORY_ITEM_MAXIMUM_QUANTITY_OF);
-
-    return
-        (is_p_serialized_field__linked(&s_item_stack_ptr))
-        ? s_item_stack_ptr.p_serialized_field__item_stack
-        : 0
-        ;
+        Identifier__u32 identifier_for__item_stack) {
+    identifier_for__item_stack &=
+        MASK(ITEM_STACK_IDENTIFIER_BITS+1);
+    return &p_inventory->items[identifier_for__item_stack];
 }
 
 i32F20 get_total_weight_of__inventory(

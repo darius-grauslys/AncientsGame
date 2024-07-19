@@ -5,13 +5,13 @@
 #include "serialization/serialized_field.h"
 #include "serialization/hashing.h"
 
-Serialization_Header *poll_for__uuid_collision(
+Index__u32 poll_for__uuid_collision(
         Serialization_Header *p_serialization_headers,
         Quantity__u32 length_of__p_serialization_headers,
-        Identifier__u32 *r_identifier__u32) {
+        Identifier__u32 identifier__u32) {
 
     Identifier__u32 identifier__mod_size = 
-        *r_identifier__u32 
+        identifier__u32 
         % length_of__p_serialization_headers;
     Quantity__u32 size_of__struct =
         p_serialization_headers->size_of__struct;
@@ -30,37 +30,27 @@ Serialization_Header *poll_for__uuid_collision(
         if (is_serialized_struct__deallocated(
                     p_serialization_header)
                 || is_identifier_u32_matching__serialization_header(
-                    current_identifier,
+                    identifier__u32,
                     p_serialization_header)) {
-            *r_identifier__u32 =
-                *r_identifier__u32
-                - identifier__mod_size
-                + current_identifier
-                ;
-            return p_serialization_header;
+            return current_identifier;
         }
     } while ((current_identifier = (current_identifier + 1) 
                 % length_of__p_serialization_headers)
             != identifier__mod_size);
-
-    *r_identifier__u32 =
-        IDENTIFIER__UNKNOWN__u32;
-    return 0;
+    return INDEX__UNKNOWN__u32;
 }
 
-Serialization_Header *get_unique__hashed_uuid_u32(
-        Game *p_game,
+Identifier__u32 get_next_available__uuid_in__contiguous_array(
         Serialization_Header *p_serialization_headers,
         Quantity__u32 length_of__p_serialization_headers,
-        Identifier__u32 *r_identifier__u32) {
-    *r_identifier__u32 = 
-        (IDENTIFIER__UNKNOWN__u32 != *r_identifier__u32)
-        ? *r_identifier__u32
-        : get_random__uuid_u32(p_game)
-        ;
-
-    return poll_for__uuid_collision(
-            p_serialization_headers, 
-            length_of__p_serialization_headers, 
-            r_identifier__u32);
+        Identifier__u32 uuid) {
+    uuid -= (uuid % length_of__p_serialization_headers);
+    Index__u32 index__u32 =
+        poll_for__uuid_collision(
+                p_serialization_headers, 
+                length_of__p_serialization_headers, 
+                uuid);
+    uuid += index__u32;
+    return uuid;
 }
+

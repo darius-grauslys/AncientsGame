@@ -8,6 +8,24 @@ static const u8 MAX__U8     = ((u8)-1);
 static const u16 MAX__U16   = ((u16)-1);
 static const u32 MAX__U32   = ((u32)-1);
 
+static inline
+bool is_index_u8__out_of_bounds(
+        Index__u8 index__u8) {
+    return index__u8 == INDEX__UNKNOWN__u8;
+}
+
+static inline
+bool is_index_u16__out_of_bounds(
+        Index__u16 index__u16) {
+    return index__u16 == INDEX__UNKNOWN__u16;
+}
+
+static inline
+bool is_index_u32__out_of_bounds(
+        Index__u32 index__u32) {
+    return index__u32 == INDEX__UNKNOWN__u32;
+}
+
 static inline 
 i32F4 i32_to__i32F4(Signed_Index__i32 x) {
     return x << FRACTIONAL_PERCISION_4__BIT_SIZE;

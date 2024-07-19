@@ -87,9 +87,9 @@ bool is_p_item_stacks__equal(
         return false;
 
     is_equal =
-        p_item_stack__one->identifier_for__item_stack
+        p_item_stack__one->_serialization_header.uuid
         ==
-        p_item_stack__two->identifier_for__item_stack
+        p_item_stack__two->_serialization_header.uuid
         ;
     if (!is_equal)
         return false;
@@ -135,14 +135,67 @@ TEST_FUNCTION(resolve_item_stack__merge_or_swap__should_swap) {
             &item_stack__one_swapped,
             &item_stack__two_swapped);
 
-    munit_assert(
+    munit_assert_true(
             is_p_item_stacks__equal(
                 &item_stack__one,
                 &item_stack__two_swapped));
-    munit_assert(
+    munit_assert_true(
             is_p_item_stacks__equal(
                 &item_stack__two,
                 &item_stack__one_swapped));
+
+    return MUNIT_OK;
+}
+
+TEST_FUNCTION(resolve_item_stack__merge_or_swap__double_swap) {
+    Item_Stack item_stack__one, item_stack__two;
+    Item_Stack item_stack__one_swapped, item_stack__two_swapped;
+    Item item__one, item__two;
+    initialize_item(
+            &item__one, 
+            0, 0, 0, 
+            Item_Kind__Arrow__Iron, 
+            0);
+    initialize_item(
+            &item__two, 
+            0, 0, 0, 
+            Item_Kind__Battleaxe__Iron, 
+            0);
+
+    Quantity__u32 quantity_of__items_in__item_stack_one =
+        (munit_rand_uint32() + 1) % 32;
+    initialize_item_stack(
+            &item_stack__one, 
+            item__one, 
+            IDENTIFIER__UNKNOWN__u16, 
+            quantity_of__items_in__item_stack_one, 32);
+
+    Quantity__u32 quantity_of__items_in__item_stack_two =
+        (munit_rand_uint32() + 1) % 32;
+    initialize_item_stack(
+            &item_stack__two, 
+            item__two, 
+            IDENTIFIER__UNKNOWN__u16, 
+            quantity_of__items_in__item_stack_two, 32);
+
+    item_stack__one_swapped = item_stack__one;
+    item_stack__two_swapped = item_stack__two;
+
+    resolve_item_stack__merge_or_swap(
+            &item_stack__one_swapped,
+            &item_stack__two_swapped);
+    resolve_item_stack__merge_or_swap(
+            &item_stack__one_swapped,
+            &item_stack__two_swapped);
+
+    munit_assert_true(
+            is_p_item_stacks__equal(
+                &item_stack__one,
+                &item_stack__one_swapped));
+    munit_assert_true(
+            is_p_item_stacks__equal(
+                &item_stack__two,
+                &item_stack__two_swapped));
 
     return MUNIT_OK;
 }
@@ -188,5 +241,6 @@ DEFINE_SUITE(item_stack,
         INCLUDE_TEST__STATELESS(initialize_item_stack),
         INCLUDE_TEST__STATELESS(resolve_item_stack__merge_or_swap__should_merge),
         INCLUDE_TEST__STATELESS(resolve_item_stack__merge_or_swap__should_swap),
+        INCLUDE_TEST__STATELESS(resolve_item_stack__merge_or_swap__double_swap),
         INCLUDE_TEST__STATELESS(remove_quantity_of_items_from__item_stack),
         END_TESTS)

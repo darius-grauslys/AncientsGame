@@ -29,12 +29,13 @@ TEST_FUNCTION(m_process__path_find__trivial) {
             0);
 
     initialize_world(
+            &game,
             get_p_world_from__game(&game), 
             0);
 
     move_chunk_manager(
-            &game.world.chunk_manager, 
-            &game.world.world_parameters, 
+            &game,
+            get_p_chunk_manager_from__game(&game),
             DIRECTION__NORTH_WEST,
             2);
 
@@ -113,13 +114,14 @@ TEST_FUNCTION(m_process__path_find__wall_in_between) {
             0);
 
     initialize_world(
+            &game,
             get_p_world_from__game(&game), 
             0);
 
     move_chunk_manager(
-            &game.world.chunk_manager, 
-            &game.world.world_parameters, 
-            DIRECTION__SOUTH_WEST,
+            &game,
+            get_p_chunk_manager_from__game(&game),
+            DIRECTION__NORTH_WEST,
             2);
 
     Tile *p_tile =

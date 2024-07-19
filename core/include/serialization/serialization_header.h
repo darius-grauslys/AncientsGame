@@ -9,9 +9,14 @@ void initialize_serialization_header(
         Identifier__u32 identifier_for__serialized_struct,
         Quantity__u32 size_of__struct);
 
+void initialize_serialization_header__contiguous_array(
+        Serialization_Header *p_serialization_headers,
+        Quantity__u32 length_of__p_serialization_headers,
+        Quantity__u32 size_of__struct);
+
 Serialization_Header *get_p_serialization_header_from__contigious_array(
         Serialization_Header *p_serialization_headers,
-        Quantity__u32 size_of__p_serialization_headers,
+        Quantity__u32 length_of__p_serialization_headers,
         Index__u32 index_of__serialized_header);
 
 static inline

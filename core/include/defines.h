@@ -696,7 +696,6 @@ typedef struct Item_t {
 
 typedef struct Item_Stack_t {
     Serialization_Header        _serialization_header;
-    Serialized_Inventory_Ptr    *s_inventory_ptr;
     Item                        item;
     Quantity__u8                quantity_of__items;
     Quantity__u8                max_quantity_of__items;
@@ -720,18 +719,15 @@ typedef struct Item_Stack_Manager_t {
 } Item_Stack_Manager;
 
 
-#define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 33
+#define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 27
 #define INVENTORY_CONSUMABLES_QUANTITY_OF 3
-
-#define INVENTORY_ITEM_STACK_SLOT__MAIN_HAND 0
-#define INVENTORY_ITEM_STACK_SLOT__OFF_HAND 1
-#define INVENTORY_ITEM_STACK_SLOT__ARMOR 2
-#define INVENTORY_ITEM_STACK_SLOT__CONSUMABLES 3
 
 ///
 /// Leaves 6 bits (0-63) for item_stacks
 ///
 #define INVENTORY_IDENTIFIER_BITS 26
+#define ITEM_STACK_IDENTIFIER_BITS \
+    (32 - INVENTORY_IDENTIFIER_BITS)
 
 typedef struct Inventory_t {
     ///
@@ -746,8 +742,34 @@ typedef struct Inventory_t {
 
 typedef struct Inventory_Manager_t {
     Inventory inventories[INVENTORY_MAX_QUANTITY_OF];
+    Repeatable_Psuedo_Random randomizer_of__inventory_manager;
     Quantity__u8 quantity_of__active_inventories;
 } Inventory_Manager;
+
+#define EQUIPMENT_ITEM_STACK_QUANTITY_OF 6
+
+typedef union Equipment_t {
+    struct {
+        Item_Stack item_stacks[
+            EQUIPMENT_ITEM_STACK_QUANTITY_OF];
+    };
+    struct {
+        Item_Stack item_stacks__equipment[
+            EQUIPMENT_ITEM_STACK_QUANTITY_OF
+                - INVENTORY_CONSUMABLES_QUANTITY_OF];
+        Item_Stack item_stack__consumables[
+            INVENTORY_CONSUMABLES_QUANTITY_OF];
+    };
+    struct {
+        Item_Stack item_stack__armor;
+        Item_Stack item_stack__main_hand;
+        Item_Stack item_stack__off_hand;
+
+        Item_Stack item_stack__consumable_1;
+        Item_Stack item_stack__consumable_2;
+        Item_Stack item_stack__consumable_3;
+    };
+} Equipment;
 
 ///
 /// SECTION_entity
@@ -980,15 +1002,16 @@ typedef struct Entity_t {
             Resource_Reserve    energy_orbs;
             Humanoid_Flags      humanoid_flags;
             Timer__u8           stun__timer_u8;
+            Equipment           equipment;
             enum Homeostasis_Update_Kind kind_of_homeostasis__update;
             union {
                 struct { // humanoid union
-                    Armor_Properties        humanoid__armor_properties;
-                    Sustenance__u8          humanoid__primary_sustenance__u8;
-                    Sustenance__u8          humanoid__secondary_sustenance__u8;
-                    Serialized_Inventory_Ptr    humanoid__serialized_inventory;    
-                    Homeostasis__i8         humanoid__homeostasis__i8;
-                    Timer__u16              humanoid__homeostasis__timer_u16;
+                    Armor_Properties            humanoid__armor_properties;
+                    Serialized_Inventory_Ptr    s_humanoid__inventory_ptr;    
+                    Sustenance__u8              humanoid__primary_sustenance__u8;
+                    Sustenance__u8              humanoid__secondary_sustenance__u8;
+                    Homeostasis__i8             humanoid__homeostasis__i8;
+                    Timer__u16                  humanoid__homeostasis__timer_u16;
                 };
             };
         };

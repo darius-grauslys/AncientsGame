@@ -11,6 +11,7 @@
 #include <defines.h>
 #include <nds_defines.h>
 #include <game.h>
+#include <ui/ui_drop_zone__inventory_slot.h>
 // THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.
 
 UI_Element *NDS_allocate_ui_for__nds_ui_window__game__equip(Game *p_game){
@@ -41,36 +42,66 @@ NDS_allocate_sprite_for__ui_slider(
     UI_Element *p_button_filter__consumable = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_button_filter__consumable, 16, 16, get_vector__3i32(228 + 0, 160 + 0, 0), m_ui_button__clicked_handler__default, false, false);
 
-    UI_Element *p_item_slot__armor = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__drop_zone(p_item_slot__armor, 20, 20, get_vector__3i32(32 + 0, 100 + 0, 0), m_ui_drop_zone__receive_drop_handler__default);
+    p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
+    for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
+        p_ui_iterator_previous = p_ui_iterator;
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 100 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
+    }
 
-    UI_Element *p_item_slot__main_hand = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__drop_zone(p_item_slot__main_hand, 20, 20, get_vector__3i32(32 + 0, 132 + 0, 0), m_ui_drop_zone__receive_drop_handler__default);
+    p_ui_iterator_previous_previous = p_ui_iterator_previous;
+    p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
+    for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
+        p_ui_iterator_previous = p_ui_iterator;
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 132 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
+    }
 
-    UI_Element *p_item_slot__off_hand = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__drop_zone(p_item_slot__off_hand, 20, 20, get_vector__3i32(32 + 0, 164 + 0, 0), m_ui_drop_zone__receive_drop_handler__default);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,9);
+    p_ui_iterator_previous_previous = p_ui_iterator_previous;
+    p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
+    for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
+        p_ui_iterator_previous = p_ui_iterator;
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 164 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
+    }
 
-    UI_Element *p_item_slot__consumable_1 = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__drop_zone(p_item_slot__consumable_1, 20, 20, get_vector__3i32(60 + 0, 100 + 0, 0), m_ui_drop_zone__receive_drop_handler__default);
-
-    UI_Element *p_item_slot__consumable_2 = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__drop_zone(p_item_slot__consumable_2, 20, 20, get_vector__3i32(60 + 0, 132 + 0, 0), m_ui_drop_zone__receive_drop_handler__default);
-
-    UI_Element *p_item_slot__consumeable_3 = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__drop_zone(p_item_slot__consumeable_3, 20, 20, get_vector__3i32(60 + 0, 164 + 0, 0), m_ui_drop_zone__receive_drop_handler__default);
-
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,11);
+    p_ui_iterator_previous_previous = p_ui_iterator_previous;
 
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 15 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 103 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 43 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 131 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,16);
@@ -78,7 +109,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 71 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 159 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,19);
@@ -86,7 +122,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 99 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 187 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,22);
@@ -94,7 +135,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 127 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 215 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,25);
@@ -102,7 +148,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 155 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 243 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,28);
@@ -110,7 +161,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 183 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 271 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,31);
@@ -118,7 +174,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 211 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 299 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,34);
@@ -126,7 +187,12 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 239 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(104 + 24* index_of__iteration__3, 327 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        set_ui_element__p_data(
+        p_ui_iterator,
+        get_p_ui_element_by__index_from__ui_manager(
+        p_ui_manager,
+        NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,37);

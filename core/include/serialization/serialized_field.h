@@ -18,7 +18,7 @@ void initialize_serialized_field(
 ///
 /// Returns true if the link is made, false otherwise.
 ///
-bool link_serialized_field(
+bool link_serialized_field_against__contiguous_array(
         Serialized_Field *p_serialized_field,
         Serialization_Header *p_serialization_structs,
         Quantity__u32 quantity_of__structs);
@@ -73,12 +73,34 @@ void initialize_serialized_field_as__unlinked(
 static inline
 bool is_p_serialized_field__linked(
         Serialized_Field *p_serialized_field) {
-    return (bool)(
-            p_serialized_field->p_serialized_field__data
-            && p_serialized_field
-                ->p_serialized_field__serialization_header
-                ->uuid
-                != IDENTIFIER__UNKNOWN__u32);
+    ///
+    /// 1) serialized_field__data points to something
+    /// 2) the serialization_header of that ptr has a uuid
+    /// 3) the uuid's match
+    ///
+    bool is_pointed =
+        p_serialized_field
+        ->p_serialized_field__data
+        ;
+    if (!is_pointed)
+        return false;
+
+    bool is_with__uuid =
+        p_serialized_field
+        ->p_serialized_field__serialization_header
+        ->uuid != IDENTIFIER__UNKNOWN__u32
+        ;
+    bool is_with__same_uuid =
+        p_serialized_field
+        ->identifier_for__serialized_field
+        == p_serialized_field
+            ->p_serialized_field__serialization_header
+            ->uuid
+        ;
+    return is_pointed
+        && is_with__uuid
+        && is_with__same_uuid
+        ;
 }
 
 static inline

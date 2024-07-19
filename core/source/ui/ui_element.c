@@ -144,3 +144,38 @@ void set_position_3i32_of__ui_element(
                     get_position_3i32_from__p_ui_element(p_ui_element)));
     }
 }
+
+void set_ui_element__PLATFORM_sprite(
+        UI_Element *p_ui_element,
+        PLATFORM_Sprite *p_PLATFORM_sprite) {
+#ifndef NDEBUG
+    if(!p_PLATFORM_sprite) {
+        debug_error("set_ui_element__PLATFORM_sprite, p_PLATFORM_sprite is null.");
+        debug_warning("Do not dispose sprites this way. Use release_ui_element__PLATFORM_sprite instead.");
+        return;
+    }
+#endif
+    p_ui_element->p_PLATFORM_sprite =
+        p_PLATFORM_sprite;
+    PLATFORM_set_sprite__position(
+            p_PLATFORM_sprite, 
+            get_x_i32_from__p_ui_element(p_ui_element), 
+            get_y_i32_from__p_ui_element(p_ui_element));
+}
+
+void release_ui_element__PLATFORM_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        UI_Element *p_ui_element) {
+    if (!p_ui_element->p_PLATFORM_sprite) {
+#ifndef NDEBUG
+        debug_error("release_ui_element__PLATFORM_sprite, p_PLATFORM_sprite is null.");
+#endif
+        return;
+    }
+
+    PLATFORM_release_sprite(
+            p_PLATFORM_gfx_context,
+            p_ui_element->p_PLATFORM_sprite);
+
+    p_ui_element->p_PLATFORM_sprite = 0;
+}

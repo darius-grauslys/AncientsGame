@@ -1,6 +1,7 @@
 #include <ui/MAIN_TEST_SUITE_UI.h>
 
-INCLUDE_SUB_SUITES(UI, 7,
+INCLUDE_SUB_SUITES(UI, 8,
+INCLUDE_SUITE(ui_drop_zone__inventory_slot),
 INCLUDE_SUITE(ui_button),
 INCLUDE_SUITE(ui_slider),
 INCLUDE_SUITE(ui_draggable),

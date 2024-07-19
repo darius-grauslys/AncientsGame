@@ -1,4 +1,5 @@
 #include "defines_weak.h"
+#include "inventory/inventory_manager.h"
 #include "platform.h"
 #include "process/process_manager.h"
 #include "random.h"
@@ -44,6 +45,8 @@ void initialize_game(
             get_p_sort_list_manager_from__game(p_game));
     initialize_path_list_manager(
             get_p_path_list_manager_from__game(p_game));
+    initialize_inventory_manager(
+            get_p_inventory_manager_from__game(p_game));
     p_game->is_world__initialized = false;
     p_game->m_game_action_handler = m_game_action_handler;
 }

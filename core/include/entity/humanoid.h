@@ -1,6 +1,7 @@
 #ifndef HUMANOID_H
 #define HUMANOID_H
 
+#include "defines_weak.h"
 #include <defines.h>
 
 void initialize_entity_as__humanoid(
@@ -11,6 +12,14 @@ void initialize_entity_as__humanoid(
         Quantity__u32 height);
 
 bool is_entity_a__humanoid(Entity *entity);
+
+/// 
+/// WARNING: this is never guaranteed to resolve.
+/// Always check for a returned nullptr.
+///
+Inventory *resolve_p_inventory_of__humanoid(
+        Game *p_game,
+        Entity *p_humanoid);
     
 //TODO: this should be an entity thing
 //      not a humanoid thing.

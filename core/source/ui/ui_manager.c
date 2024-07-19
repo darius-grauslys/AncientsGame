@@ -75,15 +75,12 @@ UI_Element *get_ui_parent_or__child_with__dragged_handler(
         return 0;
     if (does_ui_element_have__dragged_handler(p_ui_parent))
         return p_ui_parent;
-    debug_info("parent lacks hndlr");
     if (!does_ui_element_have__child(p_ui_parent)) {
-        debug_info("parent lacks child");
         return 0;
     }
     if (does_ui_element_have__dragged_handler(
                 get_child_of__ui_element(p_ui_parent)))
         return p_ui_parent->p_child;
-    debug_info("child lacks hndlr");
     return 0;
 }
 
@@ -265,13 +262,11 @@ void poll_ui_manager__update_for__drop(
         Game *p_game) {
     if (!p_ui_manager->p_ui_element__focused)
         return;
-    debug_info("ui_mngr has focus");
     set_ui_element_as__dropped(
             p_ui_manager->p_ui_element__focused);
     if (!does_ui_element_have__dropped_handler(
                 p_ui_manager->p_ui_element__focused))
         return;
-    debug_info("ui_mngr has hndlr");
 
     UI_Element *p_ui_element__receiving_drop =
         get_highest_priority_ui_element_thats__under_this_ui_element(
@@ -281,7 +276,6 @@ void poll_ui_manager__update_for__drop(
         get_ui_parent_or__child_with__receive_drop_handler(
                 p_ui_element__receiving_drop);
     if (p_ui_element__receiving_drop) {
-        debug_info("ui_mngr has someone receiving");
         p_ui_element__receiving_drop
             ->m_ui_receive_drop_handler(
                     p_ui_element__receiving_drop,
@@ -331,7 +325,6 @@ void poll_ui_manager__update(
                     p_game);
             return;
         }
-        debug_info("ui_mngr drop");
         poll_ui_manager__update_for__drop(
                 p_ui_manager,
                 p_game);

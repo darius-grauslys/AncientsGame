@@ -4,8 +4,10 @@
 #include "game.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/item_stack.h"
+#include "platform.h"
 #include "serialization/serialized_field.h"
 #include "ui/ui_element.h"
+#include "ui/ui_drop_zone.h"
 #include <ui/ui_drop_zone__inventory_slot.h>
 
 void initialize_ui_element_as__drop_zone__inventory_slot(
@@ -19,23 +21,6 @@ void initialize_ui_element_as__drop_zone__inventory_slot(
         s_item_stack_ptr;
 }
 
-bool resolve_s_item_stack_ptr_of__ui_drop_zone__inventory_slot(
-        Inventory_Manager *p_inventory_manager,
-        UI_Element *p_ui_element__drop_zone) {
-    if (!is_p_serialized_field__linked(
-                &p_ui_element__drop_zone
-                    ->s_serialized_field)) {
-        if (!resolve_s_item_stack_ptr_to__inventory_manager(
-                p_inventory_manager, 
-                &p_ui_element__drop_zone
-                    ->s_serialized_field)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 void m_ui_drop_zone__receive_drop_handler__inventory_slot(
         UI_Element *p_this_drop_zone,
         UI_Element *p_ui_element__dropped,
@@ -43,10 +28,15 @@ void m_ui_drop_zone__receive_drop_handler__inventory_slot(
     Inventory_Manager *p_inventory_manager =
         get_p_inventory_manager_from__game(p_game);
 
-    if (!resolve_s_item_stack_ptr_of__ui_drop_zone__inventory_slot(
+    if (!resolve_s_item_stack_ptr_to__inventory_manager(
                 p_inventory_manager,
-                p_this_drop_zone)) {
-        debug_error("m_ui_drop_zone__receive_drop_handler__inventory_slot, failed to resolve s_serialized_field.");
+                &p_this_drop_zone
+                ->s_serialized_field)) {
+        debug_error("m_ui_drop_zone__receive_drop_handler__inventory_slot, failed to resolve s_serialized_field: %x",
+                p_this_drop_zone
+                    ->s_serialized_field
+                    .identifier_for__serialized_field
+                );
         return;
     }
 
@@ -55,6 +45,9 @@ void m_ui_drop_zone__receive_drop_handler__inventory_slot(
 
     if (!p_ui_element__parent_of__dropped)
         return;
+    if (p_ui_element__parent_of__dropped
+            == p_this_drop_zone)
+        return;
 
     // TODO: we should restrict this even better
     if (!is_ui_element_of__this_kind(
@@ -62,10 +55,15 @@ void m_ui_drop_zone__receive_drop_handler__inventory_slot(
                 UI_Element_Kind__Drop_Zone))
         return;
 
-    if (!resolve_s_item_stack_ptr_of__ui_drop_zone__inventory_slot(
+    if (!resolve_s_item_stack_ptr_to__inventory_manager(
                 p_inventory_manager,
-                p_ui_element__parent_of__dropped)) {
-        debug_error("m_ui_drop_zone__receive_drop_handler__inventory_slot, failed to resolve s_serialized_field of originating drop_zone.");
+                &p_ui_element__parent_of__dropped
+                ->s_serialized_field)) {
+        debug_error("m_ui_drop_zone__receive_drop_handler__inventory_slot, failed to resolve s_serialized_field of originating drop_zone: %x",
+                p_this_drop_zone
+                    ->s_serialized_field
+                    .identifier_for__serialized_field
+                );
         return;
     }
 
@@ -78,7 +76,47 @@ void m_ui_drop_zone__receive_drop_handler__inventory_slot(
         ->s_serialized_field
         .p_serialized_field__item_stack;
 
-    resolve_item_stack__merge_or_swap(
+    // TODO: this should be done as a Game_Action
+    if (resolve_item_stack__merge_or_swap(
             p_item_stack__source, 
-            p_item_stack__destination);
+            p_item_stack__destination)) {
+        debug_info("swap");
+        // reflect the swap on the ui via the default handler.
+        m_ui_drop_zone__receive_drop_handler__default(
+                p_this_drop_zone, 
+                p_ui_element__dropped, 
+                p_game);
+    } else {
+        debug_info("merge");
+        // check for empty item_stacks, and if empty, release
+        // associated sprites.
+        if (is_p_serialized_field__linked(
+                    &p_this_drop_zone
+                    ->s_serialized_field)) {
+            if (is_p_item_stack__empty(
+                        p_this_drop_zone
+                        ->s_serialized_field
+                        .p_serialized_field__item_stack)
+                    && does_ui_element_have__PLATFORM_sprite(
+                            p_this_drop_zone->p_child)) {
+                release_ui_element__PLATFORM_sprite(
+                        get_p_PLATFORM_gfx_context_from__game(p_game), 
+                        p_this_drop_zone->p_child);
+            }
+        }
+        if (is_p_serialized_field__linked(
+                    &p_ui_element__parent_of__dropped
+                    ->s_serialized_field)) {
+            if (is_p_item_stack__empty(
+                        p_ui_element__parent_of__dropped
+                        ->s_serialized_field
+                        .p_serialized_field__item_stack)
+                    && does_ui_element_have__PLATFORM_sprite(
+                        p_ui_element__parent_of__dropped->p_child)) {
+                release_ui_element__PLATFORM_sprite(
+                        get_p_PLATFORM_gfx_context_from__game(p_game), 
+                        p_ui_element__parent_of__dropped->p_child);
+            }
+        }
+    }
 }

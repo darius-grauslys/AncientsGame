@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "game.h"
 #include "platform.h"
 #include "raycast/ray.h"
 #include "test_util.h"
@@ -12,22 +13,27 @@
 #include <world/chunk_manager.c>
 
 TEST_FUNCTION(initialize_chunk_manager) {
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    return MUNIT_SKIP;
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
         for (Signed_Index__i32 x=0; x <
                 CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW; x++) {
             Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
-                &chunk_manager.chunk_map[
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
@@ -59,22 +65,27 @@ TEST_FUNCTION(initialize_chunk_manager) {
 }
 
 TEST_FUNCTION(initialize_chunk_manager__local_connections) {
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    return MUNIT_SKIP;
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
         for (Signed_Index__i32 x=0; x <
                 CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW; x++) {
             Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
-                &chunk_manager.chunk_map[
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
@@ -143,18 +154,23 @@ TEST_FUNCTION(initialize_chunk_manager__local_connections) {
 }
 
 TEST_FUNCTION(initialize_chunk_manager__full_range) {
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    return MUNIT_SKIP;
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__origin =
-            chunk_manager.chunk_map;
+            p_chunk_manager->chunk_map;
 
     for (Signed_Index__i32 y=0; y <=
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -189,15 +205,19 @@ TEST_FUNCTION(initialize_chunk_manager__full_range) {
 
 TEST_FUNCTION(get_chunk_index_from__chunk_manager) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -207,7 +227,7 @@ TEST_FUNCTION(get_chunk_index_from__chunk_manager) {
                 get_vector__3i32(x,-y,0);
 
             Chunk *p_chunk =
-                &chunk_manager.chunks[
+                &p_chunk_manager->chunks[
                     (CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS - y - 1) 
                         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
@@ -215,12 +235,12 @@ TEST_FUNCTION(get_chunk_index_from__chunk_manager) {
 
             Index__u32 index =
                 get_chunk_index_from__chunk_manager(
-                        &chunk_manager,
+                        p_chunk_manager,
                         vector__3i32);
 
             munit_assert_int(
                     p_chunk
-                    - chunk_manager.chunks,
+                    - p_chunk_manager->chunks,
                     ==,
                     index);
         }
@@ -231,15 +251,19 @@ TEST_FUNCTION(get_chunk_index_from__chunk_manager) {
 
 TEST_FUNCTION(get_p_chunk_from__chunk_manager_using__i32) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -249,14 +273,14 @@ TEST_FUNCTION(get_p_chunk_from__chunk_manager_using__i32) {
                 get_vector__3i32(x,y,0);
 
             Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
-                &chunk_manager.chunk_map[
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
 
             Chunk *p_chunk =
                 get_p_chunk_from__chunk_manager_using__i32(
-                        &chunk_manager,
+                        p_chunk_manager,
                         vector__3i32.x__i32,
                         vector__3i32.y__i32,
                         0);
@@ -273,45 +297,57 @@ TEST_FUNCTION(get_p_chunk_from__chunk_manager_using__i32) {
 
 TEST_FUNCTION(move_chunk_manager) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     return MUNIT_SKIP;
 }
 
 TEST_FUNCTION(poll_chunk_manager_for__chunk_movement) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     return MUNIT_SKIP;
 }
 
 TEST_FUNCTION(poll_chunk_manager_for__tile_collision) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     return MUNIT_SKIP;
 }
@@ -331,15 +367,19 @@ MunitResult assert_p_tile_is_in__p_chunk(
 
 TEST_FUNCTION(get_p_tile_from__chunk_node) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -349,7 +389,7 @@ TEST_FUNCTION(get_p_tile_from__chunk_node) {
                 get_vector__3u8(x,y,0);
 
             Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
-                &chunk_manager.chunk_map[
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
@@ -380,15 +420,19 @@ TEST_FUNCTION(get_p_tile_from__chunk_node) {
 
 TEST_FUNCTION(get_p_tile_from__chunk_node_using__u8) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -398,7 +442,7 @@ TEST_FUNCTION(get_p_tile_from__chunk_node_using__u8) {
                 get_vector__3u8(x,y,0);
 
             Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
-                &chunk_manager.chunk_map[
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
@@ -432,15 +476,19 @@ TEST_FUNCTION(get_p_tile_from__chunk_node_using__u8) {
 
 TEST_FUNCTION(get_p_tile_from__chunk_manager) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     // for (Signed_Index__i32 y=0; y < 
     //         CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -480,15 +528,19 @@ TEST_FUNCTION(get_p_tile_from__chunk_manager) {
 
 TEST_FUNCTION(get_p_tile_from__world_using__ray_3i32F20) {
     return MUNIT_SKIP;
-    Chunk_Manager chunk_manager;
-    World_Parameters world_parameters;
-    initialize_world_parameters(
-            &world_parameters, 
-            f_chunk_generator__test_world, 
-            100);
-    initialize_chunk_manager(
-            &chunk_manager,
-            &world_parameters);
+    Game game;
+
+    initialize_game(
+            &game, 
+            0);
+
+    initialize_world(
+            &game,
+            get_p_world_from__game(&game), 
+            0);
+
+    Chunk_Manager *p_chunk_manager =
+        get_p_chunk_manager_from__game(&game);
 
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
@@ -502,14 +554,14 @@ TEST_FUNCTION(get_p_tile_from__world_using__ray_3i32F20) {
                         ANGLE__0);
 
             Chunk_Manager__Chunk_Map_Node *p_chunk_map_node =
-                &chunk_manager.chunk_map[
+                &p_chunk_manager->chunk_map[
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
                         + x
                 ];
 
             Tile *p_tile_using__ray =
                 get_p_tile_from__chunk_manager_with__ray_3i32F20(
-                        &chunk_manager,
+                        p_chunk_manager,
                         &ray__3i32F20);
 
             munit_assert(

@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "inventory/equipment.h"
 #include <entity/entity.h>
 #include <entity/handlers/entity_handlers.h>
 #include <debug/debug.h>
