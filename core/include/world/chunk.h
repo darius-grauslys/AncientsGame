@@ -5,16 +5,25 @@
 #include <stdint.h>
 #include <defines.h>
 
+#include "defines_weak.h"
 #include "platform_defines.h"
 #include "tile.h"
 #include "vectors.h"
 
-static inline void initialize_chunk(
-        Chunk *chunk, 
-        Chunk_Vector__3i32 chunk_vector__3i32) {
-    chunk->x__signed_index_i32 = chunk_vector__3i32.x__i32;
-    chunk->y__signed_index_i32 = chunk_vector__3i32.y__i32;
-}
+void initialize_chunk(
+        Chunk *p_chunk, 
+        Chunk_Vector__3i32 chunk_vector__3i32);
+
+void m_serialize__chunk(
+        Game *p_game,
+        Serialized_Field *p_serialized_field__chunk);
+
+void m_deserialize__chunk(
+        Game *p_game,
+        Serialized_Field *p_chunk);
+
+Identifier__u32 get_uuid__chunk(
+        Chunk *p_chunk);
 
 ///
 /// x, y, and z are local to the chunk.

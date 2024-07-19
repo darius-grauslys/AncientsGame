@@ -153,38 +153,6 @@ tile_structure:
     }
     //TODO: look into why we have to add 1.
     index += 1;
-    if (is_tile__stairs(p_tile)) {
-        int32_t offset = 0;
-        
-        // TODO: magic numbers, but its not that bad.
-        // they will only be used here, but who knows
-        // what the future might require?
-        switch(get_tile__stair_direction(p_tile)) {
-            case TILE_STAIR_DIRECTION_EAST:
-            case TILE_STAIR_DIRECTION_WEST:
-                offset = TILE_SHEET_ELEMENT_WIDTH;
-                break;
-            case TILE_STAIR_DIRECTION_NORTH:
-            case TILE_STAIR_DIRECTION_SOUTH:
-                offset = TILE_SHEET_ELEMENT_WIDTH * 2;
-                break;
-            case TILE_STAIR_DIRECTION_NORTH_EAST:
-            case TILE_STAIR_DIRECTION_NORTH_WEST:
-            case TILE_STAIR_DIRECTION_SOUTH_EAST:
-            case TILE_STAIR_DIRECTION_SOUTH_WEST:
-                if (is_tile__inverted_stairs(p_tile)) {
-                    offset = TILE_SHEET_ELEMENT_WIDTH * 4;
-                } else {
-                    offset = TILE_SHEET_ELEMENT_WIDTH * 3;
-                }
-                break;
-        }
-        if (is_tile__up_or_down_stairs(p_tile)) {
-            offset += TILE_SHEET_ELEMENT_WIDTH * 4;
-        }
-
-        index += offset;
-    }
     p_render_result->tile_index__ground = index;
 }
 
@@ -361,15 +329,6 @@ Tile_Render_Result get_tile_render_result(
         render_result.tile_index__sprite_cover |= 
             does_wall_adjacency_require__vflip(
                     render_result.wall_adjacency)
-            << 10;
-    }
-
-    if (is_tile__stairs(p_tile)) {
-        render_result.tile_index__ground |= 
-            does_tile__stair_direction__require_hflip(p_tile)
-            << 11;
-        render_result.tile_index__ground |= 
-            does_tile__stair_direction__require_vflip(p_tile)
             << 10;
     }
 

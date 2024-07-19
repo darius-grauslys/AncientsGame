@@ -42,7 +42,8 @@ static Index__u8 inline get_tile_z_u8_from__vector_3i32F4(
                 get_z_i32_from__vector_3i32F4(vector__3i32F4));
 }
 
-static Tile_Vector__3i32 inline get_tile_vector(
+static inline 
+Tile_Vector__3i32 get_tile_vector(
         Signed_Index__i32 x,
         Signed_Index__i32 y,
         Signed_Index__i32 z) {

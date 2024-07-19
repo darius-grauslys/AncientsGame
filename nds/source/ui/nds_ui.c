@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "inventory/inventory_manager.h"
 #include "nds/arm9/sprite.h"
 #include "nds/arm9/video.h"
 #include "nds_defines.h"
@@ -17,6 +18,10 @@
 #include "ui/menu/nds_ui_window__menu__multiplayer.h"
 #include "ui/menu/nds_ui_window__menu__settings.h"
 #include "ui/menu/nds_ui_window__menu__singleplayer.h"
+#include "ui/nds_ui__equip.h"
+#include "ui/nds_ui__equipment.h"
+#include "ui/nds_ui__inventory_column.h"
+#include "ui/nds_ui__trade.h"
 #include "ui/ui_button.h"
 #include "ui/ui_element.h"
 #include "vectors.h"
@@ -181,6 +186,9 @@ void PLATFORM_open_ui(
     release_all__ui_elements_from__ui_manager(
             get_p_ui_manager_from__game(p_game),
             p_game);
+    // TODO: It may be better to break out some of these
+    // branches to seperate function calls, in particular
+    // the inventory UIs.
     switch (the_kind_of__ui_window_to__open) {
         default:
             debug_error("NDS, PLATFORM_open_ui, unsupported UI_Window_Kind %d.",
@@ -191,10 +199,10 @@ void PLATFORM_open_ui(
             NDS_allocate_ui_for__nds_ui_window__game__idle(p_game);
             break;
         case UI_Window_Kind__Equip:
-            NDS_allocate_ui_for__nds_ui_window__game__equip(p_game);
+            NDS_open_ui__equip(p_game);
             break;
         case UI_Window_Kind__Trade:
-            NDS_allocate_ui_for__nds_ui_window__game__trade(p_game);
+            NDS_open_ui__trade(p_game);
             break;
         case UI_Window_Kind__Labor:
             NDS_allocate_ui_for__nds_ui_window__game__labor(p_game);

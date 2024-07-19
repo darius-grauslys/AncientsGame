@@ -82,10 +82,6 @@ static Tile inline *get_p_tile_from__chunk_node_using__u8(
             + x__u8];
 }
 
-Tile *get_p_tile_from__chunk_manager(
-        Chunk_Manager *p_chunk_manager,
-        Vector__3i32F4 position);
-
 Tile *get_p_tile_from__chunk_manager_with__3i32F4(
         Chunk_Manager *p_chunk_manager,
         Vector__3i32F4 position);

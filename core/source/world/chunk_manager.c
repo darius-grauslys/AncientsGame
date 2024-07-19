@@ -1,3 +1,5 @@
+#include "defines_weak.h"
+#include "serialization/serialized_field.h"
 #include "world/world.h"
 #include <defines.h>
 #include <world/chunk.h>
@@ -211,26 +213,54 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
     return p_node->p_chunk__here;
 }
 
+void replace_chunk(
+        Game *p_game,
+        Chunk *p_chunk) {
+    // TODO:    replace p_chunk ptrs with serialization_fields
+    //          but with the assumption that you never
+    //          need to resolve them.
+    Serialized_Field s_chunk;
+    initialize_serialized_field(
+            &s_chunk, 
+            p_chunk,
+            get_uuid__chunk(p_chunk));
+    // TODO:    maybe organize this logic better?
+    //          we are EFFECTIVELY using a serialization handler
+    //          for disposal logic. In particular, we are
+    //          disposing of any inventories associated to
+    //          any containers within the chunk.
+    //
+    //          We will want to serialize this containers, so
+    //          maybe not too much organization is needed.
+    p_chunk->_serializer.m_serialize_handler(
+            p_game,
+            &s_chunk);
+    get_p_world_parameters_from__game(p_game)
+        ->f_chunk_generator(
+            p_game,
+        p_chunk);
+}
+
 // TODO: find a way to consolidate this helpers without macros?
 void move_chunk_manager__chunks_north(
-        Game *p_game,
-        Chunk_Manager *p_chunk_manager) {
-    Signed_Index__i32 x__old_most_north_western_chunk =
-        p_chunk_manager->p_most_north_western__chunk_map_node
-            ->p_chunk__here->x__signed_index_i32;
-    Signed_Index__i32 y__new_most_north_western_chunk =
-        p_chunk_manager->p_most_north_western__chunk_map_node
-            ->p_chunk__here->y__signed_index_i32 + 1;
-    p_chunk_manager->p_most_north_western__chunk_map_node =
-        p_chunk_manager->p_most_north_western__chunk_map_node
-            ->p_north__chunk_map_node;
-    p_chunk_manager->p_most_north_eastern__chunk_map_node =
-        p_chunk_manager->p_most_north_eastern__chunk_map_node
-            ->p_north__chunk_map_node;
-    p_chunk_manager->p_most_south_western__chunk_map_node =
-        p_chunk_manager->p_most_south_western__chunk_map_node
-            ->p_north__chunk_map_node;
-    p_chunk_manager->p_most_south_eastern__chunk_map_node =
+    Game *p_game,
+    Chunk_Manager *p_chunk_manager) {
+Signed_Index__i32 x__old_most_north_western_chunk =
+    p_chunk_manager->p_most_north_western__chunk_map_node
+        ->p_chunk__here->x__signed_index_i32;
+Signed_Index__i32 y__new_most_north_western_chunk =
+    p_chunk_manager->p_most_north_western__chunk_map_node
+        ->p_chunk__here->y__signed_index_i32 + 1;
+p_chunk_manager->p_most_north_western__chunk_map_node =
+    p_chunk_manager->p_most_north_western__chunk_map_node
+        ->p_north__chunk_map_node;
+p_chunk_manager->p_most_north_eastern__chunk_map_node =
+    p_chunk_manager->p_most_north_eastern__chunk_map_node
+        ->p_north__chunk_map_node;
+p_chunk_manager->p_most_south_western__chunk_map_node =
+    p_chunk_manager->p_most_south_western__chunk_map_node
+        ->p_north__chunk_map_node;
+p_chunk_manager->p_most_south_eastern__chunk_map_node =
         p_chunk_manager->p_most_south_eastern__chunk_map_node
             ->p_north__chunk_map_node;
 
@@ -252,8 +282,7 @@ void move_chunk_manager__chunks_north(
             p_chunk__here->y__signed_index_i32 =
                 y__new_most_north_western_chunk;
 
-            get_p_world_parameters_from__game(p_game)
-                ->f_chunk_generator(
+            replace_chunk(
                     p_game,
                     p_chunk__here);
         }
@@ -304,9 +333,8 @@ void move_chunk_manager__chunks_east(
             p_chunk__here->y__signed_index_i32 =
                 y__old_most_south_eastern_chunk + step;
 
-            get_p_world_parameters_from__game(p_game)
-                ->f_chunk_generator(
-                    p_game, 
+            replace_chunk(
+                    p_game,
                     p_chunk__here);
         }
 
@@ -355,9 +383,8 @@ void move_chunk_manager__chunks_south(
             p_chunk__here->y__signed_index_i32 =
                 y__new_most_south_western_chunk;
 
-            get_p_world_parameters_from__game(p_game)
-                ->f_chunk_generator(
-                    p_game, 
+            replace_chunk(
+                    p_game,
                     p_chunk__here);
         }
 
@@ -407,9 +434,8 @@ void move_chunk_manager__chunks_west(
             p_chunk__here->y__signed_index_i32 =
                 y__old_most_south_western_chunk + step;
 
-            get_p_world_parameters_from__game(p_game)
-                ->f_chunk_generator(
-                    p_game, 
+            replace_chunk(
+                    p_game,
                     p_chunk__here);
         }
 

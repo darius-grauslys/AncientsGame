@@ -184,8 +184,12 @@ typedef struct Chunk_Identifier__u32_t {
 /// SECTION_serialization
 ///
 
-typedef void (*m_Serialize)(Serialized_Field *p_this_serialized_field);
-typedef void (*m_Deserialize)(Serialized_Field *p_this_serialized_field);
+typedef void (*m_Serialize)(
+        Game *p_game,
+        Serialized_Field *p_this_serialized_field);
+typedef void (*m_Deserialize)(
+        Game *p_game,
+        Serialized_Field *p_this_serialized_field);
 
 ///
 /// This must be the FIRST field to appear
@@ -1008,6 +1012,7 @@ typedef struct Entity_t {
                 struct { // humanoid union
                     Armor_Properties            humanoid__armor_properties;
                     Serialized_Inventory_Ptr    s_humanoid__inventory_ptr;    
+                    Serialized_Inventory_Ptr    s_humanoid__container_ptr;    
                     Sustenance__u8              humanoid__primary_sustenance__u8;
                     Sustenance__u8              humanoid__secondary_sustenance__u8;
                     Homeostasis__i8             humanoid__homeostasis__i8;
@@ -1501,39 +1506,18 @@ typedef Vector__3u8 Local_Tile_Vector__3u8;
 
 #define QUANTITY_OF_TILES__IN_TILE_SHEET_ROW (TILE_SHEET_PIXEL_WIDTH / TILE_PIXEL_WIDTH)
 
-
-#define TILE_STAIR_DIRECTION_NORTH      0
-#define TILE_STAIR_DIRECTION_NORTH_EAST 1
-#define TILE_STAIR_DIRECTION_EAST       2
-#define TILE_STAIR_DIRECTION_SOUTH_EAST 3
-#define TILE_STAIR_DIRECTION_SOUTH      4
-#define TILE_STAIR_DIRECTION_SOUTH_WEST 5
-#define TILE_STAIR_DIRECTION_WEST       6
-#define TILE_STAIR_DIRECTION_NORTH_WEST 7
-#define TILE_STAIR_DIRECTION_COUNT 8
-
-#define TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR 3
-#define TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN \
-    (TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR + 1)
-#define TILE_FLAGS__BIT_SHIFT_IS_STAIR \
-    (TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN + 1)
-#define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING \
-    (TILE_FLAGS__BIT_SHIFT_IS_STAIR + 1)
+#define TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING 0
 #define TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE \
     (TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING + 1)
+#define TILE_FLAGS__BIT_SHIFT_IS_CONTAINER \
+    (TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE + 1)
 
-#define TILE_FLAGS__MASK_STAIR_VALUE \
-    MASK(TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
-#define TILE_FLAGS__BIT_INVERTED_STAIR \
-    BIT(TILE_FLAGS__BIT_SHIFT_INVERTED_STAIR)
-#define TILE_FLAGS__BIT_IS_STAIR_UP_OR_DOWN \
-    BIT(TILE_FLAGS__BIT_SHIFT_IS_STAIR_UP_OR_DOWN)
-#define TILE_FLAGS__BIT_IS_STAIR \
-    BIT(TILE_FLAGS__BIT_SHIFT_IS_STAIR)
 #define TILE_FLAGS__BIT_IS_SIGHT_BLOCKING \
     BIT(TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
 #define TILE_FLAGS__BIT_IS_UNPASSABLE \
     BIT(TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
+#define TILE_FLAGS__BIT_IS_CONTAINER \
+    BIT(TILE_FLAGS__BIT_SHIFT_IS_CONTAINER)
 
 #define TILE_FLAGS__NONE 0
 
@@ -1630,7 +1614,10 @@ typedef struct Chunk_t {
     ///
     /// Do not interact with this.
     ///
-    Serialization_Header                _serialization_header;
+    union {
+        Serialization_Header    _serialization_header;
+        Serializer              _serializer;
+    };
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
     Signed_Index__i32 x__signed_index_i32, y__signed_index_i32;
     bool is_available;
