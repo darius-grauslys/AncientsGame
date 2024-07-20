@@ -10,7 +10,7 @@ void PLATFORM_coredump(void) {
 }
 
 void PLATFORM_abort(void) {
-    *(uint32_t*)8192 = 100;
+    //*(uint32_t*)8192 = 100;
 }
 
 //TODO: move to nds

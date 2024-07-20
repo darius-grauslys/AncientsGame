@@ -55,6 +55,11 @@ Inventory_Manager *get_p_inventory_manager_from__game(Game *p_game) {
     return &p_game->inventory_manager;
 }
 
+static inline
+Item_Manager *get_p_item_manager_from__game(Game *p_game) {
+    return &p_game->item_manager;
+}
+
 static Entity_Manager inline 
 *get_p_entity_manager_from__game(Game *p_game) {
     return get_p_entity_manager_from__world(&p_game->world);

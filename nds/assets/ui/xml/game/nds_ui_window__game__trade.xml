@@ -79,18 +79,6 @@
                     <drop_zone width="23" height="27" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot" />
                     <alloc_child>
                         <draggable width="18" height="22" color="196,64,64"/>
-                        <code>
-                            set_ui_element__PLATFORM_sprite(
-                                p_ui_iterator_child,
-                                allocate_sprite_for__ui(
-                                    get_p_PLATFORM_gfx_context_from__game(p_game),
-                                    &amp;get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-                                    UI_Sprite_Kind__16x16__Nav__Cap));
-                            oamSetPriority(
-                                p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-                                p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-                                3);
-                        </code>
                     </alloc_child>
                 </allocate_ui_container>
             </grid>

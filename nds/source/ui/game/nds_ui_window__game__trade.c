@@ -61,16 +61,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 15 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 15 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
@@ -80,16 +70,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 43 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 43 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,14);
@@ -100,16 +80,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 71 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 71 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,20);
@@ -120,16 +90,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 99 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 99 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,26);
@@ -140,16 +100,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 127 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 127 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,32);
@@ -160,16 +110,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 155 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 155 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,38);
@@ -180,16 +120,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 183 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 183 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,44);
@@ -200,16 +130,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 211 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 211 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,50);
@@ -220,16 +140,6 @@ NDS_allocate_sprite_for__ui_slider(
         initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(58 + 24* index_of__iteration__3, 239 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
                 p_ui_iterator_child = allocate_ui_element_from__ui_manager_as__child(p_ui_manager, p_ui_iterator);
         initialize_ui_element_as__draggable(p_ui_iterator_child, 18, 22, get_vector__3i32(58 + 24* index_of__iteration__3, 239 + 0* index_of__iteration__3, 0), m_ui_draggable__dragged_handler__default);
-        set_ui_element__PLATFORM_sprite(
-        p_ui_iterator_child,
-        allocate_sprite_for__ui(
-        get_p_PLATFORM_gfx_context_from__game(p_game),
-        &get_p_PLATFORM_gfx_context_from__game(p_game)->graphics_window__sub,
-        UI_Sprite_Kind__16x16__Nav__Cap));
-        oamSetPriority(
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam,
-        p_ui_iterator_child->p_PLATFORM_sprite->sprite_texture.oam_index,
-        3);
     }
 
     p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,56);

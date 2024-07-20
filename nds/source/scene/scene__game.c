@@ -12,6 +12,7 @@
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/item.h"
+#include "inventory/item_manager.h"
 #include "nds/arm9/background.h"
 #include "platform.h"
 #include "platform_defines.h"
@@ -141,15 +142,76 @@ void m_enter_scene_as__game_handler(
                 get_p_inventory_manager_from__game(p_game),
                 uuid__u32);
 
-    Item item;
-    initialize_item(
-            &item, 0, 0, 0, 
-            Item_Kind__Stick, 
-            0);
-
+    Item_Manager *p_item_manager =
+        get_p_item_manager_from__game(p_game);
     add_item_stack_to__inventory(
             p_inventory, 
-            item, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Stick), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Cloth), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Iron), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Iron__Rusted), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Gold), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Gold__Chaos), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Gold__Order), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Steel), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Steel__Chaos), 
+            1, 
+            1);
+    add_item_stack_to__inventory(
+            p_inventory, 
+            get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Armor__Steel__Order), 
             1, 
             1);
 

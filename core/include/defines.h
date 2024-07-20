@@ -399,30 +399,17 @@ typedef f_Sprite_Gfx_Allocator
 #define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FALLING 3
 
 #define SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID 6
-#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID 4
+#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID (4*16)
 
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__ARMORED__LAST_COL 15
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__ARMORED__LAST_ROW 15
-
-#define SPRITE_FRAME_COL__ENTITY_HUMANOID__UNARMORED__LAST_COL 5
-#define SPRITE_FRAME_ROW__ENTITY_HUMANOID__UNARMORED__LAST_ROW 3
-
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 0
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 1
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 0
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 2
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 0
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 3
-
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_DIAMOND 0
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_DIAMOND 1
-
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON_AMETHYST 2
-#define SPRITE_FRAME_COL_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 1
-#define SPRITE_FRAME_ROW_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD_AMETHYST 3
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 1
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 2
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON__RUSTED 3
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_STEEL 4
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_STEEL__DIAMOND 5
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_STEEL__AMETHYST 6
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD 7
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD__DIAMOND 8
+#define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD__AMETHYST 9
 
 ///
 /// The meaning of these flags is dependent on
@@ -683,6 +670,16 @@ typedef void (*m_Item_Use)(
         Entity *p_entity_user, 
         Game *p_game);
 
+///
+/// Returns false if the event failed.
+/// Example: equip stick to armor.
+///
+typedef bool (*m_Item_Equip_Event)(
+        Item *p_item_self, 
+        Entity *p_entity_user,
+        enum Entity_Equipment_Slot_Kind the_kind_of__slot,
+        Game *p_game);
+
 typedef struct Hearts_Damaging_Specifier_t Hearts_Damaging_Specifier;
 typedef void (*m_Item_Protect)(
         Item *p_item_self, 
@@ -693,10 +690,16 @@ typedef void (*m_Item_Protect)(
 typedef struct Item_t {
     m_Item_Use          m_item_use_handler;
     m_Item_Protect      m_item_protect_handler;
+    m_Item_Equip_Event  m_item_equip_handler;
+    m_Item_Equip_Event  m_item_unequip_handler;
     i32F20              weight_per__item;
-    enum Item_Kind      the_kind_of_item__this_item_is;
-    Item_Filter_Flags   item_filter_flags;
+    enum Item_Kind      the_kind_of_item__this_item_is  :13;
+    Item_Filter_Flags   item_filter_flags               :3;
 } Item;
+
+typedef struct Item_Manager_t {
+    Item item_templates[(u16)Item_Kind__Unknown];
+} Item_Manager;
 
 typedef struct Item_Stack_t {
     Serialization_Header        _serialization_header;
@@ -1681,7 +1684,8 @@ typedef struct Game_t {
     World world;
     Repeatable_Psuedo_Random repeatable_pseudo_random;
 
-    Inventory_Manager inventory_manager;
+    Inventory_Manager   inventory_manager;
+    Item_Manager        item_manager;
 
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;

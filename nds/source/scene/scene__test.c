@@ -59,69 +59,6 @@ void m_enter_scene_handler_as__test(
         Game *p_game) {
     enum UI_Window_Kind ui_window_kind = UI_Window_Kind__Idle;
 
-    Entity humanoid;
-    initialize_entity_as__humanoid(
-            p_game,
-            &humanoid, 
-            Entity_Kind__Player, 
-            VECTOR__3i32F4__0_0_0, 
-            1, 1);
-
-    Inventory *p_inventory =
-        resolve_p_inventory_of__humanoid(
-                p_game, 
-                &humanoid);
-
-    Item item;
-    initialize_item(
-            &item, 
-            0, 0, 
-            0, 
-            Item_Kind__Stick, 
-            0);
-
-    add_item_stack_to__inventory(
-            p_inventory, 
-            item, 
-            16, 
-            32);
-
-    initialize_item(
-            &item, 
-            0, 0, 
-            0, 
-            Item_Kind__Armor__Cloth, 
-            0);
-
-    add_item_stack_to__inventory(
-            p_inventory, 
-            item, 
-            16, 
-            32);
-
-    Item_Stack *p_item_stack__armor =
-        get_p_item_stack__armor_slot_from__equipment(
-                &humanoid.equipment);
-
-    initialize_item_stack(
-            p_item_stack__armor, 
-            item, 
-            p_item_stack__armor->_serialization_header.uuid, 
-            1, 1);
-
-    initialize_item(
-            &item, 
-            0, 0, 
-            0, 
-            Item_Kind__Armor__Steel__Chaos, 
-            0);
-
-    add_item_stack_to__inventory(
-            p_inventory, 
-            item, 
-            16, 
-            32);
-
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         manage_game(p_game);
@@ -132,28 +69,6 @@ void m_enter_scene_handler_as__test(
             PLATFORM_open_ui(
                     p_game,
                     ui_window_kind);
-            if (ui_window_kind
-                    == UI_Window_Kind__Equip) {
-                UI_Element *p_ui_element__inventory_column =
-                    get_p_ui_element_by__index_from__ui_manager(
-                            get_p_ui_manager_from__game(p_game), 
-                            NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
-
-                UI_Element *p_ui_element__equipment_column =
-                    get_p_ui_element_by__index_from__ui_manager(
-                            get_p_ui_manager_from__game(p_game), 
-                            NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
-
-                NDS_load_ui_inventory_column_for__inventory(
-                        p_game,
-                        p_ui_element__inventory_column,
-                        p_inventory);
-
-                NDS_load_ui_equipment_column_for__equipment(
-                        p_game, 
-                        p_ui_element__equipment_column, 
-                        &humanoid.equipment);
-            }
         }
         if (is_input__use_secondary_released(get_p_input_from__game(p_game))) {
             item_kind--;
@@ -162,28 +77,6 @@ void m_enter_scene_handler_as__test(
             PLATFORM_open_ui(
                     p_game,
                     ui_window_kind);
-            if (ui_window_kind
-                    == UI_Window_Kind__Equip) {
-                UI_Element *p_ui_element__inventory_column =
-                    get_p_ui_element_by__index_from__ui_manager(
-                            get_p_ui_manager_from__game(p_game), 
-                            NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
-
-                UI_Element *p_ui_element__equipment_column =
-                    get_p_ui_element_by__index_from__ui_manager(
-                            get_p_ui_manager_from__game(p_game), 
-                            NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
-
-                NDS_load_ui_inventory_column_for__inventory(
-                        p_game,
-                        p_ui_element__inventory_column,
-                        p_inventory);
-
-                NDS_load_ui_equipment_column_for__equipment(
-                        p_game, 
-                        p_ui_element__equipment_column, 
-                        &humanoid.equipment);
-            }
         }
     }
 }

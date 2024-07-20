@@ -381,22 +381,25 @@ void m_entity_body_handler__living(
                 &healing);
     }
 
-    if (elapsed % tick_rate__primary_sustenance == 0) {
-        invoke_action__decrease_sustenance_of__entity(
-                p_game, 
-                p_this_humanoid, 
-                p_this_humanoid, 
-                Sustenance_Kind__Hunger, 
-                1);
-    }
-    if (elapsed % tick_rate__secondary_sustenance == 0) {
-        invoke_action__decrease_sustenance_of__entity(
-                p_game, 
-                p_this_humanoid, 
-                p_this_humanoid, 
-                Sustenance_Kind__Thirst, 
-                1);
-    }
+    // TODO:    fix sustenance UI and then renable the following:
+    //          fix in: nds/ui/game/..hud.. .c
+    //
+    // if (elapsed % tick_rate__primary_sustenance == 0) {
+    //     invoke_action__decrease_sustenance_of__entity(
+    //             p_game, 
+    //             p_this_humanoid, 
+    //             p_this_humanoid, 
+    //             Sustenance_Kind__Hunger, 
+    //             1);
+    // }
+    // if (elapsed % tick_rate__secondary_sustenance == 0) {
+    //     invoke_action__decrease_sustenance_of__entity(
+    //             p_game, 
+    //             p_this_humanoid, 
+    //             p_this_humanoid, 
+    //             Sustenance_Kind__Thirst, 
+    //             1);
+    // }
 
     //TODO: magic number
     if (state_of__primary_sustenance 

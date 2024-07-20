@@ -16,6 +16,12 @@ void initialize_ui_element_as__drop_zone__inventory_slot(
         Quantity__u8 height__u8,
         Vector__3i32 position__3i32,
         Serialized_Item_Stack_Ptr s_item_stack_ptr) {
+    initialize_ui_element_as__drop_zone(
+            p_ui_drop_zone__inventory_slot,
+            width__u8,
+            height__u8,
+            position__3i32,
+            m_ui_drop_zone__receive_drop_handler__inventory_slot);
     p_ui_drop_zone__inventory_slot
         ->s_serialized_field =
         s_item_stack_ptr;
@@ -80,14 +86,12 @@ void m_ui_drop_zone__receive_drop_handler__inventory_slot(
     if (resolve_item_stack__merge_or_swap(
             p_item_stack__source, 
             p_item_stack__destination)) {
-        debug_info("swap");
         // reflect the swap on the ui via the default handler.
         m_ui_drop_zone__receive_drop_handler__default(
                 p_this_drop_zone, 
                 p_ui_element__dropped, 
                 p_game);
     } else {
-        debug_info("merge");
         // check for empty item_stacks, and if empty, release
         // associated sprites.
         if (is_p_serialized_field__linked(

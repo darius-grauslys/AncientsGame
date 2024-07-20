@@ -1,5 +1,6 @@
 #include <ui/game/nds_ui_window__game__equip.h>
 #include <ui/game/nds_ui_window__game__hud.h>
+#include <nds.h>
 #include <ui/ui_element.h>
 #include <ui/ui_button.h>
 #include <ui/ui_drop_zone.h>
@@ -12,6 +13,7 @@
 #include <nds_defines.h>
 #include <game.h>
 #include <ui/ui_drop_zone__inventory_slot.h>
+#include <ui/ui_drop_zone__equipment_slot.h>
 // THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.
 
 UI_Element *NDS_allocate_ui_for__nds_ui_window__game__equip(Game *p_game){
@@ -45,7 +47,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 100 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 100 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__equipment_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -57,7 +59,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 132 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 132 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__equipment_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -70,7 +72,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 164 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(32 + 28* index_of__iteration__3, 164 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__equipment_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(

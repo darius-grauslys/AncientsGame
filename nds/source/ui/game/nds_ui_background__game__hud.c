@@ -655,13 +655,14 @@ void NDS_update_ui_for__hud(
             p_player, 
             p_ui__tile_map);
 
-    update_ui_sustenance_primary(
-            p_player,
-            p_ui__tile_map);
+    // TODO: fix sustenances
+    // update_ui_sustenance_primary(
+    //         p_player,
+    //         p_ui__tile_map);
 
-    update_ui_sustenance_secondary(
-            p_player,
-            p_ui__tile_map);
+    // update_ui_sustenance_secondary(
+    //         p_player,
+    //         p_ui__tile_map);
 }
 
 void NDS_put_hud_onto__background(

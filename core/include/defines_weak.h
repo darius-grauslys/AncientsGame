@@ -81,13 +81,24 @@ enum Entity_Armor_Kind {
     Entity_Armor_Kind__None,
     Entity_Armor_Kind__Cloth,
     Entity_Armor_Kind__Iron,
+    Entity_Armor_Kind__Steel,
     Entity_Armor_Kind__Gold,
 };
 
 enum Entity_Armor_Modification_Kind {
     Entity_Armor_Modification_Kind__None,
+    Entity_Armor_Modification_Kind__Rusted,
     Entity_Armor_Modification_Kind__Diamond,
     Entity_Armor_Modification_Kind__Amethyst
+};
+
+enum Entity_Equipment_Slot_Kind {
+    Entity_Equipment_Slot_Kind__Armor,
+    Entity_Equipment_Slot_Kind__Main_Hand,
+    Entity_Equipment_Slot_Kind__Off_Hand,
+    Entity_Equipment_Slot_Kind__Consumable_1,
+    Entity_Equipment_Slot_Kind__Consumable_2,
+    Entity_Equipment_Slot_Kind__Consumable_3
 };
 
 #define RESOURCE_SYMBOL__EMPTY 0
@@ -597,8 +608,8 @@ enum Item_Kind {
     Item_Kind__Armor__Gold,
     Item_Kind__Armor__Gold__Order,
     Item_Kind__Armor__Gold__Chaos,
-    Item_Kind__Unknown,
-    Item_Kind__MAX = BIT(13)
+    Item_Kind__Unknown = BIT(10),
+    Item_Kind__MAX = BIT(12)
 };
 
 /// 

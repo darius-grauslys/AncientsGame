@@ -3,6 +3,7 @@
     <config>
         <include sub_dir="ui/game/">
             <header path="ui/game/nds_ui_window__game__hud.h"/>
+            <header path="nds.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
@@ -15,6 +16,7 @@
             <header path="nds_defines.h"/>
             <header path="game.h"/>
             <header path="ui/ui_drop_zone__inventory_slot.h"/>
+            <header path="ui/ui_drop_zone__equipment_slot.h"/>
         </include>
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__equip.c" h_path="./nds/include/ui/game/nds_ui_window__game__equip.h"/>
         <platform target="NDS" size="256,256"/>
@@ -61,7 +63,7 @@
             </allocate_ui>
             <grid x="32" y="100" size="3" stride__y="32" name="p_equipment">
                 <allocate_ui_container size="2" stride__x="28">
-                    <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
+                    <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__equipment_slot"/>
                     <code>
                         set_ui_element__p_data(
                             p_ui_iterator,

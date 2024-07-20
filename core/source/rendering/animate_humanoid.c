@@ -1,3 +1,5 @@
+#include "defines.h"
+#include "defines_weak.h"
 #include <rendering/animate_humanoid.h>
 #include <entity/entity.h>
 
@@ -7,26 +9,43 @@ uint32_t get_animation_frame_offset_for__armor(Entity *entity) {
         case Entity_Armor_Kind__None:
             return 0;
         case Entity_Armor_Kind__Cloth:
-            return get_animation_frame_offset_for__cloth_armor(entity);
+            return get_animation_frame_offset_for__group(
+                    SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH);
         case Entity_Armor_Kind__Iron:
             switch (entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has) {
                 default:
                 case Entity_Armor_Modification_Kind__None:
-                    return get_animation_frame_offset_for__iron_armor(entity);
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON);
+                case Entity_Armor_Modification_Kind__Rusted:
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON__RUSTED);
+            }
+        case Entity_Armor_Kind__Steel:
+            switch (entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has) {
+                default:
+                case Entity_Armor_Modification_Kind__None:
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_STEEL);
                 case Entity_Armor_Modification_Kind__Diamond:
-                    return get_animation_frame_offset_for__iron_diamond_armor(entity);
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_STEEL__DIAMOND);
                 case Entity_Armor_Modification_Kind__Amethyst:
-                    return get_animation_frame_offset_for__iron_amethyst_armor(entity);
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_STEEL__AMETHYST);
             }
         case Entity_Armor_Kind__Gold:
             switch (entity->humanoid__armor_properties.the_kind_of_modification__this_armor_has) {
                 default:
                 case Entity_Armor_Modification_Kind__None:
-                    return get_animation_frame_offset_for__gold_armor(entity);
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD);
                 case Entity_Armor_Modification_Kind__Diamond:
-                    return get_animation_frame_offset_for__gold_diamond_armor(entity);
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD__DIAMOND);
                 case Entity_Armor_Modification_Kind__Amethyst:
-                    return get_animation_frame_offset_for__gold_amethyst_armor(entity);
+                    return get_animation_frame_offset_for__group(
+                            SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_GOLD__AMETHYST);
             }
             break;
     }

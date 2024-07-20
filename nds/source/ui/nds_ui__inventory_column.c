@@ -61,6 +61,10 @@ void NDS_load_ui_inventory_column_for__inventory(
                             p_item_stack
                             ->item.the_kind_of_item__this_item_is);
                 if (p_PLATFORM_sprite) {
+                    oamSetPriority(
+                            p_PLATFORM_sprite->sprite_texture.oam,
+                            p_PLATFORM_sprite->sprite_texture.oam_index,
+                            2);
                     set_ui_element__PLATFORM_sprite(
                             p_child, p_PLATFORM_sprite);
                 }

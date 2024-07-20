@@ -59,15 +59,24 @@ void m_NDS_ui_slider__dragged_handler_for__backgrounds(
     debug_info("offset: %d",
             offset);
 
-    *p_starting_distance +=
+    *p_starting_distance -=
         offset;
 
+    Vector__3i32 position_for__elements =
+        position_for__bgSetScroll;
+    position_for__elements.x__i32 *= -1;
+    position_for__elements.x__i32 += 
+        (get_width_from__p_ui_element(p_this_draggable->p_child) >> 1)
+        + 4
+        ;
+    position_for__elements.y__i32 += 
+        get_height_from__p_ui_element(p_this_draggable->p_child) >> 1;
     set_positions_of__ui_elements_in__succession(
             p_this_draggable->p_child, 
-            position_for__bgSetScroll, 
+            position_for__elements, 
             24, 
             3, 
-            -28);
+            28);
     // debug_info("pos: %d, %d",
     //             get_x_i32_from__vector_3i32(position_for__bgSetScroll), 
     //             get_y_i32_from__vector_3i32(position_for__bgSetScroll));
