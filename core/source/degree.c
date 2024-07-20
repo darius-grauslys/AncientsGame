@@ -520,6 +520,55 @@ Vector__3i32F20 __DEGREE_TO_2i32F10__LOOKUP_TABLE[512] = {
 { -0b0000011001001000100, 0b11111111111110110001, 0 }, // ~-0.0123, ~0.9999
 };
 
+Direction__u8 get_direction_from__angle(
+        Degree__u9 angle) {
+    Direction__u8 direction = DIRECTION__NONE;
+    if (is_degree_u9__out_of_bounds(angle)) 
+        return direction;
+
+    if (angle <= (ANGLE__45 + ANGLE__27_5)
+            || angle >= (ANGLE__270 + ANGLE__27_5)) {
+        direction |= DIRECTION__NORTH;
+    }
+    if (angle >= (ANGLE__45 - ANGLE__27_5)
+            && angle <= (ANGLE__90 + ANGLE__45 + ANGLE__27_5)) {
+        direction |= DIRECTION__EAST; 
+    }
+    if (angle >= (ANGLE__90 + ANGLE__27_5)
+            && angle <= (ANGLE__180 + ANGLE__45 + ANGLE__27_5)) {
+        direction |= DIRECTION__SOUTH; 
+    }
+    if (angle >= (ANGLE__180 + ANGLE__27_5)
+            && angle <= (ANGLE__270 + ANGLE__45 + ANGLE__27_5)) {
+        direction |= DIRECTION__WEST; 
+    }
+    return direction;
+}
+
+Degree__u9 get_angle_from__direction(
+        Direction__u8 direction) {
+    switch (direction) {
+        default:
+            return ANGLE__OUT_OF_BOUNDS;
+        case DIRECTION__NORTH:
+            return ANGLE__0;
+        case DIRECTION__EAST:
+            return ANGLE__90;
+        case DIRECTION__SOUTH:
+            return ANGLE__180;
+        case DIRECTION__WEST:
+            return ANGLE__270;
+        case DIRECTION__NORTH_EAST:
+            return ANGLE__45;
+        case DIRECTION__NORTH_WEST:
+            return ANGLE__270 + ANGLE__45;
+        case DIRECTION__SOUTH_EAST:
+            return ANGLE__90 + ANGLE__45;
+        case DIRECTION__SOUTH_WEST:
+            return ANGLE__180 + ANGLE__45;
+    }
+}
+
 Vector__3i32F4 get_2i32F4_offset_from__angle(
         Degree__u9 angle) {
     return vector_3i32F20_to__vector_3i32F4(

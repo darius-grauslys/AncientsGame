@@ -265,11 +265,13 @@ void PLATFORM_release_texture(PLATFORM_Texture *texture) {
         debug_abort("PLATFORM_release_texture, texture not allocated.");
         return;
     }
-    oamFreeGfx(texture->oam, texture->gfx);
-    oamSetHidden(
+    oamClearSprite(
             texture->oam, 
-            texture->oam_index, 
-            true);
+            texture->oam_index);
+    oamFreeGfx(texture->oam, texture->gfx);
+    texture->oam = 0;
+    texture->oam_index = -1;
+    texture->gfx = 0;
 }
 
 uint32_t *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(PLATFORM_Texture *texture) {

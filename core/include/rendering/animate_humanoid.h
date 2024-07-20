@@ -94,26 +94,7 @@ Quantity__u32 f_get_animation_duration_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-static void inline poll_humanoid_animation__transition(
-        Entity *humanoid) {
-    bool force = 
-        humanoid->direction
-        != humanoid->sprite_wrapper.direction;
-    if (force) {
-        humanoid->sprite_wrapper.direction =
-            humanoid->direction;
-        goto poll;
-    }
-    if (is_animation__exceeded(humanoid->sprite_wrapper) 
-            && is_animation__transitionless(humanoid->sprite_wrapper)) {
-        animate_humanoid__idle(humanoid);
-    }
-poll:
-    poll_entity_animation__transition(
-            humanoid, 
-            f_get_inital_sprite_frame_for__humanoid_animation, 
-            f_get_final_sprite_frame_for__humanoid_animation,
-            force);
-}
+void poll_humanoid_animation__transition(
+        Entity *humanoid);
 
 #endif

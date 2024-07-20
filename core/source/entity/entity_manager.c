@@ -115,8 +115,9 @@ void release_entity_from__entity_manager(
             == p_entity) {
         p_entity_manager->p_local_player = 0;
     }
-    PLATFORM_release_texture_with__p_PLATFORM_sprite(
-            p_entity->sprite_wrapper.p_sprite);
+    initialize_serialization_header_for__deallocated_struct(
+            &p_entity->_serialization_header, 
+            sizeof(Entity));
 }
 
 bool resolve_p_serialized_entity_ptr_with__entity_manager(

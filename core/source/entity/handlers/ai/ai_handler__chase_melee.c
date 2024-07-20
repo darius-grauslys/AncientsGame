@@ -1,0 +1,62 @@
+#include "entity/handlers/ai/ai_handler__chase_melee.h"
+#include "defines.h"
+#include "defines_weak.h"
+#include "degree.h"
+#include "entity/handlers/ai/ai_handler__dummy.h"
+#include "entity/humanoid.h"
+#include "game.h"
+#include "game_action/game_action.h"
+#include "numerics.h"
+#include "rendering/animate_humanoid.h"
+#include "rendering/animate_sprite.h"
+#include "vectors.h"
+
+void m_entity_ai_handler__chase_melee(
+        Entity *this_chasing_melee,
+        Game *p_game) {
+    Entity *p_player = get_p_local_player_from__game(p_game);
+    if (!p_player) {
+        // m_entity_ai_handler__dummy(
+        //         this_chasing_melee, 
+        //         p_game);
+        return;
+    }
+
+    i32 distance_squared_from__player =
+        get_distance_squared_of__vector_3i32F4(
+                subtract_vectors__3i32F4(
+                    this_chasing_melee->hitbox.position__3i32F4, 
+                    p_player->hitbox.position__3i32F4));
+
+    if (distance_squared_from__player
+            > i32_to__i32F4(64 << 6)) {
+        return;
+    } else if (distance_squared_from__player
+            > i32_to__i32F4(96)) {
+        Degree__u9 angle_to__player =
+            get_angle_between__vectors_3i32(
+                    vector_3i32F4_to__vector_3i32(
+                        this_chasing_melee->hitbox.position__3i32F4), 
+                    vector_3i32F4_to__vector_3i32(
+                        p_player->hitbox.position__3i32F4));
+        Vector__3i32F4 movement__3i32F4 =
+            get_2i32F4_offset_from__angle(angle_to__player);
+        movement__3i32F4.x__i32F4 >>= 1;
+        movement__3i32F4.y__i32F4 >>= 1;
+
+        set_humanoid__direction(
+                this_chasing_melee, 
+                get_direction_from__angle(angle_to__player));
+
+        animate_humanoid__walk(this_chasing_melee);
+        invoke_action__apply_velocity_to__entity(
+                p_game, 
+                this_chasing_melee, 
+                movement__3i32F4);
+        return;
+    }
+
+    humanoid__use(
+            p_game,
+            this_chasing_melee);
+}

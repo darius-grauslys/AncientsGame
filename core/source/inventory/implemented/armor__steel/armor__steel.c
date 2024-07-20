@@ -1,7 +1,7 @@
 #include "inventory/implemented/armor__steel/armor__steel.h"
 #include "defines.h"
 #include "defines_weak.h"
-#include "inventory/handlers/armor/armor.h"
+#include "inventory/implemented/armor.h"
 #include "inventory/item_manager.h"
 #include "numerics.h"
 
@@ -9,13 +9,15 @@ void register_into__item_manager__armor_steel(
         Item_Manager *p_item_manager) {
     register_item_in__item_manager(
             p_item_manager, 
-            Item_Kind__Armor__Steel, 
-            ITEM_FILTER_FLAG__ARMOR, 
-            i32_to__i32F20(4), 
-            0, 
-            m_item_protect_handler__armor_steel, 
-            m_item_equip_handler__armor_steel, 
-            m_item_unequip_handler__armor__default);
+            Item_Kind__Armor__Steel,
+            get_armor(
+                Item_Kind__Armor__Steel, 
+                i32F4_to__i32F20(22), 
+                HEARTS_DAMAGING_FLAG__IS_SLASHING
+                | HEARTS_DAMAGING_FLAG__IS_BLUDGEONING
+                | HEARTS_DAMAGING_FLAG__IS_PIERCING, 
+                6,
+                m_item_equip_handler__armor_steel));
 }
 
 void m_item_protect_handler__armor_steel(

@@ -5,20 +5,16 @@
 #include "game.h"
 #include <defines.h>
 
-static void inline initialize_p_game_action(
+static inline 
+void initialize_p_game_action(
         Game_Action *p_game_action){
     p_game_action->game_action_flags = 0;
     p_game_action->the_kind_of_game_action__this_action_is =
         Game_Action_Kind__None;
 }        
 
-static bool inline is_game_action_using__id_or_ptr(
-        Game_Action_Flags game_action_flags) {
-    return (bool)(game_action_flags 
-            & GAME_ACTION_FLAGS__BIT_IS_ID_OR_PTR);
-}
-
-static void inline invoke_game_action(
+static inline 
+void invoke_game_action(
         Game *p_game,
         Game_Action *p_game_action) {
 #ifndef NDEBUG
@@ -29,6 +25,14 @@ static void inline invoke_game_action(
     }
 #endif
     p_game->m_game_action_handler(p_game, p_game_action);
+}
+
+static inline
+enum Game_Action_Kind get_the_kind_of__game_action(
+        Game_Action *p_game_action) {
+    if (!p_game_action)
+        return Game_Action_Kind__None;
+    return p_game_action->the_kind_of_game_action__this_action_is;
 }
 
 void invoke_action__allocate_entity(

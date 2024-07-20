@@ -1,7 +1,10 @@
 #include "defines_weak.h"
+#include "entity/handlers/body/body_handler__living.h"
 #include "game.h"
+#include "inventory/item.h"
 #include "inventory/equipment.h"
 #include "inventory/inventory_manager.h"
+#include "rendering/animate_humanoid.h"
 #include <entity/humanoid.h>
 #include <entity/entity.h>
 #include <inventory/inventory.h>
@@ -20,6 +23,10 @@ void initialize_entity_as__humanoid(
             position__3i32F4, 
             width, 
             height);
+    set_entity__game_action_handler(
+            p_entity, 
+            m_humanoid_handler__game_action_handler);
+    
     initialize_equipment(
             &p_entity->equipment);
     Inventory *p_inventory =
@@ -30,6 +37,29 @@ void initialize_entity_as__humanoid(
                 &p_entity->s_humanoid__inventory_ptr, 
                 p_inventory);
     }
+}
+
+void humanoid__use(
+        Game *p_game,
+        Entity *p_humanoid) {
+    // TODO: make this a bit better:
+    if (p_humanoid->sprite_wrapper.the_kind_of_animation__this_sprite_has
+            == Sprite_Animation_Kind__Humanoid__Use
+            || p_humanoid->sprite_wrapper.the_kind_of_animation__thats_upcomming
+            == Sprite_Animation_Kind__Humanoid__Use)
+        return;
+    Item *p_item =
+        &p_humanoid->equipment.item_stack__main_hand.item;
+    if (!does_item_have__use_handler(p_item)) {
+        return;
+    }
+
+    animate_humanoid__use(p_humanoid);
+    p_item->m_item_use_handler(
+            p_item,
+            p_humanoid,
+            0,
+            p_game);
 }
 
 bool is_entity_a__humanoid(Entity *entity) {

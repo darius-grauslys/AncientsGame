@@ -6,15 +6,21 @@
 void initialize_item_manager(
         Item_Manager *p_item_manager);
 
+static inline
 void register_item_in__item_manager(
         Item_Manager *p_item_manager,
         enum Item_Kind the_kind_of__item,
-        Item_Filter_Flags item_filter_flags,
-        i32F20 weight_per__item,
-        m_Item_Use m_item_use_handler,
-        m_Item_Protect m_item_protect_handler,
-        m_Item_Equip_Event m_item_equip_handler,
-        m_Item_Equip_Event m_item_unequip_handler);
+        Item item) {
+#ifndef NDEBUG
+    if (the_kind_of__item >= Item_Kind__Unknown) {
+        debug_error("register_item_in__item_manager, out of bounds: %d",
+                the_kind_of__item);
+        return;
+    }
+#endif
+    p_item_manager->item_templates[the_kind_of__item] =
+        item;
+}
 
 Item get_item_from__item_manager(
         Item_Manager *p_item_manager,

@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "inventory/item.h"
 #include "vectors.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
@@ -11,6 +12,9 @@
 #include <collisions/hitbox_aabb.h>
 #include <entity/reserves.h>
 #include <serialization/serialized_field.h>
+
+// TODO: move all these handlers to seperate folders under:
+//          implemented/HANDLER_NAME/...
 
 void handle_game_action__entity__allocate(
         Game *p_game,
@@ -49,6 +53,25 @@ void handle_game_action__entity__health__apply_damage(
         Entity *p_entity_source,
         Entity *p_entity_target,
         Hearts_Damaging_Specifier hearts_damaging_specifier) {
+    // TODO: make sure the entity in question HAS an equipment.
+    Item *p_item =
+        &p_entity_target->equipment.item_stack__armor.item;
+    if (does_item_have__use_handler(p_item)) {
+        //TODO: make these handlers take itself as a game action!
+        //          Also make them take p_game!
+        Game_Action game_action__TEMP_FIX_ME;
+        game_action__TEMP_FIX_ME.hearts_damaging_specifier =
+            hearts_damaging_specifier;
+        game_action__TEMP_FIX_ME.the_kind_of_game_action__this_action_is =
+            Game_Action_Kind__Entity__Health__Apply_Damage;
+        p_item->m_item_use_handler(
+                p_item,
+                p_entity_target,
+                &game_action__TEMP_FIX_ME,
+                0);
+        hearts_damaging_specifier =
+            game_action__TEMP_FIX_ME.hearts_damaging_specifier;
+    }
     apply_hearts_damaging_specifier_to__entity(
             p_entity_target, 
             hearts_damaging_specifier);
@@ -227,6 +250,12 @@ void handle_game_action__entity(
                 debug_error("Game_Action_Kind__Entity:%d, p_entity_target==0.",
                         the_kind_of_game_action__this_action_is);
                 return;
+            }
+            if (p_entity_target->m_entity_game_action_handler) {
+                p_entity_target->m_entity_game_action_handler(
+                        p_entity_target,
+                        p_game_action,
+                        p_game);
             }
             switch (the_kind_of_game_action__this_action_is) {
                 default:

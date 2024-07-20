@@ -12,6 +12,10 @@ void initialize_entity_as__humanoid(
         Quantity__u32 width,
         Quantity__u32 height);
 
+void humanoid__use(
+        Game *p_game,
+        Entity *p_humanoid);
+
 bool is_entity_a__humanoid(Entity *entity);
 
 /// 

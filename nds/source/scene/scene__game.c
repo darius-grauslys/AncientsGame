@@ -28,6 +28,7 @@
 #include "world/container.h"
 #include "world/tile.h"
 #include "world/tile_vectors.h"
+#include "world/world.h"
 #include <scene/nds_scene__game.h>
 #include <stdint.h>
 #include <timer.h>
@@ -214,6 +215,18 @@ void m_enter_scene_as__game_handler(
                 Item_Kind__Armor__Steel__Order), 
             1, 
             1);
+
+    Entity *p_skele_bro = 
+        allocate_entity_into__world(
+                p_game, 
+                get_p_world_from__game(p_game), 
+                Entity_Kind__Skeleton, 
+                get_vector__3i32F4_using__i32(8, 8, 0));
+
+    p_skele_bro->equipment.item_stack__main_hand.item =
+        get_item_from__item_manager(
+                p_item_manager, 
+                Item_Kind__Stick);
 
     PLATFORM_update_chunks(
             get_p_PLATFORM_gfx_context_from__game(p_game),

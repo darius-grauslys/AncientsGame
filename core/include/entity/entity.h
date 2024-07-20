@@ -167,6 +167,13 @@ static void inline set_entity__animator(
     p_entity->m_entity_animation_handler = m_animation_handler;
 }
 
+static inline
+void set_entity__game_action_handler(
+        Entity *p_entity,
+        m_Entity_Game_Action_Handler m_game_action_handler) {
+    p_entity->m_entity_game_action_handler = m_game_action_handler;
+}
+
 void initialize_entity(
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,

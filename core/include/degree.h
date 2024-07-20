@@ -10,6 +10,12 @@ Degree__u9 get_angle_between__vectors_3i32(
         Vector__3i32 source__3i32, 
         Vector__3i32 target__3i32);
 
+Direction__u8 get_direction_from__angle(
+        Degree__u9 angle);
+
+Degree__u9 get_angle_from__direction(
+        Direction__u8 direction);
+
 static inline
 bool is_degree_u9__out_of_bounds(
         Degree__u9 angle) {

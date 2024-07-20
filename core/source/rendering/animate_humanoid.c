@@ -56,16 +56,24 @@ Sprite_Frame_Index__u8 f_get_inital_sprite_frame_for__humanoid_animation(
         enum Sprite_Animation_Kind animation_kind) {
 
     uint32_t frame_offset = 0;
+    uint32_t frame_offset__without_direction = 0;
     if (can_entity_kind_have__armor(
                 humanoid->the_kind_of_entity__this_entity_is)) {
         frame_offset = 
             get_animation_frame_offset_for__armor(humanoid)
             + get_animation_frame_offset_for__direction__of_humanoid_armored(
                     humanoid->sprite_wrapper.direction);
+        frame_offset__without_direction =
+            get_animation_frame_offset_for__armor(humanoid)
+            + get_animation_frame_offset_for__direction__of_humanoid_armored(
+                    DIRECTION__NONE);
     } else {
         frame_offset = 
             get_animation_frame_offset_for__direction__of_humanoid_unarmored(
                     humanoid->sprite_wrapper.direction);
+        frame_offset__without_direction = 
+            get_animation_frame_offset_for__direction__of_humanoid_unarmored(
+                    DIRECTION__NONE);
     }
 
     switch (animation_kind) {
@@ -79,11 +87,11 @@ Sprite_Frame_Index__u8 f_get_inital_sprite_frame_for__humanoid_animation(
             return frame_offset
                 + SPRITE_FRAME_COL__ENTITY_HUMANOID__USE;
         case Sprite_Animation_Kind__Humanoid__Hurt:
-            return frame_offset
+            return frame_offset__without_direction
                 + SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID
                 + SPRITE_FRAME_COL__ENTITY_HUMANOID__HURT;
         case Sprite_Animation_Kind__Humanoid__Die:
-            return frame_offset
+            return frame_offset__without_direction
                 + SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID
                 + SPRITE_FRAME_COL__ENTITY_HUMANOID__DIE;
     }
@@ -149,4 +157,25 @@ Quantity__u32 f_get_animation_duration_for__humanoid_animation(
         case Sprite_Animation_Kind__Humanoid__Die:
             return 64;
     }
+}
+
+void poll_humanoid_animation__transition(
+        Entity *humanoid) {
+    bool force = 
+        humanoid->direction
+        != humanoid->sprite_wrapper.direction;
+    if (force) {
+        humanoid->sprite_wrapper.direction =
+            humanoid->direction;
+        goto poll;
+    }
+    if (is_animation__not_running(humanoid->sprite_wrapper)) {
+        animate_humanoid__idle(humanoid);
+    }
+poll:
+    poll_entity_animation__transition(
+            humanoid, 
+            f_get_inital_sprite_frame_for__humanoid_animation, 
+            f_get_final_sprite_frame_for__humanoid_animation,
+            force);
 }

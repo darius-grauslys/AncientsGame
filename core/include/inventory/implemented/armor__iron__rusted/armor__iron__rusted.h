@@ -19,10 +19,4 @@ bool m_item_equip_handler__armor_iron__rusted(
         enum Entity_Equipment_Slot_Kind the_kind_of__slot,
         Game *p_game);
 
-bool m_item_unequip_handler__armor_iron__rusted(
-        Item *p_this_armor_iron__rusted,
-        Entity *p_entity_user,
-        enum Entity_Equipment_Slot_Kind the_kind_of__slot,
-        Game *p_game);
-
 #endif

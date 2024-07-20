@@ -1,7 +1,10 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/entity.h"
 #include "entity/reserves.h"
 #include "game_action/game_action.h"
+#include "rendering/animate_humanoid.h"
+#include "rendering/animate_sprite.h"
 #include "timer.h"
 #include "world/world.h"
 #include <entity/handlers/body/body_handler__living.h>
@@ -299,10 +302,14 @@ void m_entity_body_handler__living(
 
     if (p_this_humanoid->hearts.resource_symbols[0]
             == Heart_Kind__Empty) {
-        //TODO: play death animation
-        release_entity_from__world(
-                p_game, 
-                p_this_humanoid);
+        if (!is_animation__playing(
+                    p_this_humanoid->sprite_wrapper, 
+                    Sprite_Animation_Kind__Humanoid__Die)) {
+            p_this_humanoid->m_entity_ai_handler = 0;
+            animate_humanoid__death(p_this_humanoid);
+        } else if (is_animation__finishing(p_this_humanoid->sprite_wrapper)) {
+            set_entity_as__unloaded(p_this_humanoid);
+        }
         return;
     }
 
@@ -417,5 +424,18 @@ void m_entity_body_handler__living(
                     p_this_humanoid, 
                     &damage);
         }
+    }
+}
+
+void m_humanoid_handler__game_action_handler(
+        Entity *p_entity_self,
+        Game_Action *p_game_action,
+        Game *p_game) {
+    switch (get_the_kind_of__game_action(p_game_action)) {
+        default:
+            return;
+        case Game_Action_Kind__Entity__Health__Apply_Damage:
+            animate_humanoid__hurt(p_entity_self);
+            break;
     }
 }

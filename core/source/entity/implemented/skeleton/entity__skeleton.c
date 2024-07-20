@@ -1,4 +1,5 @@
 #include "defines_weak.h"
+#include "entity/handlers/ai/ai_handler__chase_melee.h"
 #include "entity/humanoid.h"
 #include "rendering/sprite.h"
 #include <entity/implemented/skeleton/entity__skeleton.h>
@@ -30,7 +31,7 @@ void initialize_entity_as__skeleton(
             m_entity_body_handler__living);
     set_entity__ai_handler(
 			p_entity,
-            m_entity_ai_handler__dummy);
+            m_entity_ai_handler__chase_melee);
     set_entity__collider(
 			p_entity,
             m_entity_collision_handler__default);

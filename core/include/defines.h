@@ -111,11 +111,12 @@ typedef struct Timer__u8_t {
 typedef uint8_t Direction__u8;
 typedef uint16_t Degree__u9;
 
-#define ANGLE__0    0
-#define ANGLE__45   64
-#define ANGLE__90   128
-#define ANGLE__180  256
-#define ANGLE__270  384
+#define ANGLE__0        0
+#define ANGLE__27_5     32
+#define ANGLE__45       64
+#define ANGLE__90       128
+#define ANGLE__180      256
+#define ANGLE__270      384
 ///
 /// Use this for bounds checking only!
 ///
@@ -399,7 +400,7 @@ typedef f_Sprite_Gfx_Allocator
 #define SPRITE_FRAME_ROW__ENTITY_HUMANOID__FALLING 3
 
 #define SPRITE_FRAME_COL_GROUP_OFFSET__ENTITY_HUMANOID 6
-#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID (4*16)
+#define SPRITE_FRAME_ROW_GROUP_OFFSET__ENTITY_HUMANOID (3*16)
 
 #define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_CLOTH 1
 #define SPRITE_FRAME_GROUP_INDEX__ENTITY_HUMANOID__ARMOR_IRON 2
@@ -668,6 +669,7 @@ typedef uint8_t Item_Filter_Flags;
 typedef void (*m_Item_Use)(
         Item *p_item_self, 
         Entity *p_entity_user, 
+        Game_Action *p_game_action,
         Game *p_game);
 
 ///
@@ -681,6 +683,7 @@ typedef bool (*m_Item_Equip_Event)(
         Game *p_game);
 
 typedef struct Hearts_Damaging_Specifier_t Hearts_Damaging_Specifier;
+typedef uint8_t Hearts_Damaging_Flags;
 typedef void (*m_Item_Protect)(
         Item *p_item_self, 
         Entity *p_entity_user, 
@@ -689,12 +692,21 @@ typedef void (*m_Item_Protect)(
 
 typedef struct Item_t {
     m_Item_Use          m_item_use_handler;
-    m_Item_Protect      m_item_protect_handler;
     m_Item_Equip_Event  m_item_equip_handler;
     m_Item_Equip_Event  m_item_unequip_handler;
     i32F20              weight_per__item;
     enum Item_Kind      the_kind_of_item__this_item_is  :13;
     Item_Filter_Flags   item_filter_flags               :3;
+    union {
+        struct { // Armor
+            Hearts_Damaging_Flags   armor__resistances;
+            Quantity__u8            armor__quantity_of__protection_u8;
+        };
+        struct { // Weapon
+            Hearts_Damaging_Flags   weapon__damage_type;
+            Quantity__u8            weapon__quantity_of__damage_u8;
+        };
+    };
 } Item;
 
 typedef struct Item_Manager_t {
@@ -809,6 +821,11 @@ typedef void (*m_Entity_Body_Handler)(
         Entity *p_entity_self,
         Game *p_game);
 
+typedef void (*m_Entity_Game_Action_Handler)(
+        Entity *p_entity_self,
+        Game_Action *p_game_action,
+        Game *p_game);
+
 ///
 /// callee_data is an opaque pointer to whatever
 /// data the user of this function pointer needs
@@ -880,6 +897,7 @@ typedef struct Resource_Reserve_t {
 } Resource_Reserve;
 
 typedef uint8_t Hearts_Damaging_Flags;
+#define HEARTS_DAMAGING_FLAGS__NONE 0
 #define HEARTS_DAMAGING_FLAG__IS_POISONING \
     BIT(0)
 #define HEARTS_DAMAGING_FLAG__IS_ORDER \
@@ -994,6 +1012,10 @@ typedef struct Entity_t {
     // DO NOT INVOKE! Called automatically
     //
     m_Entity_Animation_Handler          m_entity_animation_handler;
+    //
+    // DO NOT INVOKE! Called automatically
+    //
+    m_Entity_Game_Action_Handler        m_entity_game_action_handler;
 
     Hitbox_AABB                         hitbox;
 

@@ -2,7 +2,7 @@
 #include "debug/nds_debug.h"
 #include "defines.h"
 #include "defines_weak.h"
-#include "inventory/handlers/armor/armor.h"
+#include "inventory/implemented/armor.h"
 #include "inventory/item_manager.h"
 #include "numerics.h"
 
@@ -10,24 +10,13 @@ void register_into__item_manager__armor_cloth(
         Item_Manager *p_item_manager) {
     register_item_in__item_manager(
             p_item_manager, 
-            Item_Kind__Armor__Cloth, 
-            ITEM_FILTER_FLAG__ARMOR, 
-            i32_to__i32F20(4), 
-            0, 
-            m_item_protect_handler__armor_cloth, 
-            m_item_equip_handler__armor_cloth, 
-            m_item_unequip_handler__armor__default);
-}
-
-void m_item_protect_handler__armor_cloth(
-        Item *p_this_armor_cloth,
-        Entity *p_entity_user,
-        Game *p_game,
-        Hearts_Damaging_Specifier *p_hearts_damage) {
-    p_hearts_damage->quantity_of__damage =
-        subtract_u16__no_overflow(
-                p_hearts_damage->quantity_of__damage, 
-                1);
+            Item_Kind__Armor__Cloth,
+            get_armor(
+                Item_Kind__Armor__Cloth, 
+                i32F4_to__i32F20(4), 
+                HEARTS_DAMAGING_FLAG__IS_SLASHING, 
+                2,
+                m_item_equip_handler__armor_cloth));
 }
 
 bool m_item_equip_handler__armor_cloth(

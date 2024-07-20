@@ -115,7 +115,9 @@ void m_entity_ai_handler__player(
     if (is_input__use_secondary_released(p_input)) {
     } 
     if (is_input__use_released(p_input)) {
-        animate_humanoid__use(p_this_player);
+        humanoid__use(
+                p_game,
+                p_this_player);
         return;
     }
 

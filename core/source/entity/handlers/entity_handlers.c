@@ -1,3 +1,5 @@
+#include "platform.h"
+#include "serialization/serialization_header.h"
 #include "world/camera.h"
 #include "world/world.h"
 #include <entity/handlers/entity_handlers.h>
@@ -7,8 +9,11 @@
 void m_entity_dispose_handler__default(
         Entity *p_this_entity,
         Game *p_game) {
-        debug_info("release_entity_from__world: %p",
-                p_this_entity);
+    if (p_this_entity->sprite_wrapper.p_sprite) {
+        PLATFORM_release_sprite(
+                get_p_PLATFORM_gfx_context_from__game(p_game), 
+                p_this_entity->sprite_wrapper.p_sprite);
+    }
 }
 
 void m_camera_handler_for__entity_tracking(

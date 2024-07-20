@@ -10,13 +10,10 @@ void initialize_item(
         Item_Filter_Flags item_filter_flags,
         i32F20 weight_of_each__item,
         m_Item_Use m_item_use_handler,
-        m_Item_Protect m_item_protect_handler,
         m_Item_Equip_Event m_item_equip_handler,
         m_Item_Equip_Event m_item_unequip_handler) {
     p_item->m_item_use_handler =
         m_item_use_handler;
-    p_item->m_item_protect_handler =
-        m_item_protect_handler;
     p_item->m_item_equip_handler=
         m_item_equip_handler;
     p_item->m_item_unequip_handler=

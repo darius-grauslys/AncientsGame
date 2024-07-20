@@ -1,7 +1,7 @@
 #include "inventory/implemented/armor__iron__rusted/armor__iron__rusted.h"
 #include "defines.h"
 #include "defines_weak.h"
-#include "inventory/handlers/armor/armor.h"
+#include "inventory/implemented/armor.h"
 #include "inventory/item_manager.h"
 #include "numerics.h"
 
@@ -9,24 +9,13 @@ void register_into__item_manager__armor_iron__rusted(
         Item_Manager *p_item_manager) {
     register_item_in__item_manager(
             p_item_manager, 
-            Item_Kind__Armor__Iron__Rusted, 
-            ITEM_FILTER_FLAG__ARMOR, 
-            i32_to__i32F20(4), 
-            0, 
-            m_item_protect_handler__armor_iron__rusted, 
-            m_item_equip_handler__armor_iron__rusted, 
-            m_item_unequip_handler__armor__default);
-}
-
-void m_item_protect_handler__armor_iron__rusted(
-        Item *p_this_armor_iron__rusted,
-        Entity *p_entity_user,
-        Game *p_game,
-        Hearts_Damaging_Specifier *p_hearts_damage) {
-    p_hearts_damage->quantity_of__damage =
-        subtract_u16__no_overflow(
-                p_hearts_damage->quantity_of__damage, 
-                1);
+            Item_Kind__Armor__Iron__Rusted,
+            get_armor(
+                Item_Kind__Armor__Iron__Rusted, 
+                i32F4_to__i32F20(32), 
+                HEARTS_DAMAGING_FLAG__IS_SLASHING, 
+                4,
+                m_item_equip_handler__armor_iron__rusted));
 }
 
 bool m_item_equip_handler__armor_iron__rusted(

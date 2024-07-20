@@ -198,6 +198,9 @@ void release_entity_from__world(
                 p_entity,
                 p_game);
     }
+    remove_entity_from__world(
+            get_p_world_from__game(p_game), 
+            p_entity);
     release_entity_from__entity_manager(
             get_p_entity_manager_from__game(p_game), 
             p_entity);
