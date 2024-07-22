@@ -1,3 +1,6 @@
+# Donate
+[Please consider donating to help the project](https://www.paypal.com/donate/?hosted_button_id=HDFNAB5DC9F2L)
+
 # Playing
 Simply download the latest release, and load the .nds file in your prefered NDS emulator! To play on the actual NDS, there are numerous sources online on how to do this. Google "How to play NDS homebrew" or search it up on YouTube.
 # Building
@@ -38,3 +41,6 @@ make clean nds
 
 # Contributing
 Older git commits have code style instructions, but the older READMEs felt a bit manifesto-like with my rants about OOP. So I will be updating the code style soon. For now, if you make a pull request I'll just refactor things as needed.
+
+# Discord
+You can join the discord [here](https://discord.gg/VkzbCGyGRF)
