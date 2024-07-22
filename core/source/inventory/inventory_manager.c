@@ -155,7 +155,7 @@ bool resolve_s_inventory_ptr_to__inventory_manager(
     link_serialized_field_against__contiguous_array(
             &s_inventory_ptr__copy, 
             (Serialization_Header*)p_inventory_manager->inventories, 
-            p_inventory_manager->quantity_of__active_inventories);
+            INVENTORY_MAX_QUANTITY_OF);
 
     if (is_p_serialized_field__linked(
                 &s_inventory_ptr__copy)) {

@@ -7,12 +7,6 @@
 void register_into__item_manager__armor_steel__order(
         Item_Manager *p_item_manager);
 
-void m_item_protect_handler__armor_steel__order(
-        Item *p_this_armor_steel__order,
-        Entity *p_entity_user,
-        Game *p_game,
-        Hearts_Damaging_Specifier *p_hearts_damage);
-
 bool m_item_equip_handler__armor_steel__order(
         Item *p_this_armor_steel__order,
         Entity *p_entity_user,

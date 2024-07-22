@@ -148,11 +148,9 @@ void manage_world__entities(Game *p_game) {
                     &p_game->tick__timer_u32);
         }
 
-        if (!is_entity__hidden(p_entity)) {
-            PLATFORM_render_entity(
-                    p_entity,
-                    p_game);
-        }
+        PLATFORM_render_entity(
+                p_entity,
+                p_game);
     }
 }
 

@@ -3,6 +3,7 @@
 #include "debug/nds_debug.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/entity.h"
 #include "entity/entity_manager.h"
 #include "entity/handlers/entity_handlers.h"
 #include "entity/humanoid.h"
@@ -86,8 +87,8 @@ void m_load_scene_as__game_handler(
             NDS_get_graphics_window__main_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
 
-    //NDS_initialize_debug__sub();
-    //return;
+    // NDS_initialize_debug__sub();
+    // return;
     NDS_initialize_gfx_for__ui(
             get_p_PLATFORM_gfx_context_from__game(p_game));
     // TODO: re-impl
@@ -110,6 +111,24 @@ void m_enter_scene_as__game_handler(
                 Entity_Kind__Player,
                 get_vector__3i32F4_using__i32(0, 0, 0));
 
+    add_item_stack_to__inventory(
+            resolve_p_inventory_of__humanoid(
+                p_game, 
+                p_player), 
+            get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                Item_Kind__Stick), 
+            1, 1);
+
+    Entity *p_skeleton =
+        allocate_entity_into__world(
+                p_game, 
+                get_p_world_from__game(p_game), 
+                Entity_Kind__Skeleton, 
+                get_vector__3i32F4_using__i32(0, 32, 0));
+    set_entity__ai_handler(
+            p_skeleton, 0);
+
     p_game->world.entity_manager
         .p_local_player =
         p_player;
@@ -123,110 +142,6 @@ void m_enter_scene_as__game_handler(
             &p_game->world.chunk_manager, 
             DIRECTION__SOUTH_WEST,
             2);
-
-    Tile *p_tile =
-        get_p_tile_from__chunk_manager_with__3i32F4(
-                get_p_chunk_manager_from__game(p_game), 
-                get_vector__3i32F4_using__i32(0, 0, 0));
-
-    p_tile->the_kind_of_tile_cover__this_tile_has =
-        Tile_Cover_Kind__Chest_Single;
-    set_tile__container(p_tile, true);
-    set_tile__is_unpassable(p_tile, true);
-
-    Identifier__u32 uuid__u32 =
-        get_container__uuid(
-                get_vector__3i32(0, 2, 0));
-
-    Inventory *p_inventory =
-        allocate_p_inventory_using__this_uuid_in__inventory_manager(
-                get_p_inventory_manager_from__game(p_game),
-                uuid__u32);
-
-    Item_Manager *p_item_manager =
-        get_p_item_manager_from__game(p_game);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Stick), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Cloth), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Iron), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Iron__Rusted), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Gold), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Gold__Chaos), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Gold__Order), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Steel), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Steel__Chaos), 
-            1, 
-            1);
-    add_item_stack_to__inventory(
-            p_inventory, 
-            get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Armor__Steel__Order), 
-            1, 
-            1);
-
-    Entity *p_skele_bro = 
-        allocate_entity_into__world(
-                p_game, 
-                get_p_world_from__game(p_game), 
-                Entity_Kind__Skeleton, 
-                get_vector__3i32F4_using__i32(8, 8, 0));
-
-    p_skele_bro->equipment.item_stack__main_hand.item =
-        get_item_from__item_manager(
-                p_item_manager, 
-                Item_Kind__Stick);
 
     PLATFORM_update_chunks(
             get_p_PLATFORM_gfx_context_from__game(p_game),

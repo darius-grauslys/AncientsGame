@@ -15,7 +15,7 @@ Identifier__u32 get_container__uuid(
         ;
     uuid |= 
         (tile_vector__3i32
-        .x__i32 & MASK((
+        .y__i32 & MASK((
             INVENTORY_IDENTIFIER_BITS >> 1) + 1))
         << (ITEM_STACK_IDENTIFIER_BITS)
         ;

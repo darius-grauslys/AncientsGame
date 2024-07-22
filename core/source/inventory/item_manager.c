@@ -9,7 +9,36 @@
 #include "inventory/implemented/armor__steel/armor__steel.h"
 #include "inventory/implemented/armor__steel__chaos/armor__steel__chaos.h"
 #include "inventory/implemented/armor__steel__order/armor__steel__order.h"
+#include "inventory/implemented/battleaxe__iron/battleaxe__iron.h"
+#include "inventory/implemented/battleaxe__rusted/battleaxe__rusted.h"
+#include "inventory/implemented/battleaxe__steel/battleaxe__steel.h"
+#include "inventory/implemented/battleaxe__steel__chaos/battleaxe__steel__chaos.h"
+#include "inventory/implemented/battleaxe__steel__order/battleaxe__steel__order.h"
+#include "inventory/implemented/dagger__iron/dagger__iron.h"
+#include "inventory/implemented/dagger__rusted/dagger__rusted.h"
+#include "inventory/implemented/dagger__steel/dagger__steel.h"
+#include "inventory/implemented/dagger__steel__chaos/dagger__steel__chaos.h"
+#include "inventory/implemented/dagger__steel__order/dagger__steel__order.h"
+#include "inventory/implemented/hatchet__iron/hatchet__iron.h"
+#include "inventory/implemented/hatchet__rusted/hatchet__rusted.h"
+#include "inventory/implemented/hatchet__steel/hatchet__steel.h"
+#include "inventory/implemented/hatchet__steel__chaos/hatchet__steel__chaos.h"
+#include "inventory/implemented/hatchet__steel__order/hatchet__steel__order.h"
+#include "inventory/implemented/rapier__iron/rapier__iron.h"
+#include "inventory/implemented/rapier__rusted/rapier__rusted.h"
+#include "inventory/implemented/rapier__steel/rapier__steel.h"
+#include "inventory/implemented/rapier__steel__chaos/rapier__steel__chaos.h"
+#include "inventory/implemented/scimitar__iron/scimitar__iron.h"
+#include "inventory/implemented/scimitar__rusted/scimitar__rusted.h"
+#include "inventory/implemented/scimitar__steel/scimitar__steel.h"
+#include "inventory/implemented/scimitar__steel__chaos/scimitar__steel__chaos.h"
+#include "inventory/implemented/scimitar__steel__order/scimitar__steel__order.h"
 #include "inventory/implemented/stick/stick.h"
+#include "inventory/implemented/sword__iron/sword__iron.h"
+#include "inventory/implemented/sword__rusted/sword__rusted.h"
+#include "inventory/implemented/sword__steel/sword__steel.h"
+#include "inventory/implemented/sword__steel__chaos/sword__steel__chaos.h"
+#include "inventory/implemented/sword__steel__order/sword__steel__order.h"
 #include "inventory/item.h"
 
 void initialize_item_manager(
@@ -40,13 +69,53 @@ void load_core_items_into__item_manager(
         Item_Manager *p_item_manager) {
     // behold, the core items:
     register_into__item_manager__armor_cloth(p_item_manager);
+
+    register_into__item_manager__armor_iron(p_item_manager);
+    register_into__item_manager__armor_iron__rusted(p_item_manager);
+
     register_into__item_manager__armor_gold(p_item_manager);
     register_into__item_manager__armor_gold__chaos(p_item_manager);
     register_into__item_manager__armor_gold__order(p_item_manager);
-    register_into__item_manager__armor_iron(p_item_manager);
-    register_into__item_manager__armor_iron__rusted(p_item_manager);
+
     register_into__item_manager__armor_steel(p_item_manager);
     register_into__item_manager__armor_steel__chaos(p_item_manager);
     register_into__item_manager__armor_steel__order(p_item_manager);
+
     register_into__item_manager__stick(p_item_manager);
+
+    register_into__item_manager__battle_axe__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__battle_axe__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__battle_axe__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__battle_axe__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__battle_axe__steel__order_into__item_manager(p_item_manager);
+
+    register_into__item_manager__dagger__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__dagger__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__dagger__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__dagger__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__dagger__steel__order_into__item_manager(p_item_manager);
+
+    register_into__item_manager__hatchet__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__steel__order_into__item_manager(p_item_manager);
+
+    register_into__item_manager__rapier__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__rapier__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__rapier__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__rapier__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__dagger__steel__order_into__item_manager(p_item_manager);
+
+    register_into__item_manager__scimitar__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__scimitar__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__scimitar__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__scimitar__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__scimitar__steel__order_into__item_manager(p_item_manager);
+
+    register_into__item_manager__sword__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__sword__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__sword__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__sword__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__sword__steel__order_into__item_manager(p_item_manager);
 }

@@ -1,3 +1,12 @@
+#include "defines_weak.h"
+#include "inventory/inventory.h"
+#include "inventory/inventory_manager.h"
+#include "inventory/item.h"
+#include "inventory/item_manager.h"
+#include "numerics.h"
+#include "vectors.h"
+#include "world/container.h"
+#include "world/world.h"
 #include <defines.h>
 #include <world/generators/generator_flat_world.h>
 #include <world/world_parameters.h>
@@ -336,10 +345,320 @@ void initialize_weight_map(void) {
     }
 }
 
+enum Item_Kind loot_table__wood[] = {
+    Item_Kind__Stick,
+    Item_Kind__Bread,
+    Item_Kind__Armor__Cloth,
+    Item_Kind__Dagger__Iron,
+    Item_Kind__Dagger__Rusted,
+};
+enum Item_Kind loot_table__stone[] = {
+    Item_Kind__Stick,
+    Item_Kind__Bread,
+    Item_Kind__Armor__Cloth,
+    Item_Kind__Dagger__Iron,
+    Item_Kind__Sword__Iron,
+    Item_Kind__Battleaxe__Iron,
+    Item_Kind__Scimitar__Iron,
+    Item_Kind__Rapier__Iron,
+    Item_Kind__Dagger__Rusted,
+    Item_Kind__Sword__Rusted,
+    Item_Kind__Battleaxe__Rusted,
+    Item_Kind__Scimitar__Rusted,
+    Item_Kind__Rapier__Rusted,
+    Item_Kind__Armor__Iron__Rusted,
+};
+enum Item_Kind loot_table__gold[] = {
+    Item_Kind__Armor__Iron,
+    Item_Kind__Armor__Gold,
+    Item_Kind__Dagger__Iron,
+    Item_Kind__Sword__Iron,
+    Item_Kind__Battleaxe__Iron,
+    Item_Kind__Scimitar__Iron,
+    Item_Kind__Rapier__Iron,
+    Item_Kind__Armor__Iron__Rusted,
+};
+enum Item_Kind loot_table__iron[] = {
+    Item_Kind__Dagger__Iron,
+    Item_Kind__Sword__Iron,
+    Item_Kind__Battleaxe__Iron,
+    Item_Kind__Scimitar__Iron,
+    Item_Kind__Rapier__Iron,
+    Item_Kind__Armor__Iron__Rusted,
+    Item_Kind__Armor__Gold,
+    Item_Kind__Armor__Iron,
+};
+enum Item_Kind loot_table__diamond[] = {
+    Item_Kind__Dagger__Steel,
+    Item_Kind__Sword__Steel,
+    Item_Kind__Battleaxe__Steel,
+    Item_Kind__Scimitar__Steel,
+    Item_Kind__Rapier__Steel,
+    Item_Kind__Dagger__Steel__Order,
+    Item_Kind__Sword__Steel__Order,
+    Item_Kind__Battleaxe__Steel__Order,
+    Item_Kind__Scimitar__Steel__Order,
+    Item_Kind__Rapier__Steel__Order,
+    Item_Kind__Armor__Steel,
+    Item_Kind__Armor__Gold,
+    Item_Kind__Armor__Gold__Order,
+    // Item_Kind__Armor__Steel__Order,
+};
+enum Item_Kind loot_table__amethyst[] = {
+    Item_Kind__Dagger__Steel,
+    Item_Kind__Sword__Steel,
+    Item_Kind__Battleaxe__Steel,
+    Item_Kind__Scimitar__Steel,
+    Item_Kind__Rapier__Steel,
+    Item_Kind__Dagger__Steel__Chaos,
+    Item_Kind__Sword__Steel__Chaos,
+    Item_Kind__Battleaxe__Steel__Chaos,
+    Item_Kind__Scimitar__Steel__Chaos,
+    Item_Kind__Rapier__Steel__Chaos,
+    Item_Kind__Armor__Steel,
+    Item_Kind__Armor__Gold,
+    Item_Kind__Armor__Steel,
+    Item_Kind__Armor__Gold__Chaos,
+    Item_Kind__Armor__Steel__Chaos,
+};
+enum Item_Kind loot_table__sandstone[] = {
+    Item_Kind__Stick,
+    Item_Kind__Bread,
+    Item_Kind__Armor__Cloth,
+    Item_Kind__Dagger__Iron,
+    Item_Kind__Sword__Iron,
+    Item_Kind__Battleaxe__Iron,
+    Item_Kind__Scimitar__Iron,
+    Item_Kind__Rapier__Iron,
+    Item_Kind__Dagger__Rusted,
+    Item_Kind__Sword__Rusted,
+    Item_Kind__Battleaxe__Rusted,
+    Item_Kind__Scimitar__Rusted,
+    Item_Kind__Rapier__Rusted,
+    Item_Kind__Armor__Iron__Rusted,
+};
+
 void f_chunk_generator__flat_world(
         Game *p_game,
         Chunk *p_chunk) {
     Local_Parameters random_results[9];
+
+    u32 chance_for__shrine =
+        get_pseudo_random_i32_with__xy_from__game(
+                p_game, 
+                p_chunk->x__signed_index_i32, 
+                p_chunk->y__signed_index_i32) & 127;
+
+    if (chance_for__shrine < 1
+            && (p_chunk->x__signed_index_i32 < 0
+                || p_chunk->x__signed_index_i32 >= 8)
+            && (p_chunk->y__signed_index_i32 < 0
+                || p_chunk->y__signed_index_i32 >= 8)) {
+        chance_for__shrine =
+            get_pseudo_random_i32_with__xy_from__game(
+                    p_game, 
+                    ~p_chunk->x__signed_index_i32, 
+                    ~p_chunk->y__signed_index_i32) % 7;
+        for (Index__u8 y=0;y<8;y++) {
+            for (Index__u8 x=0;x<8;x++) {
+                Tile *p_tile =
+                    &p_chunk->tiles[(7-y) * CHUNK_WIDTH__IN_TILES + x];
+                p_tile->the_kind_of_tile__this_tile_is =
+                    (enum Tile_Kind)((chance_for__shrine % 7) + 1);
+            }
+        }
+
+        Item armor;
+        Item weapon;
+
+        u32 size_of__p_loot_table;
+        enum Item_Kind *p_loot_table;
+        switch (chance_for__shrine) {
+            default:
+            case 0:
+                p_loot_table =
+                    loot_table__wood;
+                size_of__p_loot_table = sizeof(loot_table__wood)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Stick);
+                armor = get_item__empty();
+                break;
+            case 1:
+                p_loot_table =
+                    loot_table__stone;
+                size_of__p_loot_table = sizeof(loot_table__stone)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Sword__Rusted);
+                armor = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Armor__Cloth);
+                break;
+            case 2:
+                p_loot_table =
+                    loot_table__gold;
+                size_of__p_loot_table = sizeof(loot_table__gold)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Scimitar__Iron);
+                armor = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Armor__Gold);
+                break;
+            case 3:
+                p_loot_table =
+                    loot_table__iron;
+                size_of__p_loot_table = sizeof(loot_table__iron)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Scimitar__Iron);
+                armor = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Armor__Iron);
+                break;
+            case 4:
+                p_loot_table =
+                    loot_table__diamond;
+                size_of__p_loot_table = sizeof(loot_table__diamond)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Scimitar__Steel);
+                armor = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Armor__Steel);
+                break;
+            case 5:
+                p_loot_table =
+                    loot_table__amethyst;
+                size_of__p_loot_table = sizeof(loot_table__amethyst)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Scimitar__Steel);
+                armor = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Armor__Steel);
+                break;
+            case 6:
+                p_loot_table =
+                    loot_table__sandstone;
+                size_of__p_loot_table = sizeof(loot_table__sandstone)
+                    / sizeof(enum Item_Kind);
+                weapon = 
+                    get_item_from__item_manager(
+                            get_p_item_manager_from__game(p_game), 
+                            Item_Kind__Scimitar__Steel);
+                armor = 
+                    get_item__empty();
+                break;
+        }
+
+        Vector__3i32F4 positions[4];
+        positions[0] = 
+            get_vector__3i32F4_using__i32(
+                    (p_chunk->x__signed_index_i32 << 6) + (4 << 3), 
+                    (p_chunk->y__signed_index_i32 << 6),
+                    0);
+        positions[1] = 
+            get_vector__3i32F4_using__i32(
+                    (p_chunk->x__signed_index_i32 << 6), 
+                    (p_chunk->y__signed_index_i32 << 6) + (4 << 3),
+                    0);
+        positions[2] = 
+            get_vector__3i32F4_using__i32(
+                    (p_chunk->x__signed_index_i32 << 6) + (7 << 3), 
+                    (p_chunk->y__signed_index_i32 << 6) + (4 << 3),
+                    0);
+        positions[3] = 
+            get_vector__3i32F4_using__i32(
+                    (p_chunk->x__signed_index_i32 << 6) + (4 << 3), 
+                    (p_chunk->y__signed_index_i32 << 6) + (7 << 3),
+                    0);
+
+        for (Quantity__u8 step = 0;
+                step < 4;
+                step++) {
+            Entity *p_skeleton = 
+                allocate_entity_into__world(
+                        p_game, 
+                        get_p_world_from__game(p_game), 
+                        Entity_Kind__Skeleton, 
+                        positions[step]);
+            if (!p_skeleton)
+                continue;
+            p_skeleton->equipment.item_stack__main_hand.item =
+                weapon;
+            p_skeleton->equipment.item_stack__armor.item =
+                armor;
+            armor.m_item_equip_handler(
+                    &armor,
+                    p_skeleton,
+                    Entity_Equipment_Slot_Kind__Armor,
+                    p_game);
+        }
+
+        Tile *p_tile =
+            &p_chunk->tiles[4*8+4];
+        p_tile->the_kind_of_tile_cover__this_tile_has =
+            Tile_Cover_Kind__Chest_Single;
+        set_tile__is_unpassable(p_tile, true);
+        set_tile__container(p_tile, true);
+        Tile_Vector__3i32 tile_vector__3i32 =
+            get_vector__3i32(
+                    (p_chunk->x__signed_index_i32 << 3) + 4, 
+                    (p_chunk->y__signed_index_i32 << 3) + 3, 
+                    0);
+        Identifier__u32 container_uuid__u32 =
+            get_container__uuid(
+                    tile_vector__3i32);
+        Inventory *p_inventory =
+            allocate_p_inventory_using__this_uuid_in__inventory_manager(
+                    get_p_inventory_manager_from__game(p_game), 
+                    container_uuid__u32);
+
+        u32 quantity_of__items = 
+            add_u32__clamped(
+                    get_pseudo_random_i32_with__xy_from__game(
+                        p_game, 
+                        p_chunk->x__signed_index_i32, 
+                        p_chunk->y__signed_index_i32) % size_of__p_loot_table,
+                    1,
+                    size_of__p_loot_table - 1);
+        for (Quantity__u8 step = 0;
+                step < quantity_of__items;
+                step++) {
+            chance_for__shrine =
+                get_pseudo_random_i32_with__xy_from__game(
+                        p_game, 
+                        step % 3 + p_chunk->x__signed_index_i32,
+                        step / 3 + p_chunk->y__signed_index_i32) % size_of__p_loot_table;
+            add_item_stack_to__inventory(
+                    p_inventory, 
+                    get_item_from__item_manager(
+                        get_p_item_manager_from__game(p_game), 
+                        p_loot_table[chance_for__shrine]), 
+                    1, 1);
+        }
+
+        return;
+    }
 
     //TODO: debug_warning("f_chunk_generator__flat_world uses magic numbers.");
     

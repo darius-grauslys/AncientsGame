@@ -9,9 +9,9 @@ void register_into__item_manager__armor_steel__order(
         Item_Manager *p_item_manager) {
     register_item_in__item_manager(
             p_item_manager, 
-            Item_Kind__Armor__Steel,
+            Item_Kind__Armor__Steel__Order,
             get_armor(
-                Item_Kind__Armor__Steel, 
+                Item_Kind__Armor__Steel__Order, 
                 i32F4_to__i32F20(22), 
                 HEARTS_DAMAGING_FLAG__IS_SLASHING
                 | HEARTS_DAMAGING_FLAG__IS_BLUDGEONING
