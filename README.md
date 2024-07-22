@@ -1,3 +1,5 @@
+# Playing
+Simply download the latest release, and load the .nds file in your prefered NDS emulator! To play on the actual NDS, there are numerous sources online on how to do this. Google "How to play NDS homebrew" or search it up on YouTube.
 # Building
 **NOTE:** Currently you have to run clean every time you build. Hope to fix that soon-ish.
 This project is built using make, and the [devkitpro toolkit](https://devkitpro.org/).
