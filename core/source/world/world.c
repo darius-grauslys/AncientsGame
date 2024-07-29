@@ -144,8 +144,7 @@ void manage_world__entities(Game *p_game) {
 
         if (p_entity->m_entity_animation_handler) {
             p_entity->m_entity_animation_handler(
-                    p_entity, 
-                    &p_game->tick__timer_u32);
+                    p_entity);
         }
 
         PLATFORM_render_entity(

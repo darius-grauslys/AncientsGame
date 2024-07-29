@@ -23,10 +23,18 @@ Inventory *get_p_inventory_by__identifier_in__inventory_manager(
         Identifier__u32 identifier_for__inventory);
 
 static inline
-Inventory *get_p_inventory_by__index_in__inventory_manager(
+Inventory *get_p_inventory_for__entity_by__index_in__inventory_manager(
         Inventory_Manager *p_inventory_manager,
         Index__u32 index_of__inventory) {
-    return &p_inventory_manager->inventories[index_of__inventory];
+    return &p_inventory_manager->inventories_for__entities[index_of__inventory];
+}
+
+static inline
+Inventory *get_p_inventory_for__container_by__index_in__inventory_manager(
+        Inventory_Manager *p_inventory_manager,
+        Index__u32 index_of__inventory) {
+    return &p_inventory_manager->inventories_for__containers[
+        index_of__inventory];
 }
 
 bool resolve_s_inventory_ptr_to__inventory_manager(

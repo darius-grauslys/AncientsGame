@@ -26,7 +26,6 @@
 #include "ui/ui_manager.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
-#include "world/container.h"
 #include "world/tile.h"
 #include "world/tile_vectors.h"
 #include "world/world.h"

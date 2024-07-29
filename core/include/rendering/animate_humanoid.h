@@ -2,42 +2,12 @@
 #define ANIMATE_HUMANOID_H
 
 #include "defines_weak.h"
+#include "entity/entity.h"
 #include <rendering/animate_entity.h>
 #include <rendering/animate_sprite.h>
 #include <defines.h>
 
 uint32_t get_animation_starting_frame_for__humanoid_entity(Entity *entity);
-
-static inline 
-void animate_humanoid__death(Entity *entity) {
-    entity->sprite_wrapper.
-        the_kind_of_animation__thats_upcomming =
-        Sprite_Animation_Kind__Humanoid__Die;
-}
-static inline 
-void animate_humanoid__use(Entity *entity) {
-    entity->sprite_wrapper.
-        the_kind_of_animation__thats_upcomming =
-        Sprite_Animation_Kind__Humanoid__Use;
-}
-static inline 
-void animate_humanoid__hurt(Entity *entity) {
-    entity->sprite_wrapper.
-        the_kind_of_animation__thats_upcomming =
-        Sprite_Animation_Kind__Humanoid__Hurt;
-}
-static inline 
-void animate_humanoid__walk(Entity *entity) {
-    entity->sprite_wrapper.
-        the_kind_of_animation__thats_upcomming =
-        Sprite_Animation_Kind__Humanoid__Walk;
-}
-static inline 
-void animate_humanoid__idle(Entity *entity) {
-    entity->sprite_wrapper.
-        the_kind_of_animation__thats_upcomming =
-        Sprite_Animation_Kind__Idle;
-}
 
 static inline 
 uint32_t get_animation_frame_offset_for__group(
@@ -76,25 +46,65 @@ uint32_t get_animation_frame_offset_for__direction__of_humanoid_unarmored (
                 SPRITE_FRAME_WIDTH__ENTITY_HUMANOID_UNARMORED);
 }
 
+void set_animation_for__humanoid_with__timer_modification(
+        Entity *p_humanoid,
+        enum Sprite_Animation_Kind the_kind_of__animation,
+        bool is_keeping__timer);
+
+static inline
+void set_animation_for__humanoid(
+        Entity *p_humanoid,
+        enum Sprite_Animation_Kind the_kind_of__animation) {
+    if (is_animation_playing__this_kind_of__animation(
+                get_p_sprite_wrapper_from__entity(p_humanoid), 
+                the_kind_of__animation))
+        return;
+    set_animation_for__humanoid_with__timer_modification(
+            p_humanoid, 
+            the_kind_of__animation, 
+            false);
+}
+
+static inline 
+void animate_humanoid__death(Entity *p_humanoid) {
+    set_animation_for__humanoid(
+            p_humanoid, 
+            Sprite_Animation_Kind__Humanoid__Die);
+}
+
+static inline 
+void animate_humanoid__use(Entity *p_humanoid) {
+    set_animation_for__humanoid(
+            p_humanoid, 
+            Sprite_Animation_Kind__Humanoid__Use);
+}
+static inline 
+void animate_humanoid__hurt(Entity *p_humanoid) {
+    set_animation_for__humanoid(
+            p_humanoid, 
+            Sprite_Animation_Kind__Humanoid__Hurt);
+}
+static inline 
+void animate_humanoid__walk(Entity *p_humanoid) {
+    set_animation_for__humanoid(
+            p_humanoid, 
+            Sprite_Animation_Kind__Humanoid__Walk);
+}
+static inline 
+void animate_humanoid__idle(Entity *p_humanoid) {
+    set_animation_for__humanoid(
+            p_humanoid, 
+            Sprite_Animation_Kind__Idle);
+}
+
 uint32_t get_animation_frame_offset_for__armor(Entity *entity);
 
-Sprite_Frame_Index__u8 f_get_inital_sprite_frame_for__humanoid_animation(
+Sprite_Frame_Index__u8 get_inital_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
 
-Sprite_Frame_Index__u8 f_get_final_sprite_frame_for__humanoid_animation(
+Sprite_Frame_Index__u8 get_final_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind);
-
-Quantity__u32 f_get_animation_speed_for__humanoid_animation(
-        Entity *humanoid,
-        enum Sprite_Animation_Kind animation_kind);
-
-Quantity__u32 f_get_animation_duration_for__humanoid_animation(
-        Entity *humanoid,
-        enum Sprite_Animation_Kind animation_kind);
-
-void poll_humanoid_animation__transition(
-        Entity *humanoid);
 
 #endif

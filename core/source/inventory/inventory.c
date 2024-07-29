@@ -15,9 +15,12 @@ void remove_all_unequiped_item_stacks_from__inventory(
             index_of__item_stack++) {
         initialize_item_stack_as__empty(
                 &p_inventory->items[index_of__item_stack], 
-                (p_inventory->_serialization_header.uuid
-                    << ITEM_STACK_IDENTIFIER_BITS)
+                p_inventory->_serialization_header.uuid
                 + index_of__item_stack);
+        set_inventory_uuid__item_stack_index(
+                &p_inventory->items[index_of__item_stack]
+                    ._serialization_header.uuid,
+                index_of__item_stack);
     }
 }
 
@@ -270,7 +273,9 @@ Item_Stack *get_p_item_stack_from__inventory(
         Inventory *p_inventory,
         Identifier__u32 identifier_for__item_stack) {
     identifier_for__item_stack &=
-        MASK(ITEM_STACK_IDENTIFIER_BITS+1);
+        UUID_MASK__INVENTORY__ITEM_STACK;
+    identifier_for__item_stack >>=
+        UUID_BIT_SHIFT__INVENTORY__ITEM_STACK;
     return &p_inventory->items[identifier_for__item_stack];
 }
 

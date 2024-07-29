@@ -29,6 +29,10 @@ void initialize_entity_as__humanoid(
     
     initialize_equipment(
             &p_entity->equipment);
+    set_entity__armor(
+            p_entity, 
+            Entity_Armor_Kind__None, 
+            Entity_Armor_Modification_Kind__None);
     Inventory *p_inventory =
         allocate_p_inventory_in__inventory_manager(
                 get_p_inventory_manager_from__game(p_game));
@@ -44,8 +48,6 @@ void humanoid__use(
         Entity *p_humanoid) {
     // TODO: make this a bit better:
     if (p_humanoid->sprite_wrapper.the_kind_of_animation__this_sprite_has
-            == Sprite_Animation_Kind__Humanoid__Use
-            || p_humanoid->sprite_wrapper.the_kind_of_animation__thats_upcomming
             == Sprite_Animation_Kind__Humanoid__Use)
         return;
     Item *p_item =

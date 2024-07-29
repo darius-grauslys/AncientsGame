@@ -58,6 +58,12 @@ static Signed_Index__i32 inline get_chunk_z_i32_from__entity(
     return get_chunk_z_i32_from__hitbox(&p_entity->hitbox);
 }
 
+static inline
+Sprite_Wrapper *get_p_sprite_wrapper_from__entity(
+        Entity *p_entity) {
+    return &p_entity->sprite_wrapper;
+}
+
 bool can_entity_kind_have__armor(enum Entity_Kind kind_of_entity);
 bool can_entity__move(enum Entity_Kind kind_of_entity);
 

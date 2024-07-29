@@ -84,6 +84,102 @@ bool does_inventory_have_this__item_kind(
             p_inventory, the_kind_of__item);
 }
 
+static inline
+bool is_inventory_uuid_for__entity_or__container(
+        Identifier__u32 uuid) {
+    return uuid & UUID_BIT__INVENTORY_IS__ENTITY_OR__CONTAINER;
+}
+
+static inline
+u16 get_inventory_container__z_from__uuid(
+        Identifier__u32 uuid) {
+    return (uuid & UUID_MASK__INVENTORY__CONTAINER__Z_AXIS)
+        >> UUID_BIT_SHIFT__INVENTORY__CONTAINER__Z_AXIS
+        ;
+}
+
+static inline
+u16 get_inventory_container__x_from__uuid(
+        Identifier__u32 uuid) {
+    return (uuid & UUID_MASK__INVENTORY__CONTAINER__X_AXIS)
+        >> UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS
+        ;
+}
+
+static inline
+u16 get_inventory_container__y_from__uuid(
+        Identifier__u32 uuid) {
+    return (uuid & UUID_MASK__INVENTORY__CONTAINER__Y_AXIS);
+}
+
+static inline
+void set_inventory_uuid_flag_for__entity(
+        Identifier__u32 *p_uuid) {
+    *p_uuid |= UUID_BIT__INVENTORY_IS__ENTITY_OR__CONTAINER;
+}
+
+static inline
+void set_inventory_uuid_flag_for__container(
+        Identifier__u32 *p_uuid) {
+    *p_uuid &= ~UUID_BIT__INVENTORY_IS__ENTITY_OR__CONTAINER;
+}
+
+static inline
+void set_inventory_container__z_in__uuid(
+        Identifier__u32 *p_uuid,
+        u16 z) {
+    *p_uuid &= ~UUID_MASK__INVENTORY__CONTAINER__Z_AXIS;
+    *p_uuid |= (UUID_MASK__INVENTORY__CONTAINER__Z_AXIS
+        & (z << UUID_BIT_SHIFT__INVENTORY__CONTAINER__Z_AXIS)
+        );
+}
+
+static inline
+void set_inventory_container__x_in__uuid(
+        Identifier__u32 *p_uuid,
+        u16 x) {
+    *p_uuid &= ~UUID_MASK__INVENTORY__CONTAINER__X_AXIS;
+    *p_uuid |= (UUID_MASK__INVENTORY__CONTAINER__X_AXIS
+        & (x << UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS)
+        );
+}
+
+static inline
+void set_inventory_container__y_in__uuid(
+        Identifier__u32 *p_uuid,
+        u16 y) {
+    *p_uuid &= ~UUID_MASK__INVENTORY__CONTAINER__Y_AXIS;
+    *p_uuid |= (UUID_MASK__INVENTORY__CONTAINER__Y_AXIS & y);
+}
+
+static inline
+void set_inventory_uuid__item_stack_index(
+        Identifier__u32 *p_uuid,
+        Index__u8 index_u6) {
+    *p_uuid &= ~UUID_MASK__INVENTORY__ITEM_STACK;
+    *p_uuid |= (UUID_MASK__INVENTORY__ITEM_STACK
+            & (index_u6 << UUID_BIT_SHIFT__INVENTORY__ITEM_STACK)
+            );
+}
+
+static inline
+Identifier__u32 get_uuid_for__container(
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Identifier__u32 uuid = 0;
+    set_inventory_container__y_in__uuid(
+            &uuid, 
+            tile_vector__3i32.y__i32);
+    set_inventory_container__x_in__uuid(
+            &uuid, 
+            tile_vector__3i32.x__i32);
+    set_inventory_container__z_in__uuid(
+            &uuid, 
+            tile_vector__3i32.z__i32);
+    set_inventory_uuid_flag_for__container(
+            &uuid);
+    return uuid;
+}
+
 bool does_inventory_have_this_many_of__item_kind(
         Inventory *p_inventory,
         enum Item_Kind the_kind_of__item,

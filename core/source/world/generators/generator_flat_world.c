@@ -5,7 +5,6 @@
 #include "inventory/item_manager.h"
 #include "numerics.h"
 #include "vectors.h"
-#include "world/container.h"
 #include "world/world.h"
 #include <defines.h>
 #include <world/generators/generator_flat_world.h>
@@ -626,7 +625,7 @@ void f_chunk_generator__flat_world(
                     (p_chunk->y__signed_index_i32 << 3) + 3, 
                     0);
         Identifier__u32 container_uuid__u32 =
-            get_container__uuid(
+            get_uuid_for__container(
                     tile_vector__3i32);
         Inventory *p_inventory =
             allocate_p_inventory_using__this_uuid_in__inventory_manager(

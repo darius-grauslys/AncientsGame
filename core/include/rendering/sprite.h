@@ -130,15 +130,11 @@ void initialize_sprite_wrapper(
     sprite_wrapper->
         the_kind_of_animation__this_sprite_has =
         Sprite_Animation_Kind__Idle;
-
-    sprite_wrapper->
-        the_kind_of_animation__thats_upcomming =
-        Sprite_Animation_Kind__Idle;
     
     sprite_wrapper->
         frame__initial = 0;
     sprite_wrapper->
-        frame = 0;
+        frame__current = 0;
     sprite_wrapper->
         frame__final = 1;
 }

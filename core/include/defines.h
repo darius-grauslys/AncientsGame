@@ -334,27 +334,17 @@ typedef struct Collision_Manager__t {
 
 typedef uint8_t Sprite_Frame_Index__u8;
 
-typedef Sprite_Frame_Index__u8 (*f_Sprite_Frame_Lookup) (
-        Entity *p_entity,
-        enum Sprite_Animation_Kind animation_kind);
-
-typedef Quantity__u32 (*f_Animation_Speed_Lookup) (
-        Entity *p_entity,
-        enum Sprite_Animation_Kind animation_kind);
-typedef Quantity__u32 (*f_Animation_Duration_Lookup) (
-        Entity *p_entity,
-        enum Sprite_Animation_Kind animation_kind);
+#define ANIMATION_BIT_MASK__TICK_RATE MASK(4)
 
 typedef struct Sprite_Wrapper_t {
     PLATFORM_Sprite *p_sprite;
-    Timer__u32 time_elapsed;
-    Timer__u32 time_limit;
+    Timer__u32 animation_timer__u32;
     Direction__u8 direction;
+    Direction__u8 direction__requested;
     Sprite_Frame_Index__u8 frame__initial;
-    Sprite_Frame_Index__u8 frame;
+    Sprite_Frame_Index__u8 frame__current;
     Sprite_Frame_Index__u8 frame__final;
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
-    enum Sprite_Animation_Kind the_kind_of_animation__thats_upcomming;
 } Sprite_Wrapper;
 
 typedef void (*f_Sprite_Gfx_Allocator)(
@@ -741,12 +731,24 @@ typedef struct Item_Stack_Manager_t {
 #define INVENTORY_ITEM_MAXIMUM_QUANTITY_OF 27
 #define INVENTORY_CONSUMABLES_QUANTITY_OF 3
 
+///   __ item_stack index
+///  |           __ container: 0, entity: 1 
+///  |          |                           
+/// [31 .. 26] [25] [24 .. 22] [21 .. 11] [10 ..  0]
+///                 z - axis   x - axis   y - axis
 ///
-/// Leaves 6 bits (0-63) for item_stacks
-///
-#define INVENTORY_IDENTIFIER_BITS 26
-#define ITEM_STACK_IDENTIFIER_BITS \
-    (32 - INVENTORY_IDENTIFIER_BITS)
+#define UUID_BIT_SHIFT__INVENTORY__ITEM_STACK 26
+#define UUID_BIT_SHIFT__INVENTORY__CONTAINER__Z_AXIS 22
+#define UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS 11
+#define UUID_MASK__INVENTORY__ITEM_STACK (MASK(6) << \
+        UUID_BIT_SHIFT__INVENTORY__ITEM_STACK)
+#define UUID_BIT__INVENTORY_IS__ENTITY_OR__CONTAINER BIT(25)
+#define UUID_MASK__INVENTORY__CONTAINER__Z_AXIS (MASK(4) << \
+        UUID_BIT_SHIFT__INVENTORY__CONTAINER__Z_AXIS)
+#define UUID_MASK__INVENTORY__CONTAINER__X_AXIS (MASK(12) << \
+        UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS)
+#define UUID_MASK__INVENTORY__CONTAINER__Y_AXIS MASK(12)
+#define UUID_MASK__INVENTORY__ENTITY MASK(25)
 
 typedef struct Inventory_t {
     ///
@@ -757,12 +759,15 @@ typedef struct Inventory_t {
     Quantity__u8 quantity_of__item_stacks;
 } Inventory;
 
-#define INVENTORY_MAX_QUANTITY_OF 64
+#define INVENTORY_MAX_QUANTITY_OF__ENTITY 32
+#define INVENTORY_MAX_QUANTITY_OF__CONTAINER 32
 
 typedef struct Inventory_Manager_t {
-    Inventory inventories[INVENTORY_MAX_QUANTITY_OF];
+    Inventory inventories_for__containers[INVENTORY_MAX_QUANTITY_OF__CONTAINER];
+    Inventory inventories_for__entities[INVENTORY_MAX_QUANTITY_OF__ENTITY];
     Repeatable_Psuedo_Random randomizer_of__inventory_manager;
-    Quantity__u8 quantity_of__active_inventories;
+    Quantity__u8 quantity_of__active_inventories_for__containers;
+    Quantity__u8 quantity_of__active_inventories_for__entities;
 } Inventory_Manager;
 
 #define EQUIPMENT_ITEM_STACK_QUANTITY_OF 6
@@ -846,7 +851,7 @@ typedef void (*m_Entity_Tile_Collision_Handler)(
         Direction__u8 direction_of__tile_collision);
 
 typedef void (*m_Entity_Animation_Handler) 
-    (Entity *p_entity_self, Timer__u32 *p_timer);
+    (Entity *p_entity_self);
 
 ///
 /// Here we define the entity super struct. It has everything we could need

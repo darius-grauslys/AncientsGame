@@ -1,5 +1,8 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "numerics.h"
+#include "rendering/animate_sprite.h"
+#include "timer.h"
 #include <rendering/animate_humanoid.h>
 #include <entity/entity.h>
 
@@ -51,7 +54,7 @@ uint32_t get_animation_frame_offset_for__armor(Entity *entity) {
     }
 }
 
-Sprite_Frame_Index__u8 f_get_inital_sprite_frame_for__humanoid_animation(
+Sprite_Frame_Index__u8 get_inital_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind) {
 
@@ -97,85 +100,110 @@ Sprite_Frame_Index__u8 f_get_inital_sprite_frame_for__humanoid_animation(
     }
 }
 
-Sprite_Frame_Index__u8 f_get_final_sprite_frame_for__humanoid_animation(
+Sprite_Frame_Index__u8 get_final_sprite_frame_for__humanoid_animation(
         Entity *humanoid,
         enum Sprite_Animation_Kind animation_kind) {
     Sprite_Frame_Index__u8 offset =
-        f_get_inital_sprite_frame_for__humanoid_animation(
+        get_inital_sprite_frame_for__humanoid_animation(
                 humanoid, animation_kind);
 
     switch (animation_kind) {
         default:
         case Sprite_Animation_Kind__Idle:
             return offset
-                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__IDLE;
+                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__IDLE - 1;
         case Sprite_Animation_Kind__Humanoid__Walk:
             return offset
-                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__WALK;
+                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__WALK - 1;
         case Sprite_Animation_Kind__Humanoid__Use:
             return offset
-                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__USE;
+                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__USE - 1;
         case Sprite_Animation_Kind__Humanoid__Hurt:
             return offset
-                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__HURT;
+                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__HURT - 1;
         case Sprite_Animation_Kind__Humanoid__Die:
             return offset
-                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__DIE;
+                + SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__DIE - 1;
     }
 }
 
-Quantity__u32 f_get_animation_speed_for__humanoid_animation(
-        Entity *humanoid,
-        enum Sprite_Animation_Kind animation_kind) {
-    //TODO: magic number timers
-    switch (animation_kind) {
+void set_animation_for__humanoid_with__timer_modification(
+        Entity *p_humanoid,
+        enum Sprite_Animation_Kind the_kind_of__animation,
+        bool is_keeping__timer) {
+    Sprite_Wrapper *p_sprite_wrapper = 
+        get_p_sprite_wrapper_from__entity(
+                p_humanoid);
+    if (is_animation_playing__this_kind_of__animation(
+                p_sprite_wrapper, 
+                Sprite_Animation_Kind__Humanoid__Die)) {
+        return;
+    }
+    p_sprite_wrapper->the_kind_of_animation__this_sprite_has =
+        the_kind_of__animation;
+    switch (the_kind_of__animation) {
         default:
-        case Sprite_Animation_Kind__Idle:
-            return 1;
-        case Sprite_Animation_Kind__Humanoid__Walk:
-        case Sprite_Animation_Kind__Humanoid__Use:
+            p_sprite_wrapper->animation_timer__u32
+                .start__u32 = 0;
+            break;
         case Sprite_Animation_Kind__Humanoid__Hurt:
+            p_sprite_wrapper->animation_timer__u32
+                .start__u32 = 
+                (ANIMATION_BIT_MASK__TICK_RATE+1)
+                * SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__HURT
+                ;
+            break;
+        case Sprite_Animation_Kind__Humanoid__Use:
+            p_sprite_wrapper->animation_timer__u32
+                .start__u32 = 
+                (ANIMATION_BIT_MASK__TICK_RATE+1)
+                * SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__USE
+                ;
+            break;
+        case Sprite_Animation_Kind__Humanoid__Walk:
+            p_sprite_wrapper->animation_timer__u32
+                .start__u32 = 
+                (ANIMATION_BIT_MASK__TICK_RATE+1)
+                * SPRITE_ANIMATION_FRAME_COUNT__ENTITY_HUMANOID__WALK
+                ;
+            break;
         case Sprite_Animation_Kind__Humanoid__Die:
-            return 8;
+            p_sprite_wrapper->animation_timer__u32
+                .start__u32 = 
+                (ANIMATION_BIT_MASK__TICK_RATE+1)
+                * 16
+                ;
+            break;
     }
+    if (!is_keeping__timer) {
+        reset_timer_u32(&p_sprite_wrapper->animation_timer__u32);
+    }
+    Index__u8 frame__initial =
+        get_inital_sprite_frame_for__humanoid_animation(
+                p_humanoid, 
+                the_kind_of__animation);
+    Index__u8 frame__final =
+        get_final_sprite_frame_for__humanoid_animation(
+                p_humanoid, 
+                the_kind_of__animation);
+    Index__u8 frame__current =
+        (is_keeping__timer)
+        ? add_u8__clamped(
+                frame__initial, 
+                get_time_elapsed_from__timer_u32(
+                    &p_sprite_wrapper->animation_timer__u32)
+                / (ANIMATION_BIT_MASK__TICK_RATE+1), 
+                frame__final)
+        : frame__initial
+        ;
+    set_animation_and__timer(
+            p_sprite_wrapper, 
+            the_kind_of__animation, 
+            frame__initial, 
+            frame__current, 
+            frame__final,
+            p_sprite_wrapper->animation_timer__u32);
+    PLATFORM_update_sprite_gfx__to_current_frame(
+            get_p_sprite_wrapper_from__entity(p_humanoid));
 }
 
-Quantity__u32 f_get_animation_duration_for__humanoid_animation(
-        Entity *humanoid,
-        enum Sprite_Animation_Kind animation_kind) {
-    //TODO: magic number timers
-    switch (animation_kind) {
-        default:
-        case Sprite_Animation_Kind__Idle:
-            return 1;
-        case Sprite_Animation_Kind__Humanoid__Walk:
-            return 16;
-        case Sprite_Animation_Kind__Humanoid__Use:
-            return 24;
-        case Sprite_Animation_Kind__Humanoid__Hurt:
-            return 8;
-        case Sprite_Animation_Kind__Humanoid__Die:
-            return 64;
-    }
-}
-
-void poll_humanoid_animation__transition(
-        Entity *humanoid) {
-    bool force = 
-        humanoid->direction
-        != humanoid->sprite_wrapper.direction;
-    if (force) {
-        humanoid->sprite_wrapper.direction =
-            humanoid->direction;
-        goto poll;
-    }
-    if (is_animation__not_running(humanoid->sprite_wrapper)) {
-        animate_humanoid__idle(humanoid);
-    }
-poll:
-    poll_entity_animation__transition(
-            humanoid, 
-            f_get_inital_sprite_frame_for__humanoid_animation, 
-            f_get_final_sprite_frame_for__humanoid_animation,
-            force);
-}

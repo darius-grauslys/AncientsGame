@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game_action/game_action.h"
+#include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "platform.h"
 #include "raycast/ray.h"
@@ -8,7 +9,6 @@
 #include "vectors.h"
 #include "world/chunk_vectors.h"
 #include "world/chunk_manager.h"
-#include "world/container.h"
 #include "world/tile_vectors.h"
 #include "world/world.h"
 #include <entity/implemented/player/ai/ai_handler__player.h>
@@ -70,21 +70,16 @@ void m_entity_ai_handler__player(
                     continue;
                 }
                 if (is_tile__container(p_tile)) {
-                    debug_info("flags: %x", p_tile->tile_flags);
                     Tile_Vector__3i32 tv =
                             vector_3i32F4_to__tile_vector(
                                 tile_vector__3i32F4);
-                    debug_info("found container: %d , %d",
-                            tv.x__i32,
-                            tv.y__i32);
                     Identifier__u32 uuid_of__container =
-                        get_container__uuid(tv);
+                        get_uuid_for__container(tv);
 
                     Serialized_Field s_inventory__container;
                     initialize_serialized_field_as__unlinked(
                             &s_inventory__container, 
                             uuid_of__container);
-                    debug_info("uuid: %x", uuid_of__container);
 
                     if (!resolve_s_inventory_ptr_to__inventory_manager(
                             get_p_inventory_manager_from__game(p_game),
@@ -96,10 +91,6 @@ void m_entity_ai_handler__player(
                                 get_p_chunk_manager_from__game(p_game));
                         continue;
                     }
-                    debug_info("found inv: %x, %p",
-                            s_inventory__container
-                                .identifier_for__serialized_field,
-                            s_inventory__container.p_serialized_field__inventory);
 
                     p_this_player
                         ->s_humanoid__container_ptr =

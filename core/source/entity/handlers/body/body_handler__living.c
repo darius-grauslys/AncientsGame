@@ -302,12 +302,12 @@ void m_entity_body_handler__living(
 
     if (p_this_humanoid->hearts.resource_symbols[0]
             == Heart_Kind__Empty) {
-        if (!is_animation__playing(
-                    p_this_humanoid->sprite_wrapper, 
+        if (!is_animation_playing__this_kind_of__animation(
+                    &p_this_humanoid->sprite_wrapper, 
                     Sprite_Animation_Kind__Humanoid__Die)) {
             p_this_humanoid->m_entity_ai_handler = 0;
             animate_humanoid__death(p_this_humanoid);
-        } else if (is_animation__finishing(p_this_humanoid->sprite_wrapper)) {
+        } else if (is_animation_finished(&p_this_humanoid->sprite_wrapper)) {
             set_entity_as__unloaded(p_this_humanoid);
         }
         return;

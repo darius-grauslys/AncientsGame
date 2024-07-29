@@ -2,67 +2,38 @@
 #define ANIMATE_SPRITE_H
 
 #include "defines_weak.h"
+#include "timer.h"
 #include <defines.h>
 
 static inline
-bool is_animation__playing(
-        Sprite_Wrapper sprite_wrapper,
-        enum Sprite_Animation_Kind the_kind_of__animation) {
-    return
-        sprite_wrapper.the_kind_of_animation__this_sprite_has
-        == the_kind_of__animation
-        || sprite_wrapper.the_kind_of_animation__thats_upcomming
-        == the_kind_of__animation
-        ;
-}
-
-static inline 
-bool is_animation__finished (
-        Sprite_Wrapper sprite_wrapper) {
-    return sprite_wrapper.frame 
-        >= sprite_wrapper.frame__final;
-}
-
-static inline 
-bool is_animation__finishing (
-        Sprite_Wrapper sprite_wrapper) {
-    return (sprite_wrapper.frame + 1)
-        >= sprite_wrapper.frame__final;
-}
-
-static inline 
-bool is_animation__transitionless(
-        Sprite_Wrapper sprite_wrapper) {
-    return sprite_wrapper.the_kind_of_animation__thats_upcomming
-        == Sprite_Animation_Kind__None;
+enum Sprite_Animation_Kind get_animation_kind_from__sprite_wrapper(
+        Sprite_Wrapper *p_sprite_wrapper) {
+    return p_sprite_wrapper->the_kind_of_animation__this_sprite_has;
 }
 
 static inline
-bool is_animation__not_running(
-        Sprite_Wrapper sprite_wrapper) {
+bool is_animation_playing__this_kind_of__animation(
+        Sprite_Wrapper *p_sprite_wrapper,
+        enum Sprite_Animation_Kind the_kind_of__animation) {
     return
-        is_animation__finished(sprite_wrapper)
-        && is_animation__transitionless(sprite_wrapper)
+        p_sprite_wrapper->the_kind_of_animation__this_sprite_has
+        == the_kind_of__animation
         ;
 }
 
-static inline 
-bool is_animation__in_transition(
-        Sprite_Wrapper sprite_wrapper) {
-    return 
-        is_animation__finished(sprite_wrapper)
-        && sprite_wrapper.the_kind_of_animation__thats_upcomming
-        != Sprite_Animation_Kind__None
-        ;
+static inline
+bool is_animation_finished(
+        Sprite_Wrapper *p_sprite_wrapper) {
+    return
+        is_timer_u32__elapsed(
+                &p_sprite_wrapper->animation_timer__u32);
 }
 
-static inline 
-bool is_animation__transitioning_to(
-        Sprite_Wrapper sprite_wrapper,
-        enum Sprite_Animation_Kind animation_kind) {
-    return is_animation__in_transition(sprite_wrapper)
-        && sprite_wrapper.the_kind_of_animation__thats_upcomming
-        == animation_kind
+static inline
+bool is_animation_not__active(
+        Sprite_Wrapper *p_sprite_wrapper) {
+    return p_sprite_wrapper->the_kind_of_animation__this_sprite_has
+        == Sprite_Animation_Kind__None
         ;
 }
 
@@ -73,6 +44,51 @@ uint32_t get_sprite_frame (
     return
         col
         + (row * cols_per_row);
+}
+
+static inline
+bool poll_animation(
+        Sprite_Wrapper *p_sprite_wrapper) {
+    return poll_timer_u32(&p_sprite_wrapper->animation_timer__u32);
+}
+
+void set_animation_and__timer(
+        Sprite_Wrapper *p_sprite_wrapper,
+        enum Sprite_Animation_Kind the_kind_of__sprite_animation,
+        Index__u8 frame__initial,
+        Index__u8 frame__current,
+        Index__u8 frame__final,
+        Timer__u32 animation_timer__u32);
+
+static inline
+void set_animation(
+        Sprite_Wrapper *p_sprite_wrapper,
+        enum Sprite_Animation_Kind the_kind_of__sprite_animation,
+        Index__u8 frame__initial,
+        Index__u8 frame__current,
+        Index__u8 frame__final) {
+    set_animation_and__timer(
+            p_sprite_wrapper, 
+            the_kind_of__sprite_animation,
+            frame__initial,
+            frame__current,
+            frame__final,
+            (Timer__u32){
+                p_sprite_wrapper
+                ->animation_timer__u32
+                .start__u32,
+                p_sprite_wrapper
+                ->animation_timer__u32
+                .start__u32
+            });
+}
+
+static inline
+void set_animation__direction(
+        Sprite_Wrapper *p_sprite_wrapper,
+        Direction__u8 direction) {
+    p_sprite_wrapper->direction__requested =
+        direction;
 }
 
 uint32_t get_animation_frame_offset_for__direction(

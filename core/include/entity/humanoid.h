@@ -2,6 +2,8 @@
 #define HUMANOID_H
 
 #include "defines_weak.h"
+#include "entity/entity.h"
+#include "rendering/animate_sprite.h"
 #include <defines.h>
 
 void initialize_entity_as__humanoid(
@@ -29,16 +31,19 @@ Inventory *resolve_p_inventory_of__humanoid(
 //TODO: this should be an entity thing
 //      not a humanoid thing.
 static void inline set_humanoid__direction(
-        Entity *humanoid,
+        Entity *p_humanoid,
         Direction__u8 direction) {
 #ifndef NDEBUG
-    if (!is_entity_a__humanoid(humanoid)) {
+    if (!is_entity_a__humanoid(p_humanoid)) {
         debug_error("Treated non-humanoid %p as humanoid!",
-                humanoid);
+                p_humanoid);
         return;
     }
 #endif
-    humanoid->direction = direction;
+    p_humanoid->direction = direction;
+    set_animation__direction(
+            get_p_sprite_wrapper_from__entity(p_humanoid), 
+            direction);
 }
 
 static Direction__u8 inline get_humanoid__direction(

@@ -1,11 +1,11 @@
 #include "defines_weak.h"
 #include "game.h"
+#include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "platform_defines.h"
 #include "serialization/serialized_field.h"
 #include "serialization/serializer.h"
 #include "vectors.h"
-#include "world/container.h"
 #include "world/tile.h"
 #include <world/chunk.h>
 
@@ -51,7 +51,7 @@ void m_serialize__chunk(
             Serialized_Field s_inventory;
             initialize_serialized_field_as__unlinked(
                     &s_inventory,
-                    get_container__uuid(
+                    get_uuid_for__container(
                         vector__3i32));
 
             if (!resolve_s_inventory_ptr_to__inventory_manager(
