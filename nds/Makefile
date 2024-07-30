@@ -126,9 +126,9 @@ $(OUTPUT).elf : $(OFILES)
 #---------------------------------------------------------------------------------
 $(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file))
 	@mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(INCLUDE) $(FLAGS) \
+	@$(CC) $(CFLAGS) $(INCLUDE) $(FLAGS) \
 		-o $@ -c $(BASE_DIR)/nds/source/$(basename $@).c
-	$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) $(INCLUDE) $(FLAGS) \
+	@$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) $(INCLUDE) $(FLAGS) \
 		-o $@ -c $(BASE_DIR)/nds/source/$(basename $@).c" $@
 #---------------------------------------------------------------------------------
 
@@ -136,15 +136,15 @@ include $(BASE_DIR)/core/Makefile.build
 
 $(SPRITE_DIRS): 
 	@mkdir -p $@
-	cd $@ && grit $(shell find $(BASE_DIR)/core/$@ -iname *.png) \
+	@cd $@ && grit $(shell find $(BASE_DIR)/core/$@ -iname *.png) \
 		-ff$(BASE_DIR)/nds/$@/$(shell basename $@).grit
 $(SHARED_SPRITE_FILES):
-	cd $(shell dirname $@) && $(CC) $(CFLAGS) -c $(shell basename $(basename $@)).s -o $(shell basename $(basename $@)).o
+	@cd $(shell dirname $@) && $(CC) $(CFLAGS) -c $(shell basename $(basename $@)).s -o $(shell basename $(basename $@)).o
 
 #---------------------------------------------------------------------------------
 $(SPRITE_FILES:.png=.o) : $(SPRITE_DIRS) $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file)) 
-	$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
-	$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) -x assembler-with-cpp $(ASFLAGS) \
+	@$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
+	@$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) -x assembler-with-cpp $(ASFLAGS) \
 		-c $(basename $@).s -o $@" $(basename $@).s
 #---------------------------------------------------------------------------------
 

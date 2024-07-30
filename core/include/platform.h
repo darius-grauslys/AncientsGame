@@ -217,6 +217,21 @@ void PLATFORM_post_render(Game *game);
 ///
 void PLATFORM_poll_input(Input *p_input);
 
+///
+/// SECTION_inventory
+///
+
+///
+/// SECTION_log
+///
+bool PLATFORM_update_log__global(Game *p_game);
+bool PLATFORM_update_log__local(Game *p_game);
+bool PLATFORM_update_log__system(Game *p_game);
+
+bool PLATFORM_clear_log__global(Game *p_game);
+bool PLATFORM_clear_log__local(Game *p_game);
+bool PLATFORM_clear_log__system(Game *p_game);
+
 /// 
 /// SECTION_defines
 ///

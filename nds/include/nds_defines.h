@@ -240,6 +240,7 @@ typedef struct PLATFORM_Gfx_Context_t {
     //
     //          search for: "f_ui mangling occurs here"
     //          It's in nds_game.c
+    enum UI_Window_Kind the_kind_of__active_ui_window;
     u8 :8;
 } PLATFORM_Gfx_Context;
 

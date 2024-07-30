@@ -1,6 +1,7 @@
 #include "defines_weak.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/item_manager.h"
+#include "log/log.h"
 #include "platform.h"
 #include "process/process_manager.h"
 #include "random.h"
@@ -52,8 +53,43 @@ void initialize_game(
             get_p_item_manager_from__game(p_game));
     load_core_items_into__item_manager(
             get_p_item_manager_from__game(p_game));
+
+    initialize_log(get_p_log__global_from__game(p_game));
+    initialize_log(get_p_log__local_from__game(p_game));
+    initialize_log(get_p_log__system_from__game(p_game));
+
     p_game->is_world__initialized = false;
     p_game->m_game_action_handler = m_game_action_handler;
+}
+
+bool print_log__global(Game *p_game, char *cstr) {
+    bool result = put_cstr_into__message(
+            get_next_p_message_in__log(
+                get_p_log__global_from__game(p_game)), 
+            cstr);
+    PLATFORM_update_log__global(p_game);
+    flush_message_into__log(get_p_log__global_from__game(p_game));
+    return result;
+}
+
+bool print_log__local(Game *p_game, char *cstr) {
+    bool result = put_cstr_into__message(
+            get_next_p_message_in__log(
+                get_p_log__local_from__game(p_game)), 
+            cstr);
+    PLATFORM_update_log__local(p_game);
+    flush_message_into__log(get_p_log__local_from__game(p_game));
+    return result;
+}
+
+bool print_log__system(Game *p_game, char *cstr) {
+    bool result = put_cstr_into__message(
+            get_next_p_message_in__log(
+                get_p_log__system_from__game(p_game)), 
+            cstr);
+    PLATFORM_update_log__system(p_game);
+    flush_message_into__log(get_p_log__system_from__game(p_game));
+    return result;
 }
 
 int run_game(Game *p_game) {

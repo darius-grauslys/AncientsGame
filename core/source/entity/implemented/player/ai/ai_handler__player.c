@@ -62,6 +62,9 @@ void m_entity_ai_handler__player(
         direction__new |= DIRECTION__WEST;
     }
 
+    if (is_input__consume_released(p_input)) {
+        print_log__global(p_game, "Hello World!\n");
+    }
     if (is_input__examine_released(p_input)) {
         for (i32 y=-3;y<4;y++) {
             for (i32 x=-3;x<4;x++) {

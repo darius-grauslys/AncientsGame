@@ -123,7 +123,7 @@ void NDS_initialize_background_engine_allocation_context(
                     GFX_defaultPal,
                     GFX_defaultPalLen,
                     NDS_BACKGROUND_PRIORITY__UI__BASE);
-            NDS_initialize_background_allocation_specification(
+            NDS_initialize_background_allocation_specification_with__reservations(
                     &p_NDS_background_engine_allocation_context
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__LOG_LOWER],
@@ -134,12 +134,15 @@ void NDS_initialize_background_engine_allocation_context(
                     VECTOR__3i32__0_0_0,
                     GFX_logTiles, 
                     GFX_logTilesLen, 
+                    448 << 6,
                     ui_map_logMap, 
                     ui_map_logMapLen,
+                    448 << 6,
                     GFX_logPal,
                     GFX_logPalLen,
+                    0,
                     NDS_BACKGROUND_PRIORITY__UI__LOG_LOWER);
-            NDS_initialize_background_allocation_specification(
+            NDS_initialize_background_allocation_specification_with__reservations(
                     &p_NDS_background_engine_allocation_context
                         ->nds_background_allocation_specifications[
                             NDS_BACKGROUND_SLOT__UI__LOG_UPPER],
@@ -150,30 +153,34 @@ void NDS_initialize_background_engine_allocation_context(
                     VECTOR__3i32__0_0_0,
                     GFX_logTiles, 
                     GFX_logTilesLen, 
+                    896 << 6,
                     ui_map_logMap, 
                     ui_map_logMapLen,
+                    896 << 6,
                     GFX_logPal,
                     GFX_logPalLen,
-                    NDS_BACKGROUND_PRIORITY__UI__LOG_UPPER);
-            NDS_initialize_background_allocation_specification_with__reservations(
-                    &p_NDS_background_engine_allocation_context
-                        ->nds_background_allocation_specifications[
-                            NDS_BACKGROUND_SLOT__UI__TYPER],
-                    NDS_UI_Background_Allocation_Kind__Typer,
-                    TEXTURE_FLAG__SIZE_256x256,
-                    NDS_BACKGROUND_SLOT__UI__TYPER, 
-                    VECTOR__3i32__0_0_0,
-                    VECTOR__3i32__0_0_0,
-                    GFX_typerTiles, 
-                    GFX_typerTilesLen, 
-                    64 << 6,
-                    ui_map_typer__lockedMap, 
-                    ui_map_typer__lockedMapLen,
-                    64 << 6,
-                    GFX_typerPal,
-                    GFX_typerPalLen,
                     0,
-                    NDS_BACKGROUND_PRIORITY__UI__SCROLL_TYPER);
+                    NDS_BACKGROUND_PRIORITY__UI__LOG_UPPER);
+            // TODO: make a UI_Window_Kind__Chat
+            // NDS_initialize_background_allocation_specification_with__reservations(
+            //         &p_NDS_background_engine_allocation_context
+            //             ->nds_background_allocation_specifications[
+            //                 NDS_BACKGROUND_SLOT__UI__TYPER],
+            //         NDS_UI_Background_Allocation_Kind__Typer,
+            //         TEXTURE_FLAG__SIZE_256x256,
+            //         NDS_BACKGROUND_SLOT__UI__TYPER, 
+            //         VECTOR__3i32__0_0_0,
+            //         VECTOR__3i32__0_0_0,
+            //         GFX_typerTiles, 
+            //         GFX_typerTilesLen, 
+            //         64 << 6,
+            //         ui_map_typer__lockedMap, 
+            //         ui_map_typer__lockedMapLen,
+            //         64 << 6,
+            //         GFX_typerPal,
+            //         GFX_typerPalLen,
+            //         0,
+            //         NDS_BACKGROUND_PRIORITY__UI__SCROLL_TYPER);
             break;
         case UI_Window_Kind__Equip:
             NDS_initialize_background_allocation_specification(

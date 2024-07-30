@@ -85,6 +85,10 @@ typedef struct Vector__3i32_t {
 
 typedef struct Vector__3i32_t Chunk_Vector__3i32;
 typedef struct Vector__3i32_t Tile_Vector__3i32;
+typedef struct Vector__3i32_t Region_Vector__3i32;
+
+#define REGION__WIDTH BIT(11)
+#define REGION__HEIGHT BIT(11)
 
 typedef uint32_t Psuedo_Random_Seed__u32;
 typedef int32_t Psuedo_Random__i32;
@@ -626,13 +630,23 @@ typedef struct Font_t {
 #define MESSAGE_NAME_MAX_LENGTH_OF 16
 
 typedef struct Message_t {
-    unsigned char uchar_array_of__message_name[
+    Serialization_Header _serialization_header;
+    unsigned char message__title[
         MESSAGE_NAME_MAX_LENGTH_OF];
-    unsigned char uchar_array_of__message[
+    unsigned char message__body[
         MESSAGE_MAX_LENGTH_OF];
-    Quantity__u8 length_of__message_name;
-    Quantity__u8 length_of__message;
+    Quantity__u8 length_of__message__title;
+    Quantity__u8 length_of__message__body;
+    Index__u8 index_of__body;
 } Message;
+
+#define MESSAGE_MAX_QUANTITY_OF 32
+
+typedef struct Log_t {
+    Message messages[MESSAGE_MAX_QUANTITY_OF];
+    Message *p_next_message;
+    Message *p_oldest_message;
+} Log;
 
 typedef struct Typer_t {
     Hitbox_AABB text_bounding_box;
@@ -1698,6 +1712,7 @@ typedef struct World_t {
     Entity_Manager entity_manager;
     Chunk_Manager chunk_manager;
     Collision_Manager collision_manager;
+    Structure_Manager structure_manager;
     World_Parameters world_parameters;
 
     Camera camera;
@@ -1728,6 +1743,10 @@ typedef struct Game_t {
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;
     Path_List_Manager path_list_manager;
+
+    Log log__global;
+    Log log__local;
+    Log log__system;
 
     m_Game_Action_Handler m_game_action_handler;
 

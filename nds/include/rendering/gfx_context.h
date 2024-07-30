@@ -7,6 +7,12 @@
 #include "nds_defines.h"
 
 static inline
+enum UI_Window_Kind get_the_kind_of__active_ui_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return p_PLATFORM_gfx_context->the_kind_of__active_ui_window;
+}
+
+static inline
 PLATFORM_Graphics_Window *NDS_get_graphics_window__main_from__gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
     return &p_PLATFORM_gfx_context

@@ -6,6 +6,9 @@
 /// You will need to compile with a backend.
 ///
 
+#include "log/log.h"
+#include "log/message.h"
+#include "platform.h"
 #include "random.h"
 #include "timer.h"
 #include <defines.h>
@@ -28,6 +31,43 @@ Psuedo_Random__i32 get_pseudo_random_i32_with__xy_from__game(
     return get_pseudo_random_i32_with__xy__intrusively(
             &p_game->repeatable_pseudo_random, 
             x, y);
+}
+
+static inline
+Log *get_p_log__global_from__game(Game *p_game) {
+    return &p_game->log__global;
+}
+
+static inline
+void clear_log__global(Game *p_game) {
+    clear_log(get_p_log__global_from__game(p_game));
+    PLATFORM_clear_log__global(p_game);
+}
+
+static inline
+Log *get_p_log__local_from__game(Game *p_game) {
+    return &p_game->log__local;
+}
+
+static inline
+void clear_log__local(Game *p_game) {
+    clear_log(get_p_log__local_from__game(p_game));
+    PLATFORM_clear_log__local(p_game);
+}
+
+static inline
+Log *get_p_log__system_from__game(Game *p_game) {
+    return &p_game->log__system;
+}
+
+bool print_log__global(Game *p_game, char *cstr);
+bool print_log__local(Game *p_game, char *cstr);
+bool print_log__system(Game *p_game, char *cstr);
+
+static inline
+void clear_log__system(Game *p_game) {
+    clear_log(get_p_log__system_from__game(p_game));
+    PLATFORM_clear_log__system(p_game);
 }
 
 static inline

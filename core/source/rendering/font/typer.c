@@ -2,7 +2,6 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "platform.h"
-#include "rendering/font/message.h"
 #include "vectors.h"
 #include <rendering/font/typer.h>
 
@@ -152,9 +151,20 @@ void put_c_string_in__typer(
         return;
 
     do {
+        char letter = *c_string;
+        switch (letter) {
+            default:
+                break;
+            case '\n':
+            case '\r':
+                p_typer->cursor_position__3i32.y__i32 +=
+                    p_typer->p_font->max_height_of__font_letter;
+                p_typer->cursor_position__3i32.x__i32 = 0;
+                return;
+        }
         PLATFORM_put_char_in__typer(
                 p_PLATFORM_gfx_context, 
                 p_typer, 
-                *c_string);
+                letter);
     } while (*(++c_string) && --max_length_of__c_string);
 }

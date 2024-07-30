@@ -20,6 +20,7 @@
 #include "ui/menu/nds_ui_window__menu__singleplayer.h"
 #include "ui/nds_ui__equip.h"
 #include "ui/nds_ui__equipment.h"
+#include "ui/nds_ui__idle.h"
 #include "ui/nds_ui__inventory_column.h"
 #include "ui/nds_ui__trade.h"
 #include "ui/ui_button.h"
@@ -181,6 +182,11 @@ void PLATFORM_open_ui(
     if (the_kind_of__ui_window_to__open
             == _ui__state_machine.the_kind_of__active_ui_window)
         return;
+
+    NDS_set_background_for__ui_window(
+            get_p_PLATFORM_gfx_context_from__game(p_game), 
+            the_kind_of__ui_window_to__open);
+
     _ui__state_machine.the_kind_of__active_ui_window =
         the_kind_of__ui_window_to__open;
     release_all__ui_elements_from__ui_manager(
@@ -196,7 +202,7 @@ void PLATFORM_open_ui(
             break;
         case UI_Window_Kind__None:
         case UI_Window_Kind__Idle:
-            NDS_allocate_ui_for__nds_ui_window__game__idle(p_game);
+            NDS_open_ui__idle(p_game);
             break;
         case UI_Window_Kind__Equip:
             NDS_open_ui__equip(p_game);
@@ -224,9 +230,9 @@ void PLATFORM_open_ui(
             break;
     }
 
-    NDS_set_background_for__ui_window(
-            get_p_PLATFORM_gfx_context_from__game(p_game), 
-            the_kind_of__ui_window_to__open);
+    get_p_PLATFORM_gfx_context_from__game(p_game)
+        ->the_kind_of__active_ui_window =
+        the_kind_of__ui_window_to__open;
 }
 
 void PLATFORM_close_ui(
@@ -326,7 +332,6 @@ void NDS_set_background_for__ui_window(
 
 	vramSetBankH(VRAM_H_LCD);
 
-    debug_info("load backgrounds");
     for (Index__u8 index=0;
             index < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
             index++) {
@@ -335,9 +340,6 @@ void NDS_set_background_for__ui_window(
             &nds_background_engine_allocation_context
                 .nds_background_allocation_specifications[index];
 
-        debug_info("bgSlot: %d",
-                p_background_allocation_specification
-                ->background_slot);
         NDS_Background *p_background =
                 &p_PLATFORM_gfx_context->backgrounds__sub[
                     p_background_allocation_specification

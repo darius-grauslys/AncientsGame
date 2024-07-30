@@ -17,7 +17,6 @@
 #include "platform_defines.h"
 #include "process/process.h"
 #include "process/process_manager.h"
-#include "rendering/font/message.h"
 #include "rendering/font/typer.h"
 #include "rendering/nds_background.h"
 #include "rendering/sprite.h"
