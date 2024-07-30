@@ -21,7 +21,9 @@ void initialize_collision_manager(
 ///
 bool poll_collision_manager(
         Collision_Manager *collision_manager,
-        Entity *entity);
+        Game *p_game,
+        Entity *entity,
+        m_Entity_Collision_Handler f_entity_collision_handler);
 
 ///
 /// Does nothing if cannot find

@@ -213,6 +213,7 @@ enum Sustenance_State {
 ///
 enum Entity_Kind {
     Entity_Kind__None,
+    Entity_Kind__Trigger_Box,
     Entity_Kind__Particle,
     Entity_Kind__Item,
     Entity_Kind__Player,

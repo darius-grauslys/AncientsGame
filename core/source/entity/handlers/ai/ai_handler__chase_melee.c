@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "degree.h"
+#include "entity/entity.h"
 #include "entity/handlers/ai/ai_handler__dummy.h"
 #include "entity/humanoid.h"
 #include "game.h"
@@ -20,6 +21,16 @@ void m_entity_ai_handler__chase_melee(
         //         this_chasing_melee, 
         //         p_game);
         return;
+    }
+
+    switch (get_animation_kind_from__sprite_wrapper(
+                get_p_sprite_wrapper_from__entity(this_chasing_melee))) {
+        default:
+            break;
+        case Sprite_Animation_Kind__Humanoid__Die:
+        case Sprite_Animation_Kind__Humanoid__Hurt:
+        case Sprite_Animation_Kind__Humanoid__Use:
+            return;
     }
 
     i32 distance_squared_from__player =

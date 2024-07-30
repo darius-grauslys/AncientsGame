@@ -101,7 +101,9 @@ void manage_world__entities(Game *p_game) {
         //are polling for collisions
         if (!poll_collision_manager(
                 &p_game->world.collision_manager, 
-                p_entity)) {
+                p_game,
+                p_entity,
+                p_entity->m_entity_collision_handler)) {
             debug_info__verbose("!poll_collision_manager, release entity");
             release_entity_from__world(p_game, p_entity);
             continue;

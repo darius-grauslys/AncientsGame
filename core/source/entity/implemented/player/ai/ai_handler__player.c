@@ -36,6 +36,16 @@ void m_entity_ai_handler__player(
         return;
     }
 
+    switch (get_animation_kind_from__sprite_wrapper(
+                get_p_sprite_wrapper_from__entity(p_this_player))) {
+        default:
+            break;
+        case Sprite_Animation_Kind__Humanoid__Die:
+        case Sprite_Animation_Kind__Humanoid__Hurt:
+        case Sprite_Animation_Kind__Humanoid__Use:
+            return;
+    }
+
     Direction__u8 direction__new =
         DIRECTION__NONE;
 

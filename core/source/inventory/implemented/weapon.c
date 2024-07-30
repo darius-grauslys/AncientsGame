@@ -1,13 +1,16 @@
 #include "inventory/implemented/weapon.h"
 #include "collisions/collision_manager.h"
+#include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
 #include "degree.h"
+#include "entity/entity.h"
 #include "entity/humanoid.h"
 #include "entity/reserves.h"
 #include "game.h"
 #include "game_action/game_action.h"
 #include "inventory/item.h"
+#include "serialization/serialized_field.h"
 #include "vectors.h"
 
 void initialize_item_as__weapon(
@@ -27,6 +30,28 @@ void initialize_item_as__weapon(
         damage_type;
     p_item__weapon->weapon__quantity_of__damage_u8 =
         quantity_of__damage;
+}
+
+void f_trigger_box_collision_handler__weapon(
+        Entity *p_entity_collision_source,
+        Entity *p_entity_collided,
+        Direction__u8 direction_of_collision,
+        Game *p_game) {
+    if (p_entity_collided
+            == p_entity_collision_source->p_entity__owner) {
+        return;
+    }
+    
+    Game_Action duplicate_game_action =
+        *p_entity_collision_source
+        ->p_prepared_action;
+    point_serialized_field_to__this_serialized_struct(
+            &duplicate_game_action.s_entity__target,
+            p_entity_collided);
+
+    invoke_game_action(
+            p_game, 
+            &duplicate_game_action);
 }
 
 void m_item_use_handler__weapon(
@@ -65,24 +90,39 @@ void m_item_use_handler__weapon(
     damage_spec.quantity_of__damage =
         p_item_self->weapon__quantity_of__damage_u8;
 
+    // TODO: the offset here is not perfect.
     Vector__3i32F4 ray_offset__3i32F4 =
         get_2i32F4_offset_from__angle(
                 angle_of__attack);
-    ray_offset__3i32F4.x__i32F4 <<= 3;
-    ray_offset__3i32F4.y__i32F4 <<= 3;
+    ray_offset__3i32F4.x__i32F4 <<= 2;
+    ray_offset__3i32F4.y__i32F4 <<= 2;
     Vector__3i32F4 cone_point__3i32F4 =
         add_vectors__3i32F4(
                 cone_origin, 
                 ray_offset__3i32F4);
-    Entity *p_entity =
-        get_p_entity_from__collision_manager_with__3i32F4(
-                get_p_collision_manager_from__game(p_game), 
-                cone_point__3i32F4);
-    if (p_entity && p_entity != p_entity_user) {
-        invoke_action__apply_heart_damage_to__entity(
-                p_game, 
-                p_entity_user, 
-                p_entity, 
-                &damage_spec);
-    }
+
+    Game_Action game_action__apply_heart_damage;
+    initialize_game_action_as__apply_heart_damage_to__entity(
+            &game_action__apply_heart_damage,
+            p_entity_user, 
+            0, 
+            &damage_spec);
+
+    Entity trigger_box;
+    initialize_entity(
+            &trigger_box, 
+            Entity_Kind__Trigger_Box, 
+            cone_point__3i32F4, 
+            8, 8);
+    apply_velocity_to__hitbox(
+            &trigger_box.hitbox, 
+            &ray_offset__3i32F4);
+    trigger_box.p_entity__owner = p_entity_user;
+    trigger_box.p_prepared_action = &game_action__apply_heart_damage;
+
+    poll_collision_manager(
+            get_p_collision_manager_from__game(p_game), 
+            p_game,
+            &trigger_box, 
+            f_trigger_box_collision_handler__weapon);
 }

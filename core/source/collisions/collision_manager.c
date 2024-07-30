@@ -440,7 +440,9 @@ Direction__u8 is_this_entity_colliding_into__this_entity(
 
 void check_collision_node_for__collisions(
         Collision_Manager__Collision_Node *collision_node,
-        Entity *entity) {
+        Game *p_game,
+        Entity *entity,
+        m_Entity_Collision_Handler f_entity_collision_handler) {
     for (uint32_t i=0;
             i<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
             i++) {
@@ -460,10 +462,12 @@ void check_collision_node_for__collisions(
             entity,
             collision_node->p_entity_ptrs[i]);
         if (direction_of_collision != DIRECTION__NONE) {
-            if (entity->m_entity_collision_handler) {
-                entity->m_entity_collision_handler(entity,
+            if (f_entity_collision_handler) {
+                f_entity_collision_handler(
+                        entity,
                         collision_node->p_entity_ptrs[i],
-                        direction_of_collision);
+                        direction_of_collision,
+                        p_game);
             }
         }
     }
@@ -471,68 +475,90 @@ void check_collision_node_for__collisions(
 
 void poll_collision_node_and__neighbors(
         Collision_Manager__Collision_Node *p_collision_node,
-        Entity *p_entity) {
+        Game *p_game,
+        Entity *p_entity,
+        m_Entity_Collision_Handler f_entity_collision_handler) {
     check_collision_node_for__collisions(
             p_collision_node, 
-            p_entity);
+            p_game,
+            p_entity,
+            f_entity_collision_handler);
 
     // north
     if (p_collision_node->legal_directions & DIRECTION__NORTH) {
         check_collision_node_for__collisions(
                 p_collision_node->p_north__collision_node, 
-                p_entity);
+                p_game,
+                p_entity,
+                f_entity_collision_handler);
         // north east
         if (p_collision_node->legal_directions & DIRECTION__EAST) {
             check_collision_node_for__collisions(
                     p_collision_node->p_north__collision_node
                         ->p_east__collision_node, 
-                    p_entity);
+                    p_game,
+                    p_entity,
+                    f_entity_collision_handler);
         }
         // north west
         if (p_collision_node->legal_directions & DIRECTION__WEST) {
             check_collision_node_for__collisions(
                     p_collision_node->p_north__collision_node
                         ->p_west__collision_node, 
-                    p_entity);
+                    p_game,
+                    p_entity,
+                    f_entity_collision_handler);
         }
     }
     // south
     if (p_collision_node->legal_directions & DIRECTION__SOUTH) {
         check_collision_node_for__collisions(
                 p_collision_node->p_south__collision_node, 
-                p_entity);
+                p_game,
+                p_entity,
+                f_entity_collision_handler);
         // south east
         if (p_collision_node->legal_directions & DIRECTION__EAST) {
             check_collision_node_for__collisions(
                     p_collision_node->p_south__collision_node
                         ->p_east__collision_node, 
-                    p_entity);
+                    p_game,
+                    p_entity,
+                    f_entity_collision_handler);
         }
         // south west
         if (p_collision_node->legal_directions & DIRECTION__WEST) {
             check_collision_node_for__collisions(
                     p_collision_node->p_south__collision_node
                         ->p_west__collision_node, 
-                    p_entity);
+                    p_game,
+                    p_entity,
+                    f_entity_collision_handler);
         }
     }
     // east
     if (p_collision_node->legal_directions & DIRECTION__EAST) {
         check_collision_node_for__collisions(
                 p_collision_node->p_east__collision_node, 
-                p_entity);
+                p_game,
+                p_entity,
+                f_entity_collision_handler);
     }
     // west
     if (p_collision_node->legal_directions & DIRECTION__WEST) {
         check_collision_node_for__collisions(
                 p_collision_node->p_west__collision_node, 
-                p_entity);
+                p_game,
+                p_entity,
+                f_entity_collision_handler);
     }
 }
 
 bool poll_collision_manager(
         Collision_Manager *collision_manager,
-        Entity *entity) {
+        Game *p_game,
+        Entity *entity,
+        m_Entity_Collision_Handler f_entity_collision_handler) {
     Chunk_Vector__3i32 chunk_vector__3i32 =
         vector_3i32F4_to__chunk_vector_3i32(
                 entity->hitbox.position__3i32F4);
@@ -548,7 +574,9 @@ bool poll_collision_manager(
 
     poll_collision_node_and__neighbors(
             collision_node, 
-            entity);
+            p_game,
+            entity,
+            f_entity_collision_handler);
 
     return true;
 }

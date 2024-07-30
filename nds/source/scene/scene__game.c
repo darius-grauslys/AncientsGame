@@ -118,6 +118,10 @@ void m_enter_scene_as__game_handler(
                 get_p_item_manager_from__game(p_game), 
                 Item_Kind__Stick), 
             1, 1);
+    p_player->equipment.item_stack__main_hand.item =
+        get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                Item_Kind__Stick);
 
     Entity *p_skeleton =
         allocate_entity_into__world(

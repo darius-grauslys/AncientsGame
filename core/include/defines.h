@@ -839,7 +839,8 @@ typedef void (*m_Entity_Game_Action_Handler)(
 typedef void (*m_Entity_Collision_Handler)(
         Entity *p_entity_collision_source,
         Entity *p_entity_collided,
-        Direction__u8 direction_of_collision);
+        Direction__u8 direction_of_collision,
+        Game *p_game);
 
 typedef struct Tile_t Tile;
 
@@ -1052,6 +1053,16 @@ typedef struct Entity_t {
         };
         struct { // containers
             Serialized_Inventory_Ptr container__serialized_inventory;
+        };
+        struct { // trigger box
+            // NOTE: Trigger boxes are strictly a server side
+            // thing. Therefore we don't need to worry about serialization
+            // for packets. Furthermore, Trigger Boxes which require
+            // p_entity__owner as of right now don't need to be
+            // saved into world saves. If that changes, then make this
+            // a serialization_field.
+            Entity *p_entity__owner;
+            Game_Action *p_prepared_action;
         };
     };
 } Entity;
