@@ -10,6 +10,7 @@
 #include "game.h"
 #include "game_action/game_action.h"
 #include "inventory/item.h"
+#include "platform.h"
 #include "serialization/serialized_field.h"
 #include "vectors.h"
 
@@ -59,6 +60,10 @@ void m_item_use_handler__weapon(
         Entity *p_entity_user,
         Game_Action *p_game_action,
         Game *p_game) {
+    PLATFORM_play_audio__effect(
+            get_p_PLATFORM_audio_context_from__game(p_game), 
+            Audio_Effect_Kind__Weapon__Melee);
+
     Direction__u8 direct_of__attack =
         get_humanoid__direction(p_entity_user);
     Degree__u9 angle_of__attack =

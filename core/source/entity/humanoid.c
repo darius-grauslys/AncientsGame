@@ -5,6 +5,7 @@
 #include "inventory/equipment.h"
 #include "inventory/inventory_manager.h"
 #include "rendering/animate_humanoid.h"
+#include "timer.h"
 #include <entity/humanoid.h>
 #include <entity/entity.h>
 #include <inventory/inventory.h>

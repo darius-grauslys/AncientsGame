@@ -12,7 +12,8 @@
 void m_entity_collision_handler__default(
         Entity *entity_collision_source,
         Entity *entity_collided,
-        Direction__u8 direction_of_collision) {
+        Direction__u8 direction_of_collision,
+        Game *p_game) {
     int32_t source_x = get_x_i32F4_from__entity(entity_collision_source);
     int32_t source_y = get_y_i32F4_from__entity(entity_collision_source);
     int32_t collided_x = get_x_i32F4_from__entity(entity_collided);

@@ -11,4 +11,5 @@ export OFILES_CORE := $(CFILES_CORE:.c=.o)
 
 export SPRITE_FILES != realpath --relative-to=$(BASE_DIR)/core \
 	$$(find $(BASE_DIR)/core/assets -name *.png)
+export AUDIO_FILES != find $(BASE_DIR)/core/assets -name *.wav
 export SPRITE_DIRS != dirname $(SPRITE_FILES) | uniq

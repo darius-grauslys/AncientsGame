@@ -6,6 +6,7 @@
 #include "platform.h"
 #include "raycast/ray.h"
 #include "serialization/serialized_field.h"
+#include "timer.h"
 #include "vectors.h"
 #include "world/chunk_vectors.h"
 #include "world/chunk_manager.h"
@@ -210,5 +211,8 @@ void m_entity_ai_handler__player(
             animate_humanoid__walk(p_this_player);
             break;
     }
+    play_audio_of__entity_footstep(
+            p_game, 
+            p_this_player);
     set_humanoid__direction(p_this_player, direction__new);
 }

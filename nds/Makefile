@@ -63,6 +63,7 @@ export DEPSDIR 	:= $(BUILD)
 export CFILES_NDS	!= realpath --relative-to=$(SOURCE) $$(find $(SOURCE) -name *.c)
 export CFILES 		:= $(CFILES_NDS) $(CFILES_CORE)
 export SFILES       := $(shell find $(SOURCE) -name *.s)
+export BINFILES		:= soundbank.bin
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
@@ -149,7 +150,7 @@ $(SPRITE_FILES:.png=.o) : $(SPRITE_DIRS) $(foreach file,$(SPRITE_FILES),$(BASE_D
 #---------------------------------------------------------------------------------
 
 #---------------------------------------------------------------------------------
-soundbank.bin soundbank.h : $(foreach file,$(AUDIO_FILES),../$(file))
+soundbank.bin soundbank.h : $(AUDIO_FILES)
 	@mmutil $^ -d -osoundbank.bin -hsoundbank.h
 #---------------------------------------------------------------------------------
 

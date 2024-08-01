@@ -66,6 +66,70 @@ typedef struct Timer__u16_t Timer__u16;
 typedef struct Timer__u8_t Timer__u8;
 
 ///
+/// SECTION_audio
+///
+
+enum Audio_Effect_Kind {
+    Audio_Effect_Kind__None,
+    Audio_Effect_Kind__Test,
+    Audio_Effect_Kind__Footstep__Wood,
+    Audio_Effect_Kind__Footstep__Rock,
+    Audio_Effect_Kind__Footstep__Metal,
+    Audio_Effect_Kind__Footstep__Gem,
+    Audio_Effect_Kind__Footstep__Dirt,
+    Audio_Effect_Kind__Footstep__Sand,
+    Audio_Effect_Kind__Footstep__Grass,
+    Audio_Effect_Kind__Weapon__Melee,
+    Audio_Effect_Kind__Weapon__Ranged__Thrown,
+    Audio_Effect_Kind__Weapon__Ranged__Shot,
+    Audio_Effect_Kind__Eat__Crunch,
+    Audio_Effect_Kind__Eat__Chew,
+    Audio_Effect_Kind__Drink,
+    Audio_Effect_Kind__Humanoid__Male__Effort,
+    Audio_Effect_Kind__Humanoid__Male__Hurt,
+    Audio_Effect_Kind__Humanoid__Male__Die,
+    Audio_Effect_Kind__Humanoid__Female__Effort,
+    Audio_Effect_Kind__Humanoid__Female__Hurt,
+    Audio_Effect_Kind__Humanoid__Female__Die,
+    Audio_Effect_Kind__Monster__Zombie__Idle,
+    Audio_Effect_Kind__Monster__Zombie__Alert,
+    Audio_Effect_Kind__Monster__Zombie__Hurt,
+    Audio_Effect_Kind__Monster__Zombie__Attack,
+    Audio_Effect_Kind__Monster__Zombie__Die,
+    Audio_Effect_Kind__Monster__Skeleton__Idle,
+    Audio_Effect_Kind__Monster__Skeleton__Alert,
+    Audio_Effect_Kind__Monster__Skeleton__Hurt,
+    Audio_Effect_Kind__Monster__Skeleton__Attack,
+    Audio_Effect_Kind__Monster__Skeleton__Die,
+    Audio_Effect_Kind__Animal__Cow__Idle,
+    Audio_Effect_Kind__Animal__Cow__Hurt,
+    Audio_Effect_Kind__Animal__Cow__Die,
+    Audio_Effect_Kind__Animal__Pig__Idle,
+    Audio_Effect_Kind__Animal__Pig__Hurt,
+    Audio_Effect_Kind__Animal__Pig__Die,
+    Audio_Effect_Kind__Animal__Rabbit__Idle,
+    Audio_Effect_Kind__Animal__Rabbit__Hurt,
+    Audio_Effect_Kind__Animal__Rabbit__Die,
+    Audio_Effect_Kind__Animal__Bird__Idle,
+    Audio_Effect_Kind__Animal__Bird__Hurt,
+    Audio_Effect_Kind__Animal__Bird__Die,
+    Audio_Effect_Kind__Animal__Frog__Idle,
+    Audio_Effect_Kind__Animal__Frog__Hurt,
+    Audio_Effect_Kind__Animal__Frog__Die,
+    Audio_Effect_Kind__Unknown,
+    Audio_Effect_Kind__MAX = 128
+};
+
+enum Audio_Stream_Kind {
+    Audio_Stream_Kind__None,
+    Audio_Stream_Kind__Track_1,
+    Audio_Stream_Kind__Track_2,
+    Audio_Stream_Kind__Track_3,
+    Audio_Stream_Kind__Track_4,
+    Audio_Stream_Kind__Unknown
+};
+
+///
 /// SECTION_collisions
 ///
 
@@ -890,6 +954,8 @@ typedef struct Game_Action_t Game_Action;
 /// SECTION_platform
 ///
 
+typedef struct PLATFORM_File_System_Context_t PLATFORM_File_System_Context;
+typedef struct PLATFORM_Audio_Context_t PLATFORM_Audio_Context;
 typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
 typedef struct PLATFORM_Texture_t PLATFORM_Texture;
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;

@@ -197,4 +197,8 @@ void set_entity_as__moving(Entity *entity,
         bool state_of_movement,
         enum Sprite_Animation_Kind fallback_animation);
 
+void play_audio_of__entity_footstep(
+        Game *p_game,
+        Entity *p_entity);
+
 #endif

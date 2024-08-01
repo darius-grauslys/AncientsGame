@@ -12,12 +12,18 @@
 #include <rendering/gfx_context.h>
 
 extern PLATFORM_Gfx_Context _NDS_gfx_context;
+extern PLATFORM_Audio_Context _NDS_audio_context;
 
 int PLATFORM_main(Game *p_game) {
     NDS_initialize_gfx_context(
             &_NDS_gfx_context);
-    p_game->p_gfx_context =
+    p_game->p_PLATFORM_gfx_context =
         &_NDS_gfx_context;
+
+    PLATFORM_initialize_audio(
+            &_NDS_audio_context);
+    p_game->p_PLATFORM_audio_context=
+        &_NDS_audio_context;
 
     NDS_register_sprite_gfx_allocator_for__entity(
             &_NDS_gfx_context, 

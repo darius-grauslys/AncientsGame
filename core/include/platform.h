@@ -28,6 +28,24 @@
 /// for every platform.
 
 ///
+/// SECTION_audio
+///
+
+void PLATFORM_initialize_audio(
+        PLATFORM_Audio_Context *p_PLATFORM_audio_context);
+
+void PLATFORM_play_audio__effect(
+        PLATFORM_Audio_Context *p_PLATFORM_audio_context,
+        enum Audio_Effect_Kind the_kind_of__audio_effect);
+
+void PLATFORM_play_audio__stream(
+        PLATFORM_Audio_Context *p_PLATFORM_audio_context,
+        enum Audio_Stream_Kind the_kind_of__audio_stream);
+
+bool PLATFORM_is_audio__streaming(
+        PLATFORM_Audio_Context *p_PLATFORM_audio_context);
+
+///
 /// SECTION_debug
 ///
 

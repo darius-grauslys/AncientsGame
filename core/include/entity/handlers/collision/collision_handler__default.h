@@ -6,7 +6,8 @@
 void m_entity_collision_handler__default(
         Entity *entity_collision_source,
         Entity *entity_collided,
-        Direction__u8 direction_of_collision);
+        Direction__u8 direction_of_collision,
+        Game *p_game);
 
 void m_entity_tile_collision_handler__default(
         Entity *entity_collision_source,

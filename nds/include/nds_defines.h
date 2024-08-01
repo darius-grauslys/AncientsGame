@@ -2,6 +2,7 @@
 #define NDS_DEFINES_H
 
 #include <nds.h>
+#include <maxmod9.h>
 #include "defines.h"
 #include "defines_weak.h"
 #include "platform_defines.h"
@@ -243,5 +244,14 @@ typedef struct PLATFORM_Gfx_Context_t {
     enum UI_Window_Kind the_kind_of__active_ui_window;
     u8 :8;
 } PLATFORM_Gfx_Context;
+
+typedef struct PLATFORM_Audio_Context_t {
+    /// 
+    /// If true, then modmax is actively streaming audio.
+    ///
+    Repeatable_Psuedo_Random randomizer;
+    bool is_audio_context__streaming;
+    mm_stream maxmod__stream;
+} PLATFORM_Audio_Context;
 
 #endif

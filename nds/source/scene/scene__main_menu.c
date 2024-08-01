@@ -19,7 +19,7 @@ void m_load_scene_as__main_menu_handler(
         Game *p_game) {
     NDS_set_video_modes_to__MODE_0_2D();
     NDS_initialize_gfx_for__ui(
-            p_game->p_gfx_context);
+            p_game->p_PLATFORM_gfx_context);
     // TODO: re-impl
     // NDS_set_ui_background_to__menu_main(
     //         &p_game->gfx_context);

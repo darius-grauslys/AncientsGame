@@ -1051,8 +1051,13 @@ typedef struct Entity_t {
             Resource_Reserve    energy_orbs;
             Humanoid_Flags      humanoid_flags;
             Timer__u8           stun__timer_u8;
+            Timer__u8           footstep__timer_u8;
             Equipment           equipment;
-            enum Homeostasis_Update_Kind kind_of_homeostasis__update;
+            Vector__3i32F4      goal__position__3i32F4;
+            Serialized_Entity_Ptr goal__s_entity_ptr;
+            enum Audio_Effect_Kind the_kind_of__audio_effect_for__alert;
+            enum Audio_Effect_Kind the_kind_of__audio_effect_for__hurt;
+            enum Audio_Effect_Kind the_kind_of__audio_effect_for__die;
             union {
                 struct { // humanoid union
                     Armor_Properties            humanoid__armor_properties;
@@ -1060,6 +1065,7 @@ typedef struct Entity_t {
                     Serialized_Inventory_Ptr    s_humanoid__container_ptr;    
                     Sustenance__u8              humanoid__primary_sustenance__u8;
                     Sustenance__u8              humanoid__secondary_sustenance__u8;
+                    enum Homeostasis_Update_Kind kind_of_homeostasis__update;
                     Homeostasis__i8             humanoid__homeostasis__i8;
                     Timer__u16                  humanoid__homeostasis__timer_u16;
                 };
@@ -1730,7 +1736,8 @@ typedef void (*m_Game_Action_Handler)(
 
 typedef struct Game_t {
     Input input;
-    PLATFORM_Gfx_Context *p_gfx_context;
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    PLATFORM_Audio_Context *p_PLATFORM_audio_context;
     Scene_Manager scene_manager;
     UI_Manager ui_manager;
 

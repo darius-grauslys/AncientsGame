@@ -2,6 +2,7 @@
 #include "entity/handlers/ai/ai_handler__chase_melee.h"
 #include "entity/humanoid.h"
 #include "rendering/sprite.h"
+#include "world/tile_vectors.h"
 #include <entity/implemented/skeleton/entity__skeleton.h>
 #include <entity/entity.h>
 
@@ -41,6 +42,14 @@ void initialize_entity_as__skeleton(
     set_entity__animator(
 			p_entity,
             m_entity_animation_handler__humanoid);
+
+    p_entity->the_kind_of__audio_effect_for__alert =
+        Audio_Effect_Kind__Monster__Skeleton__Alert;
+    p_entity->the_kind_of__audio_effect_for__die =
+        Audio_Effect_Kind__Monster__Skeleton__Die;
+
+    p_entity->goal__position__3i32F4 =
+        position__3i32F4;
 
     initialize_sprite_wrapper_for__entity_with__sprite_allocation(
             p_PLATFORM_graphics_window,
