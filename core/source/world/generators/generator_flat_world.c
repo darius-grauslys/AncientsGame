@@ -439,25 +439,36 @@ enum Item_Kind loot_table__sandstone[] = {
 
 void f_chunk_generator__flat_world(
         Game *p_game,
-        Chunk *p_chunk) {
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    Chunk *p_chunk =
+        p_chunk_map_node
+        ->p_chunk__here;
+
+    Signed_Index__i32 x__index =
+        p_chunk_map_node
+        ->position_of__chunk_3i32.x__i32;
+    Signed_Index__i32 y__index =
+        p_chunk_map_node
+        ->position_of__chunk_3i32.y__i32;
+
     Local_Parameters random_results[9];
 
     u32 chance_for__shrine =
         get_pseudo_random_i32_with__xy_from__game(
                 p_game, 
-                p_chunk->x__signed_index_i32, 
-                p_chunk->y__signed_index_i32) & 127;
+                x__index, 
+                y__index) & 127;
 
     if (chance_for__shrine < 1
-            && (p_chunk->x__signed_index_i32 < 0
-                || p_chunk->x__signed_index_i32 >= 8)
-            && (p_chunk->y__signed_index_i32 < 0
-                || p_chunk->y__signed_index_i32 >= 8)) {
+            && (x__index < 0
+                || x__index >= 8)
+            && (y__index < 0
+                || y__index >= 8)) {
         chance_for__shrine =
             get_pseudo_random_i32_with__xy_from__game(
                     p_game, 
-                    ~p_chunk->x__signed_index_i32, 
-                    ~p_chunk->y__signed_index_i32) % 7;
+                    ~x__index, 
+                    ~y__index) % 7;
         for (Index__u8 y=0;y<8;y++) {
             for (Index__u8 x=0;x<8;x++) {
                 Tile *p_tile =
@@ -572,23 +583,23 @@ void f_chunk_generator__flat_world(
         Vector__3i32F4 positions[4];
         positions[0] = 
             get_vector__3i32F4_using__i32(
-                    (p_chunk->x__signed_index_i32 << 6) + (4 << 3), 
-                    (p_chunk->y__signed_index_i32 << 6),
+                    (x__index << 6) + (4 << 3), 
+                    (y__index << 6),
                     0);
         positions[1] = 
             get_vector__3i32F4_using__i32(
-                    (p_chunk->x__signed_index_i32 << 6), 
-                    (p_chunk->y__signed_index_i32 << 6) + (4 << 3),
+                    (x__index << 6), 
+                    (y__index << 6) + (4 << 3),
                     0);
         positions[2] = 
             get_vector__3i32F4_using__i32(
-                    (p_chunk->x__signed_index_i32 << 6) + (7 << 3), 
-                    (p_chunk->y__signed_index_i32 << 6) + (4 << 3),
+                    (x__index << 6) + (7 << 3), 
+                    (y__index << 6) + (4 << 3),
                     0);
         positions[3] = 
             get_vector__3i32F4_using__i32(
-                    (p_chunk->x__signed_index_i32 << 6) + (4 << 3), 
-                    (p_chunk->y__signed_index_i32 << 6) + (7 << 3),
+                    (x__index << 6) + (4 << 3), 
+                    (y__index << 6) + (7 << 3),
                     0);
 
         for (Quantity__u8 step = 0;
@@ -621,8 +632,8 @@ void f_chunk_generator__flat_world(
         set_tile__container(p_tile, true);
         Tile_Vector__3i32 tile_vector__3i32 =
             get_vector__3i32(
-                    (p_chunk->x__signed_index_i32 << 3) + 4, 
-                    (p_chunk->y__signed_index_i32 << 3) + 3, 
+                    (x__index << 3) + 4, 
+                    (y__index << 3) + 3, 
                     0);
         Identifier__u32 container_uuid__u32 =
             get_uuid_for__container(
@@ -636,8 +647,8 @@ void f_chunk_generator__flat_world(
             add_u32__clamped(
                     get_pseudo_random_i32_with__xy_from__game(
                         p_game, 
-                        p_chunk->x__signed_index_i32, 
-                        p_chunk->y__signed_index_i32) % size_of__p_loot_table,
+                        x__index, 
+                        y__index) % size_of__p_loot_table,
                     1,
                     size_of__p_loot_table - 1);
         for (Quantity__u8 step = 0;
@@ -646,8 +657,8 @@ void f_chunk_generator__flat_world(
             chance_for__shrine =
                 get_pseudo_random_i32_with__xy_from__game(
                         p_game, 
-                        step % 3 + p_chunk->x__signed_index_i32,
-                        step / 3 + p_chunk->y__signed_index_i32) % size_of__p_loot_table;
+                        step % 3 + x__index,
+                        step / 3 + y__index) % size_of__p_loot_table;
             add_item_stack_to__inventory(
                     p_inventory, 
                     get_item_from__item_manager(
@@ -668,14 +679,14 @@ void f_chunk_generator__flat_world(
                 .random_result__local__u32 =
                 get_pseudo_random_i32_with__xy_from__game(
                         p_game, 
-                        p_chunk->x__signed_index_i32 + x, 
-                        p_chunk->y__signed_index_i32 + y);
+                        x__index + x, 
+                        y__index + y);
             random_results[index]
                 .random_result__greater__u32 =
                 get_pseudo_random_i32_with__xy_from__game(
                         p_game,
-                        (p_chunk->x__signed_index_i32 + x) >> 4, 
-                        (p_chunk->y__signed_index_i32 + y) >> 4);
+                        (x__index + x) >> 4, 
+                        (y__index + y) >> 4);
 
             // for flat_world, we will use these randomized values
             // as a sort of "moisture" level.

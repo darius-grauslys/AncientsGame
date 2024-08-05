@@ -10,9 +10,7 @@
 #include "tile.h"
 #include "vectors.h"
 
-void initialize_chunk(
-        Chunk *p_chunk, 
-        Chunk_Vector__3i32 chunk_vector__3i32);
+void initialize_chunk(Chunk *p_chunk);
 
 void m_serialize__chunk(
         Game *p_game,

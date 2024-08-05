@@ -1662,7 +1662,7 @@ typedef struct Chunk_t Chunk;
 
 typedef void (*f_Chunk_Generator)(
         Game *p_game,
-        Chunk *p_chunk_to_generate);
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 typedef struct World_Parameters_t {
     f_Chunk_Generator f_chunk_generator;
@@ -1684,7 +1684,6 @@ typedef struct Chunk_t {
         Serializer              _serializer;
     };
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
-    Signed_Index__i32 x__signed_index_i32, y__signed_index_i32;
     bool is_available;
 } Chunk;
 
@@ -1694,6 +1693,7 @@ typedef struct Chunk_Manager__Chunk_Map_Node_t {
     struct Chunk_Manager__Chunk_Map_Node_t *p_east__chunk_map_node;
     struct Chunk_Manager__Chunk_Map_Node_t *p_south__chunk_map_node;
     struct Chunk_Manager__Chunk_Map_Node_t *p_west__chunk_map_node;
+    Chunk_Vector__3i32 position_of__chunk_3i32;
 } Chunk_Manager__Chunk_Map_Node;
 
 typedef Chunk_Manager__Chunk_Map_Node

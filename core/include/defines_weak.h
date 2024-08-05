@@ -941,6 +941,7 @@ enum Game_Action_Kind {
 typedef struct Camera_t Camera;
 typedef struct Chunk_Manager_t Chunk_Manager;
 typedef struct Chunk_t Chunk;
+typedef struct Chunk_Manager__Chunk_Map_Node_t Chunk_Manager__Chunk_Map_Node;
 typedef struct Tile_t Tile;
 
 ///

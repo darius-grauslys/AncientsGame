@@ -117,11 +117,13 @@ void PLATFORM_update_chunks(
                 x++) {
             //TODO: consolidate this to a helper
             Signed_Index__i32 x__index =
-                p_current_sub__chunk_map_node->p_chunk__here
-                  ->x__signed_index_i32;
+                p_current_sub__chunk_map_node
+                    ->position_of__chunk_3i32
+                    .x__i32;
             Signed_Index__i32 y__index =
-                p_current_sub__chunk_map_node->p_chunk__here
-                  ->y__signed_index_i32;
+                p_current_sub__chunk_map_node
+                    ->position_of__chunk_3i32
+                    .y__i32;
 
             NDS_render_chunk(
                     x__index,

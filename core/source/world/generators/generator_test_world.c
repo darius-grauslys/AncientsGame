@@ -6,9 +6,16 @@
 
 void f_chunk_generator__test_world(
         Game *p_game,
-        Chunk *p_chunk) {
-    int32_t x = p_chunk->x__signed_index_i32;
-    int32_t y = p_chunk->y__signed_index_i32;
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    Chunk *p_chunk =
+        p_chunk_map_node
+        ->p_chunk__here;
+    Signed_Index__i32 x = 
+        p_chunk_map_node
+        ->position_of__chunk_3i32.x__i32;
+    Signed_Index__i32 y = 
+        p_chunk_map_node
+        ->position_of__chunk_3i32.y__i32;
     if (x < 0)
         x *= -1;
     if (y < 0)

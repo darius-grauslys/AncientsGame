@@ -34,15 +34,16 @@ void initialize_chunk_manager(
                     y * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW 
                     + x];
 
-            initialize_chunk(p_chunk__here, 
-                    get_chunk_vector__3i32(x, y, 0));
+            initialize_chunk(p_chunk__here);
+
+            p_chunk_map_node->p_chunk__here = p_chunk__here;
+            p_chunk_map_node->position_of__chunk_3i32 =
+                get_vector__3i32(x,y,0);
 
             get_p_world_parameters_from__game(p_game)
                 ->f_chunk_generator(
                     p_game, 
-                    p_chunk__here);
-
-            p_chunk_map_node->p_chunk__here = p_chunk__here;
+                    p_chunk_map_node);
 
             Index__u32 x__east, x__west, y__north, y__south;
 
@@ -122,40 +123,40 @@ uint32_t get_chunk_index_from__chunk_manager(
 
     if (chunk_vector__3i32.x__i32 < p_chunk_manager
             ->p_most_north_western__chunk_map_node
-                ->p_chunk__here->x__signed_index_i32
+                ->position_of__chunk_3i32.x__i32
             || chunk_vector__3i32.y__i32 > p_chunk_manager
                 ->p_most_north_western__chunk_map_node
-                    ->p_chunk__here->y__signed_index_i32
+                    ->position_of__chunk_3i32.y__i32
             || chunk_vector__3i32.x__i32 > p_chunk_manager
                 ->p_most_south_eastern__chunk_map_node
-                    ->p_chunk__here->x__signed_index_i32
+                    ->position_of__chunk_3i32.x__i32
             || chunk_vector__3i32.y__i32 < p_chunk_manager
                 ->p_most_south_eastern__chunk_map_node
-                    ->p_chunk__here->y__signed_index_i32) {
+                    ->position_of__chunk_3i32.y__i32) {
         debug_error("get_chunk_index_from__chunk_manager chunk index out of bounds: (%d, %d, %d)",
                 chunk_vector__3i32.x__i32, 
                 chunk_vector__3i32.y__i32, 
                 chunk_vector__3i32.z__i32);
         debug_info("bounds are: (%d, %d) - (%d, %d)",
             p_chunk_manager->p_most_north_western__chunk_map_node
-                ->p_chunk__here->x__signed_index_i32,
+                ->position_of__chunk_3i32.x__i32,
             p_chunk_manager->p_most_north_western__chunk_map_node
-                ->p_chunk__here->y__signed_index_i32, 
+                ->position_of__chunk_3i32.y__i32, 
             p_chunk_manager->p_most_south_eastern__chunk_map_node
-                ->p_chunk__here->x__signed_index_i32,
+                ->position_of__chunk_3i32.x__i32,
             p_chunk_manager->p_most_south_eastern__chunk_map_node
-                ->p_chunk__here->y__signed_index_i32);
+                ->position_of__chunk_3i32.y__i32);
         return 0;
     }
 
     Signed_Index__i32 local_x =
         chunk_vector__3i32.x__i32 - p_chunk_manager
         ->p_most_south_western__chunk_map_node
-            ->p_chunk__here->x__signed_index_i32;
+            ->position_of__chunk_3i32.x__i32;
     Signed_Index__i32 local_y =
         chunk_vector__3i32.y__i32 - p_chunk_manager
         ->p_most_south_western__chunk_map_node
-            ->p_chunk__here->y__signed_index_i32;
+            ->position_of__chunk_3i32.y__i32;
 
     return  local_y 
         * CHUNK_MANAGER__QUANTITY_OF_CHUNKS__PER_ROW
@@ -171,22 +172,22 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
     Signed_Index__i32 north_east__x = 
         p_chunk_manager
         ->p_most_north_eastern__chunk_map_node
-        ->p_chunk__here->x__signed_index_i32
+        ->position_of__chunk_3i32.x__i32
         ;
     Signed_Index__i32 north_east__y = 
         p_chunk_manager
         ->p_most_north_eastern__chunk_map_node
-        ->p_chunk__here->y__signed_index_i32
+        ->position_of__chunk_3i32.y__i32
         ;
     Signed_Index__i32 south_west__x = 
         p_chunk_manager
         ->p_most_south_western__chunk_map_node
-        ->p_chunk__here->x__signed_index_i32
+        ->position_of__chunk_3i32.x__i32
         ;
     Signed_Index__i32 south_west__y = 
         p_chunk_manager
         ->p_most_south_western__chunk_map_node
-        ->p_chunk__here->y__signed_index_i32
+        ->position_of__chunk_3i32.y__i32
         ;
 
     if (x__chunk < south_west__x
@@ -215,36 +216,17 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
 
 void replace_chunk(
         Game *p_game,
-        Chunk *p_chunk,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         i32 x__new,
         i32 y__new) {
-    // TODO:    replace p_chunk ptrs with serialization_fields
-    //          but with the assumption that you never
-    //          need to resolve them.
-    Serialized_Field s_chunk;
-    initialize_serialized_field(
-            &s_chunk, 
-            p_chunk,
-            get_uuid__chunk(p_chunk));
-    // TODO:    maybe organize this logic better?
-    //          we are EFFECTIVELY using a serialization handler
-    //          for disposal logic. In particular, we are
-    //          disposing of any inventories associated to
-    //          any containers within the chunk.
-    //
-    //          We will want to serialize this containers, so
-    //          maybe not too much organization is needed.
-    p_chunk->_serializer.m_serialize_handler(
-            p_game,
-            &s_chunk);
 
-    p_chunk->x__signed_index_i32 = x__new;
-    p_chunk->y__signed_index_i32 = y__new;
+    p_chunk_map_node->position_of__chunk_3i32.x__i32 = x__new;
+    p_chunk_map_node->position_of__chunk_3i32.y__i32 = y__new;
 
     get_p_world_parameters_from__game(p_game)
         ->f_chunk_generator(
                 p_game,
-                p_chunk);
+                p_chunk_map_node);
 }
 
 // TODO: find a way to consolidate this helpers without macros?
@@ -253,10 +235,10 @@ void move_chunk_manager__chunks_north(
     Chunk_Manager *p_chunk_manager) {
     Signed_Index__i32 x__old_most_north_western_chunk =
         p_chunk_manager->p_most_north_western__chunk_map_node
-            ->p_chunk__here->x__signed_index_i32;
+            ->position_of__chunk_3i32.x__i32;
     Signed_Index__i32 y__new_most_north_western_chunk =
         p_chunk_manager->p_most_north_western__chunk_map_node
-            ->p_chunk__here->y__signed_index_i32 + 1;
+            ->position_of__chunk_3i32.y__i32 + 1;
     p_chunk_manager->p_most_north_western__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node
             ->p_north__chunk_map_node;
@@ -276,16 +258,16 @@ void move_chunk_manager__chunks_north(
     for (Quantity__u32 step = 0; 
             step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
             step++) {
-        Chunk *p_chunk__here =
-            p_current__chunk_map_node->p_chunk__here;
-        if (p_chunk__here->x__signed_index_i32 !=
+        if (p_current__chunk_map_node
+                ->position_of__chunk_3i32.x__i32 !=
                 (x__old_most_north_western_chunk + step)
-                || p_chunk__here->y__signed_index_i32 
+                || p_current__chunk_map_node
+                    ->position_of__chunk_3i32.y__i32 
                 != y__new_most_north_western_chunk) {
 
             replace_chunk(
                     p_game,
-                    p_chunk__here,
+                    p_current__chunk_map_node,
                     x__old_most_north_western_chunk + step,
                     y__new_most_north_western_chunk
                     );
@@ -301,10 +283,10 @@ void move_chunk_manager__chunks_east(
         Chunk_Manager *p_chunk_manager) {
     int32_t x__new_most_north_eastern_chunk =
         p_chunk_manager->p_most_north_eastern__chunk_map_node
-            ->p_chunk__here->x__signed_index_i32 + 1;
+            ->position_of__chunk_3i32.x__i32 + 1;
     int32_t y__old_most_south_eastern_chunk =
         p_chunk_manager->p_most_south_eastern__chunk_map_node
-            ->p_chunk__here->y__signed_index_i32;
+            ->position_of__chunk_3i32.y__i32;
 
     p_chunk_manager->p_most_north_western__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node
@@ -325,16 +307,16 @@ void move_chunk_manager__chunks_east(
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
             step++) {
-        Chunk *p_chunk__here =
-            p_current__chunk_map_node->p_chunk__here;
-        if (p_chunk__here->x__signed_index_i32 !=
+        if (p_current__chunk_map_node
+                ->position_of__chunk_3i32.x__i32 !=
                 x__new_most_north_eastern_chunk
-                || (p_chunk__here->y__signed_index_i32 != 
+                || (p_current__chunk_map_node
+                    ->position_of__chunk_3i32.y__i32 != 
                     y__old_most_south_eastern_chunk + step)) {
 
             replace_chunk(
                     p_game,
-                    p_chunk__here,
+                    p_current__chunk_map_node,
                     x__new_most_north_eastern_chunk,
                     y__old_most_south_eastern_chunk + step
                     );
@@ -350,10 +332,10 @@ void move_chunk_manager__chunks_south(
         Chunk_Manager *p_chunk_manager) {
     int32_t x__old_most_south_western_chunk=
         p_chunk_manager->p_most_south_western__chunk_map_node
-            ->p_chunk__here->x__signed_index_i32;
+            ->position_of__chunk_3i32.x__i32;
     int32_t y__new_most_south_western_chunk=
         p_chunk_manager->p_most_south_western__chunk_map_node
-            ->p_chunk__here->y__signed_index_i32 - 1;
+            ->position_of__chunk_3i32.y__i32 - 1;
     p_chunk_manager->p_most_north_western__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node
             ->p_south__chunk_map_node;
@@ -373,16 +355,16 @@ void move_chunk_manager__chunks_south(
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
             step++) {
-        Chunk *p_chunk__here =
-            p_current__chunk_map_node->p_chunk__here;
-        if (p_chunk__here->x__signed_index_i32 !=
+        if (p_current__chunk_map_node
+                ->position_of__chunk_3i32.x__i32 !=
                 (x__old_most_south_western_chunk + step)
-                || p_chunk__here->y__signed_index_i32 
+                || p_current__chunk_map_node
+                ->position_of__chunk_3i32.y__i32 
                 != y__new_most_south_western_chunk) {
 
             replace_chunk(
                     p_game,
-                    p_chunk__here,
+                    p_current__chunk_map_node,
                     x__old_most_south_western_chunk + step,
                     y__new_most_south_western_chunk
                     );
@@ -398,10 +380,10 @@ void move_chunk_manager__chunks_west(
         Chunk_Manager *p_chunk_manager) {
     int32_t x__new_most_north_western_chunk =
         p_chunk_manager->p_most_north_western__chunk_map_node
-            ->p_chunk__here->x__signed_index_i32 - 1;
+            ->position_of__chunk_3i32.x__i32 - 1;
     int32_t y__old_most_south_western_chunk =
         p_chunk_manager->p_most_south_western__chunk_map_node
-            ->p_chunk__here->y__signed_index_i32;
+            ->position_of__chunk_3i32.y__i32;
 
     p_chunk_manager->p_most_north_western__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node
@@ -422,16 +404,16 @@ void move_chunk_manager__chunks_west(
     for (uint32_t step = 0; 
             step < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
             step++) {
-        Chunk *p_chunk__here =
-            p_current__chunk_map_node->p_chunk__here;
-        if (p_chunk__here->x__signed_index_i32 !=
+        if (p_current__chunk_map_node
+                ->position_of__chunk_3i32.x__i32 !=
                 x__new_most_north_western_chunk
-                || (p_chunk__here->y__signed_index_i32 != 
+                || (p_current__chunk_map_node
+                    ->position_of__chunk_3i32.y__i32 != 
                     y__old_most_south_western_chunk + step)) {
 
             replace_chunk(
                     p_game,
-                    p_chunk__here,
+                    p_current__chunk_map_node,
                     x__new_most_north_western_chunk,
                     y__old_most_south_western_chunk + step
                     );
