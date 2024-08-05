@@ -243,6 +243,27 @@ typedef struct Serialized_Field_t {
     };
 } Serialized_Field;
 
+#define SERIALIZATION_REQUEST_FLAGS__NONE 0
+#define SERIALZIATION_REQUEST_FLAG__IS_ACTIVE BIT(0)
+#define SERIALZIATION_REQUEST_FLAG__USE_SERIALIZER_OR_BUFFER BIT(1)
+#define SERIALIZATION_REQUEST_FLAG__READ_OR_WRITE BIT(2)
+#define SERIALIZATION_REQUEST_FLAG__KEEP_ALIVE BIT(3)
+
+typedef uint8_t Serialization_Request_Flags;
+
+typedef struct Serialization_Request_t {
+    void *p_file_handler;
+    Quantity__u32 size_of__serialization;
+    Serialization_Request_Flags serialization_request_flags;
+    union {
+        Serializer *p_serializer;
+        struct {
+            u8 *p_buffer;
+            Quantity__u16 quantity_of__writes_or_reads;
+        };
+    };
+} Serialization_Request;
+
 ///
 /// SECTION_collisions
 ///

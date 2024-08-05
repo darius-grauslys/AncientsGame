@@ -749,6 +749,8 @@ typedef struct Serialized_Field_t Serialized_Item_Stack_Ptr;
 typedef struct Serialized_Field_t Serialized_Inventory_Ptr;
 typedef struct Serialized_Field_t Serialized_Entity_Ptr;
 typedef struct Serialized_Field_t Serialized_Chunk_Ptr;
+typedef struct Serialization_Request_t Serialization_Request;
+typedef struct Serializer_t Serializer;
 
 ///
 /// SECTION_sort
