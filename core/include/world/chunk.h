@@ -14,11 +14,13 @@ void initialize_chunk(Chunk *p_chunk);
 
 void m_serialize__chunk(
         Game *p_game,
-        Serialized_Field *p_serialized_field__chunk);
+        Serializer *p_this_chunk__serializer,
+        Serialization_Request *p_serialization_request);
 
 void m_deserialize__chunk(
         Game *p_game,
-        Serialized_Field *p_chunk);
+        Serializer *p_this_chunk__serializer,
+        Serialization_Request *p_serialization_request);
 
 Identifier__u32 get_uuid__chunk(
         Chunk *p_chunk);

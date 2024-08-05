@@ -191,10 +191,12 @@ typedef struct Chunk_Identifier__u32_t {
 
 typedef void (*m_Serialize)(
         Game *p_game,
-        Serialized_Field *p_this_serialized_field);
+        Serializer *p_this_serializer,
+        Serialization_Request *p_serialization_request);
 typedef void (*m_Deserialize)(
         Game *p_game,
-        Serialized_Field *p_this_serialized_field);
+        Serializer *p_this_serializer,
+        Serialization_Request *p_serialization_request);
 
 ///
 /// This must be the FIRST field to appear
