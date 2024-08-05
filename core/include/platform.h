@@ -204,6 +204,11 @@ void PLATFORM_render_tile(
         PLATFORM_Gfx_Context *context,
         Tile *tile);
 
+void PLATFORM_update_chunk(
+        PLATFORM_Gfx_Context *p_gfx_context,
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
+
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager);
@@ -229,6 +234,60 @@ void PLATFORM_post_render(Game *game);
 ///
 /// SECTION_scene
 ///
+
+///
+/// SECTION_serialization
+///
+
+void PLATFORM_initialize_file_system_context(
+        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
+
+enum PLATFORM_Open_File_Error {
+    PLATFORM_Open_File_Error__None = 0,
+    PLATFORM_Open_File_Error__Invalid_Path = 1,
+    PLATFORM_Open_File_Error__File_Not_Found = 2,
+    PLATFORM_Open_File_Error__Unknown,
+};
+
+enum PLATFORM_Write_File_Error {
+    PLATFORM_Write_File_Error__None = 0,
+    PLATFORM_Write_File_Error__Max_Size_Reached = 1,
+    PLATFORM_Write_File_Error__Unknown
+};
+
+enum PLATFORM_Read_File_Error {
+    PLATFORM_Read_File_Error__None = 0,
+    PLATFORM_Read_File_Error__End_Of_File = 1,
+    PLATFORM_Read_File_Error__Unknown
+};
+
+Serialization_Request *PLATFORM_allocate_serialization_request(
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
+
+enum PLATFORM_Open_File_Error PLATFORM_open_file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        const char *p_path,
+        const char *p_flags,
+        Serialization_Request *p_serialization_request);
+
+void PLATFORM_close_file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        Serialization_Request *p_serialization_request);
+
+enum PLATFORM_Write_File_Error PLATFORM_write_file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        u8 *source,
+        Quantity__u32 length_of__data,
+        Quantity__u32 quantity_of__writes,
+        void *p_file_handler);
+
+enum PLATFORM_Read_File_Error PLATFORM_read_file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        u8 *destination,
+        Quantity__u32 *p_length_of__data_to_read,
+        Quantity__u32 quantity_of__reads,
+        void *p_file_handler);
 
 ///
 /// SECTION_input
