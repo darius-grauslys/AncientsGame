@@ -21,8 +21,8 @@ void initialize_chunk(Chunk *p_chunk) {
 
 void m_serialize__chunk(
         Game *p_game,
-        Serializer *p_this_chunk__serializer,
-        Serialization_Request *p_serialization_request) {
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_chunk__serializer) {
     // if (!is_p_serialized_field__linked(
     //             p_serialized_field__chunk)) {
     //     return;
@@ -66,8 +66,8 @@ void m_serialize__chunk(
 
 void m_deserialize__chunk(
         Game *p_game,
-        Serializer *p_this_chunk__serializer,
-        Serialization_Request *p_serialization_request) {
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_chunk__serializer) {
     
 }
 

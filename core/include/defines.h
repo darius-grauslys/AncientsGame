@@ -191,12 +191,12 @@ typedef struct Chunk_Identifier__u32_t {
 
 typedef void (*m_Serialize)(
         Game *p_game,
-        Serializer *p_this_serializer,
-        Serialization_Request *p_serialization_request);
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
 typedef void (*m_Deserialize)(
         Game *p_game,
-        Serializer *p_this_serializer,
-        Serialization_Request *p_serialization_request);
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
 
 ///
 /// This must be the FIRST field to appear
@@ -1698,16 +1698,34 @@ typedef struct Position_Local_To_Chunk_2i8_t {
     Quantity__u8 y__local__quantity_u8;
 } Position_Local_To_Chunk_2i8;
 
+///
+/// CHUNK_FLAG__IS_ACTIVE - chunk is ready to render and received updates
+/// CHUNK_FLAG__IS_AWAITING_SERIALIZATION - chunk is busy being serialized
+/// CHUNK_FLAG__IS_AWAITING_DESERIALIZATION - busy being deserialized
+/// CHUNK_FLAG__IS_UPDATED - chunk tiles got updated, needs to be saved.
+/// CHUNK_FLAG__IS_VISUALLY_UPDATED - chunk tiles got updated, but only for
+///                                     visuals. No need to serialize yet.
+///
+
+typedef uint8_t Chunk_Flags;
+
+#define CHUNK_FLAGS__NONE 0
+#define CHUNK_FLAG__IS_ACTIVE BIT(0)
+#define CHUNK_FLAG__IS_AWAITING_SERIALIZATION BIT(1)
+#define CHUNK_FLAG__IS_AWAITING_DESERIALIZATION BIT(2)
+#define CHUNK_FLAG__IS_UPDATED BIT(3)
+#define CHUNK_FLAG__IS_VISUALLY_UPDATED BIT(4)
+
 typedef struct Chunk_t {
     ///
     /// Do not interact with this.
     ///
     union {
-        Serialization_Header    _serialization_header;
         Serializer              _serializer;
+        Serialization_Header    _serialization_header;
     };
     Tile tiles[CHUNK__WIDTH * CHUNK__HEIGHT * CHUNK__DEPTH];
-    bool is_available;
+    Chunk_Flags chunk_flags;
 } Chunk;
 
 typedef struct Chunk_Manager__Chunk_Map_Node_t {

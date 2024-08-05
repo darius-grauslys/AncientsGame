@@ -287,10 +287,17 @@ bool poll_chunk_manager_for__serialization(
 
     Index__u32 index_of__chunk_map_node_ptr = 0;
     do {
-    } while (!*(p_chunk_map_node_ptr++)
-            && index_of__chunk_map_node_ptr++
-            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS);
-    return false;
+        Chunk *p_chunk =
+            (*p_chunk_map_node_ptr)->p_chunk__here;
+        if (!is_chunk__awaiting_serialization(p_chunk)) {
+            dequeue_chunk_map_node_for__serialization(
+                    p_chunk_manager, 
+                    *p_chunk_map_node_ptr);
+        }
+    } while (++index_of__chunk_map_node_ptr
+            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS
+            && !*(++p_chunk_map_node_ptr));
+    return (bool)(p_chunk_manager->ptr_array_queue__serialized_nodes[0]);
 }
 
 void replace_chunk(
