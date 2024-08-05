@@ -1,4 +1,5 @@
 #include "defines_weak.h"
+#include "platform_defines.h"
 #include "serialization/serialized_field.h"
 #include "world/world.h"
 #include <defines.h>
@@ -19,6 +20,13 @@ void initialize_chunk_manager(
         Chunk_Manager *p_chunk_manager) {
     p_chunk_manager->x__center_chunk__signed_index_i32 =
         p_chunk_manager->y__center_chunk__signed_index_i32 = 0;
+    for (Index__u32 index_of__chunk_map_node_ptr = 0;
+            index_of__chunk_map_node_ptr
+            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS;
+            index_of__chunk_map_node_ptr++) {
+        p_chunk_manager->ptr_array_queue__serialized_nodes[
+            index_of__chunk_map_node_ptr] = 0;
+    }
     for (Signed_Index__i32 y=0; y < 
             CHUNK_MANAGER__QUANTITY_OF_MANAGED_CHUNK_ROWS; y++) {
         for (Signed_Index__i32 x=0; x <
@@ -212,6 +220,77 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
     }
 
     return p_node->p_chunk__here;
+}
+
+void enqueue_chunk_map_node_for__serialization(
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    Chunk_Manager__Chunk_Map_Node **p_chunk_map_node_ptr =
+        p_chunk_manager->ptr_array_queue__serialized_nodes;
+
+    Index__u32 index_of__chunk_map_node_ptr = 0;
+    while (!(*p_chunk_map_node_ptr)
+            && index_of__chunk_map_node_ptr++
+            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS) {
+        p_chunk_map_node_ptr++;
+    }
+
+#ifndef NDEBUG
+    if (index_of__chunk_map_node_ptr
+            >= CHUNK_MANAGER__QUANTITY_OF_CHUNKS) {
+        debug_abort("enqueue_chunk_map_node_for__serialization, failed to enqueue.");
+        return;
+    }
+#endif
+
+    *p_chunk_map_node_ptr = 
+        p_chunk_map_node;
+}
+
+void dequeue_chunk_map_node_for__serialization(
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    Chunk_Manager__Chunk_Map_Node **p_chunk_map_node_ptr =
+        p_chunk_manager->ptr_array_queue__serialized_nodes;
+    Chunk_Manager__Chunk_Map_Node **p_chunk_map_node_ptr_of__dequeue = 0;
+
+    Index__u32 index_of__chunk_map_node_ptr = 0;
+    while (index_of__chunk_map_node_ptr++
+            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS
+            && !(*(p_chunk_map_node_ptr+1))) {
+        if (*p_chunk_map_node_ptr == p_chunk_map_node)
+            p_chunk_map_node_ptr_of__dequeue =
+                p_chunk_map_node_ptr;
+        p_chunk_map_node_ptr++;
+    }
+
+#ifndef NDEBUG
+    if (!p_chunk_map_node_ptr_of__dequeue) {
+        debug_abort("dequeue_chunk_map_node_for__serialization, failed to dequeue.");
+        return;
+    }
+#endif
+
+    *p_chunk_map_node_ptr_of__dequeue =
+        *p_chunk_map_node_ptr;
+    *p_chunk_map_node_ptr = 0;
+}
+
+bool poll_chunk_manager_for__serialization(
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
+    Chunk_Manager__Chunk_Map_Node **p_chunk_map_node_ptr =
+        p_chunk_manager->ptr_array_queue__serialized_nodes;
+
+    if (!p_chunk_map_node_ptr)
+        return false;
+
+    Index__u32 index_of__chunk_map_node_ptr = 0;
+    do {
+    } while (!*(p_chunk_map_node_ptr++)
+            && index_of__chunk_map_node_ptr++
+            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS);
+    return false;
 }
 
 void replace_chunk(
