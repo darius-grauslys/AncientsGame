@@ -1,6 +1,7 @@
 #include "defines_weak.h"
 #include "platform_defines.h"
 #include "serialization/serialized_field.h"
+#include "world/serialization/world_directory.h"
 #include "world/world.h"
 #include <defines.h>
 #include <world/chunk.h>
@@ -57,11 +58,6 @@ void initialize_chunk_manager(
 
             resolve_chunk(
                     p_game,
-                    p_chunk_map_node);
-
-            get_p_world_parameters_from__game(p_game)
-                ->f_chunk_generator(
-                    p_game, 
                     p_chunk_map_node);
 
             Index__u32 x__east, x__west, y__north, y__south;
@@ -248,7 +244,22 @@ void load_chunk(
 void resolve_chunk(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    char file_path_to__chunk[128];
+    memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
+    if (stat_chunk_file__tiles(
+                p_game,
+                p_chunk_map_node,
+                file_path_to__chunk)) {
+        load_chunk(
+                p_game, 
+                p_chunk_map_node);
+        return;
+    }
 
+    get_p_world_parameters_from__game(p_game)
+        ->f_chunk_generator(
+            p_game, 
+            p_chunk_map_node);
 }
 
 void enqueue_chunk_map_node_for__serialization(
@@ -344,9 +355,11 @@ void replace_chunk(
         i32 x__new,
         i32 y__new) {
 
-    enqueue_chunk_map_node_for__serialization(
-            get_p_chunk_manager_from__game(p_game), 
-            p_chunk_map_node);
+    if (is_chunk__updated(p_chunk_map_node->p_chunk__here)) {
+        enqueue_chunk_map_node_for__serialization(
+                get_p_chunk_manager_from__game(p_game), 
+                p_chunk_map_node);
+    }
 
     p_chunk_map_node->position_of__chunk_3i32.x__i32 = x__new;
     p_chunk_map_node->position_of__chunk_3i32.y__i32 = y__new;
