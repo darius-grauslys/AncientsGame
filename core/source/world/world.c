@@ -51,6 +51,11 @@ void initialize_world(
 }
 
 void manage_world(Game *p_game) {
+    if (poll_chunk_manager_for__serialization(
+                p_game, 
+                get_p_chunk_manager_from__game(p_game))) {
+        return;
+    }
     manage_world__entities(p_game);
 
     if (p_game->world.camera.m_camera_handler) {

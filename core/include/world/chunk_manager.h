@@ -34,6 +34,10 @@ void move_chunk_manager(
         Direction__u8 direction,
         Quantity__u32 steps);
 
+bool poll_chunk_manager_for__serialization(
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager);
+
 bool poll_chunk_manager_for__chunk_movement(
         Game *p_game,
         Chunk_Manager *p_chunk_manager,
