@@ -15,6 +15,13 @@
 #include <world/tile_vectors.h>
 #include <game.h>
 
+///
+/// Either loads or generates the chunk
+///
+void resolve_chunk(
+        Game *p_game,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
+
 void initialize_chunk_manager(
         Game *p_game,
         Chunk_Manager *p_chunk_manager) {
@@ -48,10 +55,14 @@ void initialize_chunk_manager(
             p_chunk_map_node->position_of__chunk_3i32 =
                 get_vector__3i32(x,y,0);
 
-            get_p_world_parameters_from__game(p_game)
-                ->f_chunk_generator(
-                    p_game, 
+            resolve_chunk(
+                    p_game,
                     p_chunk_map_node);
+
+            // get_p_world_parameters_from__game(p_game)
+            //     ->f_chunk_generator(
+            //         p_game, 
+            //         p_chunk_map_node);
 
             Index__u32 x__east, x__west, y__north, y__south;
 
@@ -220,6 +231,24 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
     }
 
     return p_node->p_chunk__here;
+}
+
+void save_chunk(
+        Game *p_game,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+
+}
+
+void load_chunk(
+        Game *p_game,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+
+}
+
+void resolve_chunk(
+        Game *p_game,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+
 }
 
 void enqueue_chunk_map_node_for__serialization(
