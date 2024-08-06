@@ -2,6 +2,7 @@
 #include "game.h"
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
+#include "platform.h"
 #include "platform_defines.h"
 #include "serialization/serialized_field.h"
 #include "serialization/serializer.h"
@@ -23,52 +24,62 @@ void m_serialize__chunk(
         Game *p_game,
         Serialization_Request *p_serialization_request,
         Serializer *p_this_chunk__serializer) {
-    // if (!is_p_serialized_field__linked(
-    //             p_serialized_field__chunk)) {
-    //     return;
-    // }
-    // Chunk *p_chunk =
-    //     p_serialized_field__chunk
-    //     ->p_serialized_field__chunk
-    //     ;
-    // for (u8 y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
-    //     for (u8 x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
-    //         Tile *p_tile =
-    //             get_p_tile_from__chunk_using__u8(
-    //                     p_chunk, x, y, 0);
-    //         if (!is_tile__container(p_tile))
-    //             continue;
-
-    //         Vector__3i32 vector__3i32 =
-    //             get_vector__3i32(
-    //                     x + (p_chunk->x__signed_index_i32 << 3), 
-    //                     y + (p_chunk->y__signed_index_i32 << 3),
-    //                     0);
-
-    //         Serialized_Field s_inventory;
-    //         initialize_serialized_field_as__unlinked(
-    //                 &s_inventory,
-    //                 get_uuid_for__container(
-    //                     vector__3i32));
-
-    //         if (!resolve_s_inventory_ptr_to__inventory_manager(
-    //                     get_p_inventory_manager_from__game(p_game),
-    //                     &s_inventory)) {
-    //             continue;
-    //         }
-
-    //         release_p_inventory_in__inventory_manager(
-    //                 get_p_inventory_manager_from__game(p_game), 
-    //                 s_inventory.p_serialized_field__inventory);
-    //     }
-    // }
+    Chunk *p_chunk = (Chunk*)p_this_chunk__serializer;
+    clear_chunk_flags(p_chunk);
+    return;
+    enum PLATFORM_Write_File_Error error = 
+        PLATFORM_write_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                (u8*)p_this_chunk__serializer, 
+                p_this_chunk__serializer->_serialization_header.size_of__struct, 
+                1, 
+                p_serialization_request->p_file_handler);
+    if (error) {
+        debug_error("m_serialize__chunk, failed error: %d", error);
+        set_chunk_as__inactive(p_chunk);
+        set_chunk_as__visually_updated(p_chunk);
+        return;
+    }
 }
 
 void m_deserialize__chunk(
         Game *p_game,
         Serialization_Request *p_serialization_request,
         Serializer *p_this_chunk__serializer) {
-    
+    Chunk *p_chunk = (Chunk*)p_this_chunk__serializer;
+    clear_chunk_flags(p_chunk);
+    return;
+    Quantity__u32 length_of__read =
+        p_this_chunk__serializer
+        ->_serialization_header.size_of__struct;
+    enum PLATFORM_Read_File_Error error = 
+        PLATFORM_read_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                (u8*)p_this_chunk__serializer, 
+                &length_of__read,
+                1, 
+                p_serialization_request->p_file_handler);
+    if (error) {
+        debug_error("m_serialize__chunk, failed error: %d", error);
+        set_chunk_as__inactive(p_chunk);
+        set_chunk_as__visually_updated(p_chunk);
+        return;
+    }
+    if (length_of__read
+            != p_this_chunk__serializer
+            ->_serialization_header
+            .size_of__struct) {
+        debug_error("m_serialize__chunk, bad read length: %d/%d", 
+                length_of__read,
+                p_this_chunk__serializer
+                ->_serialization_header
+                .size_of__struct);
+        set_chunk_as__inactive(p_chunk);
+        set_chunk_as__visually_updated(p_chunk);
+        return;
+    }
+
+    set_chunk_as__active(p_chunk);
 }
 
 Identifier__u32 get_uuid__chunk(

@@ -1,4 +1,6 @@
 #include "defines_weak.h"
+#include "inventory/inventory.h"
+#include "inventory/inventory_manager.h"
 #include "platform.h"
 #include "platform_defines.h"
 #include "serialization/serialization_request.h"
@@ -254,7 +256,7 @@ void save_chunk(
                 p_serialization_request);
 
     set_serialization_request_as__fire_and_forget(p_serialization_request);
-    if (!error) {
+    if (error) {
         // TODO: release p_serialization_request
         debug_error("save_chunk, error opening file: %d", 
                 error);
@@ -305,6 +307,42 @@ void load_chunk(
 void resolve_chunk(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    Chunk *p_chunk =
+        p_chunk_map_node->p_chunk__here;
+    for (u8 y=0;y<CHUNK_WIDTH__IN_TILES;y++) {
+        for (u8 x=0;x<CHUNK_WIDTH__IN_TILES;x++) {
+            Tile *p_tile =
+                get_p_tile_from__chunk_using__u8(
+                        p_chunk, x, y, 0);
+            if (!is_tile__container(p_tile))
+                continue;
+
+            Vector__3i32 vector__3i32 =
+                get_vector__3i32(
+                        x + (p_chunk_map_node
+                            ->position_of__chunk_3i32.x__i32 << 3), 
+                        y + (p_chunk_map_node
+                            ->position_of__chunk_3i32.y__i32 << 3),
+                        0);
+
+            Serialized_Field s_inventory;
+            initialize_serialized_field_as__unlinked(
+                    &s_inventory,
+                    get_uuid_for__container(
+                        vector__3i32));
+
+            if (!resolve_s_inventory_ptr_to__inventory_manager(
+                        get_p_inventory_manager_from__game(p_game),
+                        &s_inventory)) {
+                continue;
+            }
+
+            release_p_inventory_in__inventory_manager(
+                    get_p_inventory_manager_from__game(p_game), 
+                    s_inventory.p_serialized_field__inventory);
+        }
+    }
+
     char file_path_to__chunk[128];
     memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
     if (stat_chunk_file__tiles(
@@ -322,7 +360,7 @@ void resolve_chunk(
         ->f_chunk_generator(
             p_game, 
             p_chunk_map_node);
-    // set_chunk_as__updated(p_chunk_map_node->p_chunk__here);
+    set_chunk_as__updated(p_chunk_map_node->p_chunk__here);
 }
 
 void enqueue_chunk_map_node_for__serialization(
