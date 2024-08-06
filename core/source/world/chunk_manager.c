@@ -1,4 +1,5 @@
 #include "defines_weak.h"
+#include "platform.h"
 #include "platform_defines.h"
 #include "serialization/serialized_field.h"
 #include "world/serialization/world_directory.h"
@@ -238,7 +239,6 @@ void save_chunk(
 void load_chunk(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
-
 }
 
 void resolve_chunk(
@@ -359,15 +359,19 @@ void replace_chunk(
         enqueue_chunk_map_node_for__serialization(
                 get_p_chunk_manager_from__game(p_game), 
                 p_chunk_map_node);
+        save_chunk(
+                p_game, 
+                p_chunk_map_node);
     }
 
     p_chunk_map_node->position_of__chunk_3i32.x__i32 = x__new;
     p_chunk_map_node->position_of__chunk_3i32.y__i32 = y__new;
 
-    get_p_world_parameters_from__game(p_game)
-        ->f_chunk_generator(
-                p_game,
+    if (!is_chunk__updated(p_chunk_map_node->p_chunk__here)) {
+        resolve_chunk(
+                p_game, 
                 p_chunk_map_node);
+    }
 }
 
 // TODO: find a way to consolidate this helpers without macros?
