@@ -59,10 +59,10 @@ void initialize_chunk_manager(
                     p_game,
                     p_chunk_map_node);
 
-            // get_p_world_parameters_from__game(p_game)
-            //     ->f_chunk_generator(
-            //         p_game, 
-            //         p_chunk_map_node);
+            get_p_world_parameters_from__game(p_game)
+                ->f_chunk_generator(
+                    p_game, 
+                    p_chunk_map_node);
 
             Index__u32 x__east, x__west, y__north, y__south;
 
