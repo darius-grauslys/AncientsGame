@@ -1,10 +1,12 @@
 #include "defines_weak.h"
 #include "platform.h"
 #include "platform_defines.h"
+#include "serialization/serialization_request.h"
 #include "serialization/serialized_field.h"
 #include "world/serialization/world_directory.h"
 #include "world/world.h"
 #include <defines.h>
+#include <stdbool.h>
 #include <world/chunk.h>
 #include <debug/debug.h>
 
@@ -232,13 +234,72 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
 
 void save_chunk(
         Game *p_game,
-        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
+        char *p_file_path_to__chunk) {
+    Serialization_Request *p_serialization_request =
+        PLATFORM_allocate_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game));
+    if (!p_serialization_request) {
+        debug_error("save_chunk failed to allocate serialization request.");
+        clear_chunk_flags(p_chunk_map_node->p_chunk__here);
+        set_chunk_as__visually_updated(p_chunk_map_node->p_chunk__here);
+        return;
+    }
 
+    enum PLATFORM_Open_File_Error error =
+        PLATFORM_open_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_file_path_to__chunk, 
+                "wb", 
+                p_serialization_request);
+
+    set_serialization_request_as__fire_and_forget(p_serialization_request);
+    if (!error) {
+        // TODO: release p_serialization_request
+        debug_error("save_chunk, error opening file: %d", 
+                error);
+        return;
+    }
+
+    set_serialization_request_as__using_serializer(
+            p_serialization_request);
+    set_serialization_request_as__write(
+            p_serialization_request);
 }
 
 void load_chunk(
         Game *p_game,
-        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
+        char *p_file_path_to__chunk) {
+    Serialization_Request *p_serialization_request =
+        PLATFORM_allocate_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game));
+    if (!p_serialization_request) {
+        debug_error("load_chunk failed to allocate serialization request.");
+        clear_chunk_flags(p_chunk_map_node->p_chunk__here);
+        set_chunk_as__visually_updated(p_chunk_map_node->p_chunk__here);
+        return;
+    }
+
+    enum PLATFORM_Open_File_Error error =
+        PLATFORM_open_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_file_path_to__chunk, 
+                "rb", 
+                p_serialization_request);
+
+    set_serialization_request_as__fire_and_forget(p_serialization_request);
+    if (!error) {
+        // TODO: release p_serialization_request
+        debug_error("load_chunk, error opening file: %d", 
+                error);
+        return;
+    }
+
+    set_serialization_request_as__using_serializer(
+            p_serialization_request);
+    set_serialization_request_as__read(
+            p_serialization_request);
 }
 
 void resolve_chunk(
@@ -252,7 +313,8 @@ void resolve_chunk(
                 file_path_to__chunk)) {
         load_chunk(
                 p_game, 
-                p_chunk_map_node);
+                p_chunk_map_node,
+                file_path_to__chunk);
         return;
     }
 
@@ -260,6 +322,7 @@ void resolve_chunk(
         ->f_chunk_generator(
             p_game, 
             p_chunk_map_node);
+    // set_chunk_as__updated(p_chunk_map_node->p_chunk__here);
 }
 
 void enqueue_chunk_map_node_for__serialization(
@@ -359,9 +422,30 @@ void replace_chunk(
         enqueue_chunk_map_node_for__serialization(
                 get_p_chunk_manager_from__game(p_game), 
                 p_chunk_map_node);
-        save_chunk(
-                p_game, 
-                p_chunk_map_node);
+        char file_path_to__chunk[128];
+        memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
+        Quantity__u8 length_of__path_to__chunk =
+            stat_chunk_directory(
+                    p_game,
+                    p_chunk_map_node,
+                    file_path_to__chunk);
+        if (length_of__path_to__chunk) {
+            if (append_chunk_file__tiles_to__path(
+                    file_path_to__chunk, 
+                    length_of__path_to__chunk, 
+                    sizeof(file_path_to__chunk))) {
+                save_chunk(
+                        p_game, 
+                        p_chunk_map_node,
+                        file_path_to__chunk);
+            } else {
+                debug_error("replace_chunk, failed to append to path.");
+                goto fail_save;
+            }
+        } else {
+fail_save:
+            clear_chunk_flags(p_chunk_map_node->p_chunk__here);
+        }
     }
 
     p_chunk_map_node->position_of__chunk_3i32.x__i32 = x__new;

@@ -126,6 +126,11 @@ static Collision_Manager inline
     return get_p_collision_manager_from__world(&p_game->world);    
 }
 
+static PLATFORM_File_System_Context inline
+*get_p_PLATFORM_file_system_context_from__game(Game *p_game) {
+    return p_game->p_PLATFORM_file_system_context;
+}
+
 static PLATFORM_Audio_Context inline
 *get_p_PLATFORM_audio_context_from__game(Game *p_game) {
     return p_game->p_PLATFORM_audio_context;

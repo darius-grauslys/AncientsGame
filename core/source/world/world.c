@@ -20,6 +20,8 @@ void initialize_world(
         World *p_world,
         PLATFORM_Graphics_Window 
             *p_PLATFORM_graphics_window_for__world) {
+    strncpy(p_world->name, "default_world", WORLD_NAME_MAX_SIZE_OF);
+
     p_world->p_PLATFORM_graphics_window_for__world =
         p_PLATFORM_graphics_window_for__world;
     // TODO: modularize this better:

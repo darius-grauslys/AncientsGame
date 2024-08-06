@@ -13,12 +13,19 @@
 
 extern PLATFORM_Gfx_Context _NDS_gfx_context;
 extern PLATFORM_Audio_Context _NDS_audio_context;
+extern PLATFORM_File_System_Context _NDS_file_system_context;
 
 int PLATFORM_main(Game *p_game) {
     NDS_initialize_gfx_context(
             &_NDS_gfx_context);
     p_game->p_PLATFORM_gfx_context =
         &_NDS_gfx_context;
+
+    PLATFORM_initialize_file_system_context(
+            p_game,
+            &_NDS_file_system_context);
+    p_game->p_PLATFORM_file_system_context =
+        &_NDS_file_system_context;
 
     PLATFORM_initialize_audio(
             &_NDS_audio_context);

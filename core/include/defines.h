@@ -1788,8 +1788,6 @@ typedef void (*m_Game_Action_Handler)(
 
 typedef struct Game_t {
     Input input;
-    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
-    PLATFORM_Audio_Context *p_PLATFORM_audio_context;
     Scene_Manager scene_manager;
     UI_Manager ui_manager;
 
@@ -1806,6 +1804,10 @@ typedef struct Game_t {
     Log log__global;
     Log log__local;
     Log log__system;
+
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    PLATFORM_Audio_Context *p_PLATFORM_audio_context;
+    PLATFORM_File_System_Context *p_PLATFORM_file_system_context;
 
     m_Game_Action_Handler m_game_action_handler;
 
