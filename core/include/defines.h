@@ -85,10 +85,6 @@ typedef struct Vector__3i32_t {
 
 typedef struct Vector__3i32_t Chunk_Vector__3i32;
 typedef struct Vector__3i32_t Tile_Vector__3i32;
-typedef struct Vector__3i32_t Region_Vector__3i32;
-
-#define REGION__WIDTH BIT(11)
-#define REGION__HEIGHT BIT(11)
 
 typedef uint32_t Psuedo_Random_Seed__u32;
 typedef int32_t Psuedo_Random__i32;
@@ -786,6 +782,14 @@ typedef struct Item_Stack_Manager_t {
         UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS)
 #define UUID_MASK__INVENTORY__CONTAINER__Y_AXIS MASK(12)
 #define UUID_MASK__INVENTORY__ENTITY MASK(25)
+
+#define REGION__WIDTH__BIT_SHIFT UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS
+#define REGION__HEIGHT__BIT_SHIFT UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS
+
+#define REGION__WIDTH BIT(UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS)
+#define REGION__HEIGHT BIT(UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS)
+
+typedef struct Vector__3i32_t Region_Vector__3i32;
 
 typedef struct Inventory_t {
     ///
@@ -1757,6 +1761,9 @@ typedef struct Chunk_Manager_t {
         y__center_chunk__signed_index_i32;
 } Chunk_Manager;
 
+#define WORLD_NAME_MAX_SIZE_OF 32
+typedef char World_Name_String[WORLD_NAME_MAX_SIZE_OF];
+
 typedef struct World_t {
     Entity_Manager entity_manager;
     Chunk_Manager chunk_manager;
@@ -1766,6 +1773,8 @@ typedef struct World_t {
 
     Camera camera;
     PLATFORM_Graphics_Window *p_PLATFORM_graphics_window_for__world;
+
+    World_Name_String name;
 } World;
 
 ///

@@ -43,9 +43,9 @@ Index__u8 stat_chunk_directory(
             directory__chunk_column,
             sizeof(directory__chunk_column),
             "c_%lx_%lx",
-            p_chunk_map_node->position_of__chunk_node_3i32.x__i32
+            p_chunk_map_node->position_of__chunk_3i32.x__i32
             & MASK(REGION__WIDTH__BIT_SHIFT),
-            p_chunk_map_node->position_of__chunk_node_3i32.y__i32
+            p_chunk_map_node->position_of__chunk_3i32.y__i32
             & MASK(REGION__WIDTH__BIT_SHIFT));
     Quantity__u8 length_of__directory_chunk_column =
         strnlen(
