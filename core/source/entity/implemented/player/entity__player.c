@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/handlers/ai/ai_handler__debug.h"
 #include "entity/humanoid.h"
 #include "platform.h"
 #include "rendering/sprite.h"
@@ -33,6 +34,9 @@ void initialize_entity_as__player(
     set_entity__ai_handler(
 			p_entity,
             m_entity_ai_handler__player);
+    set_entity__ai_handler(
+			p_entity,
+            m_entity_ai_handler__debug);
     set_entity__collider(
 			p_entity,
             m_entity_collision_handler__default);

@@ -197,8 +197,8 @@ void m_entity_ai_handler__debug(
                         set_tile__is_unpassable(p_tile, false);
                         break;
                 }
+                set_chunk_as__updated(p_chunk);
             }
-
         }
 
         PLATFORM_update_chunks(

@@ -269,6 +269,8 @@ void save_chunk(
             p_serialization_request);
     set_serialization_request_as__write(
             p_serialization_request);
+    p_serialization_request->p_serializer =
+        &p_chunk_map_node->p_chunk__here->_serializer;
 }
 
 void load_chunk(
@@ -306,6 +308,8 @@ void load_chunk(
             p_serialization_request);
     set_serialization_request_as__read(
             p_serialization_request);
+    p_serialization_request->p_serializer =
+        &p_chunk_map_node->p_chunk__here->_serializer;
 }
 
 void resolve_chunk(

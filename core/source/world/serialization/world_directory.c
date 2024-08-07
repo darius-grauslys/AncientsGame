@@ -107,9 +107,7 @@ Index__u8 stat_chunk_directory(
             sizeof(directory__chunk)+1, "/%s",
             directory__chunk);
     if (!(p_dir = opendir(buffer))) {
-        debug_info(">>>path %s", buffer);
         if (mkdir(buffer, 0777)) {
-            debug_abort("fail");
             return 0;
         }
     } else {

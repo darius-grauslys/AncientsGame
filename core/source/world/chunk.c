@@ -57,9 +57,7 @@ void m_deserialize__chunk(
                 &length_of__read,
                 1, 
                 p_serialization_request->p_file_handler);
-    p_chunk->_serializer =
-        _serializer;
-    clear_chunk_flags(p_chunk);
+    initialize_chunk((Chunk*)p_this_chunk__serializer);
     if (error) {
         debug_error("m_serialize__chunk, failed error: %d", error);
         set_chunk_as__inactive(p_chunk);

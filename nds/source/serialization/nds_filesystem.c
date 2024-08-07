@@ -225,14 +225,13 @@ void PLATFORM_close_file(
         Serialization_Request *p_serialization_request) {
     FILE *p_file = (FILE*)p_serialization_request->p_file_handler;
 
+    if (p_file) {
+        fclose(p_file);
+    }
+
     PLATFORM_release_serialization_request(
             p_PLATFORM_file_system_context,
             p_serialization_request);
-
-    if (!p_file)
-        return;
-
-    fclose(p_file);
 }
 
 enum PLATFORM_Write_File_Error PLATFORM_write_file(
@@ -249,11 +248,25 @@ enum PLATFORM_Write_File_Error PLATFORM_write_file(
 #endif
 
     FILE *p_file = p_file_handler;
-    fwrite(
+    Quantity__u32 size_of__write = fwrite(
             p_source,
             length_of__data,
             quantity_of__writes,
             p_file);
+
+    // TODO:    files are writing the correct quantity
+    //          however size_of__write is always 1.
+    //          Figure out why, this is something with libfat?
+    // if (size_of__write <
+    //         length_of__data
+    //         * quantity_of__writes) {
+    //     debug_info("%d/%d",
+    //             size_of__write,
+    //             length_of__data);
+    //     return PLATFORM_Write_File_Error__Max_Size_Reached;
+    // }
+
+    return PLATFORM_Write_File_Error__None;
 }
 
 enum PLATFORM_Read_File_Error PLATFORM_read_file(
@@ -270,12 +283,23 @@ enum PLATFORM_Read_File_Error PLATFORM_read_file(
 #endif
 
     FILE *p_file = p_file_handler;
-    *p_length_of__data_to_read = 
+    Quantity__u32 size_of__read = 
         fread(
             p_destination,
             *p_length_of__data_to_read,
             quantity_of__reads,
             p_file);
+
+    // TODO:    See the TO-DO of PLATFORM_write_file above.
+    //          For the same reason, this will also be commented out
+    //          for the time being.
+    // if (size_of__read <
+    //         *p_length_of__data_to_read
+    //         * quantity_of__reads) {
+    //     return PLATFORM_Read_File_Error__End_Of_File;
+    // }
+    
+    return PLATFORM_Read_File_Error__None;
 }
 
 void m_NDS_process__serialization(
