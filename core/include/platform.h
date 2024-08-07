@@ -265,6 +265,10 @@ enum PLATFORM_Read_File_Error {
 Serialization_Request *PLATFORM_allocate_serialization_request(
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
 
+void PLATFORM_release_serialization_request(
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        Serialization_Request *p_serialization_request);
+
 enum PLATFORM_Open_File_Error PLATFORM_open_file(
         PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
         const char *p_path,

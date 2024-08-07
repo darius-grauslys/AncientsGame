@@ -264,10 +264,11 @@ typedef struct PLATFORM_Audio_Context_t {
 typedef struct PLATFORM_File_System_Context_t {
     Serialization_Request serialization_requests[
         FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS];
+    Serialization_Request *ptr_array_of__serialization_requests[
+        FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS];
     void (*f_audio_stream__callback)();
     Process *p_serialization_process;
     Timer__u8 timer__audio_stream_u8;
-    Index__u16 index_of__next_serialization_request;
 } PLATFORM_File_System_Context;
 
 #endif

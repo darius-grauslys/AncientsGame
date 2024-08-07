@@ -24,9 +24,6 @@ void m_serialize__chunk(
         Game *p_game,
         Serialization_Request *p_serialization_request,
         Serializer *p_this_chunk__serializer) {
-    Chunk *p_chunk = (Chunk*)p_this_chunk__serializer;
-    clear_chunk_flags(p_chunk);
-    return;
     enum PLATFORM_Write_File_Error error = 
         PLATFORM_write_file(
                 get_p_PLATFORM_file_system_context_from__game(p_game), 
@@ -34,6 +31,8 @@ void m_serialize__chunk(
                 p_this_chunk__serializer->_serialization_header.size_of__struct, 
                 1, 
                 p_serialization_request->p_file_handler);
+    Chunk *p_chunk = (Chunk*)p_this_chunk__serializer;
+    clear_chunk_flags(p_chunk);
     if (error) {
         debug_error("m_serialize__chunk, failed error: %d", error);
         set_chunk_as__inactive(p_chunk);
@@ -46,12 +45,11 @@ void m_deserialize__chunk(
         Game *p_game,
         Serialization_Request *p_serialization_request,
         Serializer *p_this_chunk__serializer) {
-    Chunk *p_chunk = (Chunk*)p_this_chunk__serializer;
-    clear_chunk_flags(p_chunk);
-    return;
     Quantity__u32 length_of__read =
         p_this_chunk__serializer
         ->_serialization_header.size_of__struct;
+    Serializer _serializer = *p_this_chunk__serializer;
+    Chunk *p_chunk = (Chunk*)p_this_chunk__serializer;
     enum PLATFORM_Read_File_Error error = 
         PLATFORM_read_file(
                 get_p_PLATFORM_file_system_context_from__game(p_game), 
@@ -59,6 +57,9 @@ void m_deserialize__chunk(
                 &length_of__read,
                 1, 
                 p_serialization_request->p_file_handler);
+    p_chunk->_serializer =
+        _serializer;
+    clear_chunk_flags(p_chunk);
     if (error) {
         debug_error("m_serialize__chunk, failed error: %d", error);
         set_chunk_as__inactive(p_chunk);

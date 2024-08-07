@@ -257,7 +257,9 @@ void save_chunk(
 
     set_serialization_request_as__fire_and_forget(p_serialization_request);
     if (error) {
-        // TODO: release p_serialization_request
+        PLATFORM_release_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_serialization_request);
         debug_error("save_chunk, error opening file: %d", 
                 error);
         return;
@@ -291,8 +293,10 @@ void load_chunk(
                 p_serialization_request);
 
     set_serialization_request_as__fire_and_forget(p_serialization_request);
-    if (!error) {
-        // TODO: release p_serialization_request
+    if (error) {
+        PLATFORM_release_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_serialization_request);
         debug_error("load_chunk, error opening file: %d", 
                 error);
         return;
@@ -360,6 +364,7 @@ void resolve_chunk(
         ->f_chunk_generator(
             p_game, 
             p_chunk_map_node);
+    // TODO: uncomment this and shit breaks:
     set_chunk_as__updated(p_chunk_map_node->p_chunk__here);
 }
 
@@ -438,6 +443,9 @@ skip:
         Chunk *p_chunk =
             (*p_chunk_map_node_ptr)->p_chunk__here;
         if (!is_chunk__awaiting_serialization(p_chunk)) {
+            resolve_chunk(
+                    p_game, 
+                    *p_chunk_map_node_ptr);
             dequeue_chunk_map_node_for__serialization(
                     p_chunk_manager, 
                     *p_chunk_map_node_ptr);

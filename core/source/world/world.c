@@ -28,8 +28,7 @@ void initialize_world(
     initialize_weight_map();
     // initialize_world_parameters(
     //         &p_world->world_parameters, 
-    //         f_chunk_generator__test_world, 
-    //         100);
+    //         f_chunk_generator__test_world);
     initialize_world_parameters(
             &p_world->world_parameters, 
             f_chunk_generator__flat_world);

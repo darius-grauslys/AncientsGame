@@ -51,6 +51,9 @@ void PLATFORM_initialize_file_system_context(
         initialize_serialization_request_as__uninitalized(
                 &p_PLATFORM_file_system_context
                 ->serialization_requests[index_of__serialization_request]);
+        p_PLATFORM_file_system_context
+            ->ptr_array_of__serialization_requests[
+            index_of__serialization_request] = 0;
     }
 
     if (!fatInitDefault()) {
@@ -81,8 +84,6 @@ void PLATFORM_initialize_file_system_context(
 
     p_PLATFORM_file_system_context
         ->f_audio_stream__callback = 0;
-    p_PLATFORM_file_system_context
-        ->index_of__next_serialization_request = 0;
 
     initialize_timer_u8(
             &p_PLATFORM_file_system_context
@@ -93,26 +94,110 @@ void PLATFORM_initialize_file_system_context(
 Serialization_Request *PLATFORM_allocate_serialization_request(
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context) {
     if (p_PLATOFRM_file_system_context
-            ->index_of__next_serialization_request
-            >= FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS) {
-        debug_error("NDS::PLATFORM_allocate_serialization_request, failed to find available request slot.");
+            ->ptr_array_of__serialization_requests[
+            FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS-1]) {
+        debug_error("NDS::PLATFORM_allocate_serialization_request, failed to allocate, no request slot available.");
         return 0;
     }
 
-    // TODO:    support retaining requests
-    //          currently we only support fire and forget
-    //          and this logic below reflects that.
-    Serialization_Request *p_serialization_request =
-        &p_PLATOFRM_file_system_context
-        ->serialization_requests[
-            p_PLATOFRM_file_system_context
-                ->index_of__next_serialization_request++];
+    Serialization_Request **p_serialization_request_ptr = 0;
+    Serialization_Request *p_serialization_request = 0;
+
+    for (Index__u16 index_of__serialization_request = 0;
+            index_of__serialization_request
+            < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS;
+            index_of__serialization_request++) {
+        if (!p_serialization_request_ptr) {
+            if (!p_PLATOFRM_file_system_context
+                    ->ptr_array_of__serialization_requests[
+                    index_of__serialization_request]) {
+                p_serialization_request_ptr =
+                    &p_PLATOFRM_file_system_context
+                    ->ptr_array_of__serialization_requests[
+                    index_of__serialization_request];
+            }
+        } else if (!p_serialization_request) {
+            Serialization_Request *p_serialization_request__potential =
+                &p_PLATOFRM_file_system_context
+                ->serialization_requests[
+                index_of__serialization_request];
+            if (!is_serialization_request__active(
+                        p_serialization_request__potential)) {
+                p_serialization_request =
+                    p_serialization_request__potential;
+            }
+        } else {
+            break;
+        }
+    }
+
+    if (!p_serialization_request_ptr || !p_serialization_request) {
+        debug_error("NDS::PLATFORM_allocate_serialization_request, failed to allocate, could not find free slot.");
+        return 0;
+    }
+
+    *p_serialization_request_ptr =
+        p_serialization_request;
 
     initialize_serialization_request_as__uninitalized(
             p_serialization_request);
     set_serialization_request_as__active(
             p_serialization_request);
     return p_serialization_request;
+}
+
+void PLATFORM_release_serialization_request(
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        Serialization_Request *p_serialization_request) {
+#ifndef NDEBUG
+    if (!p_PLATOFRM_file_system_context) {
+        debug_error("NDS::PLATFORM_release_serialization_request, p_PLATFORM_file_system_context is null.");
+        return;
+    }
+    if (!p_serialization_request) {
+        debug_error("NDS::PLATFORM_release_serialization_request, p_serialization_request is null.");
+        return;
+    }
+#endif
+    Serialization_Request **p_serialization_request_ptr = 
+        p_PLATOFRM_file_system_context
+        ->ptr_array_of__serialization_requests;
+
+    if (!p_serialization_request_ptr) {
+        debug_error("NDS::PLATFORM_release_serialization_request, p_serialization_request was not allocated here.");
+        return;
+    }
+
+    Serialization_Request **p_serialization_request_ptr__found =
+        p_serialization_request_ptr;
+    Index__u16 index_of__serialization_request = 0;
+    do {
+        if (*p_serialization_request_ptr
+                == p_serialization_request) {
+            p_serialization_request_ptr__found =
+                p_serialization_request_ptr;
+        }
+        if (!*p_serialization_request_ptr)
+            break;
+    } while (
+            ++index_of__serialization_request
+            < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS
+            && *(++p_serialization_request_ptr));
+    if (index_of__serialization_request
+            < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS) {
+        p_serialization_request_ptr--;
+    }
+
+    if (!p_serialization_request_ptr__found) {
+        debug_error("NDS::PLATFORM_release_serialization_request, p_serialization_request was not found here.");
+        return;
+    }
+
+    initialize_serialization_request_as__uninitalized(
+            *p_serialization_request_ptr__found);
+    *p_serialization_request_ptr__found =
+        *p_serialization_request_ptr;
+    *p_serialization_request_ptr = 0;
 }
 
 enum PLATFORM_Open_File_Error PLATFORM_open_file(
@@ -140,7 +225,8 @@ void PLATFORM_close_file(
         Serialization_Request *p_serialization_request) {
     FILE *p_file = (FILE*)p_serialization_request->p_file_handler;
 
-    initialize_serialization_request_as__uninitalized(
+    PLATFORM_release_serialization_request(
+            p_PLATFORM_file_system_context,
             p_serialization_request);
 
     if (!p_file)
@@ -195,7 +281,6 @@ enum PLATFORM_Read_File_Error PLATFORM_read_file(
 void m_NDS_process__serialization(
         Process *p_this_process,
         Game *p_game) {
-    return;
     PLATFORM_File_System_Context *p_PLATFORM_file_system_context =
         (PLATFORM_File_System_Context*)p_this_process->p_process_data;
 
@@ -232,11 +317,10 @@ void m_NDS_process__serialization(
             < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS;
             index_of__serialization_request++) {
         Serialization_Request *p_serialization_request =
-            &p_PLATFORM_file_system_context->serialization_requests[
+            p_PLATFORM_file_system_context->ptr_array_of__serialization_requests[
                 index_of__serialization_request];
 
-        if (!is_serialization_request__active(
-                    p_serialization_request)) {
+        if (!p_serialization_request) {
             if (index_of__serialization_request > 0
                     && p_PLATFORM_file_system_context
                         ->f_audio_stream__callback) {
@@ -293,24 +377,22 @@ void m_NDS_process__serialization(
         }
     }
 
-    for (Index__u16 index_of__serialization_request = 0;
-            index_of__serialization_request
-            < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS;
-            index_of__serialization_request++) {
+    Index__u16 index_of__serialization_request = 0;
+    while(index_of__serialization_request
+            < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS) {
         Serialization_Request *p_serialization_request =
-            &p_PLATFORM_file_system_context->serialization_requests[
+            p_PLATFORM_file_system_context->ptr_array_of__serialization_requests[
                 index_of__serialization_request];
-        if (!is_serialization_request__active(
-                    p_serialization_request)) {
-            p_PLATFORM_file_system_context
-                ->index_of__next_serialization_request = 0;
-            return;
+        if (!p_serialization_request) {
+            break;
         }
         if (is_serialization_request__fire_and_forget(
                     p_serialization_request)) {
             PLATFORM_close_file(
                     p_PLATFORM_file_system_context, 
                     p_serialization_request);
+        } else {
+            index_of__serialization_request++;
         }
     }
 }
