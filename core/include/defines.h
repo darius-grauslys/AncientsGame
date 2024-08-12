@@ -1775,6 +1775,7 @@ typedef struct World_t {
     PLATFORM_Graphics_Window *p_PLATFORM_graphics_window_for__world;
 
     World_Name_String name;
+    Quantity__u8 length_of__world_name;
 } World;
 
 ///

@@ -15,58 +15,16 @@ Index__u8 stat_chunk_directory(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer) {
-    char directory__world[WORLD_NAME_MAX_SIZE_OF];
-    strncpy(directory__world, 
+    // assume buffer is of minimium length:
+    // WORLD_NAME_MAX_SIZE_OF + "/r_XXXXXX" + "/c_XXXX" + "/c_X" + "/F\0"
+    // == WORLD_NAME_MAX_SIZE_OF + 9 + 7 + 4 + 3
+    // == WORLD_NAME_MAX_SIZE_OF + 23
+
+    strncpy(buffer, 
             get_p_world_from__game(p_game)->name,
             WORLD_NAME_MAX_SIZE_OF);
-    Quantity__u8 length_of__world_name =
-        strnlen(
-                directory__world, 
-                WORLD_NAME_MAX_SIZE_OF) + 1;
-    char directory__region[16];
-    Region_Vector__3i32 region = 
-        get_region_that__this_chunk_map_node_is_in(
-                p_chunk_map_node);
-    snprintf(
-            directory__region,
-            sizeof(directory__region),
-            "r_%lx_%lx",
-            region.x__i32 & MASK(21), //TODO:   magic num, this is the quantity
-            region.y__i32 & MASK(21));      //  of regions per axis
-    Quantity__u8 length_of__directory_region =
-        strnlen(
-                directory__region,
-                16);
-
-    char directory__chunk_column[10];
-    snprintf(
-            directory__chunk_column,
-            sizeof(directory__chunk_column),
-            "c_%lx_%lx",
-            p_chunk_map_node->position_of__chunk_3i32.x__i32
-            & MASK(REGION__WIDTH__BIT_SHIFT),
-            p_chunk_map_node->position_of__chunk_3i32.y__i32
-            & MASK(REGION__WIDTH__BIT_SHIFT));
-    Quantity__u8 length_of__directory_chunk_column =
-        strnlen(
-                directory__chunk_column,
-                sizeof(directory__chunk_column));
-
-    char directory__chunk[4];
-    snprintf(
-            directory__chunk,
-            sizeof(directory__chunk),
-            "c_%x",
-            0);
-    // Quantity__u8 length_of__directory_chunk =
-    //     strnlen(
-    //             directory__chunk,
-    //             sizeof(directory__chunk));
-
-    snprintf(
-            buffer,
-            length_of__world_name, "%s",
-            directory__world);
+    Index__u16 index_of__path_append = 
+        get_p_world_from__game(p_game)->length_of__world_name;
     DIR *p_dir;
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
@@ -75,10 +33,29 @@ Index__u8 stat_chunk_directory(
     } else {
         closedir(p_dir);
     }
-    snprintf(
-            &buffer[length_of__world_name-1],
-            sizeof(directory__region)+1, "/%s",
-            directory__region);
+
+    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = 'r';
+    buffer[index_of__path_append++] = '_';
+    
+    Region_Vector__3i32 region_vector__3i32 =
+        get_region_that__this_chunk_map_node_is_in(
+                p_chunk_map_node);
+
+    for (Index__u8 i=0;i<6;i++) {
+        buffer[index_of__path_append++] =
+            'A'
+            + (region_vector__3i32.x__i32 & MASK(4));
+        region_vector__3i32.x__i32 >>= 4;
+    }
+    buffer[index_of__path_append++] = '_';
+    for (Index__u8 i=0;i<6;i++) {
+        buffer[index_of__path_append++] =
+            'A'
+            + (region_vector__3i32.y__i32 & MASK(4));
+        region_vector__3i32.y__i32 >>= 4;
+    }
+
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
             return 0;
@@ -86,12 +63,28 @@ Index__u8 stat_chunk_directory(
     } else {
         closedir(p_dir);
     }
-    snprintf(
-            &buffer[
-                length_of__world_name
-                +length_of__directory_region],
-            sizeof(directory__chunk_column)+1, "/%s",
-            directory__chunk_column);
+
+    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = 'c';
+    buffer[index_of__path_append++] = '_';
+    
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        p_chunk_map_node->position_of__chunk_3i32;
+
+    for (Index__u8 i=0;i<3;i++) {
+        buffer[index_of__path_append++] =
+            'A'
+            + (chunk_vector__3i32.x__i32 & MASK(4));
+        chunk_vector__3i32.x__i32 >>= 4;
+    }
+    buffer[index_of__path_append++] = '_';
+    for (Index__u8 i=0;i<3;i++) {
+        buffer[index_of__path_append++] =
+            'A'
+            + (chunk_vector__3i32.y__i32 & MASK(4));
+        chunk_vector__3i32.y__i32 >>= 4;
+    }
+
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
             return 0;
@@ -99,13 +92,21 @@ Index__u8 stat_chunk_directory(
     } else {
         closedir(p_dir);
     }
-    snprintf(
-            &buffer[
-                length_of__world_name
-                +length_of__directory_region
-                +length_of__directory_chunk_column+1],
-            sizeof(directory__chunk)+1, "/%s",
-            directory__chunk);
+
+    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = 'c';
+    buffer[index_of__path_append++] = '_';
+    
+    i32 z__i32 =
+        p_chunk_map_node->position_of__chunk_3i32.z__i32;
+
+    for (Index__u8 i=0;i<2;i++) {
+        buffer[index_of__path_append++] =
+            'A'
+            + (z__i32 & MASK(4));
+        z__i32 >>= 8;
+    }
+
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
             return 0;
@@ -114,7 +115,7 @@ Index__u8 stat_chunk_directory(
         closedir(p_dir);
     }
     return 
-        strnlen(buffer, 128);
+        index_of__path_append;
 }
 
 static inline

@@ -458,7 +458,7 @@ skip:
         }
     } while (++index_of__chunk_map_node_ptr
             < CHUNK_MANAGER__QUANTITY_OF_CHUNKS
-            && !*(++p_chunk_map_node_ptr));
+            && *(++p_chunk_map_node_ptr));
     return (bool)(p_chunk_manager->ptr_array_queue__serialized_nodes[0]);
 }
 
