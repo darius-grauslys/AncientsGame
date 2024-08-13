@@ -248,6 +248,10 @@ void save_chunk(
         return;
     }
 
+    p_serialization_request
+        ->position_of__serialization_3i32 =
+        p_chunk_map_node->position_of__chunk_3i32;
+
     enum PLATFORM_Open_File_Error error =
         PLATFORM_open_file(
                 get_p_PLATFORM_file_system_context_from__game(p_game), 
@@ -286,6 +290,10 @@ void load_chunk(
         set_chunk_as__visually_updated(p_chunk_map_node->p_chunk__here);
         return;
     }
+
+    p_serialization_request
+        ->position_of__serialization_3i32 =
+        p_chunk_map_node->position_of__chunk_3i32;
 
     enum PLATFORM_Open_File_Error error =
         PLATFORM_open_file(

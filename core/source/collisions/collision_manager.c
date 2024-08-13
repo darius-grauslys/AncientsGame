@@ -683,6 +683,48 @@ Entity *get_p_entity_from__collision_manager_with__3i32F4(
     return 0;
 }
 
+void foreach_p_entity_within__hitbox(
+        Collision_Manager *p_collision_manager,
+        Hitbox_AABB *p_hitbox,
+        f_Foreach_Entity_Within f_callback,
+        Game *p_game,
+        void *p_data) {
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(
+                p_hitbox->position__3i32F4);
+    Collision_Manager__Collision_Node *collision_node =
+        get_collision_node_for__this_position(
+                p_collision_manager, 
+                chunk_vector__3i32.x__i32,
+                chunk_vector__3i32.y__i32);
+
+    if (!collision_node)
+        return;
+
+    for (uint32_t i=0;
+            i<ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE;
+            i++) {
+        Entity *p_entity =
+            collision_node->p_entity_ptrs[i];
+        // All collisions checked.
+        if (!p_entity) {
+            return;
+        }
+
+        bool is_entity_overlapping__hitbox =
+            is_this_hitbox__overlapping_this_hitbox(
+                    &p_entity->hitbox,
+                    p_hitbox);
+        if (is_entity_overlapping__hitbox) {
+            f_callback(
+                    p_entity,
+                    p_game,
+                    p_data);
+        }
+    }
+    return;
+}
+
 ///
 /// This is called because the node "fell off" the map.
 ///

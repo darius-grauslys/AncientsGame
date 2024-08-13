@@ -16,6 +16,16 @@ void initialize_item_stack_as__empty(
         Item_Stack *p_item_stack,
         Identifier__u32 identifier_for__item_stack__u32);
 
+void m_serialize__item_stack(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
+
+void m_deserialize__item_stack(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_item_stack__serializer);
+
 void set_item_stack(
         Item_Stack *p_item_stack,
         Item item,

@@ -1,6 +1,9 @@
 #include "defines_weak.h"
+#include "game.h"
+#include "inventory/item_manager.h"
 #include "numerics.h"
 #include "serialization/serialization_header.h"
+#include "serialization/serializer.h"
 #include <inventory/item_stack.h>
 #include <inventory/item.h>
 
@@ -16,10 +19,12 @@ void initialize_item_stack(
         return;
     }
 #endif
-    initialize_serialization_header(
-            &p_item_stack->_serialization_header, 
-            identifier_for__item_stack, 
-            sizeof(Item_Stack));
+    intialize_serializer(
+            &p_item_stack->_serializer, 
+            sizeof(Item_Stack),
+            identifier_for__item_stack,
+            m_serialize__item_stack,
+            m_deserialize__item_stack);
     p_item_stack->item = item;
     p_item_stack->quantity_of__items =
         quantity_of__items;
@@ -36,13 +41,145 @@ void initialize_item_stack_as__empty(
         return;
     }
 #endif
-    initialize_serialization_header(
-            &p_item_stack->_serialization_header, 
+    intialize_serializer(
+            &p_item_stack->_serializer, 
+            sizeof(Item_Stack),
             identifier_for__item_stack__u32,
-            sizeof(Item_Stack));
+            m_serialize__item_stack,
+            m_deserialize__item_stack);
     p_item_stack->item = get_item__empty();
     p_item_stack->quantity_of__items = 0;
     p_item_stack->max_quantity_of__items = 0;
+}
+
+void m_serialize__item_stack(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer) {
+    
+    Item_Stack *p_item_stack =
+        (Item_Stack*)p_this_serializer;
+
+    void *p_file_handler =
+        p_serialization_request
+        ->p_file_handler;
+
+    enum PLATFORM_Write_File_Error error = 
+        PLATFORM_write_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                (u8*)&p_this_serializer->_serialization_header, 
+                sizeof(Serialization_Header), 
+                1, 
+                p_file_handler);
+    if (error) {
+        debug_error("m_serialize__default, error: %d", error);
+        return;
+    }
+
+    struct {
+        enum Item_Kind the_kind_of__item;
+        Quantity__u8 quantity_of__items;
+        Quantity__u8 max_quantity_of__items;
+    } field;
+
+    field.the_kind_of__item = 
+        p_item_stack->item.the_kind_of_item__this_item_is;
+    field.quantity_of__items =
+        p_item_stack->quantity_of__items;
+    field.max_quantity_of__items =
+        p_item_stack->max_quantity_of__items;
+
+    error = PLATFORM_write_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                (u8*)&field, 
+                sizeof(field), 
+                1, 
+                p_file_handler);
+    if (error) {
+        debug_error("m_serialize__default, error: %d", error);
+        return;
+    }
+}
+
+void m_deserialize__item_stack(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_item_stack__serializer) {
+
+    Item_Stack *p_item_stack =
+        (Item_Stack*)p_item_stack__serializer;
+
+    void *p_file_handler =
+        p_serialization_request
+        ->p_file_handler;
+
+    Quantity__u32 length_of__read =
+        sizeof(Serialization_Header);
+
+    enum PLATFORM_Read_File_Error error = 
+        PLATFORM_read_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                (u8*)&p_item_stack__serializer->_serialization_header, 
+                &length_of__read, 
+                1, 
+                p_file_handler);
+    if (error) {
+        debug_error("m_deserialize__default, failed error: %d", error);
+        return;
+    }
+
+    if (length_of__read
+            != sizeof(Serialization_Header)) {
+        debug_error("m_deserialize__default, bad read length: %d/%d", 
+                length_of__read,
+                sizeof(Serialization_Header));
+        return;
+    }
+
+    struct {
+        enum Item_Kind the_kind_of__item;
+        Quantity__u8 quantity_of__items;
+        Quantity__u8 max_quantity_of__items;
+    } field;
+
+    field.the_kind_of__item = 
+        p_item_stack->item.the_kind_of_item__this_item_is;
+    field.quantity_of__items =
+        p_item_stack->quantity_of__items;
+    field.max_quantity_of__items =
+        p_item_stack->max_quantity_of__items;
+
+    Quantity__u32 length_of__read__expected =
+        length_of__read =
+        sizeof(field);
+
+    error = PLATFORM_read_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                (u8*)&field, 
+                &length_of__read, 
+                1, 
+                p_file_handler);
+    if (error) {
+        debug_error("m_serialize__default, error: %d", error);
+        return;
+    }
+
+    if (length_of__read
+            != length_of__read__expected) {
+        debug_error("m_deserialize__default, bad read length: %d/%d", 
+                length_of__read,
+                length_of__read__expected);
+        return;
+    }
+
+    p_item_stack->item =
+        get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                field.the_kind_of__item);
+    p_item_stack->quantity_of__items =
+        field.quantity_of__items;
+    p_item_stack->max_quantity_of__items =
+        field.max_quantity_of__items;
 }
 
 void set_item_stack(

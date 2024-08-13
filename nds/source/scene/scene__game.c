@@ -123,14 +123,43 @@ void m_enter_scene_as__game_handler(
                 get_p_item_manager_from__game(p_game), 
                 Item_Kind__Stick);
 
-    Entity *p_skeleton =
-        allocate_entity_into__world(
-                p_game, 
-                get_p_world_from__game(p_game), 
-                Entity_Kind__Skeleton, 
-                get_vector__3i32F4_using__i32(0, 32, 0));
-    set_entity__ai_handler(
-            p_skeleton, 0);
+    Tile *p_tile =
+        get_p_tile_from__chunk_manager_with__3i32F4(
+                get_p_chunk_manager_from__game(p_game), 
+                get_vector__3i32F4_using__i32(4 << 3, 4 << 3, 0));
+
+    if (p_tile
+            && p_tile->the_kind_of_tile_cover__this_tile_has
+            != Tile_Cover_Kind__Chest_Single) {
+        set_tile__container(p_tile, true);
+        set_tile__is_unpassable(p_tile, true);
+
+        p_tile->the_kind_of_tile_cover__this_tile_has =
+            Tile_Cover_Kind__Chest_Single
+            ;
+
+        Inventory *p_inventory =
+            allocate_p_inventory_using__this_uuid_in__inventory_manager(
+                    get_p_inventory_manager_from__game(p_game), 
+                    get_uuid_for__container(
+                        get_vector__3i32(4,4,0)));
+
+        add_item_stack_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Stick), 1, 1);
+        add_item_stack_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Stick), 1, 1);
+        add_item_stack_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Stick), 1, 1);
+    }
 
     p_game->world.entity_manager
         .p_local_player =

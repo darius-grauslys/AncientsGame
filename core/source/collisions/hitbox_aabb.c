@@ -5,6 +5,40 @@
 #include <collisions/hitbox_aabb.h>
 #include <debug/debug.h>
 
+void initialize_hitbox(
+        Hitbox_AABB *hitbox,
+        Quantity__u32 width, 
+        Quantity__u32 height,
+        Vector__3i32F4 position__3i32F4) {
+    hitbox->width__quantity_u32 = width;
+    hitbox->height__quantity_u32 = height;
+    hitbox->velocity__3i32F4.x__i32F4 = 0;
+    hitbox->velocity__3i32F4.y__i32F4 = 0;
+    hitbox->velocity__3i32F4.z__i32F4 = 0;
+    set_hitbox__position_with__3i32F4(hitbox, 
+            position__3i32F4);
+}
+
+Direction__u8 get_movement_direction_of__hitbox(
+        Hitbox_AABB *hitbox) {
+    Direction__u8 direction_of_movement =
+        DIRECTION__NONE;
+    if (0 < hitbox->velocity__3i32F4.x__i32F4) {
+        direction_of_movement |= DIRECTION__EAST;
+    }
+    if (0 > hitbox->velocity__3i32F4.x__i32F4) {
+        direction_of_movement |= DIRECTION__WEST;
+    }
+    if (0 < hitbox->velocity__3i32F4.y__i32F4) {
+        direction_of_movement |= DIRECTION__NORTH;
+    }
+    if (0 > hitbox->velocity__3i32F4.y__i32F4) {
+        direction_of_movement |= DIRECTION__SOUTH;
+    }
+
+    return direction_of_movement;
+}
+
 void set_hitbox__position_with__3i32F4(
         Hitbox_AABB *hitbox,
         Vector__3i32F4 position__3i32F4) {
@@ -230,7 +264,7 @@ bool is_this_hitbox__fully_inside_this_hitbox__without_velocity(
                 bb__one, hitbox__two);
 }
 
-Direction__u8 is_this_hitbox__inside_this_hitbox(
+Direction__u8 is_this_hitbox__overlapping_this_hitbox(
         Hitbox_AABB *hitbox__one,
         Hitbox_AABB *hitbox__two) {
     Vector__3i32F4 aa__one_moving;
@@ -370,7 +404,11 @@ get_direction:
             direction_of_collision |= DIRECTION__SOUTH;
     }
 
-    return direction_of_collision;
+    return 
+        (DIRECTION__NONE == direction_of_collision)
+        ? DIRECTION__ANY
+        : direction_of_collision
+        ;
 }
 
 
@@ -390,7 +428,7 @@ Direction__u8 is_hitbox__colliding(
     // Hitbox collision is therefore not about checking
     // if corners are inside another hitbox, but
     // rather checking if edges are.
-    return is_this_hitbox__inside_this_hitbox(
+    return is_this_hitbox__overlapping_this_hitbox(
                 hitbox__checking, hitbox__other);
 }
 
@@ -442,4 +480,52 @@ void clamp_p_vector_3i32_to__hitbox(
             get_p_z_i32_from__p_vector_3i32(p_position__3i32), 
             aa.z__i32, 
             bb.z__i32);
+}
+
+bool is_vector_3i32F4_inside__hitbox(
+        Vector__3i32F4 vector,
+        Hitbox_AABB *p_hitbox) {
+    Vector__3i32F4 aa, bb;
+    get_aa_bb_as__vectors_3i32F4_from__hitbox(
+            p_hitbox, 
+            &aa, 
+            &bb);
+    return (
+            vector.x__i32F4
+            >= aa.x__i32F4
+            && vector.x__i32F4
+            <= bb.x__i32F4
+            && vector.y__i32F4
+            >= aa.y__i32F4
+            && vector.y__i32F4
+            <= bb.y__i32F4
+            && vector.z__i32F4
+            >= aa.z__i32F4
+            && vector.z__i32F4
+            <= aa.z__i32F4
+            );
+}
+
+bool is_vector_3i32_inside__hitbox(
+        Vector__3i32 vector,
+        Hitbox_AABB *p_hitbox) {
+    Vector__3i32 aa, bb;
+    get_aa_bb_as__vectors_3i32_from__hitbox(
+            p_hitbox, 
+            &aa, 
+            &bb);
+    return (
+            vector.x__i32
+            >= aa.x__i32
+            && vector.x__i32
+            <= bb.x__i32
+            && vector.y__i32
+            >= aa.y__i32
+            && vector.y__i32
+            <= bb.y__i32
+            && vector.z__i32
+            >= aa.z__i32
+            && vector.z__i32
+            <= aa.z__i32
+            );
 }

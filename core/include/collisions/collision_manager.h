@@ -52,6 +52,17 @@ Entity *get_p_entity_from__collision_manager_with__ray_3i32F20(
                     p_ray__3i32F20));
 }
 
+typedef void (*f_Foreach_Entity_Within)(
+        Entity *p_entity,
+        Game *p_Game,
+        void *p_data);
+void foreach_p_entity_within__hitbox(
+        Collision_Manager *p_collision_manager,
+        Hitbox_AABB *p_hitbox,
+        f_Foreach_Entity_Within f_callback,
+        Game *p_game,
+        void *p_data);
+
 ///
 /// Does nothing if cannot find
 /// entity.
@@ -59,7 +70,8 @@ Entity *get_p_entity_from__collision_manager_with__ray_3i32F20(
 /// If NDEBUG is not set, then it
 /// will debug_error(...)
 ///
-static void inline remove_entity_from__collision_manager(
+static inline 
+void remove_entity_from__collision_manager(
         Collision_Manager *collision_manager,
         Entity *entity) {
     Chunk_Vector__3i32 chunk_vector__3i32 =

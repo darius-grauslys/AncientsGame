@@ -11,6 +11,16 @@ void initialize_inventory(
 void initialize_inventory_as__empty(
         Inventory *p_inventory);
 
+void m_serialize__inventory(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
+
+void m_deserialize__inventory(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_inventory__serializer);
+
 ///
 /// Calls initialize_item_stack to
 /// an empty spot in inventory. Does nothing

@@ -294,6 +294,18 @@ enum PLATFORM_Read_File_Error PLATFORM_read_file(
         void *p_file_handler);
 
 ///
+/// Returns -1 on error.
+///
+Index__u32 PLATFORM_get_position_in__file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        void *p_file_handler);
+
+bool PLATFORM_set_position_in__file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        Index__u32 position_in__file_u32,
+        void *p_file_handler);
+
+///
 /// SECTION_input
 ///
 void PLATFORM_poll_input(Input *p_input);

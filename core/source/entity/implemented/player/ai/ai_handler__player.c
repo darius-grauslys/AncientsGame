@@ -103,6 +103,8 @@ void m_entity_ai_handler__player(
                         PLATFORM_update_chunks(
                                 get_p_PLATFORM_gfx_context_from__game(p_game), 
                                 get_p_chunk_manager_from__game(p_game));
+                        debug_info("fail: %x",
+                                s_inventory__container._serialization_header.uuid);
                         continue;
                     }
 

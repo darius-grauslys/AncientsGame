@@ -251,7 +251,16 @@ typedef uint8_t Serialization_Request_Flags;
 
 typedef struct Serialization_Request_t {
     void *p_file_handler;
+    union {
+        struct {
+            union {
+                Vector__3i32 position_of__serialization_3i32;
+                Vector__3i32F4 position_of__serialization_3i32F4;
+            };
+        };
+    };
     Quantity__u32 size_of__serialization;
+    Quantity__u32 quantity_of__sub_serializations;
     Serialization_Request_Flags serialization_request_flags;
     union {
         Serializer *p_serializer;
@@ -737,7 +746,10 @@ typedef struct Item_Manager_t {
 } Item_Manager;
 
 typedef struct Item_Stack_t {
-    Serialization_Header        _serialization_header;
+    union {
+        Serialization_Header        _serialization_header;
+        Serializer                  _serializer;
+    };
     Item                        item;
     Quantity__u8                quantity_of__items;
     Quantity__u8                max_quantity_of__items;
@@ -776,11 +788,11 @@ typedef struct Item_Stack_Manager_t {
 #define UUID_MASK__INVENTORY__ITEM_STACK (MASK(6) << \
         UUID_BIT_SHIFT__INVENTORY__ITEM_STACK)
 #define UUID_BIT__INVENTORY_IS__ENTITY_OR__CONTAINER BIT(25)
-#define UUID_MASK__INVENTORY__CONTAINER__Z_AXIS (MASK(4) << \
+#define UUID_MASK__INVENTORY__CONTAINER__Z_AXIS (MASK(3) << \
         UUID_BIT_SHIFT__INVENTORY__CONTAINER__Z_AXIS)
-#define UUID_MASK__INVENTORY__CONTAINER__X_AXIS (MASK(12) << \
+#define UUID_MASK__INVENTORY__CONTAINER__X_AXIS (MASK(11) << \
         UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS)
-#define UUID_MASK__INVENTORY__CONTAINER__Y_AXIS MASK(12)
+#define UUID_MASK__INVENTORY__CONTAINER__Y_AXIS MASK(11)
 #define UUID_MASK__INVENTORY__ENTITY MASK(25)
 
 #define REGION__WIDTH__BIT_SHIFT UUID_BIT_SHIFT__INVENTORY__CONTAINER__X_AXIS
@@ -795,7 +807,10 @@ typedef struct Inventory_t {
     ///
     /// Do not interact with this.
     ///
-    Serialization_Header                _serialization_header;
+    union {
+        Serialization_Header    _serialization_header;
+        Serializer              _serializer;
+    };
     Item_Stack items[INVENTORY_ITEM_MAXIMUM_QUANTITY_OF];
     Quantity__u8 quantity_of__item_stacks;
 } Inventory;
@@ -1032,7 +1047,10 @@ typedef struct Entity_t {
     ///
     /// Do not interact with this.
     ///
-    Serialization_Header                _serialization_header;
+    union {
+        Serialization_Header            _serialization_header;
+        Serializer                      _serializer;
+    };
     Sprite_Wrapper                      sprite_wrapper;
 
     ///

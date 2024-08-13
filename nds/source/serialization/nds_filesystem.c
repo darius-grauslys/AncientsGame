@@ -302,6 +302,38 @@ enum PLATFORM_Read_File_Error PLATFORM_read_file(
     return PLATFORM_Read_File_Error__None;
 }
 
+Index__u32 PLATFORM_get_position_in__file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        void *p_file_handler) {
+#ifndef NDEBUG
+    if (!p_file_handler) {
+        debug_abort("NDS::PLATFORM_read_file, p_file_handler is null.");
+        return PLATFORM_Read_File_Error__Unknown;
+    }
+#endif
+
+    FILE *p_file = p_file_handler;
+
+    return ftell(p_file);
+}
+
+bool PLATFORM_set_position_in__file(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        Index__u32 position_in__file_u32,
+        void *p_file_handler) {
+
+#ifndef NDEBUG
+    if (!p_file_handler) {
+        debug_abort("NDS::PLATFORM_read_file, p_file_handler is null.");
+        return PLATFORM_Read_File_Error__Unknown;
+    }
+#endif
+
+    FILE *p_file = p_file_handler;
+
+    return !fseek(p_file, position_in__file_u32, SEEK_SET);
+}
+
 void m_NDS_process__serialization(
         Process *p_this_process,
         Game *p_game) {

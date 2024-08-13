@@ -17,4 +17,14 @@ void intialize_serializer_as__deallocated(
         m_Serialize m_serialize_handler,
         m_Deserialize m_deserialize_handler);
 
+void m_serialize__default(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
+
+void m_deserialize__default(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
+
 #endif

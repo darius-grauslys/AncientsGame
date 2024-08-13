@@ -2,11 +2,13 @@
 #include "defines_weak.h"
 #include "inventory/inventory.h"
 #include "numerics.h"
+#include "platform_defines.h"
 #include "random.h"
 #include "serialization/hashing.h"
 #include "serialization/serialization_header.h"
 #include "serialization/serialized_field.h"
 #include "serialization/identifiers.h"
+#include "world/region.h"
 #include <inventory/inventory_manager.h>
 
 void initialize_inventory_manager(
@@ -264,4 +266,47 @@ bool resolve_s_item_stack_ptr_to__inventory_manager(
         p_item_stack;
     return is_p_serialized_field__linked(
             s_item_stack_ptr);
+}
+
+void foreach_p_inventory_container_in__chunk_vector(
+        Inventory_Manager *p_inventory_manager,
+        Chunk_Vector__3i32 chunk_vector__3i32,
+        f_Foreach_Inventory_Container f_callback,
+        Game *p_game,
+        void *p_data) {
+    truncate_p_chunk_vector_3i32_to__region(
+            &chunk_vector__3i32);
+
+    for (Index__u32 index_of__inventory = 0;
+            index_of__inventory
+            < INVENTORY_MAX_QUANTITY_OF__CONTAINER;
+            index_of__inventory++) {
+        Inventory *p_inventory__container =
+            get_p_inventory_for__container_by__index_in__inventory_manager(
+                    p_inventory_manager, 
+                    index_of__inventory);
+
+        Identifier__u32 uuid =
+            p_inventory__container->_serialization_header.uuid;
+
+        if (uuid == IDENTIFIER__UNKNOWN__u32)
+            continue;
+
+        i32 x__i32 =
+            get_inventory_container__x_from__uuid(uuid)
+            >> (CHUNK__WIDTH_BIT_SHIFT);
+        i32 y__i32 =
+            get_inventory_container__y_from__uuid(uuid)
+            >> (CHUNK__WIDTH_BIT_SHIFT);
+        // TODO: do z-axis
+
+        if (x__i32 == chunk_vector__3i32.x__i32
+                && y__i32 == chunk_vector__3i32.y__i32) {
+            f_callback(
+                    p_game,
+                    p_inventory__container,
+                    p_inventory_manager,
+                    p_data);
+        }
+    }
 }
