@@ -458,6 +458,10 @@ skip:
             resolve_chunk(
                     p_game, 
                     *p_chunk_map_node_ptr);
+            PLATFORM_update_chunk(
+                    get_p_PLATFORM_gfx_context_from__game(p_game),
+                    p_chunk_manager,
+                    *p_chunk_map_node_ptr);
             dequeue_chunk_map_node_for__serialization(
                     p_chunk_manager, 
                     *p_chunk_map_node_ptr);

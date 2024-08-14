@@ -103,10 +103,16 @@ void m_entity_ai_handler__player(
                         PLATFORM_update_chunks(
                                 get_p_PLATFORM_gfx_context_from__game(p_game), 
                                 get_p_chunk_manager_from__game(p_game));
-                        debug_info("fail: %x",
-                                s_inventory__container._serialization_header.uuid);
                         continue;
                     }
+
+                    Chunk *p_chunk =
+                        get_p_chunk_from__chunk_manager(
+                                get_p_chunk_manager_from__game(p_game), 
+                                vector_3i32F4_to__vector_3i32(tile_vector__3i32F4));
+
+                    if (p_chunk)
+                        set_chunk_as__updated(p_chunk);
 
                     p_this_player
                         ->s_humanoid__container_ptr =

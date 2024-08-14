@@ -53,8 +53,6 @@ void f_foreach_inventory_container__serialize_into__chunk(
             p_serialization_request,
             (Serializer*)p_inventory);
 
-    debug_info("release inv in ser %x",
-            p_inventory->_serialization_header.uuid);
     release_p_inventory_in__inventory_manager(
             p_inventory_manager, 
             p_inventory);
@@ -311,7 +309,6 @@ void m_deserialize__chunk(
         initialize_inventory(
                 p_inventory, 
                 serialization_header.uuid);
-        debug_info("alloc: %x", p_inventory->_serialization_header.uuid);
         if (!p_inventory) {
             debug_error("m_deserialize__chunk, p_inventory is null. IM full?");
             break;

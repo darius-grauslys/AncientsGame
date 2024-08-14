@@ -80,9 +80,10 @@ void NDS_render_chunk(
     }
 }
 
-void PLATFORM_update_chunks(
+void PLATFORM_update_chunk(
         PLATFORM_Gfx_Context *p_gfx_context,
-        Chunk_Manager *p_chunk_manager) {
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
     TileMapEntry16 *p_background__wall_lower =
         (TileMapEntry16*)
         bgGetMapPtr(p_gfx_context
@@ -101,6 +102,28 @@ void PLATFORM_update_chunks(
                 ->backgrounds__main[
                     NDS_BACKGROUND_SLOT__GAME__GROUND]
                 .background_index_from__hardware);
+
+    Signed_Index__i32 x__index =
+        p_chunk_map_node
+            ->position_of__chunk_3i32
+            .x__i32;
+    Signed_Index__i32 y__index =
+        p_chunk_map_node
+            ->position_of__chunk_3i32
+            .y__i32;
+
+     NDS_render_chunk(
+             x__index,
+             y__index,
+             p_background__ground,
+             p_background__wall_lower,
+             p_background__wall_upper,
+             p_chunk_map_node);
+}
+
+void PLATFORM_update_chunks(
+        PLATFORM_Gfx_Context *p_gfx_context,
+        Chunk_Manager *p_chunk_manager) {
     Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node;
     Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node;
@@ -115,22 +138,9 @@ void PLATFORM_update_chunks(
                 x 
                 < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
                 x++) {
-            //TODO: consolidate this to a helper
-            Signed_Index__i32 x__index =
-                p_current_sub__chunk_map_node
-                    ->position_of__chunk_3i32
-                    .x__i32;
-            Signed_Index__i32 y__index =
-                p_current_sub__chunk_map_node
-                    ->position_of__chunk_3i32
-                    .y__i32;
-
-            NDS_render_chunk(
-                    x__index,
-                    y__index,
-                    p_background__ground,
-                    p_background__wall_lower,
-                    p_background__wall_upper,
+            PLATFORM_update_chunk(
+                    p_gfx_context, 
+                    p_chunk_manager, 
                     p_current_sub__chunk_map_node);
 
             p_current_sub__chunk_map_node =
