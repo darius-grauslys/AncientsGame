@@ -36,6 +36,7 @@ void m_entity_ai_handler__chase_melee(
 
     if (is_p_serialized_field__linked(
                 &this_chasing_melee->goal__s_entity_ptr)) {
+    debug_info(">>>m_entity_ai_handler[chase]");
         Entity *p_target = 
             this_chasing_melee
             ->goal__s_entity_ptr
@@ -90,6 +91,7 @@ void m_entity_ai_handler__chase_melee(
                     this_chasing_melee->hitbox.position__3i32F4, 
                     p_player->hitbox.position__3i32F4));
 
+    debug_info(">>>attack");
     if (distance_squared_from__player
             < i32_to__i32F4(64 << 6)) {
         point_serialized_field_to__this_serialized_struct(
@@ -101,11 +103,14 @@ void m_entity_ai_handler__chase_melee(
                     get_p_PLATFORM_audio_context_from__game(p_game), 
                     this_chasing_melee->the_kind_of__audio_effect_for__alert);
         }
+        debug_info("m_entity_ai_handler[chase](attack)<<<");
         return;
     }
+    debug_info("attack<<<");
 
     if (is_vectors_3i32F4__out_of_bounds(
                 this_chasing_melee->goal__position__3i32F4)) {
+        debug_info("m_entity_ai_handler[chase](bounds)<<<");
         return;
     }
 
@@ -113,6 +118,7 @@ void m_entity_ai_handler__chase_melee(
                 subtract_vectors__3i32F4(
                     this_chasing_melee->hitbox.position__3i32F4, 
                     this_chasing_melee->goal__position__3i32F4))) {
+        debug_info("m_entity_ai_handler[chase](quit)<<<");
         return;
     }
 
@@ -137,4 +143,5 @@ void m_entity_ai_handler__chase_melee(
             p_game, 
             this_chasing_melee, 
             movement__3i32F4);
+    debug_info("m_entity_ai_handler[chase]<<<");
 }

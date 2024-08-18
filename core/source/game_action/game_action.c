@@ -3,6 +3,37 @@
 #include <game_action/game_action.h>
 #include <serialization/serialized_field.h>
 
+void initialize_p_game_action(
+        Game_Action *p_game_action){
+    p_game_action->game_action_flags = 0;
+    p_game_action->the_kind_of_game_action__this_action_is =
+        Game_Action_Kind__None;
+    initialize_serialized_field_as__unassigned(
+            &p_game_action->s_entity__target);
+    initialize_serialized_field_as__unassigned(
+            &p_game_action->s_entity__source);
+}        
+
+void invoke_game_action(
+        Game *p_game,
+        Game_Action *p_game_action) {
+#ifndef NDEBUG
+    if (!p_game->m_game_action_handler) {
+        debug_abort("p_game->m_game_action_handler == 0.");
+        debug_warning("Did you forget to initialize_game(...)?");
+        return;
+    }
+#endif
+    p_game->m_game_action_handler(p_game, p_game_action);
+}
+
+enum Game_Action_Kind get_the_kind_of__game_action(
+        Game_Action *p_game_action) {
+    if (!p_game_action)
+        return Game_Action_Kind__None;
+    return p_game_action->the_kind_of_game_action__this_action_is;
+}
+
 void initialize_game_action_as__allocate_entity(
         Game_Action *p_game_action,
         enum Entity_Kind the_kind_of__entity,

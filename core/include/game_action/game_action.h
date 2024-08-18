@@ -5,35 +5,15 @@
 #include "game.h"
 #include <defines.h>
 
-static inline 
 void initialize_p_game_action(
-        Game_Action *p_game_action){
-    p_game_action->game_action_flags = 0;
-    p_game_action->the_kind_of_game_action__this_action_is =
-        Game_Action_Kind__None;
-}        
+        Game_Action *p_game_action);
 
-static inline 
 void invoke_game_action(
         Game *p_game,
-        Game_Action *p_game_action) {
-#ifndef NDEBUG
-    if (!p_game->m_game_action_handler) {
-        debug_abort("p_game->m_game_action_handler == 0.");
-        debug_warning("Did you forget to initialize_game(...)?");
-        return;
-    }
-#endif
-    p_game->m_game_action_handler(p_game, p_game_action);
-}
+        Game_Action *p_game_action);
 
-static inline
 enum Game_Action_Kind get_the_kind_of__game_action(
-        Game_Action *p_game_action) {
-    if (!p_game_action)
-        return Game_Action_Kind__None;
-    return p_game_action->the_kind_of_game_action__this_action_is;
-}
+        Game_Action *p_game_action);
 
 void initialize_game_action_as__allocate_entity(
         Game_Action *p_game_action,
