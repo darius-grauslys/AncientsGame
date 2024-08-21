@@ -13,6 +13,12 @@ Vector__3i32 get_vector_3i32_from__entity(
     return vector_3i32F4_to__vector_3i32(p_entity->hitbox.position__3i32F4);
 }
 
+static inline
+Vector__3i32F4 get_vector_3i32F4_from__entity(
+        Entity *p_entity) {
+    return p_entity->hitbox.position__3i32F4;
+}
+
 static i32F4 inline get_x_i32F4_from__entity(
         Entity *p_entity) {
     return get_x_i32F4_from__hitbox(&p_entity->hitbox);

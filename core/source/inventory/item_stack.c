@@ -305,4 +305,7 @@ void remove_quantity_of_items_from__item_stack(
         subtract_u8__no_overflow(
                 p_item_stack->quantity_of__items, 
                 quantity_of__items_to__remove);
+
+    if (p_item_stack->quantity_of__items == 0)
+        p_item_stack->item = get_item__empty();
 }

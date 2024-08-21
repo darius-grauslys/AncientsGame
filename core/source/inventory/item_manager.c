@@ -19,11 +19,21 @@
 #include "inventory/implemented/dagger__steel/dagger__steel.h"
 #include "inventory/implemented/dagger__steel__chaos/dagger__steel__chaos.h"
 #include "inventory/implemented/dagger__steel__order/dagger__steel__order.h"
+#include "inventory/implemented/hammer__iron/hammer__iron.h"
 #include "inventory/implemented/hatchet__iron/hatchet__iron.h"
 #include "inventory/implemented/hatchet__rusted/hatchet__rusted.h"
 #include "inventory/implemented/hatchet__steel/hatchet__steel.h"
 #include "inventory/implemented/hatchet__steel__chaos/hatchet__steel__chaos.h"
 #include "inventory/implemented/hatchet__steel__order/hatchet__steel__order.h"
+#include "inventory/implemented/pile__stone__plenty/pile__stone__plenty.h"
+#include "inventory/implemented/pile__stone_brick__plenty/pile__stone_brick__plenty.h"
+#include "inventory/implemented/pile__iron__plenty/pile__iron__plenty.h"
+#include "inventory/implemented/pile__gold__plenty/pile__gold__plenty.h"
+#include "inventory/implemented/pile__amethyst__plenty/pile__amethyst__plenty.h"
+#include "inventory/implemented/pile__diamond__plenty/pile__diamond__plenty.h"
+#include "inventory/implemented/pile__sand__plenty/pile__sand__plenty.h"
+#include "inventory/implemented/pile__dirt__plenty/pile__dirt__plenty.h"
+#include "inventory/implemented/pile__wood__plenty/pile__wood__plenty.h"
 #include "inventory/implemented/rapier__iron/rapier__iron.h"
 #include "inventory/implemented/rapier__rusted/rapier__rusted.h"
 #include "inventory/implemented/rapier__steel/rapier__steel.h"
@@ -118,4 +128,16 @@ void load_core_items_into__item_manager(
     register_into__item_manager__sword__steel_into__item_manager(p_item_manager);
     register_into__item_manager__sword__steel__chaos_into__item_manager(p_item_manager);
     register_into__item_manager__sword__steel__order_into__item_manager(p_item_manager);
+
+    register_into__item_manager__hammer__iron_into__item_manager(p_item_manager);
+
+    register_into__item_manager__pile__stone__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__stone_brick__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__iron__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__gold__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__diamond__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__amethyst__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__dirt__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__sand__plenty_into__item_manager(p_item_manager);
+    register_into__item_manager__pile__wood__plenty_into__item_manager(p_item_manager);
 }

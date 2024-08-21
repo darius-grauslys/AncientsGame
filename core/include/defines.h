@@ -691,7 +691,7 @@ typedef struct Item_t Item;
 
 typedef uint8_t Item_Filter_Flags;
 
-#define ITEM_FILTER_FLAGS__NONE
+#define ITEM_FILTER_FLAGS__NONE 0
 #define ITEM_FILTER_FLAG__INTERACTABLE 1
 #define ITEM_FILTER_FLAG__ARMOR \
         (ITEM_FILTER_FLAG__INTERACTABLE << 1)
