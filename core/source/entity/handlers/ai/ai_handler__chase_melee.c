@@ -1,4 +1,5 @@
 #include "entity/handlers/ai/ai_handler__chase_melee.h"
+#include "audio/audio_effect.h"
 #include "defines.h"
 #include "defines_weak.h"
 #include "degree.h"
@@ -11,6 +12,7 @@
 #include "rendering/animate_humanoid.h"
 #include "rendering/animate_sprite.h"
 #include "serialization/serialized_field.h"
+#include "timer.h"
 #include "vectors.h"
 
 void m_entity_ai_handler__chase_melee(
@@ -91,7 +93,6 @@ void m_entity_ai_handler__chase_melee(
                     this_chasing_melee->hitbox.position__3i32F4, 
                     p_player->hitbox.position__3i32F4));
 
-    debug_info(">>>attack");
     if (distance_squared_from__player
             < i32_to__i32F4(64 << 6)) {
         point_serialized_field_to__this_serialized_struct(
@@ -99,14 +100,15 @@ void m_entity_ai_handler__chase_melee(
                 p_player);
         if (this_chasing_melee->the_kind_of__audio_effect_for__alert
                 != Audio_Effect_Kind__None) {
-            PLATFORM_play_audio__effect(
+            play_audio_effect_and__forget(
                     get_p_PLATFORM_audio_context_from__game(p_game), 
-                    this_chasing_melee->the_kind_of__audio_effect_for__alert);
+                    this_chasing_melee->the_kind_of__audio_effect_for__alert, 
+                    AUDIO_FLAGS__NONE, 
+                    get_timer__u32(8));
         }
         debug_info("m_entity_ai_handler[chase](attack)<<<");
         return;
     }
-    debug_info("attack<<<");
 
     if (is_vectors_3i32F4__out_of_bounds(
                 this_chasing_melee->goal__position__3i32F4)) {

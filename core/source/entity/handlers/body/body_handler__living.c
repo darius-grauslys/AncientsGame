@@ -1,3 +1,4 @@
+#include "audio/audio_effect.h"
 #include "defines.h"
 #include "defines_weak.h"
 #include "entity/entity.h"
@@ -311,9 +312,11 @@ void m_entity_body_handler__living(
             animate_humanoid__death(p_this_humanoid);
             if (p_this_humanoid->the_kind_of__audio_effect_for__die
                     != Audio_Effect_Kind__None) {
-                PLATFORM_play_audio__effect(
-                        get_p_PLATFORM_audio_context_from__game(p_game), 
-                        p_this_humanoid->the_kind_of__audio_effect_for__die);
+                play_audio_effect_and__forget(
+                        get_p_PLATFORM_audio_context_from__game(p_game),
+                        p_this_humanoid->the_kind_of__audio_effect_for__die,
+                        AUDIO_FLAGS__NONE,
+                        get_timer__u32(8));
             }
         } else if (is_animation_finished(&p_this_humanoid->sprite_wrapper)) {
             set_entity_as__unloaded(p_this_humanoid);
@@ -446,9 +449,11 @@ void m_humanoid_handler__game_action_handler(
             animate_humanoid__hurt(p_entity_self);
             if (p_entity_self->the_kind_of__audio_effect_for__hurt
                     != Audio_Effect_Kind__None) {
-                PLATFORM_play_audio__effect(
-                        get_p_PLATFORM_audio_context_from__game(p_game), 
-                        p_entity_self->the_kind_of__audio_effect_for__hurt);
+                play_audio_effect_and__forget(
+                        get_p_PLATFORM_audio_context_from__game(p_game),
+                        p_entity_self->the_kind_of__audio_effect_for__hurt,
+                        AUDIO_FLAGS__NONE,
+                        get_timer__u32(8));
             }
             break;
     }

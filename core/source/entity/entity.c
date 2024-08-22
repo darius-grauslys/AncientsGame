@@ -1,3 +1,4 @@
+#include "audio/audio_effect.h"
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
@@ -115,65 +116,65 @@ void play_audio_of__entity_footstep(
                 p_entity->hitbox.position__3i32F4);
     if (!p_tile)
         return;
+    Quantity__u8 duration = 
+        p_entity->footstep__timer_u8.start__u8;
     if (poll_timer_u8(&p_entity->footstep__timer_u8)) {
         reset_timer_u8(&p_entity->footstep__timer_u8);
         switch (p_tile->the_kind_of_tile__this_tile_is) {
             default:
                 break;
             case Tile_Kind__Oak_Wood:
-                PLATFORM_play_audio__effect(
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Wood);
+                        Audio_Effect_Kind__Footstep__Wood, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
             case Tile_Kind__Stone_Brick:
-                PLATFORM_play_audio__effect(
+            case Tile_Kind__Sandstone:
+            case Tile_Kind__Stone:
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Rock);
+                        Audio_Effect_Kind__Footstep__Rock, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
             case Tile_Kind__Gold:
-                PLATFORM_play_audio__effect(
-                        get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Metal);
-                break;
             case Tile_Kind__Iron:
-                PLATFORM_play_audio__effect(
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Metal);
+                        Audio_Effect_Kind__Footstep__Metal, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
             case Tile_Kind__Diamond:
-                PLATFORM_play_audio__effect(
-                        get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Rock);
-                break;
             case Tile_Kind__Amethyst:
-                PLATFORM_play_audio__effect(
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Rock);
-                break;
-            case Tile_Kind__Sandstone:
-                PLATFORM_play_audio__effect(
-                        get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Rock);
-                break;
-            case Tile_Kind__Stone:
-                PLATFORM_play_audio__effect(
-                        get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Rock);
+                        Audio_Effect_Kind__Footstep__Rock, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
             case Tile_Kind__Dirt:
-                PLATFORM_play_audio__effect(
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Dirt);
+                        Audio_Effect_Kind__Footstep__Dirt, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
             case Tile_Kind__Sand:
-                PLATFORM_play_audio__effect(
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Sand);
+                        Audio_Effect_Kind__Footstep__Sand, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
             case Tile_Kind__Grass:
-                PLATFORM_play_audio__effect(
+                play_audio_effect_and__forget(
                         get_p_PLATFORM_audio_context_from__game(p_game), 
-                        Audio_Effect_Kind__Footstep__Grass);
+                        Audio_Effect_Kind__Footstep__Grass, 
+                        AUDIO_FLAGS__NONE, 
+                        get_timer__u32(duration));
                 break;
         }
     }

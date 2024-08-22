@@ -1,4 +1,5 @@
 #include "inventory/implemented/weapon.h"
+#include "audio/audio_effect.h"
 #include "collisions/collision_manager.h"
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
@@ -60,9 +61,11 @@ void m_item_use_handler__weapon(
         Entity *p_entity_user,
         Game_Action *p_game_action,
         Game *p_game) {
-    PLATFORM_play_audio__effect(
+    play_audio_effect_and__forget(
             get_p_PLATFORM_audio_context_from__game(p_game), 
-            Audio_Effect_Kind__Weapon__Melee);
+            Audio_Effect_Kind__Weapon__Melee, 
+            AUDIO_FLAGS__NONE, 
+            get_timer__u32(8));
 
     Direction__u8 direct_of__attack =
         get_humanoid__direction(p_entity_user);

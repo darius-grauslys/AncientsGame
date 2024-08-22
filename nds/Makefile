@@ -18,6 +18,9 @@ CFLAGS := -Wall -O2\
     -march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
     -ffast-math
 
+ASFLAGS	= -g $(ARCH)
+ASFLAGS	+=	$(INCLUDE)
+
 CFLAGS    += $(INCLUDE) -DARM9
 CXXFLAGS  := $(CFLAGS) -fno-exceptions
 
@@ -62,7 +65,7 @@ export DEPSDIR 	:= $(BUILD)
 
 export CFILES_NDS	!= realpath --relative-to=$(SOURCE) $$(find $(SOURCE) -name *.c)
 export CFILES 		:= $(CFILES_NDS) $(CFILES_CORE)
-export SFILES       := $(shell find $(SOURCE) -name *.s)
+export SFILES		!= realpath --relative-to=$(SOURCE) $$(find $(SOURCE) -name *.s)
 export BINFILES		:= soundbank.bin
 
 #---------------------------------------------------------------------------------
@@ -80,7 +83,8 @@ endif
 #---------------------------------------------------------------------------------
 
 export OFILES_NDS := \
-  $(CFILES_NDS:.c=.o)
+  $(CFILES_NDS:.c=.o) \
+  $(SFILES:.s=.o)
 
 export SHARED_SPRITE_FILES := $(foreach sprite_dir,$(SPRITE_DIRS),$(sprite_dir)/GFX_$(shell basename $(sprite_dir)).o)
 
@@ -132,6 +136,11 @@ $(CFILES_NDS:.c=.o) : $(foreach file,$(CFILES_NDS),$(BASE_DIR)/nds/source/$(file
 	@$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) $(INCLUDE) $(FLAGS) \
 		-o $@ -c $(BASE_DIR)/nds/source/$(basename $@).c" $@
 #---------------------------------------------------------------------------------
+
+$(SFILES:.s=.o) : $(foreach file,$(SFILES),$(BASE_DIR)/nds/source/$(file))
+	$(SILENTMSG) $(notdir $<)
+	$(ADD_COMPILE_COMMAND) add $(CC) "-x assembler-with-cpp $(CPPFLAGS) $(ASFLAGS) -c $(BASE_DIR)/nds/source/$(basename $@).s -o $@" $(BASE_DIR)/nds/source/$(basename $@).s
+	$(SILENTCMD)$(CC) -MMD -MP -MF $(DEPSDIR)/$*.d -x assembler-with-cpp $(CPPFLAGS) $(ASFLAGS) -c $(BASE_DIR)/nds/source/$(basename $@).s -o $@ $(ERROR_FILTER)
 
 include $(BASE_DIR)/core/Makefile.build
 

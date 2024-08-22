@@ -272,6 +272,24 @@ typedef struct Serialization_Request_t {
 } Serialization_Request;
 
 ///
+/// SECTION_audio
+///
+
+typedef u8 Audio_Flags__u8;
+
+#define AUDIO_FLAGS__NONE 0
+#define AUDIO_FLAG__IS_ACTIVE BIT(0)
+#define AUDIO_FLAG__RELEASE_ON_COMPLETE BIT(1)
+#define AUDIO_FLAG__IS_LOOPING BIT(2)
+
+typedef struct Audio_Effect_t {
+    void                    *p_audio_instance_handle;
+    Timer__u32              timer_for__audio;
+    enum Audio_Effect_Kind  the_kind_of__audio_effect;
+    Audio_Flags__u8         audio_flags__u8;
+} Audio_Effect;
+
+///
 /// SECTION_collisions
 ///
 

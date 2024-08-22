@@ -34,9 +34,18 @@
 void PLATFORM_initialize_audio(
         PLATFORM_Audio_Context *p_PLATFORM_audio_context);
 
-void PLATFORM_play_audio__effect(
+/// 
+/// Returns false if fails to allocate audio effect.
+///
+Audio_Effect *PLATFORM_allocate_audio_effect(
+        PLATFORM_Audio_Context *p_PLATFORM_audio_context);
+
+void PLATFORM_play_audio_effect(
         PLATFORM_Audio_Context *p_PLATFORM_audio_context,
-        enum Audio_Effect_Kind the_kind_of__audio_effect);
+        Audio_Effect *p_audio_effect);
+
+void PLATFORM_poll_audio_effects(
+        PLATFORM_Audio_Context *p_PLATFORM_audio_context);
 
 void PLATFORM_play_audio__stream(
         PLATFORM_Audio_Context *p_PLATFORM_audio_context,

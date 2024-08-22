@@ -69,6 +69,9 @@ typedef struct Timer__u8_t Timer__u8;
 /// SECTION_audio
 ///
 
+typedef u8 Audio_Flags__u8;
+typedef struct Audio_Effect_t Audio_Effect;
+
 enum Audio_Effect_Kind {
     Audio_Effect_Kind__None,
     Audio_Effect_Kind__Test,

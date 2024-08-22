@@ -4,6 +4,21 @@
 #include "defines.h"
 #include "defines_weak.h"
 
+static inline
+Timer__u8 get_timer__u8(u8 start) {
+    return (Timer__u8){start, start};
+}
+
+static inline
+Timer__u16 get_timer__u16(u16 start) {
+    return (Timer__u16){start, start};
+}
+
+static inline
+Timer__u32 get_timer__u32(u32 start) {
+    return (Timer__u32){start, start};
+}
+
 static void inline initialize_timer_u32_as__unused(Timer__u32 *timer__u32) {
     timer__u32->remaining__u32 =
         timer__u32->start__u32 = 0;

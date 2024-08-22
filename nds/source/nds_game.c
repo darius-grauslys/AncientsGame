@@ -1,6 +1,8 @@
+#include "debug/nds_debug.h"
 #include "defines_weak.h"
 #include "entity/entity.h"
 #include "input/input.h"
+#include "nds/interrupts.h"
 #include "nds_defines.h"
 #include "world/camera.h"
 #include <nds.h>
@@ -11,6 +13,7 @@
 void PLATFORM_pre_render(Game *p_game) {
     swiWaitForVBlank();
 }
+
 void PLATFORM_post_render(Game *p_game) {
     Camera *p_camera =
         &p_game->world.camera;

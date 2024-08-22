@@ -5,6 +5,7 @@
 #include <maxmod9.h>
 #include "defines.h"
 #include "defines_weak.h"
+#include "mm_types.h"
 #include "platform_defines.h"
 
 enum NDS_Texture_Kind {
@@ -245,13 +246,17 @@ typedef struct PLATFORM_Gfx_Context_t {
     u8 :8;
 } PLATFORM_Gfx_Context;
 
+#define NDS_MAX_QUANTITY_OF__AUDIO_EFFECTS 16
+
 typedef struct PLATFORM_Audio_Context_t {
     /// 
     /// If true, then modmax is actively streaming audio.
     ///
+    Audio_Effect audio_effects[NDS_MAX_QUANTITY_OF__AUDIO_EFFECTS];
+    mm_sfxhand maxmod_sfx_handles[NDS_MAX_QUANTITY_OF__AUDIO_EFFECTS];
+    mm_stream maxmod__stream;
     Repeatable_Psuedo_Random randomizer;
     bool is_audio_context__streaming;
-    mm_stream maxmod__stream;
 } PLATFORM_Audio_Context;
 
 #define FILE_SYSTEM_CONTEXT__MAX_WRITE 50176
