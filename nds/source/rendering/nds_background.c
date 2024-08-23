@@ -30,7 +30,7 @@ void NDS_initialize_background_for__world_ground(
         NDS_Background *background) {
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 0;
-    background->tile_base = 2;
+    background->tile_base = 8;
     NDS_initialize_texture_as__empty(
             &background->background_texture__reserved);
     background->background_index_from__hardware =
@@ -58,7 +58,7 @@ void NDS_initialize_background_for__world_wall_lower(
         NDS_Background *background) {
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 4;
-    background->tile_base = 2;
+    background->tile_base = 12;
     NDS_initialize_texture_as__empty(
             &background->background_texture__reserved);
     background->background_index_from__hardware =
@@ -86,7 +86,7 @@ void NDS_initialize_background_for__world_wall_upper(
         NDS_Background *background) {
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 8;
-    background->tile_base = 2;
+    background->tile_base = 12;
     NDS_initialize_texture_as__empty(
             &background->background_texture__reserved);
     background->background_index_from__hardware =

@@ -233,6 +233,8 @@ wall:
 			break;
         default:
             p_render_result->tile_index__cover = 0;
+            p_render_result->tile_index__cover = 
+                p_tile->the_kind_of_tile_cover__this_tile_has;
 			break;
     }
 }

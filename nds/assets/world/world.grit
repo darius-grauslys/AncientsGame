@@ -1,7 +1,7 @@
 
 # extended palettes only work on 8bpp tiled bg with 16-bit map entries
 # this means you can only use BgType_Text8bpp or BgType_ExRotation
--gS -gt -gB8
+-gt -gB8 -gT FF00FF
 -m -mR!
 -pS
 

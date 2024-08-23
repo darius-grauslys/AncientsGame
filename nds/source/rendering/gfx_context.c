@@ -18,7 +18,8 @@
 #include <rendering/gfx_context.h>
 
 #include <assets/world/GFX_world.h>
-#include <assets/world/tiles.h>
+#include <assets/world/tilesheet_cover.h>
+#include <assets/world/tilesheet_ground.h>
 #include <assets/ui/default/GFX_default.h>
 
 #include <assets/entities/entity_sprite__16x16/GFX_entity_sprite__16x16.h>
@@ -120,7 +121,8 @@ void NDS_set_video_modes_to__MODE_0_2D(void) {
 }
 
 void NDS_set_vram_for__backgrounds_on__main(void) {
-    vramSetBankA(VRAM_A_MAIN_BG);
+    vramSetBankA(VRAM_A_MAIN_BG_0x06020000);
+    vramSetBankE(VRAM_E_MAIN_BG);
 }
 
 void NDS_set_vram_for__backgrounds_on__sub(void) {
@@ -138,6 +140,8 @@ void NDS_set_vram_and__oam_for__sprites_on__sub(void) {
 	oamInit(&oamSub, SpriteMapping_1D_256, true);
 }
 
+// TODO:    make a helper for the VRAM_F bank extended palette set
+//          to BG_Ext slot 0-1
 void NDS_load_sprite_palletes_into__vram(
         NDS_Sprite_Pallete *p_NDS_sprite_palletes,
         Quantity__u32 quantity_of__sprite_palletes,
@@ -166,7 +170,7 @@ void NDS_load_sprite_palletes_into__vram(
     return;
 
 main:
-	vramSetBankF(VRAM_F_LCD);
+	vramSetBankG(VRAM_G_LCD);
 
     for (Index__u32 index_of__sprite_pallete = 0;
             index_of__sprite_pallete < quantity_of__sprite_palletes;
@@ -179,11 +183,11 @@ main:
             p_NDS_sprite_palletes[index_of__sprite_pallete].pallete_length;
 
         dmaCopy(p_pallete, 
-                VRAM_F_EXT_SPR_PALETTE[index_of__pallete_slot],
+                VRAM_G_EXT_SPR_PALETTE[index_of__pallete_slot],
                 pallete_length);
     }
 
-	vramSetBankF(VRAM_F_SPRITE_EXT_PALETTE);
+	vramSetBankG(VRAM_G_SPRITE_EXT_PALETTE);
 }
 
 void NDS_load_sprite_palletes__default_into__vram(void) {
@@ -232,28 +236,24 @@ void NDS_initialize_gfx_for__world(
     NDS_initialize_background_for__world_wall_lower(
             &gfx_context->backgrounds__main[
                 NDS_BACKGROUND_SLOT__GAME__WALL_UPPER]);
-
-	dmaCopy(GFX_worldTiles, 
-            gfx_context->backgrounds__main[
-                NDS_BACKGROUND_SLOT__GAME__GROUND]
-            .gfx_tileset, GFX_worldTilesLen);
+            
 	dmaCopy(GFX_worldPal, BG_PALETTE, GFX_worldPalLen);
 
-	dmaCopy(tilesMap,
+	dmaCopy(tilesheet_groundTiles,
             gfx_context->backgrounds__main[
                 NDS_BACKGROUND_SLOT__GAME__GROUND]
-            .gfx_map, 
-            tilesMapLen);
-	dmaCopy(tilesMap, 
+            .gfx_tileset, 
+            tilesheet_groundTilesLen);
+	dmaCopy(tilesheet_coverTiles, 
             gfx_context->backgrounds__main[
                 NDS_BACKGROUND_SLOT__GAME__WALL_LOWER]
-            .gfx_map,
-            tilesMapLen);
-	dmaCopy(tilesMap, 
+            .gfx_tileset,
+            tilesheet_coverTilesLen);
+	dmaCopy(tilesheet_coverTiles, 
             gfx_context->backgrounds__main[
                 NDS_BACKGROUND_SLOT__GAME__WALL_UPPER]
-            .gfx_map,
-            tilesMapLen);
+            .gfx_tileset,
+            tilesheet_coverTilesLen);
 
     NDS_set_background_priority(
             &gfx_context->backgrounds__main[
