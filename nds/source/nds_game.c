@@ -23,7 +23,7 @@ void PLATFORM_post_render(Game *p_game) {
             NDS_BACKGROUND_SLOT__GAME__GROUND]
         .background_index_from__hardware,
          get_x_i32_from__camera(p_camera) - 126,
-        -get_y_i32_from__camera(p_camera) - 30
+        -get_y_i32_from__camera(p_camera) - 38
         );
     // TODO: f_ui mangling occurs here
     bgSetScroll(

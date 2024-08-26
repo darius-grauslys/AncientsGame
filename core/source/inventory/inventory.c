@@ -3,6 +3,7 @@
 #include "defines_weak.h"
 #include "game.h"
 #include "inventory/item_stack.h"
+#include "numerics.h"
 #include "platform.h"
 #include "serialization/hashing.h"
 #include "serialization/identifiers.h"
@@ -218,25 +219,43 @@ Item_Stack *get_next_available_item_stack_in__inventory(
 /// an empty spot in inventory. Does nothing
 /// if the inventory is already full.
 ///
-Item_Stack *add_item_stack_to__inventory(
+Item_Stack *add_item_to__inventory(
         Inventory *p_inventory,
         Item item,
         Quantity__u8 quantity_of__items,
         Quantity__u8 max_quantity_of__items) {
 #ifndef NDEBUG
     if (!p_inventory) {
-        debug_abort("add_item_stack_to__inventory, p_inventory is null.");
+        debug_abort("add_stack_to__inventory, p_inventory is null.");
         return 0;
     }
 #endif
     Item_Stack *p_item_stack =
-        get_next_available_item_stack_in__inventory(
-                p_inventory);
+        get_next_p_item_stack_of__this_item_kind_from__inventory(
+                p_inventory, 
+                p_inventory->items, 
+                item.the_kind_of_item__this_item_is);
+    if (!p_item_stack) {
+        p_item_stack =
+            get_next_available_item_stack_in__inventory(
+                    p_inventory);
+    }
 
     if (!p_item_stack) {
-        debug_error("add_item_stack_to__inventory, p_item_stack is null.");
+        debug_error("add_item_to__inventory, p_item_stack is null.");
         return 0;
     }
+
+    max_quantity_of__items =
+        max__u8(max_quantity_of__items,
+            p_item_stack->max_quantity_of__items);
+
+    quantity_of__items =
+        clamp__u8(
+                quantity_of__items
+                + p_item_stack->quantity_of__items, 
+                0, 
+                max_quantity_of__items);
     
     set_item_stack(
             p_item_stack,

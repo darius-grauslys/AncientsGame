@@ -1703,6 +1703,7 @@ typedef struct Tile_Render_Result_t {
     Tile_Render_Index__u16 tile_index__ground;
     Tile_Render_Index__u16 tile_index__cover;
     Tile_Render_Index__u16 tile_index__sprite_cover;
+    Tile_Render_Index__u16 tile_index__sprite_cover__extra;
     Tile_Wall_Adjacency_Code__u16 wall_adjacency;
 } Tile_Render_Result;
 

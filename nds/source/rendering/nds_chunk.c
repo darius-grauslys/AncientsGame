@@ -70,7 +70,6 @@ void NDS_render_chunk(
                         p_current_sub__chunk_map_node,
                         local_tile_vector);
 
-
             *(uint16_t*)p_tile_entry = 
                 render_result.tile_index__ground;
             *(uint16_t*)p_tile_cover_entry = 

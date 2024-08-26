@@ -26,7 +26,7 @@ void m_deserialize__inventory(
 /// an empty spot in inventory. Does nothing
 /// if the inventory is already full.
 ///
-Item_Stack *add_item_stack_to__inventory(
+Item_Stack *add_item_to__inventory(
         Inventory *p_inventory,
         Item item,
         Quantity__u8 quantity_of__items,

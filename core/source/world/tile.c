@@ -115,6 +115,7 @@ void get_tile_texture_sheet_index(
             return;
     }
 tile_structure:
+    ;
     uint32_t index = 0;
     switch (p_tile->the_kind_of_tile__this_tile_is) {
         default:
@@ -207,32 +208,51 @@ wall:
                 + get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
                         p_render_result->wall_adjacency);
             break;
-        case Tile_Cover_Kind__Plant:
+        case Tile_Cover_Kind__Crop_Corn_A:
+        case Tile_Cover_Kind__Crop_Onion_A:
+        case Tile_Cover_Kind__Crop_Tomato_A:
+        case Tile_Cover_Kind__Crop_Pumpkin_A:
+        case Tile_Cover_Kind__Crop_Watermelon_A:
             p_render_result->tile_index__cover =
-				TILE_COVER_SHEET_INDEX__PLANT;
-			break;
-        case Tile_Cover_Kind__Flower_Red:
+                Tile_Cover_Kind__Crop_Stem_A;
+            break;
+        case Tile_Cover_Kind__Crop_Corn_B:
+        case Tile_Cover_Kind__Crop_Onion_B:
+        case Tile_Cover_Kind__Crop_Tomato_B:
+        case Tile_Cover_Kind__Crop_Pumpkin_B:
+        case Tile_Cover_Kind__Crop_Watermelon_B:
             p_render_result->tile_index__cover =
-				TILE_COVER_SHEET_INDEX__FLOWER_RED;
-			break;
-        case Tile_Cover_Kind__Flower_Blue:
+                Tile_Cover_Kind__Crop_Stem_B;
+            break;
+        case Tile_Cover_Kind__Crop_Corn_C:
+        case Tile_Cover_Kind__Crop_Onion_C:
+        case Tile_Cover_Kind__Crop_Tomato_C:
             p_render_result->tile_index__cover =
-				TILE_COVER_SHEET_INDEX__FLOWER_BLUE;
-			break;
-        case Tile_Cover_Kind__Flower_Yellow:
+                Tile_Cover_Kind__Crop_Stem_C;
+            break;
+        case Tile_Cover_Kind__Crop_Pumpkin_C:
+        case Tile_Cover_Kind__Crop_Watermelon_C:
             p_render_result->tile_index__cover =
-				TILE_COVER_SHEET_INDEX__FLOWER_YELLOW;
-			break;
-        case Tile_Cover_Kind__Cactus:
+                Tile_Cover_Kind__Crop_Sprout;
+            break;
+        case Tile_Cover_Kind__Crop_Wheat_A:
             p_render_result->tile_index__cover =
-				TILE_COVER_SHEET_INDEX__CACTUS;
-			break;
-        case Tile_Cover_Kind__Chest_Single:
+                Tile_Cover_Kind__Crop_Grains_A;
+            break;
+        case Tile_Cover_Kind__Crop_Wheat_B:
             p_render_result->tile_index__cover =
-				TILE_COVER_SHEET_INDEX__CHEST_SINGLE;
-			break;
+                Tile_Cover_Kind__Crop_Grains_B;
+            break;
+        case Tile_Cover_Kind__Crop_Wheat_C:
+            p_render_result->tile_index__cover =
+                Tile_Cover_Kind__Crop_Grains_C;
+            break;
+        case Tile_Cover_Kind__Tree__Oak:
+        case Tile_Cover_Kind__Tree__Pine:
+            p_render_result->tile_index__cover =
+                Tile_Cover_Kind__Stump + 1;
+            break;
         default:
-            p_render_result->tile_index__cover = 0;
             p_render_result->tile_index__cover = 
                 p_tile->the_kind_of_tile_cover__this_tile_has;
 			break;
@@ -291,6 +311,46 @@ wall:
                 + get_tile_sheet_index_offset_for__sprite_cover_from__wall_adjacency(
                     p_render_result->wall_adjacency);
             break;
+            // TODO: magic numbers below here.
+        case Tile_Cover_Kind__Cactus__Tall:
+        case Tile_Cover_Kind__Ore__Large__Stone_1__Right:
+        case Tile_Cover_Kind__Ore__Large__Gold_1__Right:
+        case Tile_Cover_Kind__Ore__Large__Iron_1__Right:
+        case Tile_Cover_Kind__Ore__Large__Diamond_1__Right:
+        case Tile_Cover_Kind__Ore__Large__Amethyst_1__Right:
+        case Tile_Cover_Kind__Ore__Large__Stone_2__Right:
+        case Tile_Cover_Kind__Ore__Large__Gold_2__Right:
+        case Tile_Cover_Kind__Ore__Large__Iron_2__Right:
+        case Tile_Cover_Kind__Ore__Large__Diamond_2__Right:
+        case Tile_Cover_Kind__Ore__Large__Amethyst_2__Right:
+            p_render_result->tile_index__sprite_cover =
+                p_tile->the_kind_of_tile_cover__this_tile_has
+                - 32;
+            break;
+        case Tile_Cover_Kind__Tree__Oak:
+            p_render_result->tile_index__sprite_cover =
+                Tile_Cover_Kind__Stump
+                + 1
+                - 32
+                ;
+            p_render_result->tile_index__sprite_cover__extra =
+                Tile_Cover_Kind__Stump
+                + 1
+                - 64
+                ;
+            break;
+        case Tile_Cover_Kind__Tree__Pine:
+            p_render_result->tile_index__sprite_cover =
+                Tile_Cover_Kind__Stump
+                + 2
+                - 32
+                ;
+            p_render_result->tile_index__sprite_cover__extra =
+                Tile_Cover_Kind__Stump
+                + 2
+                - 64
+                ;
+            break;
     }
 }
 
@@ -315,6 +375,8 @@ Tile_Render_Result get_tile_render_result(
             p_tile, 
             &render_result);
 
+    render_result.tile_index__sprite_cover__extra = 
+        Tile_Cover_Kind__None;
     get_tile_sprite_cover_texture_sheet_index(
             p_tile, 
             &render_result);

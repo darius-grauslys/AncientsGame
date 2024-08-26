@@ -57,6 +57,16 @@ Signed_Index__i32 i32F4_to__i32F20(i32F4 x) {
 }
 
 static inline
+u8 max__u8(
+        u8 first__u8,
+        u8 second__u8) {
+    return (first__u8 < second__u8)
+        ? second__u8
+        : first__u8
+        ;
+}
+
+static inline
 u8 add_u8__clamped(
         u8 first__u8,
         u8 second__u8,

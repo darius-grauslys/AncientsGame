@@ -183,7 +183,8 @@ uint32_t get_chunk_index_from__chunk_manager(
         + local_x;
 }
 
-Chunk* get_p_chunk_from__chunk_manager_using__i32(
+Chunk_Manager__Chunk_Map_Node* 
+get_p_chunk_map_node_from__chunk_manager_using__i32(
         Chunk_Manager *p_chunk_manager, 
         Signed_Index__i32 x__chunk, 
         Signed_Index__i32 y__chunk, 
@@ -231,7 +232,25 @@ Chunk* get_p_chunk_from__chunk_manager_using__i32(
         p_node = p_node->p_north__chunk_map_node;
     }
 
-    return p_node->p_chunk__here;
+    return p_node;
+}
+
+Chunk* get_p_chunk_from__chunk_manager_using__i32(
+        Chunk_Manager *p_chunk_manager, 
+        Signed_Index__i32 x__chunk, 
+        Signed_Index__i32 y__chunk, 
+        Signed_Index__i32 z__chunk) {
+    Chunk_Manager__Chunk_Map_Node *p_node = 
+        get_p_chunk_map_node_from__chunk_manager_using__i32(
+            p_chunk_manager, 
+            x__chunk, 
+            y__chunk, 
+            z__chunk);
+    return
+        ((bool)p_node)
+        ? p_node->p_chunk__here
+        : 0
+        ;
 }
 
 void save_chunk(

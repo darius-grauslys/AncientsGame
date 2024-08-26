@@ -5,6 +5,8 @@
 #include "inventory/item_manager.h"
 #include "numerics.h"
 #include "vectors.h"
+#include "world/tiles/tile__cover__ore.h"
+#include "world/tiles/tile__cover__tree.h"
 #include "world/world.h"
 #include <defines.h>
 #include <world/generators/generator_flat_world.h>
@@ -659,7 +661,7 @@ void f_chunk_generator__flat_world(
                         p_game, 
                         step % 3 + x__index,
                         step / 3 + y__index) % size_of__p_loot_table;
-            add_item_stack_to__inventory(
+            add_item_to__inventory(
                     p_inventory, 
                     get_item_from__item_manager(
                         get_p_item_manager_from__game(p_game), 
@@ -753,7 +755,7 @@ void f_chunk_generator__flat_world(
             Psuedo_Random__u32 chance_plant =
                 get_pseudo_random_i32_from__game(
                         p_game)
-                % 100;
+                % 10000;
             p_tile->the_kind_of_tile_cover__this_tile_has =
                 Tile_Cover_Kind__None;
 
@@ -762,45 +764,93 @@ void f_chunk_generator__flat_world(
                 case 0:
                     p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Sand;
-                    if (chance_plant > 97)
+                    if (chance_plant > 9700)
                         p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Cactus;
                     break;
                 case 1:
                     p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Stone;
+                    if (chance_plant > 9996)
+                        set_tile_cover_as__ore(
+                                p_tile, 
+                                0, 
+                                Item_Kind__Pile__Diamond, 
+                                chance_plant,
+                                false);
+                    else if (chance_plant > 9993)
+                        set_tile_cover_as__ore(
+                                p_tile, 
+                                0, 
+                                Item_Kind__Pile__Amethyst, 
+                                chance_plant,
+                                false);
+                    else if (chance_plant > 9987)
+                        set_tile_cover_as__ore(
+                                p_tile, 
+                                0, 
+                                Item_Kind__Pile__Gold, 
+                                chance_plant,
+                                false);
+                    else if (chance_plant > 9975)
+                        set_tile_cover_as__ore(
+                                p_tile, 
+                                0, 
+                                Item_Kind__Pile__Iron, 
+                                chance_plant,
+                                false);
+                    else if (chance_plant > 9945)
+                        set_tile_cover_as__ore(
+                                p_tile, 
+                                0, 
+                                Item_Kind__Bag_Of__Coal, 
+                                chance_plant,
+                                false);
+                    else if (chance_plant > 9900)
+                        set_tile_cover_as__ore(
+                                p_tile, 
+                                0, 
+                                Item_Kind__Pile__Stone, 
+                                chance_plant,
+                                false);
                     break;
                 case 2:
                     p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Dirt;
-                    if (chance_plant > 94)
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Plant;
-                    if (chance_plant > 96)
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Flower_Yellow;
-                    if (chance_plant > 97)
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Flower_Red;
-                    if (chance_plant > 98)
+                    if (chance_plant > 9990)
                         p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Blue;
+                    else if (chance_plant > 9970)
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Red;
+                    else if (chance_plant > 9960)
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Yellow;
+                    else if (chance_plant > 9940)
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Fern;
+                    else if (chance_plant > 9400)
+                        set_tile_cover_as__tree(p_tile, 
+                                chance_plant);
                     break;
                 case 3:
                     p_tile->the_kind_of_tile__this_tile_is =
                         Tile_Kind__Grass;
-                    if (chance_plant > 88)
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Plant;
-                    if (chance_plant > 92)
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Flower_Yellow;
-                    if (chance_plant > 95)
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Flower_Red;
-                    if (chance_plant > 97)
+                    if (chance_plant > 9970)
+                        set_tile_cover_as__tree(p_tile, 
+                                chance_plant);
+                    else if (chance_plant > 9700)
                         p_tile->the_kind_of_tile_cover__this_tile_has =
                             Tile_Cover_Kind__Flower_Blue;
+                    else if (chance_plant > 9500)
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Red;
+                    else if (chance_plant > 9200)
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Flower_Yellow;
+                    else if (chance_plant > 8800)
+                        p_tile->the_kind_of_tile_cover__this_tile_has =
+                            Tile_Cover_Kind__Fern;
                     break;
                 case 4:
                     p_tile->the_kind_of_tile__this_tile_is =

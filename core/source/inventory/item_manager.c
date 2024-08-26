@@ -25,6 +25,7 @@
 #include "inventory/implemented/hatchet__steel/hatchet__steel.h"
 #include "inventory/implemented/hatchet__steel__chaos/hatchet__steel__chaos.h"
 #include "inventory/implemented/hatchet__steel__order/hatchet__steel__order.h"
+#include "inventory/implemented/pickaxe__iron/pickaxe__iron.h"
 #include "inventory/implemented/pile__stone__plenty/pile__stone__plenty.h"
 #include "inventory/implemented/pile__stone_brick__plenty/pile__stone_brick__plenty.h"
 #include "inventory/implemented/pile__iron__plenty/pile__iron__plenty.h"
@@ -105,12 +106,6 @@ void load_core_items_into__item_manager(
     register_into__item_manager__dagger__steel__chaos_into__item_manager(p_item_manager);
     register_into__item_manager__dagger__steel__order_into__item_manager(p_item_manager);
 
-    register_into__item_manager__hatchet__iron_into__item_manager(p_item_manager);
-    register_into__item_manager__hatchet__rusted_into__item_manager(p_item_manager);
-    register_into__item_manager__hatchet__steel_into__item_manager(p_item_manager);
-    register_into__item_manager__hatchet__steel__chaos_into__item_manager(p_item_manager);
-    register_into__item_manager__hatchet__steel__order_into__item_manager(p_item_manager);
-
     register_into__item_manager__rapier__iron_into__item_manager(p_item_manager);
     register_into__item_manager__rapier__rusted_into__item_manager(p_item_manager);
     register_into__item_manager__rapier__steel_into__item_manager(p_item_manager);
@@ -130,6 +125,14 @@ void load_core_items_into__item_manager(
     register_into__item_manager__sword__steel__order_into__item_manager(p_item_manager);
 
     register_into__item_manager__hammer__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__pickaxe__iron_into__item_manager(p_item_manager);
+
+    // TODO: make hatch a tool, not a weapon.
+    register_into__item_manager__hatchet__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__rusted_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__steel_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__steel__chaos_into__item_manager(p_item_manager);
+    register_into__item_manager__hatchet__steel__order_into__item_manager(p_item_manager);
 
     register_into__item_manager__pile__stone__plenty_into__item_manager(p_item_manager);
     register_into__item_manager__pile__stone_brick__plenty_into__item_manager(p_item_manager);

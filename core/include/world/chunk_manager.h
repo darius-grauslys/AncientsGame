@@ -12,13 +12,21 @@ Index__u32 get_chunk_index_from__chunk_manager(
         Chunk_Manager *p_chunk_manager,
         Chunk_Vector__3i32 chunk_vector__3i32);
 
+Chunk_Manager__Chunk_Map_Node* 
+get_p_chunk_map_node_from__chunk_manager_using__i32(
+        Chunk_Manager *p_chunk_manager, 
+        Signed_Index__i32 x__chunk, 
+        Signed_Index__i32 y__chunk, 
+        Signed_Index__i32 z__chunk);
+
 Chunk *get_p_chunk_from__chunk_manager_using__i32(
         Chunk_Manager *p_chunk_manager, 
         Signed_Index__i32 x__i32,
         Signed_Index__i32 y__i32,
         Signed_Index__i32 z__i32);
 
-static Chunk inline *get_p_chunk_from__chunk_manager(
+static inline 
+Chunk *get_p_chunk_from__chunk_manager(
         Chunk_Manager *p_chunk_manager, 
         Chunk_Vector__3i32 chunk_vector__3i32) {
     return get_p_chunk_from__chunk_manager_using__i32(

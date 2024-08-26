@@ -1,6 +1,7 @@
 #ifndef TILE_H
 #define TILE_H
 
+#include "defines_weak.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <defines.h>
@@ -95,6 +96,14 @@ static inline
 void set_tile__container(Tile *tile, bool value) {
     tile->tile_flags &= ~TILE_FLAGS__BIT_IS_CONTAINER;
     tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_IS_CONTAINER);
+}
+
+static inline
+void clear_tile_cover(
+        Tile *p_tile) {
+    p_tile->the_kind_of_tile_cover__this_tile_has =
+        Tile_Cover_Kind__None;
+    set_tile__is_unpassable(p_tile, false);
 }
 
 // TODO: make this PLATFORM_render_tile

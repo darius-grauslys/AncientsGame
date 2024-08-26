@@ -110,7 +110,7 @@ void m_enter_scene_as__game_handler(
                 Entity_Kind__Player,
                 get_vector__3i32F4_using__i32(0, 0, 0));
 
-    add_item_stack_to__inventory(
+    add_item_to__inventory(
             resolve_p_inventory_of__humanoid(
                 p_game, 
                 p_player), 
@@ -118,10 +118,6 @@ void m_enter_scene_as__game_handler(
                 get_p_item_manager_from__game(p_game), 
                 Item_Kind__Stick), 
             1, 1);
-    p_player->equipment.item_stack__main_hand.item =
-        get_item_from__item_manager(
-                get_p_item_manager_from__game(p_game), 
-                Item_Kind__Stick);
 
     Tile *p_tile =
         get_p_tile_from__chunk_manager_with__3i32F4(
@@ -144,51 +140,21 @@ void m_enter_scene_as__game_handler(
                     get_uuid_for__container(
                         get_vector__3i32(4,4,0)));
 
-        add_item_stack_to__inventory(
+        add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
                     get_p_item_manager_from__game(p_game), 
                     Item_Kind__Hammer__Iron), 1, 1);
-        add_item_stack_to__inventory(
+        add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
                     get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Amethyst__Plenty), 128, 128);
-        add_item_stack_to__inventory(
+                    Item_Kind__Hatchet__Iron), 1, 1);
+        add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
                     get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Diamond__Plenty), 128, 128);
-        add_item_stack_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Iron__Plenty), 128, 128);
-        add_item_stack_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Gold__Plenty), 128, 128);
-        add_item_stack_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Stone__Plenty), 128, 128);
-        add_item_stack_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Stone_Brick__Plenty), 128, 128);
-        add_item_stack_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Dirt__Plenty), 128, 128);
-        add_item_stack_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pile__Sand__Plenty), 128, 128);
+                    Item_Kind__Pickaxe__Iron), 1, 1);
     }
 
     p_game->world.entity_manager
