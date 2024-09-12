@@ -1,5 +1,4 @@
 #include "inventory/implemented/armor__cloth/armor__cloth.h"
-#include "debug/nds_debug.h"
 #include "defines.h"
 #include "defines_weak.h"
 #include "inventory/implemented/armor.h"

@@ -1,5 +1,4 @@
 #include "ui/ui_drop_zone__equipment_slot.h"
-#include "debug/nds_debug.h"
 #include "defines_weak.h"
 #include "game.h"
 #include "inventory/inventory_manager.h"
