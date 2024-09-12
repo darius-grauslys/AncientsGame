@@ -12,7 +12,7 @@
 # "!="	-	Shell assignment. This will treat the RValue is a shell command and run it.
 # 			The output then becomes the RValue.
 
-.PHONY: nds test_nds unix_opengl test_unix_opengl clean
+.PHONY: nds test_nds sdl unix_opengl test_unix_opengl clean
 
 export BASE_DIR := $(CURDIR)
 
@@ -20,12 +20,14 @@ export SILENT := @
 
 export DIR_NDS := $(CURDIR)/nds
 export DIR_UNIX_OPENGL := $(CURDIR)/unix_opengl
+export DIR_SDL := $(CURDIR)/sdl
 export DIR_CORE := $(CURDIR)/core
 
 export DIR_TEST_CORE := $(CURDIR)/tests/core
 
 export BUILD_NDS := $(CURDIR)/build/nds
 export BUILD_UNIX_OPENGL := $(CURDIR)/build/unix_opengl
+export BUILD_SDL := $(CURDIR)/build/sdl
 export BUILD_TEST_CORE := $(CURDIR)/build/tests/core
 
 GENERATE_COMPILE_COMMANDS := 1
@@ -50,6 +52,9 @@ test_nds:
 
 unix_opengl:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/unix_opengl -f $(CURDIR)/unix_opengl/Makefile -e BUILD=$(BUILD_UNIX_OPENGL)
+
+sdl:
+	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/sdl -f $(CURDIR)/sdl/Makefile -e BUILD=$(BUILD_SDL)
 
 test_unix_opengl:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/unix_opengl -f $(CURDIR)/unix_opengl/Makefile -e BUILD=$(CURDIR)/build/test_unix_opengl
