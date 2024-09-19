@@ -240,12 +240,6 @@ void PLATFORM_update_chunks(
 // void srand(unsigned int seed) {}
 // int rand(void) {}
 
-int PLATFORM_main(Game *p_game);
-
-void PLATFORM_pre_render(Game *game) {}
-
-void PLATFORM_post_render(Game *game) {}
-
 /// 
 /// SECTION_ui
 ///

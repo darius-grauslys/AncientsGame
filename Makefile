@@ -32,9 +32,9 @@ export BUILD_TEST_CORE := $(CURDIR)/build/tests/core
 
 GENERATE_COMPILE_COMMANDS := 1
 ifeq ($(GENERATE_COMPILE_COMMANDS),1)
-    export ADD_COMPILE_COMMAND := @/opt/devkitpro/tools/bin/generate_compile_commands
+    export ADD_COMPILE_COMMAND := $(BASE_DIR)/generate_compile_commands
 else
-    export ADD_COMPILE_COMMAND := @true
+	export ADD_
 endif
 
 default:
@@ -43,21 +43,27 @@ default:
 
 test_core:
 	$(SILENT)mkdir -p ./build && make -C $(DIR_TEST_CORE) -f $(DIR_TEST_CORE)/Makefile -e BUILD=$(BUILD_TEST_CORE)
+	$(SILENT)stat $(BUILD_TEST_CORE)/compile_commands.json && ln -sf $(BUILD_TEST_CORE)/compile_commands.json ./compile_commands.json
 
 nds:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/nds -f $(CURDIR)/nds/Makefile -e BUILD=$(BUILD_NDS)
+	$(SILENT)stat $(BUILD_NDS)/compile_commands.json && ln -sf $(BUILD_NDS)/compile_commands.json ./compile_commands.json
 
 test_nds:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/nds -f $(CURDIR)/nds/Makefile -e BUILD=$(CURDIR)/build/test_nds
+	$(SILENT)stat $(BUILD_TEST_NDS)/compile_commands.json && ln -sf $(BUILD_TEST_NDS)/compile_commands.json ./compile_commands.json
 
 unix_opengl:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/unix_opengl -f $(CURDIR)/unix_opengl/Makefile -e BUILD=$(BUILD_UNIX_OPENGL)
+	$(SILENT)stat $(BUILD_UNIX_OPENGL)/compile_commands.json && ln -sf $(BUILD_UNIX_OPENGL)/compile_commands.json ./compile_commands.json
 
 sdl:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/sdl -f $(CURDIR)/sdl/Makefile -e BUILD=$(BUILD_SDL)
+	$(SILENT)stat $(BUILD_SDL)/compile_commands.json && ln -sf $(BUILD_SDL)/compile_commands.json ./compile_commands.json
 
 test_unix_opengl:
 	$(SILENT)mkdir -p ./build && make -C $(CURDIR)/unix_opengl -f $(CURDIR)/unix_opengl/Makefile -e BUILD=$(CURDIR)/build/test_unix_opengl
+	$(SILENT)stat $(BUILD_TEST_UNIX_OPENGL)/compile_commands.json && ln -sf $(BUILD_TEST_UNIX_OPENGL)/compile_commands.json ./compile_commands.json 
 
 clean:
 	rm -r ./build/*

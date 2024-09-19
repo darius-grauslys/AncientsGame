@@ -39,33 +39,22 @@ export INCLUDE := \
 
 export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
-ifneq ($(GENERATE_COMPILE_COMMANDS), 1)
-
 $(BUILD):
 	$(SILENTCMD)mkdir -p $(BUILD)
 	$(SILENTCMD)make -C $(BUILD) -f $(CURDIR)/Makefile
 
 else
 
-$(BUILD):
-	$(SILENTCMD)mkdir -p $(BUILD)
-	$(SILENTCMD)make -C $(BUILD) -f $(CURDIR)/Makefile \
-		-e GENERATE_COMPILE_COMMANDS=0 --always-make --dry-run \
-		| grep -wE 'cc|gcc' \
-		| grep -w '\-c' \
-		| jq -nR '[inputs|{directory:".", command:., file: match("(?<=-c).*").string[1:-1]}]' \
-		> $(BUILD)/compile_commands.json
-endif 
-
-else
-
 # I made this going off of /opt/devkitpro/devkitARM/base_rules
 ancients_game: $(OFILES) $(SPRITE_FILES)
 	$(SILENT)$(LD) $(LDFLAGS) $(FLAGS_LINKER) $(OFILES) $(LIBPATHS) $(LIBS) -o $@
+	@$(ADD_COMPILE_COMMAND) end
 
 $(OFILES_SDL):
 	$(SILENTCMD)mkdir -p $(BUILD)/$$(dirname $@)
 	$(SILENTCMD)$(CC) $(LIBS) $(INCLUDE) $(FLAGS) -o $(BUILD)/$@ -c $(SOURCE_SDL)/$(@:.o=.c) 
+	@$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) $(LIBS) $(INCLUDE) $(FLAGS) \
+		-o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c)" $(BUILD)/$@
 
 include $(BASE_DIR)/core/Makefile.build
 

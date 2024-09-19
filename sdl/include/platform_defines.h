@@ -330,6 +330,8 @@
 #define SPRITE_PALETTE__SKELETON    1
 #define SPRITE_PALETTE__ZOMBIE      2
 
+#define SCENE_IDENTIFIER__QUIT -2
+#define SCENE_IDENTIFIER__UNKNOWN -1
 #define SCENE_IDENTIFIER__MAIN_MENU 0
 #define SCENE_IDENTIFIER__SINGLE_PLAYER_MENU \
     (SCENE_IDENTIFIER__MAIN_MENU + 1)
@@ -341,5 +343,11 @@
     (SCENE_IDENTIFIER__MAIN_MENU + 1)
 #define SCENE_IDENTIFIER__TEST \
     (SCENE_IDENTIFIER__GAME + 1)
+
+/*****************************************************
+ *  SDL
+ *****************************************************/
+
+typedef void (*f_SDL_Event_Handler)(Game *p_game);
 
 #endif

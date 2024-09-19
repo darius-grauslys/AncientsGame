@@ -3,6 +3,7 @@
 #include "inventory/item_manager.h"
 #include "log/log.h"
 #include "platform.h"
+#include "platform_defines.h"
 #include "process/process_manager.h"
 #include "random.h"
 #include "scene/scene_manager.h"
@@ -104,35 +105,34 @@ int run_game(Game *p_game) {
     while ((p_active_scene =
             get_p_active_scene_from__scene_manager(
                 p_scene_manager))) {
-#ifndef NDEBUG
-    debug_info("TRANSITION p_active_scene -> %p",
-            p_active_scene);
-#endif
+        debug_info("TRANSITION p_active_scene -> %p",
+                p_active_scene);
         p_active_scene =
             p_game->scene_manager.p_active_scene;
-#ifndef NDEBUG
         debug_info("loading scene.");
-#endif
-        p_active_scene->m_load_scene_handler(
-                p_active_scene,
-                p_game);
-#ifndef NDEBUG
+        if (p_active_scene->m_load_scene_handler)
+            p_active_scene->m_load_scene_handler(
+                    p_active_scene,
+                    p_game);
         debug_info("entering scene.");
-#endif
+        if (!p_active_scene->m_enter_scene_handler) {
+            debug_error("p_active_scene->m_enter_scene_handler is null.");
+            set_p_active_scene_for__scene_manager(
+                    p_scene_manager, 
+                    SCENE_IDENTIFIER__MAIN_MENU);
+            continue;
+        }
         p_active_scene->m_enter_scene_handler(
                 p_active_scene,
                 p_game);
-#ifndef NDEBUG
         debug_info("unloading scene.");
-#endif
-        p_active_scene->m_unload_scene_handler(
-                p_active_scene,
-                p_game);
+        if (p_active_scene->m_unload_scene_handler)
+            p_active_scene->m_unload_scene_handler(
+                    p_active_scene,
+                    p_game);
     }
-#ifndef NDEBUG
     debug_info("p_active_scene == 0");
     debug_info("Game stopped.");
-#endif
     return 0;
 }
 

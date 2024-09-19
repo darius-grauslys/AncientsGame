@@ -6,6 +6,7 @@
 /// You will need to compile with a backend.
 ///
 
+#include "defines_weak.h"
 #include "log/log.h"
 #include "log/message.h"
 #include "platform.h"
@@ -100,8 +101,13 @@ Item_Manager *get_p_item_manager_from__game(Game *p_game) {
     return &p_game->item_manager;
 }
 
-static Entity_Manager inline 
-*get_p_entity_manager_from__game(Game *p_game) {
+static inline 
+Scene_Manager *get_p_scene_manager_from__game(Game *p_game) {
+    return &p_game->scene_manager;
+}
+
+static inline 
+Entity_Manager *get_p_entity_manager_from__game(Game *p_game) {
     return get_p_entity_manager_from__world(&p_game->world);
 }
 
