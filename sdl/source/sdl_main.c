@@ -1,3 +1,4 @@
+#include "input/sdl_input.h"
 #include "platform_defines.h"
 #include "scene/scene_manager.h"
 #include "scene/sdl_scene_manager.h"
@@ -23,6 +24,8 @@ int PLATFORM_main(Game *p_game) {
             | SDL_WINDOW_SHOWN);
 
     initialize_sdl_events();
+
+    SLD_initialize_input_bindings();
 
     SDL_establish_scenes(
             get_p_scene_manager_from__game(p_game));

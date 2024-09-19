@@ -1181,12 +1181,19 @@ typedef struct Entity_Manager_t {
 /// SECTION_input
 ///
 
+typedef uint32_t Input_Code__u32;
 typedef uint32_t Input_Flags__u32;
 
 typedef struct Input_t {
     Input_Flags__u32 input_flags__pressed;
     Input_Flags__u32 input_flags__held;
     Input_Flags__u32 input_flags__released;
+
+    /// 
+    /// Not used by all platforms.
+    ///
+    Input_Flags__u32 input_flags__pressed_old;
+
     Vector__3i32 cursor__3i32;
     Vector__3i32 cursor__old__3i32;
 } Input;

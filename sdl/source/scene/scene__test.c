@@ -1,5 +1,6 @@
 #include "defines_weak.h"
 #include "game.h"
+#include "input/input.h"
 
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,

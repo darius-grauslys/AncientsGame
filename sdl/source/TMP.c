@@ -314,7 +314,6 @@ bool PLATFORM_set_position_in__file(
 ///
 /// SECTION_input
 ///
-void PLATFORM_poll_input(Input *p_input) {}
 
 ///
 /// SECTION_inventory
