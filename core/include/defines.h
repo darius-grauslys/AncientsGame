@@ -564,6 +564,8 @@ typedef uint32_t Texture_Flags;
 
 // We support up to 8 texture render methods 
 // (on nds, this is oamMain, oamSub)
+#define TEXTURE_FLAG__RENDER_METHOD__BIT_SHIFT (\
+        TEXTURE_FLAG__LENGTH__BIT_COUNT << 1)
 #define TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT 3
 #define TEXTURE_FLAG__RENDER_METHOD__MASK \
     MASK(TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT)
@@ -578,6 +580,9 @@ typedef uint32_t Texture_Flags;
 
 // We support up to 8 texture formats 
 // Replace 1-7 as needed.
+#define TEXTURE_FLAG__FORMAT__BIT_SHIFT (\
+        TEXTURE_FLAG__RENDER_METHOD__BIT_SHIFT\
+        + TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT)
 #define TEXTURE_FLAG__FORMAT__BIT_COUNT 3
 #define TEXTURE_FLAG__FORMAT__MASK \
     MASK(TEXTURE_FLAG__FORMAT__BIT_COUNT)
@@ -589,6 +594,17 @@ typedef uint32_t Texture_Flags;
 #define TEXTURE_FLAG__FORMAT__5 0b101
 #define TEXTURE_FLAG__FORMAT__6 0b110
 #define TEXTURE_FLAG__FORMAT__7 0b111
+
+#define TEXTURE_FLAGS(size, method, format)\
+    (\
+        (\
+            method << TEXTURE_FLAG__RENDER_METHOD__BIT_SHIFT\
+        )\
+        | (\
+            format << TEXTURE_FLAG__FORMAT__BIT_SHIFT\
+        )\
+        | size\
+    )
 
 #define TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS \
     (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \

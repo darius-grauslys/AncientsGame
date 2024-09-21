@@ -3,6 +3,6 @@
 
 #include <defines.h>
 
-void SLD_initialize_input_bindings();
+void SDL_initialize_input_bindings();
 
 #endif

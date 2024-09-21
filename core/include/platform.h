@@ -170,8 +170,10 @@ void PLATFORM_allocate_texture(
 /// This is currently no-op on NDS. Later, if we need to,
 /// we can to nitroFS along with this.
 ///
-void PLATFORM_allocate_texture__with_path(PLATFORM_Texture *texture,
-        Texture_Flags flags,
+void PLATFORM_allocate_texture__with_path(
+        PLATFORM_Texture *texture,
+        Texture_Allocation_Specification
+            *p_texture_allocation_specification,
         const char *path);
 
 void PLATFORM_allocate_texture__with_size(PLATFORM_Texture *texture, 

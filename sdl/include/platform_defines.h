@@ -333,4 +333,9 @@
 
 typedef void (*f_SDL_Event_Handler)(Game *p_game);
 
+#define TEXTURE_FLAG__FORMAT__RGB888 \
+    TEXTURE_FLAG__FORMAT__1
+#define TEXTURE_FLAG__FORMAT__RGBA8888 \
+    TEXTURE_FLAG__FORMAT__2
+
 #endif

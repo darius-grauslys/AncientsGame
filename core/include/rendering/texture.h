@@ -70,8 +70,15 @@ void set_texture_flags_as__not_readonly(
 static inline
 Texture_Flags get_texture_flags__rendering_method(
         Texture_Flags texture_flags) {
-    return texture_flags
+    return (texture_flags >> TEXTURE_FLAG__RENDER_METHOD__BIT_SHIFT)
         & TEXTURE_FLAG__RENDER_METHOD__MASK;
+}
+
+static inline
+Texture_Flags get_texture_flags__format(
+        Texture_Flags texture_flags) {
+    return (texture_flags >> TEXTURE_FLAG__FORMAT__BIT_SHIFT)
+        & TEXTURE_FLAG__FORMAT__MASK;
 }
 
 static inline
@@ -87,6 +94,18 @@ Texture_Flags get_texture_flags__height(
     return ((texture_flags >> TEXTURE_FLAG__LENGTH__BIT_COUNT)
         & TEXTURE_FLAG__LENGTH__MASK);
 }
+
+///
+/// Returns the length in pixels of the texture's width.
+///
+Quantity__u16 get_length_of__texture_flag__width(
+        Texture_Flags texture_flags);
+
+///
+/// Returns the length in pixels of the texture's height.
+///
+Quantity__u16 get_length_of__texture_flag__height(
+        Texture_Flags texture_flags);
 
 static inline
 void initialize_texture_allocation_specification(

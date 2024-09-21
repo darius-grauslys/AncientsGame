@@ -27,7 +27,7 @@ typedef struct {
 
 Input_Binding __SDL_INPUT_BINDINGS[QUANTITY_OF__INPUTS];
 
-void SLD_initialize_input_bindings() {
+void SDL_initialize_input_bindings() {
     __SDL_INPUT_BINDINGS[INPUT_CODE_NONE] = (Input_Binding){
         INPUT_CODE_NONE,
         INPUT_NONE,

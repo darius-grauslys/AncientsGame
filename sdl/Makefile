@@ -16,7 +16,7 @@ export OFILES_SDL := $(CFILES_SDL:.c=.o)
 export OFILES := $(OFILES_CORE) $(OFILES_SDL)
 
 export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/sdl/include
-export LIBS		:= -lm -ldl -lSDL2
+export LIBS		:= -lm -ldl -lGL -lGLEW -lSDL2 -lcglm
 
 export DEPSDIR := $(BUILD)
 

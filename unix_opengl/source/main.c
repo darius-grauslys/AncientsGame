@@ -64,7 +64,7 @@ int main(void) {
     if (!glfwInit())
         return 1;
 
-    const char *glsl_version = "#version 130";
+    const char *glsl_version = "#version 131";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
