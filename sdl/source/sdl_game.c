@@ -8,11 +8,10 @@
 
 void PLATFORM_pre_render(Game *p_game) {
     SDL_PumpEvents();
-    poll_sdl_event(p_game);
+    SDL_poll_event(p_game);
 
-    SDL_RenderClear(
-            get_p_PLATFORM_gfx_context_from__game(p_game)
-            ->p_SDL_renderer);
+    SDL_clear_screen(
+            get_p_PLATFORM_gfx_context_from__game(p_game));
 }
 
 void PLATFORM_post_render(Game *p_game) {

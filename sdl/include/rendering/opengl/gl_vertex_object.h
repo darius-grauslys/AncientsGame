@@ -4,6 +4,8 @@
 #include <defines.h>
 #include <rendering/opengl/gl_defines.h>
 
+void initialize_vertex_object_as__unit_square(
+        GL_Vertex_Object *vertex_object);
 void initialize_vertex_object(GL_Vertex_Object *vertex_object);
 void buffer_vertex_object(GL_Vertex_Object *vertex_object,
         uint32_t size_in_bytes, uint32_t vertex_count, float *vertices);

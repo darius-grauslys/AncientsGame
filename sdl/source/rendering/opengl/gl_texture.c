@@ -6,7 +6,6 @@
 #include <GL/gl.h>
 #include <SDL2/SDL_pixels.h>
 #include <rendering/opengl/gl_texture.h>
-#include <rendering/opengl/gl_defines.h>
 #include <sdl_defines.h>
 #include <stdio.h>
 
@@ -28,7 +27,7 @@ GLint GL_get_texture_format(
 
 }
 
-void PLATFORM_allocate_texture(
+void GL_allocate_texture(
         PLATFORM_Texture *p_PLATFORM_texture, 
         Texture_Allocation_Specification
             *p_texture_allocation_specification) {
@@ -67,9 +66,6 @@ void PLATFORM_allocate_texture(
         GL_get_texture_format(
                 p_PLATFORM_texture);
 
-    debug_info("--- %d, %d", 
-            p_PLATFORM_texture->width, 
-            p_PLATFORM_texture->height);
     glTexImage2D(
             GL_TEXTURE_2D, 
             0, 
@@ -95,12 +91,12 @@ void PLATFORM_allocate_texture(
             ->texture_flags);
 }
 
-void PLATFORM_allocate_texture__with_path(
+void GL_allocate_texture__with_path(
         PLATFORM_Texture *p_PLATFORM_texture,
         Texture_Allocation_Specification 
             *p_texture_allocation_specification,
         const char *path) {
-    PLATFORM_allocate_texture(
+    GL_allocate_texture(
             p_PLATFORM_texture, 
             p_texture_allocation_specification);
 
@@ -185,7 +181,7 @@ void PLATFORM_allocate_texture__with_path(
     stbi_image_free(p_data);
 }
 
-void PLATFORM_use_texture(
+void GL_use_texture(
         PLATFORM_Texture *p_PLATFORM_texture) {
     glBindTexture(
             GL_TEXTURE_2D,
@@ -198,7 +194,7 @@ void PLATFORM_use_texture(
     }
 }
 
-void PLATFORM_release_texture(
+void GL_release_texture(
         PLATFORM_Texture *p_PLATFORM_texture) {
     glDeleteTextures(
             1,

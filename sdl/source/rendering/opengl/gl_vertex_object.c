@@ -1,5 +1,50 @@
 #include <rendering/opengl/gl_vertex_object.h>
 
+void initialize_vertex_object_as__unit_square(
+        GL_Vertex_Object *vertex_object) {
+// void create_rect(unsigned int *vao, unsigned int *vbo, unsigned int *ebo)
+    float rect_vertices[] = {
+        -1.0f,  1.0f,  0.0f,        0.0f, 1.0f, // top left
+         1.0f,  1.0f,  0.0f,        1.0f, 1.0f, // top right
+         1.0f, -1.0f,  0.0f,        1.0f, 0.0f, // bottom right
+        -1.0f, -1.0f,  0.0f,        0.0f, 0.0f  // bottom left
+    };
+    unsigned int rect_indices[] = { 0, 1, 2, 0, 2, 3 };
+
+    uint32_t *vao = &vertex_object->handle__attribute_array;
+    uint32_t *vbo = &vertex_object->handle__vertex_buffer;
+    uint32_t *ebo = &vertex_object->handle__element_buffer;
+
+    initialize_vertex_object(vertex_object);
+
+    buffer_vertex_object(
+            vertex_object, 
+            sizeof(rect_vertices),
+            sizeof(rect_vertices) / (sizeof(float) * 5), 
+            rect_vertices);
+    buffer_vertex_object__element_buffer(
+            vertex_object,
+            sizeof(rect_indices),
+            rect_indices);
+    set_attribute_vertex_object(
+            vertex_object, 
+            0, 
+            3, 
+            GL_FLOAT, 
+            false, 
+            5 * sizeof(float), 
+            (void *)0);
+    set_attribute_vertex_object(
+            vertex_object, 
+            1, 
+            2, 
+            GL_FLOAT, 
+            false, 5 * sizeof(float), 
+            (void *)(3 * sizeof(float)));
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
 void initialize_vertex_object(GL_Vertex_Object *vertex_object) {
     vertex_object->handle__vertex_buffer = 0;
     vertex_object->handle__attribute_array;

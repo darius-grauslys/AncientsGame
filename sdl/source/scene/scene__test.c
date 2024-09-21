@@ -8,65 +8,6 @@
 #include "rendering/opengl/gl_vertex_object.h"
 #include "sdl_defines.h"
 
-void create_rect(GL_Vertex_Object *vertex_object) {
-// void create_rect(unsigned int *vao, unsigned int *vbo, unsigned int *ebo)
-    float rect_vertices[] = {
-        -1.0f,  1.0f,  0.0f,        0.0f, 1.0f, // top left
-         1.0f,  1.0f,  0.0f,        1.0f, 1.0f, // top right
-         1.0f, -1.0f,  0.0f,        1.0f, 0.0f, // bottom right
-        -1.0f, -1.0f,  0.0f,        0.0f, 0.0f  // bottom left
-    };
-    unsigned int rect_indices[] = { 0, 1, 2, 0, 2, 3 };
-
-    uint32_t *vao = &vertex_object->handle__attribute_array;
-    uint32_t *vbo = &vertex_object->handle__vertex_buffer;
-    uint32_t *ebo = &vertex_object->handle__element_buffer;
-
-    initialize_vertex_object(vertex_object);
-
-    buffer_vertex_object(
-            vertex_object, 
-            sizeof(rect_vertices),
-            sizeof(rect_vertices) / (sizeof(float) * 5), 
-            rect_vertices);
-    buffer_vertex_object__element_buffer(
-            vertex_object,
-            sizeof(rect_indices),
-            rect_indices);
-    set_attribute_vertex_object(
-            vertex_object, 
-            0, 
-            3, 
-            GL_FLOAT, 
-            false, 
-            5 * sizeof(float), 
-            (void *)0);
-    set_attribute_vertex_object(
-            vertex_object, 
-            1, 
-            2, 
-            GL_FLOAT, 
-            false, 5 * sizeof(float), 
-            (void *)(3 * sizeof(float)));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-void GLAPIENTRY
-debug_callback( GLenum source,
-                 GLenum type,
-                 GLuint id,
-                 GLenum severity,
-                 GLsizei length,
-                 const GLchar* message,
-                 const void* userParam )
-{
-  fprintf( stderr, 
-          "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
-           ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-            type, severity, message );
-}
-
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
         Game *p_game) {
@@ -80,7 +21,7 @@ void m_enter_scene_handler_as__test(
     initialize_shader_2d_as__shader_passthrough(
             &shader);
     GL_Vertex_Object vertex_object;
-    create_rect(&vertex_object);
+    initialize_vertex_object_as__unit_square(&vertex_object);
 
     PLATFORM_Texture texture;
     Texture_Allocation_Specification texture_alloc_spec;
@@ -103,12 +44,14 @@ void m_enter_scene_handler_as__test(
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
 
+        manage_game__pre_render(p_game);
+
         use_shader_2d(&shader);
         PLATFORM_use_texture(&texture);
         use_vertex_object(&vertex_object);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        manage_game(p_game);
+        manage_game__post_render(p_game);
     }
 }
 

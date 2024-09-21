@@ -46,9 +46,6 @@ bool PLATFORM_is_audio__streaming(
 /// SECTION_debug
 ///
 
-void PLATFORM_coredump(void) {}
-void PLATFORM_abort(void) {}
-
 ///
 /// SECTION_entity
 ///

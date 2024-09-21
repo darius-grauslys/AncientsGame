@@ -2,6 +2,10 @@
 #include <debug/debug.h>
 #include <stddef.h>
 
+void initialize_shader_2d_as__deallocated(
+        GL_Shader_2D *p_GL_shader) {
+    p_GL_shader->is_shader__allocated = false;
+}
 int initialize_shader_2d(GL_Shader_2D *shader, const char *source_vertex,
         const char *source_fragment) {
     shader->handle = 0;
