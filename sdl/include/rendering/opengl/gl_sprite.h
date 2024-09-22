@@ -9,11 +9,21 @@ void f_GL_initialize_sprite_wrapper(
 
 void GL_initialize_sprite(
         GL_Sprite *p_GL_sprite,
-        GL_Shader_2D *p_GL_shader,
-        PLATFORM_Texture *p_PLATFORM_texture);
+        GL_Shader_2D *p_GL_shader);
 
-void GL_release_sprite(
+void GL_release_sprite_vertext_object(
         GL_Sprite *p_GL_sprite);
+
+GL_Sprite *GL_get_p_sprite_from__sprite_wrapper(
+        Sprite_Wrapper *p_sprite_wrapper);
+
+GL_Sprite *GL_get_p_sprite_from__PLATFORM_sprite(
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
+void GL_render_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Sprite_Wrapper *p_sprite_wrapper,
+        Vector__3i32F4 position__3i32F4);
 
 static inline
 bool GL_is_sprite__allocated(

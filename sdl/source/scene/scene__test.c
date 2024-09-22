@@ -47,7 +47,9 @@ void m_enter_scene_handler_as__test(
         manage_game__pre_render(p_game);
 
         use_shader_2d(&shader);
-        PLATFORM_use_texture(&texture);
+        PLATFORM_use_texture(
+                get_p_PLATFORM_gfx_context_from__game(p_game),
+                &texture);
         use_vertex_object(&vertex_object);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

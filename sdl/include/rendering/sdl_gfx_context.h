@@ -2,16 +2,10 @@
 #define SDL_GFX_CONTEXT_H
 
 #include "defines_weak.h"
+#include "sdl_defines.h"
 #include <SDL2/SDL_video.h>
 
 extern PLATFORM_Gfx_Context __SDL_Gfx_Context;
-
-typedef enum {
-    SDL_Gfx_Sub_Context__None,
-    SDL_Gfx_Sub_Context__OpenGL_1_2,
-    SDL_Gfx_Sub_Context__OpenGL_3_0,
-    SDL_Gfx_Sub_Context__Vulcan //TODO: not impl'd
-} SDL_Gfx_Sub_Context__Kind;
 
 void SDL_initialize_gfx_context(
         Game *p_game,
@@ -22,5 +16,26 @@ void SDL_dispose_gfx_context(
 
 void SDL_clear_screen(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
+static inline
+SDL_Sprite_Manager *SDL_get_p_sprite_manager_from__gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return 
+        &p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .SDL_sprite_manager
+        ;
+}
+
+static inline
+SDL_Texture_Manager *SDL_get_p_texture_manager_from__gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return 
+        &p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .SDL_texture_manager
+        ;
+}
+
 
 #endif

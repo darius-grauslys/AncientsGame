@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "platform.h"
+#include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_texture.h"
 #include "rendering/texture.h"
 #include <GL/gl.h>
@@ -133,7 +134,9 @@ void GL_allocate_texture__with_path(
                 );
 
     if (!p_data) {
-        PLATFORM_release_texture(p_PLATFORM_texture);
+        PLATFORM_release_texture(
+                &__SDL_Gfx_Context,
+                p_PLATFORM_texture);
         debug_error("SDL::GL::PLATFORM_allocate_texture__with_path failed. (stbi_load)");
         return;
     }

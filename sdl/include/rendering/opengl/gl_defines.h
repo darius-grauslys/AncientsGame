@@ -8,7 +8,6 @@
 #include <cglm/mat4.h>
 #include <cglm/clipspace/ortho_rh_zo.h>
 
-
 typedef struct GL_Vertex_Object_t {
     u32 handle__vertex_buffer;
     u32 handle__attribute_array;
@@ -40,12 +39,13 @@ typedef struct GL_Shader_2D_t {
 
 typedef struct GL_Shader_Manager_t {
     GL_Shader_2D GL_shaders[MAX_QUANTITY_OF__SHADERS];
+    GL_Shader_2D *p_GL_shader__sprite;
+    GL_Shader_2D *p_GL_shader__world;
 } GL_Shader_Manager;
 
 typedef struct GL_Sprite_t {
     GL_Vertex_Object GL_vertex_object;
     GL_Shader_2D *p_GL_shader;
-    PLATFORM_Texture *p_PLATFORM_texture;
     float sprite_frame__width;
     float sprite_frame__height;
     int location_of__sprite_frame_row_col;

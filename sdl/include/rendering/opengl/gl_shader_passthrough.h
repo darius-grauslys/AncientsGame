@@ -13,10 +13,4 @@ void get_source__shader_passthrough(
 void initialize_shader_2d_as__shader_passthrough(
         GL_Shader_2D_Passthrough *shader);
 
-void render_with__shader_passthrough(
-        GL_Shader_2D_Passthrough *shader,
-        PLATFORM_Texture *texture_source,
-        GL_Vertex_Object *vertex_object
-        );
-
 #endif

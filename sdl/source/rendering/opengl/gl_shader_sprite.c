@@ -82,7 +82,9 @@ void m_SDL_render_sprite_with__gl(
             p_GL_sprite->sprite_frame__width, 
             p_GL_sprite->sprite_frame__height);
     use_vertex_object(&p_GL_sprite->GL_vertex_object);
-    PLATFORM_use_texture(p_GL_sprite->p_PLATFORM_texture);
+    PLATFORM_use_texture(
+            p_PLATFORM_gfx_context,
+            p_PLATFORM_sprite->p_PLATFORM_texture);
 
     //TODO: take in camera matrices
 

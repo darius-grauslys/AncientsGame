@@ -3,8 +3,12 @@
 #include "game.h"
 #include "platform.h"
 #include "rendering/opengl/gl_defines.h"
+#include "rendering/opengl/gl_entity.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
+#include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
+#include "rendering/sdl_sprite_manager.h"
+#include "rendering/sdl_texture_manager.h"
 #include <SDL2/SDL_render.h>
 #include <defines.h>
 #include <rendering/sdl_gfx_context.h>
@@ -97,6 +101,9 @@ void SDL_initialize_gfx_context(
             p_SDL_gfx_sub_context__wrapper
                 ->f_SDL_clear_screen =
                 GL_clear_screen;
+            p_SDL_gfx_sub_context__wrapper
+                ->f_SDL_update_camera =
+                GL_update_camera;
 
             p_SDL_gfx_sub_context__wrapper
                 ->f_SDL_allocate_texture =
@@ -111,6 +118,17 @@ void SDL_initialize_gfx_context(
                 ->f_SDL_release_texture =
                 GL_release_texture;
 
+            p_SDL_gfx_sub_context__wrapper
+                ->f_SDL_allocate_sprite =
+                GL_allocate_sprite;
+            p_SDL_gfx_sub_context__wrapper
+                ->f_SDL_release_sprite =
+                GL_release_sprite;
+
+            p_SDL_gfx_sub_context__wrapper
+                ->f_SDL_render_entity =
+                GL_render_entity;
+
             GL_initialize_gfx_sub_context(
                     p_PLATFORM_gfx_context,
                     (GL_Gfx_Sub_Context*)
@@ -123,6 +141,16 @@ void SDL_initialize_gfx_context(
     p_SDL_gfx_sub_context__wrapper
         ->the_kind_of__sub_context =
         the_kind_of__sub_context;
+
+    SDL_initialize_texture_manager(
+            &p_PLATFORM_gfx_context
+            ->SDL_gfx_sub_context__wrapper
+            .SDL_texture_manager);
+
+    SDL_initialize_sprite_manager(
+            &p_PLATFORM_gfx_context
+            ->SDL_gfx_sub_context__wrapper
+            .SDL_sprite_manager);
 }
 
 void SDL_dispose_gfx_context(
@@ -166,43 +194,4 @@ void SDL_clear_screen(
         .SDL_gfx_sub_context__wrapper
         .f_SDL_clear_screen(
                 p_PLATFORM_gfx_context);
-}
-
-void PLATFORM_allocate_texture(
-        PLATFORM_Texture *texture, 
-        Texture_Allocation_Specification 
-            *p_texture_allocation_specification) {
-    __SDL_Gfx_Context
-        .SDL_gfx_sub_context__wrapper
-        .f_SDL_allocate_texture(
-                texture,
-                p_texture_allocation_specification);
-}
-
-void PLATFORM_allocate_texture__with_path(
-        PLATFORM_Texture *texture, 
-        Texture_Allocation_Specification 
-            *p_texture_allocation_specification, 
-        const char *path) {
-    __SDL_Gfx_Context
-        .SDL_gfx_sub_context__wrapper
-        .f_SDL_allocate_texture__with_path(
-                texture,
-                p_texture_allocation_specification,
-                path);
-}
-
-void PLATFORM_use_texture(PLATFORM_Texture *texture) {
-    __SDL_Gfx_Context
-        .SDL_gfx_sub_context__wrapper
-        .f_SDL_use_texture(
-                texture);
-}
-
-void PLATFORM_release_texture(
-        PLATFORM_Texture *texture) {
-    __SDL_Gfx_Context
-        .SDL_gfx_sub_context__wrapper
-        .f_SDL_release_texture(
-                texture);
 }

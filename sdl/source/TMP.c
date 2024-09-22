@@ -115,16 +115,6 @@ Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
     return 0;
 }
 
-PLATFORM_Sprite *PLATFORM_allocate_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Sprite_Allocation_Specification *p_sprite_allocation_specification) {
-    return 0;
-}
-
-void PLATFORM_release_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Sprite *p_PLATFORM_sprite) {}
-
 void PLATFORM_release_all__sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {}
 

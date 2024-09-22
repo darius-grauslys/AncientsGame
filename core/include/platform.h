@@ -182,9 +182,14 @@ void PLATFORM_allocate_texture__with_size(PLATFORM_Texture *texture,
 
 void PLATFORM_update_texture(PLATFORM_Texture *texture);
 
-void PLATFORM_use_texture(PLATFORM_Texture *texture);
+void PLATFORM_use_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Texture *texture);
 
-void PLATFORM_release_texture(PLATFORM_Texture *texture);
+void PLATFORM_release_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Texture *texture);
+
 void PLATFORM_release_texture_with__p_PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 

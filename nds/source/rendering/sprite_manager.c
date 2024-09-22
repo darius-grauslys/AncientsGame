@@ -214,6 +214,7 @@ void PLATFORM_release_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context, 
         PLATFORM_Sprite *p_PLATFORM_sprite) {
     PLATFORM_release_texture(
+            p_PLATFORM_gfx_context,
             &p_PLATFORM_sprite
             ->sprite_texture);
     set_sprite_flags_as__deallocated(

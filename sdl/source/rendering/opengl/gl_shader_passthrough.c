@@ -41,15 +41,3 @@ void initialize_shader_2d_as__shader_passthrough(
             _source_shader_passthrough__vertex,
             _source_shader_passthrough__fragment);
 }
-
-void render_with__shader_passthrough(
-        GL_Shader_2D_Passthrough *shader,
-        PLATFORM_Texture *texture_source,
-        GL_Vertex_Object *vertex_object
-        ) {
-    use_shader_2d(shader);
-    use_vertex_object(vertex_object);
-    PLATFORM_use_texture(texture_source);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-}

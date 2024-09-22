@@ -1,3 +1,4 @@
+#include "debug/debug.h"
 #include "defines_weak.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_shader.h"
@@ -34,6 +35,15 @@ void GL_initialize_shader_manager(
             p_shader__passthrough);
     initialize_shader_2d_as__shader_sprite(
             p_shader__sprite);
+
+    p_GL_shader_manager
+        ->p_GL_shader__sprite =
+        p_shader__sprite;
+
+    //TODO: 
+    // p_GL_shader_manager
+    //     ->p_GL_shader__world =
+    //     p_shader__world;
 }
 
 GL_Shader_2D *GL_allocate_shader_with__shader_manager(
@@ -109,6 +119,24 @@ void GL_release_shader_from__shader_manager(
         return;
     }
 
+    if (p_GL_shader
+            == p_GL_shader_manager
+            ->p_GL_shader__sprite) {
+        debug_warning__verbose("SDL::GL::GL_release_shader_from__shader_manager, p_GL_shader__sprite is released.");
+        p_GL_shader_manager
+            ->p_GL_shader__sprite = 0;
+        debug_abort("SDL::GL::GL_release_shader_from__shader_manager, TODO: impl p_GL_shader__sprite reattachment.");
+    }
+
+    if (p_GL_shader
+            == p_GL_shader_manager
+            ->p_GL_shader__world) {
+        debug_warning__verbose("SDL::GL::GL_release_shader_from__shader_manager, p_GL_shader__world is released.");
+        p_GL_shader_manager
+            ->p_GL_shader__world = 0;
+        debug_abort("SDL::GL::GL_release_shader_from__shader_manager, TODO: impl p_GL_shader__world reattachment.");
+    }
+
     release_shader_2d(p_GL_shader);
     GL_set_shader_as__deallocated(
             p_GL_shader);
@@ -129,4 +157,9 @@ void GL_dispose_shader_manager(
         GL_set_shader_as__deallocated(
                 p_shader);
     }
+
+    p_GL_shader_manager
+        ->p_GL_shader__sprite = 0;
+    p_GL_shader_manager
+        ->p_GL_shader__world = 0;
 }

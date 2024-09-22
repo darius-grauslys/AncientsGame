@@ -1,3 +1,4 @@
+#include "rendering/sdl_gfx_context.h"
 #include "sdl_event.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
