@@ -185,6 +185,16 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
     p_PLATFORM_sprite->is_sprite_with__anonymous_texture =
         is_texture__anonymous;
 
+    SDL_initialize_sprite(
+            p_PLATFORM_gfx_context,
+            p_PLATFORM_sprite);
+
+    // TODO: load sprite data from yml
+    p_PLATFORM_sprite->quantity_of__sprite_frame__columns = 16;
+    p_PLATFORM_sprite->quantity_of__sprite_frame__rows = 16;
+    p_PLATFORM_sprite->sprite_frame__width = 1.0 / 16.0;
+    p_PLATFORM_sprite->sprite_frame__height = 1.0 / 16.0;
+
     return p_PLATFORM_sprite;
 }
 

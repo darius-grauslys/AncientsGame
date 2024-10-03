@@ -95,14 +95,14 @@ void release_vertex_object(GL_Vertex_Object *vertex_object) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     if (!vertex_object->handle__vertex_buffer) {
-        debug_error("Tried to release when, vertex_object->handle__vertex_buffer == 0.");
+        debug_warning("Tried to release when, vertex_object->handle__vertex_buffer == 0.");
     } else {
         glDeleteBuffers(1, &vertex_object->handle__vertex_buffer);
         vertex_object->handle__vertex_buffer = 0;
     }
 
     if (!vertex_object->handle__attribute_array) {
-        debug_error("Tried to release when, vertex_object->handle__attribute_array == 0.");
+        debug_warning("Tried to release when, vertex_object->handle__attribute_array == 0.");
     } else {
         glDeleteVertexArrays(1, &vertex_object->handle__attribute_array);
         vertex_object->handle__attribute_array = 0;

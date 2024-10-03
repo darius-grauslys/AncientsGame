@@ -5,6 +5,7 @@
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_entity.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
+#include "rendering/opengl/gl_sprite.h"
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
 #include "rendering/sdl_sprite_manager.h"
@@ -32,6 +33,86 @@ void f_NONE_Use_Texture(
 
 void f_NONE_Release_Texture(
         PLATFORM_Texture *p_PLATFORM_texture) {}
+
+///
+/// Returns TRUE on failure.
+///
+static inline
+bool _SDL_link_opengl_3_0(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        SDL_Gfx_Sub_Context__Wrapper *p_SDL_gfx_sub_context__wrapper) {
+    SDL_GL_SetAttribute(
+            SDL_GL_CONTEXT_MAJOR_VERSION, 
+            3);
+    SDL_GL_SetAttribute(
+            SDL_GL_CONTEXT_MINOR_VERSION, 
+            0);
+    SDL_GL_SetAttribute(
+            SDL_GL_CONTEXT_PROFILE_MASK, 
+            SDL_GL_CONTEXT_PROFILE_CORE);  
+
+    SDL_Window *p_SDL_window = 
+        SDL_CreateWindow(
+            "AncientsGame", 0, 0, 800, 600, 
+            SDL_WINDOW_OPENGL
+            | SDL_WINDOW_SHOWN);
+
+    p_PLATFORM_gfx_context
+        ->p_SDL_window =
+        p_SDL_window;
+
+    p_SDL_gfx_sub_context__wrapper
+        ->p_SDL_gfx_sub_context = 
+        malloc(sizeof(GL_Gfx_Sub_Context));
+    debug_info__verbose("SDL::SDL_initialize_gfx_context, OpenGL_3_0 (malloc)");
+
+    if (!p_SDL_gfx_sub_context__wrapper
+            ->p_SDL_gfx_sub_context) {
+        debug_abort("SDL::SDL_initialize_gfx_context, failed to allocate sub context.");
+        return true;
+    }
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_clear_screen =
+        GL_clear_screen;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_update_camera =
+        GL_update_camera;
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_allocate_texture =
+        GL_allocate_texture;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_allocate_texture__with_path =
+        GL_allocate_texture__with_path;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_use_texture =
+        GL_use_texture;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_release_texture =
+        GL_release_texture;
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_allocate_sprite =
+        GL_allocate_sprite;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_initialize_sprite =
+        GL_initialize_sprite;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_release_sprite =
+        GL_release_sprite;
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_render_entity =
+        GL_render_entity;
+
+    GL_initialize_gfx_sub_context(
+            p_PLATFORM_gfx_context,
+            (GL_Gfx_Sub_Context*)
+            p_SDL_gfx_sub_context__wrapper
+            ->p_SDL_gfx_sub_context);
+    return false;
+}
 
 void SDL_initialize_gfx_context(
         Game *p_game,
@@ -66,75 +147,11 @@ void SDL_initialize_gfx_context(
             debug_warning("SDL::SDL_initialize_gfx_context, graphics backend set to SDL_Gfx_Sub_Context__None. No graphics will be rendered!");
             break;
         case SDL_Gfx_Sub_Context__OpenGL_3_0:
-
-            SDL_GL_SetAttribute(
-                    SDL_GL_CONTEXT_MAJOR_VERSION, 
-                    3);
-            SDL_GL_SetAttribute(
-                    SDL_GL_CONTEXT_MINOR_VERSION, 
-                    0);
-            SDL_GL_SetAttribute(
-                    SDL_GL_CONTEXT_PROFILE_MASK, 
-                    SDL_GL_CONTEXT_PROFILE_CORE);  
-
-            SDL_Window *p_SDL_window = 
-                SDL_CreateWindow(
-                    "AncientsGame", 0, 0, 800, 600, 
-                    SDL_WINDOW_OPENGL
-                    | SDL_WINDOW_SHOWN);
-
-            p_PLATFORM_gfx_context
-                ->p_SDL_window =
-                p_SDL_window;
-
-            p_SDL_gfx_sub_context__wrapper
-                ->p_SDL_gfx_sub_context = 
-                malloc(sizeof(GL_Gfx_Sub_Context));
-            debug_info__verbose("SDL::SDL_initialize_gfx_context, OpenGL_3_0 (malloc)");
-
-            if (!p_SDL_gfx_sub_context__wrapper
-                    ->p_SDL_gfx_sub_context) {
-                debug_abort("SDL::SDL_initialize_gfx_context, failed to allocate sub context.");
+            if (_SDL_link_opengl_3_0(
+                        p_PLATFORM_gfx_context, 
+                        p_SDL_gfx_sub_context__wrapper)) {
                 return;
             }
-
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_clear_screen =
-                GL_clear_screen;
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_update_camera =
-                GL_update_camera;
-
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_allocate_texture =
-                GL_allocate_texture;
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_allocate_texture__with_path =
-                GL_allocate_texture__with_path;
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_use_texture =
-                GL_use_texture;
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_release_texture =
-                GL_release_texture;
-
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_allocate_sprite =
-                GL_allocate_sprite;
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_release_sprite =
-                GL_release_sprite;
-
-            p_SDL_gfx_sub_context__wrapper
-                ->f_SDL_render_entity =
-                GL_render_entity;
-
-            GL_initialize_gfx_sub_context(
-                    p_PLATFORM_gfx_context,
-                    (GL_Gfx_Sub_Context*)
-                    p_SDL_gfx_sub_context__wrapper
-                    ->p_SDL_gfx_sub_context);
-
             break;
     }
 

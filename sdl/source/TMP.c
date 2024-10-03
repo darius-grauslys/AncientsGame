@@ -49,9 +49,6 @@ bool PLATFORM_is_audio__streaming(
 ///
 /// SECTION_entity
 ///
-void PLATFORM_render_entity(
-        Entity *entity,
-        Game *game) {}
 
 ///
 /// SECTION_game_actions

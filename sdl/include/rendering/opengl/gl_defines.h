@@ -46,8 +46,6 @@ typedef struct GL_Shader_Manager_t {
 typedef struct GL_Sprite_t {
     GL_Vertex_Object GL_vertex_object;
     GL_Shader_2D *p_GL_shader;
-    float sprite_frame__width;
-    float sprite_frame__height;
     int location_of__sprite_frame_row_col;
     int location_of__sprite_frame_width_height;
     bool is_sprite__allocated;

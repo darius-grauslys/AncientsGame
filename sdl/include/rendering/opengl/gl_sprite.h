@@ -8,6 +8,10 @@ void f_GL_initialize_sprite_wrapper(
         Sprite_Wrapper *p_sprite_wrapper);
 
 void GL_initialize_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
+void GL_initialize_sprite_with__this_shader(
         GL_Sprite *p_GL_sprite,
         GL_Shader_2D *p_GL_shader);
 

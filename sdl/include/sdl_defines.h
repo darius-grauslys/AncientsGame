@@ -34,6 +34,10 @@ typedef void (*f_SDL_Allocate_Sprite)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
+typedef void (*f_SDL_Initialize_Sprite)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
 typedef void (*f_SDL_Release_Sprite)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite);
@@ -89,6 +93,8 @@ typedef struct PLATFORM_Sprite_t {
     PLATFORM_Texture *p_PLATFORM_texture;
     Quantity__u8 quantity_of__sprite_frame__columns;
     Quantity__u8 quantity_of__sprite_frame__rows;
+    float sprite_frame__width;
+    float sprite_frame__height;
     bool is_sprite__allocated;
     bool is_sprite_with__anonymous_texture;
 } PLATFORM_Sprite;
@@ -127,6 +133,7 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     f_SDL_Release_Texture               f_SDL_release_texture;
 
     f_SDL_Allocate_Sprite               f_SDL_allocate_sprite;
+    f_SDL_Initialize_Sprite             f_SDL_initialize_sprite;
     f_SDL_Release_Sprite                f_SDL_release_sprite;
 
     f_SDL_Render_Entity                 f_SDL_render_entity;
@@ -138,9 +145,6 @@ typedef struct PLATFORM_Gfx_Context_t {
     SDL_Gfx_Sub_Context__Wrapper SDL_gfx_sub_context__wrapper;
     SDL_Window *p_SDL_window;
 } PLATFORM_Gfx_Context;
-
-typedef void (*f_SDL_Initialize_Sprite_Wrapper)(
-        Sprite_Wrapper *p_sprite_wrapper);
 
 typedef struct PLATFORM_Audio_Context_t {
 

@@ -41,34 +41,42 @@ void m_enter_scene_handler_as__test(
 
     glViewport(0,0,800,600);
 
-    // Sprite_Allocation_Specification sprite_alloc_spec;
+    Sprite_Allocation_Specification sprite_alloc_spec;
 
-    // sprite_alloc_spec.the_kind_of__sprite_allocation =
-    //     Sprite_Allocation_Kind__Entity;
-    // sprite_alloc_spec.the_kind_of__entity_this__sprite_is =
-    //     Entity_Kind__Player;
-    // 
-    // Entity entity;
-    // entity.sprite_wrapper.p_sprite =
-    //     PLATFORM_allocate_sprite(
-    //             get_p_PLATFORM_gfx_context_from__game(p_game), 
-    //             &sprite_alloc_spec);
+    sprite_alloc_spec.the_kind_of__sprite_allocation =
+        Sprite_Allocation_Kind__Entity;
+    sprite_alloc_spec.the_kind_of__entity_this__sprite_is =
+        Entity_Kind__Player;
+    
+    Entity entity;
+    entity.sprite_wrapper.p_sprite =
+        PLATFORM_allocate_sprite(
+                get_p_PLATFORM_gfx_context_from__game(p_game), 
+                &sprite_alloc_spec);
+    entity.sprite_wrapper.frame__current = 0;
 
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
 
         manage_game__pre_render(p_game);
 
-        // PLATFORM_render_entity(
-        //         &entity,
-        //         p_game);
+        PLATFORM_render_entity(
+                &entity,
+                p_game);
 
-        use_shader_2d(&shader);
-        PLATFORM_use_texture(
-                get_p_PLATFORM_gfx_context_from__game(p_game),
-                &texture);
-        use_vertex_object(&vertex_object);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        if (is_input__forward_released(
+                    get_p_input_from__game(p_game))) {
+            entity.sprite_wrapper.frame__current =
+                (entity.sprite_wrapper.frame__current+1)
+                % 255;
+        }
+
+        // use_shader_2d(&shader);
+        // PLATFORM_use_texture(
+        //         get_p_PLATFORM_gfx_context_from__game(p_game),
+        //         &texture);
+        // use_vertex_object(&vertex_object);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         manage_game__post_render(p_game);
     }
