@@ -24,12 +24,14 @@ bool _SDL_load_texture(
         Texture_Flags format_of__texture,
         Texture_Allocation_Specification *p_texture_allocation_specification,
         bool *p_result__current) {
+    debug_info("_SDL_load_texture: %s", p_SDL_texture_name);
     *p_result__current = 
         SDL_get_path_to__texture_file(
                 Asset_Directory_Kind__Entity_Sprite__16x16, 
                 (char*)p_path, 
                 SDL_texture_string__player);
     if (*p_result__current) {
+        debug_info("_SDL_load_texture found path: %s", p_path);
         PLATFORM_Texture *p_PLATFORM_texture =
             SDL_allocate_texture_with__texture_manager(
                     p_SDL_texture_manager);
@@ -47,10 +49,12 @@ bool _SDL_load_texture(
                     p_PLATFORM_texture, 
                     p_texture_allocation_specification, 
                     p_path);
+            return true;
         } else {
             return false;
         }
     }
+    debug_info("_SDL_load_texture failed to find path: %s", p_path);
     return true;
 }
 

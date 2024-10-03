@@ -41,10 +41,27 @@ void m_enter_scene_handler_as__test(
 
     glViewport(0,0,800,600);
 
+    // Sprite_Allocation_Specification sprite_alloc_spec;
+
+    // sprite_alloc_spec.the_kind_of__sprite_allocation =
+    //     Sprite_Allocation_Kind__Entity;
+    // sprite_alloc_spec.the_kind_of__entity_this__sprite_is =
+    //     Entity_Kind__Player;
+    // 
+    // Entity entity;
+    // entity.sprite_wrapper.p_sprite =
+    //     PLATFORM_allocate_sprite(
+    //             get_p_PLATFORM_gfx_context_from__game(p_game), 
+    //             &sprite_alloc_spec);
+
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
 
         manage_game__pre_render(p_game);
+
+        // PLATFORM_render_entity(
+        //         &entity,
+        //         p_game);
 
         use_shader_2d(&shader);
         PLATFORM_use_texture(
