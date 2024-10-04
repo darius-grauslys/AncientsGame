@@ -25,10 +25,10 @@ int PLATFORM_main(Game *p_game) {
 
     p_game->p_PLATFORM_gfx_context =
         &__SDL_Gfx_Context;
+    SDL_initialize_events();
     SDL_initialize_gfx_context(
             p_game,
             SDL_Gfx_Sub_Context__OpenGL_3_0);
-    SDL_initialize_events();
     SDL_initialize_input_bindings();
 
     SDL_load_textures(p_game);

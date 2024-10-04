@@ -43,14 +43,6 @@ bool PLATFORM_is_audio__streaming(
 }
 
 ///
-/// SECTION_debug
-///
-
-///
-/// SECTION_entity
-///
-
-///
 /// SECTION_game_actions
 ///
 
@@ -119,13 +111,12 @@ void PLATFORM_release_all__sprites_using__this_graphics_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {}
 
-void PLATFORM_render_sprite(Sprite_Wrapper *sprite) {}
-
 void PLATFORM_update_sprite_gfx__to_current_frame(
         Sprite_Wrapper *sprite_wrapper) {}
 
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite) {}
+
 void PLATFORM_set_sprite__position(
         PLATFORM_Sprite *p_PLATFORM_sprite,
         Index__u16 x, Index__u16 y) {}
@@ -153,11 +144,6 @@ void PLATFORM_allocate_texture__with_size(PLATFORM_Texture *texture,
         Texture_Flags flags,
         uint32_t width, uint32_t height) {}
 
-void PLATFORM_update_texture(PLATFORM_Texture *texture) {}
-
-void PLATFORM_release_texture_with__p_PLATFORM_sprite(
-        PLATFORM_Sprite *p_PLATFORM_sprite) {}
-
 Texture_Flags *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
         PLATFORM_Texture *texture) {}
 
@@ -182,23 +168,6 @@ bool PLATFORM_has_support_for__texture_flag__render_method(
 ///
 /// SECTION_world
 ///
-
-void PLATFORM_render_chunk(
-        PLATFORM_Gfx_Context *context,
-        Chunk *chunk) {}
-
-void PLATFORM_render_tile(
-        PLATFORM_Gfx_Context *context,
-        Tile *tile) {}
-
-void PLATFORM_update_chunk(
-        PLATFORM_Gfx_Context *p_gfx_context,
-        Chunk_Manager *p_chunk_manager,
-        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {}
-
-void PLATFORM_update_chunks(
-        PLATFORM_Gfx_Context *gfx_context,
-        Chunk_Manager *chunk_manager) {}
 
 ///
 /// SECTION_core

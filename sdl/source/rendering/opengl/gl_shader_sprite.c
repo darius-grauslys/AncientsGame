@@ -9,12 +9,15 @@ layout(location = 0) in vec3 position;\n\
 layout(location = 1) in vec2 uv;\n\
 uniform vec2 spriteframe_row_col;\n\
 uniform vec2 spriteframe_width_height;\n\
+uniform mat4 projection;\n\
+uniform mat4 translation;\n\
+uniform mat4 scale;\n\
 \n\
 out vec2 TexCoord;\n\
 \n\
 void main()\n\
 {\n\
-    gl_Position = vec4(position, 1);\n\
+    gl_Position = (projection * translation * scale) * (vec4(position, 1));\n\
     TexCoord = vec2(spriteframe_width_height.x * \n\
             (uv.x + spriteframe_row_col.x),\n\
             spriteframe_width_height.y * \n\

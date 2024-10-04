@@ -1,0 +1,4 @@
+#ifndef GL_CHUNK_TEXTURE_MANAGER_H
+#define GL_CHUNK_TEXTURE_MANAGER_H
+
+#endif

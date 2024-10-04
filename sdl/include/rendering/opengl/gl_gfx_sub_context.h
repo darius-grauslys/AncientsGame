@@ -21,4 +21,8 @@ void GL_update_camera(
 GL_Gfx_Sub_Context *GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
+void f_SDL_event_handler__GL_resize(
+        Game *p_game,
+        SDL_Event *p_event);
+
 #endif

@@ -1,9 +1,13 @@
+#include "rendering/opengl/glad/glad.h"
 #include <rendering/opengl/gl_shader.h>
 #include <debug/debug.h>
 #include <stddef.h>
 
 void initialize_shader_2d_as__deallocated(
         GL_Shader_2D *p_GL_shader) {
+    p_GL_shader->location_of__projection_mat_4_4 = -1;
+    p_GL_shader->location_of__translation_mat_4_4 = -1;
+    p_GL_shader->location_of__scale_mat_4_4 = -1;
     p_GL_shader->is_shader__allocated = false;
 }
 int initialize_shader_2d(GL_Shader_2D *shader, const char *source_vertex,
@@ -61,16 +65,65 @@ int initialize_shader_2d(GL_Shader_2D *shader, const char *source_vertex,
         return shader->success_code;
     }
 
+    shader->location_of__projection_mat_4_4
+        = glGetUniformLocation(
+                shader->handle, 
+                "projection");
+    shader->location_of__translation_mat_4_4
+        = glGetUniformLocation(
+                shader->handle, 
+                "translation");
+    shader->location_of__scale_mat_4_4
+        = glGetUniformLocation(
+                shader->handle, 
+                "scale");
+
     glDeleteShader(shader->vertex_handle);
     glDeleteShader(shader->fragment_handle);
+    return 0;
 }
 
 int use_shader_2d(GL_Shader_2D *shader) {
     glUseProgram(shader->handle);
+    return 0;
 }
 
 int release_shader_2d(GL_Shader_2D *shader) {
     if (!shader->handle) return 1;
     glDeleteProgram(shader->handle);
     shader->handle = 0;
+    return 0;
+}
+
+void GL_link_camera_projection_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        GL_Camera_Data *p_GL_camera_data) {
+    glUniformMatrix4fv(
+            p_GL_shader->location_of__projection_mat_4_4,
+            1,
+            false,
+            (const GLfloat*)p_GL_camera_data
+                ->gl_projection__matrix_4_4);
+}
+
+void GL_link_camera_translation_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        GL_Camera_Data *p_GL_camera_data) {
+    glUniformMatrix4fv(
+            p_GL_shader->location_of__translation_mat_4_4,
+            1,
+            false,
+            (const GLfloat*)p_GL_camera_data
+                ->gl_translation__matrix_4_4);
+}
+
+void GL_link_camera_scale_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        GL_Camera_Data *p_GL_camera_data) {
+    glUniformMatrix4fv(
+            p_GL_shader->location_of__scale_mat_4_4,
+            1,
+            false,
+            (const GLfloat*)p_GL_camera_data
+                ->gl_scale__matrix_4_4);
 }

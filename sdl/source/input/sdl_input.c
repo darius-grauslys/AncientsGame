@@ -142,12 +142,14 @@ void PLATFORM_poll_input(Input *p_input) {
                     p_input->input_flags__pressed |=
                         p_input_binding->input_flag__u32
                         ;
+                break;
             case Input_Binding_Kind__Mouse:
                 if (mouse_button_state & 
                         p_input_binding->sdl_mouse_button)
                     p_input->input_flags__pressed |=
                         p_input_binding->input_flag__u32
                         ;
+                break;
         }
     }
 
@@ -157,7 +159,7 @@ void PLATFORM_poll_input(Input *p_input) {
         ;
     
     p_input->input_flags__released =
-        (!p_input->input_flags__pressed)
+        (~p_input->input_flags__pressed)
         & p_input->input_flags__pressed_old
         ;
 }

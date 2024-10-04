@@ -331,7 +331,11 @@
  *  SDL
  *****************************************************/
 
-typedef void (*f_SDL_Event_Handler)(Game *p_game);
+typedef union SDL_Event SDL_Event;
+
+typedef void (*f_SDL_Event_Handler)(
+        Game *p_game,
+        SDL_Event *p_event);
 
 #define TEXTURE_FLAG__FORMAT__RGB888 \
     TEXTURE_FLAG__FORMAT__1

@@ -11,12 +11,6 @@
 #include <rendering/opengl/gl_gfx_sub_context.h>
 #include <sdl_defines.h>
 
-void f_GL_initialize_sprite_wrapper(
-        Sprite_Wrapper *p_sprite_wrapper) {
-    //TODO: impl
-    debug_abort("SDL::GL::f_GL_initialize_sprite_wrapper impl");
-}
-
 void GL_initialize_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite) {
@@ -106,17 +100,43 @@ void GL_render_sprite(
     GL_Shader_2D *p_GL_shader__sprite =
         p_GL_sprite->p_GL_shader;
 
-    set_shader_mat4_model__position(
-            p_GL_shader__sprite, 
-            i32F4_to__float(
-                position__3i32F4.x__i32F4),
-            i32F4_to__float(
-                position__3i32F4.y__i32F4),
-            i32F4_to__float(
-                position__3i32F4.z__i32F4)
-            );
+    Camera *p_SDL_camera__active =
+        p_PLATFORM_gfx_context
+        ->p_active_camera
+        ;
 
     use_shader_2d(p_GL_shader__sprite);
+    if (p_SDL_camera__active) {
+        GL_Camera_Data *p_GL_camera_data =
+            (GL_Camera_Data*)p_SDL_camera__active
+            ->p_camera_data
+            ;
+        if (!p_GL_camera_data)
+            goto skip_GL_camera_link;
+
+        if (GL_does_shader_utilize__projection_mat_4_4(
+                    p_GL_shader__sprite)) {
+            GL_link_camera_projection_to__shader(
+                    p_GL_shader__sprite, 
+                    p_GL_camera_data);
+        }
+
+        if (GL_does_shader_utilize__translation_mat_4_4(
+                    p_GL_shader__sprite)) {
+            GL_link_camera_translation_to__shader(
+                    p_GL_shader__sprite, 
+                    p_GL_camera_data);
+        }
+
+        if (GL_does_shader_utilize__scale_mat_4_4(
+                    p_GL_shader__sprite)) {
+            GL_link_camera_scale_to__shader(
+                    p_GL_shader__sprite, 
+                    p_GL_camera_data);
+        }
+    }
+skip_GL_camera_link:
+
     use_vertex_object(&p_GL_sprite->GL_vertex_object);
     PLATFORM_use_texture(
             p_PLATFORM_gfx_context,

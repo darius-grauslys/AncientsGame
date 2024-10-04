@@ -18,55 +18,17 @@ int initialize_shader_2d(
 int use_shader_2d(GL_Shader_2D *shader);
 int release_shader_2d(GL_Shader_2D *shader);
 
-static inline
-void set_shader_mat4_model__scale(
-        GL_Shader_2D *shader, 
-        float scale) {
-    shader->mat4_model[0][0] = scale;
-    shader->mat4_model[1][1] = scale;
-    shader->mat4_model[2][2] = scale;
-}
+void GL_link_camera_projection_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        GL_Camera_Data *p_GL_camera_data);
 
-static inline
-void set_shader_mat4_model__position(
-        GL_Shader_2D *shader,
-        float x, float y, float z) {
-    shader->mat4_model[0][3] = x;
-    shader->mat4_model[1][3] = y;
-    shader->mat4_model[2][3] = z;
-}
+void GL_link_camera_translation_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        GL_Camera_Data *p_GL_camera_data);
 
-static inline
-void set_shader_mat4_view__scale(
-        GL_Shader_2D *shader, 
-        float scale) {
-    shader->mat4_view[0][0] = scale;
-    shader->mat4_view[1][1] = scale;
-    shader->mat4_view[2][2] = scale;
-}
-
-static inline
-void set_shader_mat4_view__position(
-        GL_Shader_2D *shader,
-        float x, 
-        float y, 
-        float z) {
-    shader->mat4_view[0][3] = x;
-    shader->mat4_view[1][3] = y;
-    shader->mat4_view[2][3] = z;
-}
-static inline 
-void set_shader_mat4_projection__orthographic(
-        GL_Shader_2D *shader,
-        float x, float y,
-        float width, float height,
-        float z_near, float z_far) {
-    glm_ortho_rh_zo(
-            x, y,
-            x + width, y + height,
-            z_near, z_far,
-            shader->mat4_projection);
-}
+void GL_link_camera_scale_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        GL_Camera_Data *p_GL_camera_data);
 
 static inline
 bool GL_is_shader__allocated(
@@ -84,6 +46,24 @@ static inline
 void GL_set_shader_as__deallocated(
         GL_Shader_2D *p_GL_shader) {
     p_GL_shader->is_shader__allocated = false;
+}
+
+static inline
+bool GL_does_shader_utilize__projection_mat_4_4(
+        GL_Shader_2D *p_GL_shader) {
+    return p_GL_shader->location_of__projection_mat_4_4 >= 0;
+}
+
+static inline
+bool GL_does_shader_utilize__translation_mat_4_4(
+        GL_Shader_2D *p_GL_shader) {
+    return p_GL_shader->location_of__translation_mat_4_4 >= 0;
+}
+
+static inline
+bool GL_does_shader_utilize__scale_mat_4_4(
+        GL_Shader_2D *p_GL_shader) {
+    return p_GL_shader->location_of__scale_mat_4_4 >= 0;
 }
 
 #endif 

@@ -37,5 +37,12 @@ SDL_Texture_Manager *SDL_get_p_texture_manager_from__gfx_context(
         ;
 }
 
+static inline
+void SDL_set_active_camera(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Camera *p_camera) {
+    p_PLATFORM_gfx_context->p_active_camera =
+        p_camera;
+}
 
 #endif

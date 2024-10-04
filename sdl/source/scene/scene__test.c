@@ -2,11 +2,13 @@
 #include "defines_weak.h"
 #include "game.h"
 #include "input/input.h"
+#include "numerics.h"
 #include "platform.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_vertex_object.h"
 #include "sdl_defines.h"
+#include "world/sdl_camera.h"
 
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
@@ -39,8 +41,6 @@ void m_enter_scene_handler_as__test(
             &texture_alloc_spec, 
             "/home/shalidor/Projects/AncientsGame/core/assets/entities/entity_sprite__16x16/player.png");
 
-    glViewport(0,0,800,600);
-
     Sprite_Allocation_Specification sprite_alloc_spec;
 
     sprite_alloc_spec.the_kind_of__sprite_allocation =
@@ -55,6 +55,9 @@ void m_enter_scene_handler_as__test(
                 &sprite_alloc_spec);
     entity.sprite_wrapper.frame__current = 0;
 
+
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context = 
+        get_p_PLATFORM_gfx_context_from__game(p_game);
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
 

@@ -11,6 +11,7 @@
 #include "rendering/sdl_sprite_manager.h"
 #include "rendering/sdl_texture_manager.h"
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_video.h>
 #include <defines.h>
 #include <rendering/sdl_gfx_context.h>
 #include <sdl_defines.h>
@@ -53,9 +54,21 @@ bool _SDL_link_opengl_3_0(
 
     SDL_Window *p_SDL_window = 
         SDL_CreateWindow(
-            "AncientsGame", 0, 0, 800, 600, 
+            "AncientsGame", 0, 0, 
+            p_PLATFORM_gfx_context->width_of__sdl_window > 0
+                ? p_PLATFORM_gfx_context->width_of__sdl_window
+                : 256, 
+            p_PLATFORM_gfx_context->height_of__sdl_window > 0
+                ? p_PLATFORM_gfx_context->height_of__sdl_window
+                : 192, 
             SDL_WINDOW_OPENGL
-            | SDL_WINDOW_SHOWN);
+            | SDL_WINDOW_SHOWN
+            | SDL_WINDOW_RESIZABLE);
+
+    SDL_GetWindowSize(
+            p_SDL_window,
+            &p_PLATFORM_gfx_context->width_of__sdl_window, 
+            &p_PLATFORM_gfx_context->height_of__sdl_window);
 
     p_PLATFORM_gfx_context
         ->p_SDL_window =
@@ -125,6 +138,10 @@ void SDL_initialize_gfx_context(
 
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__game(p_game);
+
+    SDL_set_active_camera(
+            p_PLATFORM_gfx_context, 
+            0);
 
     SDL_Gfx_Sub_Context__Wrapper *p_SDL_gfx_sub_context__wrapper =
         &p_PLATFORM_gfx_context->SDL_gfx_sub_context__wrapper;

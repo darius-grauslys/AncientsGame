@@ -1,9 +1,42 @@
 #ifndef SDL_DEFINES_H
 #define SDL_DEFINES_H
 
-#include "defines_weak.h"
+#include <defines.h>
 #include <SDL2/SDL_render.h>
 #include <platform_defines.h>
+
+#define TO_STRING(x) #x
+#define TO_STRING_EXPANDED(x) TO_STRING(x)
+
+#ifndef NDEBUG
+#define SDL_ASSERT_HOOK_NULL(\
+        callee,\
+        p_PLATFORM_gfx_context,\
+        f_hook)\
+        (!p_PLATFORM_gfx_context\
+                ->SDL_gfx_sub_context__wrapper\
+                .f_hook)
+
+#define SDL_DEBUG_ABORT_IF__HOOK_NULL(\
+        callee,\
+        p_PLATFORM_gfx_context,\
+        f_hook)\
+        if SDL_ASSERT_HOOK_NULL(callee, p_PLATFORM_gfx_context, f_hook) {\
+            debug_warning("Did you forget to initialize a SDL graphics backend?");\
+            debug_abort("SDL::" TO_STRING_EXPANDED(callee) ", " TO_STRING_EXPANDED(f_hook) " == 0.");\
+            return;\
+        }
+#else
+#define SDL_ASSERT_HOOK_NULL(\
+        callee,\
+        p_PLATFORM_gfx_context,\
+        f_hook)
+
+#define SDL_DEBUG_ABORT_IF__HOOK_NULL(\
+        callee,\
+        p_PLATFORM_gfx_context,\
+        f_hook)
+#endif
 
 typedef struct PLATFORM_Graphics_Window_t {
 } PLATFORM_Graphics_Window;
@@ -55,7 +88,15 @@ typedef void (*f_SDL_Render_Entity)(
 typedef void (*f_SDL_Clear_Screen)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
+typedef void (*f_SDL_Allocate_Camera_Data)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Camera *p_camera);
+
 typedef void (*f_SDL_Update_Camera)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Camera *p_camera);
+
+typedef void (*f_SDL_Release_Camera_Data)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Camera *p_camera);
 
@@ -125,7 +166,10 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     void                                *p_SDL_gfx_sub_context;
 
     f_SDL_Clear_Screen                  f_SDL_clear_screen;
+
+    f_SDL_Allocate_Camera_Data          f_SDL_allocate_camera_data;
     f_SDL_Update_Camera                 f_SDL_update_camera;
+    f_SDL_Release_Camera_Data           f_SDL_release_camera_data;
 
     f_SDL_Allocate_Texture              f_SDL_allocate_texture;
     f_SDL_Allocate_Texture__With_Path   f_SDL_allocate_texture__with_path;
@@ -143,7 +187,15 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 typedef struct PLATFORM_Gfx_Context_t {
     PLATFORM_Graphics_Window graphics_window__main_window;
     SDL_Gfx_Sub_Context__Wrapper SDL_gfx_sub_context__wrapper;
+
     SDL_Window *p_SDL_window;
+    Camera *p_active_camera;
+
+    i32 width_of__sdl_window;
+    i32 height_of__sdl_window;
+
+    i32 width_of__sdl_viewport;
+    i32 height_of__sdl_viewport;
 } PLATFORM_Gfx_Context;
 
 typedef struct PLATFORM_Audio_Context_t {
