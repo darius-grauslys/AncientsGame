@@ -214,7 +214,7 @@ bool PLATFORM_has_support_for__texture_flag__render_method(
 
 void PLATFORM_render_chunk(
         PLATFORM_Gfx_Context *context,
-        Chunk *chunk);
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 void PLATFORM_render_tile(
         PLATFORM_Gfx_Context *context,

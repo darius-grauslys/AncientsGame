@@ -8,6 +8,7 @@
 #include "rendering/opengl/gl_sprite.h"
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
+#include "rendering/opengl/gl_chunk.h"
 #include "rendering/sdl_sprite_manager.h"
 #include "rendering/sdl_texture_manager.h"
 #include <SDL2/SDL_render.h>
@@ -86,6 +87,10 @@ bool _SDL_link_opengl_3_0(
     }
 
     p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_initialize_rendering__worldspace =
+        GL_initialize_rendering__worldspace;
+
+    p_SDL_gfx_sub_context__wrapper
         ->f_SDL_clear_screen =
         GL_clear_screen;
     p_SDL_gfx_sub_context__wrapper
@@ -118,6 +123,16 @@ bool _SDL_link_opengl_3_0(
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_render_entity =
         GL_render_entity;
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_render_chunk =
+        GL_render_chunk;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_update_chunk =
+        GL_update_chunk;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_update_chunks =
+        GL_update_chunks;
 
     GL_initialize_gfx_sub_context(
             p_PLATFORM_gfx_context,
@@ -228,4 +243,21 @@ void SDL_clear_screen(
         .SDL_gfx_sub_context__wrapper
         .f_SDL_clear_screen(
                 p_PLATFORM_gfx_context);
+}
+
+void PLATFORM_initialize_rendering__game(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    f_SDL_Initialize_Rendering__Worldspace 
+        f_SDL_initialize_rendering__worldspace =
+        p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .f_SDL_initialize_rendering__worldspace;
+
+    SDL_ASSERT_HOOK_NULL(
+            PLATFORM_initialize_rendering__game, 
+            p_PLATFORM_gfx_context, 
+            f_SDL_initialize_rendering__worldspace);
+
+    f_SDL_initialize_rendering__worldspace(
+            p_PLATFORM_gfx_context);
 }

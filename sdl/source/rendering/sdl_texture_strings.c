@@ -2,6 +2,11 @@
 #include <rendering/sdl_texture_strings.h>
 #include <defines.h>
 
+SDL_Texture_String__Const SDL_texture_string__tilesheet_cover =
+    "tilesheet_cover.png";
+SDL_Texture_String__Const SDL_texture_string__tilesheet_ground =
+    "tilesheet_ground.png";
+
 SDL_Texture_String__Const SDL_texture_string__player =
     "player.png";
 

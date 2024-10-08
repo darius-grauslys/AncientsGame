@@ -121,11 +121,11 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
         case Sprite_Allocation_Kind__Particle:
         case Sprite_Allocation_Kind__UI:
             ;
-            SDL_Texture_String__Const *p_SDL_texture_string = 
+            SDL_Texture_String__Const *p_ptr_SDL_texture_string = 
                 SDL_get_texture_string_from__sprite_allocation_specification(
                         p_sprite_allocation_specification);
 
-            if (!p_SDL_texture_string) {
+            if (!p_ptr_SDL_texture_string) {
                 debug_error("SDL::PLATFORM_allocate_sprite, unsupported type.");
                 return 0;
             }
@@ -133,11 +133,11 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
             p_PLATFORM_texture =
                 SDL_get_texture_from__texture_manager(
                         p_SDL_texture_manager, 
-                        p_SDL_texture_string);
+                        *p_ptr_SDL_texture_string);
 
             if (!p_PLATFORM_texture) {
                 debug_error("SDL::PLATFORM_allocate_sprite, texture is not loaded for: %s",
-                        p_SDL_texture_string);
+                        p_ptr_SDL_texture_string);
                 return 0;
             }
 

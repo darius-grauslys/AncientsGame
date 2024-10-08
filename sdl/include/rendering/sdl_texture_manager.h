@@ -12,7 +12,7 @@ PLATFORM_Texture *SDL_allocate_texture_with__texture_manager(
 
 PLATFORM_Texture *SDL_get_texture_from__texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager,
-        SDL_Texture_String__Const *p_SDL_texture_string);
+        SDL_Texture_String__Const p_SDL_texture_string);
 
 void SDL_release_texture_from__texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager,

@@ -135,10 +135,6 @@ Quantity__u32 PLATFORM_get_max_quantity_of__allocated_sprites(
 /// On NDS, this will init both main and sub.
 ///
 void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context) {}
-/// 
-/// On NDS, this will init both main and sub.
-///
-void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context) {}
 
 void PLATFORM_allocate_texture__with_size(PLATFORM_Texture *texture, 
         Texture_Flags flags,

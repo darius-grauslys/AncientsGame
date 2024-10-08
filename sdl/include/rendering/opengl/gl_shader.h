@@ -26,9 +26,10 @@ void GL_link_camera_translation_to__shader(
         GL_Shader_2D *p_GL_shader,
         GL_Camera_Data *p_GL_camera_data);
 
-void GL_link_camera_scale_to__shader(
+void GL_link_model_data_to__shader(
         GL_Shader_2D *p_GL_shader,
-        GL_Camera_Data *p_GL_camera_data);
+        Vector__3i32F4 position,
+        i32F4 scale);
 
 static inline
 bool GL_is_shader__allocated(
@@ -51,19 +52,19 @@ void GL_set_shader_as__deallocated(
 static inline
 bool GL_does_shader_utilize__projection_mat_4_4(
         GL_Shader_2D *p_GL_shader) {
-    return p_GL_shader->location_of__projection_mat_4_4 >= 0;
+    return p_GL_shader->location_of__projection_mat_4_4 != -1;
 }
 
 static inline
 bool GL_does_shader_utilize__translation_mat_4_4(
         GL_Shader_2D *p_GL_shader) {
-    return p_GL_shader->location_of__translation_mat_4_4 >= 0;
+    return p_GL_shader->location_of__translation_mat_4_4 != -1;
 }
 
 static inline
-bool GL_does_shader_utilize__scale_mat_4_4(
+bool GL_does_shader_utilize__model_mat_4_4(
         GL_Shader_2D *p_GL_shader) {
-    return p_GL_shader->location_of__scale_mat_4_4 >= 0;
+    return p_GL_shader->location_of__model_mat_4_4 != -1;
 }
 
 #endif 

@@ -27,9 +27,9 @@ bool _SDL_load_texture(
     debug_info("_SDL_load_texture: %s", p_SDL_texture_name);
     *p_result__current = 
         SDL_get_path_to__texture_file(
-                Asset_Directory_Kind__Entity_Sprite__16x16, 
+                the_kind_of__asset_directory, 
                 (char*)p_path, 
-                SDL_texture_string__player);
+                p_SDL_texture_name);
     if (*p_result__current) {
         debug_info("_SDL_load_texture found path: %s", p_path);
         PLATFORM_Texture *p_PLATFORM_texture =
@@ -38,9 +38,9 @@ bool _SDL_load_texture(
         if (p_PLATFORM_texture) {
             p_texture_allocation_specification
                 ->texture_flags = TEXTURE_FLAGS(
-                        TEXTURE_FLAG__SIZE_16x16, 
-                        TEXTURE_FLAG__RENDER_METHOD__0, 
-                        TEXTURE_FLAG__FORMAT__RGBA8888);
+                        size_of__texture, 
+                        render_method_of__texture, 
+                        format_of__texture);
             memcpy(
                     p_PLATFORM_texture->SDL_texture_string,
                     p_SDL_texture_name,
@@ -54,7 +54,7 @@ bool _SDL_load_texture(
             return false;
         }
     }
-    debug_info("_SDL_load_texture failed to find path: %s", p_path);
+    debug_error("_SDL_load_texture failed to find path: %s", p_path);
     return true;
 }
 
@@ -77,6 +77,34 @@ bool SDL_load_textures(Game *p_game) {
             path, 
             SDL_texture_string__player, 
             TEXTURE_FLAG__SIZE_16x16, 
+            TEXTURE_FLAG__RENDER_METHOD__0, 
+            TEXTURE_FLAG__FORMAT__RGBA8888, 
+            &texture_allocation_specification, 
+            &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
+    if (!_SDL_load_texture(
+            p_SDL_texture_manager,
+            Asset_Directory_Kind__World, 
+            path, 
+            SDL_texture_string__tilesheet_cover, 
+            TEXTURE_FLAG__SIZE_256x256, 
+            TEXTURE_FLAG__RENDER_METHOD__0, 
+            TEXTURE_FLAG__FORMAT__RGBA8888, 
+            &texture_allocation_specification, 
+            &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
+    if (!_SDL_load_texture(
+            p_SDL_texture_manager,
+            Asset_Directory_Kind__World, 
+            path, 
+            SDL_texture_string__tilesheet_ground, 
+            TEXTURE_FLAG__SIZE_256x256, 
             TEXTURE_FLAG__RENDER_METHOD__0, 
             TEXTURE_FLAG__FORMAT__RGBA8888, 
             &texture_allocation_specification, 

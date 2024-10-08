@@ -25,4 +25,7 @@ void f_SDL_event_handler__GL_resize(
         Game *p_game,
         SDL_Event *p_event);
 
+void GL_initialize_rendering__worldspace(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
 #endif

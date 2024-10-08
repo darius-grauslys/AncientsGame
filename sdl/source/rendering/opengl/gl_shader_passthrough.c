@@ -4,13 +4,18 @@ const char *_source_shader_passthrough__vertex = "\n\
 #version 330 core\n\
 layout(location = 0) in vec3 position;\n\
 layout(location = 1) in vec2 uv;\n\
+uniform vec2 uv_index;\n\
+uniform vec2 uv_dimensions;\n\
 \n\
 out vec2 TexCoord;\n\
 \n\
 void main()\n\
 {\n\
     gl_Position = vec4(position, 1);\n\
-    TexCoord = uv;\n\
+    TexCoord = vec2(uv_dimensions.x * \n\
+            (uv.x + uv_index.x),\n\
+            uv_dimensions.y * \n\
+            (uv.y + uv_index.y));\n\
 }";
 
 const char *_source_shader_passthrough__fragment = " \n\
@@ -40,4 +45,32 @@ void initialize_shader_2d_as__shader_passthrough(
             shader, 
             _source_shader_passthrough__vertex,
             _source_shader_passthrough__fragment);
+
+    shader->location_of__general_uniform_0 =
+        glGetUniformLocation(
+                shader->handle, 
+                "uv_index");
+    shader->location_of__general_uniform_1 =
+        glGetUniformLocation(
+                shader->handle, 
+                "uv_dimensions");
+}
+
+void GL_render_with__shader__passthrough(
+        GL_Shader_2D *p_GL_shader__passthrough,
+        int x__uv,
+        int y__uv,
+        float width_of__uv,
+        float height_of__uv) {
+    glUniform2f(
+            p_GL_shader__passthrough->location_of__general_uniform_0,
+            x__uv,
+            y__uv
+            );
+    glUniform2f(
+            p_GL_shader__passthrough->location_of__general_uniform_1,
+            width_of__uv,
+            height_of__uv);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

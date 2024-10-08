@@ -40,7 +40,7 @@ PLATFORM_Texture *SDL_allocate_texture_with__texture_manager(
 
 PLATFORM_Texture *SDL_get_texture_from__texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager,
-        SDL_Texture_String__Const *p_SDL_texture_string) {
+        SDL_Texture_String__Const p_SDL_texture_string) {
     for (Index__u16 index_of__sdl_texture = 0;
             index_of__sdl_texture < MAX_QUANTITY_OF__SDL_TEXTURES;
             index_of__sdl_texture++) {
@@ -53,7 +53,7 @@ PLATFORM_Texture *SDL_get_texture_from__texture_manager(
 
         if (strncmp(
                     p_PLATFORM_texture->SDL_texture_string,
-                    (char*)p_SDL_texture_string,
+                    p_SDL_texture_string,
                     MAX_LENGTH_OF__SDL_TEXTURE_STRING)
                 == 0) {
             return p_PLATFORM_texture;
@@ -72,8 +72,8 @@ void SDL_release_texture_from__texture_manager(
         ;
 
     if (index < 0 || index >= MAX_QUANTITY_OF__SDL_TEXTURES) {
-        debug_abort("SDL::SDL_release_texture_from__texture_manager, p_PLATFORM_texture is not allocated with this manager, or is invalid.");
         debug_warning("This might cause a GPU memory leak!");
+        debug_abort("SDL::SDL_release_texture_from__texture_manager, p_PLATFORM_texture is not allocated with this manager, or is invalid.");
         return;
     }
 

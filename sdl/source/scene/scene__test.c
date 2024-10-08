@@ -4,10 +4,13 @@
 #include "input/input.h"
 #include "numerics.h"
 #include "platform.h"
+#include "platform_defines.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_vertex_object.h"
+#include "rendering/sdl_chunk.h"
 #include "sdl_defines.h"
+#include "vectors.h"
 #include "world/sdl_camera.h"
 
 void m_load_scene_as__test_handler(
@@ -25,22 +28,6 @@ void m_enter_scene_handler_as__test(
     GL_Vertex_Object vertex_object;
     initialize_vertex_object_as__unit_square(&vertex_object);
 
-    PLATFORM_Texture texture;
-    Texture_Allocation_Specification texture_alloc_spec;
-    texture_alloc_spec.p_PLATFORM_graphics_window =
-        &get_p_PLATFORM_gfx_context_from__game(p_game)
-        ->graphics_window__main_window;
-    texture_alloc_spec.texture_flags =
-        TEXTURE_FLAGS(
-                TEXTURE_FLAG__SIZE_64x64,
-                TEXTURE_FLAG__RENDER_METHOD__0,
-                TEXTURE_FLAG__FORMAT__2);
-
-    PLATFORM_allocate_texture__with_path(
-            &texture, 
-            &texture_alloc_spec, 
-            "/home/shalidor/Projects/AncientsGame/core/assets/entities/entity_sprite__16x16/player.png");
-
     Sprite_Allocation_Specification sprite_alloc_spec;
 
     sprite_alloc_spec.the_kind_of__sprite_allocation =
@@ -54,14 +41,51 @@ void m_enter_scene_handler_as__test(
                 get_p_PLATFORM_gfx_context_from__game(p_game), 
                 &sprite_alloc_spec);
     entity.sprite_wrapper.frame__current = 0;
+    entity.hitbox.position__3i32F4 = VECTOR__3i32F4__0_0_0;
 
+    Chunk chunk;
+    Chunk_Manager__Chunk_Map_Node chunk_node;
+
+    for (Index__u16 index_of__tile = 0;
+            index_of__tile < CHUNK_QUANTITY_OF__TILES;
+            index_of__tile++) {
+        chunk.tiles[index_of__tile].the_kind_of_tile__this_tile_is =
+            Tile_Kind__Grass;
+        chunk.tiles[index_of__tile].the_kind_of_tile_cover__this_tile_has =
+            Tile_Cover_Kind__None;
+    }
+
+    chunk_node.p_chunk__here = &chunk;
+    chunk_node.position_of__chunk_3i32.x__i32 = 0;
+    chunk_node.position_of__chunk_3i32.y__i32 = 0;
+    chunk_node.position_of__chunk_3i32.z__i32 = 0;
 
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context = 
         get_p_PLATFORM_gfx_context_from__game(p_game);
+
+    PLATFORM_initialize_rendering__game(
+            p_PLATFORM_gfx_context);
+
+    PLATFORM_update_chunk(
+            p_PLATFORM_gfx_context, 
+            0, 
+            &chunk_node);
+
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
 
         manage_game__pre_render(p_game);
+
+        chunk_node.position_of__chunk_3i32.x__i32 = 0;
+        chunk_node.position_of__chunk_3i32.y__i32 = 0;
+        PLATFORM_render_chunk(
+                p_PLATFORM_gfx_context,
+                &chunk_node);
+        chunk_node.position_of__chunk_3i32.x__i32 = 1;
+        chunk_node.position_of__chunk_3i32.y__i32 = 1;
+        PLATFORM_render_chunk(
+                p_PLATFORM_gfx_context,
+                &chunk_node);
 
         PLATFORM_render_entity(
                 &entity,

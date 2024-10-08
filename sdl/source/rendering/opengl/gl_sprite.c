@@ -1,4 +1,5 @@
 #include "defines_weak.h"
+#include "numerics.h"
 #include "platform.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_numerics.h"
@@ -128,11 +129,12 @@ void GL_render_sprite(
                     p_GL_camera_data);
         }
 
-        if (GL_does_shader_utilize__scale_mat_4_4(
+        if (GL_does_shader_utilize__model_mat_4_4(
                     p_GL_shader__sprite)) {
-            GL_link_camera_scale_to__shader(
+            GL_link_model_data_to__shader(
                     p_GL_shader__sprite, 
-                    p_GL_camera_data);
+                    position__3i32F4,
+                    i32_to__i32F4(1));
         }
     }
 skip_GL_camera_link:

@@ -56,8 +56,8 @@ void GL_release_sprite_from__sprite_manager(
         ;
     
     if (index < 0 || index >= MAX_QUANTITY_OF__SPRITES) {
-        debug_abort("SDL::GL_release_sprite_from__sprite_manager, p_GL_sprite is not allocated with this manager, or is invalid.");
         debug_warning("This might cause a GPU memory leak!");
+        debug_abort("SDL::GL_release_sprite_from__sprite_manager, p_GL_sprite is not allocated with this manager, or is invalid.");
         return;
     }
 

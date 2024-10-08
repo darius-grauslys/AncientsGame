@@ -2,6 +2,7 @@
 #include "defines_weak.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_shader.h"
+#include "rendering/opengl/gl_shader_chunk.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_shader_sprite.h"
 #include <rendering/opengl/gl_shader_manager.h>
@@ -10,6 +11,7 @@
 
 Shader_String__Const shader_string__passthrough = "shader__passthrough";
 Shader_String__Const shader_string__sprite = "shader__sprite";
+Shader_String__Const shader_string__chunk = "shader__chunk";
 
 void GL_initialize_shader_manager(
         GL_Shader_Manager *p_GL_shader_manager) {
@@ -31,10 +33,17 @@ void GL_initialize_shader_manager(
             p_GL_shader_manager, 
             shader_string__sprite);
 
+    GL_Shader_2D *p_shader__chunk = 
+        GL_allocate_shader_with__shader_manager(
+            p_GL_shader_manager, 
+            shader_string__chunk);
+
     initialize_shader_2d_as__shader_passthrough(
             p_shader__passthrough);
     initialize_shader_2d_as__shader_sprite(
             p_shader__sprite);
+    initialize_shader_2d_as__shader_chunk(
+            p_shader__chunk);
 
     p_GL_shader_manager
         ->p_GL_shader__sprite =

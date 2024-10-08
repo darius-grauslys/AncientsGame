@@ -13,8 +13,15 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <rendering/stb_image.h>
 
-static inline
-GLint GL_get_texture_format(
+void GL_initialize_texture_as__deallocated(
+        PLATFORM_Texture *p_PLATFORM_texture) {
+    p_PLATFORM_texture->SDL_is_texture__allocated = false;
+    p_PLATFORM_texture->GL_texture_handle = 0;
+    p_PLATFORM_texture->width = 0;
+    p_PLATFORM_texture->height = 0;
+}
+
+int GL_get_texture_format(
         PLATFORM_Texture *p_PLATFORM_texture) {
     switch (p_PLATFORM_texture->SDL_texture_format__u32) {
         default:

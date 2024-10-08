@@ -47,7 +47,7 @@ void initialize_vertex_object_as__unit_square(
 
 void initialize_vertex_object(GL_Vertex_Object *vertex_object) {
     vertex_object->handle__vertex_buffer = 0;
-    vertex_object->handle__attribute_array;
+    vertex_object->handle__attribute_array = 0;
     vertex_object->vertex_count = 0;
 
     glGenVertexArrays(1, &vertex_object->handle__attribute_array);
@@ -113,4 +113,49 @@ void use_vertex_object(GL_Vertex_Object *vertex_object) {
     glBindVertexArray(vertex_object->handle__attribute_array);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_object->handle__vertex_buffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_object->handle__element_buffer);
+}
+
+void GL_set_vertex_object__unit_square__UVs_within__texture_atlas(
+        GL_Vertex_Object *p_GL_vertex_object,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        GLint column,
+        GLint row,
+        GLint quantity_of__columns,
+        GLint quantity_of__rows) {
+    float width_of__uv  = 
+        ((float)p_PLATFORM_texture->width 
+        / quantity_of__columns)
+        / (float)p_PLATFORM_texture->width;
+    float height_of__uv = 
+        ((float)p_PLATFORM_texture->height 
+        / quantity_of__rows)
+        / (float)p_PLATFORM_texture->height;
+
+
+    float rect_vertices[] = {
+        -1.0f,  1.0f,  0.0f,  
+            (width_of__uv * column), 
+            (height_of__uv * (row+1)), // top left
+         1.0f,  1.0f,  0.0f,
+            (width_of__uv * (column+1)), 
+            (height_of__uv * (row+1)), // top right
+         1.0f, -1.0f,  0.0f,  
+            (width_of__uv * (column+1)), 
+            (height_of__uv * row), // bottom right
+            1.0f, 0.0f, // bottom right
+        -1.0f, -1.0f,  0.0f,  
+            (width_of__uv * column), 
+            (height_of__uv * row), // bottom left
+    };
+
+    glBindVertexArray(
+            p_GL_vertex_object
+            ->handle__attribute_array);
+    buffer_vertex_object(
+            p_GL_vertex_object, 
+            sizeof(rect_vertices),
+            sizeof(rect_vertices) / (sizeof(float) * 5), 
+            rect_vertices);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }

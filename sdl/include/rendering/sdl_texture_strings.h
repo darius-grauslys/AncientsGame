@@ -6,6 +6,9 @@
 
 // TODO: auto-gen this file.
 
+extern SDL_Texture_String__Const SDL_texture_string__tilesheet_cover;
+extern SDL_Texture_String__Const SDL_texture_string__tilesheet_ground;
+
 extern SDL_Texture_String__Const SDL_texture_string__player;
 
 SDL_Texture_String__Const 

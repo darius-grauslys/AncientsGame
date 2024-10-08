@@ -1,10 +1,14 @@
 #include "debug/opengl/gl_debug.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "rendering/opengl/gl_chunk_texture_manager.h"
 #include "rendering/opengl/gl_defines.h"
+#include "rendering/opengl/gl_framebuffer_manager.h"
 #include "rendering/opengl/gl_numerics.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_sprite_manager.h"
+#include "rendering/opengl/gl_vertex_object.h"
+#include "rendering/opengl/gl_viewport.h"
 #include "rendering/sdl_gfx_context.h"
 #include "world/opengl/gl_camera.h"
 #include "world/opengl/gl_camera_data_manager.h"
@@ -40,6 +44,16 @@ void GL_initialize_gfx_sub_context(
     GL_initialize_camera_data_manager(
             GL_get_p_camera_data_manager_from__gfx_sub_context(
                 p_GL_gfx_sub_context));
+    GL_initialize_viewport_stack(
+            GL_get_p_viewport_stack_from__gfx_sub_context(
+                p_GL_gfx_sub_context),
+            0,
+            0,
+            p_PLATFORM_gfx_context->width_of__sdl_viewport,
+            p_PLATFORM_gfx_context->height_of__sdl_viewport);
+    GL_initialize_framebuffer_manager(
+            GL_get_p_framebuffer_manager_from__gfx_sub_context(
+                p_GL_gfx_sub_context));
 
     SDL_register_window_event(
             SDL_WINDOWEVENT_RESIZED,
@@ -60,6 +74,10 @@ void GL_initialize_gfx_sub_context(
     SDL_set_active_camera(
             p_PLATFORM_gfx_context, 
             p_GL_camera__default);
+
+    initialize_vertex_object_as__unit_square(
+            &p_GL_gfx_sub_context
+            ->GL_vertex_object__unit_square);
 
     glClearColor(0,0,0,1);
 }
@@ -120,4 +138,19 @@ void f_SDL_event_handler__GL_resize(
             p_PLATFORM_gfx_context, 
             p_PLATFORM_gfx_context
                 ->p_active_camera);
+}
+
+void GL_initialize_rendering__worldspace(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    GL_Gfx_Sub_Context *p_GL_gfx_sub_context =
+        GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context);
+
+    GL_Chunk_Texture_Manager *p_GL_chunk_texture_manager =
+        GL_get_p_chunk_texture_manager_from__gfx_sub_context(
+                p_GL_gfx_sub_context);
+
+    GL_initialize_chunk_texture_manager(
+            p_PLATFORM_gfx_context, 
+            p_GL_chunk_texture_manager);
 }

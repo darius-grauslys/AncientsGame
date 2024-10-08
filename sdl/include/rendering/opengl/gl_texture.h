@@ -5,6 +5,9 @@
 #include <defines.h>
 #include <sdl_defines.h>
 
+void GL_initialize_texture_as__deallocated(
+        PLATFORM_Texture *p_PLATFORM_texture);
+
 void GL_allocate_texture(
         PLATFORM_Texture *texture, 
         Texture_Allocation_Specification
@@ -19,6 +22,9 @@ void GL_allocate_texture__with_path(
 void GL_use_texture(PLATFORM_Texture *texture);
 
 void GL_release_texture(PLATFORM_Texture *texture);
+
+int GL_get_texture_format(
+        PLATFORM_Texture *p_PLATFORM_texture);
 
 static inline
 GL_Texture_Handle__u32 GL_get_texture_handle(

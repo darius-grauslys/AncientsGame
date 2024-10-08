@@ -1,6 +1,7 @@
 #ifndef SDL_DEFINES_H
 #define SDL_DEFINES_H
 
+#include "defines_weak.h"
 #include <defines.h>
 #include <SDL2/SDL_render.h>
 #include <platform_defines.h>
@@ -43,6 +44,9 @@ typedef struct PLATFORM_Graphics_Window_t {
 
 typedef void SDL_Gfx_Sub_Context;
 
+typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
 typedef void (*f_SDL_Allocate_Texture)(
         PLATFORM_Texture *p_PLATFORM_texture, 
         Texture_Allocation_Specification
@@ -81,6 +85,22 @@ typedef void (*f_SDL_Release_Sprite)(
 typedef void (*f_SDL_Render_Entity)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Entity *p_entity);
+
+
+
+
+typedef void (*f_SDL_Render_Chunk)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
+
+typedef void (*f_SDL_Update_Chunk)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
+
+typedef void (*f_SDL_Update_Chunks)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Chunk_Manager *p_chunk_manager);
 
 
 
@@ -165,6 +185,9 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     SDL_Texture_Manager                 SDL_texture_manager;
     void                                *p_SDL_gfx_sub_context;
 
+    f_SDL_Initialize_Rendering__Worldspace
+                                        f_SDL_initialize_rendering__worldspace;
+
     f_SDL_Clear_Screen                  f_SDL_clear_screen;
 
     f_SDL_Allocate_Camera_Data          f_SDL_allocate_camera_data;
@@ -181,6 +204,10 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     f_SDL_Release_Sprite                f_SDL_release_sprite;
 
     f_SDL_Render_Entity                 f_SDL_render_entity;
+
+    f_SDL_Render_Chunk                  f_SDL_render_chunk;
+    f_SDL_Update_Chunk                  f_SDL_update_chunk;
+    f_SDL_Update_Chunks                 f_SDL_update_chunks;
 
 } SDL_Gfx_Sub_Context__Wrapper;
 
