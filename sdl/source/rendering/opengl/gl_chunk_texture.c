@@ -27,6 +27,10 @@ void GL_allocate_chunk_texture__texture_data(
             &p_GL_chunk_texture
             ->GL_chunk_texture, 
             &texture_alloc_spec);
+    PLATFORM_allocate_texture(
+            &p_GL_chunk_texture
+            ->GL_chunk_texture__sprite_cover, 
+            &texture_alloc_spec);
 }
 
 void GL_deallocate_chunk_texture__texture_data(

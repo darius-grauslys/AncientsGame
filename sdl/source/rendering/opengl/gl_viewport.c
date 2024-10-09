@@ -9,6 +9,8 @@ void GL_initialize_viewport_stack(
         GLint height__initial) {
     p_GL_viewport_stack->p_GL_viewport__current =
         &p_GL_viewport_stack->GL_viewport_stack[0];
+    p_GL_viewport_stack->p_GL_viewport__base =
+        &p_GL_viewport_stack->GL_viewport_stack[0];
 
     p_GL_viewport_stack
         ->p_GL_viewport__current->x = x__initial;

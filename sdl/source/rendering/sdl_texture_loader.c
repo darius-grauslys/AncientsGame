@@ -87,6 +87,20 @@ bool SDL_load_textures(Game *p_game) {
 
     if (!_SDL_load_texture(
             p_SDL_texture_manager,
+            Asset_Directory_Kind__Entity_Sprite__16x16, 
+            path, 
+            SDL_texture_string__skeleton, 
+            TEXTURE_FLAG__SIZE_16x16, 
+            TEXTURE_FLAG__RENDER_METHOD__0, 
+            TEXTURE_FLAG__FORMAT__RGBA8888, 
+            &texture_allocation_specification, 
+            &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
+    if (!_SDL_load_texture(
+            p_SDL_texture_manager,
             Asset_Directory_Kind__World, 
             path, 
             SDL_texture_string__tilesheet_cover, 

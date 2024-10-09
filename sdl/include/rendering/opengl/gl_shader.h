@@ -20,15 +20,21 @@ int release_shader_2d(GL_Shader_2D *shader);
 
 void GL_link_camera_projection_to__shader(
         GL_Shader_2D *p_GL_shader,
-        GL_Camera_Data *p_GL_camera_data);
+        Camera *p_camera);
 
 void GL_link_camera_translation_to__shader(
         GL_Shader_2D *p_GL_shader,
-        GL_Camera_Data *p_GL_camera_data);
+        Camera *p_camera);
 
 void GL_link_model_data_to__shader(
         GL_Shader_2D *p_GL_shader,
         Vector__3i32F4 position,
+        i32F4 scale);
+
+void GL_link_data_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        Camera *p_camera,
+        Vector__3i32F4 position__3i32F4,
         i32F4 scale);
 
 static inline

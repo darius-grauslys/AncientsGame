@@ -13,6 +13,7 @@
 #include "rendering/opengl/gl_vertex_object.h"
 #include "rendering/opengl/gl_viewport.h"
 #include "vectors.h"
+#include "world/tile.h"
 #include <GL/gl.h>
 #include <rendering/opengl/gl_chunk.h>
 
@@ -38,8 +39,10 @@ void GL_render_chunk(
         vector_3i32_to__vector_3i32F4(
                 p_chunk_map_node->position_of__chunk_3i32);
 
-    chunk_pos_in__world__3i32f4.x__i32F4 *= 16;
-    chunk_pos_in__world__3i32f4.y__i32F4 *= 16;
+    chunk_pos_in__world__3i32f4.x__i32F4 *= 64;
+    chunk_pos_in__world__3i32f4.y__i32F4 *= 64;
+    chunk_pos_in__world__3i32f4.x__i32F4 += i32_to__i32F4(32);
+    chunk_pos_in__world__3i32f4.y__i32F4 += i32_to__i32F4(28);
     chunk_pos_in__world__3i32f4.z__i32F4 = 0;
 
     GL_Shader_2D *p_GL_shader__chunk =
@@ -50,10 +53,9 @@ void GL_render_chunk(
 
     // TODO: null checks
 
-    GL_Camera_Data *p_GL_camera_data =
-        (GL_Camera_Data*)p_PLATFORM_gfx_context
+    Camera *p_camera =
+        p_PLATFORM_gfx_context
         ->p_active_camera
-        ->p_camera_data
         ;
 
     GL_Gfx_Sub_Context *p_GL_gfx_sub_context =
@@ -63,31 +65,32 @@ void GL_render_chunk(
 
     use_shader_2d(p_GL_shader__chunk);
 
-    if (GL_does_shader_utilize__projection_mat_4_4(
-                p_GL_shader__chunk)) {
-        GL_link_camera_projection_to__shader(
-                p_GL_shader__chunk, 
-                p_GL_camera_data);
-    }
+    GL_link_data_to__shader(
+            p_GL_shader__chunk,
+            p_camera,
+            chunk_pos_in__world__3i32f4,
+            i32_to__i32F4(4));
+    
+    PLATFORM_use_texture(
+            p_PLATFORM_gfx_context, 
+            &p_GL_chunk_texture->GL_chunk_texture);
 
-    if (GL_does_shader_utilize__translation_mat_4_4(
-                p_GL_shader__chunk)) {
-        GL_link_camera_translation_to__shader(
-                p_GL_shader__chunk, 
-                p_GL_camera_data);
-    }
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    chunk_pos_in__world__3i32f4.y__i32F4 += i32_to__i32F4(8);
+    chunk_pos_in__world__3i32f4.z__i32F4 = BIT(4);
 
     if (GL_does_shader_utilize__model_mat_4_4(
                 p_GL_shader__chunk)) {
         GL_link_model_data_to__shader(
                 p_GL_shader__chunk, 
                 chunk_pos_in__world__3i32f4, 
-                i32_to__i32F4(8));
+                i32_to__i32F4(4));
     }
-    
+
     PLATFORM_use_texture(
             p_PLATFORM_gfx_context, 
-            &p_GL_chunk_texture->GL_chunk_texture);
+            &p_GL_chunk_texture->GL_chunk_texture__sprite_cover);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -135,8 +138,27 @@ void GL_update_chunk(
         p_GL_chunk_texture_manager
         ->p_GL_framebuffer__chunk_rendering;
 
+    float clear_color[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
+
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     GL_use_framebuffer_as__target(
             p_GL_framebuffer);
+    GL_bind_texture_to__framebuffer(
+            p_GL_framebuffer, 
+            &p_GL_chunk_texture
+            ->GL_chunk_texture__sprite_cover);
+    glClear(GL_COLOR_BUFFER_BIT);
+    GL_bind_texture_to__framebuffer(
+            p_GL_framebuffer, 
+            &p_GL_chunk_texture
+            ->GL_chunk_texture);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(
+            clear_color[0],
+            clear_color[1],
+            clear_color[2],
+            clear_color[3]);
 
     GL_Viewport_Stack *p_GL_viewport_stack =
         GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
@@ -145,16 +167,9 @@ void GL_update_chunk(
     use_shader_2d(
             p_GL_shader__passthrough);
 
-    GL_bind_texture_to__framebuffer(
-            p_GL_framebuffer, 
-            &p_GL_chunk_texture
-            ->GL_chunk_texture);
-
     Chunk *p_chunk = 
         p_chunk_map_node
         ->p_chunk__here;
-
-    glClear(GL_COLOR_BUFFER_BIT);
 
     GL_Vertex_Object *p_GL_vertex_object =
         &GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
@@ -190,7 +205,17 @@ void GL_update_chunk(
             Tile *p_tile =
                 &p_chunk->tiles[
                 index_of__x_tile
-                    + index_of__y_tile * CHUNK_WIDTH__IN_TILES];
+                    + (CHUNK_WIDTH__IN_TILES - 1 - index_of__y_tile) 
+                    * CHUNK_WIDTH__IN_TILES];
+
+            Local_Tile_Vector__3u8 local_tile_vector = {
+                index_of__x_tile, 
+                (7 - index_of__y_tile), 0};
+
+            Tile_Render_Result render_result =
+                get_tile_render_result(
+                        p_chunk_map_node,
+                        local_tile_vector);
 
             switch (p_tile->the_kind_of_tile__this_tile_is) {
                 case Tile_Kind__None:
@@ -198,9 +223,12 @@ void GL_update_chunk(
                 default:
                     ;
                     int index =
-                        p_tile
-                        ->the_kind_of_tile__this_tile_is
+                        render_result.tile_index__ground
                         - 1;
+                    GL_bind_texture_to__framebuffer(
+                            p_GL_framebuffer, 
+                            &p_GL_chunk_texture
+                            ->GL_chunk_texture);
                     PLATFORM_use_texture(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
@@ -210,7 +238,9 @@ void GL_update_chunk(
                             index % 32, 
                             31 - (index / 32), 
                             width_of__uv, 
-                            height_of__uv);
+                            height_of__uv,
+                            false,
+                            false);
                     break;
             }
 
@@ -220,17 +250,53 @@ void GL_update_chunk(
                 default:
                     ;
                     int index = 
-                        p_tile
-                        ->the_kind_of_tile_cover__this_tile_has;
+                        render_result.tile_index__cover
+                        - 1;
+                    GL_bind_texture_to__framebuffer(
+                            p_GL_framebuffer, 
+                            &p_GL_chunk_texture
+                            ->GL_chunk_texture);
                     PLATFORM_use_texture(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
                             ->p_PLATFORM_texture_of__tilesheet_cover);
                     GL_render_with__shader__passthrough(
                             p_GL_shader__passthrough, 
-                            index % 32, index / 32, 
+                            index % 32, 
+                            31 - (index / 32), 
                             width_of__uv, 
-                            height_of__uv);
+                            height_of__uv,
+                            does_wall_adjacency_require__vflip(
+                                render_result.wall_adjacency),
+                            false);
+                    break;
+            }
+
+            switch (p_tile->the_kind_of_tile_cover__this_tile_has) {
+                case Tile_Cover_Kind__None:
+                    break;
+                default:
+                    ;
+                    int index = 
+                        render_result.tile_index__sprite_cover
+                        - 1;
+                    GL_bind_texture_to__framebuffer(
+                            p_GL_framebuffer, 
+                            &p_GL_chunk_texture
+                            ->GL_chunk_texture__sprite_cover);
+                    PLATFORM_use_texture(
+                            p_PLATFORM_gfx_context, 
+                            p_GL_chunk_texture_manager
+                            ->p_PLATFORM_texture_of__tilesheet_cover);
+                    GL_render_with__shader__passthrough(
+                            p_GL_shader__passthrough, 
+                            index % 32, 
+                            31 - (index / 32), 
+                            width_of__uv, 
+                            height_of__uv,
+                            does_wall_adjacency_require__vflip(
+                                render_result.wall_adjacency),
+                            false);
                     break;
             }
 
@@ -244,5 +310,29 @@ void GL_update_chunk(
 void GL_update_chunks(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Chunk_Manager *p_chunk_manager) {
-    // TODO: scan through node fulcrum
+    Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
+        p_chunk_manager->p_most_north_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node;
+
+    for (uint8_t y=0; 
+            y 
+            < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
+            y++) {
+        p_current_sub__chunk_map_node =
+            p_current__chunk_map_node;
+        for (uint8_t x=0; 
+                x 
+                < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
+                x++) {
+            PLATFORM_update_chunk(
+                    p_PLATFORM_gfx_context, 
+                    p_chunk_manager, 
+                    p_current_sub__chunk_map_node);
+
+            p_current_sub__chunk_map_node =
+                p_current_sub__chunk_map_node->p_east__chunk_map_node;
+        }
+        p_current__chunk_map_node =
+            p_current__chunk_map_node->p_south__chunk_map_node;
+    }
 }

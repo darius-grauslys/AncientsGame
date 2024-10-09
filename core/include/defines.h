@@ -1547,8 +1547,10 @@ typedef struct Camera_t {
     Vector__3i32F4 position;
     m_Camera_Handler m_camera_handler;
     void *p_camera_data;
-    Quantity__u32 width_of__fulcrum, height_of__fulcrum;
-    //TODO: add more things such as fulcrum
+    Quantity__u32 width_of__fulcrum;
+    Quantity__u32 height_of__fulcrum;
+    i32F20 z_near;
+    i32F20 z_far;
 } Camera;
 
 #define PATH_VECTORS_MAX_QUANTITY_OF 6

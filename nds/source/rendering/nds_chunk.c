@@ -10,7 +10,7 @@
 
 void PLATFORM_render_chunk(
         PLATFORM_Gfx_Context *context,
-        Chunk *chunk) {
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
 }
 
 void NDS_render_chunk(

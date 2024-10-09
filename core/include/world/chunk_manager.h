@@ -74,7 +74,8 @@ Tile *get_p_tile_from__chunk_node(
             + local_tile_vector__3u8.x__u8];
 }
 
-static Tile inline *get_p_tile_from__chunk_node_using__u8(
+static inline 
+Tile *get_p_tile_from__chunk_node_using__u8(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,
         Index__u8 x__u8,
         Index__u8 y__u8) {

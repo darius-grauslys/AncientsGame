@@ -61,6 +61,7 @@ typedef struct GL_Viewport_t {
 typedef struct GL_Viewport_Stack_t {
     GL_Viewport GL_viewport_stack[MAX_QUANTITY_OF__VIEWPORTS];
     GL_Viewport *p_GL_viewport__current;
+    GL_Viewport *p_GL_viewport__base;
 } GL_Viewport_Stack;
 
 typedef struct GL_Framebuffer_t {
@@ -80,6 +81,7 @@ typedef struct GL_Sprite_t {
     GL_Shader_2D *p_GL_shader;
     int location_of__sprite_frame_row_col;
     int location_of__sprite_frame_width_height;
+    int location_of__sprite_flip;
     bool is_sprite__allocated;
 } GL_Sprite;
 
@@ -87,21 +89,9 @@ typedef struct GL_Sprite_Manager_t {
     GL_Sprite GL_sprites[MAX_QUANTITY_OF__SPRITES];
 } GL_Sprite_Manager;
 
-typedef struct GL_Camera_Data_t {
-    mat4 gl_projection__matrix_4_4;
-    mat4 gl_translation__matrix_4_4;
-    mat4 gl_scale__matrix_4_4;
-    bool is_allocated;
-} GL_Camera_Data;
-
-#define MAX_QUANTITY_OF__GL_CAMERA_DATA 16
-
-typedef struct GL_Camera_Data_Manager_t {
-    GL_Camera_Data gl_camera_datas[MAX_QUANTITY_OF__GL_CAMERA_DATA];
-} GL_Camera_Data_Manager;
-
 typedef struct GL_Chunk_Texture_t {
     PLATFORM_Texture GL_chunk_texture;
+    PLATFORM_Texture GL_chunk_texture__sprite_cover;
     const Chunk *p_chunk_owner;
 } GL_Chunk_Texture;
 
@@ -120,7 +110,6 @@ typedef struct GL_Gfx_Sub_Context_t {
     SDL_GLContext GL_context;
     GL_Shader_Manager GL_shader_manager;
     GL_Sprite_Manager GL_sprite_manager;
-    GL_Camera_Data_Manager GL_camera_data_manager;
     GL_Chunk_Texture_Manager GL_chunk_texture_manager;
     GL_Framebuffer_Manager GL_framebuffer_manager;
     GL_Viewport_Stack GL_viewport_stack;
@@ -141,14 +130,6 @@ GL_Sprite_Manager *GL_get_p_sprite_manager_from__gfx_sub_context(
         GL_Gfx_Sub_Context *p_GL_gfx_sub_context) {
     return &p_GL_gfx_sub_context
         ->GL_sprite_manager
-        ;
-}
-
-static inline
-GL_Camera_Data_Manager *GL_get_p_camera_data_manager_from__gfx_sub_context(
-        GL_Gfx_Sub_Context *p_GL_gfx_sub_context) {
-    return &p_GL_gfx_sub_context
-        ->GL_camera_data_manager
         ;
 }
 
@@ -193,16 +174,6 @@ GL_Sprite_Manager *GL_get_p_sprite_manager_from__PLATFORM_gfx_context(
         ->SDL_gfx_sub_context__wrapper
         .p_SDL_gfx_sub_context)
         ->GL_sprite_manager
-        ;
-}
-
-static inline
-GL_Camera_Data_Manager *GL_get_p_camera_data_manager_from__PLATFORM_gfx_context(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
-    return &((GL_Gfx_Sub_Context*)p_PLATFORM_gfx_context
-        ->SDL_gfx_sub_context__wrapper
-        .p_SDL_gfx_sub_context)
-        ->GL_camera_data_manager
         ;
 }
 

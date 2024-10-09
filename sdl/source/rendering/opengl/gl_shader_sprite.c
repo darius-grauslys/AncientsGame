@@ -9,6 +9,7 @@ layout(location = 0) in vec3 position;\n\
 layout(location = 1) in vec2 uv;\n\
 uniform vec2 spriteframe_row_col;\n\
 uniform vec2 spriteframe_width_height;\n\
+uniform vec2 sprite_flip;\n\
 uniform mat4 projection;\n\
 uniform mat4 translation;\n\
 uniform mat4 model;\n\
@@ -19,9 +20,9 @@ void main()\n\
 {\n\
     gl_Position = (projection * translation * model) * (vec4(position, 1));\n\
     TexCoord = vec2(spriteframe_width_height.x * \n\
-            (uv.x + spriteframe_row_col.x),\n\
+            (abs(sprite_flip.x-uv.x) + spriteframe_row_col.x),\n\
             spriteframe_width_height.y * \n\
-            (uv.y + spriteframe_row_col.y));\n\
+            (abs(sprite_flip.y-uv.y) + spriteframe_row_col.y));\n\
 }";
 
 const char *_source_shader_sprite__fragment = " \n\
@@ -34,6 +35,9 @@ out vec4 color;\n\
 void main()\n\
 {\n\
     color = texture(_sample, TexCoord);\n\
+    if (color.r == 1.0 && color.g == 0.0 && color.b == 1.0) {\n\
+        color.a = 0.0;\n\
+    }\n\
 }";
 
 void initialize_shader_2d_as__shader_sprite(

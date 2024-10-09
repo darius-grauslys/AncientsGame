@@ -49,7 +49,9 @@ void initialize_world(
                 0, 0, 0),
             0, //nullptr handler
             CAMERA_FULCRUM__WIDTH,
-            CAMERA_FULCRUM__HEIGHT
+            CAMERA_FULCRUM__HEIGHT,
+            -BIT(18),
+            i32_to__i32F20(100)
             );
 }
 

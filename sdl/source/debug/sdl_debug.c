@@ -3,10 +3,7 @@
 #include <unistd.h>
 
 void PLATFORM_coredump(void) {
-    abort();
-    // TODO:    replace abort() with below comment
-    //          for release.
-    // if(!fork()) abort();
+    if(!fork()) abort();
 }
 
 void PLATFORM_abort(void) {

@@ -1,3 +1,4 @@
+#include "defines.h"
 #include "defines_weak.h"
 #include "numerics.h"
 #include "platform.h"
@@ -57,6 +58,9 @@ void GL_initialize_sprite_with__this_shader(
     p_GL_sprite->location_of__sprite_frame_width_height
         = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
                 "spriteframe_width_height");
+    p_GL_sprite->location_of__sprite_flip
+        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
+                "sprite_flip");
 }
 
 void GL_release_sprite_vertext_object(
@@ -108,36 +112,12 @@ void GL_render_sprite(
 
     use_shader_2d(p_GL_shader__sprite);
     if (p_SDL_camera__active) {
-        GL_Camera_Data *p_GL_camera_data =
-            (GL_Camera_Data*)p_SDL_camera__active
-            ->p_camera_data
-            ;
-        if (!p_GL_camera_data)
-            goto skip_GL_camera_link;
-
-        if (GL_does_shader_utilize__projection_mat_4_4(
-                    p_GL_shader__sprite)) {
-            GL_link_camera_projection_to__shader(
-                    p_GL_shader__sprite, 
-                    p_GL_camera_data);
-        }
-
-        if (GL_does_shader_utilize__translation_mat_4_4(
-                    p_GL_shader__sprite)) {
-            GL_link_camera_translation_to__shader(
-                    p_GL_shader__sprite, 
-                    p_GL_camera_data);
-        }
-
-        if (GL_does_shader_utilize__model_mat_4_4(
-                    p_GL_shader__sprite)) {
-            GL_link_model_data_to__shader(
-                    p_GL_shader__sprite, 
-                    position__3i32F4,
-                    i32_to__i32F4(1));
-        }
+        GL_link_data_to__shader(
+                p_GL_shader__sprite, 
+                p_SDL_camera__active, 
+                position__3i32F4, 
+                i32_to__i32F4(1));
     }
-skip_GL_camera_link:
 
     use_vertex_object(&p_GL_sprite->GL_vertex_object);
     PLATFORM_use_texture(
@@ -157,6 +137,11 @@ skip_GL_camera_link:
             p_GL_sprite->location_of__sprite_frame_width_height,
             p_PLATFORM_sprite->sprite_frame__width, 
             p_PLATFORM_sprite->sprite_frame__height);
-
+    glUniform2f(
+            p_GL_sprite->location_of__sprite_flip,
+            p_sprite_wrapper->direction & DIRECTION__WEST
+            ? 1.0
+            : 0.0, 
+            0.0);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

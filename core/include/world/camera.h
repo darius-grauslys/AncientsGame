@@ -15,7 +15,9 @@ void initialize_camera(
         Vector__3i32F4 position,
         m_Camera_Handler m_camera_handler,
         Quantity__u32 width_of__fulcrum,
-        Quantity__u32 height_of__fulcrum) {
+        Quantity__u32 height_of__fulcrum,
+        i32F20 z_near,
+        i32F20 z_far) {
     p_camera->position = 
         position;
     p_camera->m_camera_handler =
@@ -27,6 +29,8 @@ void initialize_camera(
         height_of__fulcrum;
     p_camera->width_of__fulcrum =
         width_of__fulcrum;
+    p_camera->z_near = z_near;
+    p_camera->z_far = z_far;
 }
 
 static inline

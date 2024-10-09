@@ -62,11 +62,6 @@ PLATFORM_Graphics_Window
     return 0;
 }
 
-PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
-    return 0;
-}
-
 void PLATFORM_put_char_in__typer(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Typer *p_typer,

@@ -9,6 +9,8 @@ SDL_Texture_String__Const SDL_texture_string__tilesheet_ground =
 
 SDL_Texture_String__Const SDL_texture_string__player =
     "player.png";
+SDL_Texture_String__Const SDL_texture_string__skeleton =
+    "skeleton.png";
 
 SDL_Texture_String__Const 
 *SDL_get_texture_string_from__sprite_allocation_specification(
@@ -26,6 +28,8 @@ SDL_Texture_String__Const
                     return 0;
                 case Entity_Kind__Player:
                     return &SDL_texture_string__player;
+                case Entity_Kind__Skeleton:
+                    return &SDL_texture_string__skeleton;
             }
             break;
     }

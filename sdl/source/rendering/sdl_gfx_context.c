@@ -9,6 +9,7 @@
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
 #include "rendering/opengl/gl_chunk.h"
+#include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_sprite_manager.h"
 #include "rendering/sdl_texture_manager.h"
 #include <SDL2/SDL_render.h>
@@ -52,6 +53,7 @@ bool _SDL_link_opengl_3_0(
     SDL_GL_SetAttribute(
             SDL_GL_CONTEXT_PROFILE_MASK, 
             SDL_GL_CONTEXT_PROFILE_CORE);  
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
     SDL_Window *p_SDL_window = 
         SDL_CreateWindow(
@@ -93,9 +95,6 @@ bool _SDL_link_opengl_3_0(
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_clear_screen =
         GL_clear_screen;
-    p_SDL_gfx_sub_context__wrapper
-        ->f_SDL_update_camera =
-        GL_update_camera;
 
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_allocate_texture =
@@ -153,6 +152,11 @@ void SDL_initialize_gfx_context(
 
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__game(p_game);
+
+    SDL_initialize_gfx_window(
+            p_PLATFORM_gfx_context, 
+            &p_PLATFORM_gfx_context->SDL_main_graphics_window, 
+            0);
 
     SDL_set_active_camera(
             p_PLATFORM_gfx_context, 
@@ -260,4 +264,10 @@ void PLATFORM_initialize_rendering__game(
 
     f_SDL_initialize_rendering__worldspace(
             p_PLATFORM_gfx_context);
+}
+
+PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
+    return p_PLATFORM_graphics_window
+        ->p_PLATFORM_gfx_context;
 }

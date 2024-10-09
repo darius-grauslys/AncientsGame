@@ -925,6 +925,9 @@ Quantity__u16 get_quantity_u16_of__energy_of__entity(
         get_last_usable_resource(
                 p_first_energy_orb, 
                 p_last_energy_orb);
+    if (!p_last_usable_energy_orb)
+        p_last_usable_energy_orb =
+            p_first_energy_orb;
 
     Quantity__u16 quantity_of__energy =
         p_last_usable_energy_orb - p_first_energy_orb;

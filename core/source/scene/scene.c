@@ -10,7 +10,7 @@ void m_enter_scene_handler__default(
         Game *p_game) {
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
-        manage_game(p_game);
+        manage_game__pre_render(p_game);
         if (is_input__click_released(&p_game->input)) {
             debug_info__verbose("scene.c, SCENE_UI_CLICK");
             debug_info__verbose("click: (%d, %d)",
@@ -31,5 +31,6 @@ void m_enter_scene_handler__default(
                         );
             }
         }
+        manage_game__post_render(p_game);
     }
 }

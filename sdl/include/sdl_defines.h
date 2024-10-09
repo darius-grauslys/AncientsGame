@@ -40,6 +40,8 @@
 #endif
 
 typedef struct PLATFORM_Graphics_Window_t {
+    void *p_SDL_graphics_window__data;
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
 } PLATFORM_Graphics_Window;
 
 typedef void SDL_Gfx_Sub_Context;
@@ -109,10 +111,6 @@ typedef void (*f_SDL_Clear_Screen)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
 typedef void (*f_SDL_Allocate_Camera_Data)(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Camera *p_camera);
-
-typedef void (*f_SDL_Update_Camera)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Camera *p_camera);
 
@@ -191,7 +189,6 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     f_SDL_Clear_Screen                  f_SDL_clear_screen;
 
     f_SDL_Allocate_Camera_Data          f_SDL_allocate_camera_data;
-    f_SDL_Update_Camera                 f_SDL_update_camera;
     f_SDL_Release_Camera_Data           f_SDL_release_camera_data;
 
     f_SDL_Allocate_Texture              f_SDL_allocate_texture;
@@ -215,14 +212,13 @@ typedef struct PLATFORM_Gfx_Context_t {
     PLATFORM_Graphics_Window graphics_window__main_window;
     SDL_Gfx_Sub_Context__Wrapper SDL_gfx_sub_context__wrapper;
 
+    PLATFORM_Graphics_Window SDL_main_graphics_window;
+
     SDL_Window *p_SDL_window;
     Camera *p_active_camera;
 
     i32 width_of__sdl_window;
     i32 height_of__sdl_window;
-
-    i32 width_of__sdl_viewport;
-    i32 height_of__sdl_viewport;
 } PLATFORM_Gfx_Context;
 
 typedef struct PLATFORM_Audio_Context_t {

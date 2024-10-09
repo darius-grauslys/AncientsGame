@@ -136,12 +136,6 @@ int run_game(Game *p_game) {
     return 0;
 }
 
-void manage_game(Game *p_game) {
-    manage_game__pre_render(p_game);
-    manage_game__post_render(p_game);
-    loop_timer_u32(&p_game->tick__timer_u32);
-}
-
 void manage_game__pre_render(Game *p_game) {
     PLATFORM_pre_render(p_game);
 }
@@ -156,4 +150,5 @@ void manage_game__post_render(Game *p_game) {
             get_p_PLATFORM_audio_context_from__game(p_game));
 
     PLATFORM_post_render(p_game);
+    loop_timer_u32(&p_game->tick__timer_u32);
 }

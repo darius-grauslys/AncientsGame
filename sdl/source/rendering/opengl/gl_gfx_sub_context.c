@@ -1,6 +1,7 @@
 #include "debug/opengl/gl_debug.h"
 #include "defines_weak.h"
 #include "game.h"
+#include <world/camera.h>
 #include "rendering/opengl/gl_chunk_texture_manager.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_framebuffer_manager.h"
@@ -9,9 +10,8 @@
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_vertex_object.h"
 #include "rendering/opengl/gl_viewport.h"
+#include "rendering/opengl/glad/glad.h"
 #include "rendering/sdl_gfx_context.h"
-#include "world/opengl/gl_camera.h"
-#include "world/opengl/gl_camera_data_manager.h"
 #include <SDL2/SDL_video.h>
 #include <rendering/opengl/gl_gfx_sub_context.h>
 #include <rendering/opengl/gl_shader_manager.h>
@@ -41,16 +41,13 @@ void GL_initialize_gfx_sub_context(
     GL_initialize_sprite_manager(
             GL_get_p_sprite_manager_from__gfx_sub_context(
                 p_GL_gfx_sub_context));
-    GL_initialize_camera_data_manager(
-            GL_get_p_camera_data_manager_from__gfx_sub_context(
-                p_GL_gfx_sub_context));
     GL_initialize_viewport_stack(
             GL_get_p_viewport_stack_from__gfx_sub_context(
                 p_GL_gfx_sub_context),
             0,
             0,
-            p_PLATFORM_gfx_context->width_of__sdl_viewport,
-            p_PLATFORM_gfx_context->height_of__sdl_viewport);
+            p_PLATFORM_gfx_context->width_of__sdl_window,
+            p_PLATFORM_gfx_context->height_of__sdl_window);
     GL_initialize_framebuffer_manager(
             GL_get_p_framebuffer_manager_from__gfx_sub_context(
                 p_GL_gfx_sub_context));
@@ -62,14 +59,15 @@ void GL_initialize_gfx_sub_context(
     Camera *p_GL_camera__default =
         &p_GL_gfx_sub_context
         ->GL_camera__default;
-    
-    GL_allocate_camera_data(
-            p_PLATFORM_gfx_context, 
-            p_GL_camera__default);
 
-    GL_initialize_camera(
-            p_PLATFORM_gfx_context, 
-            p_GL_camera__default);
+    initialize_camera(
+            p_GL_camera__default, 
+            VECTOR__3i32F4__0_0_0, 
+            0, 
+            16,
+            12, 
+            -BIT(18), 
+            i32_to__i32F20(100));
 
     SDL_set_active_camera(
             p_PLATFORM_gfx_context, 
@@ -80,6 +78,8 @@ void GL_initialize_gfx_sub_context(
             ->GL_vertex_object__unit_square);
 
     glClearColor(0,0,0,1);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void GL_dispose_gfx_sub_context(
@@ -95,7 +95,7 @@ void GL_dispose_gfx_sub_context(
 
 void GL_clear_screen(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 GL_Gfx_Sub_Context *GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
@@ -118,8 +118,8 @@ void f_SDL_event_handler__GL_resize(
     i32 width  = p_PLATFORM_gfx_context->width_of__sdl_window;
     i32 height = p_PLATFORM_gfx_context->height_of__sdl_window;
 
-    i32 width__fixed = width / 64;
-    i32 height__fixed = width__fixed / 4 * 3;
+    i32 width__fixed = width / 32;
+    i32 height__fixed = width__fixed / 8 * 6;
 
     width__fixed *= 32;
     height__fixed *= 32;
@@ -129,15 +129,18 @@ void f_SDL_event_handler__GL_resize(
             width__fixed,
             height__fixed);
 
-    p_PLATFORM_gfx_context->width_of__sdl_viewport =
-        width__fixed;
-    p_PLATFORM_gfx_context->height_of__sdl_viewport =
-        height__fixed;
+    GL_Viewport_Stack *p_GL_viewport_stack =
+        GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context);
 
-    GL_fit_projection_of__camera_to__window(
-            p_PLATFORM_gfx_context, 
-            p_PLATFORM_gfx_context
-                ->p_active_camera);
+    p_GL_viewport_stack->p_GL_viewport__base->x =
+        (width - width__fixed) / 2;
+    p_GL_viewport_stack->p_GL_viewport__base->y =
+        (height - height__fixed) / 2;
+    p_GL_viewport_stack->p_GL_viewport__base->width =
+        width__fixed;
+    p_GL_viewport_stack->p_GL_viewport__base->height =
+        height__fixed;
 }
 
 void GL_initialize_rendering__worldspace(

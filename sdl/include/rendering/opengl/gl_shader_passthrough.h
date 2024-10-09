@@ -19,6 +19,8 @@ void GL_render_with__shader__passthrough(
         int x__uv,
         int y__uv,
         float width_of__uv,
-        float height_of__uv);
+        float height_of__uv,
+        bool is_flipped_on__x,
+        bool is_flipped_on__y);
 
 #endif

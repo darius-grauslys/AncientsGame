@@ -1,7 +1,11 @@
+#include "align.h"
+#include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_numerics.h"
 #include "rendering/opengl/glad/glad.h"
 #include "sdl_numerics.h"
+#include <cglm/clipspace/ortho_lh_no.h>
 #include <cglm/mat4.h>
+#include <cglm/types.h>
 #include <rendering/opengl/gl_shader.h>
 #include <debug/debug.h>
 #include <stddef.h>
@@ -106,24 +110,52 @@ int release_shader_2d(GL_Shader_2D *shader) {
 
 void GL_link_camera_projection_to__shader(
         GL_Shader_2D *p_GL_shader,
-        GL_Camera_Data *p_GL_camera_data) {
+        Camera *p_camera) {
+
+    ALIGN(16, mat4, projection);
+
+    // TODO: magic numbers
+    glm_ortho_lh_no(
+            -(float)p_camera->width_of__fulcrum, 
+             (float)p_camera->width_of__fulcrum,
+            -(float)p_camera->height_of__fulcrum, 
+             (float)p_camera->height_of__fulcrum,
+             i32F20_to__float(p_camera->z_near),
+             i32F20_to__float(p_camera->z_far),
+             *p_projection);
+
     glUniformMatrix4fv(
             p_GL_shader->location_of__projection_mat_4_4,
             1,
             false,
-            (const GLfloat*)p_GL_camera_data
-                ->gl_projection__matrix_4_4);
+            (const GLfloat*)*p_projection);
 }
 
 void GL_link_camera_translation_to__shader(
         GL_Shader_2D *p_GL_shader,
-        GL_Camera_Data *p_GL_camera_data) {
+        Camera *p_camera) {
+
+    vec3 vec3__translation;
+
+    vector_3i32F4_to__vec3(
+            p_camera->position, 
+            vec3__translation);
+
+    ALIGN(16, mat4, translation);
+
+    vec3__translation[0] *= -(1.0/8);
+    vec3__translation[1] *= -(1.0/8);
+    vec3__translation[2] *= -(1.0/8);
+
+    glm_translate_make(
+            *p_translation, 
+            vec3__translation);
+
     glUniformMatrix4fv(
             p_GL_shader->location_of__translation_mat_4_4,
             1,
             false,
-            (const GLfloat*)p_GL_camera_data
-                ->gl_translation__matrix_4_4);
+            (const float*)*p_translation);
 }
 
 void GL_link_model_data_to__shader(
@@ -137,6 +169,9 @@ void GL_link_model_data_to__shader(
     vector_3i32F4_to__vec3(
             position, 
             vector3_cglm);
+    vector3_cglm[0] *= (1.0/8);
+    vector3_cglm[1] *= (1.0/8);
+    vector3_cglm[2] *= (1.0/8);
     glm_translate(
             model, 
             vector3_cglm);
@@ -146,4 +181,30 @@ void GL_link_model_data_to__shader(
             1,
             false,
             (const GLfloat*)model);
+}
+
+void GL_link_data_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        Camera *p_camera,
+        Vector__3i32F4 position__3i32F4,
+        i32F4 scale) {
+    if (GL_does_shader_utilize__projection_mat_4_4(
+                p_GL_shader)) {
+        GL_link_camera_projection_to__shader(
+                p_GL_shader, 
+                p_camera);
+    }
+    if (GL_does_shader_utilize__translation_mat_4_4(
+                p_GL_shader)) {
+        GL_link_camera_translation_to__shader(
+                p_GL_shader, 
+                p_camera);
+    }
+    if (GL_does_shader_utilize__model_mat_4_4(
+                p_GL_shader)) {
+        GL_link_model_data_to__shader(
+                p_GL_shader, 
+                position__3i32F4, 
+                scale);
+    }
 }
