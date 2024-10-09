@@ -8,7 +8,7 @@
 #include <sdl_defines.h>
 
 f_SDL_Event_Handler __SDL_EVENT_HANDLERS[SDL_LASTEVENT] = {0};
-f_SDL_Event_Handler __SDL_EVENT_WINDOW_HANDLERS[SDL_WINDOWEVENT_MOVED] = {0};
+f_SDL_Event_Handler __SDL_EVENT_WINDOW_HANDLERS[SDL_WINDOWEVENT_DISPLAY_CHANGED] = {0};
 
 void SDL_poll_event(Game *p_game) {
     SDL_Event event;

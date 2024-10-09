@@ -1,6 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include "platform_defines.h"
 #include <stdbool.h>
 #include <stdint.h>
 #ifndef NDEBUG

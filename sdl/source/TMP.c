@@ -180,65 +180,6 @@ bool PLATFORM_has_support_for__texture_flag__render_method(
 /// SECTION_serialization
 ///
 
-void PLATFORM_initialize_file_system_context(
-        Game *p_game,
-        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context) {}
-
-Serialization_Request *PLATFORM_allocate_serialization_request(
-        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context) {
-    return 0;
-}
-
-void PLATFORM_release_serialization_request(
-        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
-        Serialization_Request *p_serialization_request) {}
-
-enum PLATFORM_Open_File_Error PLATFORM_open_file(
-        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
-        const char *p_path,
-        const char *p_flags,
-        Serialization_Request *p_serialization_request) {
-    return PLATFORM_Open_File_Error__Unknown;
-}
-
-void PLATFORM_close_file(
-        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
-        Serialization_Request *p_serialization_request) {}
-
-enum PLATFORM_Write_File_Error PLATFORM_write_file(
-        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
-        u8 *source,
-        Quantity__u32 length_of__data,
-        Quantity__u32 quantity_of__writes,
-        void *p_file_handler) {
-    return PLATFORM_Write_File_Error__Unknown;
-}
-
-enum PLATFORM_Read_File_Error PLATFORM_read_file(
-        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
-        u8 *destination,
-        Quantity__u32 *p_length_of__data_to_read,
-        Quantity__u32 quantity_of__reads,
-        void *p_file_handler) {
-    return PLATFORM_Read_File_Error__Unknown;
-}
-
-///
-/// Returns -1 on error.
-///
-Index__u32 PLATFORM_get_position_in__file(
-        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
-        void *p_file_handler) {
-    return -1;
-}
-
-bool PLATFORM_set_position_in__file(
-        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
-        Index__u32 position_in__file_u32,
-        void *p_file_handler) {
-    return false;
-}
-
 ///
 /// SECTION_input
 ///

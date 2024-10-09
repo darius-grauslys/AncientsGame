@@ -1,6 +1,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#include "platform_defines.h"
 #include <defines_weak.h>
 
 ///
@@ -259,6 +260,11 @@ void PLATFORM_initialize_file_system_context(
         Game *p_game,
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
 
+void PLATFORM_append_base_directory_to__path(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        char *p_c_str_path,
+        Index__u32 *p_index_of__path_end);
+
 enum PLATFORM_Open_File_Error {
     PLATFORM_Open_File_Error__None = 0,
     PLATFORM_Open_File_Error__Invalid_Path = 1,
@@ -352,6 +358,10 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.
+#endif
+
+#ifndef PLATFORM__IO
+#define MAX_LENGTH_OF__IO_PATH 128
 #endif
 
 #ifndef PLATFORM__CAMERA
@@ -449,5 +459,7 @@ typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 #define INPUT_TURN_LEFT (INPUT_TURN_RIGHT<<1)
 #define INPUT_CLICK (INPUT_TURN_LEFT<<1)
 #endif
+
+typedef char IO_path[MAX_LENGTH_OF__IO_PATH];
 
 #endif

@@ -1,5 +1,6 @@
 #include "rendering/sdl_gfx_context.h"
 #include "sdl_event.h"
+#include "serialization/sdl_filesystem.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
@@ -11,6 +12,7 @@ void PLATFORM_pre_render(Game *p_game) {
     SDL_PumpEvents();
     SDL_poll_event(p_game);
 
+    SDL_poll_serialization_requests(p_game);
     SDL_clear_screen(
             get_p_PLATFORM_gfx_context_from__game(p_game));
 }

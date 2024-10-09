@@ -27,8 +27,8 @@ Index__u8 stat_chunk_file__inventories(
 static inline
 bool append_chunk_file__tiles_to__path(
         char *buffer,
-        Quantity__u8 length_of__path,
-        Quantity__u8 max_length_of__path) {
+        Quantity__u16 length_of__path,
+        Quantity__u16 max_length_of__path) {
     if (length_of__path + 2 > max_length_of__path)
         return false;
 
@@ -40,8 +40,8 @@ bool append_chunk_file__tiles_to__path(
 static inline
 bool append_chunk_file__entities_to__path(
         char *buffer,
-        Quantity__u8 length_of__path,
-        Quantity__u8 max_length_of__path) {
+        Quantity__u16 length_of__path,
+        Quantity__u16 max_length_of__path) {
     if (length_of__path + 2 > max_length_of__path)
         return false;
 
@@ -53,8 +53,8 @@ bool append_chunk_file__entities_to__path(
 static inline
 bool append_chunk_file__inventories_to__path(
         char *buffer,
-        Quantity__u8 length_of__path,
-        Quantity__u8 max_length_of__path) {
+        Quantity__u16 length_of__path,
+        Quantity__u16 max_length_of__path) {
     if (length_of__path + 2 > max_length_of__path)
         return false;
 

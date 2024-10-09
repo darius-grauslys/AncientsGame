@@ -378,7 +378,7 @@ void resolve_chunk(
         }
     }
 
-    char file_path_to__chunk[128];
+    char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
     memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
     if (stat_chunk_file__tiles(
                 p_game,
@@ -503,7 +503,7 @@ void replace_chunk(
         enqueue_chunk_map_node_for__serialization(
                 get_p_chunk_manager_from__game(p_game), 
                 p_chunk_map_node);
-        char file_path_to__chunk[128];
+        char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
         memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
         Quantity__u8 length_of__path_to__chunk =
             stat_chunk_directory(

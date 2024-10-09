@@ -91,6 +91,11 @@ void PLATFORM_initialize_file_system_context(
             FILE_SYSTEM_CONTEXT__AUDIO_STREAM__TIME_WINDOW);
 }
 
+void PLATFORM_append_base_directory_to__path(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        char *p_c_str_path,
+        Index__u32 *p_index_of__path_end) {}
+
 Serialization_Request *PLATFORM_allocate_serialization_request(
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context) {
     if (p_PLATOFRM_file_system_context

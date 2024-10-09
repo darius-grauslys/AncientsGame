@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "platform.h"
 #include "world/region.h"
 #include "sys/stat.h"
 #include "sys/types.h"
@@ -20,11 +21,24 @@ Index__u8 stat_chunk_directory(
     // == WORLD_NAME_MAX_SIZE_OF + 9 + 7 + 4 + 3
     // == WORLD_NAME_MAX_SIZE_OF + 23
 
-    strncpy(buffer, 
+    Index__u32 index_of__path_append = 0;
+
+    PLATFORM_append_base_directory_to__path(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            buffer, 
+            &index_of__path_append);
+
+    buffer[index_of__path_append++] = '/';
+
+    // TODO: bounds check index_of__path_append + WORLD_NAME_MAX_SIZE_OF
+    //                      < MAX_LENGTH_OF__IO_PATH
+    strncpy(&buffer[index_of__path_append], 
             get_p_world_from__game(p_game)->name,
             WORLD_NAME_MAX_SIZE_OF);
-    Index__u16 index_of__path_append = 
+
+    index_of__path_append += 
         get_p_world_from__game(p_game)->length_of__world_name;
+
     DIR *p_dir;
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {

@@ -6,6 +6,7 @@
 #include "scene/scene_manager.h"
 #include "scene/sdl_scene_manager.h"
 #include "sdl_event.h"
+#include "serialization/sdl_filesystem.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_video.h>
@@ -25,6 +26,8 @@ int PLATFORM_main(Game *p_game) {
 
     p_game->p_PLATFORM_gfx_context =
         &__SDL_Gfx_Context;
+    p_game->p_PLATFORM_file_system_context =
+        &__SDL_file_system_context;
     SDL_initialize_events();
     SDL_initialize_gfx_context(
             p_game,
@@ -35,6 +38,10 @@ int PLATFORM_main(Game *p_game) {
 
     SDL_establish_scenes(
             get_p_scene_manager_from__game(p_game));
+
+    PLATFORM_initialize_file_system_context(
+            p_game,
+            p_game->p_PLATFORM_file_system_context);
 
     int exit_code = 
         run_game(p_game);

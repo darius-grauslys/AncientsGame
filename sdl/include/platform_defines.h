@@ -3,6 +3,9 @@
 
 #include "defines_weak.h"
 
+#define PLATFORM__IO
+#define MAX_LENGTH_OF__IO_PATH 1024
+
 /*****************************************************
  *  CHUNKS
  *****************************************************/
