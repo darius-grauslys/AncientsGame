@@ -619,11 +619,13 @@ void f_chunk_generator__flat_world(
                 weapon;
             p_skeleton->equipment.item_stack__armor.item =
                 armor;
-            armor.m_item_equip_handler(
-                    &armor,
-                    p_skeleton,
-                    Entity_Equipment_Slot_Kind__Armor,
-                    p_game);
+            if (armor.m_item_equip_handler) {
+                armor.m_item_equip_handler(
+                        &armor,
+                        p_skeleton,
+                        Entity_Equipment_Slot_Kind__Armor,
+                        p_game);
+            }
         }
 
         Tile *p_tile =
