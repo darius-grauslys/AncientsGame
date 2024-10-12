@@ -60,7 +60,7 @@ void m_enter_scene_handler_as__test(
 
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
-        manage_game(p_game);
+        manage_game__pre_render(p_game);
         if (is_input__use_released(get_p_input_from__game(p_game))) {
             item_kind++;
             ui_window_kind++;
@@ -77,6 +77,7 @@ void m_enter_scene_handler_as__test(
                     p_game,
                     ui_window_kind);
         }
+        manage_game__post_render(p_game);
     }
 }
 

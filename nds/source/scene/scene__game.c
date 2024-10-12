@@ -178,12 +178,13 @@ void m_enter_scene_as__game_handler(
     while (1) {
         if (p_game->scene_manager.p_active_scene == 0)
             break;
-        manage_game(p_game);
+        manage_game__pre_render(p_game);
         NDS_update_ui_for__hud(
                 get_p_PLATFORM_gfx_context_from__game(p_game),
                 p_this_scene,
                 p_player);
         manage_world(p_game);
+        manage_game__post_render(p_game);
     }
 }
 

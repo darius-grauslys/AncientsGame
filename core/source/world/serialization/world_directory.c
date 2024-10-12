@@ -3,6 +3,7 @@
 #include "defines_weak.h"
 #include "game.h"
 #include "platform.h"
+#include "vectors.h"
 #include "world/region.h"
 #include "sys/stat.h"
 #include "sys/types.h"
@@ -11,6 +12,31 @@
 #include <string.h>
 #include "world/region.h"
 #include <unistd.h>
+
+void append_hex_value_to__path(
+        Index__u32 *p_index_of__path_append,
+        u32 value,
+        i32 beginning_index,
+        char *buffer) {
+    u32 hex;
+    Index__u32 index_of__hex = 0;
+    for (;
+            index_of__hex<(8 - beginning_index);
+            index_of__hex++) {
+        value <<= 4;
+    }
+    for (Index__u32 index_of__hex = 0;
+            index_of__hex < beginning_index;
+            index_of__hex++) {
+        hex = ((MASK(4) << 28) & value) >> 28;
+        buffer[(*p_index_of__path_append)++] =
+            (hex < 10)
+            ? ('0' + hex)
+            : ('a' + (hex-10))
+            ;
+        value <<= 4;
+    }
+}
 
 Index__u8 stat_chunk_directory(
         Game *p_game,
@@ -56,19 +82,17 @@ Index__u8 stat_chunk_directory(
         get_region_that__this_chunk_map_node_is_in(
                 p_chunk_map_node);
 
-    for (Index__u8 i=0;i<6;i++) {
-        buffer[index_of__path_append++] =
-            'A'
-            + (region_vector__3i32.x__i32 & MASK(4));
-        region_vector__3i32.x__i32 >>= 4;
-    }
+    append_hex_value_to__path(
+            &index_of__path_append, 
+            region_vector__3i32.x__i32, 
+            8,
+            buffer);
     buffer[index_of__path_append++] = '_';
-    for (Index__u8 i=0;i<6;i++) {
-        buffer[index_of__path_append++] =
-            'A'
-            + (region_vector__3i32.y__i32 & MASK(4));
-        region_vector__3i32.y__i32 >>= 4;
-    }
+    append_hex_value_to__path(
+            &index_of__path_append, 
+            region_vector__3i32.y__i32, 
+            8,
+            buffer);
 
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
@@ -77,50 +101,81 @@ Index__u8 stat_chunk_directory(
     } else {
         closedir(p_dir);
     }
-
-    buffer[index_of__path_append++] = '/';
-    buffer[index_of__path_append++] = 'c';
-    buffer[index_of__path_append++] = '_';
     
     Chunk_Vector__3i32 chunk_vector__3i32 =
         p_chunk_map_node->position_of__chunk_3i32;
+    if (chunk_vector__3i32.x__i32 < 0)
+        chunk_vector__3i32.x__i32 *= -1;
+    chunk_vector__3i32.x__i32 &= MASK(8);
+    if (chunk_vector__3i32.y__i32 < 0)
+        chunk_vector__3i32.y__i32 *= -1;
+    chunk_vector__3i32.y__i32 &= MASK(8);
 
-    for (Index__u8 i=0;i<3;i++) {
-        buffer[index_of__path_append++] =
-            'A'
-            + (chunk_vector__3i32.x__i32 & MASK(4));
-        chunk_vector__3i32.x__i32 >>= 4;
-    }
-    buffer[index_of__path_append++] = '_';
-    for (Index__u8 i=0;i<3;i++) {
-        buffer[index_of__path_append++] =
-            'A'
-            + (chunk_vector__3i32.y__i32 & MASK(4));
-        chunk_vector__3i32.y__i32 >>= 4;
-    }
+    Chunk_Vector__3i32 chunk_vector_quad__3i32 =
+        get_vector__3i32(127, 127, 127);
 
-    if (!(p_dir = opendir(buffer))) {
-        if (mkdir(buffer, 0777)) {
-            return 0;
+    Chunk_Vector__3i32 chunk_vector_descend__3i32 =
+        chunk_vector_quad__3i32;
+
+    for(Quantity__u8 level_of__recursion = 0;
+            level_of__recursion < 6;
+            level_of__recursion++) {
+        if (chunk_vector__3i32.x__i32
+                > chunk_vector_descend__3i32.x__i32) {
+            chunk_vector_descend__3i32.x__i32 +=
+                chunk_vector_quad__3i32.x__i32;
+        } else {
+            chunk_vector_descend__3i32.x__i32 -=
+                chunk_vector_quad__3i32.x__i32;
         }
-    } else {
-        closedir(p_dir);
+        if (chunk_vector__3i32.y__i32
+                > chunk_vector_descend__3i32.y__i32) {
+            chunk_vector_descend__3i32.y__i32 +=
+                chunk_vector_quad__3i32.y__i32;
+        } else {
+            chunk_vector_descend__3i32.y__i32 -=
+                chunk_vector_quad__3i32.y__i32;
+        }
+
+        buffer[index_of__path_append++] = '/';
+        buffer[index_of__path_append++] = 'c';
+        buffer[index_of__path_append++] = '_';
+        append_hex_value_to__path(
+                &index_of__path_append, 
+                chunk_vector_descend__3i32.x__i32, 
+                2,
+                buffer);
+        buffer[index_of__path_append++] = '_';
+        append_hex_value_to__path(
+                &index_of__path_append, 
+                chunk_vector_descend__3i32.y__i32, 
+                2,
+                buffer);
+        if (!(p_dir = opendir(buffer))) {
+            if (mkdir(buffer, 0777)) {
+                return 0;
+            }
+        } else {
+            closedir(p_dir);
+        }
+        chunk_vector_quad__3i32.x__i32 >>= 1;
+        chunk_vector_quad__3i32.y__i32 >>= 1;
     }
 
     buffer[index_of__path_append++] = '/';
     buffer[index_of__path_append++] = 'c';
     buffer[index_of__path_append++] = '_';
-    
-    i32 z__i32 =
-        p_chunk_map_node->position_of__chunk_3i32.z__i32;
-
-    for (Index__u8 i=0;i<2;i++) {
-        buffer[index_of__path_append++] =
-            'A'
-            + (z__i32 & MASK(4));
-        z__i32 >>= 8;
-    }
-
+    append_hex_value_to__path(
+            &index_of__path_append, 
+            chunk_vector__3i32.x__i32, 
+            2,
+            buffer);
+    buffer[index_of__path_append++] = '_';
+    append_hex_value_to__path(
+            &index_of__path_append, 
+            chunk_vector__3i32.y__i32, 
+            2,
+            buffer);
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
             return 0;
@@ -128,6 +183,9 @@ Index__u8 stat_chunk_directory(
     } else {
         closedir(p_dir);
     }
+
+    //TODO: recur by Z-axis
+
     return 
         index_of__path_append;
 }
