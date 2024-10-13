@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "entity/entity.h"
+#include "entity/humanoid.h"
 #include "entity/implemented/player/ai/ai_handler__player.h"
 #include "entity/reserves.h"
 #include "game.h"
@@ -327,7 +328,6 @@ void m_entity_body_handler__living(
                     set_entity_as__unloaded(p_this_humanoid);
                     break;
                 case Entity_Kind__Player:
-                    debug_info("respawn");
                     // TODO: drop inventory as a tombstone.
                     p_this_humanoid->hearts.resource_symbols[0] =
                         Heart_Kind__Half_Normal;
@@ -463,8 +463,11 @@ void m_humanoid_handler__game_action_handler(
         Game *p_game) {
     switch (get_the_kind_of__game_action(p_game_action)) {
         default:
-            return;
+            break;
         case Game_Action_Kind__Entity__Health__Apply_Damage:
+            if (is_humanoid__dead(p_entity_self)) {
+                break;
+            }
             animate_humanoid__hurt(p_entity_self);
             if (p_entity_self->the_kind_of__audio_effect_for__hurt
                     != Audio_Effect_Kind__None) {

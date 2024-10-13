@@ -106,3 +106,8 @@ Inventory *resolve_p_inventory_of__humanoid(
 
     return p_inventory;
 }
+
+bool is_humanoid__dead(Entity *p_humanoid) {
+    return p_humanoid->hearts.resource_symbols[0] 
+        == Heart_Kind__Empty;
+}

@@ -313,7 +313,7 @@ typedef struct Item_t Item;
 typedef struct Item_Stack_t Item_Stack;
 typedef struct Inventory_t Inventory;
 
-enum Item_Kind {
+typedef enum Item_Kind {
     Item_Kind__None = 0,
     Item_Kind__Stick,
     Item_Kind__Club,
@@ -678,7 +678,7 @@ enum Item_Kind {
     Item_Kind__Armor__Gold__Chaos,
     Item_Kind__Unknown = BIT(10),
     Item_Kind__MAX = BIT(12)
-};
+} Item_Kind;
 
 /// 
 /// SECTION_multiplayer

@@ -780,6 +780,25 @@ typedef struct Item_Manager_t {
     Item item_templates[(u16)Item_Kind__Unknown];
 } Item_Manager;
 
+
+typedef struct Item_Recipe_Requirement_t {
+    Item_Kind the_kind_of__item_that_is__required;
+    Quantity__u32 the_quantity_of__items_required;
+} Item_Recipe_Requirement;
+
+#define ITEM_REQUIREMENT_MAX_QUANTITY_OF 4
+
+typedef struct Item_Recipe_t {
+    Item_Recipe_Requirement requirements[
+        ITEM_REQUIREMENT_MAX_QUANTITY_OF];
+    Item_Kind the_kind_of__item_this__recipe_makes;
+    Quantity__u32 the_quantity_of__items_this__recipe_makes;
+} Item_Recipe;
+
+typedef struct Item_Recipe_Manager_t {
+    Item_Recipe recipes[Item_Kind__Unknown - 1];
+} Item_Recipe_Manager;
+
 typedef struct Item_Stack_t {
     union {
         Serialization_Header        _serialization_header;

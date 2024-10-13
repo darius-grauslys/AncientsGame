@@ -20,6 +20,8 @@ void humanoid__use(
 
 bool is_entity_a__humanoid(Entity *entity);
 
+bool is_humanoid__dead(Entity *p_humanoid);
+
 /// 
 /// WARNING: this is never guaranteed to resolve.
 /// Always check for a returned nullptr.
