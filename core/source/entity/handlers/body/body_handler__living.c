@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "entity/entity.h"
+#include "entity/implemented/player/ai/ai_handler__player.h"
 #include "entity/reserves.h"
 #include "game.h"
 #include "game_action/game_action.h"
@@ -9,6 +10,7 @@
 #include "rendering/animate_humanoid.h"
 #include "rendering/animate_sprite.h"
 #include "timer.h"
+#include "vectors.h"
 #include "world/world.h"
 #include <entity/handlers/body/body_handler__living.h>
 
@@ -319,7 +321,24 @@ void m_entity_body_handler__living(
                         get_timer__u32(8));
             }
         } else if (is_animation_finished(&p_this_humanoid->sprite_wrapper)) {
-            set_entity_as__unloaded(p_this_humanoid);
+            // TODO: player body handler?
+            switch (p_this_humanoid->the_kind_of_entity__this_entity_is) {
+                default:
+                    set_entity_as__unloaded(p_this_humanoid);
+                    break;
+                case Entity_Kind__Player:
+                    debug_info("respawn");
+                    // TODO: drop inventory as a tombstone.
+                    p_this_humanoid->hearts.resource_symbols[0] =
+                        Heart_Kind__Half_Normal;
+                    p_this_humanoid->m_entity_ai_handler = 
+                        m_entity_ai_handler__player;
+                    animate_humanoid__idle(p_this_humanoid);
+                    teleport_player(
+                            p_game, 
+                            VECTOR__3i32F4__0_0_0);
+                    break;
+            }
         }
         return;
     }

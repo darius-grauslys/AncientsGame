@@ -1,7 +1,9 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "platform.h"
 #include "world/camera.h"
+#include "world/chunk_vectors.h"
 #include <world/world.h>
 #include <entity/entity_manager.h>
 #include <collisions/collision_manager.h>
@@ -225,4 +227,35 @@ bool poll_world_for__scrolling(
                 p_world->camera.position);
 
     return is_chunks_moved;
+}
+
+void teleport_player(
+        Game *p_game,
+        Vector__3i32F4 position__3i32F4) {
+    Chunk_Vector__3i32 chunk_vector__3i32 =
+        vector_3i32F4_to__chunk_vector_3i32(
+                position__3i32F4);
+    remove_entity_from__collision_manager(
+            get_p_collision_manager_from__game(p_game), 
+            get_p_local_player_from__game(p_game));
+    move_chunk_manager_to__chunk_position(
+            p_game, 
+            get_p_chunk_manager_from__game(p_game), 
+            chunk_vector__3i32);
+    set_hitbox__position_with__3i32F4(
+            &get_p_local_player_from__game(
+                p_game)->hitbox,
+            position__3i32F4);
+    set_collision_manager__center_chunk(
+            &p_game->world.collision_manager,
+            p_game->world.chunk_manager.x__center_chunk__signed_index_i32,
+            p_game->world.chunk_manager.y__center_chunk__signed_index_i32);
+    add_entity_to__collision_manager(
+            get_p_collision_manager_from__game(p_game), 
+            get_p_local_player_from__game(p_game));
+
+    set_position_of__camera_to__entity(
+            &get_p_world_from__game(p_game)
+            ->camera, 
+            get_p_local_player_from__game(p_game));
 }

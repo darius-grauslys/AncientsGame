@@ -55,6 +55,14 @@ bool poll_chunk_manager_for__tile_collision(
         Chunk_Manager *p_chunk_manager,
         Entity *p_entity);
 
+///
+/// This will flush all loaded chunks to the file system.
+///
+void move_chunk_manager_to__chunk_position(
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Vector__3i32 chunk_vector__3i32);
+
 static inline 
 Tile *get_p_tile_from__chunk_node(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,

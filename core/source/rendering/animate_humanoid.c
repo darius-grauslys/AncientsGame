@@ -134,11 +134,6 @@ void set_animation_for__humanoid_with__timer_modification(
     Sprite_Wrapper *p_sprite_wrapper = 
         get_p_sprite_wrapper_from__entity(
                 p_humanoid);
-    if (is_animation_playing__this_kind_of__animation(
-                p_sprite_wrapper, 
-                Sprite_Animation_Kind__Humanoid__Die)) {
-        return;
-    }
     p_sprite_wrapper->the_kind_of_animation__this_sprite_has =
         the_kind_of__animation;
     switch (the_kind_of__animation) {

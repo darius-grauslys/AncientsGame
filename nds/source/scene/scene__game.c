@@ -183,6 +183,12 @@ void m_enter_scene_as__game_handler(
                 get_p_PLATFORM_gfx_context_from__game(p_game),
                 p_this_scene,
                 p_player);
+        if (is_input__consume_released(
+                    get_p_input_from__game(p_game))) {
+            teleport_player(
+                    p_game, 
+                    VECTOR__3i32F4__0_0_0);
+        }
         manage_world(p_game);
         manage_game__post_render(p_game);
     }

@@ -505,7 +505,7 @@ void replace_chunk(
                 p_chunk_map_node);
         char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
         memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
-        Quantity__u8 length_of__path_to__chunk =
+        Quantity__u32 length_of__path_to__chunk =
             stat_chunk_directory(
                     p_game,
                     p_chunk_map_node,
@@ -761,6 +761,51 @@ void move_chunk_manager(
                     p_chunk_manager);
         }
     }
+}
+
+void move_chunk_manager_to__chunk_position(
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Vector__3i32 chunk_vector__3i32) {
+
+    p_chunk_manager->x__center_chunk__signed_index_i32 =
+        chunk_vector__3i32.x__i32;
+    p_chunk_manager->y__center_chunk__signed_index_i32 =
+        chunk_vector__3i32.y__i32;
+
+    //TODO: z axis
+    i32 x, y;
+    
+    x = chunk_vector__3i32.x__i32 - 3;
+    y = chunk_vector__3i32.y__i32 - 2;
+
+    Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__beginning =
+        p_chunk_manager
+        ->p_most_south_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__current_row =
+        p_chunk_map_node__beginning;
+    do {
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__current_column =
+            p_chunk_map_node__current_row;
+        x = chunk_vector__3i32.x__i32 - 2;
+        do {
+            replace_chunk(
+                    p_game,
+                    p_chunk_map_node__current_column,
+                    x, y);
+            p_chunk_map_node__current_column =
+                p_chunk_map_node__current_column
+                ->p_east__chunk_map_node;
+            x++;
+        } while (
+                p_chunk_map_node__current_column
+                != p_chunk_map_node__current_row);
+        p_chunk_map_node__current_row =
+            p_chunk_map_node__current_row
+            ->p_north__chunk_map_node;
+        y++;
+    } while(p_chunk_map_node__current_row
+            != p_chunk_map_node__beginning);
 }
 
 bool poll_chunk_manager_for__chunk_movement(

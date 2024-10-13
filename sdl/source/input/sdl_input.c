@@ -90,12 +90,12 @@ void SDL_initialize_input_bindings() {
         Input_Binding_Kind__Keyboard,
         SDL_SCANCODE_F
     };
-    // __SDL_INPUT_BINDINGS[INPUT_CODE_CONSUME] = (Input_Binding){
-    //     INPUT_CODE_CONSUME,
-    //     INPUT_CONSUME,
-    //     Input_Binding_Kind__Keyboard,
-    //     SDL_SCANCODE_S
-    // };
+    __SDL_INPUT_BINDINGS[INPUT_CODE_CONSUME] = (Input_Binding){
+        INPUT_CODE_CONSUME,
+        INPUT_CONSUME,
+        Input_Binding_Kind__Keyboard,
+        SDL_SCANCODE_LEFT
+    };
     __SDL_INPUT_BINDINGS[INPUT_CODE_TURN_RIGHT] = (Input_Binding){
         INPUT_CODE_TURN_RIGHT,
         INPUT_TURN_RIGHT,

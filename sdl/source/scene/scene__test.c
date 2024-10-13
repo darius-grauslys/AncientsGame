@@ -2,6 +2,7 @@
 #include "defines_weak.h"
 #include "entity/handlers/entity_handlers.h"
 #include "game.h"
+#include "game_action/game_action.h"
 #include "input/input.h"
 #include "numerics.h"
 #include "platform.h"
@@ -97,6 +98,19 @@ void m_enter_scene_handler_as__test(
             }
             p_current__chunk_map_node =
                 p_current__chunk_map_node->p_south__chunk_map_node;
+        }
+
+        if (is_input__consume_released(
+                    get_p_input_from__game(p_game))) {
+            Hearts_Damaging_Specifier hearts_damaging_specifier;
+            hearts_damaging_specifier.hearts_damaging__flags =
+                HEARTS_DAMAGING_FLAG__IS_CHAOS;
+            hearts_damaging_specifier.quantity_of__damage = 20;
+            invoke_action__apply_heart_damage_to__entity(
+                    p_game, 
+                    get_p_local_player_from__game(p_game), 
+                    get_p_local_player_from__game(p_game), 
+                    &hearts_damaging_specifier);
         }
 
         manage_world(p_game);

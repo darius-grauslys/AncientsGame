@@ -92,4 +92,8 @@ bool poll_world_for__scrolling(
         Game *p_game,
         World *p_world);
 
+void teleport_player(
+        Game *p_game,
+        Vector__3i32F4 position__3i32F4);
+
 #endif
