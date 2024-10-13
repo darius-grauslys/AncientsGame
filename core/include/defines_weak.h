@@ -867,7 +867,7 @@ enum UI_Element_Kind {
 ///
 
 // TODO: change this to reflect new tileset
-enum Tile_Kind {
+typedef enum Tile_Kind {
     Tile_Kind__None,
     Tile_Kind__Oak_Wood,
     Tile_Kind__Stone_Brick,
@@ -883,11 +883,11 @@ enum Tile_Kind {
     Tile_Kind__Leaves,
     Tile_Kind__Snow,
     Tile_Kind__Water,
-    Tile_Kind__MAX = MASK(10)
-};
+    Tile_Kind__Unknown = MASK(10)
+} Tile_Kind;
 
 // TODO: change this to reflect new tileset
-enum Tile_Cover_Kind {
+typedef enum Tile_Cover_Kind {
     Tile_Cover_Kind__None               = 0b00000,
     Tile_Cover_Kind__Fern               = 1,
     Tile_Cover_Kind__Cactus             = 5,
@@ -988,7 +988,9 @@ enum Tile_Cover_Kind {
     Tile_Cover_Kind__Wall__Stone        = 0b1000001000,
     Tile_Cover_Kind__Wall__Dirt         = 0b1000001001,
     Tile_Cover_Kind__Wall__Sand         = 0b1000001010,
-};
+
+    Tile_Cover_Kind__Unknown
+} Tile_Cover_Kind;
 
 ///
 /// These specify the various kinds of Game_Actions

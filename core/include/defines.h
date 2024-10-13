@@ -1725,6 +1725,32 @@ typedef struct Tile_t Tile;
 
 typedef uint8_t Tile_Flags__u8;
 
+typedef void (*f_Tile_Handler__Interact)(
+        Game *p_game,
+        Tile *p_tile,
+        Entity *p_entity);
+
+typedef void (*f_Tile_Handler__Touch)(
+        Game *p_game,
+        Tile *p_tile,
+        Entity *p_entity);
+
+///
+/// Manages the logic associated with special tiles.
+/// IE. lava tile, water tile, chest tile, etc.
+///
+typedef struct Tile_Logic_Manager_t {
+    f_Tile_Handler__Interact tile_interaction__handlers[
+        Tile_Kind__Unknown];
+    f_Tile_Handler__Interact tile_touch__handlers[
+        Tile_Kind__Unknown];
+
+    f_Tile_Handler__Interact tile_cover_interaction__handlers[
+        Tile_Cover_Kind__Unknown];
+    f_Tile_Handler__Interact tile_cover_touch__handlers[
+        Tile_Cover_Kind__Unknown];
+} Tile_Logic_Manager;
+
 typedef struct Tile_t {
     enum Tile_Kind                  
         the_kind_of_tile__this_tile_is          :10;

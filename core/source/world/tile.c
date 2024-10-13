@@ -4,7 +4,45 @@
 #include <world/chunk_manager.h>
 #include <vectors.h>
 
-static Tile inline *get_p_tile_from__chunk_node_for__tile_render(
+void initialize_tile(Tile *tile, 
+        enum Tile_Kind kind_of_tile,
+        enum Tile_Cover_Kind kind_of_tile_cover,
+        Tile_Flags__u8 flags) {
+    tile->tile_flags = flags;
+    tile->the_kind_of_tile__this_tile_is =
+        kind_of_tile;
+    tile->the_kind_of_tile_cover__this_tile_has =
+        kind_of_tile_cover;
+}
+
+Index__u16 get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
+        Tile_Wall_Adjacency_Code__u16 wall_adjacency) {
+    return 
+        TILE_SHEET_TILE_WIDTH
+        * (4
+        * (1 + (wall_adjacency & TILE_RENDER__WALL_ADJACENCY__COVER_MASK))
+        - 1)
+        ;
+}
+
+bool is_tile_kind__illegal(
+        Tile_Kind the_kind_of__tile) {
+    return
+        the_kind_of__tile < Tile_Kind__None
+        || the_kind_of__tile >= Tile_Kind__Unknown
+        ;
+}
+
+bool is_tile_cover_kind__illegal(
+        Tile_Cover_Kind the_kind_of__tile_cover_kind) {
+    return
+        the_kind_of__tile_cover_kind < Tile_Cover_Kind__None
+        || the_kind_of__tile_cover_kind >= Tile_Cover_Kind__Unknown
+        ;
+}
+
+static inline 
+Tile *get_p_tile_from__chunk_node_for__tile_render(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,
         Local_Tile_Vector__3u8 local_tile_vector__3u8,
         Tile_Render_Result *p_render_result) {

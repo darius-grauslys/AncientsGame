@@ -6,34 +6,19 @@
 #include <stdint.h>
 #include <defines.h>
 
-static inline 
 void initialize_tile(Tile *tile, 
         enum Tile_Kind kind_of_tile,
         enum Tile_Cover_Kind kind_of_tile_cover,
-        Tile_Flags__u8 flags) {
-    tile->tile_flags = flags;
-    tile->the_kind_of_tile__this_tile_is =
-        kind_of_tile;
-    tile->the_kind_of_tile_cover__this_tile_has =
-        kind_of_tile_cover;
-}
+        Tile_Flags__u8 flags);
 
-static inline 
-bool is_tile_cover__a_wall(
-        enum Tile_Cover_Kind kind_of_tile_cover) {
-    return kind_of_tile_cover & TILE_COVER__BIT_IS_WALL;
-}
-
-static inline 
 Index__u16 get_tile_sheet_index_offset_for__cover_from__wall_adjacency(
-        Tile_Wall_Adjacency_Code__u16 wall_adjacency) {
-    return 
-        TILE_SHEET_TILE_WIDTH
-        * (4
-        * (1 + (wall_adjacency & TILE_RENDER__WALL_ADJACENCY__COVER_MASK))
-        - 1)
-        ;
-}
+        Tile_Wall_Adjacency_Code__u16 wall_adjacency);
+
+bool is_tile_kind__illegal(
+        Tile_Kind the_kind_of__tile);
+
+bool is_tile_cover_kind__illegal(
+        Tile_Cover_Kind the_kind_of__tile_cover_kind);
 
 static inline Index__u16 
 get_tile_sheet_index_offset_for__sprite_cover_from__wall_adjacency(
@@ -50,6 +35,13 @@ bool does_wall_adjacency_require__vflip(
         (bool)(wall_adjacency
                 & TILE_RENDER__WALL_ADJACENCY__BIT_VFLIP);
 }
+
+static inline 
+bool is_tile_cover__a_wall(
+        enum Tile_Cover_Kind kind_of_tile_cover) {
+    return kind_of_tile_cover & TILE_COVER__BIT_IS_WALL;
+}
+
 
 static inline 
 bool does_tile__have_a_wall(
