@@ -2,8 +2,12 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "platform.h"
+#include "platform_defines.h"
+#include "serialization/serialization_request.h"
+#include "serialization/serializer.h"
 #include "world/camera.h"
 #include "world/chunk_vectors.h"
+#include "world/serialization/world_directory.h"
 #include <world/world.h>
 #include <entity/entity_manager.h>
 #include <collisions/collision_manager.h>
@@ -17,11 +21,28 @@
 #include <debug/debug.h>
 #include <vectors.h>
 
+void m_serialize_handler__world(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
+void m_deserialize_handler__world(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer);
+
 void initialize_world(
         Game *p_game,
         World *p_world,
         PLATFORM_Graphics_Window 
             *p_PLATFORM_graphics_window_for__world) {
+
+    intialize_serializer(
+            &p_world->_serializer, 
+            sizeof(World), 
+            0, 
+            m_serialize_handler__world, 
+            m_deserialize_handler__world);
+
     // TODO: take world name in by world_parameters
     strncpy(p_world->name, "default_world", WORLD_NAME_MAX_SIZE_OF);
     p_world->length_of__world_name = strnlen(p_world->name, WORLD_NAME_MAX_SIZE_OF);
@@ -258,4 +279,195 @@ void teleport_player(
             &get_p_world_from__game(p_game)
             ->camera, 
             get_p_local_player_from__game(p_game));
+}
+
+void save_world(
+        Game *p_game) {
+    save_all_chunks(
+            p_game, 
+            get_p_chunk_manager_from__game(p_game));
+
+    char path[MAX_LENGTH_OF__IO_PATH];
+    stat_world_header_file(
+            p_game, 
+            path);
+
+    Serialization_Request *p_serialization_request =
+        PLATFORM_allocate_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game));
+
+    if (!p_serialization_request) {
+        debug_error("save_world, failed to allocated p_serialization_request.");
+        return;
+    }
+
+    enum PLATFORM_Open_File_Error error =
+        PLATFORM_open_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                path, 
+                "wb", 
+                p_serialization_request);
+
+    if (error) {
+        PLATFORM_release_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_serialization_request);
+        debug_error("save_world, IO error: %d", error);
+        return;
+    }
+    
+    set_serialization_request_as__fire_and_forget(
+            p_serialization_request);
+    set_serialization_request_as__using_serializer(
+            p_serialization_request);
+    set_serialization_request_as__write(
+            p_serialization_request);
+    p_serialization_request->p_serializer =
+        &get_p_world_from__game(p_game)->_serializer;
+}
+
+void load_world(
+        Game *p_game) {
+    char path[MAX_LENGTH_OF__IO_PATH];
+    Index__u32 index_of__path_append =
+        stat_world_header_file(
+                p_game, 
+                path);
+    
+    if (!index_of__path_append) {
+        debug_error("load_world, failed to stat world header file.");
+        return;
+    }
+
+    Serialization_Request *p_serialization_request =
+        PLATFORM_allocate_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game));
+
+    if (!p_serialization_request) {
+        debug_error("load_world, failed to allocated p_serialization_request.");
+        return;
+    }
+
+    enum PLATFORM_Open_File_Error error =
+        PLATFORM_open_file(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                path, 
+                "rb", 
+                p_serialization_request);
+
+    if (error) {
+        PLATFORM_release_serialization_request(
+                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_serialization_request);
+        debug_error("load_world, IO error: %d", error);
+        return;
+    }
+    
+    set_serialization_request_as__fire_and_forget(
+            p_serialization_request);
+    set_serialization_request_as__using_serializer(
+            p_serialization_request);
+    set_serialization_request_as__read(
+            p_serialization_request);
+    p_serialization_request->p_serializer =
+        &get_p_world_from__game(p_game)->_serializer;
+}
+
+void m_serialize_handler__world(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer) {
+    World *p_world = get_p_world_from__game(p_game);
+
+    Quantity__u32 length_of__read = WORLD_NAME_MAX_SIZE_OF;
+    PLATFORM_write_file(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            (u8*)p_world->name, 
+            length_of__read, 
+            1, 
+            p_serialization_request
+            ->p_file_handler);
+
+    // TODO: verify the read lengths for errors.
+    length_of__read = sizeof(
+            p_game->repeatable_pseudo_random.seed__initial);
+    PLATFORM_write_file(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            (u8*)&p_game->repeatable_pseudo_random.seed__initial, 
+            length_of__read, 
+            1, 
+            p_serialization_request
+            ->p_file_handler);
+
+    length_of__read = sizeof(
+            p_game->repeatable_pseudo_random.seed__current_random);
+    PLATFORM_write_file(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            (u8*)&p_game->repeatable_pseudo_random.seed__current_random, 
+            length_of__read, 
+            1, 
+            p_serialization_request
+            ->p_file_handler);
+
+    // TODO: save other players if any.
+    Entity *p_local_player =
+        get_p_local_player_from__game(p_game);
+
+    p_local_player->_serializer.m_serialize_handler(
+            p_game,
+            p_serialization_request,
+            &p_local_player->_serializer);
+}
+
+void m_deserialize_handler__world(
+        Game *p_game,
+        Serialization_Request *p_serialization_request,
+        Serializer *p_this_serializer) {
+    World *p_world = get_p_world_from__game(p_game);
+    Entity *p_entity =
+        allocate_entity_into__world(
+                p_game, 
+                p_world,
+                Entity_Kind__Player, 
+                VECTOR__3i32F4__0_0_0);
+
+    Quantity__u32 length_of__read = WORLD_NAME_MAX_SIZE_OF;
+    PLATFORM_read_file(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            (u8*)p_world->name, 
+            &length_of__read, 
+            1, 
+            p_serialization_request
+            ->p_file_handler);
+
+    // TODO: verify the read lengths for errors.
+    length_of__read = sizeof(
+            p_game->repeatable_pseudo_random.seed__initial);
+    PLATFORM_read_file(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            (u8*)&p_game->repeatable_pseudo_random.seed__initial, 
+            &length_of__read, 
+            1, 
+            p_serialization_request
+            ->p_file_handler);
+
+    length_of__read = sizeof(
+            p_game->repeatable_pseudo_random.seed__current_random);
+    PLATFORM_read_file(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            (u8*)&p_game->repeatable_pseudo_random.seed__current_random, 
+            &length_of__read, 
+            1, 
+            p_serialization_request
+            ->p_file_handler);
+
+    if (!p_entity) {
+        debug_abort("m_deserialize_handler__world, failed to allocate player.");
+        return;
+    }
+
+    p_entity->_serializer.m_deserialize_handler(
+            p_game,
+            p_serialization_request,
+            &p_entity->_serializer);
 }

@@ -58,6 +58,13 @@ bool poll_chunk_manager_for__tile_collision(
 ///
 /// This will flush all loaded chunks to the file system.
 ///
+void save_all_chunks(
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager);
+
+///
+/// This will flush all loaded chunks to the file system.
+///
 void move_chunk_manager_to__chunk_position(
         Game *p_game,
         Chunk_Manager *p_chunk_manager,

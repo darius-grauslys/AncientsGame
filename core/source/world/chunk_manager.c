@@ -763,6 +763,54 @@ void move_chunk_manager(
     }
 }
 
+void save_all_chunks(
+        Game *p_game,
+        Chunk_Manager *p_chunk_manager) {
+    Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__beginning =
+        p_chunk_manager
+        ->p_most_south_western__chunk_map_node;
+    Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__current_row =
+        p_chunk_map_node__beginning;
+    do {
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__current_column =
+            p_chunk_map_node__current_row;
+        do {
+            // TODO: save entity data if needed.
+            if (!is_chunk__updated(
+                        p_chunk_map_node__current_column
+                        ->p_chunk__here)) {
+                continue;
+            }
+            char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
+            Quantity__u32 length_of__path_to__chunk =
+                stat_chunk_directory(
+                        p_game,
+                        p_chunk_map_node__current_column,
+                        file_path_to__chunk);
+            if (length_of__path_to__chunk) {
+                if (append_chunk_file__tiles_to__path(
+                        file_path_to__chunk, 
+                        length_of__path_to__chunk, 
+                        sizeof(file_path_to__chunk))) {
+                    save_chunk(
+                            p_game,
+                            p_chunk_map_node__current_column,
+                            file_path_to__chunk);
+                }
+            }
+            p_chunk_map_node__current_column =
+                p_chunk_map_node__current_column
+                ->p_east__chunk_map_node;
+        } while (
+                p_chunk_map_node__current_column
+                != p_chunk_map_node__current_row);
+        p_chunk_map_node__current_row =
+            p_chunk_map_node__current_row
+            ->p_north__chunk_map_node;
+    } while(p_chunk_map_node__current_row
+            != p_chunk_map_node__beginning);
+}
+
 void move_chunk_manager_to__chunk_position(
         Game *p_game,
         Chunk_Manager *p_chunk_manager,

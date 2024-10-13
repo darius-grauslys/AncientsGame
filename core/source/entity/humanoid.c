@@ -1,5 +1,6 @@
 #include "defines_weak.h"
 #include "entity/handlers/body/body_handler__living.h"
+#include "entity/handlers/serialization/serialization_handler__humanoid__default.h"
 #include "game.h"
 #include "inventory/item.h"
 #include "inventory/equipment.h"
@@ -24,6 +25,10 @@ void initialize_entity_as__humanoid(
             position__3i32F4, 
             width, 
             height);
+    p_entity->_serializer.m_serialize_handler =
+        m_serialize_handler__humanoid__default;
+    p_entity->_serializer.m_deserialize_handler =
+        m_deserialize_handler__humanoid__default;
     set_entity__game_action_handler(
             p_entity, 
             m_humanoid_handler__game_action_handler);

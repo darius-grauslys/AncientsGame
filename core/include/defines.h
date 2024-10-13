@@ -1873,6 +1873,7 @@ typedef struct Chunk_Manager_t {
 typedef char World_Name_String[WORLD_NAME_MAX_SIZE_OF];
 
 typedef struct World_t {
+    Serializer _serializer;
     Entity_Manager entity_manager;
     Chunk_Manager chunk_manager;
     Collision_Manager collision_manager;

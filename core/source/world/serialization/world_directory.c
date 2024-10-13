@@ -38,7 +38,7 @@ void append_hex_value_to__path(
     }
 }
 
-Index__u8 stat_chunk_directory(
+Index__u32 stat_chunk_directory(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer) {
@@ -117,7 +117,7 @@ Index__u8 stat_chunk_directory(
     Chunk_Vector__3i32 chunk_vector_descend__3i32 =
         chunk_vector_quad__3i32;
 
-    for(Quantity__u8 level_of__recursion = 0;
+    for(Quantity__u32 level_of__recursion = 0;
             level_of__recursion < 6;
             level_of__recursion++) {
         if (chunk_vector__3i32.x__i32
@@ -191,12 +191,12 @@ Index__u8 stat_chunk_directory(
 }
 
 static inline
-Index__u8 stat_chunk_file(
+Index__u32 stat_chunk_file(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer,
         char file_character) {
-    Index__u8 end_of__path = 
+    Index__u32 end_of__path = 
         stat_chunk_directory(
                 p_game, 
                 p_chunk_map_node, 
@@ -216,7 +216,47 @@ Index__u8 stat_chunk_file(
     return end_of__path+2;
 }
 
-Index__u8 stat_chunk_file__tiles(
+Index__u32 stat_world_header_file(
+        Game *p_game,
+        char *buffer) {
+    Index__u32 index_of__path_append = 0;
+
+    PLATFORM_append_base_directory_to__path(
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            buffer, 
+            &index_of__path_append);
+
+    buffer[index_of__path_append++] = '/';
+
+    // TODO: bounds check index_of__path_append + WORLD_NAME_MAX_SIZE_OF
+    //                      < MAX_LENGTH_OF__IO_PATH
+    strncpy(&buffer[index_of__path_append], 
+            get_p_world_from__game(p_game)->name,
+            WORLD_NAME_MAX_SIZE_OF);
+
+    index_of__path_append += 
+        get_p_world_from__game(p_game)->length_of__world_name;
+
+    DIR *p_dir;
+    if (!(p_dir = opendir(buffer))) {
+        if (mkdir(buffer, 0777)) {
+            return 0;
+        }
+    } else {
+        closedir(p_dir);
+    }
+
+    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = 'h';
+
+    if (access(buffer, F_OK)) {
+        return false;
+    }
+    
+    return index_of__path_append;
+}
+
+Index__u32 stat_chunk_file__tiles(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer) {
@@ -227,7 +267,7 @@ Index__u8 stat_chunk_file__tiles(
             't');
 }
 
-Index__u8 stat_chunk_file__entities(
+Index__u32 stat_chunk_file__entities(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer) {
@@ -238,7 +278,7 @@ Index__u8 stat_chunk_file__entities(
             'e');
 }
 
-Index__u8 stat_chunk_file__inventories(
+Index__u32 stat_chunk_file__inventories(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer) {
@@ -247,4 +287,9 @@ Index__u8 stat_chunk_file__inventories(
             p_chunk_map_node,
             buffer,
             'i');
+}
+
+void save_world(
+        Game *p_game) {
+    
 }

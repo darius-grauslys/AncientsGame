@@ -1,6 +1,7 @@
 #include "audio/audio_effect.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/handlers/serialization/serialization_handler__entity__default.h"
 #include "game.h"
 #include "inventory/equipment.h"
 #include "serialization/serialized_field.h"
@@ -64,6 +65,10 @@ void initialize_entity(
             &p_entity->_serialization_header,
             p_entity->_serialization_header.uuid,
             sizeof(Entity));
+    p_entity->_serializer.m_serialize_handler =
+        m_serialize_handler__entity__default;
+    p_entity->_serializer.m_deserialize_handler =
+        m_deserialize_handler__entity__default;
 
     p_entity->the_kind_of_entity__this_entity_is =
         kind_of_entity;
