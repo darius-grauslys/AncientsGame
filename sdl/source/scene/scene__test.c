@@ -14,6 +14,8 @@
 #include "rendering/sdl_gfx_context.h"
 #include "sdl_defines.h"
 #include "vectors.h"
+#include "world/serialization/world_directory.h"
+#include "world/world.h"
 
 void m_load_scene_as__test_handler(
         Scene *p_this_scene,
@@ -34,30 +36,20 @@ void m_enter_scene_handler_as__test(
             get_p_world_from__game(p_game),
             SDL_get_main_graphics_window_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
-
+    load_world(p_game);
+    while(!get_p_local_player_from__game(p_game)) {
+        manage_game__pre_render(p_game); // handle loading first.
+    }
     Entity *p_player = 
-        allocate_entity_into__world(
-                p_game,
-                get_p_world_from__game(p_game),
-                Entity_Kind__Player,
-                get_vector__3i32F4_using__i32(0, 0, 0));
-
-    p_game->world.entity_manager
-        .p_local_player =
-        p_player;
-
-    set_camera_to__track_this__entity(
-            &p_game->world.camera, 
-            p_player);
+        p_game->world.entity_manager
+            .p_local_player;
     set_camera_to__track_this__entity(
             p_game->p_PLATFORM_gfx_context->p_active_camera,
             p_player);
-
-    move_chunk_manager(
-            p_game,
-            &p_game->world.chunk_manager, 
-            DIRECTION__SOUTH_WEST,
-            2);
+    teleport_player(
+            p_game, 
+            get_p_local_player_from__game(p_game)
+            ->hitbox.position__3i32F4);
 
     PLATFORM_update_chunks(
             get_p_PLATFORM_gfx_context_from__game(p_game),
@@ -102,15 +94,16 @@ void m_enter_scene_handler_as__test(
 
         if (is_input__consume_released(
                     get_p_input_from__game(p_game))) {
-            Hearts_Damaging_Specifier hearts_damaging_specifier;
-            hearts_damaging_specifier.hearts_damaging__flags =
-                HEARTS_DAMAGING_FLAG__IS_CHAOS;
-            hearts_damaging_specifier.quantity_of__damage = 20;
-            invoke_action__apply_heart_damage_to__entity(
-                    p_game, 
-                    get_p_local_player_from__game(p_game), 
-                    get_p_local_player_from__game(p_game), 
-                    &hearts_damaging_specifier);
+            save_world(p_game);
+            // Hearts_Damaging_Specifier hearts_damaging_specifier;
+            // hearts_damaging_specifier.hearts_damaging__flags =
+            //     HEARTS_DAMAGING_FLAG__IS_CHAOS;
+            // hearts_damaging_specifier.quantity_of__damage = 20;
+            // invoke_action__apply_heart_damage_to__entity(
+            //         p_game, 
+            //         get_p_local_player_from__game(p_game), 
+            //         get_p_local_player_from__game(p_game), 
+            //         &hearts_damaging_specifier);
         }
 
         manage_world(p_game);

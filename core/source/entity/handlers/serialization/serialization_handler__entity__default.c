@@ -26,11 +26,13 @@ void m_serialize_handler__entity__default(
         Entity_Flags__u8 entity_flags;
         Identifier__u16 identifier;
         enum Entity_Kind the_kind_of_entity;
+        Vector__3i32F4 position__3i32F4;
     } field;
     
     field.entity_flags = p_entity->entity_flags;
     field.identifier = p_entity->identifier;
     field.the_kind_of_entity = p_entity->the_kind_of_entity__this_entity_is;
+    field.position__3i32F4 = p_entity->hitbox.position__3i32F4;
 
     error = 
         PLATFORM_write_file(
@@ -66,6 +68,7 @@ void m_deserialize_handler__entity__default(
         Entity_Flags__u8 entity_flags;
         Identifier__u16 identifier;
         enum Entity_Kind the_kind_of_entity;
+        Vector__3i32F4 position__3i32F4;
     } field;
 
     length_of__read =
@@ -83,5 +86,7 @@ void m_deserialize_handler__entity__default(
     p_entity->identifier =
         field.identifier;
     p_entity->the_kind_of_entity__this_entity_is =
-        field.entity_flags;
+        field.the_kind_of_entity;
+    p_entity->hitbox.position__3i32F4 =
+        field.position__3i32F4;
 }

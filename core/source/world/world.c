@@ -1,6 +1,7 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/handlers/entity_handlers.h"
 #include "platform.h"
 #include "platform_defines.h"
 #include "serialization/serialization_request.h"
@@ -335,7 +336,21 @@ void load_world(
                 path);
     
     if (!index_of__path_append) {
-        debug_error("load_world, failed to stat world header file.");
+        // this is a fresh world.
+        World *p_world = get_p_world_from__game(p_game);
+        Entity *p_player =
+            allocate_entity_into__world(
+                    p_game, 
+                    p_world,
+                    Entity_Kind__Player, 
+                    VECTOR__3i32F4__0_0_0);
+
+        p_world->entity_manager.p_local_player =
+            p_player;
+
+        set_camera_to__track_this__entity(
+                &p_game->world.camera, 
+                p_player);
         return;
     }
 
@@ -424,12 +439,19 @@ void m_deserialize_handler__world(
         Serialization_Request *p_serialization_request,
         Serializer *p_this_serializer) {
     World *p_world = get_p_world_from__game(p_game);
-    Entity *p_entity =
+    Entity *p_player =
         allocate_entity_into__world(
                 p_game, 
                 p_world,
                 Entity_Kind__Player, 
                 VECTOR__3i32F4__0_0_0);
+
+    p_world->entity_manager.p_local_player =
+        p_player;
+
+    set_camera_to__track_this__entity(
+            &p_game->world.camera, 
+            p_player);
 
     Quantity__u32 length_of__read = WORLD_NAME_MAX_SIZE_OF;
     PLATFORM_read_file(
@@ -461,13 +483,13 @@ void m_deserialize_handler__world(
             p_serialization_request
             ->p_file_handler);
 
-    if (!p_entity) {
+    if (!p_player) {
         debug_abort("m_deserialize_handler__world, failed to allocate player.");
         return;
     }
 
-    p_entity->_serializer.m_deserialize_handler(
+    p_player->_serializer.m_deserialize_handler(
             p_game,
             p_serialization_request,
-            &p_entity->_serializer);
+            &p_player->_serializer);
 }

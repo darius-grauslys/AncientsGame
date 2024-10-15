@@ -28,6 +28,10 @@ void resolve_chunk(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
+void enqueue_chunk_map_node_for__serialization(
+        Chunk_Manager *p_chunk_manager,
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
+
 void initialize_chunk_manager(
         Game *p_game,
         Chunk_Manager *p_chunk_manager) {
@@ -60,10 +64,6 @@ void initialize_chunk_manager(
             p_chunk_map_node->p_chunk__here = p_chunk__here;
             p_chunk_map_node->position_of__chunk_3i32 =
                 get_vector__3i32(x,y,0);
-
-            resolve_chunk(
-                    p_game,
-                    p_chunk_map_node);
 
             Index__u32 x__east, x__west, y__north, y__south;
 
@@ -257,6 +257,9 @@ void save_chunk(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *p_file_path_to__chunk) {
+    enqueue_chunk_map_node_for__serialization(
+            get_p_chunk_manager_from__game(p_game), 
+            p_chunk_map_node);
     Serialization_Request *p_serialization_request =
         PLATFORM_allocate_serialization_request(
                 get_p_PLATFORM_file_system_context_from__game(p_game));
@@ -294,6 +297,9 @@ void save_chunk(
             p_serialization_request);
     p_serialization_request->p_serializer =
         &p_chunk_map_node->p_chunk__here->_serializer;
+
+    set_chunk_as__awaiting_serialization(
+            p_chunk_map_node->p_chunk__here);
 }
 
 void load_chunk(
@@ -304,7 +310,9 @@ void load_chunk(
         PLATFORM_allocate_serialization_request(
                 get_p_PLATFORM_file_system_context_from__game(p_game));
     if (!p_serialization_request) {
-        debug_error("load_chunk failed to allocate serialization request.");
+        debug_error("load_chunk, failed to allocate serialization request (%d, %d).",
+                p_chunk_map_node->position_of__chunk_3i32.x__i32,
+                p_chunk_map_node->position_of__chunk_3i32.y__i32);
         clear_chunk_flags(p_chunk_map_node->p_chunk__here);
         set_chunk_as__visually_updated(p_chunk_map_node->p_chunk__here);
         return;
@@ -337,6 +345,9 @@ void load_chunk(
             p_serialization_request);
     p_serialization_request->p_serializer =
         &p_chunk_map_node->p_chunk__here->_serializer;
+
+    set_chunk_as__awaiting_deserialization(
+            p_chunk_map_node->p_chunk__here);
 }
 
 void resolve_chunk(
@@ -408,13 +419,13 @@ void enqueue_chunk_map_node_for__serialization(
     Index__u32 index_of__chunk_map_node_ptr = 0;
     while (*p_chunk_map_node_ptr
             && index_of__chunk_map_node_ptr++
-            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS) {
+            < CHUNK_MANAGER__QUANTITY_OF_IO_QUEUED_CHUNKS) {
         p_chunk_map_node_ptr++;
     }
 
 #ifndef NDEBUG
     if (index_of__chunk_map_node_ptr
-            >= CHUNK_MANAGER__QUANTITY_OF_CHUNKS) {
+            >= CHUNK_MANAGER__QUANTITY_OF_IO_QUEUED_CHUNKS) {
         debug_abort("enqueue_chunk_map_node_for__serialization, failed to enqueue: %d", index_of__chunk_map_node_ptr);
         return;
     }
@@ -441,7 +452,7 @@ void dequeue_chunk_map_node_for__serialization(
             p_chunk_map_node_ptr_of__dequeue =
                 p_chunk_map_node_ptr;
     } while (index_of__chunk_map_node_ptr++
-            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS
+            < CHUNK_MANAGER__QUANTITY_OF_IO_QUEUED_CHUNKS
             && *(++p_chunk_map_node_ptr));
     p_chunk_map_node_ptr--;
 
@@ -488,7 +499,7 @@ skip:
                 goto skip;
         }
     } while (++index_of__chunk_map_node_ptr
-            < CHUNK_MANAGER__QUANTITY_OF_CHUNKS
+            < CHUNK_MANAGER__QUANTITY_OF_IO_QUEUED_CHUNKS
             && *(++p_chunk_map_node_ptr));
     return (bool)(p_chunk_manager->ptr_array_queue__serialized_nodes[0]);
 }
@@ -500,9 +511,6 @@ void replace_chunk(
         i32 y__new) {
 
     if (is_chunk__updated(p_chunk_map_node->p_chunk__here)) {
-        enqueue_chunk_map_node_for__serialization(
-                get_p_chunk_manager_from__game(p_game), 
-                p_chunk_map_node);
         char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
         memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
         Quantity__u32 length_of__path_to__chunk =
@@ -775,13 +783,8 @@ void save_all_chunks(
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__current_column =
             p_chunk_map_node__current_row;
         do {
-            // TODO: save entity data if needed.
-            if (!is_chunk__updated(
-                        p_chunk_map_node__current_column
-                        ->p_chunk__here)) {
-                continue;
-            }
             char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
+            memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
             Quantity__u32 length_of__path_to__chunk =
                 stat_chunk_directory(
                         p_game,
@@ -1046,3 +1049,8 @@ Tile *get_p_tile_from__chunk_manager_with__ray_3i32F20(
                 0);
 }
 
+bool is_chunk_manager__resolving_chunks(
+        Chunk_Manager *p_chunk_manager) {
+    return p_chunk_manager->ptr_array_queue__serialized_nodes[0]
+        != 0;
+}

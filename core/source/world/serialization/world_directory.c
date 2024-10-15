@@ -68,6 +68,7 @@ Index__u32 stat_chunk_directory(
     DIR *p_dir;
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
+            debug_error("stat_chunk_directory, failed default_world");
             return 0;
         }
     } else {
@@ -96,6 +97,7 @@ Index__u32 stat_chunk_directory(
 
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
+            debug_error("stat_chunk_directory, failed region");
             return 0;
         }
     } else {
@@ -104,18 +106,14 @@ Index__u32 stat_chunk_directory(
     
     Chunk_Vector__3i32 chunk_vector__3i32 =
         p_chunk_map_node->position_of__chunk_3i32;
-    if (chunk_vector__3i32.x__i32 < 0)
-        chunk_vector__3i32.x__i32 *= -1;
     chunk_vector__3i32.x__i32 &= MASK(8);
-    if (chunk_vector__3i32.y__i32 < 0)
-        chunk_vector__3i32.y__i32 *= -1;
     chunk_vector__3i32.y__i32 &= MASK(8);
 
     Chunk_Vector__3i32 chunk_vector_quad__3i32 =
-        get_vector__3i32(127, 127, 127);
+        get_vector__3i32(128, 128, 128);
 
     Chunk_Vector__3i32 chunk_vector_descend__3i32 =
-        chunk_vector_quad__3i32;
+        get_vector__3i32(127, 127, 127);
 
     for(Quantity__u32 level_of__recursion = 0;
             level_of__recursion < 6;
@@ -153,6 +151,9 @@ Index__u32 stat_chunk_directory(
                 buffer);
         if (!(p_dir = opendir(buffer))) {
             if (mkdir(buffer, 0777)) {
+            debug_error("stat_chunk_directory, failed recur: %d, %d",
+                    chunk_vector_descend__3i32.x__i32,
+                    chunk_vector_descend__3i32.y__i32);
                 return 0;
             }
         } else {
@@ -178,6 +179,7 @@ Index__u32 stat_chunk_directory(
             buffer);
     if (!(p_dir = opendir(buffer))) {
         if (mkdir(buffer, 0777)) {
+            debug_error("stat_chunk_directory, leaf directory");
             return 0;
         }
     } else {
@@ -190,7 +192,6 @@ Index__u32 stat_chunk_directory(
         index_of__path_append;
 }
 
-static inline
 Index__u32 stat_chunk_file(
         Game *p_game,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
@@ -287,9 +288,4 @@ Index__u32 stat_chunk_file__inventories(
             p_chunk_map_node,
             buffer,
             'i');
-}
-
-void save_world(
-        Game *p_game) {
-    
 }

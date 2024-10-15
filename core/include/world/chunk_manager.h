@@ -56,6 +56,13 @@ bool poll_chunk_manager_for__tile_collision(
         Entity *p_entity);
 
 ///
+/// Returns true if some chunks are not ready yet.
+/// Useful for teleportation, and initially loading the world.
+///
+bool is_chunk_manager__resolving_chunks(
+        Chunk_Manager *p_chunk_manager);
+
+///
 /// This will flush all loaded chunks to the file system.
 ///
 void save_all_chunks(

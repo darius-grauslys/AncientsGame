@@ -158,7 +158,7 @@ void m_deserialize__inventory(
     }
 
     for (Index__u8 index_of__item_stack = 0;
-            index_of__item_stack < INVENTORY_ITEM_MAXIMUM_QUANTITY_OF;
+            index_of__item_stack < quantity_of__serialized_item_stacks;
             index_of__item_stack++) {
         Item_Stack *p_item_stack =
             get_p_item_stack_from__inventory_by__index(
@@ -298,7 +298,7 @@ void remove_p_item_stack_from__inventory(
         Inventory *p_inventory,
         Item_Stack *p_item_stack) {
 #ifndef NDEBUG
-    if (p_inventory){ 
+    if (!p_inventory){ 
         debug_abort("remove_p_item_stack_from__inventory, p_inventory is null.");
         return;
     }

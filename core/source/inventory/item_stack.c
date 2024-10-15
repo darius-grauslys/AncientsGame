@@ -142,13 +142,6 @@ void m_deserialize__item_stack(
         Quantity__u8 max_quantity_of__items;
     } field;
 
-    field.the_kind_of__item = 
-        p_item_stack->item.the_kind_of_item__this_item_is;
-    field.quantity_of__items =
-        p_item_stack->quantity_of__items;
-    field.max_quantity_of__items =
-        p_item_stack->max_quantity_of__items;
-
     Quantity__u32 length_of__read__expected =
         length_of__read =
         sizeof(field);

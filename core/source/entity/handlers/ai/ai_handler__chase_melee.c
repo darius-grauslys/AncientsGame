@@ -38,7 +38,6 @@ void m_entity_ai_handler__chase_melee(
 
     if (is_p_serialized_field__linked(
                 &this_chasing_melee->goal__s_entity_ptr)) {
-    debug_info(">>>m_entity_ai_handler[chase]");
         Entity *p_target = 
             this_chasing_melee
             ->goal__s_entity_ptr
@@ -106,13 +105,11 @@ void m_entity_ai_handler__chase_melee(
                     AUDIO_FLAGS__NONE, 
                     get_timer__u32(8));
         }
-        debug_info("m_entity_ai_handler[chase](attack)<<<");
         return;
     }
 
     if (is_vectors_3i32F4__out_of_bounds(
                 this_chasing_melee->goal__position__3i32F4)) {
-        debug_info("m_entity_ai_handler[chase](bounds)<<<");
         return;
     }
 
@@ -120,7 +117,6 @@ void m_entity_ai_handler__chase_melee(
                 subtract_vectors__3i32F4(
                     this_chasing_melee->hitbox.position__3i32F4, 
                     this_chasing_melee->goal__position__3i32F4))) {
-        debug_info("m_entity_ai_handler[chase](quit)<<<");
         return;
     }
 
@@ -145,5 +141,4 @@ void m_entity_ai_handler__chase_melee(
             p_game, 
             this_chasing_melee, 
             movement__3i32F4);
-    debug_info("m_entity_ai_handler[chase]<<<");
 }

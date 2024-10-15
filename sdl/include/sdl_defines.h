@@ -225,7 +225,7 @@ typedef struct PLATFORM_Audio_Context_t {
 
 } PLATFORM_Audio_Context;
 
-#define MAX_QUANTITY_OF__SERIALIZATION_REQUESTS 128
+#define MAX_QUANTITY_OF__SERIALIZATION_REQUESTS 256
 
 typedef struct PLATFORM_File_System_Context_t {
     Serialization_Request SDL_serialization_requests[

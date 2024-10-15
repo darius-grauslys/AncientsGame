@@ -260,9 +260,9 @@ void m_deserialize__chunk(
 
     if (length_of__read
             != sizeof(p_chunk->tiles)) {
-        debug_error("m_serialize__chunk, bad read length: %d/%d", 
-                length_of__read,
-                sizeof(p_chunk->tiles));
+        // debug_error("m_serialize__chunk, bad read length: %d/%d", 
+        //         length_of__read,
+        //         sizeof(p_chunk->tiles));
         set_chunk_as__inactive(p_chunk);
         set_chunk_as__visually_updated(p_chunk);
         return;

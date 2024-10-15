@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "entity/handlers/serialization/serialization_handler__living__default.h"
 #include "game.h"
+#include "inventory/inventory_manager.h"
 #include "serialization/serialized_field.h"
 #include <entity/handlers/serialization/serialization_handler__humanoid__default.h>
 
@@ -52,6 +53,20 @@ void m_serialize_handler__humanoid__default(
                 sizeof(field),
                 1, 
                 p_file_handler);
+
+    if (!resolve_s_inventory_ptr_to__inventory_manager(
+                get_p_inventory_manager_from__game(p_game), 
+                &p_humanoid->s_humanoid__inventory_ptr)) {
+        return;
+    }
+
+    Inventory *p_inventory =
+        p_humanoid->s_humanoid__inventory_ptr.p_serialized_field__inventory;
+
+    p_inventory->_serializer.m_serialize_handler(
+            p_game,
+            p_serialization_request,
+            &p_inventory->_serializer);
 }
 
 void m_deserialize_handler__humanoid__default(
@@ -95,4 +110,21 @@ void m_deserialize_handler__humanoid__default(
         field.kind_of_homeostasis__update;
     p_humanoid->humanoid__homeostasis__timer_u16 =
         field.humanoid__homeostasis__timer_u16;
+
+    Inventory *p_inventory =
+        allocate_p_inventory_in__inventory_manager(
+                get_p_inventory_manager_from__game(p_game));
+
+    if (!p_inventory)
+        return;
+
+    initialize_serialized_field(
+            &p_humanoid->s_humanoid__inventory_ptr, 
+            p_inventory, 
+            p_inventory->_serialization_header.uuid);
+
+    p_inventory->_serializer.m_deserialize_handler(
+            p_game,
+            p_serialization_request,
+            &p_inventory->_serializer);
 }

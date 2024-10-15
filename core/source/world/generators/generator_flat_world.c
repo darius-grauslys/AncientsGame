@@ -446,6 +446,13 @@ void f_chunk_generator__flat_world(
         p_chunk_map_node
         ->p_chunk__here;
 
+    bool is_chunk__0_0 =
+        p_chunk_map_node
+        ->position_of__chunk_3i32.x__i32 == 0
+        && p_chunk_map_node
+        ->position_of__chunk_3i32.y__i32 == 0
+        ;
+
     Signed_Index__i32 x__index =
         p_chunk_map_node
         ->position_of__chunk_3i32.x__i32;
@@ -460,6 +467,8 @@ void f_chunk_generator__flat_world(
                 p_game, 
                 x__index, 
                 y__index) & 127;
+    if (is_chunk__0_0)
+        chance_for__shrine = 1;
 
     if (chance_for__shrine < 1
             && (x__index < 0
@@ -860,5 +869,50 @@ void f_chunk_generator__flat_world(
                     break;
             }
         }
+    }
+
+    if (!is_chunk__0_0)
+        return;
+
+    Tile *p_tile =
+        &p_chunk->tiles[
+        (sizeof(p_chunk->tiles) / sizeof(Tile)) / 2];
+
+    if (p_tile
+            && p_tile->the_kind_of_tile_cover__this_tile_has
+            != Tile_Cover_Kind__Chest_Single) {
+        set_tile__container(p_tile, true);
+        set_tile__is_unpassable(p_tile, true);
+
+        p_tile->the_kind_of_tile_cover__this_tile_has =
+            Tile_Cover_Kind__Chest_Single
+            ;
+
+        Inventory *p_inventory =
+            allocate_p_inventory_using__this_uuid_in__inventory_manager(
+                    get_p_inventory_manager_from__game(p_game), 
+                    get_uuid_for__container(
+                        get_vector__3i32(0,3,0)));
+
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Stick), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Hammer__Iron), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Hatchet__Iron), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Pickaxe__Iron), 1, 1);
     }
 }

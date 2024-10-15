@@ -1855,7 +1855,7 @@ typedef Chunk_Manager__Chunk_Map_Node
 typedef struct Chunk_Manager_t {
     Chunk chunks[CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
     Chunk_Manager__Chunk_Map_Node *ptr_array_queue__serialized_nodes[
-        CHUNK_MANAGER__QUANTITY_OF_CHUNKS];
+        CHUNK_MANAGER__QUANTITY_OF_IO_QUEUED_CHUNKS];
     Chunk_Manager__Chunk_Map chunk_map;
     
     Chunk_Manager__Chunk_Map_Node *p_local_player_occupied__chunk_map_node;

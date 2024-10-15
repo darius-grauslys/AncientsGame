@@ -2,6 +2,7 @@
 #include <serialization/game_directory.h>
 #include "core_string.h"
 #include "platform_defines.h"
+#include <unistd.h>
 
 Index__u32 stat_game_data_file(
         Game *p_game,

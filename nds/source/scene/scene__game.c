@@ -26,6 +26,7 @@
 #include "ui/ui_manager.h"
 #include "world/chunk.h"
 #include "world/chunk_manager.h"
+#include "world/serialization/world_directory.h"
 #include "world/tile.h"
 #include "world/tile_vectors.h"
 #include "world/world.h"
@@ -80,14 +81,29 @@ void m_load_scene_as__game_handler(
         get_p_PLATFORM_gfx_context_from__game(p_game);
 
     NDS_initialize_gfx_for__world(p_gfx_context);
+    NDS_initialize_debug__sub();
     initialize_world(
             p_game,
             get_p_world_from__game(p_game),
             NDS_get_graphics_window__main_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
+    load_world(p_game);
+    while(!get_p_local_player_from__game(p_game)) {
+        manage_game__post_render(p_game); // handle loading first.
+    }
+    teleport_player(
+            p_game, 
+            get_p_local_player_from__game(p_game)
+            ->hitbox.position__3i32F4);
+    set_camera_to__track_this__entity(
+            &p_game->world.camera, 
+            get_p_local_player_from__game(p_game));
+    PLATFORM_update_chunks(
+            get_p_PLATFORM_gfx_context_from__game(p_game),
+            get_p_chunk_manager_from__game(p_game));
 
     // NDS_initialize_debug__sub();
-    // return;
+    return;
     NDS_initialize_gfx_for__ui(
             get_p_PLATFORM_gfx_context_from__game(p_game));
     // TODO: re-impl
@@ -104,90 +120,19 @@ void m_enter_scene_as__game_handler(
 
     // TODO: prob wanna remove some of the stuff below
     Entity *p_player = 
-        allocate_entity_into__world(
-                p_game,
-                get_p_world_from__game(p_game),
-                Entity_Kind__Player,
-                get_vector__3i32F4_using__i32(0, 0, 0));
-
-    add_item_to__inventory(
-            resolve_p_inventory_of__humanoid(
-                p_game, 
-                p_player), 
-            get_item_from__item_manager(
-                get_p_item_manager_from__game(p_game), 
-                Item_Kind__Stick), 
-            1, 1);
-
-    Tile *p_tile =
-        get_p_tile_from__chunk_manager_with__3i32F4(
-                get_p_chunk_manager_from__game(p_game), 
-                get_vector__3i32F4_using__i32(4 << 3, 4 << 3, 0));
-
-    if (p_tile
-            && p_tile->the_kind_of_tile_cover__this_tile_has
-            != Tile_Cover_Kind__Chest_Single) {
-        set_tile__container(p_tile, true);
-        set_tile__is_unpassable(p_tile, true);
-
-        p_tile->the_kind_of_tile_cover__this_tile_has =
-            Tile_Cover_Kind__Chest_Single
-            ;
-
-        Inventory *p_inventory =
-            allocate_p_inventory_using__this_uuid_in__inventory_manager(
-                    get_p_inventory_manager_from__game(p_game), 
-                    get_uuid_for__container(
-                        get_vector__3i32(4,4,0)));
-
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Hammer__Iron), 1, 1);
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Hatchet__Iron), 1, 1);
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Pickaxe__Iron), 1, 1);
-    }
-
-    p_game->world.entity_manager
-        .p_local_player =
-        p_player;
-
-    set_camera_to__track_this__entity(
-            &p_game->world.camera, 
-            p_player);
-
-    move_chunk_manager(
-            p_game,
-            &p_game->world.chunk_manager, 
-            DIRECTION__SOUTH_WEST,
-            2);
-
-    PLATFORM_update_chunks(
-            get_p_PLATFORM_gfx_context_from__game(p_game),
-            get_p_chunk_manager_from__game(p_game));
+        get_p_local_player_from__game(p_game);
 
     while (1) {
         if (p_game->scene_manager.p_active_scene == 0)
             break;
         manage_game__pre_render(p_game);
-        NDS_update_ui_for__hud(
-                get_p_PLATFORM_gfx_context_from__game(p_game),
-                p_this_scene,
-                p_player);
+        // NDS_update_ui_for__hud(
+        //         get_p_PLATFORM_gfx_context_from__game(p_game),
+        //         p_this_scene,
+        //         p_player);
         if (is_input__consume_released(
                     get_p_input_from__game(p_game))) {
-            teleport_player(
-                    p_game, 
-                    VECTOR__3i32F4__0_0_0);
+            save_world(p_game);
         }
         manage_world(p_game);
         manage_game__post_render(p_game);

@@ -137,6 +137,8 @@ Inventory *allocate_p_inventory_in__inventory_manager(
 void release_p_inventory_in__inventory_manager(
         Inventory_Manager *p_inventory_manager,
         Inventory *p_inventory) {
+    debug_info("release: %x",
+            p_inventory->_serialization_header.uuid);
     bool is_inventory_for__entity_or__container =
         is_inventory_uuid_for__entity_or__container(
                 p_inventory->_serialization_header.uuid);

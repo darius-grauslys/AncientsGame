@@ -288,12 +288,15 @@ enum PLATFORM_Read_File_Error PLATFORM_read_file(
 #endif
 
     FILE *p_file = p_file_handler;
-    Quantity__u32 size_of__read = 
+    Quantity__u32 quantity_of__successful_reads = 
         fread(
             p_destination,
             *p_length_of__data_to_read,
             quantity_of__reads,
             p_file);
+    *p_length_of__data_to_read = 
+        quantity_of__successful_reads
+        * *p_length_of__data_to_read;
 
     // TODO:    See the TO-DO of PLATFORM_write_file above.
     //          For the same reason, this will also be commented out
