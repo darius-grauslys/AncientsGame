@@ -19,6 +19,9 @@ void register_into__item_manager__hatchet__iron_into__item_manager(
             Item_Kind__Hatchet__Iron, 
             get_item(
                 Item_Kind__Hatchet__Iron, 
+                ITEM_USAGE_FLAG__IS_LABOR
+                | ITEM_USAGE_FLAG__IS_LABOR__SECONDARY
+                | ITEM_USAGE_FLAG__IS_COMBAT,
                 ITEM_FILTER_FLAGS__NONE, 
                 i32_to__i32F20(4), 
                 m_item_use_handler__hatchet__iron, 

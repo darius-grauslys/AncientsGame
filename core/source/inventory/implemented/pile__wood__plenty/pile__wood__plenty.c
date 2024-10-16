@@ -11,6 +11,7 @@ void register_into__item_manager__pile__wood__plenty_into__item_manager(
             Item_Kind__Pile__Wood__Plenty, 
             get_item(
                 Item_Kind__Pile__Wood__Plenty, 
+                ITEM_USAGE_FLAGS__NONE,
                 ITEM_FILTER_FLAGS__NONE, 
                 i32_to__i32F20(180), 
                 0, 

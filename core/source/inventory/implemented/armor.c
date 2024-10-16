@@ -15,6 +15,7 @@ void initialize_item_as__armor(
     initialize_item(
             p_item__armor,
             the_kind_of__item,
+            ITEM_USAGE_FLAGS__NONE,
             ITEM_FILTER_FLAG__INTERACTABLE,
             weight_of_each__item,
             m_item_use_handler__armor,

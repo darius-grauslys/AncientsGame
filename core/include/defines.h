@@ -733,6 +733,13 @@ typedef uint8_t Item_Filter_Flags;
 #define ITEM_FILTER_FLAG__CONSUMABLE \
         (ITEM_FILTER_FLAG__ARMOR << 1)
 
+typedef uint8_t Item_Usage_Flags;
+
+#define ITEM_USAGE_FLAGS__NONE 0
+#define ITEM_USAGE_FLAG__IS_LABOR BIT(0)
+#define ITEM_USAGE_FLAG__IS_LABOR__SECONDARY BIT(1)
+#define ITEM_USAGE_FLAG__IS_COMBAT BIT(2)
+
 typedef void (*m_Item_Use)(
         Item *p_item_self, 
         Entity *p_entity_user, 
@@ -762,8 +769,9 @@ typedef struct Item_t {
     m_Item_Equip_Event  m_item_equip_handler;
     m_Item_Equip_Event  m_item_unequip_handler;
     i32F20              weight_per__item;
-    enum Item_Kind      the_kind_of_item__this_item_is  :13;
+    enum Item_Kind      the_kind_of_item__this_item_is  :10;
     Item_Filter_Flags   item_filter_flags               :3;
+    Item_Usage_Flags    item_usage_flags                :3;
     union {
         struct { // Armor
             Hearts_Damaging_Flags   armor__resistances;
@@ -774,6 +782,7 @@ typedef struct Item_t {
             Quantity__u8            weapon__quantity_of__damage_u8;
         };
     };
+    Tool_Mode item_tool_mode;
 } Item;
 
 typedef struct Item_Manager_t {

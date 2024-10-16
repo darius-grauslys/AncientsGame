@@ -2,19 +2,18 @@
 <root>
     <config>
         <include sub_dir="ui/game/">
-            <header path="ui/game/nds_ui_window__game__hud.h"/>
+            <header path="nds.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
-            <header path="ui/ui_drop_zone.h"/>
-            <header path="ui/ui_draggable.h"/>
             <header path="ui/ui_manager.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>
+            <header path="nds_defines.h"/>
             <header path="game.h"/>
         </include>
-        <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__labor.c" h_path="./nds/include/ui/game/nds_ui_window__game__labor.h"/>
-        <platform target="NDS" size="256,192"/>
-        <background layer="0" path="./core/assets/ui/default/ui_map_labor.png"/>
+        <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__settings.c" h_path="./nds/include/ui/game/nds_ui_window__game__settings.h"/>
+        <platform target="NDS" size="256,256"/>
+        <background layer="0" y="0" path="./core/assets/ui/default/ui_map_ingame_settings.png"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
         <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
@@ -29,13 +28,22 @@
     <ui offset_of__ui_index="3">
         <code>
             NDS_allocate_ui_for__nds_ui_window__game__hud(p_game);
-            toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 2));
+            toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
         </code>
-        <grid size="5" x="64" y="104" stride__x="16">
-            <allocate_ui_container size="5" stride__y="16">
-                <button width="8" height="8"/>
-            </allocate_ui_container>
-        </grid>
+        <group>
+            <allocate_ui x="128" y="28" name="p_button_setting__resume">
+                <button width="104" height="32" color="64,196,64"/>
+            </allocate_ui>
+            <allocate_ui x="128" y="72" name="p_button_setting__save">
+                <button width="104" height="32" color="64,196,64"/>
+            </allocate_ui>
+            <allocate_ui x="128" y="116" name="p_button_setting__main_menu">
+                <button width="104" height="32" color="64,196,64"/>
+            </allocate_ui>
+            <allocate_ui x="128" y="160" name="p_button_setting__quit">
+                <button width="104" height="32" color="64,196,64"/>
+            </allocate_ui>
+        </group>
     </ui>
 </root>
 

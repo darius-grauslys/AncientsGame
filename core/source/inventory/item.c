@@ -1,3 +1,5 @@
+#include "defines.h"
+#include "defines_weak.h"
 #include <inventory/item.h>
 
 const Item _item_void = {
@@ -7,6 +9,7 @@ const Item _item_void = {
 void initialize_item(
         Item *p_item,
         enum Item_Kind the_kind_of__item,
+        Item_Usage_Flags item_usage_flags,
         Item_Filter_Flags item_filter_flags,
         i32F20 weight_of_each__item,
         m_Item_Use m_item_use_handler,
@@ -25,6 +28,17 @@ void initialize_item(
         the_kind_of__item;
     p_item->item_filter_flags =
         item_filter_flags;
+
+    p_item->item_usage_flags =
+        item_usage_flags;
+
+    if (is_item_usable_for__labor(p_item)) {
+        p_item->item_tool_mode = Tool_Mode__Labor;
+    } else if (is_item_usable_for__combat(p_item)) {
+        p_item->item_tool_mode = Tool_Mode__Combat;
+    } else {
+        p_item->item_tool_mode = Tool_Mode__None;
+    }
 }
 
 void initialize_item_as__empty(
@@ -34,4 +48,82 @@ void initialize_item_as__empty(
 
 Item get_item__empty() {
     return _item_void;
+}
+
+void set_item_tool_mode_to__next_tool_mode(
+        Item *p_item) {
+    if (p_item->item_usage_flags
+            == ITEM_USAGE_FLAGS__NONE) {
+        return;
+    }
+
+    switch (p_item->item_tool_mode) {
+        default:
+            p_item->item_tool_mode =
+                Tool_Mode__None;
+            break;
+        case Tool_Mode__Labor:
+            if (is_item_possessing__secondary_labor(p_item)) {
+                p_item->item_tool_mode =
+                    Tool_Mode__Labor_Secondary;
+                break;
+            }
+            // deliberate fallthrough right here.
+        case Tool_Mode__Labor_Secondary:
+            if (is_item_usable_for__combat(p_item)) {
+                p_item->item_tool_mode =
+                    Tool_Mode__Combat;
+            }
+            break;
+        case Tool_Mode__Combat:
+        case Tool_Mode__Combat_Lockon:
+            if (is_item_usable_for__labor(p_item)) {
+                p_item->item_tool_mode =
+                    Tool_Mode__Labor;
+            }
+            p_item->item_tool_mode =
+                Tool_Mode__Combat;
+            break;
+    }
+}
+
+bool set_item_tool_mode(
+        Item *p_item,
+        Tool_Mode tool_mode) {
+    if (tool_mode < Tool_Mode__None
+            || tool_mode >= Tool_Mode__Unknown) {
+        return false;
+    }
+    switch (tool_mode) {
+        default:
+        case Tool_Mode__None:
+            if (p_item->item_usage_flags
+                    == ITEM_USAGE_FLAGS__NONE) {
+                break;
+            }
+            return false;
+        case Tool_Mode__Labor:
+            if (is_item_usable_for__labor(p_item)) {
+                break;
+            }
+            return false;
+        case Tool_Mode__Labor_Secondary:
+            if (is_item_possessing__secondary_labor(p_item)) {
+                break;
+            }
+            return false;
+        case Tool_Mode__Combat:
+            if (is_item_usable_for__combat(p_item)) {
+                break;
+            }
+            return false;
+        case Tool_Mode__Combat_Lockon:
+            if (is_item_usable_for__combat(p_item)) {
+                break;
+            }
+            return false;
+    }
+    p_item->item_tool_mode =
+        tool_mode;
+    return true;
 }

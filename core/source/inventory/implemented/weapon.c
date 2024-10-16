@@ -24,6 +24,7 @@ void initialize_item_as__weapon(
     initialize_item(
             p_item__weapon,
             the_kind_of__item,
+            ITEM_USAGE_FLAG__IS_COMBAT,
             ITEM_FILTER_FLAG__INTERACTABLE,
             weight_of_each__item,
             m_item_use_handler__weapon,

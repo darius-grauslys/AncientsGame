@@ -18,6 +18,10 @@ void humanoid__use(
         Game *p_game,
         Entity *p_humanoid);
 
+void humanoid__tool_mode(
+        Game *p_game,
+        Entity *p_humanoid);
+
 bool is_entity_a__humanoid(Entity *entity);
 
 bool is_humanoid__dead(Entity *p_humanoid);

@@ -12,6 +12,7 @@ void register_into__item_manager__pile__iron__plenty_into__item_manager(
             get_item(
                 Item_Kind__Pile__Iron__Plenty, 
                 ITEM_FILTER_FLAGS__NONE, 
+                ITEM_USAGE_FLAGS__NONE,
                 i32_to__i32F20(600), 
                 0, 
                 0, 

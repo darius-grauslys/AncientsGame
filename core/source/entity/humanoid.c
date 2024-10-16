@@ -53,6 +53,7 @@ void humanoid__use(
         Game *p_game,
         Entity *p_humanoid) {
     // TODO: make this a bit better:
+    // TODO: make this as a game action.
     if (p_humanoid->sprite_wrapper.the_kind_of_animation__this_sprite_has
             == Sprite_Animation_Kind__Humanoid__Use)
         return;
@@ -68,6 +69,26 @@ void humanoid__use(
             p_humanoid,
             0,
             p_game);
+}
+
+void humanoid__tool_mode(
+        Game *p_game,
+        Entity *p_humanoid) {
+    // TODO: make this as a game action.
+    Item *p_item =
+        &p_humanoid->equipment.item_stack__main_hand.item;
+    switch (p_item->item_tool_mode) {
+        default:
+            set_item_tool_mode_to__next_tool_mode(
+                    p_item);
+            break;
+        case Tool_Mode__Combat_Lockon:
+            // TODO: impl lockon
+            set_item_tool_mode(
+                    p_item, 
+                    Tool_Mode__Labor);
+            break;
+    }
 }
 
 bool is_entity_a__humanoid(Entity *entity) {

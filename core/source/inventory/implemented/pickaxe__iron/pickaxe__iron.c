@@ -19,6 +19,7 @@ void register_into__item_manager__pickaxe__iron_into__item_manager(
             Item_Kind__Pickaxe__Iron, 
             get_item(
                 Item_Kind__Pickaxe__Iron, 
+                ITEM_USAGE_FLAGS__NONE,
                 ITEM_FILTER_FLAGS__NONE, 
                 i32_to__i32F20(4), 
                 m_item_use_handler__pickaxe__iron, 

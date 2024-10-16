@@ -1,11 +1,13 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include "defines_weak.h"
 #include <defines.h>
 
 void initialize_item(
         Item *p_item,
         enum Item_Kind the_kind_of__item,
+        Item_Usage_Flags item_usage_flags,
         Item_Filter_Flags item_filter_flags,
         i32F20 weight_of_each__item,
         m_Item_Use m_item_use_handler,
@@ -18,9 +20,17 @@ void initialize_item_as__empty(
 
 Item get_item__empty();
 
+void set_item_tool_mode_to__next_tool_mode(
+        Item *p_item);
+
+bool set_item_tool_mode(
+        Item *p_item,
+        Tool_Mode tool_mode);
+
 static inline
 Item get_item(
         enum Item_Kind the_kind_of__item,
+        Item_Usage_Flags item_usage_flags,
         Item_Filter_Flags item_filter_flags,
         i32F20 weight_of_each__item,
         m_Item_Use m_item_use_handler,
@@ -30,6 +40,7 @@ Item get_item(
     initialize_item(
             &item, 
             the_kind_of__item, 
+            item_usage_flags,
             item_filter_flags, 
             weight_of_each__item, 
             m_item_use_handler, 
@@ -71,6 +82,55 @@ static inline
 bool does_item_have__use_handler(
         Item *p_item) {
     return p_item->m_item_use_handler;
+}
+
+static inline
+bool is_item_usable_for__labor(
+        Item *p_item) {
+    return p_item->item_usage_flags 
+        & ITEM_USAGE_FLAG__IS_LABOR;
+}
+
+static inline
+bool is_item_usable_for__combat(
+        Item *p_item) {
+    return p_item->item_usage_flags 
+        & ITEM_USAGE_FLAG__IS_COMBAT;
+}
+
+static inline
+bool is_item_possessing__secondary_labor(
+        Item *p_item) {
+    return p_item->item_usage_flags 
+        & ITEM_USAGE_FLAG__IS_LABOR__SECONDARY;
+}
+
+static inline
+bool is_item_tool_mode__labor(
+        Item *p_item) {
+    return p_item->item_tool_mode
+        == Tool_Mode__Labor;
+}
+
+static inline
+bool is_item_tool_mode__labor_secondary(
+        Item *p_item) {
+    return p_item->item_tool_mode
+        == Tool_Mode__Labor_Secondary;
+}
+
+static inline
+bool is_item_tool_mode__combat(
+        Item *p_item) {
+    return p_item->item_tool_mode
+        == Tool_Mode__Combat;
+}
+
+static inline
+bool is_item_tool_mode__combat_lockon(
+        Item *p_item) {
+    return p_item->item_tool_mode
+        == Tool_Mode__Combat_Lockon;
 }
 
 #endif
