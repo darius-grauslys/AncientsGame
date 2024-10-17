@@ -91,6 +91,40 @@ void set_tile__container(Tile *tile, bool value) {
 }
 
 static inline
+bool is_tile_with__general_purpose_data(
+        Tile *p_tile) {
+    return p_tile->tile_flags
+        & TILE_FLAGS__BIT_GENERAL_PURPOSE_DATA_BIT
+        ;
+}
+
+static inline
+void set_tile__general_purpose_data(
+        Tile *p_tile,
+        bool value) {
+    p_tile->tile_flags &=
+        ~TILE_FLAGS__BIT_GENERAL_PURPOSE_DATA_BIT;
+    p_tile->tile_flags |=
+        (value << TILE_FLAGS__BIT_SHIFT_GENERAL_PURPOSE_DATA_BIT);
+}
+
+static inline
+void set_tile_kind_of__tile(
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile) {
+    p_tile->the_kind_of_tile__this_tile_is =
+        the_kind_of__tile;
+}
+
+static inline
+void set_tile_cover_kind_of__tile(
+        Tile *p_tile,
+        Tile_Cover_Kind the_kind_of__tile_cover) {
+    p_tile->the_kind_of_tile_cover__this_tile_has =
+        the_kind_of__tile_cover;
+}
+
+static inline
 void clear_tile_cover(
         Tile *p_tile) {
     p_tile->the_kind_of_tile_cover__this_tile_has =
@@ -98,10 +132,56 @@ void clear_tile_cover(
     set_tile__is_unpassable(p_tile, false);
 }
 
+static inline
+Tile_Kind get_tile_kind_from__tile(
+        Tile *p_tile) {
+    return p_tile->the_kind_of_tile__this_tile_is;
+}
+
+static inline
+bool is_tile_of__this_kind(
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile) {
+    return p_tile->the_kind_of_tile__this_tile_is
+        == the_kind_of__tile;
+}
+
+static inline
+bool is_tile_with__this_kind_of__tile_cover(
+        Tile *p_tile,
+        Tile_Cover_Kind the_kind_of__tile_cover) {
+    return p_tile->the_kind_of_tile_cover__this_tile_has
+        == the_kind_of__tile_cover;
+}
+
+static inline
+Tile_Cover_Kind get_tile_cover_kind_from__tile(
+        Tile *p_tile) {
+    return p_tile->the_kind_of_tile_cover__this_tile_has;
+}
+
+static inline
+bool is_tiles_with__same_tile_cover(
+        Tile *p_tile__one,
+        Tile *p_tile__two) {
+    return get_tile_cover_kind_from__tile(p_tile__one)
+        == get_tile_cover_kind_from__tile(p_tile__two);
+}
+
 // TODO: make this PLATFORM_render_tile
 // TODO: make Tile_Render_Result into PLATFORM_Tile_Render_Result
 Tile_Render_Result get_tile_render_result(
         Chunk_Manager__Chunk_Map_Node *chunk_node,
         Local_Tile_Vector__3u8 local_tile_vector__3u8);
+
+bool poll_tile_for__interaction(
+        Game *p_game,
+        Tile *p_tile,
+        Entity *p_entity);
+
+bool poll_tile_for__touch(
+        Game *p_game,
+        Tile *p_tile,
+        Entity *p_entity);
 
 #endif

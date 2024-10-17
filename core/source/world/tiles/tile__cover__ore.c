@@ -23,42 +23,42 @@ void set_tile_cover_as__ore(
         case Item_Kind__Pile__Stone:
             the_kind_of__tile_cover_for__ore =
                 (is_large)
-                ? Tile_Cover_Kind__Ore__Large__Stone_1__Left
+                ? Tile_Cover_Kind__Ore__Large__Stone_1__Top_Left
                 : Tile_Cover_Kind__Ore__Small__Stone_1
                 ;
             break;
         case Item_Kind__Bag_Of__Coal:
             the_kind_of__tile_cover_for__ore =
                 (is_large)
-                ? Tile_Cover_Kind__Ore__Large__Stone_1__Left
+                ? Tile_Cover_Kind__Ore__Large__Stone_1__Top_Left
                 : Tile_Cover_Kind__Ore__Small__Stone_1
                 ; // TODO: make coal.
             break;
         case Item_Kind__Pile__Amethyst:
             the_kind_of__tile_cover_for__ore =
                 (is_large)
-                ? Tile_Cover_Kind__Ore__Large__Amethyst_1__Left
+                ? Tile_Cover_Kind__Ore__Large__Amethyst_1__Top_Left
                 : Tile_Cover_Kind__Ore__Small__Amethyst_1
                 ;
             break;
         case Item_Kind__Pile__Diamond:
             the_kind_of__tile_cover_for__ore =
                 (is_large)
-                ? Tile_Cover_Kind__Ore__Large__Diamond_1__Left
+                ? Tile_Cover_Kind__Ore__Large__Diamond_1__Top_Left
                 : Tile_Cover_Kind__Ore__Small__Diamond_1
                 ;
             break;
         case Item_Kind__Pile__Gold:
             the_kind_of__tile_cover_for__ore =
                 (is_large)
-                ? Tile_Cover_Kind__Ore__Large__Gold_1__Left
+                ? Tile_Cover_Kind__Ore__Large__Gold_1__Top_Left
                 : Tile_Cover_Kind__Ore__Small__Gold_1
                 ;
             break;
         case Item_Kind__Pile__Iron:
             the_kind_of__tile_cover_for__ore =
                 (is_large)
-                ? Tile_Cover_Kind__Ore__Large__Iron_1__Left
+                ? Tile_Cover_Kind__Ore__Large__Iron_1__Top_Left
                 : Tile_Cover_Kind__Ore__Small__Iron_1
                 ;
             break;

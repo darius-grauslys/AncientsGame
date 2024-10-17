@@ -9,14 +9,15 @@
 #include "world/camera.h"
 #include "world/chunk_vectors.h"
 #include "world/serialization/world_directory.h"
+#include "world/tile_logic_manager.h"
 #include <world/world.h>
+#include <game.h>
 #include <entity/entity_manager.h>
 #include <collisions/collision_manager.h>
 #include <world/chunk_manager.h>
 #include <world/generators/generator_flat_world.h>
 #include <world/generators/generator_test_world.h>
 #include <world/world_parameters.h>
-#include <game.h>
 
 #include <entity/entity.h>
 #include <debug/debug.h>
@@ -64,9 +65,11 @@ void initialize_world(
             &p_world->collision_manager, 
             0, 
             0);
+    initialize_tile_logic_manager(
+            get_p_tile_logic_manager_from__world(p_world));
     initialize_chunk_manager(
             p_game,
-            &p_world->chunk_manager);
+            get_p_chunk_manager_from__world(p_world));
     initialize_camera(
             &p_world->camera,
             get_vector__3i32F4_using__i32(
@@ -146,6 +149,7 @@ void manage_world__entities(Game *p_game) {
         //TODO: only do this for entities which
         //are polling for collisions
         if (!poll_chunk_manager_for__tile_collision(
+                    p_game,
                     &p_world->chunk_manager,
                     p_entity)) {
             debug_info__verbose("!poll_chunk_manager_for__tile_collision, release entity");

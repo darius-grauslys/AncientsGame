@@ -83,11 +83,11 @@ void register_tile_cover_handler__touch_in__tile_logic_manager(
         f_tile_handler__touch;
 }
 
-bool does_tile_have__interact_logic(
+bool is_tile_possessing__interact_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Kind the_kind_of__tile) {
     if (is_tile_kind__illegal(the_kind_of__tile)) {
-        debug_error("does_tile_have__interact_logic, the_kind_of__tile is illegal: %d",
+        debug_error("is_tile_possessing__interact_logic, the_kind_of__tile is illegal: %d",
                 the_kind_of__tile);
         return false;
     }
@@ -96,11 +96,11 @@ bool does_tile_have__interact_logic(
         ->tile_interaction__handlers[the_kind_of__tile];
 }
 
-bool does_tile_cover_have__interact_logic(
+bool is_tile_cover_possessing__interact_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Cover_Kind the_kind_of__tile_cover) {
     if (is_tile_cover_kind__illegal(the_kind_of__tile_cover)) {
-        debug_error("does_tile_cover_have__interact_logic, the_kind_of__tile_cover is illegal: %d",
+        debug_error("is_tile_cover_possessing__interact_logic, the_kind_of__tile_cover is illegal: %d",
                 the_kind_of__tile_cover);
         return false;
     }
@@ -109,11 +109,11 @@ bool does_tile_cover_have__interact_logic(
         ->tile_cover_interaction__handlers[the_kind_of__tile_cover];
 }
 
-bool does_tile_have__touch_logic(
+bool is_tile_possessing__touch_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Kind the_kind_of__tile) {
     if (is_tile_kind__illegal(the_kind_of__tile)) {
-        debug_error("does_tile_have__touch_logic, the_kind_of__tile is illegal: %d",
+        debug_error("is_tile_possessing__touch_logic, the_kind_of__tile is illegal: %d",
                 the_kind_of__tile);
         return false;
     }
@@ -122,11 +122,11 @@ bool does_tile_have__touch_logic(
         ->tile_touch__handlers[the_kind_of__tile];
 }
 
-bool does_tile_cover_have__touch_logic(
+bool is_tile_cover_possessing__touch_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Cover_Kind the_kind_of__tile_cover) {
     if (is_tile_cover_kind__illegal(the_kind_of__tile_cover)) {
-        debug_error("does_tile_cover_have__touch_logic, the_kind_of__tile_cover is illegal: %d",
+        debug_error("is_tile_cover_possessing__touch_logic, the_kind_of__tile_cover is illegal: %d",
                 the_kind_of__tile_cover);
         return false;
     }

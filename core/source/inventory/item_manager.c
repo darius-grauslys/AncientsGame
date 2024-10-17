@@ -20,6 +20,7 @@
 #include "inventory/implemented/dagger__steel__chaos/dagger__steel__chaos.h"
 #include "inventory/implemented/dagger__steel__order/dagger__steel__order.h"
 #include "inventory/implemented/hammer__iron/hammer__iron.h"
+#include "inventory/implemented/shovel__iron/shovel__iron.h"
 #include "inventory/implemented/hatchet__iron/hatchet__iron.h"
 #include "inventory/implemented/hatchet__rusted/hatchet__rusted.h"
 #include "inventory/implemented/hatchet__steel/hatchet__steel.h"
@@ -50,6 +51,12 @@
 #include "inventory/implemented/sword__steel/sword__steel.h"
 #include "inventory/implemented/sword__steel__chaos/sword__steel__chaos.h"
 #include "inventory/implemented/sword__steel__order/sword__steel__order.h"
+
+#include "inventory/implemented/door__wood/door__wood.h"
+#include "inventory/implemented/door__gold/door__gold.h"
+#include "inventory/implemented/door__iron/door__iron.h"
+#include "inventory/implemented/door__diamond/door__diamond.h"
+#include "inventory/implemented/door__amethyst/door__amethyst.h"
 #include "inventory/item.h"
 
 void initialize_item_manager(
@@ -125,6 +132,7 @@ void load_core_items_into__item_manager(
     register_into__item_manager__sword__steel__order_into__item_manager(p_item_manager);
 
     register_into__item_manager__hammer__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__shovel__iron_into__item_manager(p_item_manager);
     register_into__item_manager__pickaxe__iron_into__item_manager(p_item_manager);
 
     // TODO: make hatch a tool, not a weapon.
@@ -143,4 +151,10 @@ void load_core_items_into__item_manager(
     register_into__item_manager__pile__dirt__plenty_into__item_manager(p_item_manager);
     register_into__item_manager__pile__sand__plenty_into__item_manager(p_item_manager);
     register_into__item_manager__pile__wood__plenty_into__item_manager(p_item_manager);
+
+    register_into__item_manager__door__wood_into__item_manager(p_item_manager);
+    register_into__item_manager__door__gold_into__item_manager(p_item_manager);
+    register_into__item_manager__door__iron_into__item_manager(p_item_manager);
+    register_into__item_manager__door__diamond_into__item_manager(p_item_manager);
+    register_into__item_manager__door__amethyst_into__item_manager(p_item_manager);
 }

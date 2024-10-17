@@ -71,6 +71,11 @@ void clear_log__system(Game *p_game) {
     PLATFORM_clear_log__system(p_game);
 }
 
+static inline 
+World *get_p_world_from__game(Game *p_game) {
+    return &p_game->world;
+}
+
 static inline
 Camera *get_p_camera_from__game(Game *p_game) {
     return get_p_camera_from__world(&p_game->world);
@@ -114,11 +119,6 @@ Entity_Manager *get_p_entity_manager_from__game(Game *p_game) {
 static Chunk_Manager inline 
 *get_p_chunk_manager_from__game(Game *p_game) {
     return get_p_chunk_manager_from__world(&p_game->world);
-}
-
-static inline 
-World *get_p_world_from__game(Game *p_game) {
-    return &p_game->world;
 }
 
 static inline

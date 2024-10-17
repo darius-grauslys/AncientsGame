@@ -1,4 +1,7 @@
 #include "defines_weak.h"
+#include "game.h"
+#include "world/tile_logic_manager.h"
+#include "world/world.h"
 #include <world/tile.h>
 #include <defines.h>
 #include <world/chunk_manager.h>
@@ -200,7 +203,75 @@ static inline
 void get_tile_cover_texture_sheet_index(
         Tile *p_tile,
         Tile_Render_Result *p_render_result) {
+    p_render_result->tile_index__sprite_cover = 0;
     switch(p_tile->the_kind_of_tile_cover__this_tile_has) {
+        default:
+            p_render_result->tile_index__cover = 
+                p_tile->the_kind_of_tile_cover__this_tile_has;
+			break;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Dirt:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Dirt:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__DIRT;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Sand:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Sand:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__SAND;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Wood:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Wood:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__WOOD;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Stone:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Stone:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__STONE;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Stone_Brick:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Stone_Brick:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__STONE_BRICK;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Iron:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Iron:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__IRON;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Gold:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Gold:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__GOLD;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Diamond:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Diamond:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__DIAMOND;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Amethyst:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Amethyst:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__AMEYTHYST;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Sandstone:
+            p_render_result->tile_index__cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Sandstone:
+            p_render_result->tile_index__cover +=
+                TILE_SHEET_INDEX__SANDSTONE;
+horizontal__door:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_COVER_SHEET_INDEX__DOOR;
+            break;
         case Tile_Cover_Kind__Wall__Dirt:
             p_render_result->tile_index__cover =
                 TILE_SHEET_INDEX__DIRT;
@@ -252,7 +323,7 @@ wall:
         case Tile_Cover_Kind__Crop_Pumpkin_A:
         case Tile_Cover_Kind__Crop_Watermelon_A:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Stem_A;
+                Tile_Cover_Kind__Crop__A;
             break;
         case Tile_Cover_Kind__Crop_Corn_B:
         case Tile_Cover_Kind__Crop_Onion_B:
@@ -260,49 +331,109 @@ wall:
         case Tile_Cover_Kind__Crop_Pumpkin_B:
         case Tile_Cover_Kind__Crop_Watermelon_B:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Stem_B;
+                Tile_Cover_Kind__Crop__B;
             break;
         case Tile_Cover_Kind__Crop_Corn_C:
         case Tile_Cover_Kind__Crop_Onion_C:
         case Tile_Cover_Kind__Crop_Tomato_C:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Stem_C;
+                Tile_Cover_Kind__Crop__C;
             break;
         case Tile_Cover_Kind__Crop_Pumpkin_C:
         case Tile_Cover_Kind__Crop_Watermelon_C:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Sprout;
+                Tile_Cover_Kind__Crop__D;
             break;
         case Tile_Cover_Kind__Crop_Wheat_A:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Grains_A;
+                Tile_Cover_Kind__Crop__E;
             break;
         case Tile_Cover_Kind__Crop_Wheat_B:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Grains_B;
+                Tile_Cover_Kind__Crop__F;
             break;
         case Tile_Cover_Kind__Crop_Wheat_C:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Crop_Grains_C;
+                Tile_Cover_Kind__Crop__G;
             break;
         case Tile_Cover_Kind__Tree__Oak:
         case Tile_Cover_Kind__Tree__Pine:
             p_render_result->tile_index__cover =
-                Tile_Cover_Kind__Stump + 1;
+                Tile_Cover_Kind__Tree__Trunk;
             break;
-        default:
-            p_render_result->tile_index__cover = 
-                p_tile->the_kind_of_tile_cover__this_tile_has;
-			break;
     }
 }
 
 static void inline get_tile_sprite_cover_texture_sheet_index(
         Tile *p_tile,
         Tile_Render_Result *p_render_result) {
+    p_render_result->tile_index__sprite_cover = 0;
     switch(p_tile->the_kind_of_tile_cover__this_tile_has) {
         default:
-            p_render_result->tile_index__sprite_cover = 0;
+            break;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Dirt:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Dirt:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__DIRT;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Sand:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Sand:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__SAND;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Wood:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Wood:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__WOOD;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Stone:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Stone:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__STONE;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Stone_Brick:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Stone_Brick:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__STONE_BRICK;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Iron:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Iron:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__IRON;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Gold:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Gold:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__GOLD;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Diamond:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Diamond:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__DIAMOND;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Amethyst:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Amethyst:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__AMEYTHYST;
+            goto horizontal__door;
+        case Tile_Cover_Kind__Door__Horizontal__Open__Sandstone:
+            p_render_result->tile_index__sprite_cover += 64;
+        case Tile_Cover_Kind__Door__Horizontal__Sandstone:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_SHEET_INDEX__SANDSTONE;
+horizontal__door:
+            p_render_result->tile_index__sprite_cover +=
+                TILE_COVER_SHEET_INDEX__DOOR
+                - 32;
             break;
         case Tile_Cover_Kind__Wall__Dirt:
             p_render_result->tile_index__sprite_cover =
@@ -350,17 +481,17 @@ wall:
                     p_render_result->wall_adjacency);
             break;
             // TODO: magic numbers below here.
-        case Tile_Cover_Kind__Cactus__Tall:
-        case Tile_Cover_Kind__Ore__Large__Stone_1__Right:
-        case Tile_Cover_Kind__Ore__Large__Gold_1__Right:
-        case Tile_Cover_Kind__Ore__Large__Iron_1__Right:
-        case Tile_Cover_Kind__Ore__Large__Diamond_1__Right:
-        case Tile_Cover_Kind__Ore__Large__Amethyst_1__Right:
-        case Tile_Cover_Kind__Ore__Large__Stone_2__Right:
-        case Tile_Cover_Kind__Ore__Large__Gold_2__Right:
-        case Tile_Cover_Kind__Ore__Large__Iron_2__Right:
-        case Tile_Cover_Kind__Ore__Large__Diamond_2__Right:
-        case Tile_Cover_Kind__Ore__Large__Amethyst_2__Right:
+        case Tile_Cover_Kind__Cactus__Tall__Top:
+        case Tile_Cover_Kind__Ore__Large__Stone_1__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Gold_1__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Iron_1__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Diamond_1__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Amethyst_1__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Stone_2__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Gold_2__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Iron_2__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Diamond_2__Top_Right:
+        case Tile_Cover_Kind__Ore__Large__Amethyst_2__Top_Right:
             p_render_result->tile_index__sprite_cover =
                 p_tile->the_kind_of_tile_cover__this_tile_has
                 - 32;
@@ -435,4 +566,70 @@ Tile_Render_Result get_tile_render_result(
     }
 
     return render_result;
+}
+
+bool poll_tile_for__interaction(
+        Game *p_game,
+        Tile *p_tile,
+        Entity *p_entity) {
+    Tile_Logic_Manager *p_tile_logic_manager =
+        get_p_tile_logic_manager_from__world(
+                get_p_world_from__game(p_game));
+    if (is_tile_cover_possessing__interact_logic(
+                p_tile_logic_manager, 
+                get_tile_cover_kind_from__tile(p_tile))) {
+        invoke_tile_cover_logic__interact(
+                p_game,
+                p_tile_logic_manager,
+                p_tile,
+                p_entity);
+                
+        return true;
+    }
+
+    if (is_tile_possessing__interact_logic(
+                p_tile_logic_manager, 
+                get_tile_kind_from__tile(p_tile))) {
+        invoke_tile_cover_logic__interact(
+                p_game, 
+                p_tile_logic_manager, 
+                p_tile, 
+                p_entity);
+        return true;
+    }
+
+    return false;
+}
+
+bool poll_tile_for__touch(
+        Game *p_game,
+        Tile *p_tile,
+        Entity *p_entity) {
+    Tile_Logic_Manager *p_tile_logic_manager =
+        get_p_tile_logic_manager_from__world(
+                get_p_world_from__game(p_game));
+    if (is_tile_cover_possessing__touch_logic(
+                p_tile_logic_manager, 
+                get_tile_cover_kind_from__tile(p_tile))) {
+        invoke_tile_cover_logic__touch(
+                p_game,
+                p_tile_logic_manager,
+                p_tile,
+                p_entity);
+                
+        return true;
+    }
+
+    if (is_tile_possessing__touch_logic(
+                p_tile_logic_manager, 
+                get_tile_kind_from__tile(p_tile))) {
+        invoke_tile_cover_logic__touch(
+                p_game, 
+                p_tile_logic_manager, 
+                p_tile, 
+                p_entity);
+        return true;
+    }
+
+    return false;
 }

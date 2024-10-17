@@ -133,4 +133,11 @@ bool is_item_tool_mode__combat_lockon(
         == Tool_Mode__Combat_Lockon;
 }
 
+static inline
+bool is_item_tool_mode_a__combat_mode(
+        Item *p_item) {
+    return (is_item_tool_mode__combat(p_item)
+            || is_item_tool_mode__combat_lockon(p_item));
+}
+
 #endif

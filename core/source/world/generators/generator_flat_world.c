@@ -640,7 +640,7 @@ void f_chunk_generator__flat_world(
         Tile *p_tile =
             &p_chunk->tiles[4*8+4];
         p_tile->the_kind_of_tile_cover__this_tile_has =
-            Tile_Cover_Kind__Chest_Single;
+            Tile_Cover_Kind__Chest__Single;
         set_tile__is_unpassable(p_tile, true);
         set_tile__container(p_tile, true);
         Tile_Vector__3i32 tile_vector__3i32 =
@@ -880,12 +880,12 @@ void f_chunk_generator__flat_world(
 
     if (p_tile
             && p_tile->the_kind_of_tile_cover__this_tile_has
-            != Tile_Cover_Kind__Chest_Single) {
+            != Tile_Cover_Kind__Chest__Single) {
         set_tile__container(p_tile, true);
         set_tile__is_unpassable(p_tile, true);
 
         p_tile->the_kind_of_tile_cover__this_tile_has =
-            Tile_Cover_Kind__Chest_Single
+            Tile_Cover_Kind__Chest__Single
             ;
 
         Inventory *p_inventory =
@@ -914,5 +914,35 @@ void f_chunk_generator__flat_world(
                 get_item_from__item_manager(
                     get_p_item_manager_from__game(p_game), 
                     Item_Kind__Pickaxe__Iron), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Shovel__Iron), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Door__Wood), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Door__Iron), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Door__Gold), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Door__Diamond), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Door__Amethyst), 1, 1);
     }
 }

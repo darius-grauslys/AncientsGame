@@ -4,6 +4,7 @@
 #include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"
 #include "vectors.h"
+#include "world/tile_vectors.h"
 #include <stdbool.h>
 #include <defines.h>
 
@@ -204,6 +205,25 @@ void set_entity_as__moving(Entity *entity,
         enum Sprite_Animation_Kind fallback_animation);
 
 void play_audio_of__entity_footstep(
+        Game *p_game,
+        Entity *p_entity);
+
+Vector__3i32F4 get_vector_3i32F4_thats__infront_of_this__entity(
+        Entity *p_entity);
+
+static inline
+Tile_Vector__3i32 get_tile_vector_thats__infront_of_this__entity(
+        Entity *p_entity) {
+    return vector_3i32F4_to__tile_vector(
+            get_vector_3i32F4_thats__infront_of_this__entity(
+                p_entity));
+}
+
+///
+/// For internal use only.
+/// Utilize Game_Action instead.
+///
+void entity__use(
         Game *p_game,
         Entity *p_entity);
 

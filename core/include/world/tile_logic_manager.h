@@ -26,19 +26,19 @@ void register_tile_cover_handler__touch_in__tile_logic_manager(
         Tile_Cover_Kind the_kind_of__tile,
         f_Tile_Handler__Touch f_tile_handler__touch);
 
-bool does_tile_have__interact_logic(
+bool is_tile_possessing__interact_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Kind the_kind_of__tile);
 
-bool does_tile_cover_have__interact_logic(
+bool is_tile_cover_possessing__interact_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Cover_Kind the_kind_of__tile_cover);
 
-bool does_tile_have__touch_logic(
+bool is_tile_possessing__touch_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Kind the_kind_of__tile);
 
-bool does_tile_cover_have__touch_logic(
+bool is_tile_cover_possessing__touch_logic(
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile_Cover_Kind the_kind_of__tile_cover);
 

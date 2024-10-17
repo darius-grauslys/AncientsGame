@@ -122,6 +122,32 @@ void m_enter_scene_as__game_handler(
     Entity *p_player = 
         get_p_local_player_from__game(p_game);
 
+    p_player->equipment.item_stack__main_hand.item =
+        get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                Item_Kind__Hammer__Iron);
+    p_player->equipment.item_stack__main_hand.quantity_of__items = 1;
+    p_player->equipment.item_stack__main_hand.max_quantity_of__items = 1;
+
+    p_player->equipment.item_stack__off_hand.item =
+        get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                Item_Kind__Door__Wood);
+    p_player->equipment.item_stack__off_hand.quantity_of__items = 1;
+    p_player->equipment.item_stack__off_hand.max_quantity_of__items = 1;
+
+    Chunk *p_chunk =
+        get_p_chunk_from__chunk_manager(
+                get_p_chunk_manager_from__game(p_game), 
+                (const Chunk_Vector__3i32){0, 0, 0});
+
+    p_chunk->tiles[0].the_kind_of_tile_cover__this_tile_has =
+        Tile_Cover_Kind__Wall__Dirt;
+    p_chunk->tiles[2].the_kind_of_tile_cover__this_tile_has =
+        Tile_Cover_Kind__Wall__Dirt;
+    p_chunk->tiles[16].the_kind_of_tile_cover__this_tile_has =
+        Tile_Cover_Kind__Wall__Dirt;
+
     while (1) {
         if (p_game->scene_manager.p_active_scene == 0)
             break;

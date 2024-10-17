@@ -32,6 +32,15 @@ void m_item_use_handler__pickaxe__iron(
         Entity *p_entity_user,
         Game_Action *p_game_action,
         Game *p_game) {
+    if (is_item_tool_mode_a__combat_mode(p_item_self)) {
+        m_item_use_handler__weapon(
+                p_item_self, 
+                p_entity_user, 
+                p_game_action, 
+                p_game);
+        return;
+    }
+
     Chunk_Vector__3i32 chunk_vector =
         vector_3i32F4_to__chunk_vector_3i32(
                 get_vector_3i32F4_from__entity(p_entity_user));
@@ -61,7 +70,8 @@ void m_item_use_handler__pickaxe__iron(
             p_game, 
             p_entity_user, 
             p_tile,
-            0); // TODO support large ores
+            0, // TODO support large ores
+            !is_item_tool_mode__labor(p_item_self));
 
     PLATFORM_update_chunk(
             get_p_PLATFORM_gfx_context_from__game(p_game), 

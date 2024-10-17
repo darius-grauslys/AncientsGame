@@ -6,6 +6,7 @@
 #include "serialization/serialization_request.h"
 #include "serialization/serialized_field.h"
 #include "world/serialization/world_directory.h"
+#include "world/tile_logic_manager.h"
 #include "world/world.h"
 #include <defines.h>
 #include <stdbool.h>
@@ -910,6 +911,7 @@ bool poll_chunk_manager_for__chunk_movement(
 }
 
 bool poll_chunk_manager_for__tile_collision(
+        Game *p_game,
         Chunk_Manager *p_chunk_manager, 
         Entity *p_entity) {
     if (p_entity->hitbox.velocity__3i32F4.x__i32F4 == 0
@@ -992,6 +994,10 @@ bool poll_chunk_manager_for__tile_collision(
                         directions[index>>2]);
             }
         }
+        (void)poll_tile_for__touch(
+                p_game,
+                p_tile, 
+                p_entity);
     }
 
     return true;

@@ -52,6 +52,7 @@ bool poll_chunk_manager_for__chunk_movement(
         Vector__3i32F4 position__3i32F4);
 
 bool poll_chunk_manager_for__tile_collision(
+        Game *p_game,
         Chunk_Manager *p_chunk_manager,
         Entity *p_entity);
 

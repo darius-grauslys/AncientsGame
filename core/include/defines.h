@@ -1690,6 +1690,8 @@ typedef Vector__3u8 Local_Tile_Vector__3u8;
     (TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING + 1)
 #define TILE_FLAGS__BIT_SHIFT_IS_CONTAINER \
     (TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE + 1)
+#define TILE_FLAGS__BIT_SHIFT_GENERAL_PURPOSE_DATA_BIT \
+    (TILE_FLAGS__BIT_IS_CONTAINER + 1)
 
 #define TILE_FLAGS__BIT_IS_SIGHT_BLOCKING \
     BIT(TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING)
@@ -1697,6 +1699,8 @@ typedef Vector__3u8 Local_Tile_Vector__3u8;
     BIT(TILE_FLAGS__BIT_SHIFT_IS_UNPASSABLE)
 #define TILE_FLAGS__BIT_IS_CONTAINER \
     BIT(TILE_FLAGS__BIT_SHIFT_IS_CONTAINER)
+#define TILE_FLAGS__BIT_GENERAL_PURPOSE_DATA_BIT \
+    BIT(TILE_FLAGS__BIT_SHIFT_GENERAL_PURPOSE_DATA_BIT)
 
 #define TILE_FLAGS__NONE 0
 
@@ -1720,6 +1724,7 @@ typedef Vector__3u8 Local_Tile_Vector__3u8;
 typedef struct Tile_t Tile;
 
 #define TILE_COVER_SHEET_INDEX__WALL (1 + TILE_SHEET_TILE_WIDTH * 16)
+#define TILE_COVER_SHEET_INDEX__DOOR (16 + 1 + TILE_SHEET_TILE_WIDTH * 16)
 
 #define TILE_COVER_SHEET_INDEX__PLANT (1 + TILE_SHEET_TILE_WIDTH * 2)
 #define TILE_COVER_SHEET_INDEX__FLOWER_RED (1 + TILE_SHEET_TILE_WIDTH * 3)
@@ -1765,15 +1770,7 @@ typedef struct Tile_t {
         the_kind_of_tile__this_tile_is          :10;
     enum Tile_Cover_Kind            
         the_kind_of_tile_cover__this_tile_has   :10;
-    //TODO: this structure is not padding friendly.
-    // consider making flags 16 bit
     Tile_Flags__u8 tile_flags                   :4;
-    // bits 1 2 3, stair direction (values 0-7)
-    // bit 4, is the stair inverted
-    // bit 5, is the stair going up or down
-    // bit 6, is this a stair
-    // bit 7, is sight blocking
-    // bit 8, is passable
 } Tile;
 
 typedef uint16_t Tile_Render_Index__u16;
@@ -1887,6 +1884,7 @@ typedef struct World_t {
     Chunk_Manager chunk_manager;
     Collision_Manager collision_manager;
     Structure_Manager structure_manager;
+    Tile_Logic_Manager tile_logic_manager;
     World_Parameters world_parameters;
 
     Camera camera;

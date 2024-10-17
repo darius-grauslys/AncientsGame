@@ -2,6 +2,7 @@
 #define INVENTORY_MANAGER_H
 
 #include "defines_weak.h"
+#include "game.h"
 #include <defines.h>
 
 void initialize_inventory_manager(
@@ -62,5 +63,17 @@ bool resolve_s_inventory_ptr_to__inventory_manager(
 bool resolve_s_item_stack_ptr_to__inventory_manager(
         Inventory_Manager *p_inventory_manager,
         Serialized_Item_Stack_Ptr *s_item_stack_ptr);
+
+static inline
+Inventory *resolve_s_inventory(
+        Game *p_game,
+        Serialized_Inventory_Ptr *s_inventory_ptr) {
+    if (resolve_s_inventory_ptr_to__inventory_manager(
+                get_p_inventory_manager_from__game(p_game), 
+                s_inventory_ptr)) {
+        return s_inventory_ptr->p_serialized_field__inventory;
+    }
+    return 0;
+}
 
 #endif
