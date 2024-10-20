@@ -1,5 +1,8 @@
 #include "defines_weak.h"
 #include "world/tile.h"
+#include "world/tiles/tile__cover__chest.h"
+#include "world/tiles/tile__cover__door.h"
+#include "world/tiles/tile__cover__table.h"
 #include <world/tile_logic_manager.h>
 
 void initialize_tile_logic_manager(
@@ -139,6 +142,7 @@ void invoke_tile_logic__interact(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32,
         Entity *p_entity) {
     if (is_tile_kind__illegal(p_tile->the_kind_of_tile__this_tile_is)) {
         debug_error("invoke_tile_logic__interact, the_kind_of__tile is illegal: %d",
@@ -151,6 +155,7 @@ void invoke_tile_logic__interact(
         p_tile->the_kind_of_tile__this_tile_is](
                 p_game,
                 p_tile,
+                tile_vector__3i32,
                 p_entity);
 }
 
@@ -158,6 +163,7 @@ void invoke_tile_cover_logic__interact(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity) {
     if (is_tile_cover_kind__illegal(p_tile->the_kind_of_tile_cover__this_tile_has)) {
         debug_error("invoke_tile_cover_logic__interact, the_kind_of__tile_cover is illegal: %d",
@@ -170,6 +176,7 @@ void invoke_tile_cover_logic__interact(
         p_tile->the_kind_of_tile_cover__this_tile_has](
                 p_game,
                 p_tile,
+                tile_vector__3i32,
                 p_entity);
 }
 
@@ -177,6 +184,7 @@ void invoke_tile_logic__touch(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity) {
     if (is_tile_kind__illegal(p_tile->the_kind_of_tile__this_tile_is)) {
         debug_error("invoke_tile_logic__touch, the_kind_of__tile is illegal: %d",
@@ -189,6 +197,7 @@ void invoke_tile_logic__touch(
         p_tile->the_kind_of_tile__this_tile_is](
                 p_game,
                 p_tile,
+                tile_vector__3i32,
                 p_entity);
 }
 
@@ -196,6 +205,7 @@ void invoke_tile_cover_logic__touch(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity) {
     if (is_tile_cover_kind__illegal(p_tile->the_kind_of_tile_cover__this_tile_has)) {
         debug_error("invoke_tile_cover_logic__touch, the_kind_of__tile_cover is illegal: %d",
@@ -208,5 +218,16 @@ void invoke_tile_cover_logic__touch(
         p_tile->the_kind_of_tile_cover__this_tile_has](
                 p_game,
                 p_tile,
+                tile_vector__3i32,
                 p_entity);
+}
+
+void register_tile_logic_handlers(
+        Tile_Logic_Manager *p_tile_logic_manager) {
+    register_tile_handlers_for__door(
+            p_tile_logic_manager);
+    register_tile_handlers_for__chest(
+            p_tile_logic_manager);
+    register_tile_handlers_for__table(
+            p_tile_logic_manager);
 }

@@ -13,20 +13,14 @@ void NDS_open_ui__equip(
     Entity *p_entity__local_player =
         get_p_local_player_from__game(p_game);
 
-    if (!p_entity__local_player)
+    if (!p_entity__local_player) {
+        debug_error("NDS::NDS_open_ui__equip, fail to get local player.");
         return;
+    }
     if (!resolve_s_inventory_ptr_to__inventory_manager(
                 get_p_inventory_manager_from__game(p_game), 
                 &p_entity__local_player->s_humanoid__inventory_ptr)) {
-        Tile *p_tile =
-            get_p_tile_from__chunk_manager_with__3i32F4(
-                get_p_chunk_manager_from__game(p_game),
-                get_vector__3i32F4_using__i32(0, 3, 0));
-        p_tile->the_kind_of_tile_cover__this_tile_has =
-            Tile_Cover_Kind__Wall__Iron;
-        PLATFORM_update_chunks(
-                get_p_PLATFORM_gfx_context_from__game(p_game), 
-                get_p_chunk_manager_from__game(p_game));
+        debug_error("NDS::NDS_open_ui__equip, fail to get inventory of local player.");
         return;
     }
 

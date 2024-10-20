@@ -230,6 +230,8 @@ void entity__interact(
     (void)poll_tile_for__interaction(
             p_game, 
             p_tile, 
+            vector_3i32F4_to__tile_vector(
+                vector_3i32F4__front_of_entity),
             p_entity);
 }
 

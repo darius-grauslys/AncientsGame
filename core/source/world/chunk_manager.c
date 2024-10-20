@@ -984,8 +984,8 @@ bool poll_chunk_manager_for__tile_collision(
                     local_positions[index+1],
                     0);
 
-        if (is_tile__unpassable(p_tile)) {
-            if (p_entity->m_entity_tile_collision_handler) {
+        if (p_entity->m_entity_tile_collision_handler) {
+            if (is_tile__unpassable(p_tile)) {
                 p_entity->m_entity_tile_collision_handler(
                         p_entity,
                         p_tile,
@@ -993,14 +993,45 @@ bool poll_chunk_manager_for__tile_collision(
                         corner_positions[index+1],
                         directions[index>>2]);
             }
+            // TODO: provide accurate tile_vector
+            (void)poll_tile_for__touch(
+                    p_game,
+                    p_tile, 
+                    VECTOR__3i32__0_0_0,
+                    p_entity);
         }
-        (void)poll_tile_for__touch(
-                p_game,
-                p_tile, 
-                p_entity);
     }
 
     return true;
+}
+
+// TODO: replace all the other tile getters to convert the vector
+// to tile_vector__3i32 and call this function.
+Tile *get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+        Chunk_Manager *p_chunk_manager,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Vector__3i32 chunk_index =
+        tile_vector_3i32_to__chunk_vector_3i32(tile_vector__3i32);
+    Vector__3u8 local_position =
+        tile_vector_3i32_to__local_tile_vector_3u8(
+                tile_vector__3i32);
+
+    Chunk *p_chunk =
+        get_p_chunk_from__chunk_manager(
+                p_chunk_manager, 
+                chunk_index);
+#ifndef NDEBUG
+    if (!p_chunk) {
+        debug_warning("nullptr: get_p_tile_from__chunk_manager_with__3i32F4");
+        return 0;
+    }
+#endif
+    Tile *p_tile =
+        get_p_tile_from__chunk(
+                p_chunk, 
+                local_position);
+
+    return p_tile;
 }
 
 Tile *get_p_tile_from__chunk_manager_with__3i32F4(

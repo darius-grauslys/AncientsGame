@@ -42,6 +42,46 @@
         0,\
         -i32_to__i32F4(1),\
         0}
+#define VECTOR__3i32__1_0_0 \
+        (const Vector__3i32){\
+        1,\
+        0,\
+        0}
+#define VECTOR__3i32__n1_0_0 \
+        (const Vector__3i32){\
+        -1,\
+        0,\
+        0}
+#define VECTOR__3i32__0_1_0 \
+        (const Vector__3i32){\
+        0,\
+        1,\
+        0}
+#define VECTOR__3i32__0_n1_0 \
+        (const Vector__3i32){\
+        0,\
+        -1,\
+        0}
+#define VECTOR__3i32__1_1_0 \
+        (const Vector__3i32){\
+        1,\
+        1,\
+        0}
+#define VECTOR__3i32__n1_1_0 \
+        (const Vector__3i32){\
+        -1,\
+        1,\
+        0}
+#define VECTOR__3i32__1_n1_0 \
+        (const Vector__3i32){\
+        0,\
+        1,\
+        0}
+#define VECTOR__3i32__n1_n1_0 \
+        (const Vector__3i32){\
+        0,\
+        -1,\
+        0}
 #define VECTOR__3i32F20__0_0_0 \
     (const Vector__3i32F20) VECTOR__0_0_0
 

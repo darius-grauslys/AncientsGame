@@ -177,11 +177,13 @@ Tile_Render_Result get_tile_render_result(
 bool poll_tile_for__interaction(
         Game *p_game,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
 
 bool poll_tile_for__touch(
         Game *p_game,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
 
 #endif

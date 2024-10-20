@@ -24,7 +24,7 @@ void initialize_entity_as__player(
             p_entity,
             Entity_Kind__Player,
             position__3i32F4,
-            8, 8);
+            7, 7);
     set_entity__disposer(
             p_entity,
             m_entity_dispose_handler__default);

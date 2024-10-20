@@ -13,6 +13,10 @@
 #include <assets/ui/default/ui_map_trade.h>
 #include <assets/ui/default/ui_map_labor.h>
 #include <assets/ui/default/ui_map_inventory_column.h>
+#include <assets/ui/default/ui_map_short_inventory_column.h>
+#include <assets/ui/default/ui_map_loading.h>
+#include <assets/ui/default/ui_map_station.h>
+#include <assets/ui/default/ui_map_station_items.h>
 
 #include <assets/ui/log/GFX_log.h>
 #include <assets/ui/log/ui_map_log.h>
@@ -181,6 +185,56 @@ void NDS_initialize_background_engine_allocation_context(
             //         GFX_typerPalLen,
             //         0,
             //         NDS_BACKGROUND_PRIORITY__UI__SCROLL_TYPER);
+            break;
+        case UI_Window_Kind__Station:
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__BASE],
+                    NDS_UI_Background_Allocation_Kind__Base,
+                    TEXTURE_FLAG__SIZE_256x256,
+                    NDS_BACKGROUND_SLOT__UI__BASE, 
+                    VECTOR__3i32__0_0_0,
+                    VECTOR__3i32__0_0_0,
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_stationMap, 
+                    ui_map_stationMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
+                    NDS_BACKGROUND_PRIORITY__UI__BASE);
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__SUB_BASE],
+                    NDS_UI_Background_Allocation_Kind__Sub_Base,
+                    TEXTURE_FLAG__SIZE_256x256,
+                    NDS_BACKGROUND_SLOT__UI__SUB_BASE, 
+                    VECTOR__3i32__0_0_0,
+                    VECTOR__3i32__0_0_0,
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_station_itemsMap, 
+                    ui_map_station_itemsMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
+                    NDS_BACKGROUND_PRIORITY__UI__SUB_BASE);
+            NDS_initialize_background_allocation_specification(
+                    &p_NDS_background_engine_allocation_context
+                        ->nds_background_allocation_specifications[
+                            NDS_BACKGROUND_SLOT__UI__SCROLL],
+                    NDS_UI_Background_Allocation_Kind__Scroll,
+                    TEXTURE_FLAG__SIZE_256x512,
+                    NDS_BACKGROUND_SLOT__UI__SCROLL, 
+                    get_vector__3i32(-48, 86, 0),
+                    get_vector__3i32(0, 176, 0),
+                    GFX_defaultTiles, 
+                    GFX_defaultTilesLen, 
+                    ui_map_short_inventory_columnMap, 
+                    ui_map_short_inventory_columnMapLen,
+                    GFX_defaultPal,
+                    GFX_defaultPalLen,
+                    NDS_BACKGROUND_PRIORITY__UI__SCROLL);
             break;
         case UI_Window_Kind__Equip:
             NDS_initialize_background_allocation_specification(

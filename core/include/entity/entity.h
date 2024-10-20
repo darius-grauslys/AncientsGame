@@ -187,6 +187,29 @@ void set_entity__game_action_handler(
     p_entity->m_entity_game_action_handler = m_game_action_handler;
 }
 
+static inline
+void set_entity_kind_of__entity(
+        Entity *p_entity,
+        Entity_Kind the_kind_of__entity) {
+    p_entity
+        ->the_kind_of_entity__this_entity_is =
+        the_kind_of__entity;
+}
+
+static inline
+Entity_Kind get_entity_kind_of__entity(
+        Entity *p_entity) {
+    return p_entity->the_kind_of_entity__this_entity_is;
+}
+
+static inline
+bool is_entity_of__this_kind(
+        Entity *p_entity,
+        Entity_Kind the_kind_of__entity) {
+    return get_entity_kind_of__entity(p_entity)
+        == the_kind_of__entity;
+}
+
 void initialize_entity(
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,

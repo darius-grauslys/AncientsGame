@@ -278,7 +278,7 @@ enum Sustenance_State {
 /// Furthermore DO NOT explicitly assign values to
 /// any Entity_Kind, even your own.
 ///
-enum Entity_Kind {
+typedef enum Entity_Kind {
     Entity_Kind__None,
     Entity_Kind__Trigger_Box,
     Entity_Kind__Particle,
@@ -290,7 +290,7 @@ enum Entity_Kind {
     // specifier, or if an Entity_Kind enum doesn't
     // match any defined enum.
     Entity_Kind__Unknown
-};
+} Entity_Kind;
 
 enum Particle_Kind {
     Particle_Kind__None = 0,
@@ -464,7 +464,8 @@ typedef enum Item_Kind {
     Item_Kind__Shovel__Steel__Order__Broken,
     Item_Kind__Hammer__Steel__Order__Broken,
     Item_Kind__RESERVED_33,
-    Item_Kind__Tongs__Tool,
+    Item_Kind__TOOLS,
+    Item_Kind__Tongs__Tool = Item_Kind__TOOLS,
     Item_Kind__Tongs__Tool_Hot,
     Item_Kind__Hammer__Tool,
     Item_Kind__Saw__Iron,
@@ -731,9 +732,73 @@ typedef enum Item_Kind {
     Item_Kind__RESERVED_142,
     Item_Kind__RESERVED_143,
     Item_Kind__RESERVED_144,
-    Item_Kind__RESERVED_145,
     Item_Kind__Table,
     Item_Kind__Chest,
+    Item_Kind__RESERVED_145,
+    Item_Kind__RESERVED_146,
+    Item_Kind__RESERVED_147,
+    Item_Kind__RESERVED_148,
+    Item_Kind__RESERVED_149,
+    Item_Kind__RESERVED_150,
+    Item_Kind__RESERVED_151,
+    Item_Kind__RESERVED_152,
+    Item_Kind__RESERVED_153,
+    Item_Kind__RESERVED_154,
+    Item_Kind__RESERVED_155,
+    Item_Kind__RESERVED_156,
+    Item_Kind__RESERVED_157,
+    Item_Kind__RESERVED_158,
+    Item_Kind__RESERVED_159,
+    Item_Kind__RESERVED_160,
+    Item_Kind__RESERVED_161,
+    Item_Kind__RESERVED_162,
+    Item_Kind__RESERVED_163,
+    Item_Kind__RESERVED_164,
+    Item_Kind__RESERVED_165,
+    Item_Kind__RESERVED_166,
+    Item_Kind__RESERVED_167,
+    Item_Kind__RESERVED_168,
+    Item_Kind__RESERVED_169,
+    Item_Kind__RESERVED_170,
+    Item_Kind__RESERVED_171,
+    Item_Kind__RESERVED_172,
+    Item_Kind__RESERVED_173,
+    Item_Kind__RESERVED_174,
+
+    // row
+    
+    Item_Kind__Item_Recipe,
+    Item_Kind__RESERVED_176,
+    Item_Kind__RESERVED_177,
+    Item_Kind__RESERVED_178,
+    Item_Kind__RESERVED_179,
+    Item_Kind__RESERVED_180,
+    Item_Kind__RESERVED_181,
+    Item_Kind__RESERVED_182,
+    Item_Kind__RESERVED_183,
+    Item_Kind__RESERVED_184,
+    Item_Kind__RESERVED_185,
+    Item_Kind__RESERVED_186,
+    Item_Kind__RESERVED_187,
+    Item_Kind__RESERVED_188,
+    Item_Kind__RESERVED_189,
+    Item_Kind__RESERVED_190,
+    Item_Kind__RESERVED_191,
+    Item_Kind__RESERVED_192,
+    Item_Kind__RESERVED_193,
+    Item_Kind__RESERVED_194,
+    Item_Kind__RESERVED_195,
+    Item_Kind__RESERVED_196,
+    Item_Kind__RESERVED_197,
+    Item_Kind__RESERVED_198,
+    Item_Kind__RESERVED_199,
+    Item_Kind__RESERVED_200,
+    Item_Kind__RESERVED_201,
+    Item_Kind__RESERVED_202,
+    Item_Kind__RESERVED_203,
+    Item_Kind__RESERVED_204,
+    Item_Kind__RESERVED_205,
+    Item_Kind__RESERVED_206,
     Item_Kind__Unknown = BIT(9)
 } Item_Kind;
 
@@ -745,6 +810,16 @@ typedef enum Tool_Mode {
     Tool_Mode__Combat_Lockon,
     Tool_Mode__Unknown
 } Tool_Mode;
+
+typedef enum Station_Kind {
+    Station_Kind__None,
+    Station_Kind__Carpentry,
+    Station_Kind__Bower,
+    Station_Kind__Cartographer,
+    Station_Kind__Metalurgist,
+    Station_Kind__Bakery,
+    Station_Kind__Unknown
+} Station_Kind;
 
 /// 
 /// SECTION_multiplayer
@@ -1432,11 +1507,11 @@ typedef enum Tile_Cover_Kind {
     Tile_Cover_Kind__RESERVED_333,
     Tile_Cover_Kind__RESERVED_334,
     Tile_Cover_Kind__RESERVED_335,
-    Tile_Cover_Kind__RESERVED_Anvil__Steel__Left,
-    Tile_Cover_Kind__RESERVED_Anvil__Steel__Right,
-    Tile_Cover_Kind__RESERVED_Table__Top__Left,
-    Tile_Cover_Kind__RESERVED_Table__Top__Middle,
-    Tile_Cover_Kind__RESERVED_Table__Top__Right,
+    Tile_Cover_Kind__Anvil__Steel__Left,
+    Tile_Cover_Kind__Anvil__Steel__Right,
+    Tile_Cover_Kind__Table__Top__Left,
+    Tile_Cover_Kind__Table__Top__Middle,
+    Tile_Cover_Kind__Table__Top__Right,
     Tile_Cover_Kind__RESERVED_341,
     Tile_Cover_Kind__RESERVED_342,
     Tile_Cover_Kind__RESERVED_343,
@@ -1465,13 +1540,13 @@ typedef enum Tile_Cover_Kind {
     Tile_Cover_Kind__RESERVED_365,
     Tile_Cover_Kind__RESERVED_366,
     Tile_Cover_Kind__RESERVED_367,
-    Tile_Cover_Kind__RESERVED_Anvil__Iron__Left,
-    Tile_Cover_Kind__RESERVED_Anvil__Iron__Right,
-    Tile_Cover_Kind__RESERVED_Table__Bottom__Left,
-    Tile_Cover_Kind__RESERVED_Table__Bottom__Middle,
-    Tile_Cover_Kind__RESERVED_Table__Bottom__Right,
-    Tile_Cover_Kind__RESERVED_Bed__Horizontal__Left,
-    Tile_Cover_Kind__RESERVED_Bed__Horizontal__Right,
+    Tile_Cover_Kind__Anvil__Iron__Left,
+    Tile_Cover_Kind__Anvil__Iron__Right,
+    Tile_Cover_Kind__Table__Bottom__Left,
+    Tile_Cover_Kind__Table__Bottom__Middle,
+    Tile_Cover_Kind__Table__Bottom__Right,
+    Tile_Cover_Kind__Bed__Horizontal__Left,
+    Tile_Cover_Kind__Bed__Horizontal__Right,
     Tile_Cover_Kind__RESERVED_375,
     Tile_Cover_Kind__RESERVED_376,
     Tile_Cover_Kind__RESERVED_377,

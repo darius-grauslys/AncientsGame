@@ -9,6 +9,7 @@
 #include "scene/scene_manager.h"
 #include "sort/sort_list/sort_list_manager.h"
 #include "world/path_finding/path_list_manager.h"
+#include "world/tile_logic_manager.h"
 #include <game.h>
 #include <entity/entity.h>
 #include <entity/entity_manager.h>
@@ -52,7 +53,7 @@ void initialize_game(
             get_p_inventory_manager_from__game(p_game));
     initialize_item_manager(
             get_p_item_manager_from__game(p_game));
-    load_core_items_into__item_manager(
+    register_core_items_into__item_manager(
             get_p_item_manager_from__game(p_game));
 
     initialize_log(get_p_log__global_from__game(p_game));

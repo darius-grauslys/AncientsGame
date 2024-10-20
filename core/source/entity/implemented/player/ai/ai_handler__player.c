@@ -69,66 +69,25 @@ void m_entity_ai_handler__player(
         print_log__global(p_game, "Hello World!\n");
     }
     if (is_input__examine_released(p_input)) {
-        for (i32 y=-3;y<4;y++) {
-            for (i32 x=-3;x<4;x++) {
-                Vector__3i32F4 player_vector__3i32F4 =
-                    p_this_player
-                    ->hitbox.position__3i32F4;
-                player_vector__3i32F4.x__i32F4 += i32_to__i32F4(x << 3);
-                player_vector__3i32F4.y__i32F4 += i32_to__i32F4(y << 3);
+        // TODO: on player_ai loop, we should check if the front tile_vector
+        //       is interactable, and if it is, put a (X) sprite above it.
+        Vector__3i32F4 vector_front__3i32F4;
+        Tile *p_tile =
+            get_p_tile_and_vector_3i32F4_thats__infront_of_this__entity(
+                    get_p_world_from__game(p_game), 
+                    p_this_player, 
+                    &vector_front__3i32F4);
 
-                Tile *p_tile =
-                    get_p_tile_from__chunk_manager_with__3i32F4(
-                            get_p_chunk_manager_from__game(p_game), 
-                            player_vector__3i32F4);
-
-                if (!p_tile) {
-                    continue;
-                }
-                Tile_Vector__3i32 tv =
-                        vector_3i32F4_to__tile_vector(
-                            player_vector__3i32F4);
-                if (is_tile__container(p_tile)) {
-                    Identifier__u32 uuid_of__container =
-                        get_uuid_for__container(tv);
-
-                    Serialized_Field s_inventory__container;
-                    initialize_serialized_field_as__unlinked(
-                            &s_inventory__container, 
-                            uuid_of__container);
-
-                    if (!resolve_s_inventory_ptr_to__inventory_manager(
-                            get_p_inventory_manager_from__game(p_game),
-                            &s_inventory__container)) {
-                        p_tile->the_kind_of_tile_cover__this_tile_has =
-                            Tile_Cover_Kind__Wall__Gold;
-                        PLATFORM_update_chunks(
-                                get_p_PLATFORM_gfx_context_from__game(p_game), 
-                                get_p_chunk_manager_from__game(p_game));
-                        continue;
-                    }
-
-                    for (Index__u8 index_of__item_stack = 0;
-                            index_of__item_stack < 4;
-                            index_of__item_stack++) {
-                        Item_Stack *p_item_stack =
-                            get_p_item_stack_from__inventory_by__index(
-                                s_inventory__container.p_serialized_field__inventory, 
-                                index_of__item_stack);
-                        debug_info("item: %d",
-                                p_item_stack->item.the_kind_of_item__this_item_is);
-                    }
-
-                    p_this_player
-                        ->s_humanoid__container_ptr =
-                        s_inventory__container;
-
-                    PLATFORM_open_ui(
-                            p_game,
-                            UI_Window_Kind__Trade);
-                }
-            }
+        if (!p_tile) {
+            return;
         }
+
+        poll_tile_for__interaction(
+                p_game, 
+                p_tile, 
+                vector_3i32F4_to__tile_vector(
+                    vector_front__3i32F4),
+                p_this_player);
     } 
     if (is_input__use_secondary_released(p_input)) {
         // TODO:    this will become running?

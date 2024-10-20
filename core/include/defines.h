@@ -764,6 +764,18 @@ typedef void (*m_Item_Protect)(
         Game *p_game,
         Hearts_Damaging_Specifier *p_hearts_damage);
 
+typedef uint8_t Item_Recipe_Flags;
+
+#define ITEM_RECIPE_FLAGS__NONE 0
+#define ITEM_RECIPE_FLAG__IS_COST_REDUCTION__ONE BIT(0)
+#define ITEM_RECIPE_FLAG__IS_COST_REDUCTION__TWO BIT(1)
+#define ITEM_RECIPE_FLAG__IS_COST_REDUCTION__THREE BIT(2)
+#define ITEM_RECIPE_FLAG__IS_COST_REDUCTION__FOUR BIT(3)
+#define ITEM_RECIPE_FLAG__DOUBLE_PRODUCITON BIT(4)
+#define ITEM_RECIPE_FLAG__HALF_TOOL_CONSUMPTION BIT(5)
+
+#define ITEM_TOOL_MAX_QUANTITY_OF 32
+
 typedef struct Item_t {
     m_Item_Use          m_item_use_handler;
     m_Item_Equip_Event  m_item_equip_handler;
@@ -773,22 +785,32 @@ typedef struct Item_t {
     Item_Filter_Flags   item_filter_flags               :3;
     Item_Usage_Flags    item_usage_flags                :3;
     union {
-        struct { // Armor
-            Hearts_Damaging_Flags   armor__resistances;
-            Quantity__u8            armor__quantity_of__protection_u8;
+        struct { // Tool
+            union {
+                struct { // Armor
+                    Hearts_Damaging_Flags   armor__resistances;
+                    Quantity__u8            armor__quantity_of__protection_u8;
+                };
+                struct { // Weapon
+                    Hearts_Damaging_Flags   weapon__damage_type;
+                    Quantity__u8            weapon__quantity_of__damage_u8;
+                };
+            };
+            Quantity__u16 tool__quantity_of__durability;
+            Quantity__u16 tool__max_quantity_of__durability;
+            Tool_Mode item_tool_mode;
         };
-        struct { // Weapon
-            Hearts_Damaging_Flags   weapon__damage_type;
-            Quantity__u8            weapon__quantity_of__damage_u8;
+        struct { // Item Recipe
+            Item_Kind   the_kind_of_item__this_recipe_produces :10;
+            Item_Recipe_Flags item_recipe_flags;
+            Station_Kind the_kind_of__station_required;
         };
     };
-    Tool_Mode item_tool_mode;
 } Item;
 
 typedef struct Item_Manager_t {
     Item item_templates[(u16)Item_Kind__Unknown];
 } Item_Manager;
-
 
 typedef struct Item_Recipe_Requirement_t {
     Item_Kind the_kind_of__item_that_is__required;
@@ -797,15 +819,15 @@ typedef struct Item_Recipe_Requirement_t {
 
 #define ITEM_REQUIREMENT_MAX_QUANTITY_OF 4
 
-typedef struct Item_Recipe_t {
+typedef struct Item_Recipe_Record_t {
     Item_Recipe_Requirement requirements[
         ITEM_REQUIREMENT_MAX_QUANTITY_OF];
     Item_Kind the_kind_of__item_this__recipe_makes;
     Quantity__u32 the_quantity_of__items_this__recipe_makes;
-} Item_Recipe;
+} Item_Recipe_Record;
 
 typedef struct Item_Recipe_Manager_t {
-    Item_Recipe recipes[Item_Kind__Unknown - 1];
+    Item_Recipe_Record recipes[Item_Kind__Unknown - 1];
 } Item_Recipe_Manager;
 
 typedef struct Item_Stack_t {
@@ -913,6 +935,37 @@ typedef union Equipment_t {
         Item_Stack item_stack__consumable_3;
     };
 } Equipment;
+
+typedef bool (*f_Station_Handler__Use)(
+        Game *p_game,
+        Entity *p_entity__user,
+        Inventory *p_station__inventory);
+
+typedef struct Station_Record_t {
+    f_Station_Handler__Use f_station_handler__use;
+    Item_Kind first_required__tool;
+    Item_Kind second_required__tool;
+} Station_Record;
+
+///
+/// Maps the item_stacks of an inventory to
+/// a struct of aliased pointer fields.
+///
+/// These pointers are non-owning.
+///
+typedef struct Station_Inventory_Map_t {
+    Item_Stack *p_item_stack__recipe;
+    Item_Stack *p_item_stack__required_items;
+    Item_Stack *p_item_stack__tool_one;
+    Item_Stack *p_item_stack__tool_two;
+} Station_Inventory_Map;
+
+typedef struct Station_Manager_t {
+    Station_Record stations[Station_Kind__Unknown];
+    Station_Kind map_of__tools_to__station[
+        ITEM_TOOL_MAX_QUANTITY_OF
+            * ITEM_TOOL_MAX_QUANTITY_OF];
+} Station_Manager;
 
 ///
 /// SECTION_entity
@@ -1196,9 +1249,11 @@ typedef struct Entity_t {
 } Entity;
 
 #define ENTITY_TILE_LOCAL_SPACE__BIT_SIZE 3
+#define CHUNK_LOCAL_SPACE__BIT_SIZE 3
 
 #define ENTITY_CHUNK_LOCAL_SPACE__BIT_SIZE \
-    (ENTITY_TILE_LOCAL_SPACE__BIT_SIZE + 3)
+    (ENTITY_TILE_LOCAL_SPACE__BIT_SIZE\
+     + CHUNK_LOCAL_SPACE__BIT_SIZE)
 
 #define ENTITY_TILE_FRACTIONAL__BIT_SIZE \
     (FRACTIONAL_PERCISION_4__BIT_SIZE \
@@ -1742,12 +1797,22 @@ typedef uint8_t Tile_Flags__u8;
 typedef void (*f_Tile_Handler__Interact)(
         Game *p_game,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32,
         Entity *p_entity);
 
 typedef void (*f_Tile_Handler__Touch)(
         Game *p_game,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32,
         Entity *p_entity);
+
+///
+/// Returns false on placement failure
+///
+typedef bool (*f_Tile_Handler__Place)(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32);
 
 ///
 /// Manages the logic associated with special tiles.
@@ -1913,6 +1978,7 @@ typedef struct Game_t {
 
     Inventory_Manager   inventory_manager;
     Item_Manager        item_manager;
+    Item_Recipe_Manager item_recipe_manager;
 
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;

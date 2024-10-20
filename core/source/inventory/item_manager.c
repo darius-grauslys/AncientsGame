@@ -57,6 +57,7 @@
 #include "inventory/implemented/door__iron/door__iron.h"
 #include "inventory/implemented/door__diamond/door__diamond.h"
 #include "inventory/implemented/door__amethyst/door__amethyst.h"
+#include "inventory/implemented/table/table.h"
 #include "inventory/item.h"
 
 void initialize_item_manager(
@@ -83,7 +84,7 @@ Item get_item_from__item_manager(
     return p_item_manager->item_templates[the_kind_of__item];
 }
 
-void load_core_items_into__item_manager(
+void register_core_items_into__item_manager(
         Item_Manager *p_item_manager) {
     // behold, the core items:
     register_into__item_manager__armor_cloth(p_item_manager);
@@ -157,4 +158,6 @@ void load_core_items_into__item_manager(
     register_into__item_manager__door__iron_into__item_manager(p_item_manager);
     register_into__item_manager__door__diamond_into__item_manager(p_item_manager);
     register_into__item_manager__door__amethyst_into__item_manager(p_item_manager);
+
+    register_into__item_manager__table_into__item_manager(p_item_manager);
 }

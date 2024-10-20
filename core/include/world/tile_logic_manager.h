@@ -46,24 +46,31 @@ void invoke_tile_logic__interact(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
 
 void invoke_tile_cover_logic__interact(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
 
 void invoke_tile_logic__touch(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
 
 void invoke_tile_cover_logic__touch(
         Game *p_game,
         Tile_Logic_Manager *p_tile_logic_manager,
         Tile *p_tile,
+        Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
+
+void register_tile_logic_handlers(
+        Tile_Logic_Manager *p_tile_logic_manager);
 
 #endif

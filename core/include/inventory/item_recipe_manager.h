@@ -12,17 +12,19 @@ void initialize_item_recipe_manager(
 ///
 void register_item_recipe_into__item_recipe_manager(
         Item_Recipe_Manager *p_item_recipe_manager,
-        Item_Recipe *p_item_recipe);
+        Item_Recipe_Record item_recipe);
 
 bool is_inventory_capable_of__making_this_item_in__item_recipe_manager(
         Item_Recipe_Manager *p_item_recipe_manager,
         Inventory *p_inventory,
-        Item_Kind the_kind_of__item);
+        Item_Kind the_kind_of__item,
+        Item_Recipe_Flags item_recipe_flags);
 
 bool make_item_with__this_inventory(
         Item_Recipe_Manager *p_item_recipe_manager,
         Inventory *p_inventory,
-        Item_Kind the_kind_of__item);
+        Item_Kind the_kind_of__item,
+        Item_Recipe_Flags item_recipe_flags);
 
 bool is_item__craftable(
         Item_Recipe_Manager *p_item_recipe_manager,

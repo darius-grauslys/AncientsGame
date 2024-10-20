@@ -98,10 +98,42 @@ Tile_Vector__3i32 get_ray_endpoint_as__tile_vector(
 ///
 /// Returns a Vector__3u8 with x,y,z signlessly indexing tiles
 ///
-static inline Local_Tile_Vector__3u8 vector_3i32F4_to__local_tile_vector_3u8(
+static inline 
+Local_Tile_Vector__3u8 vector_3i32F4_to__local_tile_vector_3u8(
         Vector__3i32F4 vector) {
     Vector__3i32 vector__3i32 =
         vector_3i32F4_to__vector_3i32(vector);
+    vector__3i32.x__i32 = (((vector__3i32.x__i32 >> 3)
+            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
+        % CHUNK_WIDTH__IN_TILES;
+    vector__3i32.y__i32 = (((vector__3i32.y__i32 >> 3)
+            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
+        % CHUNK_WIDTH__IN_TILES;
+    vector__3i32.z__i32 = (((vector__3i32.z__i32 >> 3)
+            % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
+        % CHUNK_WIDTH__IN_TILES;
+    return get_vector__3u8(
+            vector__3i32.x__i32, 
+            vector__3i32.y__i32, 
+            vector__3i32.z__i32);
+}
+
+static inline
+Vector__3i32 tile_vector_3i32_to__vector_3i32(
+        Tile_Vector__3i32 tile_vector__3i32) {
+    return get_vector__3i32(
+            tile_vector__3i32.x__i32
+            << TILE_PIXEL_WIDTH__BIT_SIZE,
+            tile_vector__3i32.y__i32
+            << TILE_PIXEL_WIDTH__BIT_SIZE,
+            tile_vector__3i32.z__i32
+            << TILE_PIXEL_WIDTH__BIT_SIZE);
+}
+
+static inline Local_Tile_Vector__3u8 tile_vector_3i32_to__local_tile_vector_3u8(
+        Tile_Vector__3i32 vector) {
+    Vector__3i32 vector__3i32 =
+        tile_vector_3i32_to__vector_3i32(vector);
     vector__3i32.x__i32 = (((vector__3i32.x__i32 >> 3)
             % CHUNK_WIDTH__IN_TILES) + CHUNK_WIDTH__IN_TILES)
         % CHUNK_WIDTH__IN_TILES;

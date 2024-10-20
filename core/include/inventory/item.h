@@ -28,6 +28,12 @@ bool set_item_tool_mode(
         Tool_Mode tool_mode);
 
 static inline
+Item_Kind get_item_kind_of__item(
+        Item *p_item) {
+    return p_item->the_kind_of_item__this_item_is;
+}
+
+static inline
 Item get_item(
         enum Item_Kind the_kind_of__item,
         Item_Usage_Flags item_usage_flags,
@@ -56,6 +62,16 @@ bool is_p_item__empty(
         == Item_Kind__None;
 }
 
+
+static inline
+bool is_item_of__this_kind(
+        Item *p_item,
+        Item_Kind the_kind_of__item) {
+    return p_item->the_kind_of_item__this_item_is
+        == the_kind_of__item;
+}
+
+// TODO: rename to be same item_kind
 static inline
 bool is_p_items__equal(
         Item *p_item__one,

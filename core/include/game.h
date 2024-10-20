@@ -106,6 +106,11 @@ Item_Manager *get_p_item_manager_from__game(Game *p_game) {
     return &p_game->item_manager;
 }
 
+static inline
+Item_Recipe_Manager *get_p_item_recipe_manager_from__game(Game *p_game) {
+    return &p_game->item_recipe_manager;
+}
+
 static inline 
 Scene_Manager *get_p_scene_manager_from__game(Game *p_game) {
     return &p_game->scene_manager;
@@ -116,8 +121,8 @@ Entity_Manager *get_p_entity_manager_from__game(Game *p_game) {
     return get_p_entity_manager_from__world(&p_game->world);
 }
 
-static Chunk_Manager inline 
-*get_p_chunk_manager_from__game(Game *p_game) {
+static inline 
+Chunk_Manager *get_p_chunk_manager_from__game(Game *p_game) {
     return get_p_chunk_manager_from__world(&p_game->world);
 }
 
@@ -127,38 +132,40 @@ World_Parameters *get_p_world_parameters_from__game(Game *p_game) {
             get_p_world_from__game(p_game));
 }
 
-static Collision_Manager inline 
-*get_p_collision_manager_from__game(Game *p_game) {
+static inline 
+Collision_Manager *get_p_collision_manager_from__game(Game *p_game) {
     return get_p_collision_manager_from__world(&p_game->world);    
 }
 
-static PLATFORM_File_System_Context inline
-*get_p_PLATFORM_file_system_context_from__game(Game *p_game) {
+static inline
+PLATFORM_File_System_Context *get_p_PLATFORM_file_system_context_from__game(
+        Game *p_game) {
     return p_game->p_PLATFORM_file_system_context;
 }
 
-static PLATFORM_Audio_Context inline
-*get_p_PLATFORM_audio_context_from__game(Game *p_game) {
+static inline
+PLATFORM_Audio_Context *get_p_PLATFORM_audio_context_from__game(
+        Game *p_game) {
     return p_game->p_PLATFORM_audio_context;
 }
 
-static PLATFORM_Gfx_Context inline
-*get_p_PLATFORM_gfx_context_from__game(Game *p_game) {
+static inline
+PLATFORM_Gfx_Context *get_p_PLATFORM_gfx_context_from__game(Game *p_game) {
     return p_game->p_PLATFORM_gfx_context;
 }
 
-static Input inline
-*get_p_input_from__game(Game *p_game) {
+static inline
+Input *get_p_input_from__game(Game *p_game) {
     return &p_game->input;
 }
 
-static UI_Manager inline
-*get_p_ui_manager_from__game(Game *p_game) {
+static inline
+UI_Manager *get_p_ui_manager_from__game(Game *p_game) {
     return &p_game->ui_manager;
 }
 
-static Entity inline
-*get_p_local_player_from__game(Game *p_game) {
+static inline
+Entity *get_p_local_player_from__game(Game *p_game) {
     return get_p_local_player_from__world(&p_game->world);
 }
 

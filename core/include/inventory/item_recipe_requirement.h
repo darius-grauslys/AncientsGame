@@ -7,6 +7,10 @@
 void initialize_item_recipe_requirement_as__unused(
         Item_Recipe_Requirement *p_item_recipe_requirement);
 
+Item_Recipe_Requirement get_item_recipe_requirement(
+        Item_Kind the_kind_of__item_required,
+        Quantity__u32 the_quantity_of__items_required);
+
 void initialize_item_recipe_requirement(
         Item_Recipe_Requirement *p_item_recipe_requirement,
         Item_Kind the_kind_of__item_that_is__required,
@@ -14,7 +18,8 @@ void initialize_item_recipe_requirement(
 
 bool is_inventory_capable_of__meeting_item_recipe_requirement(
         Inventory *p_inventory,
-        Item_Recipe_Requirement *p_item_recipe_requirement);
+        Item_Recipe_Requirement *p_item_recipe_requirement,
+        bool is_requirement__halved);
 
 static inline
 bool is_item_recipe_requirement__used(

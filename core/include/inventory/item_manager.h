@@ -26,7 +26,7 @@ Item get_item_from__item_manager(
         Item_Manager *p_item_manager,
         enum Item_Kind the_kind_of__item);
 
-void load_core_items_into__item_manager(
+void register_core_items_into__item_manager(
         Item_Manager *p_item_manager);
 
 #endif

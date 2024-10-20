@@ -944,5 +944,10 @@ void f_chunk_generator__flat_world(
                 get_item_from__item_manager(
                     get_p_item_manager_from__game(p_game), 
                     Item_Kind__Door__Amethyst), 1, 1);
+        add_item_to__inventory(
+                p_inventory, 
+                get_item_from__item_manager(
+                    get_p_item_manager_from__game(p_game), 
+                    Item_Kind__Table), 1, 1);
     }
 }

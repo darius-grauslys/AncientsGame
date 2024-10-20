@@ -13,6 +13,8 @@
 #include "vectors.h"
 #include "world/chunk_manager.h"
 #include "world/tile.h"
+#include "world/tile_vectors.h"
+#include "world/tiles/tile__cover__table.h"
 #include "world/world.h"
 #include <inventory/implemented/hammer__iron/hammer__iron.h>
 
@@ -292,6 +294,12 @@ bool use_hammer__set_tile_to__cover_type_of__this_item(
                     the_kind_of__offhand_item,
                     vector_front__3i32F4);
             break;
+        case Item_Kind__Table:
+            return f_tile_handler__place__table(
+                    p_game, 
+                    p_tile, 
+                    vector_3i32F4_to__tile_vector(
+                        vector_front__3i32F4));
     }
     return true;
 }

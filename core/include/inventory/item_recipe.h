@@ -2,44 +2,87 @@
 #define ITEM_RECIPE_H
 
 #include "defines_weak.h"
+#include "inventory/item.h"
 #include <defines.h>
 
-void initialize_item_recipe_as__deallocated(
-        Item_Recipe *p_item_recipe);
-
-void initialize_item_recipe(
-        Item_Recipe *p_item_recipe,
-        Item_Kind the_kind_of__item_this__recipe_makes,
-        Quantity__u32 the_quantity_of__items_this__recipe_makes);
-
-///
-/// Returns false if fails to add requirement.
-/// Likely due to the recipe already possessing the
-/// maximum amount of permitted requirements.
-///
-bool add_item_recipe_requirement(
-        Item_Recipe *p_item_recipe,
-        Item_Kind the_kind_of__item_that_is__required,
-        Quantity__u32 the_quantity_of__items_required);
-
-bool is_inventory_capable_of__making_this_item(
-        Inventory *p_inventory,
-        Item_Recipe *p_item_recipe);
+void initialize_item_as__item_recipe(
+        Item *p_item,
+        Item_Kind the_kind_of__item_produced,
+        Item_Recipe_Flags item_recipe_flags,
+        Station_Kind the_kind_of__station_required);
 
 static inline
-bool is_item_recipe_for__this_item(
-        Item_Recipe *p_item_recipe,
-        Item_Kind the_kind_of__item) {
-    return p_item_recipe->the_kind_of__item_this__recipe_makes
-        == the_kind_of__item;
+Item get_item_recipe(
+        Item_Kind the_kind_of__item_produced,
+        Item_Recipe_Flags item_recipe_flags,
+        Station_Kind the_kind_of__station_required) {
+    Item item;
+    initialize_item_as__item_recipe(
+            &item, 
+            the_kind_of__item_produced, 
+            item_recipe_flags, 
+            the_kind_of__station_required);
+    return item;
 }
 
 static inline
-bool is_item_recipe__allocated(
-        Item_Recipe *p_item_recipe) {
-    return p_item_recipe
-        ->the_kind_of__item_this__recipe_makes
-        != Item_Kind__None;
+bool is_item_an__item_recipe(
+        Item *p_item) {
+    return is_item_of__this_kind(
+            p_item, 
+            Item_Kind__Item_Recipe);
+}
+
+static inline
+bool is_first_requirement_of__item_recipe__efficent(
+        Item_Recipe_Flags item_recipe_flags) {
+    return item_recipe_flags
+        & ITEM_RECIPE_FLAG__IS_COST_REDUCTION__ONE;
+}
+
+static inline
+bool is_second_requirement_of__item_recipe__efficent(
+        Item_Recipe_Flags item_recipe_flags) {
+    return item_recipe_flags
+        & ITEM_RECIPE_FLAG__IS_COST_REDUCTION__TWO;
+}
+
+static inline
+bool is_third_requirement_of__item_recipe__efficent(
+        Item_Recipe_Flags item_recipe_flags) {
+    return item_recipe_flags
+        & ITEM_RECIPE_FLAG__IS_COST_REDUCTION__THREE;
+}
+
+static inline
+bool is_fourth_requirement_of__item_recipe__efficent(
+        Item_Recipe_Flags item_recipe_flags) {
+    return item_recipe_flags
+        & ITEM_RECIPE_FLAG__IS_COST_REDUCTION__FOUR;
+}
+
+static inline
+bool is_output_of__item_recipe__doubled(
+        Item_Recipe_Flags item_recipe_flags) {
+    return item_recipe_flags
+        & ITEM_RECIPE_FLAG__DOUBLE_PRODUCITON;
+}
+
+static inline
+bool is_tool_requirements_of__item_recipe__preserving(
+        Item_Recipe_Flags item_recipe_flags) {
+    return item_recipe_flags
+        & ITEM_RECIPE_FLAG__HALF_TOOL_CONSUMPTION;
+}
+
+static inline
+bool is_nth_requirement_of__item_recipe__efficent(
+        Item_Recipe_Flags  item_recipe_flags,
+        Index__u8 index_of__item) {
+    return item_recipe_flags
+        & (ITEM_RECIPE_FLAG__IS_COST_REDUCTION__ONE
+                << index_of__item)
+        ;
 }
 
 #endif
