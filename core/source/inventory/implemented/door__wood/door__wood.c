@@ -5,6 +5,7 @@
 #include "inventory/item_manager.h"
 #include "inventory/item_recipe.h"
 #include "inventory/item_recipe_manager.h"
+#include "inventory/item_recipe_record.h"
 #include "inventory/item_recipe_requirement.h"
 #include "numerics.h"
 

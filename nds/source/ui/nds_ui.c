@@ -12,6 +12,7 @@
 #include "ui/game/nds_ui_window__game__equip.h"
 #include "ui/game/nds_ui_window__game__idle.h"
 #include "ui/game/nds_ui_window__game__labor.h"
+#include "ui/game/nds_ui_window__game__station.h"
 #include "ui/game/nds_ui_window__game__trade.h"
 #include "ui/game/nds_ui_window__game__typer.h"
 #include "ui/menu/nds_ui_window__menu__main.h"
@@ -22,6 +23,7 @@
 #include "ui/nds_ui__equipment.h"
 #include "ui/nds_ui__idle.h"
 #include "ui/nds_ui__inventory_column.h"
+#include "ui/nds_ui__station.h"
 #include "ui/nds_ui__trade.h"
 #include "ui/ui_button.h"
 #include "ui/ui_element.h"
@@ -215,6 +217,9 @@ void PLATFORM_open_ui(
             break;
         case UI_Window_Kind__Typer:
             NDS_allocate_ui_for__nds_ui_window__game__typer(p_game);
+            break;
+        case UI_Window_Kind__Station:
+            NDS_open_ui__station(p_game);
             break;
         case UI_Window_Kind__Main_Menu:
             NDS_allocate_ui_for__nds_ui_window__menu__main(p_game);

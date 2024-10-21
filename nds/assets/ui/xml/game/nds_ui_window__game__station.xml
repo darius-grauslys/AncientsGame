@@ -19,7 +19,7 @@
         </include>
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__station.c" h_path="./nds/include/ui/game/nds_ui_window__game__station.h"/>
         <platform target="NDS" size="256,256"/>
-        <background layer="0" x="48" y="88" path="./core/assets/ui/default/ui_map_short_inventory_column.png"/>
+        <background layer="0" x="158" y="88" path="./core/assets/ui/default/ui_map_short_inventory_column.png"/>
         <background layer="1" path="./core/assets/ui/default/ui_map_station_items.png"/>
         <background layer="2" path="./core/assets/ui/default/ui_map_station.png"/>
         <ui_func_signature for="grid"/>
@@ -40,7 +40,7 @@
         </code>
         <group>
             <allocate_ui name="p_slider">
-                <slider x="228" y="132" width="16" height="80"/>
+                <slider x="228" y="132" width="16" height="80" m_Dragged_Handler="m_NDS_ui_slider__dragged_handler_for__backgrounds"/>
             </allocate_ui>
             <code>
                 NDS_allocate_sprite_for__ui_slider(
@@ -51,16 +51,17 @@
                     ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
                 p_slider->p_ui_data = p_NDS_background;
             </code>
-            <allocate_ui>
-                <drop_zone x="44" y="116" width="20" height="20" color="55,55,96"/>
-            </allocate_ui>
-            <allocate_ui>
-                <drop_zone x="44" y="156" width="20" height="20" color="55,55,96"/>
-            </allocate_ui>
-            <allocate_ui>
-                <drop_zone x="108" y="100" width="20" height="20" color="55,55,96"/>
-            </allocate_ui>
-            <grid x="92" y="132" size="2" stride__y="32" name="p_equipment">
+            <allocate_ui_container x="140" y="100" size="3" stride__y="32" name="p_recipe_and_tools">
+                <drop_zone width="20" height="20" color="55,55,96"/>
+                <code>
+                    set_ui_element__p_data(
+                        p_ui_iterator,
+                        get_p_ui_element_by__index_from__ui_manager(
+                            p_ui_manager,
+                            NDS_UI_WINDOW__GAME__STATION_P_RECIPE_AND_TOOLS_4));
+                </code>
+            </allocate_ui_container>
+            <grid x="28" y="124" size="2" stride__y="32" name="p_requirements">
                 <allocate_ui_container size="2" stride__x="32">
                     <drop_zone width="20" height="20" color="55,55,96"/>
                     <code>
@@ -68,11 +69,11 @@
                             p_ui_iterator,
                             get_p_ui_element_by__index_from__ui_manager(
                                 p_ui_manager,
-                                NDS_UI_WINDOW__GAME__STATION_P_EQUIPMENT_7));
+                                NDS_UI_WINDOW__GAME__STATION_P_RECIPE_AND_TOOLS_4));
                     </code>
                 </allocate_ui_container>
             </grid>
-            <grid x="168" y="103" size="9" stride__y="28" name="p_inventory_column">
+            <grid x="174" y="103" size="9" stride__y="28" name="p_inventory_column">
                 <allocate_ui_container size="2" stride__x="24">
                     <drop_zone width="23" height="27" color="55,55,96"/>
                     <code>
@@ -93,6 +94,9 @@
                         NDS_UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11));
             </code>
         </group>
+        <allocate_ui>
+            <button x="100" y="164" width="32" height="16" name="p_button_craft"/>
+        </allocate_ui>
     </ui>
 </root>
 
