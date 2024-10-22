@@ -99,9 +99,26 @@ void PLATFORM_put_char_in__typer(
 /// Opens the specified UI. Depending on the backend this
 /// might close all other UI's.
 ///
+/// p_game_action can be null, this however might cause
+/// the ui to fail in opening depending on the ui and
+/// it's implementation. It's recommended to keep a COPY
+/// of p_game_action in PLATFORM_Graphics_Window.
+///
+/// TODO: backend impl note
+/// If you are implementing a backend, its recommended to
+/// store this copy in PLATFORM_Graphics_Window.
+///
 void PLATFORM_open_ui(
         Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open);
+        enum UI_Window_Kind the_kind_of__ui_window_to__open,
+        Game_Action *p_game_action);
+
+///
+/// TODO: this will be called on game_action
+///
+void PLATFORM_refresh_ui(
+        Game *p_game,
+        UI_Window_Kind the_kind_of__ui_window_to__refresh);
 
 ///
 /// Closes the specified UI. Depending on the backend this

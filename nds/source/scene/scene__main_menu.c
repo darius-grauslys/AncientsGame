@@ -25,7 +25,8 @@ void m_load_scene_as__main_menu_handler(
     //         &p_game->gfx_context);
     PLATFORM_open_ui(
             p_game,
-            UI_Window_Kind__Main_Menu);
+            UI_Window_Kind__Main_Menu,
+            0);
 }
 
 void initialize_scene_as__main_menu(Scene *p_scene) {

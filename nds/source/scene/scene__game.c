@@ -110,7 +110,8 @@ void m_load_scene_as__game_handler(
 
     PLATFORM_open_ui(
             p_game,
-            UI_Window_Kind__Idle);
+            UI_Window_Kind__Idle,
+            0);
 }
 
 void m_enter_scene_as__game_handler(

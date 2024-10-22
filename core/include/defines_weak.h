@@ -1724,6 +1724,9 @@ enum Game_Action_Kind {
     Game_Action_Kind__Entity__Item_Stack__Drop,
     Game_Action_Kind__Entity__Item_Stack__Consume,
     Game_Action_Kind__Entity__Item_Stack__Equip,
+    
+    Game_Action_Kind__Inventory__Container__Open,
+    Game_Action_Kind__Inventory__Station__Use,
     Game_Action_Kind__Unknown
 };
 

@@ -13,6 +13,7 @@
 #include <nds_defines.h>
 #include <game.h>
 #include <ui/ui_drop_zone__inventory_slot.h>
+#include <ui/handlers/inventory/nds_ui_handler__button_craft.h>
 // THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.
 
 UI_Element *NDS_allocate_ui_for__nds_ui_window__game__station(Game *p_game){
@@ -37,7 +38,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__2=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__2++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(140 + 0* index_of__iteration__2, 100 + 32* index_of__iteration__2, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(140 + 0* index_of__iteration__2, 100 + 32* index_of__iteration__2, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -48,7 +49,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(28 + 32* index_of__iteration__3, 124 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(28 + 32* index_of__iteration__3, 124 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -60,7 +61,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(28 + 32* index_of__iteration__3, 156 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 20, 20, get_vector__3i32(28 + 32* index_of__iteration__3, 156 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -74,7 +75,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 103 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 103 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -86,7 +87,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 131 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 131 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -99,7 +100,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 159 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 159 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -112,7 +113,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 187 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 187 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -125,7 +126,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 215 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 215 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -138,7 +139,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 243 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 243 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -151,7 +152,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 271 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 271 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -164,7 +165,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 299 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 299 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -177,7 +178,7 @@ NDS_allocate_sprite_for__ui_slider(
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
         p_ui_iterator_previous = p_ui_iterator;
-        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 327 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__default);
+        initialize_ui_element_as__drop_zone(p_ui_iterator, 23, 27, get_vector__3i32(174 + 24* index_of__iteration__3, 327 + 0* index_of__iteration__3, 0), m_ui_drop_zone__receive_drop_handler__inventory_slot);
         set_ui_element__p_data(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
@@ -196,5 +197,5 @@ set_ui_element_as__the_parent_of__this_ui_element(
     NDS_UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11));
 
     p_ui_iterator = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__button(p_ui_iterator, 32, 16, get_vector__3i32(100 + 0, 164 + 0, 0), m_ui_button__clicked_handler__default, false, false);
+    initialize_ui_element_as__button(p_ui_iterator, 32, 16, get_vector__3i32(100 + 0, 164 + 0, 0), m_NDS_ui_button__click_handler__craft, false, false);
 }

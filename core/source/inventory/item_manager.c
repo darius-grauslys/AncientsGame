@@ -20,6 +20,7 @@
 #include "inventory/implemented/dagger__steel__chaos/dagger__steel__chaos.h"
 #include "inventory/implemented/dagger__steel__order/dagger__steel__order.h"
 #include "inventory/implemented/hammer__iron/hammer__iron.h"
+#include "inventory/implemented/item_recipe/item_recipe.h"
 #include "inventory/implemented/shovel__iron/shovel__iron.h"
 #include "inventory/implemented/hatchet__iron/hatchet__iron.h"
 #include "inventory/implemented/hatchet__rusted/hatchet__rusted.h"
@@ -160,4 +161,5 @@ void register_core_items_into__item_manager(
     register_into__item_manager__door__amethyst_into__item_manager(p_item_manager);
 
     register_into__item_manager__table_into__item_manager(p_item_manager);
+    register_into__item_manager__item_recipe_into__item_manager(p_item_manager);
 }

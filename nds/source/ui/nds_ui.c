@@ -8,6 +8,7 @@
 #include "rendering/nds_background.h"
 #include "rendering/nds_background_allocation_specification.h"
 #include "rendering/nds_background_engine_allocation_context.h"
+#include "rendering/nds_graphics_window.h"
 #include "ui/game/nds_ui_background__game__hud.h"
 #include "ui/game/nds_ui_window__game__equip.h"
 #include "ui/game/nds_ui_window__game__idle.h"
@@ -180,10 +181,16 @@ void NDS_set_ui_element_size_using__sprite_size(
 
 void PLATFORM_open_ui(
         Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open) {
+        enum UI_Window_Kind the_kind_of__ui_window_to__open,
+        Game_Action *p_game_action) {
     if (the_kind_of__ui_window_to__open
-            == _ui__state_machine.the_kind_of__active_ui_window)
+            == _ui__state_machine.the_kind_of__active_ui_window) {
         return;
+    }
+
+    NDS_copy_game_action_into__sub_graphics_window(
+            p_game,
+            p_game_action);
 
     NDS_set_background_for__ui_window(
             get_p_PLATFORM_gfx_context_from__game(p_game), 
@@ -210,7 +217,9 @@ void PLATFORM_open_ui(
             NDS_open_ui__equip(p_game);
             break;
         case UI_Window_Kind__Trade:
-            NDS_open_ui__trade(p_game);
+            NDS_open_ui__trade(
+                    p_game,
+                    p_game_action);
             break;
         case UI_Window_Kind__Labor:
             NDS_allocate_ui_for__nds_ui_window__game__labor(p_game);
@@ -219,7 +228,9 @@ void PLATFORM_open_ui(
             NDS_allocate_ui_for__nds_ui_window__game__typer(p_game);
             break;
         case UI_Window_Kind__Station:
-            NDS_open_ui__station(p_game);
+            NDS_open_ui__station(
+                    p_game,
+                    p_game_action);
             break;
         case UI_Window_Kind__Main_Menu:
             NDS_allocate_ui_for__nds_ui_window__menu__main(p_game);
@@ -248,7 +259,8 @@ void PLATFORM_close_ui(
         return;
     PLATFORM_open_ui(
             p_game, 
-            UI_Window_Kind__Idle);
+            UI_Window_Kind__Idle,
+            0);
 }
 
 void m_ui_button__clicked_handler__navigate_to__equip(
@@ -260,12 +272,14 @@ void m_ui_button__clicked_handler__navigate_to__equip(
             == kind_of_ui_window__currently_open) {
         PLATFORM_open_ui(
                 p_game, 
-                UI_Window_Kind__Idle);
+                UI_Window_Kind__Idle,
+                0);
         return;
     }
     PLATFORM_open_ui(
             p_game, 
-            UI_Window_Kind__Equip);
+            UI_Window_Kind__Equip,
+            0);
 }
 
 void m_ui_button__clicked_handler__navigate_to__trade(
@@ -277,12 +291,14 @@ void m_ui_button__clicked_handler__navigate_to__trade(
             == kind_of_ui_window__currently_open) {
         PLATFORM_open_ui(
                 p_game, 
-                UI_Window_Kind__Idle);
+                UI_Window_Kind__Idle,
+                0);
         return;
     }
     PLATFORM_open_ui(
             p_game, 
-            UI_Window_Kind__Trade);
+            UI_Window_Kind__Trade,
+            0); // TODO: not be 0, probably need to change hud design.
 }
 
 void m_ui_button__clicked_handler__navigate_to__labor(
@@ -294,12 +310,14 @@ void m_ui_button__clicked_handler__navigate_to__labor(
             == kind_of_ui_window__currently_open) {
         PLATFORM_open_ui(
                 p_game, 
-                UI_Window_Kind__Idle);
+                UI_Window_Kind__Idle,
+                0);
         return;
     }
     PLATFORM_open_ui(
             p_game, 
-            UI_Window_Kind__Labor);
+            UI_Window_Kind__Labor,
+            0);
 }
 
 enum UI_Window_Kind PLATFORM_get_last_opened_ui(void) {

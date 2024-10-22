@@ -4,8 +4,10 @@
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "platform.h"
+#include "world/chunk_manager.h"
 #include "world/tile.h"
 #include "world/tile_logic_manager.h"
+#include "world/tile_logic_record.h"
 #include <world/tiles/tile__cover__chest.h>
 #include <serialization/serialized_field.h>
 
@@ -90,33 +92,66 @@ void f_tile_interact_handler__chest(
 
     PLATFORM_open_ui(
             p_game, 
-            UI_Window_Kind__Trade);
+            UI_Window_Kind__Trade,
+            0);
+}
+
+bool f_tile_handler__place__chest(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32) {
+
+    Identifier__u32 uuid =
+        get_uuid_for__container(
+                tile_vector__3i32);
+
+    Inventory *p_inventory =
+        allocate_p_inventory_using__this_uuid_in__inventory_manager(
+                get_p_inventory_manager_from__game(p_game), 
+                uuid);
+
+    if (!p_inventory)
+        return false;
+
+    update_chunk_at__tile_vector__3i32(
+            p_game, 
+            tile_vector__3i32);
+
+    return true;
+}
+
+void register_default_tile_handlers_for__chest(
+        Tile_Logic_Manager *p_tile_logic_manager,
+        Tile_Cover_Kind the_kind_of__chest) {
+    register_tile_logic_record_for__cover_kind(
+            p_tile_logic_manager, 
+            Tile_Cover_Kind__Table__Bottom__Middle, 
+            TILE_LOGIC_RECORD(
+                f_tile_interact_handler__chest,
+                0,
+                f_tile_handler__place__chest));
 }
 
 void register_tile_handlers_for__chest(
-        Tile_Logic_Manager *p_tile_logic_managers) {
-    register_tile_cover_handler__interact_in__tile_logic_manager(
-            p_tile_logic_managers, 
-            Tile_Cover_Kind__Chest__Single, 
-            f_tile_interact_handler__chest);
-    register_tile_cover_handler__interact_in__tile_logic_manager(
-            p_tile_logic_managers, 
-            Tile_Cover_Kind__Chest__Single__Locked, 
-            f_tile_interact_handler__chest);
-    register_tile_cover_handler__interact_in__tile_logic_manager(
-            p_tile_logic_managers, 
-            Tile_Cover_Kind__Chest__Left, 
-            f_tile_interact_handler__chest);
-    register_tile_cover_handler__interact_in__tile_logic_manager(
-            p_tile_logic_managers, 
-            Tile_Cover_Kind__Chest__Right, 
-            f_tile_interact_handler__chest);
-    register_tile_cover_handler__interact_in__tile_logic_manager(
-            p_tile_logic_managers, 
-            Tile_Cover_Kind__Chest__Left__Locked, 
-            f_tile_interact_handler__chest);
-    register_tile_cover_handler__interact_in__tile_logic_manager(
-            p_tile_logic_managers, 
-            Tile_Cover_Kind__Chest__Right__Locked, 
-            f_tile_interact_handler__chest);
+        Tile_Logic_Manager *p_tile_logic_manager) {
+    register_default_tile_handlers_for__chest(
+            p_tile_logic_manager,
+            Tile_Cover_Kind__Chest__Single);
+    register_default_tile_handlers_for__chest(
+            p_tile_logic_manager,
+            Tile_Cover_Kind__Chest__Single__Locked);
+    register_default_tile_handlers_for__chest(
+            p_tile_logic_manager,
+            Tile_Cover_Kind__Chest__Left);
+    register_default_tile_handlers_for__chest(
+            p_tile_logic_manager,
+            Tile_Cover_Kind__Chest__Right);
+    register_default_tile_handlers_for__chest(
+            p_tile_logic_manager,
+            Tile_Cover_Kind__Chest__Left__Locked);
+    register_default_tile_handlers_for__chest(
+            p_tile_logic_manager,
+            Tile_Cover_Kind__Chest__Right__Locked);
 }

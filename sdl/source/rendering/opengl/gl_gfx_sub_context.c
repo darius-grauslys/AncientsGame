@@ -29,7 +29,7 @@ void GL_initialize_gfx_sub_context(
                 ->p_SDL_window);
 
     if (!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
-        debug_error("SDL::PLATFORM_main failed to load GL functions.");
+        debug_error("SDL::PLATFORM_main failed to load GL functions. Version: %d.%d", GLVersion.major, GLVersion.minor);
         return;
     }
     

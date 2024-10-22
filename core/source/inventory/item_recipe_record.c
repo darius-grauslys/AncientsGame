@@ -109,7 +109,7 @@ bool is_inventory_capable_of__making_this_item(
                 is_nth_requirement_of__item_recipe__efficent(
                     item_recipe_flags, 
                     index_of__requirement))) {
-            return true;
+            return false;
         }
     }
 

@@ -73,7 +73,8 @@ void PLATFORM_put_char_in__typer(
 ///
 void PLATFORM_open_ui(
         Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open) {}
+        enum UI_Window_Kind the_kind_of__ui_window_to__open,
+        Game_Action *p_game_action) {}
 
 ///
 /// Closes the specified UI. Depending on the backend this

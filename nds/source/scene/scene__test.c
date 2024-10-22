@@ -50,7 +50,8 @@ void m_load_scene_as__test_handler(
 
     PLATFORM_open_ui(
             p_game,
-            UI_Window_Kind__Idle);
+            UI_Window_Kind__Idle,
+            0);
 }
 
 void m_enter_scene_handler_as__test(
@@ -67,7 +68,8 @@ void m_enter_scene_handler_as__test(
             debug_info("ui_window_kind: %d", ui_window_kind);
             PLATFORM_open_ui(
                     p_game,
-                    ui_window_kind);
+                    ui_window_kind,
+                    0);
         }
         if (is_input__use_secondary_released(get_p_input_from__game(p_game))) {
             item_kind--;
@@ -75,7 +77,8 @@ void m_enter_scene_handler_as__test(
             debug_info("ui_window_kind: %d", ui_window_kind);
             PLATFORM_open_ui(
                     p_game,
-                    ui_window_kind);
+                    ui_window_kind,
+                    0);
         }
         manage_game__post_render(p_game);
     }

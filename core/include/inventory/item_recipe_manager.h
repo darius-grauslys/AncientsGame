@@ -30,4 +30,7 @@ bool is_item__craftable(
         Item_Recipe_Manager *p_item_recipe_manager,
         Item_Kind the_kind_of__item);
 
+void register_core_item_recipes_into__item_recipe_manager(
+        Item_Recipe_Manager *p_item_recipe_manager);
+
 #endif

@@ -42,6 +42,22 @@ bool is_tile_cover__a_wall(
     return kind_of_tile_cover & TILE_COVER__BIT_IS_WALL;
 }
 
+static inline
+bool is_tile_with__this_kind_of__tile_cover(
+        Tile *p_tile,
+        Tile_Cover_Kind the_kind_of__tile_cover) {
+    return p_tile->the_kind_of_tile_cover__this_tile_has
+        == the_kind_of__tile_cover;
+}
+
+
+static inline
+bool is_tile_without_a__cover(
+        Tile *p_tile) {
+    return is_tile_with__this_kind_of__tile_cover(
+            p_tile, Tile_Cover_Kind__None);
+}
+
 
 static inline 
 bool does_tile__have_a_wall(
@@ -147,14 +163,6 @@ bool is_tile_of__this_kind(
 }
 
 static inline
-bool is_tile_with__this_kind_of__tile_cover(
-        Tile *p_tile,
-        Tile_Cover_Kind the_kind_of__tile_cover) {
-    return p_tile->the_kind_of_tile_cover__this_tile_has
-        == the_kind_of__tile_cover;
-}
-
-static inline
 Tile_Cover_Kind get_tile_cover_kind_from__tile(
         Tile *p_tile) {
     return p_tile->the_kind_of_tile_cover__this_tile_has;
@@ -185,5 +193,11 @@ bool poll_tile_for__touch(
         Tile *p_tile,
         Tile_Vector__3i32 tile_vector__3i32, 
         Entity *p_entity);
+
+bool attempt_tile_placement(
+        Game *p_game,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32);
 
 #endif

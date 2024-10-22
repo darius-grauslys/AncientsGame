@@ -127,7 +127,10 @@ bool resolve_p_serialized_entity_ptr_with__entity_manager(
                 s_entity_ptr)
             && s_entity_ptr->p_serialized_field__entity
             - p_entity_manager->entities
-            < ENTITY_MAXIMUM_QUANTITY_OF)
+            < ENTITY_MAXIMUM_QUANTITY_OF
+            && s_entity_ptr->p_serialized_field__entity
+            - p_entity_manager->entities
+            >= 0)
         return true;
     return link_serialized_field_against__contiguous_array(
             s_entity_ptr, 

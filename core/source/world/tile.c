@@ -1,6 +1,8 @@
 #include "defines_weak.h"
 #include "game.h"
+#include "platform.h"
 #include "world/tile_logic_manager.h"
+#include "world/tile_logic_record.h"
 #include "world/world.h"
 #include <world/tile.h>
 #include <defines.h>
@@ -711,12 +713,18 @@ bool poll_tile_for__interaction(
     Tile_Logic_Manager *p_tile_logic_manager =
         get_p_tile_logic_manager_from__world(
                 get_p_world_from__game(p_game));
-    if (is_tile_cover_possessing__interact_logic(
+
+    Tile_Logic_Record *p_tile_logic_record =
+        get_p_tile_logic_record_for__cover_kind_from__tile_logic_manager(
                 p_tile_logic_manager, 
-                get_tile_cover_kind_from__tile(p_tile))) {
-        invoke_tile_cover_logic__interact(
+                get_tile_cover_kind_from__tile(p_tile));
+
+    if (p_tile_logic_record
+            && is_tile_logic_record_possessing__interact(
+                p_tile_logic_record)) {
+        invoke_tile_logic_record__interact(
+                p_tile_logic_record,
                 p_game,
-                p_tile_logic_manager,
                 p_tile,
                 tile_vector__3i32,
                 p_entity);
@@ -724,15 +732,21 @@ bool poll_tile_for__interaction(
         return true;
     }
 
-    if (is_tile_possessing__interact_logic(
+    p_tile_logic_record =
+        get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
                 p_tile_logic_manager, 
-                get_tile_kind_from__tile(p_tile))) {
-        invoke_tile_cover_logic__interact(
-                p_game, 
-                p_tile_logic_manager, 
-                p_tile, 
+                get_tile_kind_from__tile(p_tile));
+
+    if (p_tile_logic_record
+            && is_tile_logic_record_possessing__interact(
+                p_tile_logic_record)) {
+        invoke_tile_logic_record__interact(
+                p_tile_logic_record,
+                p_game,
+                p_tile,
                 tile_vector__3i32,
                 p_entity);
+                
         return true;
     }
 
@@ -747,12 +761,18 @@ bool poll_tile_for__touch(
     Tile_Logic_Manager *p_tile_logic_manager =
         get_p_tile_logic_manager_from__world(
                 get_p_world_from__game(p_game));
-    if (is_tile_cover_possessing__touch_logic(
+
+    Tile_Logic_Record *p_tile_logic_record =
+        get_p_tile_logic_record_for__cover_kind_from__tile_logic_manager(
                 p_tile_logic_manager, 
-                get_tile_cover_kind_from__tile(p_tile))) {
-        invoke_tile_cover_logic__touch(
+                get_tile_cover_kind_from__tile(p_tile));
+
+    if (p_tile_logic_record
+            && is_tile_logic_record_possessing__touch(
+                p_tile_logic_record)) {
+        invoke_tile_logic_record__touch(
+                p_tile_logic_record,
                 p_game,
-                p_tile_logic_manager,
                 p_tile,
                 tile_vector__3i32,
                 p_entity);
@@ -760,17 +780,67 @@ bool poll_tile_for__touch(
         return true;
     }
 
-    if (is_tile_possessing__touch_logic(
+    p_tile_logic_record =
+        get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
                 p_tile_logic_manager, 
-                get_tile_kind_from__tile(p_tile))) {
-        invoke_tile_cover_logic__touch(
-                p_game, 
-                p_tile_logic_manager, 
-                p_tile, 
+                get_tile_kind_from__tile(p_tile));
+
+    if (p_tile_logic_record
+            && is_tile_logic_record_possessing__touch(
+                p_tile_logic_record)) {
+        invoke_tile_logic_record__touch(
+                p_tile_logic_record,
+                p_game,
+                p_tile,
                 tile_vector__3i32,
                 p_entity);
+                
         return true;
     }
 
     return false;
+}
+
+bool attempt_tile_placement(
+        Game *p_game,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile *p_tile = 
+        get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                get_p_chunk_manager_from__game(p_game),
+                tile_vector__3i32);
+
+    if (!p_tile)
+        return false;
+
+    Tile_Logic_Record *p_tile_logic_record =
+        get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
+                get_p_tile_logic_manager_from__world(
+                    get_p_world_from__game(p_game)), 
+                the_kind_of__tile);
+
+    bool is_placement__successful = true;
+    if (is_tile_logic_record_possessing__place(
+                p_tile_logic_record)) {
+        is_placement__successful = invoke_tile_logic_record__place(
+                p_tile_logic_record, 
+                p_game, 
+                p_tile, 
+                the_kind_of__tile,
+                the_kind_of__tile_cover,
+                tile_vector__3i32);
+    } else {
+        set_tile_kind_of__tile(
+                p_tile, 
+                the_kind_of__tile);
+    }
+
+    if (is_placement__successful) {
+        update_chunk_at__tile_vector__3i32(
+                p_game, 
+                tile_vector__3i32);
+    }
+
+    return is_placement__successful;
 }

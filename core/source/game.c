@@ -1,6 +1,8 @@
 #include "defines_weak.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/item_manager.h"
+#include "inventory/item_recipe_manager.h"
+#include "inventory/station_manager.h"
 #include "log/log.h"
 #include "platform.h"
 #include "platform_defines.h"
@@ -55,6 +57,10 @@ void initialize_game(
             get_p_item_manager_from__game(p_game));
     register_core_items_into__item_manager(
             get_p_item_manager_from__game(p_game));
+    register_core_item_recipes_into__item_recipe_manager(
+            get_p_item_recipe_manager_from__game(p_game));
+    register_core_stations_into__station_manager(
+            get_p_station_manager_from__game(p_game));
 
     initialize_log(get_p_log__global_from__game(p_game));
     initialize_log(get_p_log__local_from__game(p_game));

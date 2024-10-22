@@ -22,21 +22,24 @@ void m_NDS_ui_button__clicked_handler__hud(
                     p_game,
                     (toggle_ui_button(p_this_button))
                         ? UI_Window_Kind__Equip
-                        : UI_Window_Kind__Idle);
+                        : UI_Window_Kind__Idle,
+                    0);
             break;
         case 1:
             PLATFORM_open_ui(
                     p_game,
                     (toggle_ui_button(p_this_button))
                         ? UI_Window_Kind__Trade
-                        : UI_Window_Kind__Idle);
+                        : UI_Window_Kind__Idle,
+                    0);
             break;
         case 2:
             PLATFORM_open_ui(
                     p_game,
                     (toggle_ui_button(p_this_button))
                         ? UI_Window_Kind__Labor
-                        : UI_Window_Kind__Idle);
+                        : UI_Window_Kind__Idle,
+                    0);
             break;
     }
 }

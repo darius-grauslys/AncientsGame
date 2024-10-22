@@ -72,15 +72,18 @@ void NDS_initialize_gfx_context(
             &_font_small);
 
     p_PLATFORM_gfx_context
-        ->graphics_window__main = (PLATFORM_Graphics_Window){
-            p_PLATFORM_gfx_context,
-            &oamMain
-        };
+        ->graphics_window__main.p_PLATFORM_gfx_context = 
+        p_PLATFORM_gfx_context;
     p_PLATFORM_gfx_context
-        ->graphics_window__sub = (PLATFORM_Graphics_Window){
-            p_PLATFORM_gfx_context,
-            &oamSub
-        };
+        ->graphics_window__main.p_oam_state =
+            &oamMain;
+
+    p_PLATFORM_gfx_context
+        ->graphics_window__sub.p_PLATFORM_gfx_context = 
+        p_PLATFORM_gfx_context;
+    p_PLATFORM_gfx_context
+        ->graphics_window__sub.p_oam_state = 
+            &oamSub;
 
     initialize_sprite_gfx_allocator__lookup_table_for__entities(
             p_PLATFORM_gfx_context

@@ -80,7 +80,7 @@ void initialize_world(
             -BIT(18),
             i32_to__i32F20(100)
             );
-    register_tile_logic_handlers(
+    register_core_tile_logic_handlers(
             get_p_tile_logic_manager_from__world(p_world));
 }
 

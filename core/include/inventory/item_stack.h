@@ -66,6 +66,15 @@ bool is_p_item_stack__empty(
 }
 
 static inline
+bool is_p_item_stack___full(
+        Item_Stack *p_item_stack) {
+    return 
+        !is_p_item__empty(&p_item_stack->item)
+        && p_item_stack->quantity_of__items
+        < p_item_stack->max_quantity_of__items;
+}
+
+static inline
 bool is_p_item_stack_of__this_item_kind(
         Item_Stack *p_item_stack,
         enum Item_Kind this_item_kind) {

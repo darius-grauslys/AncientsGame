@@ -215,6 +215,7 @@ typedef NDS_Background NDS_Backgrounds[
     NDS_QUANTITY_OF__BACKGROUND_IN__2D_ENGINE];
 
 typedef struct PLATFORM_Graphics_Window_t {
+    Game_Action associated_game_action;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
     OamState *p_oam_state;
 } PLATFORM_Graphics_Window;

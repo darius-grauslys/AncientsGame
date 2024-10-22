@@ -11,7 +11,8 @@
 #include "world/chunk_manager.h"
 
 void NDS_open_ui__trade(
-        Game *p_game) {
+        Game *p_game,
+        Game_Action *p_game_action) {
     NDS_allocate_ui_for__nds_ui_window__game__trade(p_game);
 
     Entity *p_entity__local_player =

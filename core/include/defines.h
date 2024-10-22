@@ -805,6 +805,10 @@ typedef struct Item_t {
             Item_Recipe_Flags item_recipe_flags;
             Station_Kind the_kind_of__station_required;
         };
+        struct { // Building Material
+            Tile_Cover_Kind the_kind_of__tile_cover__this_item_builds;
+            Tile_Kind the_kind_of__ground__this_item_builds;
+        };
     };
 } Item;
 
@@ -1590,15 +1594,13 @@ typedef struct UI_Element_t {
     UI_Flags__u8            ui_flags;
     PLATFORM_Sprite         *p_PLATFORM_sprite;
     union {
-        union {
-            struct { // UI_Button
-                UI_Button_Flags__u8 ui_button_flags;
-            };
-            struct { // UI_Draggable
-            };
-            struct { // UI_Slider
-                u32      slider__distance__u32;
-            };
+        struct { // UI_Button
+            UI_Button_Flags__u8 ui_button_flags;
+        };
+        struct { // UI_Draggable
+        };
+        struct { // UI_Slider
+            u32      slider__distance__u32;
         };
     };
 } UI_Element;
@@ -1812,21 +1814,24 @@ typedef void (*f_Tile_Handler__Touch)(
 typedef bool (*f_Tile_Handler__Place)(
         Game *p_game,
         Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
         Tile_Vector__3i32 tile_vector__3i32);
+
+typedef struct Tile_Logic_Record_t {
+    f_Tile_Handler__Interact    f_tile_handler__interact;
+    f_Tile_Handler__Touch       f_tile_handler__touch;
+    f_Tile_Handler__Place       f_tile_handler__place;
+} Tile_Logic_Record;
 
 ///
 /// Manages the logic associated with special tiles.
 /// IE. lava tile, water tile, chest tile, etc.
 ///
 typedef struct Tile_Logic_Manager_t {
-    f_Tile_Handler__Interact tile_interaction__handlers[
+    Tile_Logic_Record tile_logic_records_for__ground_kinds[
         Tile_Kind__Unknown];
-    f_Tile_Handler__Interact tile_touch__handlers[
-        Tile_Kind__Unknown];
-
-    f_Tile_Handler__Interact tile_cover_interaction__handlers[
-        Tile_Cover_Kind__Unknown];
-    f_Tile_Handler__Interact tile_cover_touch__handlers[
+    Tile_Logic_Record tile_logic_records_for__cover_kinds[
         Tile_Cover_Kind__Unknown];
 } Tile_Logic_Manager;
 
@@ -1979,6 +1984,7 @@ typedef struct Game_t {
     Inventory_Manager   inventory_manager;
     Item_Manager        item_manager;
     Item_Recipe_Manager item_recipe_manager;
+    Station_Manager     station_manager;
 
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;
@@ -2084,6 +2090,14 @@ typedef struct Game_Action_t {
                 struct { //...Entity__Item
                     Item_Stack item_stack;
                     Identifier__u16 identifier_for__item_stack;
+                };
+            };
+        }; // </Game_Action_Kind__Entity>
+        struct { // Game_Action_Kind__Inventory
+            Serialized_Entity_Ptr s_game_action__inventory__entity_source;
+            union { //Game_Action_Kind__Container
+                struct {
+                    Tile_Vector__3i32 game_action__container__tile_vector_3i32;
                 };
             };
         };

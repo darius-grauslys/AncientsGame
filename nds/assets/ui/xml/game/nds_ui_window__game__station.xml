@@ -16,6 +16,7 @@
             <header path="nds_defines.h"/>
             <header path="game.h"/>
             <header path="ui/ui_drop_zone__inventory_slot.h"/>
+            <header path="ui/handlers/inventory/nds_ui_handler__button_craft.h"/>
         </include>
         <output base_dir="./" c_path="./nds/source/ui/game/nds_ui_window__game__station.c" h_path="./nds/include/ui/game/nds_ui_window__game__station.h"/>
         <platform target="NDS" size="256,256"/>
@@ -52,7 +53,7 @@
                 p_slider->p_ui_data = p_NDS_background;
             </code>
             <allocate_ui_container x="140" y="100" size="3" stride__y="32" name="p_recipe_and_tools">
-                <drop_zone width="20" height="20" color="55,55,96"/>
+                <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
                 <code>
                     set_ui_element__p_data(
                         p_ui_iterator,
@@ -63,7 +64,7 @@
             </allocate_ui_container>
             <grid x="28" y="124" size="2" stride__y="32" name="p_requirements">
                 <allocate_ui_container size="2" stride__x="32">
-                    <drop_zone width="20" height="20" color="55,55,96"/>
+                    <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
                     <code>
                         set_ui_element__p_data(
                             p_ui_iterator,
@@ -75,7 +76,7 @@
             </grid>
             <grid x="174" y="103" size="9" stride__y="28" name="p_inventory_column">
                 <allocate_ui_container size="2" stride__x="24">
-                    <drop_zone width="23" height="27" color="55,55,96"/>
+                    <drop_zone width="23" height="27" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
                     <code>
                         set_ui_element__p_data(
                             p_ui_iterator,
@@ -95,7 +96,7 @@
             </code>
         </group>
         <allocate_ui>
-            <button x="100" y="164" width="32" height="16" name="p_button_craft"/>
+            <button x="100" y="164" width="32" height="16" name="p_button_craft" m_Clicked_Handler="m_NDS_ui_button__click_handler__craft"/>
         </allocate_ui>
     </ui>
 </root>

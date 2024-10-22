@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "inventory/item.h"
 #include "inventory/item_stack.h"
 #include "numerics.h"
 #include "platform.h"
@@ -226,28 +227,40 @@ Item_Stack *add_item_to__inventory(
         Quantity__u8 max_quantity_of__items) {
 #ifndef NDEBUG
     if (!p_inventory) {
-        debug_abort("add_stack_to__inventory, p_inventory is null.");
+        debug_abort("add_item_to__inventory, p_inventory is null.");
         return 0;
     }
 #endif
     Item_Stack *p_item_stack =
-        get_next_p_item_stack_of__this_item_kind_from__inventory(
+        get_first_p_item_stack_of__this_item_kind_from__inventory(
                 p_inventory, 
-                p_inventory->items, 
-                item.the_kind_of_item__this_item_is);
-    if (!p_item_stack) {
-        p_item_stack =
-            get_next_available_item_stack_in__inventory(
-                    p_inventory);
-    }
+                get_item_kind_of__item(&item));
+    if (p_item_stack) {
+        while (p_item_stack
+                && is_p_item_stack__full(p_item_stack)) {
+            p_item_stack =
+                get_next_p_item_stack_of__this_item_kind_from__inventory(
+                        p_inventory, 
+                        p_item_stack, 
+                        item.the_kind_of_item__this_item_is);
+        }
+    } // do not else, since inner while might produce nullptr for p_item_stack.
 
     if (!p_item_stack) {
-        debug_error("add_item_to__inventory, p_item_stack is null.");
-        return 0;
+        p_item_stack =
+            get_first_p_item_stack_of__this_item_kind_from__inventory(
+                    p_inventory, 
+                    Item_Kind__None);
+        if (!p_item_stack) {
+            debug_abort("add_item_to__inventory, inventory is full?");
+            return 0;
+        }
     }
 
     max_quantity_of__items =
-        max__u8(max_quantity_of__items,
+        (is_p_item_stack__empty(p_item_stack))
+        ? max_quantity_of__items
+        : max__u8(max_quantity_of__items,
             p_item_stack->max_quantity_of__items);
 
     quantity_of__items =
@@ -262,6 +275,7 @@ Item_Stack *add_item_to__inventory(
             item,
             quantity_of__items,
             max_quantity_of__items);
+
     return p_item_stack;
 }
 

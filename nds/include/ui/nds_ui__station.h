@@ -4,6 +4,7 @@
 #include <defines.h>
 
 void NDS_open_ui__station(
-        Game *p_game);
+        Game *p_game,
+        Game_Action *p_game_action);
 
 #endif

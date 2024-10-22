@@ -3,6 +3,7 @@
 #include "inventory/inventory_manager.h"
 #include "inventory/item.h"
 #include "inventory/item_manager.h"
+#include "inventory/item_recipe.h"
 #include "numerics.h"
 #include "vectors.h"
 #include "world/tiles/tile__cover__ore.h"
@@ -921,29 +922,11 @@ void f_chunk_generator__flat_world(
                     Item_Kind__Shovel__Iron), 1, 1);
         add_item_to__inventory(
                 p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Door__Wood), 1, 1);
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Door__Iron), 1, 1);
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Door__Gold), 1, 1);
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Door__Diamond), 1, 1);
-        add_item_to__inventory(
-                p_inventory, 
-                get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
-                    Item_Kind__Door__Amethyst), 1, 1);
+                get_item_recipe(
+                    Item_Kind__Door__Wood, 
+                    ITEM_RECIPE_FLAGS__NONE, 
+                    Station_Kind__None),
+                1, 1);
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(

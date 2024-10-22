@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "inventory/implemented/door__wood/door__wood.h"
 #include "inventory/inventory.h"
 #include "inventory/item_recipe.h"
 #include "inventory/item_recipe_record.h"
@@ -8,13 +9,11 @@
 
 bool is_item_kind__illegal_for__item_recipe_manager(
         Item_Kind the_kind_of__item) {
-    if (the_kind_of__item
+    return the_kind_of__item
             >= Item_Kind__Unknown
             || the_kind_of__item
-            <= Item_Kind__None) {
-        return true;
-    }
-    return false;
+            <= Item_Kind__None
+            ;
 }
 
 static inline
@@ -22,7 +21,7 @@ Item_Recipe_Record *get_p_item_recipe_from__item_recipe_manager(
         Item_Recipe_Manager *p_item_recipe_manager,
         Item_Kind the_kind_of__item) {
     return &p_item_recipe_manager
-        ->recipes[the_kind_of__item];
+        ->recipes[the_kind_of__item - 1];
 }
 
 void initialize_item_recipe_manager(
@@ -104,6 +103,7 @@ bool make_item_with__this_inventory(
                 p_item_recipe_manager, 
                 the_kind_of__item);
 
+    // Remove the used items.
     for (Index__u32 index_of__requirement = 0;
             index_of__requirement < ITEM_REQUIREMENT_MAX_QUANTITY_OF;
             index_of__requirement++) {
@@ -147,4 +147,10 @@ bool is_item__craftable(
                 the_kind_of__item)
         ->the_kind_of__item_this__recipe_makes
         != Item_Kind__None;
+}
+
+void register_core_item_recipes_into__item_recipe_manager(
+        Item_Recipe_Manager *p_item_recipe_manager) { 
+    register_into__recipe_manager__door__wood(
+            p_item_recipe_manager);
 }
