@@ -4,6 +4,9 @@
 #include "entity/handlers/serialization/serialization_handler__entity__default.h"
 #include "game.h"
 #include "inventory/equipment.h"
+#include "inventory/inventory.h"
+#include "inventory/inventory_manager.h"
+#include "platform.h"
 #include "serialization/serialized_field.h"
 #include "vectors.h"
 #include "world/chunk_manager.h"
@@ -18,6 +21,7 @@
 #include <collisions/hitbox_aabb.h>
 #include <debug/debug.h>
 #include <serialization/serialization_header.h>
+#include <game_util.h>
 
 bool can_entity_kind_have__armor(enum Entity_Kind kind_of_entity) {
     switch (kind_of_entity) {
@@ -189,20 +193,6 @@ void play_audio_of__entity_footstep(
     }
 }
 
-Vector__3i32F4 get_vector_3i32F4_thats__infront_of_this__entity(
-        Entity *p_entity) {
-    Vector__3i32F4 offset =
-        get_2i32F4_offset_from__angle(
-            get_angle_from__direction(
-                p_entity->direction));
-    offset.x__i32F4 <<= 4;
-    offset.y__i32F4 <<= 4;
-    return
-        add_vectors__3i32F4(
-                get_vector_3i32F4_from__entity(p_entity), 
-                offset);
-}
-
 void entity__interact(
         Game *p_game,
         Entity *p_entity) {
@@ -222,16 +212,13 @@ void entity__interact(
         return;
     }
 
-    Tile *p_tile =
-        get_p_tile_from__chunk_manager_with__3i32F4(
-                get_p_chunk_manager_from__game(p_game),
-                vector_3i32F4__front_of_entity);
+    Tile_Vector__3i32 tile_vector__3i32 =
+        get_tile_vector_thats__infront_of_this__entity(
+                p_entity);
 
     (void)poll_tile_for__interaction(
             p_game, 
-            p_tile, 
-            vector_3i32F4_to__tile_vector(
-                vector_3i32F4__front_of_entity),
-            p_entity);
+            p_entity, 
+            tile_vector__3i32);
 }
 

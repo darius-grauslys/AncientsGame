@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "entity/humanoid.h"
 #include "inventory/implemented/door__wood/door__wood.h"
 #include "inventory/inventory.h"
 #include "inventory/item_recipe.h"

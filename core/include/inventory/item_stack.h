@@ -53,7 +53,10 @@ bool resolve_item_stack__merge_or_swap(
         Item_Stack *p_item_stack__source,
         Item_Stack *p_item_stack__destination);
 
-void remove_quantity_of_items_from__item_stack(
+///
+/// Returns the amount of items not removed.
+///
+Quantity__u32 remove_quantity_of_items_from__item_stack(
         Item_Stack *p_item_stack,
         Quantity__u8 quantity_of__items_to__remove);
 
@@ -95,6 +98,20 @@ bool is_p_item_stacks_the_same__item_kind(
         Item_Stack *p_item_stack__two) {
     return p_item_stack__one->item.the_kind_of_item__this_item_is
         == p_item_stack__two->item.the_kind_of_item__this_item_is;
+}
+
+static inline
+Quantity__u32 get_quantity_of__items_in__item_stack(
+        Item_Stack *p_item_stack) {
+    return p_item_stack
+        ->quantity_of__items;
+}
+
+static inline
+Item_Kind get_item_kind_of__item_stack(
+        Item_Stack *p_item_stack) {
+    return get_item_kind_of__item(
+            &p_item_stack->item);
 }
 
 #endif

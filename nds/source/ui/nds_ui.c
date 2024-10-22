@@ -434,3 +434,30 @@ void NDS_set_background_for__ui_window(
 
 	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 }
+
+void PLATFORM_refresh_ui(
+        Game *p_game, 
+        UI_Window_Kind the_kind_of__ui_window_to__refresh) {
+    if (the_kind_of__ui_window_to__refresh
+            !=
+            p_game
+            ->p_PLATFORM_gfx_context
+            ->the_kind_of__active_ui_window) {
+        return;
+    }
+    // TODO: don't just simple re-open the ui.
+    Game_Action game_action =
+        p_game
+        ->p_PLATFORM_gfx_context
+        ->graphics_window__sub
+        .associated_game_action
+        ;
+    PLATFORM_open_ui(
+            p_game,
+            UI_Window_Kind__Idle,
+            0);
+    PLATFORM_open_ui(
+            p_game,
+            the_kind_of__ui_window_to__refresh,
+            &game_action);
+}

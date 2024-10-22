@@ -7,6 +7,26 @@
 #include "world/tiles/tile__cover__table.h"
 #include <world/tile_logic_manager.h>
 
+static inline
+Tile_Logic_Record
+*get_p_tile_logic_record_for__ground_kind_by__index_from__tile_logic_manager(
+        Tile_Logic_Manager *p_tile_logic_manager,
+        Index__u32 index_of__record) {
+    return &p_tile_logic_manager
+        ->tile_logic_records_for__ground_kinds[
+            index_of__record];
+}
+
+static inline
+Tile_Logic_Record
+*get_p_tile_logic_record_for__cover_kind_by__index_from__tile_logic_manager(
+        Tile_Logic_Manager *p_tile_logic_manager,
+        Index__u32 index_of__record) {
+    return &p_tile_logic_manager
+        ->tile_logic_records_for__cover_kinds[
+            index_of__record];
+}
+
 Tile_Logic_Record 
 *get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
         Tile_Logic_Manager *p_tile_logic_manager,
@@ -22,9 +42,9 @@ Tile_Logic_Record
         return 0;
     }
 #endif
-    return &p_tile_logic_manager
-        ->tile_logic_records_for__ground_kinds[
-        the_kind_of__tile];
+    return get_p_tile_logic_record_for__ground_kind_by__index_from__tile_logic_manager(
+            p_tile_logic_manager, 
+            the_kind_of__tile - 1);
 }
 
 Tile_Logic_Record 
@@ -42,9 +62,9 @@ Tile_Logic_Record
         return 0;
     }
 #endif
-    return &p_tile_logic_manager
-        ->tile_logic_records_for__cover_kinds[
-        the_kind_of__tile_cover];
+    return get_p_tile_logic_record_for__cover_kind_by__index_from__tile_logic_manager(
+            p_tile_logic_manager, 
+            the_kind_of__tile_cover - 1);
 }
 
 void initialize_tile_logic_manager(
@@ -53,7 +73,7 @@ void initialize_tile_logic_manager(
             index_of__tile < Tile_Kind__Unknown;
             index_of__tile++) {
         Tile_Logic_Record *p_tile_logic_record =
-            get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
+            get_p_tile_logic_record_for__ground_kind_by__index_from__tile_logic_manager(
                     p_tile_logic_manager, 
                     index_of__tile);
         initialize_tile_logic_record_as__unused(
@@ -64,7 +84,7 @@ void initialize_tile_logic_manager(
             index_of__tile < Tile_Cover_Kind__Unknown;
             index_of__tile++) {
         Tile_Logic_Record *p_tile_logic_record =
-            get_p_tile_logic_record_for__cover_kind_from__tile_logic_manager(
+            get_p_tile_logic_record_for__cover_kind_by__index_from__tile_logic_manager(
                     p_tile_logic_manager, 
                     index_of__tile);
         initialize_tile_logic_record_as__unused(

@@ -76,6 +76,10 @@ void PLATFORM_open_ui(
         enum UI_Window_Kind the_kind_of__ui_window_to__open,
         Game_Action *p_game_action) {}
 
+void PLATFORM_refresh_ui(
+        Game *p_game,
+        enum UI_Window_Kind the_kind_of__ui_window_to__open) {}
+
 ///
 /// Closes the specified UI. Depending on the backend this
 /// might cause a UI window to open. For example, on NDS

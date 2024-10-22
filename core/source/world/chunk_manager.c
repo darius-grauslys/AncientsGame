@@ -22,6 +22,8 @@
 #include <world/tile_vectors.h>
 #include <game.h>
 
+#include <entity/entity.h>
+
 ///
 /// Either loads or generates the chunk
 ///
@@ -993,12 +995,10 @@ bool poll_chunk_manager_for__tile_collision(
                         corner_positions[index+1],
                         directions[index>>2]);
             }
-            // TODO: provide accurate tile_vector
             (void)poll_tile_for__touch(
                     p_game,
-                    p_tile, 
-                    VECTOR__3i32__0_0_0,
-                    p_entity);
+                    p_entity,
+                    get_tile_vector__3i32_of__entity(p_entity));
         }
     }
 
@@ -1109,4 +1109,7 @@ void update_chunk_at__tile_vector__3i32(
             get_p_PLATFORM_gfx_context_from__game(p_game), 
             get_p_chunk_manager_from__game(p_game), 
             p_chunk_map_node);
+    set_chunk_as__updated(
+            p_chunk_map_node
+            ->p_chunk__here);
 }

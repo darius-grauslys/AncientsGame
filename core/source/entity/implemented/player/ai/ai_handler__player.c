@@ -21,6 +21,7 @@
 #include <collisions/hitbox_aabb.h>
 #include <rendering/animate_humanoid.h>
 #include <entity/humanoid.h>
+#include <game_util.h>
 
 #include <world/chunk_manager.h>
 #include <world/chunk.h>
@@ -71,23 +72,14 @@ void m_entity_ai_handler__player(
     if (is_input__examine_released(p_input)) {
         // TODO: on player_ai loop, we should check if the front tile_vector
         //       is interactable, and if it is, put a (X) sprite above it.
-        Vector__3i32F4 vector_front__3i32F4;
-        Tile *p_tile =
-            get_p_tile_and_vector_3i32F4_thats__infront_of_this__entity(
-                    get_p_world_from__game(p_game), 
-                    p_this_player, 
-                    &vector_front__3i32F4);
-
-        if (!p_tile) {
-            return;
-        }
+        Tile_Vector__3i32 tile_vector__3i32 =
+            get_tile_vector_thats__infront_of_this__entity(
+                    p_this_player);
 
         poll_tile_for__interaction(
                 p_game, 
-                p_tile, 
-                vector_3i32F4_to__tile_vector(
-                    vector_front__3i32F4),
-                p_this_player);
+                p_this_player,
+                tile_vector__3i32);
     } 
     if (is_input__use_secondary_released(p_input)) {
         // TODO:    this will become running?

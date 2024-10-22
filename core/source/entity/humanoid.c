@@ -11,6 +11,7 @@
 #include <entity/entity.h>
 #include <inventory/inventory.h>
 #include <serialization/serialized_field.h>
+#include <inventory/item_stack.h>
 
 void initialize_entity_as__humanoid(
         Game *p_game,
@@ -136,4 +137,97 @@ Inventory *resolve_p_inventory_of__humanoid(
 bool is_humanoid__dead(Entity *p_humanoid) {
     return p_humanoid->hearts.resource_symbols[0] 
         == Heart_Kind__Empty;
+}
+
+void humanoid__poll_player_update_inventory(
+        Game *p_game,
+        Entity_Kind the_kind_of__entity) {
+    switch (the_kind_of__entity) {
+        default:
+            break;
+        case Entity_Kind__Player:
+            // TODO: dispatch to player via game_action
+            PLATFORM_refresh_ui(
+                    p_game, 
+                    UI_Window_Kind__Equip);
+            PLATFORM_refresh_ui(
+                    p_game, 
+                    UI_Window_Kind__Trade);
+            PLATFORM_refresh_ui(
+                    p_game, 
+                    UI_Window_Kind__Station);
+            break;
+    }
+}
+
+void humanoid__add_item_to__inventory(
+        Game *p_game,
+        Entity *p_entity,
+        Item item,
+        Quantity__u32 quantity_of__items,
+        Quantity__u32 max_quantity_of__items) {
+    Inventory *p_inventory =
+        resolve_s_inventory(
+                p_game,
+                &p_entity->s_humanoid__inventory_ptr);
+
+    if (!p_inventory)
+        return;
+
+    add_item_to__inventory(
+            p_inventory, 
+            item, 
+            quantity_of__items, 
+            max_quantity_of__items);
+
+    humanoid__poll_player_update_inventory(
+            p_game, 
+            get_entity_kind_of__entity(p_entity));
+}
+
+void humanoid__remove_quantity_of__item_kinds_from__inventory(
+        Game *p_game,
+        Entity *p_entity,
+        Item_Kind the_kind_of__item,
+        Quantity__u32 quantity_of__items) {
+    Inventory *p_inventory =
+        resolve_s_inventory(
+                p_game,
+                &p_entity->s_humanoid__inventory_ptr);
+
+    if (!p_inventory)
+        return;
+
+    remove_this_many_item_kinds_from__inventory(
+            p_inventory, 
+            the_kind_of__item, 
+            quantity_of__items);
+
+    humanoid__poll_player_update_inventory(
+            p_game, 
+            get_entity_kind_of__entity(p_entity));
+}
+
+void humanoid__remove_quantity_of__item_kinds_from__posessions(
+        Game *p_game,
+        Entity *p_entity,
+        Item_Kind the_kind_of__item,
+        Quantity__u32 quantity_of__items) {
+    Quantity__u32 quantity_of__items_remaining_to__remove =
+        remove_quantity_of_items_from__item_stack(
+                get_p_item_stack__off_hand_slot_from__equipment(
+                    &p_entity->equipment), 
+                quantity_of__items);
+    if (quantity_of__items_remaining_to__remove == 0) {
+        humanoid__poll_player_update_inventory(
+                p_game, 
+                get_entity_kind_of__entity(p_entity));
+        return;
+    }
+
+    humanoid__remove_quantity_of__item_kinds_from__inventory(
+            p_game,
+            p_entity,
+            the_kind_of__item,
+            quantity_of__items_remaining_to__remove);
 }

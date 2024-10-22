@@ -3,7 +3,9 @@
 
 #include "collisions/hitbox_aabb.h"
 #include "defines_weak.h"
+#include "game.h"
 #include "vectors.h"
+#include "world/chunk_manager.h"
 #include "world/tile_vectors.h"
 #include <stdbool.h>
 #include <defines.h>
@@ -231,17 +233,6 @@ void play_audio_of__entity_footstep(
         Game *p_game,
         Entity *p_entity);
 
-Vector__3i32F4 get_vector_3i32F4_thats__infront_of_this__entity(
-        Entity *p_entity);
-
-static inline
-Tile_Vector__3i32 get_tile_vector_thats__infront_of_this__entity(
-        Entity *p_entity) {
-    return vector_3i32F4_to__tile_vector(
-            get_vector_3i32F4_thats__infront_of_this__entity(
-                p_entity));
-}
-
 ///
 /// For internal use only.
 /// Utilize Game_Action instead.
@@ -249,5 +240,13 @@ Tile_Vector__3i32 get_tile_vector_thats__infront_of_this__entity(
 void entity__use(
         Game *p_game,
         Entity *p_entity);
+
+static inline
+Tile_Vector__3i32 get_tile_vector__3i32_of__entity(
+        Entity *p_entity) {
+    return 
+        vector_3i32F4_to__tile_vector(
+            p_entity->hitbox.position__3i32F4);
+}
 
 #endif

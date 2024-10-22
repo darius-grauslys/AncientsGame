@@ -47,39 +47,8 @@ void m_item_use_handler__shovel(
         return;
     }
 
-    Chunk_Vector__3i32 chunk_vector =
-        vector_3i32F4_to__chunk_vector_3i32(
-                get_vector_3i32F4_from__entity(p_entity_user));
-    Chunk_Manager__Chunk_Map_Node *p_chunk_node =
-        get_p_chunk_map_node_from__chunk_manager_using__i32(
-                get_p_chunk_manager_from__game(p_game), 
-                chunk_vector.x__i32, 
-                chunk_vector.y__i32, 
-                chunk_vector.z__i32);
-
-    Vector__3i32F4 offset =
-        get_2i32F4_offset_from__angle(
-            get_angle_from__direction(
-                p_entity_user->direction));
-    offset.x__i32F4 <<= 4;
-    offset.y__i32F4 <<= 4;
-    Vector__3i32F4 position =
-        add_vectors__3i32F4(
-                get_vector_3i32F4_from__entity(p_entity_user), 
-                offset);
-    Tile *p_tile =
-        get_p_tile_from__chunk_manager_with__3i32F4(
-                get_p_chunk_manager_from__game(p_game), 
-                position);
-
     use_tool__harvest_soil(
             p_game, 
             p_entity_user, 
-            p_tile, 
-            !is_item_tool_mode__labor(p_item_self));
-
-    PLATFORM_update_chunk(
-            get_p_PLATFORM_gfx_context_from__game(p_game), 
-            get_p_chunk_manager_from__game(p_game), 
-            p_chunk_node);
+            is_item_tool_mode__labor(p_item_self));
 }

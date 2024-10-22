@@ -3,7 +3,6 @@
 
 #include "collisions/collision_manager.h"
 #include "defines_weak.h"
-#include "entity/entity.h"
 #include "world/chunk_manager.h"
 #include <defines.h>
 
@@ -110,29 +109,5 @@ bool poll_world_for__scrolling(
 void teleport_player(
         Game *p_game,
         Vector__3i32F4 position__3i32F4);
-
-static inline
-Tile *get_p_tile_thats__infront_of_this__entity(
-        World *p_world,
-        Entity *p_entity) {
-    return
-        get_p_tile_from__chunk_manager_with__3i32F4(
-                get_p_chunk_manager_from__world(p_world),
-                get_vector_3i32F4_thats__infront_of_this__entity(
-                    p_entity));
-}
-
-static inline
-Tile *get_p_tile_and_vector_3i32F4_thats__infront_of_this__entity(
-        World *p_world,
-        Entity *p_entity,
-        Vector__3i32F4 *p_vector__3i32F4) {
-    *p_vector__3i32F4 =
-        get_vector_3i32F4_thats__infront_of_this__entity(
-                p_entity);
-    return get_p_tile_from__chunk_manager_with__3i32F4(
-            get_p_chunk_manager_from__world(p_world), 
-            *p_vector__3i32F4);
-}
 
 #endif

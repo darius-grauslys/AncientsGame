@@ -15,8 +15,8 @@ void initialize_item_as__building_material(
             weight_of_each__item,
             0, 0, 0);
 
-    p_item->the_kind_of__tile_cover__this_item_builds =
-        the_kind_of__tile_cover__this_item_builds;
     p_item->the_kind_of__ground__this_item_builds =
         the_kind_of__ground__this_item_builds;
+    p_item->the_kind_of__tile_cover__this_item_builds =
+        the_kind_of__tile_cover__this_item_builds;
 }

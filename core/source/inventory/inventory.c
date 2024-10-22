@@ -344,23 +344,20 @@ void remove_this_many_item_kinds_from__inventory(
                 p_inventory, the_kind_of__item);
     if (!p_item_stack)
         return;
+    Quantity__u32 quantity_of__items_remaining_to__remove =
+        quantity_of__items_to__remove;
     do {
-        Quantity__u8 quantity_of__items_in__item_stack =
-            p_item_stack->quantity_of__items;
-        remove_quantity_of_items_from__item_stack(
-                p_item_stack, 
-                quantity_of__items_to__remove);
+        quantity_of__items_remaining_to__remove =
+            remove_quantity_of_items_from__item_stack(
+                    p_item_stack, 
+                    quantity_of__items_to__remove);
         if (is_p_item_stack__empty(p_item_stack)) {
             remove_p_item_stack_from__inventory(
                     p_inventory, 
                     p_item_stack);
         }
-        if (quantity_of__items_to__remove
-                < quantity_of__items_in__item_stack) {
+        if (quantity_of__items_remaining_to__remove == 0)
             return;
-        }
-        quantity_of__items_to__remove -=
-            p_item_stack->quantity_of__items;
     } while ((p_item_stack =
                 get_next_p_item_stack_of__this_item_kind_from__inventory(
                     p_inventory, 

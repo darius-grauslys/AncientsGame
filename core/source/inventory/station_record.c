@@ -65,5 +65,17 @@ bool f_station_handler__use__default(
                 get_item_recipe_flags_of__station_recipe(
                     &station_inventory_map));
 
+    if (is_crafting__successful) {
+        PLATFORM_refresh_ui(
+                p_game, 
+                UI_Window_Kind__Equip);
+        PLATFORM_refresh_ui(
+                p_game, 
+                UI_Window_Kind__Trade);
+        PLATFORM_refresh_ui(
+                p_game, 
+                UI_Window_Kind__Station);
+    }
+
     return is_crafting__successful;
 }

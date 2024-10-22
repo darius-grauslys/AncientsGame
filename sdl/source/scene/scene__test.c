@@ -1,9 +1,11 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "entity/handlers/entity_handlers.h"
+#include "entity/humanoid.h"
 #include "game.h"
 #include "game_action/game_action.h"
 #include "input/input.h"
+#include "inventory/item_manager.h"
 #include "numerics.h"
 #include "platform.h"
 #include "platform_defines.h"
@@ -50,6 +52,40 @@ void m_enter_scene_handler_as__test(
             p_game, 
             get_p_local_player_from__game(p_game)
             ->hitbox.position__3i32F4);
+
+    get_p_local_player_from__game(p_game)
+        ->equipment
+        .item_stack__main_hand
+        .item =
+            get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                Item_Kind__Hammer__Iron);
+
+    get_p_local_player_from__game(p_game)
+        ->equipment
+        .item_stack__main_hand
+        .quantity_of__items = 1;
+    get_p_local_player_from__game(p_game)
+        ->equipment
+        .item_stack__main_hand
+        .max_quantity_of__items = 1;
+
+    get_p_local_player_from__game(p_game)
+        ->equipment
+        .item_stack__off_hand
+        .item =
+            get_item_from__item_manager(
+                get_p_item_manager_from__game(p_game), 
+                Item_Kind__Pile__Dirt__Plenty);
+
+    get_p_local_player_from__game(p_game)
+        ->equipment
+        .item_stack__main_hand
+        .quantity_of__items = 1;
+    get_p_local_player_from__game(p_game)
+        ->equipment
+        .item_stack__main_hand
+        .max_quantity_of__items = 1;
 
     PLATFORM_update_chunks(
             get_p_PLATFORM_gfx_context_from__game(p_game),

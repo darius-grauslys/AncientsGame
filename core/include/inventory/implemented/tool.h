@@ -6,7 +6,6 @@
 void use_tool__harvest_soil(
         Game *p_game,
         Entity *p_entity_user,
-        Tile *p_tile,
         bool is_harvesting_wall_or__ground);
 
 /// 
@@ -20,13 +19,10 @@ void use_tool__harvest_soil(
 void use_tool__harvest_ore(
         Game *p_game,
         Entity *p_entity_user,
-        Tile *p_tile,
-        Tile *p_tile__other,
         bool is_harvesting_wall_or__ground);
 
 void use_tool__harvest_tree(
         Game *p_game,
-        Entity *p_entity_user,
-        Tile *p_tile);
+        Entity *p_entity_user);
 
 #endif

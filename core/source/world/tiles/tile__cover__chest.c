@@ -127,7 +127,7 @@ void register_default_tile_handlers_for__chest(
         Tile_Cover_Kind the_kind_of__chest) {
     register_tile_logic_record_for__cover_kind(
             p_tile_logic_manager, 
-            Tile_Cover_Kind__Table__Bottom__Middle, 
+            the_kind_of__chest, 
             TILE_LOGIC_RECORD(
                 f_tile_interact_handler__chest,
                 0,

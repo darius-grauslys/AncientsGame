@@ -184,20 +184,26 @@ Tile_Render_Result get_tile_render_result(
 
 bool poll_tile_for__interaction(
         Game *p_game,
-        Tile *p_tile,
-        Tile_Vector__3i32 tile_vector__3i32, 
-        Entity *p_entity);
+        Entity *p_entity,
+        Tile_Vector__3i32 tile_vector__3i32);
 
 bool poll_tile_for__touch(
         Game *p_game,
-        Tile *p_tile,
-        Tile_Vector__3i32 tile_vector__3i32, 
-        Entity *p_entity);
+        Entity *p_entity,
+        Tile_Vector__3i32 tile_vector__3i32);
 
 bool attempt_tile_placement(
         Game *p_game,
         Tile_Kind the_kind_of__tile,
         Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32);
+
+void remove_tile__cover(
+        Game *p_game,
+        Tile_Vector__3i32 tile_vector__3i32);
+
+void remove_tile__ground(
+        Game *p_game,
         Tile_Vector__3i32 tile_vector__3i32);
 
 #endif

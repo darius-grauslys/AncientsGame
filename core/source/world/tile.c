@@ -1,6 +1,7 @@
 #include "defines_weak.h"
 #include "game.h"
 #include "platform.h"
+#include "world/chunk.h"
 #include "world/tile_logic_manager.h"
 #include "world/tile_logic_record.h"
 #include "world/world.h"
@@ -707,9 +708,13 @@ Tile_Render_Result get_tile_render_result(
 
 bool poll_tile_for__interaction(
         Game *p_game,
-        Tile *p_tile,
-        Tile_Vector__3i32 tile_vector__3i32, 
-        Entity *p_entity) {
+        Entity *p_entity,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile *p_tile = 
+        get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                get_p_chunk_manager_from__game(p_game),
+                tile_vector__3i32);
+
     Tile_Logic_Manager *p_tile_logic_manager =
         get_p_tile_logic_manager_from__world(
                 get_p_world_from__game(p_game));
@@ -755,9 +760,13 @@ bool poll_tile_for__interaction(
 
 bool poll_tile_for__touch(
         Game *p_game,
-        Tile *p_tile,
-        Tile_Vector__3i32 tile_vector__3i32, 
-        Entity *p_entity) {
+        Entity *p_entity,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile *p_tile = 
+        get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                get_p_chunk_manager_from__game(p_game),
+                tile_vector__3i32);
+
     Tile_Logic_Manager *p_tile_logic_manager =
         get_p_tile_logic_manager_from__world(
                 get_p_world_from__game(p_game));
@@ -801,6 +810,96 @@ bool poll_tile_for__touch(
     return false;
 }
 
+bool attempt_tile_placement_for__this_tile_logic_record(
+        Tile_Logic_Record *p_tile_logic_record,
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    bool is_placement__successful = true;
+    if (p_tile_logic_record
+            && is_tile_logic_record_possessing__place(
+                p_tile_logic_record)) {
+        is_placement__successful = invoke_tile_logic_record__place(
+                p_tile_logic_record, 
+                p_game, 
+                p_tile, 
+                the_kind_of__tile,
+                the_kind_of__tile_cover,
+                tile_vector__3i32);
+    } else if (the_kind_of__tile
+            != Tile_Kind__None) {
+        set_tile_kind_of__tile(
+                p_tile, 
+                the_kind_of__tile);
+    } else if (the_kind_of__tile_cover
+            != Tile_Cover_Kind__None) {
+        set_tile_cover_kind_of__tile(
+                p_tile, 
+                the_kind_of__tile_cover);
+    } else {
+        return false;
+    }
+
+    return is_placement__successful;
+}
+
+bool attempt_tile_placement__ground(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile_Logic_Record *p_tile_logic_record =
+        get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
+                get_p_tile_logic_manager_from__world(
+                    get_p_world_from__game(p_game)), 
+                the_kind_of__tile);
+
+    if (!is_tile_of__this_kind(
+                p_tile,
+                Tile_Kind__None)) {
+        return false;
+    }
+
+    bool is_placement__successful =
+        attempt_tile_placement_for__this_tile_logic_record(
+            p_tile_logic_record, 
+            p_game, 
+            p_tile, 
+            the_kind_of__tile, 
+            Tile_Cover_Kind__None, 
+            tile_vector__3i32);
+
+    if (is_placement__successful) {
+        set_tile__is_unpassable( // TODO: passability rules
+                p_tile, 
+                false);
+    }
+
+    return is_placement__successful;
+}
+
+bool attempt_tile_placement__cover(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile_Logic_Record *p_tile_logic_record =
+        get_p_tile_logic_record_for__cover_kind_from__tile_logic_manager(
+                get_p_tile_logic_manager_from__world(
+                    get_p_world_from__game(p_game)), 
+                the_kind_of__tile_cover);
+
+    return attempt_tile_placement_for__this_tile_logic_record(
+            p_tile_logic_record, 
+            p_game, 
+            p_tile, 
+            Tile_Kind__None, 
+            the_kind_of__tile_cover, 
+            tile_vector__3i32);
+}
+
 bool attempt_tile_placement(
         Game *p_game,
         Tile_Kind the_kind_of__tile,
@@ -814,33 +913,57 @@ bool attempt_tile_placement(
     if (!p_tile)
         return false;
 
-    Tile_Logic_Record *p_tile_logic_record =
-        get_p_tile_logic_record_for__ground_kind_from__tile_logic_manager(
-                get_p_tile_logic_manager_from__world(
-                    get_p_world_from__game(p_game)), 
-                the_kind_of__tile);
-
-    bool is_placement__successful = true;
-    if (is_tile_logic_record_possessing__place(
-                p_tile_logic_record)) {
-        is_placement__successful = invoke_tile_logic_record__place(
-                p_tile_logic_record, 
+    if (the_kind_of__tile
+            != Tile_Kind__None) {
+        return attempt_tile_placement__ground(
                 p_game, 
                 p_tile, 
-                the_kind_of__tile,
-                the_kind_of__tile_cover,
-                tile_vector__3i32);
-    } else {
-        set_tile_kind_of__tile(
-                p_tile, 
-                the_kind_of__tile);
-    }
-
-    if (is_placement__successful) {
-        update_chunk_at__tile_vector__3i32(
-                p_game, 
+                the_kind_of__tile, 
                 tile_vector__3i32);
     }
 
-    return is_placement__successful;
+    if (the_kind_of__tile_cover
+            != Tile_Cover_Kind__None) {
+        return attempt_tile_placement__cover(
+                p_game, 
+                p_tile, 
+                the_kind_of__tile_cover, 
+                tile_vector__3i32);
+    }
+
+    return false;
+}
+
+void remove_tile__cover(
+        Game *p_game,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile *p_tile = 
+        get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                get_p_chunk_manager_from__game(p_game),
+                tile_vector__3i32);
+
+    set_tile_cover_kind_of__tile(
+            p_tile, 
+            Tile_Cover_Kind__None);
+
+    update_chunk_at__tile_vector__3i32(
+            p_game, 
+            tile_vector__3i32);
+}
+
+void remove_tile__ground(
+        Game *p_game,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile *p_tile = 
+        get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                get_p_chunk_manager_from__game(p_game),
+                tile_vector__3i32);
+
+    set_tile_kind_of__tile(
+            p_tile, 
+            Tile_Kind__None);
+
+    update_chunk_at__tile_vector__3i32(
+            p_game, 
+            tile_vector__3i32);
 }

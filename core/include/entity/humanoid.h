@@ -90,4 +90,26 @@ static bool inline does_humanoid_have__divine_providence(
             & HUMANOID_FLAG__HAS_DIVINE_PROVIDENCE);
 }
 
+void humanoid__add_item_to__inventory(
+        Game *p_game,
+        Entity *p_entity,
+        Item item,
+        Quantity__u32 quantity_of__items,
+        Quantity__u32 max_quantity_of__items);
+
+void humanoid__remove_quantity_of__item_kinds_from__inventory(
+        Game *p_game,
+        Entity *p_entity,
+        Item_Kind the_kind_of__item,
+        Quantity__u32 quantity_of__items);
+
+/// 
+/// First removes items from offhand then inventory.
+///
+void humanoid__remove_quantity_of__item_kinds_from__posessions(
+        Game *p_game,
+        Entity *p_entity,
+        Item_Kind the_kind_of__item,
+        Quantity__u32 quantity_of__items);
+
 #endif

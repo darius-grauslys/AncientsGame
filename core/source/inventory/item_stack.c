@@ -285,15 +285,27 @@ bool resolve_item_stack__merge_or_swap(
     return true;
 }
 
-void remove_quantity_of_items_from__item_stack(
+Quantity__u32 remove_quantity_of_items_from__item_stack(
         Item_Stack *p_item_stack,
         Quantity__u8 quantity_of__items_to__remove) {
 #ifndef NDEBUG
     if (!p_item_stack) {
         debug_abort("remove_quantity_of_items_from__item_stack, p_item_stack is null.");
-        return;
+        return quantity_of__items_to__remove;
     }
 #endif
+    Quantity__u32 quantity_of__items_in__item_stack =
+        get_quantity_of__items_in__item_stack(
+                p_item_stack);
+    Quantity__u32 quantity_of__items_remaining_to__remove =
+        (get_quantity_of__items_in__item_stack(
+                p_item_stack)
+            < quantity_of__items_to__remove)
+        ? quantity_of__items_to__remove
+            - quantity_of__items_in__item_stack
+        : 0
+        ;
+
     p_item_stack->quantity_of__items =
         subtract_u8__no_overflow(
                 p_item_stack->quantity_of__items, 
@@ -301,4 +313,6 @@ void remove_quantity_of_items_from__item_stack(
 
     if (p_item_stack->quantity_of__items == 0)
         p_item_stack->item = get_item__empty();
+
+    return quantity_of__items_remaining_to__remove;
 }
