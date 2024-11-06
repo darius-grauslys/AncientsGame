@@ -56,6 +56,9 @@ typedef uint8_t    u8F4;
 
 typedef int32_t     i32F20;
 
+#define I32F4_MAX ((uint32_t)BIT(31)-1)
+#define I32F4_MIN BIT(31)
+
 /// 
 /// Vector__3i32F4 is a 3-tuple of 32 bit FIXED POINT
 /// fractional integers with 4 bits of percision.
@@ -1695,39 +1698,128 @@ typedef struct Path_List_Manager {
 
 #define ROOM_ENTRANCE_MAX_QUANTITY_OF 4
 
+typedef Quantity__u16 Room_Type__u16;
+typedef uint8_t Room_Flags__u8;
+
+#define ROOM_FLAGS__NONE 0
+#define ROOM_FLAG__IS_ALLOCATED BIT(0)
+
 typedef struct Room_t {
+    Serializer _serializer;
     Hitbox_AABB bounding_box_of__room;
     Vector__3i32F4 entrances__3i32F4
         [ROOM_ENTRANCE_MAX_QUANTITY_OF];
+    Room_Type__u16 the_type_of__room;
     Quantity__u8 quantity_of__room_entrances;
+    Room_Flags__u8 room_flags;
 } Room;
 
 #define ROOM_MAX_QUANTITY_OF 128
 #define ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF 8
 
+typedef Quantity__u16 Structure_Type__u16;
+typedef uint8_t Structure_Flags__u8;
+
+#define STRUCTURE_FLAGS__NONE 0
+#define STRUCTURE_FLAG__IS_ALLOCATED BIT(0)
+
+typedef Room* Structure_Ptr_Array_Of__Rooms[
+    ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF];
+
 typedef struct Structure_t {
-    Room *p_room_ptrs
-        [ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF];
+    Serializer _serializer;
+    Structure_Ptr_Array_Of__Rooms ptr_array_of__rooms;
+    Hitbox_AABB bounding_box_of__structure;
+    Structure_Type__u16 the_kind_of__structure;
     Quantity__u8 quantity_of__rooms_in__structure;
+    Structure_Flags__u8 structure_flags;
 } Structure;
 
 #define STRUCTURE_MAX_QUANTITY_OF (\
         ROOM_MAX_QUANTITY_OF \
         / ROOMS_IN_STRUCTURE__MAX_QUANTITY_OF)
 
+#define STRUCTURES_IN_SITE__MAX_QUANTITY_OF\
+    (STRUCTURE_MAX_QUANTITY_OF \
+    / 4)
+#define SITE_MAX_QUANTITY_OF\
+    (STRUCTURE_MAX_QUANTITY_OF \
+     / STRUCTURES_IN_SITE__MAX_QUANTITY_OF)
+
+#define SITE__WIDTH_IN__TILES 512
+#define SITE__HEIGHT_IN__TILES 512
+
+typedef Structure *Site_Ptr_Array_Of__Structures[
+    STRUCTURES_IN_SITE__MAX_QUANTITY_OF];
+
+typedef struct Site_t {
+    Serializer _serializer;
+    Site_Ptr_Array_Of__Structures ptr_array_of__structures_in__site;
+    Hitbox_AABB bounding_box_of__site;
+    Quantity__u8 quantity_of__structures_in__site;
+} Site;
+
+#define REGION__WIDTH_IN__CHUNKS \
+    (REGION__WIDTH \
+    >> CHUNK__WIDTH_BIT_SHIFT)
+#define REGION__HEIGHT_IN__CHUNKS \
+    (REGION__HEIGHT \
+    >> CHUNK__HEIGHT_BIT_SHIFT)
+
+#define SITE_QUANTITY_OF__PER_REGION \
+    ((REGION__WIDTH * REGION__HEIGHT) \
+     / (SITE__WIDTH_IN__TILES\
+         * SITE__HEIGHT_IN__TILES))
+
+typedef struct Region_t {
+    Serializer _serializer;
+    u8 bitmap_of__serialized_chunks[
+        (REGION__WIDTH_IN__CHUNKS
+            * REGION__HEIGHT_IN__CHUNKS
+            >> 3)];
+    u8 bitmap_of__sites[
+        SITE_QUANTITY_OF__PER_REGION
+            >> 3];
+} Region;
+
+#define REGION_MAX_QUANTITY_OF 4
+
+typedef struct Region_Manager_t {
+    Region regions[REGION_MAX_QUANTITY_OF];
+} Region_Manager;
+
 typedef struct Structure_Manager_t {
     Room rooms[ROOM_MAX_QUANTITY_OF];
     Structure structures[STRUCTURE_MAX_QUANTITY_OF];
 
+    Room *ptr_array_of__allocated_rooms[ROOM_MAX_QUANTITY_OF];
+    Structure *ptr_array_of__allocated_structures[
+        STRUCTURE_MAX_QUANTITY_OF];
+
     Quantity__u32 quantity_of__allocated_rooms;
     Quantity__u32 quantity_of__allocated_structures;
 } Structure_Manager;
+
+typedef bool (*f_Room_Compositor_Handler__Room)(
+        Game *p_game,
+        Room *p_room);
+
+typedef bool (*f_Room_Compositor_Handler__Hallway)(
+        Game *p_game,
+        Room *p_room__origin,
+        Room *p_room__destination);
+
+typedef struct Room_Compositor_t {
+    f_Room_Compositor_Handler__Room f_room_compositor_handler__room;
+    f_Room_Compositor_Handler__Hallway f_room_compositor_handler__hallway;
+} Room_Compositor;
 
 typedef uint8_t Chunk_Tile_Index__u8;
 ///
 /// Local to a chunk.
 ///
 typedef Vector__3u8 Local_Tile_Vector__3u8;
+
 
 #define TILE_PIXEL_HEIGHT 8
 #define TILE_PIXEL_WIDTH 8
