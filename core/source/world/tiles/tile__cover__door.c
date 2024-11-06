@@ -233,7 +233,6 @@ update_chunk:
             get_p_chunk_manager_from__game(p_game));
 }
 
-static inline
 Tile_Cover_Kind orientate_door_placement(
         Tile_Cover_Kind the_kind_of__tile_cover,
         bool is_vertical_or__horizontal) {
@@ -351,7 +350,8 @@ bool f_tile_handler__place__door(
     Tile_Cover_Kind the_kind_of__door_placed =
         orientate_door_placement(
                 the_kind_of__tile_cover,
-                true);
+                false);
+
     if (is_door_placement__valid(
                 p_tile__north, 
                 p_tile__south, 
@@ -379,6 +379,11 @@ bool f_tile_handler__place__door(
                 add_vectors__3i32(
                     tile_vector__3i32, 
                     VECTOR__3i32__1_0_0));
+
+    the_kind_of__door_placed =
+        orientate_door_placement(
+                the_kind_of__tile_cover,
+                true);
 
     if (is_door_placement__valid(
                 p_tile__west, 
