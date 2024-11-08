@@ -1,6 +1,7 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#include "platform.h"
 #include "platform_defines.h"
 #include <stdbool.h>
 #include <stdint.h>
@@ -1508,6 +1509,79 @@ typedef struct Sort_List_Manager_t {
 typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;
 
+typedef u16 UI_Tile_Flags;
+
+#define UI_TILE_FLAGS__NONE 0
+
+#define UI_TILE_FLAG__SCALE_VERTICAL        BIT(0)
+#define UI_TILE_FLAG__SCALE_HORIZONTAL      BIT(1)
+#define UI_TILE_FLAG__FLIPPED_VERTICAL      BIT(2)
+#define UI_TILE_FLAG__FLIPPED_HORIZONTAL    BIT(3)
+#define UI_TILE_FLAG__GENERAL_1             BIT(4)
+#define UI_TILE_FLAG__GENERAL_2             BIT(5)
+
+#define UI_TILE__QUANTITY_OF__FLAGS 6
+
+///
+/// Endian-proof form of UI_Tile.
+///
+typedef u16 UI_Tile_Raw;
+
+typedef struct UI_Tile_t {
+    UI_Tile_Kind the_kind_of__ui_tile   :10;
+    UI_Tile_Flags ui_tile_flags         :6;
+} UI_Tile;
+
+#define UI_TILE_SPAN__QUANTITY_OF__CORNERS 4
+#define UI_TILE_SPAN__QUANTITY_OF__EDGES 4
+typedef struct UI_Tile_Span_t {
+    union {
+        UI_Tile ui_tile__corners[
+            UI_TILE_SPAN__QUANTITY_OF__CORNERS];
+        struct {
+            UI_Tile ui_tile__corner__top_left;
+            UI_Tile ui_tile__corner__top_right;
+            UI_Tile ui_tile__corner__bottom_left;
+            UI_Tile ui_tile__corner__bottom_right;
+        };
+    };
+    union {
+        UI_Tile ui_tile__edges[
+            UI_TILE_SPAN__QUANTITY_OF__EDGES];
+        struct {
+            UI_Tile ui_tile__edge__top;
+            UI_Tile ui_tile__edge__right;
+            UI_Tile ui_tile__edge__bottom;
+            UI_Tile ui_tile__edge__left;
+        };
+    };
+    UI_Tile ui_tile__fill;
+} UI_Tile_Span;
+
+typedef struct UI_Tile_Map__Wrapper_t {
+    UI_Tile_Raw *p_ui_tile_data;
+    Quantity__u32 width_of__ui_tile_map;
+    Quantity__u32 height_of__ui_tile_map;
+} UI_Tile_Map__Wrapper;
+
+typedef struct UI_Tile_Map__Small_t {
+    UI_Tile_Raw ui_tile_data__small[
+        UI_TILE_MAP__LARGE__WIDTH
+            * UI_TILE_MAP__LARGE__HEIGHT];
+} UI_Tile_Map__Small;
+
+typedef struct UI_Tile_Map__Medium_t {
+    UI_Tile_Raw ui_tile_data__medium[
+        UI_TILE_MAP__LARGE__WIDTH
+            * UI_TILE_MAP__LARGE__HEIGHT];
+} UI_Tile_Map__Medium;
+
+typedef struct UI_Tile_Map__Large_t {
+    UI_Tile_Raw ui_tile_data__large[
+        UI_TILE_MAP__LARGE__WIDTH
+            * UI_TILE_MAP__LARGE__HEIGHT];
+} UI_Tile_Map__Large;
+
 typedef void (*m_UI_Dispose)(
         UI_Element *p_this_ui_element,
         Game *p_game);
@@ -1546,6 +1620,8 @@ typedef uint8_t UI_Button_Flags__u8;
     (UI_FLAGS__BIT_SHIFT_IS_BEING_HELD + 1)
 #define UI_FLAGS__BIT_SHIFT_IS_SNAPPED_X_OR_Y_AXIS \
     (UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED + 1)
+#define UI_FLAGS__BIT_SHIFT_IS_USING__SPRITE_OR_UI_TILE_SPAN \
+    (UI_FLAGS__BIT_SHIFT_IS_SNAPPED_X_OR_Y_AXIS + 1)
 
 #define UI_FLAGS__NONE 0
 
@@ -1561,6 +1637,8 @@ typedef uint8_t UI_Button_Flags__u8;
     BIT(UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED )
 #define UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS \
     BIT(UI_FLAGS__BIT_SHIFT_IS_SNAPPED_X_OR_Y_AXIS)
+#define UI_FLAGS__BIT_IS_USING__SPRITE_OR_UI_TILE_SPAN \
+    BIT(UI_FLAGS__BIT_SHIFT_IS_USING__SPRITE_OR_UI_TILE_SPAN)
 
 #define UI_BUTTON_FLAGS__NONE 0
 #define UI_BUTTON_FLAGS__BIT_SHIFT_IS_TOGGLEABLE 0
@@ -1595,7 +1673,10 @@ typedef struct UI_Element_t {
     UI_Element *p_parent,   *p_child, *p_next;
     Identifier__u16         ui_identifier;
     UI_Flags__u8            ui_flags;
-    PLATFORM_Sprite         *p_PLATFORM_sprite;
+    union {
+        PLATFORM_Sprite         *p_PLATFORM_sprite;
+        UI_Tile_Span            ui_tile_span;
+    };
     union {
         struct { // UI_Button
             UI_Button_Flags__u8 ui_button_flags;
@@ -1927,6 +2008,8 @@ typedef struct Tile_Logic_Manager_t {
         Tile_Cover_Kind__Unknown];
 } Tile_Logic_Manager;
 
+// TODO: Might need to make a Tile_Raw variant of u8[3]
+// to be endian-proof on serialization.
 typedef struct Tile_t {
     enum Tile_Kind                  
         the_kind_of_tile__this_tile_is          :10;

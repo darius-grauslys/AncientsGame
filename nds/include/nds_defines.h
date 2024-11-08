@@ -277,4 +277,10 @@ typedef struct PLATFORM_File_System_Context_t {
     Timer__u8 timer__audio_stream_u8;
 } PLATFORM_File_System_Context;
 
+///
+/// SECTION_ui
+///
+
+#define NDS__UI_TILE_FLAG__RESERVED UI_TILE_FLAG__GENERAL_1
+
 #endif

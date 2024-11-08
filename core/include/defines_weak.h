@@ -904,6 +904,11 @@ typedef struct Serializer_t Serializer;
 /// SECTION_ui
 ///
 
+typedef enum UI_Tile_Kind {
+    UI_Tile_Kind__None = 0,
+    UI_Tile_Kind__Unknown
+} UI_Tile_Kind;
+
 enum UI_Sprite_Kind {
     UI_Sprite_Kind__None = 0,
     UI_Sprite_Kind__8x8__Nav__Indicator__Close__Hostile,

@@ -3,12 +3,21 @@
 
 #include "defines_weak.h"
 
+#ifndef PLATFORM__IO
 #define PLATFORM__IO
-#define MAX_LENGTH_OF__IO_PATH 1024
+#define MAX_LENGTH_OF__IO_PATH 128
+#endif
+
+#ifndef PLATFORM__CAMERA
+#define PLATFORM__CAMERA
+#define CAMERA_FULCRUM__WIDTH 256
+#define CAMERA_FULCRUM__HEIGHT 196
+#endif
 
 /*****************************************************
  *  CHUNKS
  *****************************************************/
+#ifndef PLATFORM__CHUNKS
 #define PLATFORM__CHUNKS
 
 #define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 6
@@ -53,6 +62,7 @@
 #define CHUNK_WIDTH__IN_BYTES (\
         TILE_WIDTH__IN_BYTES *\
         CHUNK_WIDTH__IN_TILES)
+#endif
 
 /*****************************************************
  *  ENTITIES
@@ -88,6 +98,23 @@
 //   KEY_TOUCH  = BIT(12), //!< Touchscreen pendown.
 //   KEY_LID    = BIT(13)  //!< Lid state.
 // } KEYPAD_BITS;
+
+#define PLATFORM__INPUT
+#define INPUT_NONE 0
+#define INPUT_USE (1<<0)
+#define INPUT_USE_SECONDARY (INPUT_USE <<1)
+#define INPUT_LOCKON (INPUT_USE_SECONDARY<<1)
+#define INPUT_GAME_SETTINGS (INPUT_LOCKON<<1)
+#define INPUT_RIGHT (INPUT_GAME_SETTINGS<<1)
+#define INPUT_LEFT (INPUT_RIGHT<<1)
+#define INPUT_FORWARD (INPUT_LEFT<<1)
+#define INPUT_BACKWARD (INPUT_FORWARD<<1)
+#define INPUT_TURN_RIGHT (INPUT_BACKWARD<<1)
+#define INPUT_TURN_LEFT (INPUT_TURN_RIGHT<<1)
+#define INPUT_EXAMINE (INPUT_TURN_LEFT<<1)
+#define INPUT_CONSUME (INPUT_EXAMINE<<1)
+#define INPUT_CLICK (INPUT_CONSUME<<1)
+
 
 /*****************************************************
  *  TILES
@@ -319,8 +346,6 @@
 #define SPRITE_PALETTE__SKELETON    1
 #define SPRITE_PALETTE__ZOMBIE      2
 
-#define SCENE_IDENTIFIER__QUIT -2
-#define SCENE_IDENTIFIER__UNKNOWN -1
 #define SCENE_IDENTIFIER__MAIN_MENU 0
 #define SCENE_IDENTIFIER__SINGLE_PLAYER_MENU \
     (SCENE_IDENTIFIER__MAIN_MENU + 1)
@@ -333,19 +358,24 @@
 #define SCENE_IDENTIFIER__TEST \
     (SCENE_IDENTIFIER__GAME + 1)
 
-/*****************************************************
- *  SDL
- *****************************************************/
+#ifndef PLATFORM__UI
+#define PLATFORM__UI
+// #define UI_TILE__IS_NOT__SAVING_FLAGS_TO__RAW
 
-typedef union SDL_Event SDL_Event;
+#define UI_TILE__WIDTH_IN__PIXELS 8
+#define UI_TILE__HEIGHT_IN__PIXELS 8
 
-typedef void (*f_SDL_Event_Handler)(
-        Game *p_game,
-        SDL_Event *p_event);
+#define UI_TILE_MAP__SMALL__MAX_QUANTITY_OF 32
+#define UI_TILE_MAP__SMALL__WIDTH 8
+#define UI_TILE_MAP__SMALL__HEIGHT 8
 
-#define TEXTURE_FLAG__FORMAT__RGB888 \
-    TEXTURE_FLAG__FORMAT__1
-#define TEXTURE_FLAG__FORMAT__RGBA8888 \
-    TEXTURE_FLAG__FORMAT__2
+#define UI_TILE_MAP__MEDIUM__MAX_QUANTITY_OF 16
+#define UI_TILE_MAP__MEDIUM__WIDTH 16
+#define UI_TILE_MAP__MEDIUM__HEIGHT 16
+
+#define UI_TILE_MAP__LARGE__MAX_QUANTITY_OF 8
+#define UI_TILE_MAP__LARGE__WIDTH 32
+#define UI_TILE_MAP__LARGE__HEIGHT 32
+#endif
 
 #endif

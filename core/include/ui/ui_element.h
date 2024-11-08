@@ -8,6 +8,49 @@
 #include "vectors.h"
 #include <defines.h>
 
+void initialize_ui_element(
+        UI_Element *p_ui_element,
+        UI_Element *p_ui_element__parent,
+        UI_Element *p_ui_element__child,
+        UI_Element *p_ui_element__next,
+        enum UI_Element_Kind kind_of_ui_element,
+        UI_Flags__u8 ui_flags,
+        Quantity__u8 width__u8,
+        Quantity__u8 height__u8,
+        Vector__3i32 position__3i32);
+
+void m_ui_element__dispose_handler__default(
+        UI_Element *p_this_ui_element,
+        Game *p_game);
+
+void set_positions_of__ui_elements_in__succession(
+        UI_Element *p_ui_element__succession_collection,
+        Vector__3i32 starting_position__3i32,
+        i32 x__stride,
+        Quantity__u32 quantity_of__elements_per_row,
+        i32 y__stride);
+
+void set_ui_element__PLATFORM_sprite(
+        UI_Element *p_ui_element,
+        PLATFORM_Sprite *p_PLATFORM_sprite);
+
+void release_ui_element__PLATFORM_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        UI_Element *p_ui_element);
+
+void set_ui_tile_span_of__ui_element(
+        UI_Element *p_ui_element,
+        UI_Tile_Span *p_ui_tile_span);
+
+const UI_Tile_Span *get_ui_tile_span_of__ui_element(
+        UI_Element *p_ui_element,
+        Quantity__u32 *p_width_in__tiles,
+        Quantity__u32 *p_height_in__tiles);
+
+void set_position_3i32_of__ui_element(
+        UI_Element *p_ui_element,
+        Vector__3i32 position__3i32);
+
 static inline 
 Signed_Index__i32 get_x_i32_from__p_ui_element(
         UI_Element *p_ui_element) {
@@ -111,28 +154,6 @@ UI_Element *iterate_to_child_of__ui_element(
     return p_iterated_element;
 }
 
-void initialize_ui_element(
-        UI_Element *p_ui_element,
-        UI_Element *p_ui_element__parent,
-        UI_Element *p_ui_element__child,
-        UI_Element *p_ui_element__next,
-        enum UI_Element_Kind kind_of_ui_element,
-        UI_Flags__u8 ui_flags,
-        Quantity__u8 width__u8,
-        Quantity__u8 height__u8,
-        Vector__3i32 position__3i32);
-
-void m_ui_element__dispose_handler__default(
-        UI_Element *p_this_ui_element,
-        Game *p_game);
-
-void set_positions_of__ui_elements_in__succession(
-        UI_Element *p_ui_element__succession_collection,
-        Vector__3i32 starting_position__3i32,
-        i32 x__stride,
-        Quantity__u32 quantity_of__elements_per_row,
-        i32 y__stride);
-
 static inline
 bool is_ui_element_of__this_kind(
         UI_Element *p_ui_element,
@@ -141,91 +162,146 @@ bool is_ui_element_of__this_kind(
         == the_kind_of_ui_element;
 }
 
-static bool inline is_ui_element__allocated(UI_Element *p_ui_element) {
+static inline
+bool is_ui_element__allocated(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_ALLOCATED);
 }
 
-static bool inline is_ui_element__enabled(UI_Element *p_ui_element) {
+static inline
+bool is_ui_element__enabled(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_ENABLED);
 }
 
-static bool inline is_ui_element__in_needing_update(UI_Element *p_ui_element) {
+static inline
+bool is_ui_element__in_needing_update(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_NEEDING_UPDATE);
 }
 
-static bool inline is_ui_element__being_held(UI_Element *p_ui_element) {
+static inline
+bool is_ui_element__being_held(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_BEING_HELD);
 }
 
-static bool inline is_ui_element__being_dragged(UI_Element *p_ui_element) {
+static inline
+bool is_ui_element__being_dragged(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_BEING_DRAGGED);
 }
 
-static bool inline is_ui_element__snapped_x_or_y_axis(UI_Element *p_ui_element) {
+static inline
+bool is_ui_element__snapped_x_or_y_axis(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS);
 }
 
-static bool inline is_ui_element__focused(
+static inline
+bool is_ui_element__focused(
         UI_Element *p_ui_element) {
     return is_ui_element__being_held(p_ui_element)
         || is_ui_element__being_dragged(p_ui_element);
 }
 
-static bool inline does_ui_element_have__parent(
+static inline
+bool is_ui_element__using_sprite_or__ui_tile_span(
+        UI_Element *p_ui_element) {
+    return p_ui_element->ui_flags
+        & UI_FLAGS__BIT_IS_USING__SPRITE_OR_UI_TILE_SPAN
+        ;
+}
+
+static inline
+bool is_ui_element__using_sprite(
+        UI_Element *p_ui_element) {
+    return is_ui_element__using_sprite_or__ui_tile_span(
+            p_ui_element);
+}
+
+static inline
+bool is_ui_element__using_ui_tile_span(
+        UI_Element *p_ui_element) {
+    return !is_ui_element__using_sprite_or__ui_tile_span(
+            p_ui_element);
+}
+
+static inline
+bool does_ui_element_have__parent(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->p_parent;
 }
 
-static bool inline does_ui_element_have__child(
+static inline
+bool does_ui_element_have__child(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->p_child;
 }
 
-static bool inline does_ui_element_have__next(
+static inline
+bool does_ui_element_have__next(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->p_next;
 }
 
 //TODO: move to private header
-static void inline set_ui_element_as__allocated(
+static inline
+void set_ui_element_as__allocated(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags |=
         UI_FLAGS__BIT_IS_ALLOCATED;
 }
 
 //TODO: move to private header
-static void inline set_ui_element_as__deallocated(
+static inline
+void set_ui_element_as__deallocated(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_ALLOCATED;
 }
 
-static void inline set_ui_element_as__being_dragged(
+static inline
+void set_ui_element_as__being_dragged(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags |=
         UI_FLAGS__BIT_IS_BEING_DRAGGED;
 }
 
-static void inline set_ui_element_as__being_held(
+static inline
+void set_ui_element_as__being_held(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags |=
         UI_FLAGS__BIT_IS_BEING_HELD;
 }
 
-static void inline set_ui_element_as__dropped(
+static inline
+void set_ui_element_as__dropped(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_BEING_HELD
         & ~UI_FLAGS__BIT_IS_BEING_DRAGGED;
 }
 
-static void inline set_ui_element_as__snapped_x_axis(
+static inline
+void set_ui_element_as__using_sprite(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags |=
+        UI_FLAGS__BIT_IS_USING__SPRITE_OR_UI_TILE_SPAN
+        ;
+}
+
+static inline
+void set_ui_element_as__using_ui_tile_span(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags &=
+        ~UI_FLAGS__BIT_IS_USING__SPRITE_OR_UI_TILE_SPAN
+        ;
+}
+
+static inline
+void set_ui_element_as__snapped_x_axis(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags |=
         UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS;
 }
 
-static void inline set_ui_element_as__snapped_y_axis(
+static inline
+void set_ui_element_as__snapped_y_axis(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_SNAPPED_X_OR_Y_AXIS;
@@ -242,65 +318,70 @@ void set_ui_element__snapped_state(
     }
 }
 
-static void inline set_ui_element_as__enabled(
+static inline
+void set_ui_element_as__enabled(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags |=
         UI_FLAGS__BIT_IS_ENABLED;
 }
 
-static void inline set_ui_element_as__disabled(
+static inline
+void set_ui_element_as__disabled(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_ENABLED;
 }
 
-static void inline set_ui_element__dispose_handler(
+static inline
+void set_ui_element__dispose_handler(
         UI_Element *p_ui_element,
         m_UI_Dispose m_ui_dispose_handler) {
     p_ui_element->m_ui_dispose_handler =
         m_ui_dispose_handler;
 }
 
-static void inline set_ui_element__clicked_handler(
+static inline
+void set_ui_element__clicked_handler(
         UI_Element *p_ui_element,
         m_UI_Clicked m_ui_clicked_handler) {
     p_ui_element->m_ui_clicked_handler =
         m_ui_clicked_handler;
 }
 
-static void inline set_ui_element__dragged_handler(
+static inline
+void set_ui_element__dragged_handler(
         UI_Element *p_ui_element,
         m_UI_Dragged m_ui_dragged_handler) {
     p_ui_element->m_ui_dragged_handler =
         m_ui_dragged_handler;
 }
 
-static void inline set_ui_element__dropped_handler(
+static inline
+void set_ui_element__dropped_handler(
         UI_Element *p_ui_element,
         m_UI_Dropped m_ui_dropped_handler) {
     p_ui_element->m_ui_dropped_handler =
         m_ui_dropped_handler;
 }
 
-static void inline set_ui_element__receive_drop_handler(
+static inline
+void set_ui_element__receive_drop_handler(
         UI_Element *p_ui_element,
         m_UI_Receive_Drop m_ui_receive_drop_handler) {
     p_ui_element->m_ui_receive_drop_handler =
         m_ui_receive_drop_handler;
 }
 
-static void inline set_ui_element__held_handler(
+static inline
+void set_ui_element__held_handler(
         UI_Element *p_ui_element,
         m_UI_Dragged m_ui_held_handler) {
     p_ui_element->m_ui_held_handler =
         m_ui_held_handler;
 }
 
-void set_position_3i32_of__ui_element(
-        UI_Element *p_ui_element,
-        Vector__3i32 position__3i32);
-
-static void inline set_ui_element__size(
+static inline
+void set_ui_element__size(
         UI_Element *p_ui_element,
         Quantity__u32 width, Quantity__u32 height) {
     p_ui_element->ui_bounding_box__aabb
@@ -309,7 +390,8 @@ static void inline set_ui_element__size(
         .height__quantity_u32 = height;
 }
 
-static void inline set_ui_element__hitbox(
+static inline
+void set_ui_element__hitbox(
         UI_Element *p_ui_element,
         Quantity__u32 width, 
         Quantity__u32 height,
@@ -325,40 +407,38 @@ void set_ui_element__p_data(
     p_ui_element->p_ui_data = p_ui_data;
 }
 
-void set_ui_element__PLATFORM_sprite(
-        UI_Element *p_ui_element,
-        PLATFORM_Sprite *p_PLATFORM_sprite);
-
-void release_ui_element__PLATFORM_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        UI_Element *p_ui_element);
-
-static bool inline does_ui_element_have__dispose_handler(
+static inline
+bool does_ui_element_have__dispose_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_dispose_handler;
 }
 
-static bool inline does_ui_element_have__clicked_handler(
+static inline
+bool does_ui_element_have__clicked_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_clicked_handler;
 }
 
-static bool inline does_ui_element_have__dragged_handler(
+static inline
+bool does_ui_element_have__dragged_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_dragged_handler;
 }
 
-static bool inline does_ui_element_have__dropped_handler(
+static inline
+bool does_ui_element_have__dropped_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_dropped_handler;
 }
 
-static bool inline does_ui_element_have__receive_drop_handler(
+static inline
+bool does_ui_element_have__receive_drop_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_receive_drop_handler;
 }
 
-static bool inline does_ui_element_have__held_handler(
+static inline
+bool does_ui_element_have__held_handler(
         UI_Element *p_ui_element) {
     return (bool)p_ui_element->m_ui_held_handler;
 }
@@ -366,7 +446,9 @@ static bool inline does_ui_element_have__held_handler(
 static inline
 bool does_ui_element_have__PLATFORM_sprite(
         UI_Element *p_ui_element){
-    return (bool)p_ui_element->p_PLATFORM_sprite;
+    return 
+        is_ui_element__using_sprite(p_ui_element)
+        && (bool)p_ui_element->p_PLATFORM_sprite;
 }
 
 static inline

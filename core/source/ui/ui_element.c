@@ -2,6 +2,7 @@
 #include "debug/debug.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "platform_defaults.h"
 #include "ui/ui_button.h"
 #include "ui/ui_draggable.h"
 #include "ui/ui_slider.h"
@@ -155,6 +156,8 @@ void set_ui_element__PLATFORM_sprite(
         return;
     }
 #endif
+    set_ui_element_as__using_sprite(
+            p_ui_element);
     p_ui_element->p_PLATFORM_sprite =
         p_PLATFORM_sprite;
     PLATFORM_set_sprite__position(
@@ -178,4 +181,38 @@ void release_ui_element__PLATFORM_sprite(
             p_ui_element->p_PLATFORM_sprite);
 
     p_ui_element->p_PLATFORM_sprite = 0;
+}
+
+void set_ui_tile_span_of__ui_element(
+        UI_Element *p_ui_element,
+        UI_Tile_Span *p_ui_tile_span) {
+    set_ui_element_as__using_ui_tile_span(
+            p_ui_element);
+    p_ui_element->ui_tile_span =
+        *p_ui_tile_span;
+}
+
+const UI_Tile_Span *get_ui_tile_span_of__ui_element(
+        UI_Element *p_ui_element,
+        Quantity__u32 *p_width_in__tiles,
+        Quantity__u32 *p_height_in__tiles) {
+    if (is_ui_element__using_sprite(
+            p_ui_element)) {
+        *p_width_in__tiles = 0;
+        *p_height_in__tiles = 0;
+        return 0;
+    }
+
+    *p_width_in__tiles = 
+        p_ui_element
+        ->ui_bounding_box__aabb
+        .width__quantity_u32
+        / UI_TILE__WIDTH_IN__PIXELS;
+    *p_height_in__tiles =
+        p_ui_element
+        ->ui_bounding_box__aabb
+        .height__quantity_u32
+        / UI_TILE__HEIGHT_IN__PIXELS;
+
+    return &p_ui_element->ui_tile_span;
 }

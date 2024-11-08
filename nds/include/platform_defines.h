@@ -3,9 +3,21 @@
 
 #include "defines_weak.h"
 
+#ifndef PLATFORM__IO
+#define PLATFORM__IO
+#define MAX_LENGTH_OF__IO_PATH 128
+#endif
+
+#ifndef PLATFORM__CAMERA
+#define PLATFORM__CAMERA
+#define CAMERA_FULCRUM__WIDTH 256
+#define CAMERA_FULCRUM__HEIGHT 196
+#endif
+
 /*****************************************************
  *  CHUNKS
  *****************************************************/
+#ifndef PLATFORM__CHUNKS
 #define PLATFORM__CHUNKS
 
 #define GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS 6
@@ -50,17 +62,24 @@
 #define CHUNK_WIDTH__IN_BYTES (\
         TILE_WIDTH__IN_BYTES *\
         CHUNK_WIDTH__IN_TILES)
+#endif
 
 /*****************************************************
  *  ENTITIES
  *****************************************************/
 
+#ifndef PLATFORM__ENTITIES
 #define PLATFORM__ENTITIES
 #define ENTITY_MAXIMUM_QUANTITY_OF 128
 #define ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS 8
 #define ENTITY_MAXIMUM_QUANTITY_OF__NPCS 48
-#define ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES 72
-
+#define ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES 32
+#define ENTITY_MAXIMUM_QUANTITY_OF__PARTICLES 40
+#define ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE \
+    (ENTITY_MAXIMUM_QUANTITY_OF__NPCS \
+    + ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES \
+    + ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS)
+#endif
 
 /*****************************************************
  *  INPUT
@@ -344,5 +363,29 @@
     (SCENE_IDENTIFIER__MAIN_MENU + 1)
 #define SCENE_IDENTIFIER__TEST \
     (SCENE_IDENTIFIER__GAME + 1)
+
+/*****************************************************
+ *  UI
+ *****************************************************/
+
+#ifndef PLATFORM__UI
+#define PLATFORM__UI
+#define UI_TILE__IS_NOT__SAVING_FLAGS_TO__RAW
+
+#define UI_TILE__WIDTH_IN__PIXELS 8
+#define UI_TILE__HEIGHT_IN__PIXELS 8
+
+#define UI_TILE_MAP__SMALL__MAX_QUANTITY_OF 32
+#define UI_TILE_MAP__SMALL__WIDTH 8
+#define UI_TILE_MAP__SMALL__HEIGHT 8
+
+#define UI_TILE_MAP__MEDIUM__MAX_QUANTITY_OF 16
+#define UI_TILE_MAP__MEDIUM__WIDTH 16
+#define UI_TILE_MAP__MEDIUM__HEIGHT 16
+
+#define UI_TILE_MAP__LARGE__MAX_QUANTITY_OF 8
+#define UI_TILE_MAP__LARGE__WIDTH 32
+#define UI_TILE_MAP__LARGE__HEIGHT 32
+#endif
 
 #endif
