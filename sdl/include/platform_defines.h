@@ -5,7 +5,7 @@
 
 #ifndef PLATFORM__IO
 #define PLATFORM__IO
-#define MAX_LENGTH_OF__IO_PATH 128
+#define MAX_LENGTH_OF__IO_PATH 1024
 #endif
 
 #ifndef PLATFORM__CAMERA
@@ -73,7 +73,10 @@
 #define ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS 8
 #define ENTITY_MAXIMUM_QUANTITY_OF__NPCS 48
 #define ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES 72
-
+#define ENTITY_MAXIMUM_QUANTITY_OF__COLLIDABLE \
+    (ENTITY_MAXIMUM_QUANTITY_OF__NPCS \
+    + ENTITY_MAXIMUM_QUANTITY_OF__PROJECTILES \
+    + ENTITY_MAXIMUM_QUANTITY_OF__PLAYERS)
 
 /*****************************************************
  *  INPUT
@@ -98,23 +101,6 @@
 //   KEY_TOUCH  = BIT(12), //!< Touchscreen pendown.
 //   KEY_LID    = BIT(13)  //!< Lid state.
 // } KEYPAD_BITS;
-
-#define PLATFORM__INPUT
-#define INPUT_NONE 0
-#define INPUT_USE (1<<0)
-#define INPUT_USE_SECONDARY (INPUT_USE <<1)
-#define INPUT_LOCKON (INPUT_USE_SECONDARY<<1)
-#define INPUT_GAME_SETTINGS (INPUT_LOCKON<<1)
-#define INPUT_RIGHT (INPUT_GAME_SETTINGS<<1)
-#define INPUT_LEFT (INPUT_RIGHT<<1)
-#define INPUT_FORWARD (INPUT_LEFT<<1)
-#define INPUT_BACKWARD (INPUT_FORWARD<<1)
-#define INPUT_TURN_RIGHT (INPUT_BACKWARD<<1)
-#define INPUT_TURN_LEFT (INPUT_TURN_RIGHT<<1)
-#define INPUT_EXAMINE (INPUT_TURN_LEFT<<1)
-#define INPUT_CONSUME (INPUT_EXAMINE<<1)
-#define INPUT_CLICK (INPUT_CONSUME<<1)
-
 
 /*****************************************************
  *  TILES
@@ -377,5 +363,14 @@
 #define UI_TILE_MAP__LARGE__WIDTH 32
 #define UI_TILE_MAP__LARGE__HEIGHT 32
 #endif
+
+/*****************************************************
+ *  SDL
+ *****************************************************/
+
+#define TEXTURE_FLAG__FORMAT__RGB888 \
+    TEXTURE_FLAG__FORMAT__1
+#define TEXTURE_FLAG__FORMAT__RGBA8888 \
+    TEXTURE_FLAG__FORMAT__2
 
 #endif

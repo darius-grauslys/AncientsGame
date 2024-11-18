@@ -1529,7 +1529,7 @@ typedef u16 UI_Tile_Raw;
 
 typedef struct UI_Tile_t {
     UI_Tile_Kind the_kind_of__ui_tile   :10;
-    UI_Tile_Flags ui_tile_flags         :6;
+    UI_Tile_Flags ui_tile_flags         :UI_TILE__QUANTITY_OF__FLAGS;
 } UI_Tile;
 
 #define UI_TILE_SPAN__QUANTITY_OF__CORNERS 4

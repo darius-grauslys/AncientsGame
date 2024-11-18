@@ -39,12 +39,25 @@
         f_hook)
 #endif
 
+
+typedef union SDL_Event SDL_Event;
+
+typedef void (*f_SDL_Event_Handler)(
+        Game *p_game,
+        SDL_Event *p_event);
+
+
 typedef struct PLATFORM_Graphics_Window_t {
     void *p_SDL_graphics_window__data;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
 } PLATFORM_Graphics_Window;
 
 typedef void SDL_Gfx_Sub_Context;
+
+typedef union SDL_Event SDL_Event;
+typedef void (*f_SDL_Event_Handler)(
+        Game *p_game,
+        SDL_Event *p_event);
 
 typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
@@ -65,9 +78,6 @@ typedef void (*f_SDL_Use_Texture)(
 
 typedef void (*f_SDL_Release_Texture)(
         PLATFORM_Texture *p_PLATFORM_texture);
-
-
-
 
 typedef void (*f_SDL_Allocate_Sprite)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -175,7 +185,6 @@ typedef enum {
     SDL_Gfx_Sub_Context__OpenGL_3_0,
     SDL_Gfx_Sub_Context__Vulcan //TODO: not impl'd
 } SDL_Gfx_Sub_Context__Kind;
-
 
 typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     SDL_Gfx_Sub_Context__Kind           the_kind_of__sub_context;

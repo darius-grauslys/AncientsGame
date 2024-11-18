@@ -1,8 +1,8 @@
 #ifndef SDL_EVENT_H
 #define SDL_EVENT_H
 
-#include "platform.h"
 #include "platform_defines.h"
+#include "sdl_defines.h"
 #include <SDL2/SDL_events.h>
 
 void SDL_poll_event(Game *p_game);
