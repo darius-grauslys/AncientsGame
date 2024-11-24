@@ -5,6 +5,25 @@
 #include <SDL2/SDL_render.h>
 #include <rendering/sdl_texture.h>
 
+void SDL_initialize_texture_as__deallocated(
+        PLATFORM_Texture *p_PLATFORM_texture) {
+    memset(
+            p_PLATFORM_texture
+            ->SDL_texture_string,
+            0,
+            sizeof(Texture_String));
+    p_PLATFORM_texture->texture_flags = 
+        TEXTURE_FLAGS__NONE;
+    p_PLATFORM_texture->SDL_texture_format__u32 = 
+        SDL_PIXELFORMAT_UNKNOWN;
+    p_PLATFORM_texture->SDL_texture_access = 
+        SDL_TEXTUREACCESS_STATIC;
+    p_PLATFORM_texture->width = 
+        0;
+    p_PLATFORM_texture->height = 
+        0;
+}
+
 void SDL_update_texture_format_and__access(
         PLATFORM_Texture *p_PLATFORM_texture,
         Texture_Allocation_Specification

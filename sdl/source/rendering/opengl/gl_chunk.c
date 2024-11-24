@@ -73,7 +73,7 @@ void GL_render_chunk(
     
     PLATFORM_use_texture(
             p_PLATFORM_gfx_context, 
-            &p_GL_chunk_texture->GL_chunk_texture);
+            p_GL_chunk_texture->p_GL_chunk_texture);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -90,7 +90,7 @@ void GL_render_chunk(
 
     PLATFORM_use_texture(
             p_PLATFORM_gfx_context, 
-            &p_GL_chunk_texture->GL_chunk_texture__sprite_cover);
+            p_GL_chunk_texture->p_GL_chunk_texture__sprite_cover);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -146,13 +146,13 @@ void GL_update_chunk(
             p_GL_framebuffer);
     GL_bind_texture_to__framebuffer(
             p_GL_framebuffer, 
-            &p_GL_chunk_texture
-            ->GL_chunk_texture__sprite_cover);
+            p_GL_chunk_texture
+            ->p_GL_chunk_texture__sprite_cover);
     glClear(GL_COLOR_BUFFER_BIT);
     GL_bind_texture_to__framebuffer(
             p_GL_framebuffer, 
-            &p_GL_chunk_texture
-            ->GL_chunk_texture);
+            p_GL_chunk_texture
+            ->p_GL_chunk_texture);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(
             clear_color[0],
@@ -227,8 +227,8 @@ void GL_update_chunk(
                         - 1;
                     GL_bind_texture_to__framebuffer(
                             p_GL_framebuffer, 
-                            &p_GL_chunk_texture
-                            ->GL_chunk_texture);
+                            p_GL_chunk_texture
+                            ->p_GL_chunk_texture);
                     PLATFORM_use_texture(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
@@ -254,8 +254,8 @@ void GL_update_chunk(
                         - 1;
                     GL_bind_texture_to__framebuffer(
                             p_GL_framebuffer, 
-                            &p_GL_chunk_texture
-                            ->GL_chunk_texture);
+                            p_GL_chunk_texture
+                            ->p_GL_chunk_texture);
                     PLATFORM_use_texture(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
@@ -282,8 +282,8 @@ void GL_update_chunk(
                         - 1;
                     GL_bind_texture_to__framebuffer(
                             p_GL_framebuffer, 
-                            &p_GL_chunk_texture
-                            ->GL_chunk_texture__sprite_cover);
+                            p_GL_chunk_texture
+                            ->p_GL_chunk_texture__sprite_cover);
                     PLATFORM_use_texture(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager

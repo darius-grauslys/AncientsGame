@@ -9,13 +9,13 @@
 void GL_initialize_texture_as__deallocated(
         PLATFORM_Texture *p_PLATFORM_texture);
 
-void GL_allocate_texture(
-        PLATFORM_Texture *texture, 
+PLATFORM_Texture *GL_allocate_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification);
 
-void GL_allocate_texture__with_path(
-        PLATFORM_Texture *p_PLATFORM_texture,
+PLATFORM_Texture *GL_allocate_texture__with_path(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification 
             *p_texture_allocation_specification,
         const char *path);

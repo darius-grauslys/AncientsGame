@@ -10,16 +10,17 @@
 #include <rendering/opengl/gl_texture.h>
 #include <sdl_defines.h>
 #include <stdio.h>
+#include "rendering/sdl_texture_manager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <rendering/stb_image.h>
 
 void GL_initialize_texture_as__deallocated(
         PLATFORM_Texture *p_PLATFORM_texture) {
-    p_PLATFORM_texture->SDL_is_texture__allocated = false;
-    p_PLATFORM_texture->GL_texture_handle = 0;
-    p_PLATFORM_texture->width = 0;
-    p_PLATFORM_texture->height = 0;
+    p_PLATFORM_texture
+        ->GL_texture_handle = 0;
+    SDL_initialize_texture_as__deallocated(
+            p_PLATFORM_texture);
 }
 
 int GL_get_texture_format(
@@ -36,10 +37,16 @@ int GL_get_texture_format(
 
 }
 
-void GL_allocate_texture(
-        PLATFORM_Texture *p_PLATFORM_texture, 
+PLATFORM_Texture *GL_allocate_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification) {
+    PLATFORM_Texture *p_PLATFORM_texture =
+        SDL_allocate_texture_with__texture_manager(
+                SDL_get_p_texture_manager_from__gfx_context(
+                    p_PLATFORM_gfx_context));
+    if (!p_PLATFORM_texture)
+        return p_PLATFORM_texture;
     glGenTextures(
             1,
             GL_get_p_texture_handle(
@@ -51,7 +58,7 @@ void GL_allocate_texture(
                 &p_PLATFORM_texture
                 ->texture_flags);
         debug_error("SDL::GL::PLATFORM_allocate_texture failed. (glGenTextures)");
-        return;
+        return 0;
     }
 
     glBindTexture(
@@ -95,34 +102,35 @@ void GL_allocate_texture(
             GL_UNSIGNED_BYTE, 
             0);
 
+    // TODO: this leaks atm, check glGetError on each step, and clean up as needed.
     error = glGetError();
     if (error != GL_NO_ERROR) {
         set_texture_flags_as__deallocated(
                 &p_PLATFORM_texture
                 ->texture_flags);
         debug_error("SDL::GL::PLATFORM_allocate_texture failed. (glTexImage2D:%x)", error);
-        return;
+        return 0;
     }
 
     set_texture_flags_as__allocated(
             &p_PLATFORM_texture
             ->texture_flags);
+
+    return p_PLATFORM_texture;
 }
 
-void GL_allocate_texture__with_path(
-        PLATFORM_Texture *p_PLATFORM_texture,
+PLATFORM_Texture *GL_allocate_texture__with_path(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification 
             *p_texture_allocation_specification,
         const char *path) {
-    GL_allocate_texture(
-            p_PLATFORM_texture, 
-            p_texture_allocation_specification);
+    PLATFORM_Texture *p_PLATFORM_texture = 
+        GL_allocate_texture(
+                p_PLATFORM_gfx_context, 
+                p_texture_allocation_specification);
 
-    if (!is_texture_flags__allocated(
-                p_PLATFORM_texture
-                ->texture_flags)) {
-        return;
-    }
+    if (!p_PLATFORM_texture)
+        return 0;
 
     int width, height, channels, requested_channels;
 
@@ -155,7 +163,7 @@ void GL_allocate_texture__with_path(
                 &__SDL_Gfx_Context,
                 p_PLATFORM_texture);
         debug_error("SDL::GL::PLATFORM_allocate_texture__with_path failed. (stbi_load)");
-        return;
+        return 0;
     }
 
     if (width != p_PLATFORM_texture->width) {
@@ -187,11 +195,11 @@ void GL_allocate_texture__with_path(
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        set_texture_flags_as__deallocated(
-                &p_PLATFORM_texture
-                ->texture_flags);
+        PLATFORM_release_texture(
+                &__SDL_Gfx_Context,
+                p_PLATFORM_texture);
         debug_error("SDL::GL::PLATFORM_allocate_texture__with_path failed. (glTexImage2D:%d)", error);
-        return;
+        return 0;
     }
 
     set_texture_flags_as__allocated(
@@ -199,6 +207,8 @@ void GL_allocate_texture__with_path(
             ->texture_flags);
 
     stbi_image_free(p_data);
+
+    return p_PLATFORM_texture;
 }
 
 void GL_use_texture(

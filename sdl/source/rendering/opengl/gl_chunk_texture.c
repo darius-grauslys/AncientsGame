@@ -7,8 +7,8 @@
 
 void GL_initialize_chunk_texture_as__deallocated(
         GL_Chunk_Texture *p_GL_chunk_texture) {
-    GL_initialize_texture_as__deallocated(
-            &p_GL_chunk_texture->GL_chunk_texture);
+    p_GL_chunk_texture->p_GL_chunk_texture = 0;
+    p_GL_chunk_texture->p_GL_chunk_texture__sprite_cover = 0;
     p_GL_chunk_texture->p_chunk_owner = 0;
 }
 
@@ -23,14 +23,16 @@ void GL_allocate_chunk_texture__texture_data(
                 TEXTURE_FLAG__RENDER_METHOD__0, 
                 TEXTURE_FLAG__FORMAT__RGBA8888);
 
-    PLATFORM_allocate_texture(
-            &p_GL_chunk_texture
-            ->GL_chunk_texture, 
-            &texture_alloc_spec);
-    PLATFORM_allocate_texture(
-            &p_GL_chunk_texture
-            ->GL_chunk_texture__sprite_cover, 
-            &texture_alloc_spec);
+    p_GL_chunk_texture
+        ->p_GL_chunk_texture =
+            PLATFORM_allocate_texture(
+                    p_PLATFORM_gfx_context,
+                    &texture_alloc_spec);
+    p_GL_chunk_texture
+        ->p_GL_chunk_texture__sprite_cover =
+            PLATFORM_allocate_texture(
+                    p_PLATFORM_gfx_context,
+                    &texture_alloc_spec);
 }
 
 void GL_deallocate_chunk_texture__texture_data(
@@ -38,6 +40,9 @@ void GL_deallocate_chunk_texture__texture_data(
         GL_Chunk_Texture *p_GL_chunk_texture) {
     PLATFORM_release_texture(
             p_PLATFORM_gfx_context, 
-            &p_GL_chunk_texture->GL_chunk_texture);
+            p_GL_chunk_texture->p_GL_chunk_texture);
+    PLATFORM_release_texture(
+            p_PLATFORM_gfx_context, 
+            p_GL_chunk_texture->p_GL_chunk_texture__sprite_cover);
 }
 

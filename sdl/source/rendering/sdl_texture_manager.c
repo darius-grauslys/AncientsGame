@@ -1,9 +1,26 @@
 #include "debug/debug.h"
 #include "defines_weak.h"
+#include "platform_defines.h"
 #include "rendering/sdl_gfx_context.h"
 #include "sdl_defines.h"
 #include <rendering/sdl_texture_manager.h>
 #include <rendering/sdl_texture.h>
+
+static inline
+PLATFORM_Texture *SDL_get_p_PLATFORM_texture_by__index_from__texture_manager(
+        SDL_Texture_Manager *p_SDL_texture_manager,
+        Index__u32 index_of__sdl_texture) {
+#ifndef NDEBUG
+    if (index_of__sdl_texture
+            >= MAX_QUANTITY_OF__TEXTURES) {
+        debug_error("SDL_get_p_PLATFORM_texture_by__index_from__texture_manager, index out of bounds: %d,%d", index_of__sdl_texture, MAX_QUANTITY_OF__TEXTURES);
+        return 0;
+    }
+#endif
+    return &p_SDL_texture_manager
+        ->SDL_textures[index_of__sdl_texture]
+        ;
+}
 
 void SDL_initialize_texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager) {
@@ -11,9 +28,10 @@ void SDL_initialize_texture_manager(
             index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
-            &p_SDL_texture_manager
-            ->SDL_textures[index_of__sdl_texture];
-        SDL_set_texture_as__deallocated(
+            SDL_get_p_PLATFORM_texture_by__index_from__texture_manager(
+                    p_SDL_texture_manager,
+                    index_of__sdl_texture);
+        SDL_initialize_texture_as__deallocated(
                 p_PLATFORM_texture);
     }
 }
@@ -24,8 +42,9 @@ PLATFORM_Texture *SDL_allocate_texture_with__texture_manager(
             index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
-            &p_SDL_texture_manager
-            ->SDL_textures[index_of__sdl_texture];
+            SDL_get_p_PLATFORM_texture_by__index_from__texture_manager(
+                    p_SDL_texture_manager, 
+                    index_of__sdl_texture);
         if (SDL_is_texture__allocated(
                     p_PLATFORM_texture)) {
             continue;
@@ -45,8 +64,9 @@ PLATFORM_Texture *SDL_get_texture_from__texture_manager(
             index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
-            &p_SDL_texture_manager
-            ->SDL_textures[index_of__sdl_texture];
+            SDL_get_p_PLATFORM_texture_by__index_from__texture_manager(
+                    p_SDL_texture_manager,
+                    index_of__sdl_texture);
         if (!SDL_is_texture__allocated(p_PLATFORM_texture)) {
             continue;
         }
@@ -87,8 +107,9 @@ void SDL_dispose_texture_manager(
             index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
-            &p_SDL_texture_manager
-            ->SDL_textures[index_of__sdl_texture];
+            SDL_get_p_PLATFORM_texture_by__index_from__texture_manager(
+                    p_SDL_texture_manager,
+                    index_of__sdl_texture);
         if (!SDL_is_texture__allocated(p_PLATFORM_texture)) {
             continue;
         }
@@ -99,26 +120,26 @@ void SDL_dispose_texture_manager(
     }
 }
 
-void PLATFORM_allocate_texture(
-        PLATFORM_Texture *texture, 
+PLATFORM_Texture *PLATFORM_allocate_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification) {
-    __SDL_Gfx_Context
+    return __SDL_Gfx_Context
         .SDL_gfx_sub_context__wrapper
         .f_SDL_allocate_texture(
-                texture,
+                p_PLATFORM_gfx_context,
                 p_texture_allocation_specification);
 }
 
-void PLATFORM_allocate_texture__with_path(
-        PLATFORM_Texture *texture,
+PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification,
         const char *path) {
-    __SDL_Gfx_Context
+    return __SDL_Gfx_Context
         .SDL_gfx_sub_context__wrapper
         .f_SDL_allocate_texture__with_path(
-                texture,
+                p_PLATFORM_gfx_context,
                 p_texture_allocation_specification,
                 path);
 }

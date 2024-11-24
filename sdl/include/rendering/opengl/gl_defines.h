@@ -89,8 +89,8 @@ typedef struct GL_Sprite_Manager_t {
 } GL_Sprite_Manager;
 
 typedef struct GL_Chunk_Texture_t {
-    PLATFORM_Texture GL_chunk_texture;
-    PLATFORM_Texture GL_chunk_texture__sprite_cover;
+    PLATFORM_Texture *p_GL_chunk_texture;
+    PLATFORM_Texture *p_GL_chunk_texture__sprite_cover;
     const Chunk *p_chunk_owner;
 } GL_Chunk_Texture;
 

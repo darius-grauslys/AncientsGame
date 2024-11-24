@@ -108,10 +108,11 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                 debug_error("SDL::PLATFORM_allocate_sprite, failed to allocate anonymous texture.");
                 return 0;
             }
-            PLATFORM_allocate_texture(
-                    p_PLATFORM_texture, 
-                    &p_sprite_allocation_specification
-                    ->texture_allocation_specification);
+            p_PLATFORM_texture =
+                PLATFORM_allocate_texture(
+                        p_PLATFORM_gfx_context, 
+                        &p_sprite_allocation_specification
+                        ->texture_allocation_specification);
             debug_error("SDL::PLATFORM_allocate_sprite impl");
             // TODO: verify that the allocation suceeded.
             is_texture__anonymous = true;

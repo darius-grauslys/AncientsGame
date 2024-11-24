@@ -21,7 +21,7 @@ bool GL_is_chunk_texture__allocated(
         GL_Chunk_Texture *p_GL_chunk_texture) {
     return 
         SDL_is_texture__allocated(
-                &p_GL_chunk_texture->GL_chunk_texture);
+                p_GL_chunk_texture->p_GL_chunk_texture);
 }
 
 #endif

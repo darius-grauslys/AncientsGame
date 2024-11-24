@@ -9,21 +9,22 @@
 #include "rendering/opengl/glad/glad.h"
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/texture.h"
+#include "rendering/sdl_texture.h"
 
 void GL_allocate_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
         Texture_Allocation_Specification
             *p_texture_allocation_specification) {
-    PLATFORM_allocate_texture(
-            &p_PLATFORM_graphics_window
-            ->SDL_graphics_window__texture,
-            p_texture_allocation_specification);
+    p_PLATFORM_graphics_window
+        ->p_SDL_graphics_window__texture =
+            PLATFORM_allocate_texture(
+                    p_PLATFORM_gfx_context,
+                    p_texture_allocation_specification);
 
-    if (!is_texture_flags__allocated(
+    if (!SDL_is_texture__allocated(
                 p_PLATFORM_graphics_window
-                ->SDL_graphics_window__texture
-                .texture_flags)) {
+                ->p_SDL_graphics_window__texture)) {
         debug_error("GL_allocate_gfx_window, failed to allocate texture.");
         return;
     }
@@ -37,8 +38,8 @@ void GL_allocate_gfx_window(
     if (!p_GL_framebuffer) {
         PLATFORM_release_texture(
                 p_PLATFORM_gfx_context, 
-                &p_PLATFORM_graphics_window
-                ->SDL_graphics_window__texture);
+                p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture);
         debug_error("GL_allocate_gfx_window, failed to allocate framebuffer");
         return;
     }
@@ -80,8 +81,8 @@ void GL_render_gfx_window(
     // TODO: make proper
     GL_bind_texture_to__framebuffer(
             p_GL_framebuffer, 
-            &p_PLATFORM_graphics_window
-            ->SDL_graphics_window__texture);
+            p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture);
     // TODO: use UI texture atlas
     // PLATFORM_use_texture(
     //         p_PLATFORM_gfx_context, 
@@ -103,8 +104,8 @@ void GL_release_gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
     PLATFORM_release_texture(
             p_PLATFORM_gfx_context, 
-            &p_PLATFORM_graphics_window
-            ->SDL_graphics_window__texture);
+            p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture);
 
     GL_Framebuffer *p_GL_framebuffer =
         (GL_Framebuffer*)p_PLATFORM_graphics_window

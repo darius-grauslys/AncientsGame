@@ -66,11 +66,10 @@ typedef struct PLATFORM_Texture_t {
     SDL_TextureAccess SDL_texture_access;
     Quantity__u16 width;
     Quantity__u16 height;
-    bool SDL_is_texture__allocated;
 } PLATFORM_Texture;
 
 typedef struct PLATFORM_Graphics_Window_t {
-    PLATFORM_Texture SDL_graphics_window__texture;
+    PLATFORM_Texture *p_SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
     bool is_allocated;
@@ -99,13 +98,13 @@ typedef void (*f_SDL_Render_Gfx_Window)(
         Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
-typedef void (*f_SDL_Allocate_Texture)(
-        PLATFORM_Texture *p_PLATFORM_texture, 
+typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification);
 
-typedef void (*f_SDL_Allocate_Texture__With_Path)(
-        PLATFORM_Texture *p_PLATFORM_texture,
+typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture__With_Path)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification 
             *p_texture_allocation_specification,
         const char *path);
