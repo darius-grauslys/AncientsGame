@@ -13,6 +13,7 @@
 #include <nds_defines.h>
 #include <rendering/gfx_context.h>
 #include <world/tile.h>
+#include "rendering/nds_texture_manager.h"
 
 #include <rendering/nds_background.h>
 #include <rendering/gfx_context.h>

@@ -7,6 +7,7 @@
 #include <assets/entities/entity_sprite__8x8/items.h>
 
 void f_sprite_gfx_allocator__handler_for__items(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite, 
         Sprite_Allocation_Specification
             *p_sprite_allocation_specification) {
@@ -17,10 +18,16 @@ void f_sprite_gfx_allocator__handler_for__items(
     *p_texture_flags &= ~TEXTURE_FLAG__SIZE__MASK;
     *p_texture_flags |= TEXTURE_FLAG__SIZE_8x8;
 
-    PLATFORM_allocate_texture(
-            &p_PLATFORM_sprite->sprite_texture,
-            &p_sprite_allocation_specification
-                ->texture_allocation_specification);
+    PLATFORM_Texture *p_PLATFORM_texture =
+        PLATFORM_allocate_texture(
+                p_PLATFORM_gfx_context,
+                &p_sprite_allocation_specification
+                    ->texture_allocation_specification);
+
+    NDS_set_sprite__texture(
+            p_PLATFORM_gfx_context, 
+            p_PLATFORM_sprite, 
+            p_PLATFORM_texture);
 
     NDS_set_sprite_graphics_to__item_kind(
             p_PLATFORM_sprite,
@@ -33,11 +40,12 @@ void f_sprite_gfx_allocator__handler_for__items(
 void NDS_set_sprite_graphics_to__item_kind(
         PLATFORM_Sprite *p_PLATFORM_sprite,
         enum Item_Kind the_kind_of__item) {
-    while (DMA_CR(p_PLATFORM_sprite->sprite_texture.dma_channel) & DMA_BUSY);
+    NDS_wait_for_dma_channel_of__PLATFORM_sprite(p_PLATFORM_sprite);
+    // TODO: support 16x16, 32x32
     dmaCopy(
             NDS_get_p_gfx_of__item_sprite_as__p_u8(
                 the_kind_of__item),
-            p_PLATFORM_sprite->sprite_texture.gfx, 
+            NDS_get_p_gfx_from__PLATFORM_sprite(p_PLATFORM_sprite), 
             SPRITE_FRAME__8x8__OFFSET);
 }
 

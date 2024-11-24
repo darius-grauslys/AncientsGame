@@ -185,8 +185,8 @@ void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
 ///
 void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context);
 
-void PLATFORM_allocate_texture(
-        PLATFORM_Texture *texture, 
+PLATFORM_Texture *PLATFORM_allocate_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification);
 
@@ -194,17 +194,14 @@ void PLATFORM_allocate_texture(
 /// This is currently no-op on NDS. Later, if we need to,
 /// we can to nitroFS along with this.
 ///
-void PLATFORM_allocate_texture__with_path(
-        PLATFORM_Texture *texture,
+PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification,
         const char *path);
 
-void PLATFORM_allocate_texture__with_size(PLATFORM_Texture *texture, 
-        Texture_Flags flags,
-        uint32_t width, uint32_t height);
-
-void PLATFORM_update_texture(PLATFORM_Texture *texture);
+void PLATFORM_update_texture(
+        PLATFORM_Texture *texture);
 
 void PLATFORM_use_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -213,9 +210,6 @@ void PLATFORM_use_texture(
 void PLATFORM_release_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Texture *texture);
-
-void PLATFORM_release_texture_with__p_PLATFORM_sprite(
-        PLATFORM_Sprite *p_PLATFORM_sprite);
 
 Texture_Flags *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
         PLATFORM_Texture *texture);

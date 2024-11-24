@@ -15,6 +15,7 @@ void initialize_sprite_gfx_allocator__lookup_table_for__particles(
             sprite_gfx_allocator__lookup_table);
 
 void f_sprite_gfx_allocator__handler__default(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite, 
         Sprite_Allocation_Specification
             *p_sprite_allocation_specification);

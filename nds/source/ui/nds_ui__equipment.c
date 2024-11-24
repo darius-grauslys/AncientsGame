@@ -9,6 +9,7 @@
 #include "ui/ui_element.h"
 #include "ui/ui_manager.h"
 #include <ui/nds_ui__equipment.h>
+#include "rendering/nds_sprite.h"
 
 void NDS_load_ui_equipment_column_for__equipment(
         Game *p_game,
@@ -59,12 +60,12 @@ void NDS_load_ui_equipment_column_for__equipment(
                             p_item_stack
                             ->item.the_kind_of_item__this_item_is);
                 if (p_PLATFORM_sprite) {
-                    oamSetPriority(
-                            p_PLATFORM_sprite->sprite_texture.oam,
-                            p_PLATFORM_sprite->sprite_texture.oam_index,
+                    NDS_set_priority_of__PLATFORM_sprite(
+                            p_PLATFORM_sprite, 
                             2);
                     set_ui_element__PLATFORM_sprite(
-                            p_child, p_PLATFORM_sprite);
+                            p_child, 
+                            p_PLATFORM_sprite);
                 }
             }
         }

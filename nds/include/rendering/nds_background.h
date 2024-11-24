@@ -82,7 +82,7 @@ bool NDS_setup_typer_onto__background(
             p_typer->text_bounding_box.height__quantity_u32);
     set_PLATFORM_texture_target_for__typer(
             p_typer,
-            &p_NDS_background->background_texture__reserved);
+            p_NDS_background->p_PLATFORM_texture__background_reserved);
     return true;
 }
 

@@ -13,9 +13,9 @@ void NDS_initialize_background(
     background->background_index_from__initializer = 
         background_index_for__initializer;
     NDS_initialize_texture_as__deallocated(
-            &background->background_texture);
+            background->p_PLATFORM_texture__background);
     NDS_initialize_texture_as__deallocated(
-            &background->background_texture__reserved);
+            background->p_PLATFORM_texture__background_reserved);
     background->background_index_from__hardware = -1;
     background->gfx_map = 0;
     background->gfx_tileset = 0;
@@ -32,7 +32,7 @@ void NDS_initialize_background_for__world_ground(
     background->map_base = 0;
     background->tile_base = 8;
     NDS_initialize_texture_as__deallocated(
-            &background->background_texture__reserved);
+            background->p_PLATFORM_texture__background_reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
                 BgType_Text8bpp, BgSize_T_512x512, 
@@ -44,7 +44,7 @@ void NDS_initialize_background_for__world_ground(
         bgGetGfxPtr(background->background_index_from__hardware);
 
     NDS_initialize_texture(
-            &background->background_texture, 
+            background->p_PLATFORM_texture__background, 
             0, 
             background->gfx_tileset, 
             0,
@@ -60,7 +60,7 @@ void NDS_initialize_background_for__world_wall_lower(
     background->map_base = 4;
     background->tile_base = 12;
     NDS_initialize_texture_as__deallocated(
-            &background->background_texture__reserved);
+            background->p_PLATFORM_texture__background_reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
                 BgType_Text8bpp, BgSize_T_512x512, 
@@ -72,7 +72,7 @@ void NDS_initialize_background_for__world_wall_lower(
         bgGetGfxPtr(background->background_index_from__hardware);
 
     NDS_initialize_texture(
-            &background->background_texture, 
+            background->p_PLATFORM_texture__background, 
             0, 
             background->gfx_tileset, 
             0,
@@ -88,7 +88,7 @@ void NDS_initialize_background_for__world_wall_upper(
     background->map_base = 8;
     background->tile_base = 12;
     NDS_initialize_texture_as__deallocated(
-            &background->background_texture__reserved);
+            background->p_PLATFORM_texture__background_reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
                 BgType_Text8bpp, BgSize_T_512x512, 
@@ -100,7 +100,7 @@ void NDS_initialize_background_for__world_wall_upper(
         bgGetGfxPtr(background->background_index_from__hardware);
 
     NDS_initialize_texture(
-            &background->background_texture, 
+            background->p_PLATFORM_texture__background, 
             0, 
             background->gfx_tileset, 
             0,
@@ -186,7 +186,7 @@ void NDS_initialize_background_with__allocation_specification(
         bgGetGfxPtr(p_background->background_index_from__hardware);
 
     NDS_initialize_texture(
-            &p_background->background_texture, 
+            p_background->p_PLATFORM_texture__background, 
             0, 
             p_background->gfx_tileset, 
             0,
@@ -197,7 +197,7 @@ void NDS_initialize_background_with__allocation_specification(
             NDS_Texture_Kind__Background);
 
     NDS_initialize_texture(
-            &p_background->background_texture__reserved, 
+            p_background->p_PLATFORM_texture__background_reserved, 
             0, 
             p_background->gfx_tileset
             + (p_background->quantity_of__tiles_allocated << 5),
@@ -246,10 +246,12 @@ bool NDS_copy_tiles_into__reserved_tiles_of__background(
 
     Quantity__u16 background_width =
                 p_NDS_background
-                ->background_texture.width >> 3;
+                ->p_PLATFORM_texture__background_reserved
+                ->width >> 3;
     Quantity__u16 background_height =
                 p_NDS_background
-                ->background_texture.height >> 3;
+                ->p_PLATFORM_texture__background_reserved
+                ->height >> 3;
 
     Index__u16 index_of__reserved_tile =
         p_NDS_background
@@ -275,11 +277,11 @@ bool NDS_copy_tiles_into__reserved_tiles_of__background(
     }
 
     p_NDS_background
-        ->background_texture__reserved
-        .width = width << 3;
+        ->p_PLATFORM_texture__background_reserved
+        ->width = width << 3;
     p_NDS_background
-        ->background_texture__reserved
-        .height = height << 3;
+        ->p_PLATFORM_texture__background_reserved
+        ->height = height << 3;
     return true;
 }
 
@@ -293,10 +295,12 @@ void NDS_point_tile_entries_to__reserved_tiles_in__background(
 
     Quantity__u16 background_width =
                 p_NDS_background
-                ->background_texture.width >> 3;
+                ->p_PLATFORM_texture__background
+                ->width >> 3;
     Quantity__u16 background_height =
                 p_NDS_background
-                ->background_texture.height >> 3;
+                ->p_PLATFORM_texture__background
+                ->height >> 3;
 
     width >>= 3;
     height >>= 3;
@@ -319,9 +323,9 @@ void NDS_point_tile_entries_to__reserved_tiles_in__background(
     }
 
     p_NDS_background
-        ->background_texture__reserved
-        .width = width << 3;
+        ->p_PLATFORM_texture__background_reserved
+        ->width = width << 3;
     p_NDS_background
-        ->background_texture__reserved
-        .height = height << 3;
+        ->p_PLATFORM_texture__background_reserved
+        ->height = height << 3;
 }

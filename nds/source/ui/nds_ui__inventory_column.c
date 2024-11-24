@@ -11,6 +11,7 @@
 #include "ui/ui_draggable.h"
 #include "vectors.h"
 #include "nds_defines.h"
+#include "rendering/nds_sprite.h"
 
 bool NDS_load_ui_item_stack(
         Game *p_game,
@@ -55,9 +56,8 @@ bool NDS_load_ui_item_stack(
                 p_item_stack
                 ->item.the_kind_of_item__this_item_is);
     if (p_PLATFORM_sprite) {
-        oamSetPriority(
-                p_PLATFORM_sprite->sprite_texture.oam,
-                p_PLATFORM_sprite->sprite_texture.oam_index,
+        NDS_set_priority_of__PLATFORM_sprite(
+                p_PLATFORM_sprite, 
                 2);
         set_ui_element__PLATFORM_sprite(
                 p_child, p_PLATFORM_sprite);

@@ -403,6 +403,7 @@ typedef struct Sprite_Wrapper_t {
 } Sprite_Wrapper;
 
 typedef void (*f_Sprite_Gfx_Allocator)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite,
         Sprite_Allocation_Specification 
             *p_sprite_allocation_specification);

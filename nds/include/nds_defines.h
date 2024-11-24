@@ -31,8 +31,8 @@ typedef struct NDS_Texture_Manager_t {
 } NDS_Texture_Manager;
 
 typedef struct NDS_Background_t {
-    PLATFORM_Texture background_texture;
-    PLATFORM_Texture background_texture__reserved;
+    PLATFORM_Texture *p_PLATFORM_texture__background;
+    PLATFORM_Texture *p_PLATFORM_texture__background_reserved;
     Vector__3i32 starting_position__3i32;
     Vector__3i32 spanning_scroll_lengths__3i32;
     uint16_t *gfx_map;
@@ -87,7 +87,7 @@ typedef struct OamState OamState;
     TEXTURE_FLAG__RENDER_METHOD__3
 
 typedef struct PLATFORM_Sprite_t {
-    PLATFORM_Texture sprite_texture;
+    PLATFORM_Texture *p_PLATFORM_texture__sprite;
     const uint16_t *gfx_sprite_sheet;
     Sprite_Flags sprite_flags;
 } PLATFORM_Sprite;

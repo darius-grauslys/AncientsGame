@@ -1,12 +1,15 @@
 #include "debug/debug.h"
+#include "debug/nds_debug.h"
 #include "nds/arm9/console.h"
 #include <platform.h>
 
 void PLATFORM_coredump(void) {
     debug_warning__verbose("PLATFORM_coredump not defined on nds.");
+    PLATFORM_abort();
 }
 
 void PLATFORM_abort(void) {
+    NDS_initialize_debug__sub();
     *(uint32_t*)8192 = 100;
 }
 

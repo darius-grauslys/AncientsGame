@@ -18,13 +18,6 @@ void NDS_initialize_sprite_array(
         PLATFORM_Sprite *p_PLATFORM_sprite =
             &p_NDS_sprite_array
             ->sprites[index_of__sprite];
-        PLATFORM_Texture *p_PLATFORM_texture =
-            &p_PLATFORM_sprite
-            ->sprite_texture;
-
-        set_texture_flags_as__deallocated(
-                NDS_get_p_texture_flags_from__PLATFORM_texture(
-                    p_PLATFORM_texture));
         NDS_initialize_sprite(
                 p_PLATFORM_sprite,
                 SPRITE_FLAGS__NONE);
@@ -108,32 +101,31 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                     ->the_kind_of__sprite_allocation);
             return 0;
         case Sprite_Allocation_Kind__Graphics_Pointer:
-            PLATFORM_allocate_texture(
-                    &p_PLATFORM_sprite->sprite_texture,
-                    &p_sprite_allocation_specification
-                        ->texture_allocation_specification);
-
             PLATFORM_Texture *p_PLATFORM_texture =
-                &p_PLATFORM_sprite
-                ->sprite_texture;
+                PLATFORM_allocate_texture(
+                        p_PLATFORM_gfx_context,
+                        &p_sprite_allocation_specification
+                            ->texture_allocation_specification);
                 
             dmaCopy(
                     p_sprite_allocation_specification
-                    ->p_gfx,
+                        ->p_gfx,
                     p_PLATFORM_texture
-                    ->gfx,
+                        ->gfx,
                     p_PLATFORM_texture->width
                     * p_PLATFORM_texture->height);
             break;
         case Sprite_Allocation_Kind__Item:
             p_PLATFORM_gfx_context
                 ->f_sprite_gfx_allocator__handler_for__items(
+                        p_PLATFORM_gfx_context,
                         p_PLATFORM_sprite,
                         p_sprite_allocation_specification);
             break;
         case Sprite_Allocation_Kind__UI:
             p_PLATFORM_gfx_context
                 ->f_sprite_gfx_allocator__handler_for__ui(
+                        p_PLATFORM_gfx_context,
                         p_PLATFORM_sprite,
                         p_sprite_allocation_specification);
             break;
@@ -144,9 +136,10 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                 ->the_kind_of__particle_this__sprite_is;
             p_PLATFORM_gfx_context
                 ->F_sprite_gfx_allocator__lookup_table_for__particles[
-                    the_kind_of__particle]
-                (p_PLATFORM_sprite, 
-                 p_sprite_allocation_specification);
+                    the_kind_of__particle](
+                            p_PLATFORM_gfx_context,
+                            p_PLATFORM_sprite, 
+                            p_sprite_allocation_specification);
             break;
         case Sprite_Allocation_Kind__Entity:
             //TODO: bounds check the enum
@@ -155,17 +148,16 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                 ->the_kind_of__entity_this__sprite_is;
             p_PLATFORM_gfx_context
                 ->F_sprite_gfx_allocator__lookup_table_for__entities[
-                    the_kind_of__entity]
-                (p_PLATFORM_sprite, 
-                 p_sprite_allocation_specification);
+                    the_kind_of__entity](
+                            p_PLATFORM_gfx_context,
+                            p_PLATFORM_sprite, 
+                            p_sprite_allocation_specification);
             break;
     }
 
 #ifndef NDEBUG
-    if (!is_texture_flags__allocated(
-                p_PLATFORM_sprite
-                ->sprite_texture
-                .flags)) {
+    if (!NDS_is_sprite_texture__allocated(
+                p_PLATFORM_sprite)) {
         switch (p_sprite_allocation_specification
                 ->the_kind_of__sprite_allocation) {
             default:
@@ -215,11 +207,11 @@ void PLATFORM_release_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite) {
     PLATFORM_release_texture(
             p_PLATFORM_gfx_context,
-            &p_PLATFORM_sprite
-            ->sprite_texture);
+            NDS_get_p_PLATFORM_texture_from__PLATFORM_sprite(
+                p_PLATFORM_sprite));
     set_sprite_flags_as__deallocated(
-            &p_PLATFORM_sprite
-            ->sprite_flags);
+            NDS_get_p_sprite_flags_of__PLATFORM_sprite(
+                p_PLATFORM_sprite));
 }
 
 void PLATFORM_release_all__sprites(

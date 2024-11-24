@@ -1,6 +1,8 @@
 #include "rendering/nds_texture_manager.h"
+#include "defines_weak.h"
 #include "platform.h"
 #include "platform_defines.h"
+#include "rendering/nds_sprite.h"
 #include "rendering/texture.h"
 #include "rendering/nds_texture.h"
 #include "rendering/gfx_context.h"
@@ -38,31 +40,37 @@ void NDS_initialize_texture_manager(
     }
 }
 
-void PLATFORM_allocate_texture(
-        PLATFORM_Texture *texture, 
+PLATFORM_Texture *PLATFORM_allocate_texture(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification *p_texture_allocation_specification) {
-    NDS_allocate_texture(
-            texture,
-            p_texture_allocation_specification);
-    return;
-    // for (Index__u32 index_of__texture = 0;
-    //         index_of__texture < MAX_QUANTITY_OF__TEXTURES;
-    //         index_of__texture++) {
-    //     PLATFORM_Texture *p_PLATFORM_texture =
-    //         NDS_get_texture_by__index_from__texture_manager(
-    //                 p_NDS_texture_manager, 
-    //                 index_of__texture);
+    NDS_Texture_Manager *p_NDS_texture_manager =
+        NDS_get_p_texture_manager_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context);
+    for (Index__u32 index_of__texture = 0;
+            index_of__texture < MAX_QUANTITY_OF__TEXTURES;
+            index_of__texture++) {
+        PLATFORM_Texture *p_PLATFORM_texture =
+            NDS_get_texture_by__index_from__texture_manager(
+                    p_NDS_texture_manager, 
+                    index_of__texture);
 
-    //     if (is_texture_flags__allocated(
-    //                 *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
-    //                     p_PLATFORM_texture))) { 
-    //         continue;
-    //     }
+        if (is_texture_flags__allocated(
+                    *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
+                        p_PLATFORM_texture))) { 
+            continue;
+        }
 
-    //     set_texture_flags_as__allocated(
-    //             PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
-    //                 p_PLATFORM_texture));
-    // }
+        NDS_allocate_texture(
+                p_PLATFORM_texture,
+                p_texture_allocation_specification);
+        set_texture_flags_as__allocated(
+                PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
+                    p_PLATFORM_texture));
+        
+        return p_PLATFORM_texture;
+    }
+
+    return 0;
 }
 
 void PLATFORM_release_texture(
@@ -100,24 +108,11 @@ void PLATFORM_release_texture(
             texture);
 }
 
-void PLATFORM_release_texture_with__p_PLATFORM_sprite(PLATFORM_Sprite *p_PLATFORM_sprite) {
-    PLATFORM_release_texture(
-            0,
-            &p_PLATFORM_sprite->sprite_texture);
-}
-
-void PLATFORM_allocate_texture__with_path(
-        PLATFORM_Texture *texture,
+PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification,
         const char *path) {
     // no-op
     debug_error("allocate_texture__with_path not defined on NDS.");
-}
-
-void PLATFORM_allocate_texture__with_size(
-        PLATFORM_Texture *texture, 
-        Texture_Flags flags,
-        uint32_t width, uint32_t height) {
-    debug_error("allocate_texture__with_size not supported on NDS.");
 }
