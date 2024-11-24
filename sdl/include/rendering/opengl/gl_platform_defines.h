@@ -1,0 +1,11 @@
+#ifndef GL_PLATFORM_DEFINES_H
+#define GL_PLATFORM_DEFINES_H
+
+#include "platform_defines.h"
+
+#define TEXTURE_FLAG__GL_FLAGS__BIT_COUNT 8
+#define TEXTURE_FLAG__BIT_SHIFT__GL_FLAGS \
+    (TEXTURE_FLAG__BIT_SHIFT__SDL_FLAGS \
+     + TEXTURE_FLAG__SDL_FLAGS__BIT_COUNT)
+
+#endif

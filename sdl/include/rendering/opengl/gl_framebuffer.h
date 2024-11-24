@@ -39,9 +39,11 @@ void GL_set_framebuffer_as__deallocated(
 }
 
 static inline
-bool GL_does_framebuffer_have__attached_texture(
+GLuint GL_get_framebuffer__handle(
         GL_Framebuffer *p_GL_framebuffer) {
-    return p_GL_framebuffer->p_PLATFORM_texture;
+    return p_GL_framebuffer
+        ->GL_framebuffer_handle
+        ;
 }
 
 #endif

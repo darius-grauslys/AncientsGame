@@ -5,6 +5,7 @@
 #include "rendering/sdl_texture.h"
 #include "rendering/texture.h"
 #include <GL/gl.h>
+#include <GL/glext.h>
 #include <SDL2/SDL_pixels.h>
 #include <rendering/opengl/gl_texture.h>
 #include <sdl_defines.h>

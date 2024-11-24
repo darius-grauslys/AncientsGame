@@ -2,6 +2,7 @@
 #define GL_TEXTURE_H
 
 #include "defines_weak.h"
+#include "rendering/opengl/gl_platform_defines.h"
 #include <defines.h>
 #include <sdl_defines.h>
 

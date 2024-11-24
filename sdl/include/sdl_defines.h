@@ -47,9 +47,33 @@ typedef void (*f_SDL_Event_Handler)(
         SDL_Event *p_event);
 
 
+typedef u32 SDL_Texture_Format__u32;
+typedef u32 GL_Texture_Handle__u32;
+
+#define MAX_LENGTH_OF__SDL_TEXTURE_STRING 32
+typedef char Texture_String[
+    MAX_LENGTH_OF__SDL_TEXTURE_STRING];
+typedef const char SDL_Texture_String__Const[
+    MAX_LENGTH_OF__SDL_TEXTURE_STRING];
+
+typedef struct PLATFORM_Texture_t {
+    Texture_String SDL_texture_string;
+    union {
+        GL_Texture_Handle__u32 GL_texture_handle;
+    };
+    Texture_Flags texture_flags;
+    SDL_Texture_Format__u32 SDL_texture_format__u32;
+    SDL_TextureAccess SDL_texture_access;
+    Quantity__u16 width;
+    Quantity__u16 height;
+    bool SDL_is_texture__allocated;
+} PLATFORM_Texture;
+
 typedef struct PLATFORM_Graphics_Window_t {
+    PLATFORM_Texture SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    bool is_allocated;
 } PLATFORM_Graphics_Window;
 
 typedef void SDL_Gfx_Sub_Context;
@@ -61,6 +85,19 @@ typedef void (*f_SDL_Event_Handler)(
 
 typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+
+typedef void (*f_SDL_Allocate_Gfx_Window)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        Texture_Allocation_Specification
+            *p_texture_allocation_specification);
+typedef void (*f_SDL_Release_Gfx_Window)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
+
+typedef void (*f_SDL_Render_Gfx_Window)(
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
 typedef void (*f_SDL_Allocate_Texture)(
         PLATFORM_Texture *p_PLATFORM_texture, 
@@ -128,28 +165,6 @@ typedef void (*f_SDL_Release_Camera_Data)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Camera *p_camera);
 
-typedef u32 SDL_Texture_Format__u32;
-typedef u32 GL_Texture_Handle__u32;
-
-#define MAX_LENGTH_OF__SDL_TEXTURE_STRING 32
-typedef char Texture_String[
-    MAX_LENGTH_OF__SDL_TEXTURE_STRING];
-typedef const char SDL_Texture_String__Const[
-    MAX_LENGTH_OF__SDL_TEXTURE_STRING];
-
-typedef struct PLATFORM_Texture_t {
-    Texture_String SDL_texture_string;
-    union {
-        GL_Texture_Handle__u32 GL_texture_handle;
-    };
-    Texture_Flags texture_flags;
-    SDL_Texture_Format__u32 SDL_texture_format__u32;
-    SDL_TextureAccess SDL_texture_access;
-    Quantity__u16 width;
-    Quantity__u16 height;
-    bool SDL_is_texture__allocated;
-} PLATFORM_Texture;
-
 typedef void (*m_SDL_Render_Sprite)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Sprite_Wrapper *p_sprite_wrapper);
@@ -194,6 +209,10 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 
     f_SDL_Initialize_Rendering__Worldspace
                                         f_SDL_initialize_rendering__worldspace;
+
+    f_SDL_Allocate_Gfx_Window           f_SDL_allocate_gfx_window;
+    f_SDL_Release_Gfx_Window           f_SDL_release_gfx_window;
+    f_SDL_Render_Gfx_Window             f_SDL_render_gfx_window;
 
     f_SDL_Clear_Screen                  f_SDL_clear_screen;
 

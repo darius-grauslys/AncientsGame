@@ -9,6 +9,7 @@
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
 #include "rendering/opengl/gl_chunk.h"
+#include "rendering/opengl/gl_gfx_window.h"
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_sprite_manager.h"
 #include "rendering/sdl_texture_manager.h"
@@ -93,6 +94,16 @@ bool _SDL_link_opengl_3_0(
         GL_initialize_rendering__worldspace;
 
     p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_allocate_gfx_window =
+        GL_allocate_gfx_window;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_release_gfx_window =
+        GL_release_gfx_window;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_render_gfx_window =
+        GL_render_gfx_window;
+
+    p_SDL_gfx_sub_context__wrapper
         ->f_SDL_clear_screen =
         GL_clear_screen;
 
@@ -153,10 +164,10 @@ void SDL_initialize_gfx_context(
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__game(p_game);
 
-    SDL_initialize_gfx_window(
-            p_PLATFORM_gfx_context, 
-            &p_PLATFORM_gfx_context->SDL_main_graphics_window, 
-            0);
+    p_PLATFORM_gfx_context
+        ->SDL_main_graphics_window
+        .p_PLATFORM_gfx_context =
+        p_PLATFORM_gfx_context;
 
     SDL_set_active_camera(
             p_PLATFORM_gfx_context, 

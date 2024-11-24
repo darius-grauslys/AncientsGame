@@ -44,6 +44,7 @@ void GL_initialize_chunk_texture_manager(
 
     GL_Framebuffer *p_GL_framebuffer =
         GL_allocate_framebuffer_with__framebuffer_manager(
+                p_PLATFORM_gfx_context,
                 GL_get_p_framebuffer_manager_from__PLATFORM_gfx_context(
                     p_PLATFORM_gfx_context));
     

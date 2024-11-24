@@ -125,4 +125,9 @@
 #define UI_TILE_MAP__LARGE__HEIGHT 32
 #endif
 
+#ifndef PLATFORM__GFX_WINDOW
+#define PLATFORM__GFX_WINDOW
+#define PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF 1
+#endif
+
 #endif

@@ -9,7 +9,11 @@
 ///
 
 #include "defines_weak.h"
-#include <platform.h>
+#include "game.h"
+#include "platform_defines.h"
+#include "rendering/sdl_gfx_window.h"
+#include "sdl_defines.h"
+#include "rendering/texture.h"
 
 ///
 /// SECTION_audio
@@ -71,10 +75,39 @@ void PLATFORM_put_char_in__typer(
 /// Opens the specified UI. Depending on the backend this
 /// might close all other UI's.
 ///
+PLATFORM_Graphics_Window _TMP_window = {
+    {},
+    0,
+    0,
+    false
+    };
 void PLATFORM_open_ui(
         Game *p_game,
         enum UI_Window_Kind the_kind_of__ui_window_to__open,
-        Game_Action *p_game_action) {}
+        Game_Action *p_game_action) {
+    if (!SDL_is_gfx_window__allocated(
+                &_TMP_window)) {
+        debug_info("TMP::PLATFORM_open_ui, allocate window");
+        Texture_Allocation_Specification texture_alloc_spec;
+        initialize_texture_allocation_specification(
+                &texture_alloc_spec, 
+                TEXTURE_FLAG__SIZE_256x256, 
+                &get_p_PLATFORM_gfx_context_from__game(
+                    p_game)
+                ->SDL_main_graphics_window);
+        SDL_allocate_gfx_window(
+                get_p_PLATFORM_gfx_context_from__game(
+                    p_game), 
+                &_TMP_window,
+                &texture_alloc_spec);
+    } else {
+        debug_info("TMP::PLATFORM_open_ui, deallocate window");
+        SDL_release_gfx_window(
+                get_p_PLATFORM_gfx_context_from__game(
+                    p_game), 
+                &_TMP_window);
+    }
+}
 
 void PLATFORM_refresh_ui(
         Game *p_game,

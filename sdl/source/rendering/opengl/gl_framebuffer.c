@@ -11,8 +11,6 @@ void GL_initialize_framebuffer_as__deallocated(
 void GL_bind_texture_to__framebuffer(
         GL_Framebuffer *p_GL_framebuffer,
         PLATFORM_Texture *p_PLATFORM_texture) {
-    p_GL_framebuffer->p_PLATFORM_texture =
-        p_PLATFORM_texture;
 
     u32 GL_format =
         GL_get_texture_format(

@@ -66,7 +66,6 @@ typedef struct GL_Viewport_Stack_t {
 
 typedef struct GL_Framebuffer_t {
     GLuint GL_framebuffer_handle;
-    PLATFORM_Texture *p_PLATFORM_texture;
     bool is_allocated;
 } GL_Framebuffer;
 

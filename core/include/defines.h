@@ -611,17 +611,23 @@ typedef uint32_t Texture_Flags;
         | size\
     )
 
-#define TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS \
+#define TEXTURE_FLAG__CORE_FLAGS__BIT_COUNT 8
+
+#define TEXTURE_FLAG__BIT_SHIFT__CORE_FLAGS \
     (TEXTURE_FLAG__RENDER_METHOD__BIT_COUNT \
            + TEXTURE_FLAG__SIZE__BIT_COUNT \
            + TEXTURE_FLAG__FORMAT__BIT_COUNT)
 
 #define TEXTURE_FLAG__IS_HIDDEN \
-    BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS)
+    BIT(TEXTURE_FLAG__BIT_SHIFT__CORE_FLAGS)
 #define TEXTURE_FLAG__IS_ALLOCATED \
-    BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS + 1)
+    BIT(TEXTURE_FLAG__BIT_SHIFT__CORE_FLAGS + 1)
 #define TEXTURE_FLAG__IS_READONLY \
-    BIT(TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS + 2)
+    BIT(TEXTURE_FLAG__BIT_SHIFT__CORE_FLAGS + 2)
+
+#define TEXTURE_FLAG__BIT_SHIFT__GENERAL_FLAGS \
+    (TEXTURE_FLAG__BIT_SHIFT__CORE_FLAGS \
+     + TEXTURE_FLAG__CORE_FLAGS__BIT_COUNT)
 
 #define GET_TEXTURE_FLAG__LENGTH__WIDTH(flags) \
     ((flags & (TEXTURE_FLAG__LENGTH__MASK \
@@ -633,6 +639,7 @@ typedef uint32_t Texture_Flags;
 
 typedef struct Texture_Allocation_Specification_t {
     PLATFORM_Graphics_Window *p_PLATFORM_graphics_window;
+    void *p_texture_allocation_specification__data;
     Texture_Flags texture_flags;
 } Texture_Allocation_Specification;
 

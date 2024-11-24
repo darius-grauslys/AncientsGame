@@ -19,6 +19,7 @@ void GL_initialize_framebuffer_manager(
 }
 
 GL_Framebuffer *GL_allocate_framebuffer_with__framebuffer_manager(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Framebuffer_Manager *p_GL_framebuffer_manager) {
     for (Index__u16 index_of__GL_framebuffer = 0;
             index_of__GL_framebuffer < MAX_QUANTITY_OF__FRAMEBUFFERS;

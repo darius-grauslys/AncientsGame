@@ -118,6 +118,19 @@ void initialize_texture_allocation_specification(
     p_texture_allocation_specification
         ->p_PLATFORM_graphics_window = 
         p_PLATFORM_graphics_window;
+    p_texture_allocation_specification
+        ->p_texture_allocation_specification__data = 0;
+}
+
+static inline
+void set_texture_allocation_specification__data(
+        Texture_Allocation_Specification
+            *p_texture_allocation_specification,
+        void *p_texture_allocation_specification__data){
+    p_texture_allocation_specification
+        ->p_texture_allocation_specification__data =
+        p_texture_allocation_specification__data
+        ;
 }
 
 #endif
