@@ -51,6 +51,9 @@ void NDS_initialize_gfx_context(
     videoSetMode(MODE_0_2D);
 	videoSetModeSub(MODE_0_2D);
 
+    NDS_initialize_texture_manager(
+            NDS_get_p_texture_manager_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context));
     NDS_initialize_backgrounds(
             p_PLATFORM_gfx_context
             ->backgrounds__main);

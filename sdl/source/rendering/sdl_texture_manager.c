@@ -8,7 +8,7 @@
 void SDL_initialize_texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager) {
     for (Index__u16 index_of__sdl_texture = 0;
-            index_of__sdl_texture < MAX_QUANTITY_OF__SDL_TEXTURES;
+            index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
             &p_SDL_texture_manager
@@ -21,7 +21,7 @@ void SDL_initialize_texture_manager(
 PLATFORM_Texture *SDL_allocate_texture_with__texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager) {
     for (Index__u16 index_of__sdl_texture = 0;
-            index_of__sdl_texture < MAX_QUANTITY_OF__SDL_TEXTURES;
+            index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
             &p_SDL_texture_manager
@@ -42,7 +42,7 @@ PLATFORM_Texture *SDL_get_texture_from__texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager,
         SDL_Texture_String__Const p_SDL_texture_string) {
     for (Index__u16 index_of__sdl_texture = 0;
-            index_of__sdl_texture < MAX_QUANTITY_OF__SDL_TEXTURES;
+            index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
             &p_SDL_texture_manager
@@ -71,7 +71,7 @@ void SDL_release_texture_from__texture_manager(
         - p_SDL_texture_manager->SDL_textures
         ;
 
-    if (index < 0 || index >= MAX_QUANTITY_OF__SDL_TEXTURES) {
+    if (index < 0 || index >= MAX_QUANTITY_OF__TEXTURES) {
         debug_warning("This might cause a GPU memory leak!");
         debug_abort("SDL::SDL_release_texture_from__texture_manager, p_PLATFORM_texture is not allocated with this manager, or is invalid.");
         return;
@@ -84,7 +84,7 @@ void SDL_release_texture_from__texture_manager(
 void SDL_dispose_texture_manager(
         SDL_Texture_Manager *p_SDL_texture_manager) {
     for (Index__u16 index_of__sdl_texture = 0;
-            index_of__sdl_texture < MAX_QUANTITY_OF__SDL_TEXTURES;
+            index_of__sdl_texture < MAX_QUANTITY_OF__TEXTURES;
             index_of__sdl_texture++) {
         PLATFORM_Texture *p_PLATFORM_texture =
             &p_SDL_texture_manager

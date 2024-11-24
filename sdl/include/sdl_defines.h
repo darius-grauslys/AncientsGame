@@ -183,11 +183,9 @@ typedef struct PLATFORM_Sprite_t {
     bool is_sprite_with__anonymous_texture;
 } PLATFORM_Sprite;
 
-#define MAX_QUANTITY_OF__SDL_TEXTURES 1024
-
 typedef struct SLD_Texture_Manager_t {
     PLATFORM_Texture SDL_textures[
-        MAX_QUANTITY_OF__SDL_TEXTURES];
+        MAX_QUANTITY_OF__TEXTURES];
 } SDL_Texture_Manager;
 
 typedef struct SDL_Sprite_Manager_t {

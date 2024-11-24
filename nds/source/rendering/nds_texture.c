@@ -174,7 +174,7 @@ void NDS_initialize_texture_as__empty(
             NDS_Texture_Kind__None);
 }
 
-void PLATFORM_allocate_texture(
+void NDS_allocate_texture(
         PLATFORM_Texture *p_texture, 
         Texture_Allocation_Specification
             *p_texture_allocation_specification) {
@@ -239,48 +239,10 @@ void PLATFORM_allocate_texture(
             false);
 }
 
-void PLATFORM_allocate_texture__with_path(
-        PLATFORM_Texture *texture,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification,
-        const char *path) {
-    // no-op
-    debug_error("allocate_texture__with_path not defined on NDS.");
-}
-
-void PLATFORM_allocate_texture__with_size(
-        PLATFORM_Texture *texture, 
-        Texture_Flags flags,
-        uint32_t width, uint32_t height) {
-    debug_error("allocate_texture__with_size not supported on NDS.");
-}
-
 void PLATFORM_use_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Texture *texture) {
     // no-op
-}
-
-void PLATFORM_release_texture_with__p_PLATFORM_sprite(PLATFORM_Sprite *p_PLATFORM_sprite) {
-    PLATFORM_release_texture(
-            0,
-            &p_PLATFORM_sprite->sprite_texture);
-}
-
-void PLATFORM_release_texture(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Texture *texture) {
-    if (!texture->oam) {
-        debug_abort("PLATFORM_release_texture, texture not allocated.");
-        return;
-    }
-    oamClearSprite(
-            texture->oam, 
-            texture->oam_index);
-    oamFreeGfx(texture->oam, texture->gfx);
-    texture->oam = 0;
-    texture->oam_index = -1;
-    texture->gfx = 0;
 }
 
 uint32_t *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(PLATFORM_Texture *texture) {

@@ -1,6 +1,7 @@
 #ifndef NDS_TEXTURE_H
 #define NDS_TEXTURE_H
 
+#include "defines.h"
 #include "defines_weak.h"
 #include <nds_defines.h>
 
@@ -17,13 +18,26 @@ void NDS_initialize_texture(
         uint8_t dma_channel,
         enum NDS_Texture_Kind the_kind_of__texture);
 
-void NDS_initialize_texture_as__empty(
-        PLATFORM_Texture *p_PLATFORM_texture);
-
 void NDS_update_texture_for__oam(
         PLATFORM_Texture *p_texture,
         Index__u8 palette,
         SpriteColorFormat color_format_for__sprite);
+
+static inline
+void NDS_initialize_texture_as__deallocated(
+        PLATFORM_Texture *p_PLATFORM_texture) {
+    NDS_initialize_texture(
+            p_PLATFORM_texture,
+            0,
+            0,
+            0,
+            0,
+            TEXTURE_FLAGS__NONE,
+            0,
+            NDS_Texture_Kind__None
+            );
+}
+
 
 static inline
 Texture_Flags *NDS_get_p_texture_flags_from__PLATFORM_texture(

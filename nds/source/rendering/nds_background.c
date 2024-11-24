@@ -12,9 +12,9 @@ void NDS_initialize_background(
         Signed_Index__i8 background_index_for__initializer) {
     background->background_index_from__initializer = 
         background_index_for__initializer;
-    NDS_initialize_texture_as__empty(
+    NDS_initialize_texture_as__deallocated(
             &background->background_texture);
-    NDS_initialize_texture_as__empty(
+    NDS_initialize_texture_as__deallocated(
             &background->background_texture__reserved);
     background->background_index_from__hardware = -1;
     background->gfx_map = 0;
@@ -31,7 +31,7 @@ void NDS_initialize_background_for__world_ground(
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 0;
     background->tile_base = 8;
-    NDS_initialize_texture_as__empty(
+    NDS_initialize_texture_as__deallocated(
             &background->background_texture__reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
@@ -59,7 +59,7 @@ void NDS_initialize_background_for__world_wall_lower(
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 4;
     background->tile_base = 12;
-    NDS_initialize_texture_as__empty(
+    NDS_initialize_texture_as__deallocated(
             &background->background_texture__reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 
@@ -87,7 +87,7 @@ void NDS_initialize_background_for__world_wall_upper(
     debug_warning("nds_background.c init's use magic numbers.");
     background->map_base = 8;
     background->tile_base = 12;
-    NDS_initialize_texture_as__empty(
+    NDS_initialize_texture_as__deallocated(
             &background->background_texture__reserved);
     background->background_index_from__hardware =
         bgInit(background->background_index_from__initializer, 

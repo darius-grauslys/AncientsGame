@@ -14,6 +14,11 @@
 #define CAMERA_FULCRUM__HEIGHT 196
 #endif
 
+#ifndef PLATFORM__TEXTURES
+#define PLATFORM__TEXTURES
+#define MAX_QUANTITY_OF__TEXTURES 128
+#endif
+
 /*****************************************************
  *  CHUNKS
  *****************************************************/

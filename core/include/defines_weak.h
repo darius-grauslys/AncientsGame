@@ -906,7 +906,7 @@ typedef struct Serializer_t Serializer;
 
 typedef enum UI_Tile_Kind {
     UI_Tile_Kind__None = 0,
-    UI_Tile_Kind__Unknown
+    UI_Tile_Kind__Unknown = 1023
 } UI_Tile_Kind;
 
 enum UI_Sprite_Kind {

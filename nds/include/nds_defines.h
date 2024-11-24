@@ -26,6 +26,10 @@ typedef struct PLATFORM_Texture_t {
     enum NDS_Texture_Kind the_kind_of__texture;
 } PLATFORM_Texture;
 
+typedef struct NDS_Texture_Manager_t {
+    PLATFORM_Texture NDS_textures[MAX_QUANTITY_OF__TEXTURES];
+} NDS_Texture_Manager;
+
 typedef struct NDS_Background_t {
     PLATFORM_Texture background_texture;
     PLATFORM_Texture background_texture__reserved;
@@ -221,6 +225,8 @@ typedef struct PLATFORM_Graphics_Window_t {
 } PLATFORM_Graphics_Window;
 
 typedef struct PLATFORM_Gfx_Context_t {
+    NDS_Texture_Manager NDS_texture_manager;
+
     NDS_Backgrounds backgrounds__main;
     NDS_Backgrounds backgrounds__sub;
 
