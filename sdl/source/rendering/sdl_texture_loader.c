@@ -129,6 +129,21 @@ bool SDL_load_textures(Game *p_game) {
     }
     result &= result__current;
 
+    if (!_SDL_load_texture(
+                p_PLATFORM_gfx_context,
+                p_SDL_texture_manager,
+                Asset_Directory_Kind__UI__Default, 
+                path, 
+                SDL_texture_string__tilesheet_ui, 
+                TEXTURE_FLAG__SIZE_256x256, 
+                TEXTURE_FLAG__RENDER_METHOD__0, 
+                TEXTURE_FLAG__FORMAT__RGBA8888, 
+                &texture_allocation_specification, 
+                &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
     return result;
 failure_to__allocate:
     debug_abort("SDL::SDL_load_textures, failed to allocate p_PLATFORM_texture.");

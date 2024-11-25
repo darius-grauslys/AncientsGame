@@ -95,6 +95,12 @@ Texture_Flags get_texture_flags__height(
         & TEXTURE_FLAG__LENGTH__MASK);
 }
 
+static inline
+Texture_Flags get_texture_flags__size(
+        Texture_Flags texture_flags) {
+    return texture_flags & TEXTURE_FLAG__SIZE__MASK;
+}
+
 ///
 /// Returns the length in pixels of the texture's width.
 ///
@@ -131,6 +137,23 @@ void set_texture_allocation_specification__data(
         ->p_texture_allocation_specification__data =
         p_texture_allocation_specification__data
         ;
+}
+
+static inline
+Texture_Flags get_texture_flags_from__texture_allocation_specification(
+        Texture_Allocation_Specification 
+        *p_texture_allocation_specification) {
+    return p_texture_allocation_specification
+        ->texture_flags;
+}
+
+static inline
+Texture_Flags get_texture_size_from__texture_allocation_specification(
+        Texture_Allocation_Specification 
+        *p_texture_allocation_specification) {
+    return get_texture_flags__size(
+            get_texture_flags_from__texture_allocation_specification(
+                p_texture_allocation_specification));
 }
 
 #endif

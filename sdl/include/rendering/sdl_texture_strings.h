@@ -9,6 +9,8 @@
 extern SDL_Texture_String__Const SDL_texture_string__tilesheet_cover;
 extern SDL_Texture_String__Const SDL_texture_string__tilesheet_ground;
 
+extern SDL_Texture_String__Const SDL_texture_string__tilesheet_ui;
+
 extern SDL_Texture_String__Const SDL_texture_string__player;
 extern SDL_Texture_String__Const SDL_texture_string__skeleton;
 

@@ -72,6 +72,8 @@ typedef struct PLATFORM_Graphics_Window_t {
     PLATFORM_Texture *p_SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    UI_Window_Kind the_kind_of__ui_window;
+    UI_Tile_Map__Wrapper SDL_graphics_window__ui_tile_map__wrapper;
     bool is_allocated;
 } PLATFORM_Graphics_Window;
 
@@ -94,6 +96,9 @@ typedef void (*f_SDL_Release_Gfx_Window)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
+typedef void (*f_SDL_Compose_Gfx_Window)(
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 typedef void (*f_SDL_Render_Gfx_Window)(
         Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
@@ -208,7 +213,8 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
                                         f_SDL_initialize_rendering__worldspace;
 
     f_SDL_Allocate_Gfx_Window           f_SDL_allocate_gfx_window;
-    f_SDL_Release_Gfx_Window           f_SDL_release_gfx_window;
+    f_SDL_Release_Gfx_Window            f_SDL_release_gfx_window;
+    f_SDL_Compose_Gfx_Window            f_SDL_compose_gfx_window;
     f_SDL_Render_Gfx_Window             f_SDL_render_gfx_window;
 
     f_SDL_Clear_Screen                  f_SDL_clear_screen;
@@ -234,10 +240,11 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 } SDL_Gfx_Sub_Context__Wrapper;
 
 typedef struct PLATFORM_Gfx_Context_t {
-    PLATFORM_Graphics_Window graphics_window__main_window;
-    SDL_Gfx_Sub_Context__Wrapper SDL_gfx_sub_context__wrapper;
+    UI_Tile_Map_Manager SDL_ui_tile_map_manager;
 
-    PLATFORM_Graphics_Window SDL_main_graphics_window;
+    SDL_Gfx_Sub_Context__Wrapper SDL_gfx_sub_context__wrapper;
+    PLATFORM_Graphics_Window SDL_graphics_window__main;
+    PLATFORM_Graphics_Window SDL_graphics_window__ui;
 
     SDL_Window *p_SDL_window;
     Camera *p_active_camera;

@@ -1,3 +1,4 @@
+#include "serialization/sdl_filesystem_defines.h"
 #include <serialization/unix/unix_filesystem.h>
 #include <unistd.h>
 #include <libgen.h>
@@ -62,6 +63,41 @@ bool UNIX_get_path_to__assets(
                     "%s/%s",
                     buffer,
                     "assets/ui");
+            break;
+        case Asset_Directory_Kind__UI__Default:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/default");
+            break;
+        case Asset_Directory_Kind__UI__Font:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/font");
+            break;
+        case Asset_Directory_Kind__UI__Log:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/log");
+            break;
+        case Asset_Directory_Kind__UI__Sprites:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/sprites");
+            break;
+        case Asset_Directory_Kind__UI__Typer:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/typer");
             break;
         case Asset_Directory_Kind__World:
             snprintf(path,

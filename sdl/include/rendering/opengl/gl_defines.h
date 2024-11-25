@@ -106,6 +106,8 @@ typedef struct GL_Chunk_Texture_Manager_t {
 } GL_Chunk_Texture_Manager;
 
 typedef struct GL_Gfx_Sub_Context_t {
+    UI_Tile_Map_Manager GL_ui_tile_map_manager;
+
     SDL_GLContext GL_context;
     GL_Shader_Manager GL_shader_manager;
     GL_Sprite_Manager GL_sprite_manager;

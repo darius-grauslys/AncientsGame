@@ -18,6 +18,14 @@ int initialize_shader_2d(
 int use_shader_2d(GL_Shader_2D *shader);
 int release_shader_2d(GL_Shader_2D *shader);
 
+void GL_link_projection_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        float projection[16]);
+
+void GL_link_translation_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        Vector__3i32F4 translation);
+
 void GL_link_camera_projection_to__shader(
         GL_Shader_2D *p_GL_shader,
         Camera *p_camera);

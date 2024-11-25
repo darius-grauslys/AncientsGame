@@ -2,6 +2,7 @@
 #define SDL_GFX_CONTEXT_H
 
 #include "defines_weak.h"
+#include "rendering/sdl_gfx_window.h"
 #include "sdl_defines.h"
 #include <SDL2/SDL_video.h>
 
@@ -48,7 +49,29 @@ void SDL_set_active_camera(
 static inline
 PLATFORM_Graphics_Window *SDL_get_main_graphics_window_from__gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
-    return &p_PLATFORM_gfx_context->SDL_main_graphics_window;
+    return &p_PLATFORM_gfx_context->SDL_graphics_window__main;
+}
+
+static inline
+PLATFORM_Graphics_Window *SDL_get_graphics_window__ui_from__gfx_contexT(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context->SDL_graphics_window__ui;
+}
+
+static inline
+bool SDL_is_gfx_window_of__this_ui_window_kind(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        UI_Window_Kind the_kind_of_window) {
+    return SDL_get_ui_window_kind_of__gfx_window(
+            p_PLATFORM_gfx_window)
+        == the_kind_of_window;
+}
+
+static inline
+UI_Tile_Map_Manager *SDL_get_p_ui_tile_map_manager_from__PLATFORM_gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context
+        ->SDL_ui_tile_map_manager;
 }
 
 #endif

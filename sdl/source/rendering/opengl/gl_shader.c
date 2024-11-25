@@ -108,6 +108,49 @@ int release_shader_2d(GL_Shader_2D *shader) {
     return 0;
 }
 
+void GL_link_projection_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        float _projection[16]) {
+    ALIGN(16, mat4, projection);
+
+    memcpy(
+            *p_projection,
+            _projection,
+            16 * sizeof(float));
+
+    glUniformMatrix4fv(
+            p_GL_shader->location_of__projection_mat_4_4,
+            1,
+            false,
+            (const GLfloat*)*p_projection);
+}
+
+void GL_link_translation_to__shader(
+        GL_Shader_2D *p_GL_shader,
+        Vector__3i32F4 _translation) {
+    vec3 vec3__translation;
+
+    vector_3i32F4_to__vec3(
+            _translation, 
+            vec3__translation);
+
+    ALIGN(16, mat4, translation);
+
+    vec3__translation[0] *= -(1.0/8);
+    vec3__translation[1] *= -(1.0/8);
+    vec3__translation[2] *= -(1.0/8);
+
+    glm_translate_make(
+            *p_translation, 
+            vec3__translation);
+
+    glUniformMatrix4fv(
+            p_GL_shader->location_of__translation_mat_4_4,
+            1,
+            false,
+            (const float*)*p_translation);
+}
+
 void GL_link_camera_projection_to__shader(
         GL_Shader_2D *p_GL_shader,
         Camera *p_camera) {

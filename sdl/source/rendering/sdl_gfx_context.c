@@ -13,6 +13,7 @@
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_sprite_manager.h"
 #include "rendering/sdl_texture_manager.h"
+#include "ui/ui_tile_map_manager.h"
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <defines.h>
@@ -100,6 +101,9 @@ bool _SDL_link_opengl_3_0(
         ->f_SDL_release_gfx_window =
         GL_release_gfx_window;
     p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_compose_gfx_window =
+        GL_compose_gfx_window;
+    p_SDL_gfx_sub_context__wrapper
         ->f_SDL_render_gfx_window =
         GL_render_gfx_window;
 
@@ -164,10 +168,18 @@ void SDL_initialize_gfx_context(
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__game(p_game);
 
+    initialize_ui_tile_map_manager(
+            SDL_get_p_ui_tile_map_manager_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context));
+
     p_PLATFORM_gfx_context
-        ->SDL_main_graphics_window
+        ->SDL_graphics_window__main
         .p_PLATFORM_gfx_context =
         p_PLATFORM_gfx_context;
+
+    SDL_initialize_gfx_window_as__deallocated(
+            &p_PLATFORM_gfx_context
+            ->SDL_graphics_window__ui);
 
     SDL_set_active_camera(
             p_PLATFORM_gfx_context, 

@@ -10,6 +10,10 @@ void GL_allocate_gfx_window(
         Texture_Allocation_Specification
             *p_texture_allocation_specification);
 
+void GL_compose_gfx_window(
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
+
 void GL_render_gfx_window(
         Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);

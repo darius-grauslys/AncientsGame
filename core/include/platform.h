@@ -120,6 +120,16 @@ void PLATFORM_open_ui(
         Game_Action *p_game_action);
 
 ///
+/// Depending on some implementations, this might be no-op,
+/// but nonetheless it is routinely invoked each tick to
+/// provide a render loop from core.
+///
+/// This is invoked RIGHT BEFORE PLATFORM_post_render.
+///
+void PLATFORM_update_ui(
+        Game *p_game);
+
+///
 /// TODO: this will be called on game_action
 ///
 void PLATFORM_refresh_ui(

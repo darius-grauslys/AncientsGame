@@ -7,10 +7,15 @@ SDL_Texture_String__Const SDL_texture_string__tilesheet_cover =
 SDL_Texture_String__Const SDL_texture_string__tilesheet_ground =
     "tilesheet_ground.png";
 
+SDL_Texture_String__Const SDL_texture_string__tilesheet_ui =
+    "ui_tileset_default.png";
+
 SDL_Texture_String__Const SDL_texture_string__player =
     "player.png";
 SDL_Texture_String__Const SDL_texture_string__skeleton =
     "skeleton.png";
+
+// TODO: the behavior below should be auto-gen'd
 
 SDL_Texture_String__Const 
 *SDL_get_texture_string_from__sprite_allocation_specification(

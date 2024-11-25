@@ -71,67 +71,6 @@ void PLATFORM_put_char_in__typer(
         Typer *p_typer,
         unsigned char letter) {}
 
-///
-/// Opens the specified UI. Depending on the backend this
-/// might close all other UI's.
-///
-PLATFORM_Graphics_Window _TMP_window = {
-    {},
-    0,
-    0,
-    false
-    };
-void PLATFORM_open_ui(
-        Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open,
-        Game_Action *p_game_action) {
-    if (!SDL_is_gfx_window__allocated(
-                &_TMP_window)) {
-        debug_info("TMP::PLATFORM_open_ui, allocate window");
-        Texture_Allocation_Specification texture_alloc_spec;
-        initialize_texture_allocation_specification(
-                &texture_alloc_spec, 
-                TEXTURE_FLAG__SIZE_256x256, 
-                &get_p_PLATFORM_gfx_context_from__game(
-                    p_game)
-                ->SDL_main_graphics_window);
-        SDL_allocate_gfx_window(
-                get_p_PLATFORM_gfx_context_from__game(
-                    p_game), 
-                &_TMP_window,
-                &texture_alloc_spec);
-    } else {
-        debug_info("TMP::PLATFORM_open_ui, deallocate window");
-        SDL_release_gfx_window(
-                get_p_PLATFORM_gfx_context_from__game(
-                    p_game), 
-                &_TMP_window);
-    }
-}
-
-void PLATFORM_refresh_ui(
-        Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open) {}
-
-///
-/// Closes the specified UI. Depending on the backend this
-/// might cause a UI window to open. For example, on NDS
-/// this will close the specified UI Window, and transition
-/// to the UI Idle window.
-///
-void PLATFORM_close_ui(
-        Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__close) {}
-
-enum UI_Window_Kind PLATFORM_get_last_opened_ui(void) {
-    return UI_Window_Kind__None;
-}
-Quantity__u8 PLATFORM_get_all_opened_ui(
-        enum UI_Window_Kind *p_ui_window_kind__buffer,
-        Quantity__u8 size_of__buffer) {
-    return 0;
-}
-
 Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite) {
     return 0;

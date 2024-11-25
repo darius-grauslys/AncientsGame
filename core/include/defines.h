@@ -524,7 +524,7 @@ typedef uint32_t Texture_Flags;
     | (TEXTURE_FLAG__LENGTH_x16 << \
             TEXTURE_FLAG__LENGTH__BIT_COUNT)
 #define TEXTURE_FLAG__SIZE_16x32 \
-    TEXTURE_FLAG__LENGTH_x8 \
+    TEXTURE_FLAG__LENGTH_x16 \
     | (TEXTURE_FLAG__LENGTH_x32 << \
             TEXTURE_FLAG__LENGTH__BIT_COUNT)
 #define TEXTURE_FLAG__SIZE_32x8 \
@@ -1566,29 +1566,55 @@ typedef struct UI_Tile_Span_t {
     UI_Tile ui_tile__fill;
 } UI_Tile_Span;
 
+typedef uint8_t UI_Tile_Map__Flags;
+
+#define UI_TILE_MAP__FLAGS__NONE 0
+#define UI_TILE_MAP__FLAG__IS_ALLOCATED BIT(0)
+
 typedef struct UI_Tile_Map__Wrapper_t {
     UI_Tile_Raw *p_ui_tile_data;
+    UI_Tile_Map__Flags *p_ui_tile_map__flags;
     Quantity__u32 width_of__ui_tile_map;
     Quantity__u32 height_of__ui_tile_map;
+    UI_Tile_Map_Size catagory_size_of__ui_tile_map;
 } UI_Tile_Map__Wrapper;
 
 typedef struct UI_Tile_Map__Small_t {
+    UI_Tile_Map__Flags ui_tile_map__flags;
     UI_Tile_Raw ui_tile_data__small[
         UI_TILE_MAP__LARGE__WIDTH
             * UI_TILE_MAP__LARGE__HEIGHT];
 } UI_Tile_Map__Small;
 
 typedef struct UI_Tile_Map__Medium_t {
+    UI_Tile_Map__Flags ui_tile_map__flags;
     UI_Tile_Raw ui_tile_data__medium[
         UI_TILE_MAP__LARGE__WIDTH
             * UI_TILE_MAP__LARGE__HEIGHT];
 } UI_Tile_Map__Medium;
 
 typedef struct UI_Tile_Map__Large_t {
+    UI_Tile_Map__Flags ui_tile_map__flags;
     UI_Tile_Raw ui_tile_data__large[
         UI_TILE_MAP__LARGE__WIDTH
             * UI_TILE_MAP__LARGE__HEIGHT];
 } UI_Tile_Map__Large;
+
+///
+/// NOTE:   This is not included in the core game
+///         structs, since not all platforms (nds)
+///         leverages it. It is up to the platform
+///         to explicitly include a UI_Tile_Map_Manager
+///         somewhere within its PLATFORM_Gfx_Context.
+///
+typedef struct UI_Tile_Map_Manager_t {
+    UI_Tile_Map__Large ui_tile_maps__large[
+        UI_TILE_MAP__LARGE__MAX_QUANTITY_OF];
+    UI_Tile_Map__Medium ui_tile_maps__medium[
+        UI_TILE_MAP__MEDIUM__MAX_QUANTITY_OF];
+    UI_Tile_Map__Small ui_tile_maps__small[
+        UI_TILE_MAP__SMALL__MAX_QUANTITY_OF];
+} UI_Tile_Map_Manager;
 
 typedef void (*m_UI_Dispose)(
         UI_Element *p_this_ui_element,

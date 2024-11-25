@@ -904,6 +904,14 @@ typedef struct Serializer_t Serializer;
 /// SECTION_ui
 ///
 
+typedef enum UI_Tile_Map_Size {
+    UI_Tile_Map_Size__None = 0,
+    UI_Tile_Map_Size__Small,
+    UI_Tile_Map_Size__Medium,
+    UI_Tile_Map_Size__Large,
+    UI_Tile_Map_Size__Unknown
+} UI_Tile_Map_Size;
+
 typedef enum UI_Tile_Kind {
     UI_Tile_Kind__None = 0,
     UI_Tile_Kind__Unknown = 1023
