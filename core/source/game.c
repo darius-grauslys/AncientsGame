@@ -151,8 +151,6 @@ void manage_game__post_render(Game *p_game) {
     PLATFORM_poll_input(&p_game->input);
     poll_process_manager(
             get_p_process_manager_from__game(p_game), p_game);
-    poll_ui_manager__update(
-            get_p_ui_manager_from__game(p_game), p_game);
     PLATFORM_poll_audio_effects(
             get_p_PLATFORM_audio_context_from__game(p_game));
 

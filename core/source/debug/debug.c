@@ -69,6 +69,7 @@ void debug_error(const char *msg_fmt, ...) {
 }
 
 void debug_abort(const char *msg_fmt, ...) {
+    PLATFORM_pre_abort();
 #ifndef NDEBUG
     va_list args_list;
     va_start(args_list, msg_fmt);

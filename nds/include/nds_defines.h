@@ -227,6 +227,8 @@ typedef struct PLATFORM_Graphics_Window_t {
 typedef struct PLATFORM_Gfx_Context_t {
     NDS_Texture_Manager NDS_texture_manager;
 
+    UI_Manager NDS_ui_manager;
+
     NDS_Backgrounds backgrounds__main;
     NDS_Backgrounds backgrounds__sub;
 

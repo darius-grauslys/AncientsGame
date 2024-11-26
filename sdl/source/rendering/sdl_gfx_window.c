@@ -5,6 +5,7 @@
 #include "rendering/sdl_sprite.h"
 #include "rendering/texture.h"
 #include "sdl_defines.h"
+#include "ui/ui_manager.h"
 #include "ui/ui_tile_map_manager.h"
 #include <rendering/sdl_gfx_window.h>
 
@@ -17,6 +18,12 @@ void SDL_initialize_gfx_window(
         ->p_PLATFORM_gfx_context =
         p_PLATFORM_gfx_context
         ;
+
+    initialize_ui_manager(
+            SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
+                p_PLATFORM_gfx_window),
+            p_PLATFORM_gfx_window);
+
     // TODO: initialize texture as deallocated
     p_PLATFORM_gfx_window
         ->p_SDL_graphics_window__data = 0;
@@ -74,5 +81,11 @@ void SDL_render_gfx_window(
 
     f_SDL_render_gfx_window(
             p_game,
+            p_PLATFORM_gfx_window);
+}
+
+UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
             p_PLATFORM_gfx_window);
 }

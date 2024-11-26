@@ -14,6 +14,7 @@
 #include <rendering/gfx_context.h>
 #include <world/tile.h>
 #include "rendering/nds_texture_manager.h"
+#include "ui/ui_manager.h"
 
 #include <rendering/nds_background.h>
 #include <rendering/gfx_context.h>
@@ -88,6 +89,12 @@ void NDS_initialize_gfx_context(
     p_PLATFORM_gfx_context
         ->graphics_window__sub.p_oam_state = 
             &oamSub;
+
+    initialize_ui_manager(
+            NDS_get_p_ui_manager_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context), 
+            &p_PLATFORM_gfx_context
+                ->graphics_window__sub);
 
     initialize_sprite_gfx_allocator__lookup_table_for__entities(
             p_PLATFORM_gfx_context

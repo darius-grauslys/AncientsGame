@@ -12,6 +12,7 @@ void initialize_ui_element_as__drop_zone__equipment_slot(
         Serialized_Item_Stack_Ptr s_item_stack_ptr);
 
 void m_ui_drop_zone__receive_drop_handler__equipment_slot(
+        UI_Manager *p_ui_manager,
         UI_Element *p_this_draggable,
         UI_Element *p_ui_element__dropped,
         Game *p_game);

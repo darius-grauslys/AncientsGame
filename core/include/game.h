@@ -165,11 +165,6 @@ Input *get_p_input_from__game(Game *p_game) {
 }
 
 static inline
-UI_Manager *get_p_ui_manager_from__game(Game *p_game) {
-    return &p_game->ui_manager;
-}
-
-static inline
 Entity *get_p_local_player_from__game(Game *p_game) {
     return get_p_local_player_from__world(&p_game->world);
 }

@@ -92,6 +92,10 @@ void PLATFORM_update_ui(
             continue;
         }
 
+        poll_ui_manager__update(
+                SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
+                    p_PLATFORM_gfx_window),
+                p_game);
         SDL_render_gfx_window(
                 p_game, 
                 p_PLATFORM_gfx_window);

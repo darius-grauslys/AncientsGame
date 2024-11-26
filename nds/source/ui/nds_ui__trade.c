@@ -9,11 +9,17 @@
 #include "ui/ui_manager.h"
 #include "vectors.h"
 #include "world/chunk_manager.h"
+#include "nds_game.h"
 
 void NDS_open_ui__trade(
         Game *p_game,
         Game_Action *p_game_action) {
-    NDS_allocate_ui_for__nds_ui_window__game__trade(p_game);
+    UI_Manager *p_ui_manager =
+        NDS_get_p_ui_manager_from__game(
+                p_game);
+    NDS_allocate_ui_for__nds_ui_window__game__trade(
+            p_game,
+            p_ui_manager);
 
     Entity *p_entity__local_player =
         get_p_local_player_from__game(p_game);
@@ -45,7 +51,7 @@ void NDS_open_ui__trade(
 
     UI_Element *p_ui_element__inventory_column__player =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager, 
                 NDS_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62);
 
     NDS_load_ui_inventory_column_for__inventory(
@@ -55,7 +61,7 @@ void NDS_open_ui__trade(
 
     UI_Element *p_ui_element__inventory_column__container =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager, 
                 NDS_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8);
 
     NDS_load_ui_inventory_column_for__inventory(

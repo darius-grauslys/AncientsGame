@@ -214,6 +214,11 @@ Signed_Quantity__i32 SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
         PLATFORM_Graphics_Window **p_PLATFORM_gfx_windows,
         Quantity__u32 size_of__ptr_buffer) {
     Signed_Quantity__i32 quantity_of__gfx_windows = 0;
+    memset(
+            p_PLATFORM_gfx_windows,
+            0,
+            sizeof(PLATFORM_Graphics_Window*)
+            * size_of__ptr_buffer);
     for (Index__u32 index_of__gfx_window = 0;
             index_of__gfx_window
             < PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF;

@@ -11,11 +11,17 @@
 #include <ui/nds_ui__station.h>
 #include <ui/game/nds_ui_window__game__station.h>
 #include <nds_defines.h>
+#include "nds_game.h"
 
 void NDS_open_ui__station(
         Game *p_game,
         Game_Action *p_game_action) {
-    NDS_allocate_ui_for__nds_ui_window__game__station(p_game);
+    UI_Manager *p_ui_manager =
+        NDS_get_p_ui_manager_from__game(
+                p_game);
+    NDS_allocate_ui_for__nds_ui_window__game__station(
+            p_game,
+            p_ui_manager);
 
     Entity *p_entity__local_player =
         get_p_local_player_from__game(p_game);
@@ -70,7 +76,7 @@ void NDS_open_ui__station(
 
     UI_Element *p_ui_element__inventory_column__player =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager,
                 NDS_UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11);
 
     NDS_load_ui_inventory_column_for__inventory(
@@ -86,12 +92,9 @@ void NDS_open_ui__station(
         &get_p_PLATFORM_gfx_context_from__game(p_game)
         ->graphics_window__sub;
 
-    UI_Manager *p_ui_manager =
-        get_p_ui_manager_from__game(p_game);
-
     UI_Element *p_ui_element__current_inventory_slot =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager,
                 NDS_UI_WINDOW__GAME__STATION_P_REQUIREMENTS_7);
 
     do {
@@ -113,7 +116,7 @@ void NDS_open_ui__station(
 
     p_ui_element__current_inventory_slot =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager,
                 NDS_UI_WINDOW__GAME__STATION_P_RECIPE_AND_TOOLS_4);
 
     NDS_load_ui_item_stack(

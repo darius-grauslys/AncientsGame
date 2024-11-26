@@ -66,6 +66,7 @@ bool PLATFORM_is_audio__streaming(
 ///
 
 void PLATFORM_coredump(void);
+void PLATFORM_pre_abort(void);
 void PLATFORM_abort(void);
 
 ///
@@ -274,6 +275,9 @@ void PLATFORM_post_render(Game *game);
 /// 
 /// SECTION_ui
 ///
+
+UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 ///
 /// SECTION_scene

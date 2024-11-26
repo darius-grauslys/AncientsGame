@@ -34,6 +34,7 @@
 #include <assets/ui/default/ui_tileset_default.h>
 #include <ui/ui_manager.h>
 #include <game.h>
+#include "nds_game.h"
 
 struct NDS_UI__State_Machine_t {
     enum UI_Window_Kind the_kind_of__active_ui_window;
@@ -188,6 +189,10 @@ void PLATFORM_open_ui(
         return;
     }
 
+    UI_Manager *p_ui_manager =
+        NDS_get_p_ui_manager_from__game(
+                p_game);
+
     NDS_copy_game_action_into__sub_graphics_window(
             p_game,
             p_game_action);
@@ -199,7 +204,7 @@ void PLATFORM_open_ui(
     _ui__state_machine.the_kind_of__active_ui_window =
         the_kind_of__ui_window_to__open;
     release_all__ui_elements_from__ui_manager(
-            get_p_ui_manager_from__game(p_game),
+            p_ui_manager,
             p_game);
     // TODO: It may be better to break out some of these
     // branches to seperate function calls, in particular
@@ -218,31 +223,43 @@ void PLATFORM_open_ui(
             break;
         case UI_Window_Kind__Trade:
             NDS_open_ui__trade(
-                    p_game,
+                    p_game, 
                     p_game_action);
             break;
         case UI_Window_Kind__Labor:
-            NDS_allocate_ui_for__nds_ui_window__game__labor(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__labor(
+                    p_game, 
+                    p_ui_manager);
             break;
         case UI_Window_Kind__Typer:
-            NDS_allocate_ui_for__nds_ui_window__game__typer(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__typer(
+                    p_game, 
+                    p_ui_manager);
             break;
         case UI_Window_Kind__Station:
             NDS_open_ui__station(
-                    p_game,
+                    p_game, 
                     p_game_action);
             break;
         case UI_Window_Kind__Main_Menu:
-            NDS_allocate_ui_for__nds_ui_window__menu__main(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__main(
+                    p_game, 
+                    p_ui_manager);
             break;
         case UI_Window_Kind__Multiplayer:
-            NDS_allocate_ui_for__nds_ui_window__menu__multiplayer(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__multiplayer(
+                    p_game, 
+                    p_ui_manager);
             break;
         case UI_Window_Kind__Settings:
-            NDS_allocate_ui_for__nds_ui_window__menu__settings(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__settings(
+                    p_game, 
+                    p_ui_manager);
             break;
         case UI_Window_Kind__Singleplayer:
-            NDS_allocate_ui_for__nds_ui_window__menu__singleplayer(p_game);
+            NDS_allocate_ui_for__nds_ui_window__menu__singleplayer(
+                    p_game, 
+                    p_ui_manager);
             break;
     }
 
@@ -460,4 +477,10 @@ void PLATFORM_refresh_ui(
             p_game,
             the_kind_of__ui_window_to__refresh,
             &game_action);
+}
+
+void PLATFORM_update_ui(Game *p_game) {
+    // TODO: use gfx_context sub_window
+    poll_ui_manager__update(
+            NDS_get_p_ui_manager_from__game(p_game), p_game);
 }

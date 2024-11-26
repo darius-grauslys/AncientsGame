@@ -32,7 +32,9 @@ void SDL_initialize_gfx_window_as__deallocated(
 static inline
 bool SDL_is_gfx_window__allocated(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
-    return p_PLATFORM_gfx_window
+    return 
+        p_PLATFORM_gfx_window
+        && p_PLATFORM_gfx_window
         ->is_allocated
         ;
 }
@@ -72,6 +74,13 @@ Vector__3i32F4 SDL_get_position_of__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     return p_PLATFORM_gfx_window
         ->SDL_position_of__graphics_window;
+}
+
+static inline
+UI_Manager *SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return &p_PLATFORM_gfx_window
+        ->SDL_graphics_window__ui_manager;
 }
 
 #endif

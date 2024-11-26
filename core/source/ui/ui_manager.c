@@ -278,6 +278,7 @@ void poll_ui_manager__update_for__drop(
     if (p_ui_element__receiving_drop) {
         p_ui_element__receiving_drop
             ->m_ui_receive_drop_handler(
+                    p_ui_manager,
                     p_ui_element__receiving_drop,
                     p_ui_manager->p_ui_element__focused,
                     p_game);
@@ -488,10 +489,9 @@ UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
 }
 
 void release__ui_element_from__ui_manager(
+        UI_Manager *p_ui_manager,
         UI_Element *p_ui_element,
         Game *p_game) {
-    UI_Manager *p_ui_manager =
-        get_p_ui_manager_from__game(p_game);
     if (p_ui_manager->quantity_of__ui_elements__quantity_u8 == 0) {
 #ifndef NDEBUG
         debug_error("Tried to release UI_Element %p while ui_manager is empty.",

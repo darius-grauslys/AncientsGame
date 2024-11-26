@@ -608,7 +608,7 @@ def generate_source__ui(xml_node__ui):
             "\nUI_Element *{}_allocate_ui_for__{}".format(\
             config.BACKEND,\
             config.source_name))
-    generate_source_h__arguments(["Game *p_game"])
+    generate_source_h__arguments(["Game *p_game, UI_Manager *p_ui_manager"])
     generate_source_h__with_literal(";\n")
 
     generate_source_c__with_literal(\
@@ -618,7 +618,7 @@ def generate_source__ui(xml_node__ui):
             "\nUI_Element *{}_allocate_ui_for__{}".format(\
             config.BACKEND,\
             config.source_name))
-    generate_source_c__arguments(["Game *p_game"])
+    generate_source_c__arguments(["Game *p_game, UI_Manager *p_ui_manager"])
     generate_source_c__with_literal("{\n")
 
     context_stack = deque()
@@ -639,9 +639,6 @@ def generate_source__ui(xml_node__ui):
     generate_source_c__tabs(context_stack[-1].indentation_level)
     generate_source_c__local_field__p_ui_element("{}{}".format(p_ui_iterator, "_child"))
     generate_source_c__with_literal("0")
-    generate_source_c__new_line()
-    generate_source_c__tabs(context_stack[-1].indentation_level)
-    generate_source_c__with_literal("UI_Manager *p_ui_manager = get_p_ui_manager_from__game(p_game)")
     generate_source_c__new_line()
     current_element_id = get_int_from_xml_or__use_this(xml_node__ui, "offset_of__ui_index", 0)
     for element in xml_node__ui:

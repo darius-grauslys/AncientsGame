@@ -117,4 +117,12 @@ NDS_Sprite_Manager *NDS_get_p_NDS_sprite_manager_from__gfx_context(
         &p_PLATFORM_gfx_context->nds_sprite_manager;
 }
 
+static inline
+UI_Manager *NDS_get_p_ui_manager_from__PLATFORM_gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return 
+        &p_PLATFORM_gfx_context
+        ->NDS_ui_manager;
+}
+
 #endif

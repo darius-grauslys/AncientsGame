@@ -28,6 +28,7 @@ void initialize_ui_element_as__drop_zone(
 }
 
 void m_ui_drop_zone__receive_drop_handler__default(
+        UI_Manager *p_ui_manager,
         UI_Element *p_this_drop_zone,
         UI_Element *p_ui_element__dropped,
         Game *p_game) {
@@ -35,7 +36,7 @@ void m_ui_drop_zone__receive_drop_handler__default(
     UI_Element *p_ui_element__parent_of__dropped =
         p_ui_element__dropped->p_parent;
     swap_ui_element__children(
-            get_p_ui_manager_from__game(p_game), 
+            p_ui_manager, 
             p_this_drop_zone, 
             p_ui_element__dropped->p_parent);
     if (!p_ui_element__parent_of__dropped)

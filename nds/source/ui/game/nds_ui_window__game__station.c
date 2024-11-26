@@ -16,13 +16,12 @@
 #include <ui/handlers/inventory/nds_ui_handler__button_craft.h>
 // THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.
 
-UI_Element *NDS_allocate_ui_for__nds_ui_window__game__station(Game *p_game){
+UI_Element *NDS_allocate_ui_for__nds_ui_window__game__station(Game *p_game, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-    UI_Manager *p_ui_manager = get_p_ui_manager_from__game(p_game);
-NDS_allocate_ui_for__nds_ui_window__game__hud(p_game);
+NDS_allocate_ui_for__nds_ui_window__game__hud(p_game, p_ui_manager);
     toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__slider(p_slider, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), m_NDS_ui_slider__dragged_handler_for__backgrounds, true);

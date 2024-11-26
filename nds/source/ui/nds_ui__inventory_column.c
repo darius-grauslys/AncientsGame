@@ -12,6 +12,7 @@
 #include "vectors.h"
 #include "nds_defines.h"
 #include "rendering/nds_sprite.h"
+#include "nds_game.h"
 
 bool NDS_load_ui_item_stack(
         Game *p_game,
@@ -22,6 +23,7 @@ bool NDS_load_ui_item_stack(
     if (does_ui_element_have__child(
                 p_ui_element__inventory_slot)) {
         release__ui_element_from__ui_manager(
+                p_ui_manager,
                 p_ui_element__inventory_slot
                 ->p_child, 
                 p_game);
@@ -77,7 +79,7 @@ void NDS_load_ui_inventory_column_for__inventory(
         &get_p_PLATFORM_gfx_context_from__game(p_game)
         ->graphics_window__sub;
     UI_Manager *p_ui_manager =
-        get_p_ui_manager_from__game(p_game);
+        NDS_get_p_ui_manager_from__game(p_game);
     UI_Element *p_ui_element__current_inventory_slot =
         p_ui_element__inventory_column;
     Index__u32 index_of__inventory_column_slot = 0;

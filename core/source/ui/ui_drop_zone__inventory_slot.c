@@ -28,6 +28,7 @@ void initialize_ui_element_as__drop_zone__inventory_slot(
 }
 
 void m_ui_drop_zone__receive_drop_handler__inventory_slot(
+        UI_Manager *p_ui_manager,
         UI_Element *p_this_drop_zone,
         UI_Element *p_ui_element__dropped,
         Game *p_game) {
@@ -88,6 +89,7 @@ void m_ui_drop_zone__receive_drop_handler__inventory_slot(
             p_item_stack__destination)) {
         // reflect the swap on the ui via the default handler.
         m_ui_drop_zone__receive_drop_handler__default(
+                p_ui_manager,
                 p_this_drop_zone, 
                 p_ui_element__dropped, 
                 p_game);

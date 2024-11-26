@@ -10,12 +10,11 @@
 #include <game.h>
 // THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.
 
-UI_Element *NDS_allocate_ui_for__nds_ui_window__game__typer(Game *p_game){
+UI_Element *NDS_allocate_ui_for__nds_ui_window__game__typer(Game *p_game, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-    UI_Manager *p_ui_manager = get_p_ui_manager_from__game(p_game);
     UI_Element *p_hide = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_hide, 32, 16, get_vector__3i32(220 + 0, 68 + 0, 0), m_ui_button__clicked_handler__default, false, false);
 

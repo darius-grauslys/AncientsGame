@@ -28,7 +28,7 @@
     </config>
     <ui offset_of__ui_index="3">
         <code>
-            NDS_allocate_ui_for__nds_ui_window__game__hud(p_game);
+            NDS_allocate_ui_for__nds_ui_window__game__hud(p_game, p_ui_manager);
             toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 2));
         </code>
         <grid size="5" x="64" y="104" stride__x="16">

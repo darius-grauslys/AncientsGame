@@ -5,10 +5,17 @@
 #include "ui/nds_ui__equipment.h"
 #include "ui/nds_ui__inventory_column.h"
 #include "ui/ui_manager.h"
+#include "nds_game.h"
 
 void NDS_open_ui__equip(
         Game *p_game) {
-    NDS_allocate_ui_for__nds_ui_window__game__equip(p_game);
+    UI_Manager *p_ui_manager =
+            NDS_get_p_ui_manager_from__game(
+                p_game);
+
+    NDS_allocate_ui_for__nds_ui_window__game__equip(
+            p_game,
+            p_ui_manager);
 
     Entity *p_entity__local_player =
         get_p_local_player_from__game(p_game);
@@ -32,12 +39,12 @@ void NDS_open_ui__equip(
 
     UI_Element *p_ui_element__inventory_column =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager,
                 NDS_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
 
     UI_Element *p_ui_element__equipment_column =
         get_p_ui_element_by__index_from__ui_manager(
-                get_p_ui_manager_from__game(p_game), 
+                p_ui_manager,
                 NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
 
     NDS_load_ui_inventory_column_for__inventory(

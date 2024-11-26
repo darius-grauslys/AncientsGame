@@ -1627,6 +1627,7 @@ typedef void (*m_UI_Dragged)(
         UI_Element *p_this_ui_element,
         Game *p_game);
 typedef void (*m_UI_Receive_Drop)(
+        UI_Manager *p_ui_manager,
         UI_Element *p_this_ui_element,
         UI_Element *p_ui_element__dropped,
         Game *p_game);
@@ -1729,6 +1730,11 @@ typedef struct UI_Element_t {
 typedef UI_Element UI_Container_Entries[
     UI_CONTAINER_PTR_ENTRIES_MAXIMUM_QUANTITY_OF];
 
+///
+/// UI_Manager is not apart of core data structures,
+/// and is instead apart of PLATFORM_Graphics_Window
+/// which is left to the backend to implement.
+///
 typedef struct UI_Manager_t {
     Quantity__u8 quantity_of__ui_elements__quantity_u8;
     UI_Element ui_elements[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
@@ -2185,7 +2191,6 @@ typedef void (*m_Game_Action_Handler)(
 typedef struct Game_t {
     Input input;
     Scene_Manager scene_manager;
-    UI_Manager ui_manager;
 
     World world;
     Repeatable_Psuedo_Random repeatable_pseudo_random;

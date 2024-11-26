@@ -10,6 +10,7 @@
 #include <nds_defines.h>
 #include <scene/nds_scene_manager.h>
 #include <rendering/gfx_context.h>
+#include "nds_game.h"
 
 extern PLATFORM_Gfx_Context _NDS_gfx_context;
 extern PLATFORM_Audio_Context _NDS_audio_context;
@@ -54,7 +55,7 @@ int PLATFORM_main(Game *p_game) {
             f_sprite_gfx_allocator__handler_for__ui);
 
     initialize_ui_manager(
-            get_p_ui_manager_from__game(p_game),
+            NDS_get_p_ui_manager_from__game(p_game),
             &_NDS_gfx_context.graphics_window__sub);
 
     //TODO: get_p_scene_manager_from__game(...)

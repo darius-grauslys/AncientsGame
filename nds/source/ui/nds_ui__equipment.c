@@ -10,6 +10,7 @@
 #include "ui/ui_manager.h"
 #include <ui/nds_ui__equipment.h>
 #include "rendering/nds_sprite.h"
+#include "nds_game.h"
 
 void NDS_load_ui_equipment_column_for__equipment(
         Game *p_game,
@@ -19,7 +20,7 @@ void NDS_load_ui_equipment_column_for__equipment(
         &get_p_PLATFORM_gfx_context_from__game(p_game)
         ->graphics_window__sub;
     UI_Manager *p_ui_manager =
-        get_p_ui_manager_from__game(p_game);
+        NDS_get_p_ui_manager_from__game(p_game);
     UI_Element *p_ui_element__current_equipment_slot =
         p_ui_element__equipment_column;
     Index__u32 index_of__inventory_column_slot = 0;
@@ -27,6 +28,7 @@ void NDS_load_ui_equipment_column_for__equipment(
         if (does_ui_element_have__child(
                     p_ui_element__current_equipment_slot)) {
             release__ui_element_from__ui_manager(
+                    p_ui_manager,
                     p_ui_element__current_equipment_slot
                     ->p_child, 
                     p_game);

@@ -8,8 +8,11 @@ void PLATFORM_coredump(void) {
     PLATFORM_abort();
 }
 
-void PLATFORM_abort(void) {
+void PLATFORM_pre_abort(void) {
     NDS_initialize_debug__sub();
+}
+
+void PLATFORM_abort(void) {
     *(uint32_t*)8192 = 100;
 }
 

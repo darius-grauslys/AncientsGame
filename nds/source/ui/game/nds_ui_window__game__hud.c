@@ -8,12 +8,11 @@
 #include <game.h>
 // THIS CODE IS AUTO GENERATED. Go to ./nds/assets/ui/xml/ instead of modifying this file.
 
-UI_Element *NDS_allocate_ui_for__nds_ui_window__game__hud(Game *p_game){
+UI_Element *NDS_allocate_ui_for__nds_ui_window__game__hud(Game *p_game, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-    UI_Manager *p_ui_manager = get_p_ui_manager_from__game(p_game);
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__2=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__2++) {
         p_ui_iterator_previous = p_ui_iterator;
