@@ -172,14 +172,18 @@ void SDL_initialize_gfx_context(
             SDL_get_p_ui_tile_map_manager_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context));
 
+    // TODO: do better
+    SDL_initialize_gfx_window_as__deallocated(
+            &p_PLATFORM_gfx_context
+            ->SDL_graphics_window__main);
+    SDL_set_gfx_window_as__allocated(
+            &p_PLATFORM_gfx_context
+            ->SDL_graphics_window__main);
     p_PLATFORM_gfx_context
         ->SDL_graphics_window__main
         .p_PLATFORM_gfx_context =
         p_PLATFORM_gfx_context;
-
-    SDL_initialize_gfx_window_as__deallocated(
-            &p_PLATFORM_gfx_context
-            ->SDL_graphics_window__ui);
+    // up to here.
 
     SDL_set_active_camera(
             p_PLATFORM_gfx_context, 

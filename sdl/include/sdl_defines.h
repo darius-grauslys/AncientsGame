@@ -74,8 +74,14 @@ typedef struct PLATFORM_Graphics_Window_t {
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
     UI_Window_Kind the_kind_of__ui_window;
     UI_Tile_Map__Wrapper SDL_graphics_window__ui_tile_map__wrapper;
+    Vector__3i32F4 SDL_position_of__graphics_window;
     bool is_allocated;
 } PLATFORM_Graphics_Window;
+
+typedef struct SDL_Gfx_Window_Mananger_t {
+    PLATFORM_Graphics_Window SDL_gfx_windows[
+        PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF];
+} SDL_Gfx_Window_Manager;
 
 typedef void SDL_Gfx_Sub_Context;
 
@@ -242,9 +248,10 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 typedef struct PLATFORM_Gfx_Context_t {
     UI_Tile_Map_Manager SDL_ui_tile_map_manager;
 
+    SDL_Gfx_Window_Manager SDL_gfx_window_manager;
+
     SDL_Gfx_Sub_Context__Wrapper SDL_gfx_sub_context__wrapper;
     PLATFORM_Graphics_Window SDL_graphics_window__main;
-    PLATFORM_Graphics_Window SDL_graphics_window__ui;
 
     SDL_Window *p_SDL_window;
     Camera *p_active_camera;

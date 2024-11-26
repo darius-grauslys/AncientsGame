@@ -2,22 +2,14 @@
 #define SDL_GFX_WINDOW_H
 
 #include "defines_weak.h"
+#include "vectors.h"
 #include <sdl_defines.h>
 
 void SDL_initialize_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        UI_Window_Kind the_kind_of__ui_window);
-
-void SDL_allocate_gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
-
-void SDL_release_gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        UI_Window_Kind the_kind_of__ui_window,
+        Vector__3i32F4 position_of__graphics_window__3i32F4);
 
 void SDL_compose_gfx_window(
         Game *p_game,
@@ -33,7 +25,8 @@ void SDL_initialize_gfx_window_as__deallocated(
     SDL_initialize_gfx_window(
             0, 
             p_PLATFORM_gfx_window,
-            UI_Window_Kind__None);
+            UI_Window_Kind__None,
+            VECTOR__3i32F4__OUT_OF_BOUNDS);
 }
 
 static inline
@@ -63,6 +56,22 @@ UI_Window_Kind SDL_get_ui_window_kind_of__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     return p_PLATFORM_gfx_window
         ->the_kind_of__ui_window;
+}
+
+static inline
+void SDL_set_position_of__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Vector__3i32F4 position_of__gfx_window) {
+    p_PLATFORM_gfx_window
+        ->SDL_position_of__graphics_window =
+        position_of__gfx_window;
+}
+
+static inline
+Vector__3i32F4 SDL_get_position_of__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return p_PLATFORM_gfx_window
+        ->SDL_position_of__graphics_window;
 }
 
 #endif

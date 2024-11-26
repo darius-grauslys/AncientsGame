@@ -225,8 +225,11 @@ void GL_render_gfx_window(
             projection);
     GL_link_translation_to__shader(
             p_GL_shader,
-            get_vector__3i32F4_using__i32(
-                -4, -4, 0));
+            add_vectors__3i32F4(
+                get_vector__3i32F4_using__i32(
+                -4, -4, 0),
+                p_PLATFORM_graphics_window
+                ->SDL_position_of__graphics_window));
     GL_link_model_data_to__shader(
             p_GL_shader, 
             VECTOR__3i32F4__0_0_0, 

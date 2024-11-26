@@ -4,6 +4,7 @@
 #include "game.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_gfx_window.h"
+#include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/texture.h"
 
 ///
@@ -18,24 +19,6 @@ void PLATFORM_open_ui(
         get_p_PLATFORM_gfx_context_from__game(
                 p_game);
 
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__ui =
-        SDL_get_graphics_window__ui_from__gfx_contexT(
-                p_PLATFORM_gfx_context);
-
-    if (SDL_is_gfx_window__allocated(
-                p_PLATFORM_gfx_window__ui)) {
-        if (SDL_is_gfx_window_of__this_ui_window_kind(
-                    p_PLATFORM_gfx_window__ui, 
-                    the_kind_of__ui_window_to__open)) {
-            debug_warning("SDL::PLATFORM_open_ui, redundant opening of UI_Window_Kind.");
-            return;
-        }
-
-        SDL_release_gfx_window(
-                p_PLATFORM_gfx_context, 
-                p_PLATFORM_gfx_window__ui);
-    }
-
     Texture_Allocation_Specification texture_alloc_spec;
 
     initialize_texture_allocation_specification(
@@ -44,10 +27,15 @@ void PLATFORM_open_ui(
             SDL_get_main_graphics_window_from__gfx_context(
                 p_PLATFORM_gfx_context));
 
-    SDL_allocate_gfx_window(
-            p_PLATFORM_gfx_context, 
-            p_PLATFORM_gfx_window__ui, 
-            &texture_alloc_spec);
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__ui =
+        SDL_allocate_gfx_window(
+                p_PLATFORM_gfx_context, 
+                &texture_alloc_spec);
+
+    if (!p_PLATFORM_gfx_window__ui) {
+        debug_error("SDL::PLATFORM_open_ui, failed to open ui.");
+        return;
+    }
 
     UI_Tile_Map__Wrapper ui_tile_map__wrapper =
         p_PLATFORM_gfx_window__ui
@@ -82,18 +70,32 @@ void PLATFORM_update_ui(
         get_p_PLATFORM_gfx_context_from__game(
                 p_game);
 
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__ui =
-        SDL_get_graphics_window__ui_from__gfx_contexT(
-                p_PLATFORM_gfx_context);
+    PLATFORM_Graphics_Window *ptr_array_of__gfx_windows[
+        PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF];
 
-    if (!SDL_is_gfx_window__allocated(
-                p_PLATFORM_gfx_window__ui)) {
-        return;
+    SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
+            SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context), 
+            UI_Window_Kind__Unknown, 
+            ptr_array_of__gfx_windows, 
+            PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF);
+
+    for (Index__u32 index_of__gfx_window = 0;
+            index_of__gfx_window
+            < PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF;
+            index_of__gfx_window++) {
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window =
+            ptr_array_of__gfx_windows[
+            index_of__gfx_window];
+        if (!SDL_is_gfx_window__allocated(
+                    p_PLATFORM_gfx_window)) {
+            continue;
+        }
+
+        SDL_render_gfx_window(
+                p_game, 
+                p_PLATFORM_gfx_window);
     }
-    
-    SDL_render_gfx_window(
-            p_game, 
-            p_PLATFORM_gfx_window__ui);
 }
 
 ///
@@ -111,22 +113,19 @@ void PLATFORM_close_ui(
         get_p_PLATFORM_gfx_context_from__game(
                 p_game);
 
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__ui =
-        SDL_get_graphics_window__ui_from__gfx_contexT(
-                p_PLATFORM_gfx_context);
-
-    if (!SDL_is_gfx_window__allocated(
-                p_PLATFORM_gfx_window__ui)) {
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window;
+    if (!SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
+                SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                    p_PLATFORM_gfx_context), 
+                the_kind_of__ui_window_to__close, 
+                &p_PLATFORM_gfx_window, 
+                1)) {
         return;
     }
 
-    if (SDL_is_gfx_window_of__this_ui_window_kind(
-                p_PLATFORM_gfx_window__ui, 
-                the_kind_of__ui_window_to__close)) {
-        SDL_release_gfx_window(
-                p_PLATFORM_gfx_context, 
-                p_PLATFORM_gfx_window__ui);
-    }
+    SDL_release_gfx_window(
+            p_PLATFORM_gfx_context, 
+            p_PLATFORM_gfx_window);
 
     debug_info("SDL::PLATFORM_open_ui, ui closed.");
 }

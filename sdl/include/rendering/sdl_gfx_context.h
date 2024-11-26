@@ -53,12 +53,6 @@ PLATFORM_Graphics_Window *SDL_get_main_graphics_window_from__gfx_context(
 }
 
 static inline
-PLATFORM_Graphics_Window *SDL_get_graphics_window__ui_from__gfx_contexT(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
-    return &p_PLATFORM_gfx_context->SDL_graphics_window__ui;
-}
-
-static inline
 bool SDL_is_gfx_window_of__this_ui_window_kind(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         UI_Window_Kind the_kind_of_window) {
@@ -72,6 +66,13 @@ UI_Tile_Map_Manager *SDL_get_p_ui_tile_map_manager_from__PLATFORM_gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
     return &p_PLATFORM_gfx_context
         ->SDL_ui_tile_map_manager;
+}
+
+static inline
+SDL_Gfx_Window_Manager *SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context
+        ->SDL_gfx_window_manager;
 }
 
 #endif
