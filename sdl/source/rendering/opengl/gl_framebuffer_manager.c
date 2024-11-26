@@ -5,16 +5,43 @@
 #include "rendering/opengl/glad/glad.h"
 #include <rendering/opengl/gl_framebuffer_manager.h>
 
+static inline
+GL_Framebuffer *GL_get_p_framebuffer_by__index_from__framebuffer_manager(
+        GL_Framebuffer_Manager *p_GL_framebuffer_manager,
+        Index__u32 index_of__GL_framebuffer) {
+    return &p_GL_framebuffer_manager
+        ->GL_framebuffers[index_of__GL_framebuffer];
+}
+
+static inline
+GL_Framebuffer **GL_get_p_ptr_framebuffer_by__index_from__stack_of__manager(
+        GL_Framebuffer_Manager *p_GL_framebuffer_manager,
+        Index__u32 index_of__GL_framebuffer) {
+    return &p_GL_framebuffer_manager
+        ->GL_ptr_array__framebuffer_stack[index_of__GL_framebuffer];
+}
+
 void GL_initialize_framebuffer_manager(
         GL_Framebuffer_Manager *p_GL_framebuffer_manager) {
+    p_GL_framebuffer_manager
+        ->index_of__framebuffer_on__stack = 0;
     for (Index__u16 index_of__GL_framebuffer = 0;
             index_of__GL_framebuffer < MAX_QUANTITY_OF__FRAMEBUFFERS;
             index_of__GL_framebuffer++) {
         GL_Framebuffer *p_GL_framebuffer =
-            &p_GL_framebuffer_manager->GL_framebuffers[index_of__GL_framebuffer];
+            GL_get_p_framebuffer_by__index_from__framebuffer_manager(
+                    p_GL_framebuffer_manager, 
+                    index_of__GL_framebuffer);
 
         GL_set_framebuffer_as__deallocated(
                 p_GL_framebuffer);
+
+        GL_Framebuffer **p_ptr_GL_framebuffer =
+            GL_get_p_ptr_framebuffer_by__index_from__stack_of__manager(
+                    p_GL_framebuffer_manager, 
+                    index_of__GL_framebuffer);
+
+        *p_ptr_GL_framebuffer = 0;
     }
 }
 
@@ -68,6 +95,50 @@ void GL_release_framebuffer_from__framebuffer_manager(
 
     GL_set_framebuffer_as__deallocated(
             p_GL_framebuffer);
+}
+
+void GL_push_framebuffer_onto__framebuffer_manager(
+        GL_Framebuffer_Manager *p_GL_framebuffer_manager,
+        GL_Framebuffer *p_GL_framebuffer) {
+#ifndef NDEBUG
+    uint index = 
+        p_GL_framebuffer
+        - p_GL_framebuffer_manager
+        ->GL_framebuffers
+        ;
+    if (index >=
+            MAX_QUANTITY_OF__FRAMEBUFFERS) {
+        debug_error("GL_push_framebuffer_onto__framebuffer_manager, p_GL_framebuffer is not allocated with this manager.");
+        return;
+    }
+#endif
+
+    if (GL_is_framebuffer_manager__stack__full(
+                p_GL_framebuffer_manager)) {
+        debug_error("GL_push_framebuffer_onto__framebuffer_manager, stack is full.");
+        return;
+    }
+
+    p_GL_framebuffer_manager
+        ->GL_ptr_array__framebuffer_stack[
+        p_GL_framebuffer_manager
+            ->index_of__framebuffer_on__stack++] =
+            p_GL_framebuffer
+            ;
+}
+
+void GL_pop_framebuffer_off_of__framebuffer_manager(
+        GL_Framebuffer_Manager *p_GL_framebuffer_manager) {
+    if (GL_is_framebuffer_manager__stack__empty(
+                p_GL_framebuffer_manager)) {
+        debug_error("GL_pop_frameubffer_off_of__frameubffer_manager, stack is empty.");
+        return;
+    }
+
+    p_GL_framebuffer_manager
+        ->GL_ptr_array__framebuffer_stack[
+        --p_GL_framebuffer_manager
+            ->index_of__framebuffer_on__stack] = 0;
 }
 
 void GL_dispose_framebuffer_manager(

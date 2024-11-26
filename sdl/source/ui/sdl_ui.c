@@ -6,6 +6,7 @@
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/texture.h"
+#include "ui/ui_manager.h"
 
 ///
 /// Opens the specified UI. Depending on the backend this

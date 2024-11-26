@@ -20,4 +20,22 @@ void GL_dispose_framebuffer_manager(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Framebuffer_Manager *p_GL_framebuffer_manager);
 
+static inline
+bool GL_is_framebuffer_manager__stack__full(
+        GL_Framebuffer_Manager *p_GL_framebuffer_manager) {
+    return p_GL_framebuffer_manager
+        ->index_of__framebuffer_on__stack+1
+        >= MAX_QUANTITY_OF__FRAMEBUFFERS
+        ;
+}
+
+static inline
+bool GL_is_framebuffer_manager__stack__empty(
+        GL_Framebuffer_Manager *p_GL_framebuffer_manager) {
+    return p_GL_framebuffer_manager
+        ->index_of__framebuffer_on__stack
+        == 0
+        ;
+}
+
 #endif

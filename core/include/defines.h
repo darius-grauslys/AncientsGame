@@ -1735,6 +1735,18 @@ typedef UI_Element UI_Container_Entries[
 /// and is instead apart of PLATFORM_Graphics_Window
 /// which is left to the backend to implement.
 ///
+/// Why? This is because by keeping a singleton UI_Manager
+/// in Game_t and designing everything around that, it
+/// then makes it difficult to seperate UI_Elements
+/// in different Gfx_Windows. Some PLATFORMs can support
+/// more than one window, some PLATFORMs don't even correlate
+/// UI_Elements to a Gfx_Window... it varies.
+///
+/// So it's best to delegate the reponsibility to PLATFORM.
+/// CORE logic should leverate PLATFORM_get_ui_manager_from__gfx_window(...)
+/// And if a PLATFORM doesn't keep UI_Managers in Gfx_Windows
+/// then it should constantly return the singleton.
+///
 typedef struct UI_Manager_t {
     Quantity__u8 quantity_of__ui_elements__quantity_u8;
     UI_Element ui_elements[UI_ELEMENT_MAXIMUM_QUANTITY_OF];

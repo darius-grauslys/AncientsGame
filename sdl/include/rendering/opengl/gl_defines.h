@@ -73,6 +73,9 @@ typedef struct GL_Framebuffer_t {
 
 typedef struct GL_Framebuffer_Manager_t {
     GL_Framebuffer GL_framebuffers[MAX_QUANTITY_OF__FRAMEBUFFERS];
+    GL_Framebuffer *GL_ptr_array__framebuffer_stack[
+        MAX_QUANTITY_OF__FRAMEBUFFERS];
+    Index__u32 index_of__framebuffer_on__stack;
 } GL_Framebuffer_Manager;
 
 typedef struct GL_Sprite_t {
