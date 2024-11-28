@@ -109,3 +109,17 @@ void GL_pop_viewport(
             (*p_GL_viewport__current)->width, 
             (*p_GL_viewport__current)->height);
 }
+
+void GL_refresh_viewport_on_top_of__viewport_stack(
+        GL_Viewport_Stack *p_GL_viewport_stack) {
+
+    GL_Viewport **p_GL_viewport__current =
+        &p_GL_viewport_stack
+        ->p_GL_viewport__current;
+
+    glViewport(
+            (*p_GL_viewport__current)->x, 
+            (*p_GL_viewport__current)->y, 
+            (*p_GL_viewport__current)->width, 
+            (*p_GL_viewport__current)->height);
+}

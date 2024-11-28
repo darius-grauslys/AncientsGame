@@ -6,6 +6,7 @@
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/texture.h"
 #include "sdl_defines.h"
+#include "ui/ui_tile_map.h"
 #include "ui/ui_tile_map_manager.h"
 #include "vectors.h"
 
@@ -151,7 +152,6 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
                         UI_Tile_Map_Size__Small);
             break;
         case TEXTURE_FLAG__SIZE_128x128:
-        case TEXTURE_FLAG__SIZE_256x256:
             p_PLATFORM_gfx_window
                 ->SDL_graphics_window__ui_tile_map__wrapper =
                 allocate_ui_tile_map_with__ui_tile_map_manager(
@@ -159,6 +159,7 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
                             p_PLATFORM_gfx_context), 
                         UI_Tile_Map_Size__Medium);
             break;
+        case TEXTURE_FLAG__SIZE_256x256:
         case TEXTURE_FLAG__SIZE_256x512:
         case TEXTURE_FLAG__SIZE_512x256:
         case TEXTURE_FLAG__SIZE_512x512:
@@ -170,6 +171,28 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
                         UI_Tile_Map_Size__Large);
             break;
     }
+
+    Texture_Flags texture_flags =
+        get_texture_flags_from__texture_allocation_specification(
+                p_texture_allocation_specification);
+
+    set_ui_tile_map__wrapper__utilized_size(
+            &p_PLATFORM_gfx_window
+            ->SDL_graphics_window__ui_tile_map__wrapper, 
+            get_length_of__texture_flag__width(
+                texture_flags)
+            / TILE_WIDTH__IN_PIXELS, 
+            get_length_of__texture_flag__height(
+                texture_flags)
+            / TILE_WIDTH__IN_PIXELS);
+
+    debug_info(">> SIZE: %d, %d",
+            get_length_of__texture_flag__width(
+                texture_flags)
+            / TILE_WIDTH__IN_PIXELS, 
+            get_length_of__texture_flag__height(
+                texture_flags)
+            / TILE_WIDTH__IN_PIXELS);
 
     return p_PLATFORM_gfx_window;
 }

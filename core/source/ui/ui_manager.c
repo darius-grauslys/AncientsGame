@@ -667,5 +667,56 @@ void swap_ui_element__children(
             p_ui_manager, 
             p_parent__two, 
             p_child__one);
+}
 
+void foreach_ui_element_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game,
+        f_Foreach_UI_Element f_foreach_ui_element) {
+    for (Index__u32 index_of__ui_element = 0;
+            index_of__ui_element
+            < UI_ELEMENT_MAXIMUM_QUANTITY_OF;
+            index_of__ui_element++) {
+        UI_Element *p_ui_element =
+            get_p_ui_element_by__index_from__ui_manager(
+                    p_ui_manager, 
+                    index_of__ui_element);
+
+        if (is_ui_element__allocated(p_ui_element)) {
+            f_foreach_ui_element(
+                    p_ui_manager,
+                    p_PLATFORM_gfx_window,
+                    p_game,
+                    p_ui_element);
+        }
+    }
+}
+
+void _f_render_ui_element_callback__ui_manager(
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game,
+        UI_Element *p_ui_element) {
+    if (!does_ui_element_have__render_handler(
+                p_ui_element)) {
+        return;
+    }
+
+    get_ui_element__render_handler(
+            p_ui_element)(
+                p_ui_element,
+                p_PLATFORM_gfx_window,
+                p_game);
+}
+
+void render_all_ui_elements_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game) {
+    foreach_ui_element_in__ui_manager(
+            p_ui_manager, 
+            p_PLATFORM_gfx_window,
+            p_game, 
+            _f_render_ui_element_callback__ui_manager);
 }

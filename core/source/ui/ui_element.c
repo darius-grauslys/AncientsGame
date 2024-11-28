@@ -2,13 +2,16 @@
 #include "debug/debug.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "platform.h"
 #include "platform_defaults.h"
 #include "ui/ui_button.h"
 #include "ui/ui_draggable.h"
 #include "ui/ui_slider.h"
+#include "ui/ui_tile_map.h"
 #include <ui/ui_element.h>
 #include <vectors.h>
 #include <game.h>
+#include <wctype.h>
 
 void initialize_ui_element(
         UI_Element *p_ui_element,
@@ -38,6 +41,7 @@ void initialize_ui_element(
     p_ui_element->m_ui_dragged_handler = 0;
     p_ui_element->m_ui_receive_drop_handler = 0;
     p_ui_element->m_ui_held_handler = 0;
+    p_ui_element->m_ui_render_handler = 0;
     p_ui_element->m_ui_dispose_handler = 
         m_ui_element__dispose_handler__default;
     p_ui_element->p_PLATFORM_sprite = 0;
@@ -195,11 +199,15 @@ void set_ui_tile_span_of__ui_element(
 const UI_Tile_Span *get_ui_tile_span_of__ui_element(
         UI_Element *p_ui_element,
         Quantity__u32 *p_width_in__tiles,
-        Quantity__u32 *p_height_in__tiles) {
+        Quantity__u32 *p_height_in__tiles,
+        Index__u32 *p_index_x__u32, 
+        Index__u32 *p_index_y__u32) {
     if (is_ui_element__using_sprite(
             p_ui_element)) {
         *p_width_in__tiles = 0;
         *p_height_in__tiles = 0;
+        *p_index_x__u32 = 0;
+        *p_index_y__u32 = 0;
         return 0;
     }
 
@@ -214,5 +222,46 @@ const UI_Tile_Span *get_ui_tile_span_of__ui_element(
         .height__quantity_u32
         / UI_TILE__HEIGHT_IN__PIXELS;
 
+    *p_index_x__u32 = 
+        (p_ui_element
+        ->ui_bounding_box__aabb
+        .position__3i32F4
+        .x__i32F4
+        / UI_TILE__WIDTH_IN__PIXELS)
+        - (*p_width_in__tiles >> 1);
+    *p_index_y__u32 =
+        (p_ui_element
+        ->ui_bounding_box__aabb
+        .position__3i32F4
+        .y__i32F4
+        / UI_TILE__HEIGHT_IN__PIXELS)
+        - (*p_height_in__tiles >> 1);
+
     return &p_ui_element->ui_tile_span;
+}
+
+void m_ui_render__element__tile_span(
+        UI_Element *p_ui_element,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game) {
+    Quantity__u32 width_of__ui_tile_span; 
+    Quantity__u32 height_of__ui_tile_span;
+    Index__u32 index_x__u32; 
+    Index__u32 index_y__u32;
+    const UI_Tile_Span *p_const_ui_tile_span =
+        get_ui_tile_span_of__ui_element(
+                p_ui_element,
+                &width_of__ui_tile_span,
+                &height_of__ui_tile_span,
+                &index_x__u32,
+                &index_y__u32);
+
+    generate_ui_span_in__ui_tile_map(
+            PLATFORM_get_tile_map__wrapper_from__gfx_window(
+                p_PLATFORM_gfx_window), 
+            p_const_ui_tile_span, 
+            width_of__ui_tile_span, 
+            height_of__ui_tile_span, 
+            index_x__u32, 
+            index_y__u32);
 }

@@ -116,11 +116,6 @@ void f_SDL_event_handler__GL_resize(
     width__fixed *= 32;
     height__fixed *= 32;
 
-    glViewport(
-            (width - width__fixed) / 2, (height - height__fixed) / 2,
-            width__fixed,
-            height__fixed);
-
     GL_Viewport_Stack *p_GL_viewport_stack =
         GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context);
@@ -133,6 +128,12 @@ void f_SDL_event_handler__GL_resize(
         width__fixed;
     p_GL_viewport_stack->p_GL_viewport__base->height =
         height__fixed;
+
+    if (GL_is_viewport_stack__only_the_base(
+                p_GL_viewport_stack)) {
+        GL_refresh_viewport_on_top_of__viewport_stack(
+                p_GL_viewport_stack);
+    }
 }
 
 void GL_initialize_rendering__worldspace(

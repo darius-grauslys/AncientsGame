@@ -1,6 +1,7 @@
 #ifndef SDL_GFX_WINDOW_H
 #define SDL_GFX_WINDOW_H
 
+#include "defines.h"
 #include "defines_weak.h"
 #include "vectors.h"
 #include <sdl_defines.h>
@@ -81,6 +82,13 @@ UI_Manager *SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     return &p_PLATFORM_gfx_window
         ->SDL_graphics_window__ui_manager;
+}
+
+static inline
+UI_Tile_Map__Wrapper SDL_get_tile_map__wrapper_from__PLATFORM_gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return p_PLATFORM_gfx_window
+        ->SDL_graphics_window__ui_tile_map__wrapper;
 }
 
 #endif

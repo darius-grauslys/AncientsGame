@@ -904,6 +904,12 @@ typedef struct Serializer_t Serializer;
 /// SECTION_ui
 ///
 
+typedef uint8_t UI_Tile_Map__Flags;
+typedef struct UI_Tile_Map__Wrapper_t UI_Tile_Map__Wrapper;
+typedef struct UI_Tile_Map__Small_t UI_Tile_Map__Small;
+typedef struct UI_Tile_Map__Medium_t UI_Tile_Map__Medium;
+typedef struct UI_Tile_Map__Large_t UI_Tile_Map__Large;
+
 typedef enum UI_Tile_Map_Size {
     UI_Tile_Map_Size__None = 0,
     UI_Tile_Map_Size__Small,
@@ -1020,6 +1026,8 @@ enum UI_Element_Kind {
     UI_Element_Kind__Draggable,
     UI_Element_Kind__Slider,
     UI_Element_Kind__Drop_Zone,
+    UI_Element_Kind__Background,
+    UI_Element_Kind__Unknown
 };
 
 ///

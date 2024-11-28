@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "platform.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_sprite.h"
 #include "rendering/texture.h"
@@ -89,3 +90,9 @@ UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
     return SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
             p_PLATFORM_gfx_window);
 }
+
+UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return SDL_get_tile_map__wrapper_from__PLATFORM_gfx_window(
+            p_PLATFORM_gfx_window);
+} 

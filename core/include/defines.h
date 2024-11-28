@@ -1582,15 +1582,15 @@ typedef struct UI_Tile_Map__Wrapper_t {
 typedef struct UI_Tile_Map__Small_t {
     UI_Tile_Map__Flags ui_tile_map__flags;
     UI_Tile_Raw ui_tile_data__small[
-        UI_TILE_MAP__LARGE__WIDTH
-            * UI_TILE_MAP__LARGE__HEIGHT];
+        UI_TILE_MAP__SMALL__WIDTH
+            * UI_TILE_MAP__SMALL__HEIGHT];
 } UI_Tile_Map__Small;
 
 typedef struct UI_Tile_Map__Medium_t {
     UI_Tile_Map__Flags ui_tile_map__flags;
     UI_Tile_Raw ui_tile_data__medium[
-        UI_TILE_MAP__LARGE__WIDTH
-            * UI_TILE_MAP__LARGE__HEIGHT];
+        UI_TILE_MAP__MEDIUM__WIDTH
+            * UI_TILE_MAP__MEDIUM__HEIGHT];
 } UI_Tile_Map__Medium;
 
 typedef struct UI_Tile_Map__Large_t {
@@ -1636,6 +1636,10 @@ typedef void (*m_UI_Dropped)(
         Game *p_game);
 typedef void (*m_UI_Held)(
         UI_Element *p_this_ui_element,
+        Game *p_game);
+typedef void (*m_UI_Render)(
+        UI_Element *p_this_ui_element,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game);
 
 typedef uint8_t UI_Flags__u8;
@@ -1698,6 +1702,8 @@ typedef struct UI_Element_t {
     m_UI_Receive_Drop       m_ui_receive_drop_handler;
     /// DO NOT INVOKE
     m_UI_Held               m_ui_held_handler;
+    /// DO NOT INVOKE
+    m_UI_Render             m_ui_render_handler;
     /// DO NOT INVOKE, DO NOT REMOVE FROM UI_MANAGER
     /// FROM WITHIN m_ui_dispose_handler!
     /// When implementing your own, be sure to
@@ -1729,6 +1735,12 @@ typedef struct UI_Element_t {
 
 typedef UI_Element UI_Container_Entries[
     UI_CONTAINER_PTR_ENTRIES_MAXIMUM_QUANTITY_OF];
+
+typedef void (*f_Foreach_UI_Element)(
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game,
+        UI_Element *p_ui_element);
 
 ///
 /// UI_Manager is not apart of core data structures,

@@ -2,11 +2,14 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "platform.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/texture.h"
+#include "ui/sdl_ui__background.h"
 #include "ui/ui_manager.h"
+#include "vectors.h"
 
 ///
 /// Opens the specified UI. Depending on the backend this
@@ -24,7 +27,7 @@ void PLATFORM_open_ui(
 
     initialize_texture_allocation_specification(
             &texture_alloc_spec, 
-            TEXTURE_FLAG__SIZE_512x512, 
+            TEXTURE_FLAG__SIZE_256x256, 
             SDL_get_main_graphics_window_from__gfx_context(
                 p_PLATFORM_gfx_context));
 
@@ -51,6 +54,66 @@ void PLATFORM_open_ui(
                 5;
         }
     }
+
+    UI_Manager *p_ui_manager =
+        PLATFORM_get_p_ui_manager_from__gfx_window(
+                p_PLATFORM_gfx_window__ui);
+
+    UI_Element *p_ui_element =
+        allocate_ui_element_from__ui_manager(
+                p_ui_manager);
+
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__background =
+        SDL_allocate_gfx_window(
+                p_PLATFORM_gfx_context, 
+                &texture_alloc_spec);
+
+    if (!p_PLATFORM_gfx_window__background) {
+        release__ui_element_from__ui_manager(
+                p_ui_manager, 
+                p_ui_element, 
+                p_game);
+        debug_error("SDL::PLATFORM_open_ui, TMP");
+        return;
+    }
+
+    SDL_initialize_ui_element_as__background(
+            p_ui_element, 
+            64, 
+            64, 
+            get_vector__3i32(
+                22, 88, 0), 
+            p_PLATFORM_gfx_window__background);
+
+    ui_tile_map__wrapper =
+        p_PLATFORM_gfx_window__background
+        ->SDL_graphics_window__ui_tile_map__wrapper;
+
+    //TODO: remove
+    for (int y=0;y<32;y++) {
+        for (int x=0;x<32;x++) {
+            ui_tile_map__wrapper.p_ui_tile_data[
+                x
+                + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
+                12;
+            if (y==31) {
+                ui_tile_map__wrapper.p_ui_tile_data[
+                    x
+                    + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
+                    22;
+            }
+            if (x==0) {
+                ui_tile_map__wrapper.p_ui_tile_data[
+                    x
+                    + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
+                    33;
+            }
+        }
+    }
+
+    SDL_compose_gfx_window(
+            p_game,
+            p_PLATFORM_gfx_window__background);
 
     SDL_compose_gfx_window(
             p_game,
@@ -93,6 +156,8 @@ void PLATFORM_update_ui(
             continue;
         }
 
+        // TODO: allow ui_elements to flag the gfx_window as having
+        // it's tile_map modified, and if so, recomposite the window.
         poll_ui_manager__update(
                 SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
                     p_PLATFORM_gfx_window),
@@ -100,6 +165,23 @@ void PLATFORM_update_ui(
         SDL_render_gfx_window(
                 p_game, 
                 p_PLATFORM_gfx_window);
+
+        UI_Element *p_ui_element =
+            get_p_ui_element_by__index_from__ui_manager(
+                    PLATFORM_get_p_ui_manager_from__gfx_window(
+                        p_PLATFORM_gfx_window), 
+                    0);
+
+        p_ui_element->ui_bounding_box__aabb
+            .position__3i32F4.x__i32F4++;
+        p_ui_element->ui_bounding_box__aabb
+            .position__3i32F4.y__i32F4++;
+
+
+        SDL_compose_gfx_window(
+                p_game,
+                p_PLATFORM_gfx_window);
+        return;
     }
 }
 

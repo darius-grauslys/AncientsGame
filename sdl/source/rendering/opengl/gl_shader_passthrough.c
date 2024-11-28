@@ -13,10 +13,10 @@ out vec2 TexCoord;\n\
 void main()\n\
 {\n\
     gl_Position = vec4(position, 1);\n\
-    TexCoord = vec2(uv_dimensions.x * \n\
-            (abs(uv_flip.x-uv.x) + uv_index.x),\n\
-            uv_dimensions.y * \n\
-            (abs(uv_flip.y-uv.y) + uv_index.y));\n\
+    TexCoord = vec2((uv_dimensions.x * \n\
+            (abs(uv_flip.x-uv.x)) + uv_index.x),\n\
+            (uv_dimensions.y * \n\
+            (abs(uv_flip.y-uv.y)) + uv_index.y));\n\
 }";
 
 const char *_source_shader_passthrough__fragment = " \n\
@@ -65,10 +65,41 @@ void initialize_shader_2d_as__shader_passthrough(
                 "uv_flip");
 }
 
-void GL_render_with__shader__passthrough(
+void GL_render_with__shader__passthrough_using__index_sampling(
         GL_Shader_2D *p_GL_shader__passthrough,
-        int x__uv,
-        int y__uv,
+        float x__uv,
+        float y__uv,
+        float width_of__uv,
+        float height_of__uv,
+        bool is_flipped_on__x,
+        bool is_flipped_on__y) {
+    glUniform2f(
+            p_GL_shader__passthrough->location_of__general_uniform_0,
+            x__uv * width_of__uv,
+            1.0f 
+            - (y__uv * height_of__uv)
+            - height_of__uv
+            );
+    glUniform2f(
+            p_GL_shader__passthrough->location_of__general_uniform_1,
+            width_of__uv,
+            height_of__uv);
+    glUniform2f(
+            p_GL_shader__passthrough->location_of__general_uniform_2,
+            (is_flipped_on__x)
+            ? 1.0
+            : 0.0,
+            (is_flipped_on__y)
+            ? 1.0
+            : 0.0);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void GL_render_with__shader__passthrough_using__coordinate_sampling(
+        GL_Shader_2D *p_GL_shader__passthrough,
+        float x__uv,
+        float y__uv,
         float width_of__uv,
         float height_of__uv,
         bool is_flipped_on__x,
@@ -76,7 +107,9 @@ void GL_render_with__shader__passthrough(
     glUniform2f(
             p_GL_shader__passthrough->location_of__general_uniform_0,
             x__uv,
-            y__uv
+            1.0f 
+            - y__uv
+            - height_of__uv
             );
     glUniform2f(
             p_GL_shader__passthrough->location_of__general_uniform_1,

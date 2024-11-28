@@ -1,6 +1,7 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+#include "defines.h"
 #include "platform_defines.h"
 #ifndef PLATFORM_DEFINES_H
 #error Cannot build AncientsGame without a backend implementation.
@@ -277,6 +278,9 @@ void PLATFORM_post_render(Game *game);
 ///
 
 UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+
+UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 ///

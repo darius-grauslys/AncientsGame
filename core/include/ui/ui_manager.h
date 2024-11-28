@@ -33,10 +33,6 @@ UI_Element *get_p_ui_element_by__index_from__ui_manager(
         debug_abort("get_p_ui_element_by__index_from__ui_manager, index of out bounds: %d", index_of__ui_element);
         return 0;
     }
-    if (!is_ui_element__allocated(&p_ui_manager->ui_elements[index_of__ui_element])) {
-        debug_abort("get_p_ui_element_by__index_from__ui_manager, index not allocated: %d", index_of__ui_element);
-        return 0;
-    }
 #endif
     return &p_ui_manager->ui_elements[index_of__ui_element];
 }
@@ -116,5 +112,16 @@ void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element__higher_priority,
         UI_Element *p_ui_element__lower_priortiy);
+
+void foreach_ui_element_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game,
+        f_Foreach_UI_Element f_foreach_ui_element);
+
+void render_all_ui_elements_in__ui_manager(
+        UI_Manager *p_ui_manager,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game);
 
 #endif

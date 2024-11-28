@@ -233,10 +233,10 @@ void GL_update_chunk(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
                             ->p_PLATFORM_texture_of__tilesheet_ground);
-                    GL_render_with__shader__passthrough(
+                    GL_render_with__shader__passthrough_using__index_sampling(
                             p_GL_shader__passthrough, 
                             index % 32, 
-                            31 - (index / 32), 
+                            (int)(index / 32), 
                             width_of__uv, 
                             height_of__uv,
                             false,
@@ -260,10 +260,10 @@ void GL_update_chunk(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
                             ->p_PLATFORM_texture_of__tilesheet_cover);
-                    GL_render_with__shader__passthrough(
+                    GL_render_with__shader__passthrough_using__index_sampling(
                             p_GL_shader__passthrough, 
                             index % 32, 
-                            31 - (index / 32), 
+                            (int)(index / 32), 
                             width_of__uv, 
                             height_of__uv,
                             does_wall_adjacency_require__vflip(
@@ -288,10 +288,10 @@ void GL_update_chunk(
                             p_PLATFORM_gfx_context, 
                             p_GL_chunk_texture_manager
                             ->p_PLATFORM_texture_of__tilesheet_cover);
-                    GL_render_with__shader__passthrough(
+                    GL_render_with__shader__passthrough_using__index_sampling(
                             p_GL_shader__passthrough, 
                             index % 32, 
-                            31 - (index / 32), 
+                            (int)(index / 32), 
                             width_of__uv, 
                             height_of__uv,
                             does_wall_adjacency_require__vflip(

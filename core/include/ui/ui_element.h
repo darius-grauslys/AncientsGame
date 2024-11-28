@@ -45,7 +45,9 @@ void set_ui_tile_span_of__ui_element(
 const UI_Tile_Span *get_ui_tile_span_of__ui_element(
         UI_Element *p_ui_element,
         Quantity__u32 *p_width_in__tiles,
-        Quantity__u32 *p_height_in__tiles);
+        Quantity__u32 *p_height_in__tiles,
+        Index__u32 *p_index_x__u32, 
+        Index__u32 *p_index_y__u32);
 
 void set_position_3i32_of__ui_element(
         UI_Element *p_ui_element,
@@ -160,6 +162,13 @@ bool is_ui_element_of__this_kind(
         enum UI_Element_Kind the_kind_of_ui_element) {
     return p_ui_element->the_kind_of_ui_element__this_is
         == the_kind_of_ui_element;
+}
+
+static inline
+UI_Flags__u8 get_ui_element__flags(
+        UI_Element *p_ui_element) {
+    return p_ui_element
+        ->ui_flags;
 }
 
 static inline
@@ -381,6 +390,14 @@ void set_ui_element__held_handler(
 }
 
 static inline
+void set_ui_element__render_handler(
+        UI_Element *p_ui_element,
+        m_UI_Render m_ui_render_handler) {
+    p_ui_element->m_ui_render_handler =
+        m_ui_render_handler;
+}
+
+static inline
 void set_ui_element__size(
         UI_Element *p_ui_element,
         Quantity__u32 width, Quantity__u32 height) {
@@ -458,6 +475,20 @@ void clamp_p_vector_3i32_to__ui_element(
     clamp_p_vector_3i32_to__hitbox(
             &p_ui_element->ui_bounding_box__aabb, 
             p_position__3i32);
+}
+
+static inline
+m_UI_Render get_ui_element__render_handler(
+        UI_Element *p_ui_element) {
+    return p_ui_element
+        ->m_ui_render_handler;
+}
+
+static inline
+bool does_ui_element_have__render_handler(
+        UI_Element *p_ui_element) {
+    return get_ui_element__render_handler(
+            p_ui_element);
 }
 
 #endif

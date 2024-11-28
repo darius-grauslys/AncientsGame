@@ -19,6 +19,7 @@
 #include "rendering/sdl_texture_strings.h"
 #include "rendering/texture.h"
 #include "rendering/sdl_texture.h"
+#include "ui/ui_manager.h"
 #include "vectors.h"
 
 void GL_allocate_gfx_window(
@@ -95,6 +96,10 @@ void GL_compose_gfx_window(
         return;
     }
 
+    GL_Framebuffer_Manager *p_GL_framebuffer_manager =
+        GL_get_p_framebuffer_manager_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context);
+
     PLATFORM_Texture *p_PLATFORM_texture__ui_tilesheet =
         SDL_get_texture_from__texture_manager(
                 SDL_get_p_texture_manager_from__gfx_context(
@@ -105,7 +110,8 @@ void GL_compose_gfx_window(
     glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
 
     glClearColor(0.0, 0.0, 0.0, 0.0);
-    GL_use_framebuffer_as__target(
+    GL_push_framebuffer_onto__framebuffer_manager(
+            p_GL_framebuffer_manager,
             p_GL_framebuffer);
     GL_bind_texture_to__framebuffer(
             p_GL_framebuffer, 
@@ -161,7 +167,7 @@ void GL_compose_gfx_window(
                     TILE_WIDTH__IN_PIXELS, 
                     TILE_WIDTH__IN_PIXELS);
 
-            UI_Tile_Raw p_ui_tile_raw =
+            UI_Tile_Raw ui_tile_raw =
                 ui_tile_map__wrapper
                 .p_ui_tile_data[
                 index_of__x_tile
@@ -169,10 +175,10 @@ void GL_compose_gfx_window(
                             - 1 - index_of__y_tile) 
                     * ui_tile_map__wrapper.width_of__ui_tile_map];
 
-            GL_render_with__shader__passthrough(
+            GL_render_with__shader__passthrough_using__index_sampling(
                     p_GL_shader__passthrough, 
-                    p_ui_tile_raw % 32, 
-                    31 - (p_ui_tile_raw / 32), 
+                    ui_tile_raw % 32, 
+                    (int)(ui_tile_raw / 32), 
                     width_of__uv, 
                     height_of__uv,
                     false,
@@ -182,7 +188,36 @@ void GL_compose_gfx_window(
         }
     }
 
-    GL_unbind_framebuffer();
+    GL_push_viewport(
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context), 
+            i32F4_to__i32(
+                p_PLATFORM_graphics_window
+                ->SDL_position_of__graphics_window
+                .x__i32F4), 
+            i32F4_to__i32(
+                p_PLATFORM_graphics_window
+                ->SDL_position_of__graphics_window
+                .y__i32F4), 
+            p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture
+            ->width,
+            p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture
+            ->height);
+
+    render_all_ui_elements_in__ui_manager(
+            SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
+                p_PLATFORM_graphics_window), 
+            p_PLATFORM_graphics_window,
+            p_game);
+
+    GL_pop_viewport(
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context));
+
+    GL_pop_framebuffer_off_of__framebuffer_manager(
+            p_GL_framebuffer_manager);
 }
 
 void GL_render_gfx_window(
@@ -194,51 +229,97 @@ void GL_render_gfx_window(
                 p_game);
 
     // TODO: make and use shader_string__ui along with it's shader.
-    GL_Shader_2D *p_GL_shader =
+    GL_Shader_2D *p_GL_shader__passthrough =
         GL_get_shader_from__shader_manager(
                 GL_get_p_shader_manager_from__PLATFORM_gfx_context(
                     get_p_PLATFORM_gfx_context_from__game(
                         p_game)), 
-                shader_string__chunk);
+                shader_string__passthrough);
 
-    if (!p_GL_shader) {
+    if (!p_GL_shader__passthrough) {
         debug_error("GL_render_gfx_window, p_GL_shader == 0.");
         return;
     }
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    GL_Gfx_Sub_Context *p_GL_gfx_sub_context =
-        GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context);
-    use_vertex_object(&p_GL_gfx_sub_context->GL_vertex_object__unit_square);
-
-    use_shader_2d(p_GL_shader);
-    // TODO: remove this comment later, we will keep this proj here.
-    float projection[16] = {
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    };
-    GL_link_projection_to__shader(
-            p_GL_shader, 
-            projection);
-    GL_link_translation_to__shader(
-            p_GL_shader,
-            add_vectors__3i32F4(
-                get_vector__3i32F4_using__i32(
-                -4, -4, 0),
-                p_PLATFORM_graphics_window
-                ->SDL_position_of__graphics_window));
-    GL_link_model_data_to__shader(
-            p_GL_shader, 
-            VECTOR__3i32F4__0_0_0, 
-            i32_to__i32F4(1));
+    use_shader_2d(p_GL_shader__passthrough);
     PLATFORM_use_texture(
             p_PLATFORM_gfx_context,
             p_PLATFORM_graphics_window
             ->p_SDL_graphics_window__texture);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    float width_of__uv = 1.0f;
+    float height_of__uv = 1.0f;
+
+    float x = 0, y = 0;
+
+    if (!GL_is_viewport_stack__only_the_base(
+                GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                    p_PLATFORM_gfx_context))) {
+        GL_Viewport *p_GL_viewport =
+            GL_peek_viewport_stack(
+                    GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                        p_PLATFORM_gfx_context));
+
+        if (p_GL_viewport->width
+                < p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture
+                ->width) {
+            width_of__uv =
+                (float)p_GL_viewport
+                ->width 
+                / (float)p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture
+                ->width
+                ;
+        }
+
+        if (p_GL_viewport->height
+                < p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture
+                ->height) {
+            height_of__uv =
+                (float)p_GL_viewport
+                ->height 
+                / (float)p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture
+                ->height
+                ;
+        }
+
+        x = p_GL_viewport->x;
+        y = 
+            p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture
+                ->height
+            - p_GL_viewport->y
+            - p_GL_viewport->height
+            ;
+
+        x /= (float)p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture
+            ->width
+            ;
+        y /= (float)p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture
+            ->height
+            ;
+
+        // TODO:    this makes the most sense right now
+        //          as the above manipulations although deemed
+        //          necessary (from lack of planning... rushing...)
+        //          are not usable for our purposes in UI.
+        x = 0;
+        y = 0;
+    }
+
+    GL_render_with__shader__passthrough_using__coordinate_sampling(
+            p_GL_shader__passthrough, 
+            x,
+            y, 
+            width_of__uv, 
+            height_of__uv,
+            false,
+            false);
 }
 
 void GL_release_gfx_window(
