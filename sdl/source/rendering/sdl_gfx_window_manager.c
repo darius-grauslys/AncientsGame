@@ -1,11 +1,14 @@
 #include "rendering/sdl_gfx_window_manager.h"
 #include "defines.h"
 #include "defines_weak.h"
+#include "game.h"
+#include "platform.h"
 #include "platform_defines.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/texture.h"
 #include "sdl_defines.h"
+#include "ui/ui_manager.h"
 #include "ui/ui_tile_map.h"
 #include "ui/ui_tile_map_manager.h"
 #include "vectors.h"
@@ -198,8 +201,11 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
 }
 
 void SDL_release_gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context = 
+        get_p_PLATFORM_gfx_context_from__game(
+                p_game);
 
     f_SDL_Release_Gfx_Window f_SDL_release_gfx_window =
         p_PLATFORM_gfx_context
@@ -224,6 +230,11 @@ void SDL_release_gfx_window(
                 p_PLATFORM_gfx_context), 
             p_PLATFORM_gfx_window
             ->SDL_graphics_window__ui_tile_map__wrapper);
+
+    release_all__ui_elements_from__ui_manager(
+            PLATFORM_get_p_ui_manager_from__gfx_window(
+                p_PLATFORM_gfx_window), 
+            p_game);
 
     SDL_release_PLATFORM_gfx_window_from__manager(
             SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
@@ -264,7 +275,7 @@ Signed_Quantity__i32 SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
             continue;
         }
 
-        if (quantity_of__gfx_windows+1
+        if (quantity_of__gfx_windows
                 >= size_of__ptr_buffer) {
             return -1;
         }

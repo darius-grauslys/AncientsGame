@@ -37,6 +37,9 @@ void SDL_initialize_ui_element_as__background(
     set_ui_element__render_handler(
             p_ui_background, 
             m_SDL_render__ui__background);
+    set_ui_element__dispose_handler(
+            p_ui_background, 
+            m_SDL_dispose__ui__background);
 }
 
 ///
@@ -52,8 +55,7 @@ void m_SDL_dispose__ui__background(
         ;
 
     SDL_release_gfx_window(
-            get_p_PLATFORM_gfx_context_from__game(
-                p_game), 
+            p_game,
             p_PLATFORM_gfx_window);
 }
 

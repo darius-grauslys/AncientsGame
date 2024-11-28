@@ -211,7 +211,7 @@ void PLATFORM_close_ui(
     }
 
     SDL_release_gfx_window(
-            p_PLATFORM_gfx_context, 
+            p_game, 
             p_PLATFORM_gfx_window);
 
     debug_info("SDL::PLATFORM_open_ui, ui closed.");

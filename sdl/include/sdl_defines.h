@@ -93,6 +93,8 @@ typedef void (*f_SDL_Event_Handler)(
 
 typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
+typedef void (*f_SDL_Render_World)(
+        Game *p_game);
 
 typedef void (*f_SDL_Allocate_Gfx_Window)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -218,6 +220,7 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 
     f_SDL_Initialize_Rendering__Worldspace
                                         f_SDL_initialize_rendering__worldspace;
+    f_SDL_Render_World                  f_SDL_render_world;
 
     f_SDL_Allocate_Gfx_Window           f_SDL_allocate_gfx_window;
     f_SDL_Release_Gfx_Window            f_SDL_release_gfx_window;

@@ -5,6 +5,7 @@
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_entity.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
+#include "rendering/opengl/gl_render_world.h"
 #include "rendering/opengl/gl_sprite.h"
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
@@ -93,6 +94,9 @@ bool _SDL_link_opengl_3_0(
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_initialize_rendering__worldspace =
         GL_initialize_rendering__worldspace;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_render_world =
+        GL_render_world;
 
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_allocate_gfx_window =

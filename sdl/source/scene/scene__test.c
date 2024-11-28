@@ -14,6 +14,7 @@
 #include "rendering/opengl/gl_vertex_object.h"
 #include "rendering/sdl_chunk.h"
 #include "rendering/sdl_gfx_context.h"
+#include "rendering/sdl_render_world.h"
 #include "sdl_defines.h"
 #include "vectors.h"
 #include "world/serialization/world_directory.h"
@@ -91,58 +92,21 @@ void m_enter_scene_handler_as__test(
             get_p_PLATFORM_gfx_context_from__game(p_game),
             get_p_chunk_manager_from__game(p_game));
 
-    Chunk_Manager *p_chunk_manager =
-        get_p_chunk_manager_from__game(p_game);
-
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         manage_game__pre_render(p_game);
-
-        p_game->p_PLATFORM_gfx_context->p_active_camera
-            ->m_camera_handler(
-                    p_game->p_PLATFORM_gfx_context->p_active_camera,
-                    p_game);
-
-        Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
-            p_chunk_manager->p_most_north_western__chunk_map_node;
-        Chunk_Manager__Chunk_Map_Node *p_current_sub__chunk_map_node;
-
-        for (uint8_t y=0; 
-                y 
-                < GFX_CONTEXT__RENDERING_HEIGHT__IN_CHUNKS;
-                y++) {
-            p_current_sub__chunk_map_node =
-                p_current__chunk_map_node;
-            for (uint8_t x=0; 
-                    x 
-                    < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
-                    x++) {
-                PLATFORM_render_chunk(
-                        get_p_PLATFORM_gfx_context_from__game(p_game),
-                        p_current_sub__chunk_map_node);
-
-                p_current_sub__chunk_map_node =
-                    p_current_sub__chunk_map_node->p_east__chunk_map_node;
-            }
-            p_current__chunk_map_node =
-                p_current__chunk_map_node->p_south__chunk_map_node;
-        }
+        SDL_render_world(p_game);
 
         if (is_input__consume_released(
                     get_p_input_from__game(p_game))) {
             save_world(p_game);
-            // Hearts_Damaging_Specifier hearts_damaging_specifier;
-            // hearts_damaging_specifier.hearts_damaging__flags =
-            //     HEARTS_DAMAGING_FLAG__IS_CHAOS;
-            // hearts_damaging_specifier.quantity_of__damage = 20;
-            // invoke_action__apply_heart_damage_to__entity(
-            //         p_game, 
-            //         get_p_local_player_from__game(p_game), 
-            //         get_p_local_player_from__game(p_game), 
-            //         &hearts_damaging_specifier);
         }
-
-        manage_world(p_game);
+        if (is_input__game_settings_released(
+                    get_p_input_from__game(p_game))) {
+            PLATFORM_close_ui(
+                    p_game, 
+                    UI_Window_Kind__Unknown);
+        }
         manage_game__post_render(p_game);
     }
 }

@@ -110,8 +110,13 @@ void f_SDL_event_handler__GL_resize(
     i32 width  = p_PLATFORM_gfx_context->width_of__sdl_window;
     i32 height = p_PLATFORM_gfx_context->height_of__sdl_window;
 
-    i32 width__fixed = width / 32;
-    i32 height__fixed = width__fixed / 8 * 6;
+    i32 minima = (width > height)
+        ? height
+        : width
+        ;
+
+    i32 width__fixed = minima / 32;
+    i32 height__fixed = width__fixed;
 
     width__fixed *= 32;
     height__fixed *= 32;
@@ -119,6 +124,10 @@ void f_SDL_event_handler__GL_resize(
     GL_Viewport_Stack *p_GL_viewport_stack =
         GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context);
+
+    debug_info("RESIZE: %d, %d",
+            width__fixed,
+            height__fixed);
 
     p_GL_viewport_stack->p_GL_viewport__base->x =
         (width - width__fixed) / 2;

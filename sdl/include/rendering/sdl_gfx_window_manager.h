@@ -21,7 +21,7 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
             *p_texture_allocation_specification);
 
 void SDL_release_gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 ///

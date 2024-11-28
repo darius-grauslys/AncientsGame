@@ -552,7 +552,7 @@ void release_all__ui_elements_from__ui_manager(
             ui_index++) {
         UI_Element **p_ui_element_ptr = 
             &p_ui_manager->ui_element_ptrs[ui_index];
-        if (!p_ui_element_ptr) {
+        if (!p_ui_element_ptr || !*p_ui_element_ptr) {
             return;
         }
 
