@@ -30,6 +30,13 @@ void NDS_set_background_priority(
         uint32_t priority);
 
 static inline
+u32 NDS_get_background__priority(
+        NDS_Background *p_NDS_background) {
+    return p_NDS_background
+        ->priority;
+}
+
+static inline
 bool NDS_does_background_have__enough_tiles_in__reserve(
         NDS_Background *p_NDS_background,
         Quantity__u16 quantity_of__tiles_to_reserve) {

@@ -6,6 +6,7 @@
 #include "ui/game/nds_ui_window__game__trade.h"
 #include "ui/nds_ui__equipment.h"
 #include "ui/nds_ui__inventory_column.h"
+#include "ui/ui_inventory_column.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
 #include "world/chunk_manager.h"
@@ -54,9 +55,11 @@ void NDS_open_ui__trade(
                 p_ui_manager, 
                 NDS_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62);
 
-    NDS_load_ui_inventory_column_for__inventory(
-            p_game,
-            p_ui_element__inventory_column__player,
+    allocate_ui_inventory_column_into__ui_element_container(
+            p_game, 
+            &get_p_PLATFORM_gfx_context_from__game(p_game)
+            ->graphics_windows__sub[1], 
+            p_ui_element__inventory_column__player, 
             p_inventory__player);
 
     UI_Element *p_ui_element__inventory_column__container =
@@ -64,8 +67,10 @@ void NDS_open_ui__trade(
                 p_ui_manager, 
                 NDS_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8);
 
-    NDS_load_ui_inventory_column_for__inventory(
-            p_game,
-            p_ui_element__inventory_column__container,
+    allocate_ui_inventory_column_into__ui_element_container(
+            p_game, 
+            &get_p_PLATFORM_gfx_context_from__game(p_game)
+            ->graphics_windows__sub[1], 
+            p_ui_element__inventory_column__container, 
             p_inventory__container);
 }

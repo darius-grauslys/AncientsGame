@@ -4,6 +4,8 @@
 #include "ui/game/nds_ui_window__game__equip.h"
 #include "ui/nds_ui__equipment.h"
 #include "ui/nds_ui__inventory_column.h"
+#include "ui/ui_inventory_column.h"
+#include "ui/ui_inventory_equipment.h"
 #include "ui/ui_manager.h"
 #include "nds_game.h"
 
@@ -47,13 +49,17 @@ void NDS_open_ui__equip(
                 p_ui_manager,
                 NDS_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
 
-    NDS_load_ui_inventory_column_for__inventory(
-            p_game,
-            p_ui_element__inventory_column,
+    allocate_ui_inventory_column_into__ui_element_container(
+            p_game, 
+            &get_p_PLATFORM_gfx_context_from__game(p_game)
+            ->graphics_windows__sub[1], 
+            p_ui_element__inventory_column, 
             p_inventory);
 
-    NDS_load_ui_equipment_column_for__equipment(
+    allocate_ui_equipment_into__ui_element_container(
             p_game, 
+            &get_p_PLATFORM_gfx_context_from__game(p_game)
+            ->graphics_windows__sub[1], 
             p_ui_element__equipment_column, 
             &p_entity__local_player->equipment);
 }

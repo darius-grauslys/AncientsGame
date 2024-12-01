@@ -4,6 +4,7 @@
 #include "nds/arm9/video.h"
 #include "nds/dma.h"
 #include "rendering/font/typer.h"
+#include "rendering/nds_gfx_window.h"
 #include "rendering/nds_sprite.h"
 #include "rendering/nds_sprite_manager.h"
 #include "rendering/sprite.h"
@@ -48,6 +49,24 @@ void NDS_initialize_backgrounds(
     }
 }
 
+static inline
+void NDS_initialize_PLATFORM_gfx_windows_for__background(
+        PLATFORM_Graphics_Window *a_PLATFORM_gfx_windows,
+        NDS_Backgrounds a_NDS_backgrounds,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        OamState *p_oam_state) {
+    for (Index__u8 index_of__background = 0;
+            index_of__background 
+            < NDS_QUANTITY_OF__BACKGROUNDS_PER__ENGINE;
+            index_of__background++) {
+        NDS_initialize_gfx_window(
+                &a_PLATFORM_gfx_windows[index_of__background],
+                p_PLATFORM_gfx_context,
+                &a_NDS_backgrounds[index_of__background],
+                p_oam_state);
+    }
+}
+
 void NDS_initialize_gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
     videoSetMode(MODE_0_2D);
@@ -63,6 +82,22 @@ void NDS_initialize_gfx_context(
             p_PLATFORM_gfx_context
             ->backgrounds__sub);
 
+    NDS_initialize_PLATFORM_gfx_windows_for__background(
+            p_PLATFORM_gfx_context
+            ->graphics_windows__main, 
+            p_PLATFORM_gfx_context
+            ->backgrounds__main, 
+            p_PLATFORM_gfx_context, 
+            &oamMain);
+
+    NDS_initialize_PLATFORM_gfx_windows_for__background(
+            p_PLATFORM_gfx_context
+            ->graphics_windows__sub, 
+            p_PLATFORM_gfx_context
+            ->backgrounds__sub, 
+            p_PLATFORM_gfx_context, 
+            &oamSub);
+
     initialize_typer_with__font(
             &p_PLATFORM_gfx_context->typers[0],
             0, 0,
@@ -76,19 +111,18 @@ void NDS_initialize_gfx_context(
             0, 0,
             &_font_small);
 
-    p_PLATFORM_gfx_context
-        ->graphics_window__main.p_PLATFORM_gfx_context = 
-        p_PLATFORM_gfx_context;
-    p_PLATFORM_gfx_context
-        ->graphics_window__main.p_oam_state =
-            &oamMain;
-
-    p_PLATFORM_gfx_context
-        ->graphics_window__sub.p_PLATFORM_gfx_context = 
-        p_PLATFORM_gfx_context;
-    p_PLATFORM_gfx_context
-        ->graphics_window__sub.p_oam_state = 
-            &oamSub;
+    NDS_initialize_gfx_window(
+            &p_PLATFORM_gfx_context
+            ->graphics_window__main, 
+            p_PLATFORM_gfx_context, 
+            0, 
+            &oamMain);
+    NDS_initialize_gfx_window(
+            &p_PLATFORM_gfx_context
+            ->graphics_window__sub, 
+            p_PLATFORM_gfx_context, 
+            0, 
+            &oamSub);
 
     initialize_ui_manager(
             NDS_get_p_ui_manager_from__PLATFORM_gfx_context(

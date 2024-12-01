@@ -221,6 +221,7 @@ typedef NDS_Background NDS_Backgrounds[
 typedef struct PLATFORM_Graphics_Window_t {
     Game_Action associated_game_action;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    NDS_Background *p_NDS_background_associated_to__this_window;
     OamState *p_oam_state;
 } PLATFORM_Graphics_Window;
 
@@ -231,6 +232,9 @@ typedef struct PLATFORM_Gfx_Context_t {
 
     NDS_Backgrounds backgrounds__main;
     NDS_Backgrounds backgrounds__sub;
+
+    PLATFORM_Graphics_Window graphics_windows__main[4];
+    PLATFORM_Graphics_Window graphics_windows__sub[4];
 
     PLATFORM_Graphics_Window graphics_window__main;
     PLATFORM_Graphics_Window graphics_window__sub;

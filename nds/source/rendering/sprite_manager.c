@@ -3,6 +3,7 @@
 #include "defines_weak.h"
 #include "nds/arm9/sprite.h"
 #include "platform.h"
+#include "rendering/nds_gfx_window.h"
 #include "rendering/nds_sprite.h"
 #include "rendering/sprite.h"
 #include "rendering/texture.h"
@@ -101,6 +102,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                     ->the_kind_of__sprite_allocation);
             return 0;
         case Sprite_Allocation_Kind__Graphics_Pointer:
+            ;
             PLATFORM_Texture *p_PLATFORM_texture =
                 PLATFORM_allocate_texture(
                         p_PLATFORM_gfx_context,
@@ -130,6 +132,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                         p_sprite_allocation_specification);
             break;
         case Sprite_Allocation_Kind__Particle:
+            ;
             //TODO: bounds check the enum
             enum Particle_Kind the_kind_of__particle =
                 p_sprite_allocation_specification
@@ -142,6 +145,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
                             p_sprite_allocation_specification);
             break;
         case Sprite_Allocation_Kind__Entity:
+            ;
             //TODO: bounds check the enum
             enum Entity_Kind the_kind_of__entity =
                 p_sprite_allocation_specification
@@ -195,6 +199,13 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
         return 0;
     }
 #endif
+
+    NDS_set_priority_of__PLATFORM_sprite(
+            p_PLATFORM_sprite, 
+            NDS_get_background_priortiy_of__PLATFORM_gfx_window(
+                p_sprite_allocation_specification
+                ->texture_allocation_specification
+                .p_PLATFORM_graphics_window));
 
     PLATFORM_update_sprite(p_PLATFORM_sprite);
 
