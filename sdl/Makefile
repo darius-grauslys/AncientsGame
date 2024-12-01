@@ -12,8 +12,15 @@ include $(BASE_DIR)/core/Makefile.include
 export SOURCE_SDL := $(CURDIR)/source
 
 export CFILES_SDL != realpath --relative-to=$(SOURCE_SDL) $$(find $(SOURCE_SDL) -name *.c)
+
+export SHARED_SPRITE_FILES := $(foreach sprite_dir,$(SPRITE_DIRS),$(sprite_dir)/GFX_$(shell basename $(sprite_dir)).o)
+
 export OFILES_SDL := $(CFILES_SDL:.c=.o)
-export OFILES := $(OFILES_CORE) $(OFILES_SDL)
+export OFILES := $(SPRITE_FILES:.png=.o) \
+	$(SHARED_SPRITE_FILES) \
+	$(OFILES_CORE) $(OFILES_SDL)
+
+export CFLAGS := -march=$(shell uname -m | sed "s/_/-/")
 
 export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/sdl/include
 export LIBS		:= -lm -ldl -lGL -lGLEW -lSDL2 -lcglm
@@ -34,7 +41,7 @@ export DEPSDIR := $(BUILD)
 export INCLUDE := \
   $(foreach dir,$(INCLUDES),-I$(dir)) \
   $(foreach dir,$(LIBDIRS),-I$(dir)/include) \
-  -I$(ASSETS) \
+  -I$(BUILD)/$(ASSETS)\
   -I$(BUILD)
 
 export LIBPATHS := $(foreach dir,$(LIBDIRS),-L$(dir)/lib)
@@ -57,5 +64,23 @@ $(OFILES_SDL):
 		-o $(BUILD)/$@ -c $(SOURCE_CORE)/$(@:.o=.c)" $(BUILD)/$@
 
 include $(BASE_DIR)/core/Makefile.build
+
+$(SPRITE_DIRS): 
+	@mkdir -p $@
+	@cd $@ && grit $(shell find $(BASE_DIR)/core/$@ -iname *.png | sort) \
+		-ff$(BASE_DIR)/nds/$@/$(shell basename $@).grit
+$(SHARED_SPRITE_FILES):
+	@sed -i "s/@.*$$/\n/g" $(basename $@).s     # TODO: these sed calls are a HACK.
+	@sed -i "s/\.word/.long/g" $(basename $@).s
+	@cd $(shell dirname $@) && $(CC) $(CFLAGS) -c $(shell basename $(basename $@)).s -o $(shell basename $(basename $@)).o
+
+#---------------------------------------------------------------------------------
+$(SPRITE_FILES:.png=.o) : $(SPRITE_DIRS) $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file)) 
+	@sed -i "s/@.*$$/\n/g" $(basename $@).s
+	@sed -i "s/\.word/.long/g" $(basename $@).s
+	@$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
+	@$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) -x assembler-with-cpp $(ASFLAGS) \
+		-c $(basename $@).s -o $@" $(basename $@).s
+#---------------------------------------------------------------------------------
 
 endif

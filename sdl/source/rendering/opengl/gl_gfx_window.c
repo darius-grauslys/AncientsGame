@@ -160,13 +160,6 @@ void GL_compose_gfx_window(
                 index_of__x_tile 
                 < ui_tile_map__wrapper.width_of__ui_tile_map;
                 index_of__x_tile++) {
-            GL_push_viewport(
-                    p_GL_viewport_stack, 
-                    index_of__x_tile * TILE_WIDTH__IN_PIXELS, 
-                    index_of__y_tile * TILE_WIDTH__IN_PIXELS, 
-                    TILE_WIDTH__IN_PIXELS, 
-                    TILE_WIDTH__IN_PIXELS);
-
             UI_Tile_Raw ui_tile_raw =
                 ui_tile_map__wrapper
                 .p_ui_tile_data[
@@ -174,6 +167,16 @@ void GL_compose_gfx_window(
                     + (ui_tile_map__wrapper.width_of__ui_tile_map 
                             - 1 - index_of__y_tile) 
                     * ui_tile_map__wrapper.width_of__ui_tile_map];
+            if (!ui_tile_raw)
+                continue;
+            ui_tile_raw--;
+
+            GL_push_viewport(
+                    p_GL_viewport_stack, 
+                    index_of__x_tile * TILE_WIDTH__IN_PIXELS, 
+                    index_of__y_tile * TILE_WIDTH__IN_PIXELS, 
+                    TILE_WIDTH__IN_PIXELS, 
+                    TILE_WIDTH__IN_PIXELS);
 
             GL_render_with__shader__passthrough_using__index_sampling(
                     p_GL_shader__passthrough, 

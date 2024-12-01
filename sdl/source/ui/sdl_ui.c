@@ -10,6 +10,8 @@
 #include "ui/sdl_ui__background.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
+#include "assets/ui/default/ui_map_trade.h"
+#include "assets/ui/default/ui_map_equip.h"
 
 ///
 /// Opens the specified UI. Depending on the backend this
@@ -45,15 +47,10 @@ void PLATFORM_open_ui(
         p_PLATFORM_gfx_window__ui
         ->SDL_graphics_window__ui_tile_map__wrapper;
 
-    //TODO: remove
-    for (int y=8;y<16+8;y++) {
-        for (int x=8;x<16+8;x++) {
-            ui_tile_map__wrapper.p_ui_tile_data[
-                x
-                + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
-                5;
-        }
-    }
+    memcpy(
+            ui_tile_map__wrapper.p_ui_tile_data,
+            ui_map_equipMap,
+            sizeof(ui_map_equipMap));
 
     UI_Manager *p_ui_manager =
         PLATFORM_get_p_ui_manager_from__gfx_window(

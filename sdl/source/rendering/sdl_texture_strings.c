@@ -8,7 +8,7 @@ SDL_Texture_String__Const SDL_texture_string__tilesheet_ground =
     "tilesheet_ground.png";
 
 SDL_Texture_String__Const SDL_texture_string__tilesheet_ui =
-    "ui_tileset_default.png";
+    "_ui_tileset_default.png";
 
 SDL_Texture_String__Const SDL_texture_string__player =
     "player.png";
