@@ -27,6 +27,9 @@ void initialize_ui_element_as__slider(
     set_ui_element__dragged_handler(
             p_ui_slider, 
             m_ui_dragged_handler);
+    set_ui_element__render_handler(
+            p_ui_slider, 
+            m_ui_slider__render_handler__default);
 
     if (is_snapped_x_or_y__axis) {
         set_ui_element_as__snapped_x_axis(p_ui_slider);
@@ -57,8 +60,24 @@ void m_ui_slider__dragged_handler__default(
             get_width_from__p_ui_element(p_this_draggable));
         ;
 
+    p_this_draggable
+        ->slider__distance__u32 = 
+        cursor_position;
+}
+
+void m_ui_slider__render_handler__default(
+        UI_Element *p_this_draggable,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game) {
+    bool is_snapped_x_or_y__axis =
+        is_ui_element__snapped_x_or_y_axis(p_this_draggable);
+
     Vector__3i32 sprite_position =
         get_position_3i32_from__p_ui_element(p_this_draggable);
+
+    i32 cursor_position =
+        p_this_draggable
+            ->slider__distance__u32;
 
     if (is_snapped_x_or_y__axis) {
         sprite_position.y__i32 =
@@ -74,13 +93,10 @@ void m_ui_slider__dragged_handler__default(
             ;
     }
 
-    p_this_draggable
-        ->slider__distance__u32 = 
-        cursor_position;
-
-    PLATFORM_set_sprite__position(
-            p_this_draggable
-            ->p_PLATFORM_sprite, 
-            sprite_position.x__i32, 
-            sprite_position.y__i32);
+    PLATFORM_render_sprite(
+            p_PLATFORM_gfx_window,
+            &p_this_draggable
+            ->ui_sprite_wrapper, 
+            vector_3i32_to__vector_3i32F4(
+                sprite_position));
 }

@@ -46,6 +46,8 @@ bool NDS_load_ui_item_stack(
                 p_child
                 ->ui_bounding_box__aabb.position__3i32F4), 
             m_NDS_ui_dragged__handler);
+    // TODO: m_NDS_ui_dragged__handler is a PURE wrapper (no side effects)
+    // of m_ui_draggable__dragged_handler__default, so likely remove it and replace.
 
     if (is_p_item_stack__empty(p_item_stack)) {
         return false;
@@ -63,6 +65,9 @@ bool NDS_load_ui_item_stack(
                 2);
         set_ui_element__PLATFORM_sprite(
                 p_child, p_PLATFORM_sprite);
+        set_ui_element__render_handler(
+                p_child, 
+                m_ui_element__render_handler_for__sprite__default);
     }
 
     return false;

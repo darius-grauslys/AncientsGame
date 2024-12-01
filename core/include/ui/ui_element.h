@@ -53,6 +53,11 @@ void set_position_3i32_of__ui_element(
         UI_Element *p_ui_element,
         Vector__3i32 position__3i32);
 
+void m_ui_element__render_handler_for__sprite__default(
+        UI_Element *p_this_ui_element,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game);
+
 static inline 
 Signed_Index__i32 get_x_i32_from__p_ui_element(
         UI_Element *p_ui_element) {
@@ -76,6 +81,15 @@ Vector__3i32 get_position_3i32_from__p_ui_element(
             p_ui_element
             ->ui_bounding_box__aabb
             .position__3i32F4);
+}
+
+static inline 
+Vector__3i32F4 get_position_3i32F4_from__p_ui_element(
+        UI_Element *p_ui_element) {
+    return p_ui_element
+            ->ui_bounding_box__aabb
+            .position__3i32F4
+            ;
 }
 
 static inline
@@ -465,7 +479,9 @@ bool does_ui_element_have__PLATFORM_sprite(
         UI_Element *p_ui_element){
     return 
         is_ui_element__using_sprite(p_ui_element)
-        && (bool)p_ui_element->p_PLATFORM_sprite;
+        && (bool)p_ui_element
+        ->ui_sprite_wrapper
+        .p_sprite;
 }
 
 static inline

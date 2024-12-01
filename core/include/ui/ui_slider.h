@@ -22,6 +22,11 @@ void m_ui_slider__dispose_handler__default(
         UI_Element *p_this_slider,
         Game *p_game);
 
+void m_ui_slider__render_handler__default(
+        UI_Element *p_this_ui_element,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game);
+
 static inline
 i32F20 get_percentage_i32F20_from__ui_slider(
         UI_Element *p_ui_slider) {
@@ -90,10 +95,6 @@ void allocate_sprite_for__ui_slider(
                 (is_ui_element__snapped_x_or_y_axis(p_ui_slider))
                 ? UI_Sprite_Kind__16x16__Slider__Horizontal
                 : UI_Sprite_Kind__16x16__Slider__Vertical));
-    PLATFORM_set_sprite__position(
-            p_ui_slider->p_PLATFORM_sprite,
-            get_x_i32_from__p_ui_element(p_ui_slider),
-            get_y_i32_from__p_ui_element(p_ui_slider));
 }
 
 #endif

@@ -87,10 +87,12 @@ GL_Sprite *GL_get_p_sprite_from__sprite_wrapper(
 }
 
 void GL_render_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         Vector__3i32F4 position__3i32F4) {
-
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        p_PLATFORM_gfx_window
+        ->p_PLATFORM_gfx_context;
     GL_Gfx_Sub_Context *p_GL_gfx_sub_context =
         GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context);

@@ -137,6 +137,11 @@ typedef void (*f_SDL_Initialize_Sprite)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
+typedef void (*f_SDL_Render_Sprite)(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *p_sprite_wrapper,
+        Vector__3i32F4 position_of__sprite__3i32F4);
+
 typedef void (*f_SDL_Release_Sprite)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite);
@@ -145,7 +150,7 @@ typedef void (*f_SDL_Release_Sprite)(
 
 
 typedef void (*f_SDL_Render_Entity)(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Entity *p_entity);
 
 
@@ -239,6 +244,7 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 
     f_SDL_Allocate_Sprite               f_SDL_allocate_sprite;
     f_SDL_Initialize_Sprite             f_SDL_initialize_sprite;
+    f_SDL_Render_Sprite                 f_SDL_render_sprite;
     f_SDL_Release_Sprite                f_SDL_release_sprite;
 
     f_SDL_Render_Entity                 f_SDL_render_entity;

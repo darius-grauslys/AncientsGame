@@ -171,16 +171,16 @@ void PLATFORM_release_all__sprites_using__this_graphics_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
-void PLATFORM_render_sprite(Sprite_Wrapper *sprite);
+void PLATFORM_render_sprite(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *sprite,
+        Vector__3i32F4 position_of__sprite__3i32F4);
 
 void PLATFORM_update_sprite_gfx__to_current_frame(
         Sprite_Wrapper *sprite_wrapper);
 
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
-void PLATFORM_set_sprite__position(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        Index__u16 x, Index__u16 y);
 
 Quantity__u32 PLATFORM_get_quantity_of__allocated_sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);

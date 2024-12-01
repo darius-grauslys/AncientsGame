@@ -15,6 +15,7 @@
 
 #include <stdint.h>
 #include <nds_defines.h>
+#include "vectors.h"
 
 void NDS_initialize_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite,
@@ -26,7 +27,30 @@ void NDS_initialize_sprite(
 }
 
 /// no-op
-void PLATFORM_render_sprite(Sprite_Wrapper *sprite_wrapper) { }
+void PLATFORM_render_sprite(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *sprite,
+        Vector__3i32F4 position_of__sprite__3i32F4) {
+    
+    PLATFORM_Texture *p_PLATFORM_texture =
+        NDS_get_p_PLATFORM_texture_from__PLATFORM_sprite(
+                sprite->p_sprite); // TODO: fix naming...
+
+    Vector__3i32 position_of__sprite__3i32 =
+        vector_3i32F4_to__vector_3i32(
+                position_of__sprite__3i32F4);
+
+    Index__u16 x = 
+        position_of__sprite__3i32.x__i32;
+    Index__u16 y = 
+        position_of__sprite__3i32.y__i32;
+
+    oamSetXY(
+            p_PLATFORM_texture->oam,
+            p_PLATFORM_texture->oam_index,
+            x - (p_PLATFORM_texture->width >> 1), 
+            y - (p_PLATFORM_texture->height >> 1));
+}
 
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite) {
@@ -58,19 +82,6 @@ void PLATFORM_update_sprite(
             false, 
             false, false, 
             false);
-}
-
-void PLATFORM_set_sprite__position(
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        Index__u16 x, Index__u16 y) {
-    PLATFORM_Texture *p_PLATFORM_texture =
-        NDS_get_p_PLATFORM_texture_from__PLATFORM_sprite(
-                p_PLATFORM_sprite);
-    oamSetXY(
-            p_PLATFORM_texture->oam,
-            p_PLATFORM_texture->oam_index,
-            x - (p_PLATFORM_texture->width >> 1), 
-            y - (p_PLATFORM_texture->height >> 1));
 }
 
 Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(

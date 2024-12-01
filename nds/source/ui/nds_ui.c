@@ -31,7 +31,7 @@
 #include "vectors.h"
 #include <nds.h>
 #include <ui/nds_ui.h>
-#include <assets/ui/default/ui_tileset_default.h>
+#include <assets/ui/default/_ui_tileset_default.h>
 #include <ui/ui_manager.h>
 #include <game.h>
 #include "nds_game.h"
@@ -41,14 +41,14 @@ struct NDS_UI__State_Machine_t {
 } _ui__state_machine;
 
 void NDS_set_ui_to__debug(PLATFORM_Gfx_Context *p_gfx_context) {
-	dmaCopy(ui_tileset_defaultMap, 
+	dmaCopy(_ui_tileset_defaultMap, 
             p_gfx_context->backgrounds__sub[0]
             .gfx_map,
-            ui_tileset_defaultMapLen);
-	dmaCopy(ui_tileset_defaultMap, 
+            _ui_tileset_defaultMapLen);
+	dmaCopy(_ui_tileset_defaultMap, 
             p_gfx_context->backgrounds__sub[1]
             .gfx_map,
-            ui_tileset_defaultMapLen);
+            _ui_tileset_defaultMapLen);
 }
 
 void NDS_set_ui_element_size_using__sprite_size(
@@ -483,4 +483,9 @@ void PLATFORM_update_ui(Game *p_game) {
     // TODO: use gfx_context sub_window
     poll_ui_manager__update(
             NDS_get_p_ui_manager_from__game(p_game), p_game);
+    render_all_ui_elements_in__ui_manager(
+            NDS_get_p_ui_manager_from__game(p_game), 
+            &get_p_PLATFORM_gfx_context_from__game(
+                p_game)->graphics_window__sub, 
+            p_game);
 }

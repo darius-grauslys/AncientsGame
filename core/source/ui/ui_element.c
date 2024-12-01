@@ -4,6 +4,7 @@
 #include "defines_weak.h"
 #include "platform.h"
 #include "platform_defaults.h"
+#include "rendering/sprite.h"
 #include "ui/ui_button.h"
 #include "ui/ui_draggable.h"
 #include "ui/ui_slider.h"
@@ -44,7 +45,13 @@ void initialize_ui_element(
     p_ui_element->m_ui_render_handler = 0;
     p_ui_element->m_ui_dispose_handler = 
         m_ui_element__dispose_handler__default;
-    p_ui_element->p_PLATFORM_sprite = 0;
+    initialize_sprite_wrapper(
+            &p_ui_element
+            ->ui_sprite_wrapper, 
+            TEXTURE_FLAGS__NONE);
+    p_ui_element->
+        ui_sprite_wrapper
+        .p_sprite = 0;
 }
 
 void m_ui_element__dispose_handler__default(
@@ -60,12 +67,15 @@ void m_ui_element__dispose_handler__default(
                     p_game);
         }
     }
-    if (p_this_ui_element->p_PLATFORM_sprite) {
+    if (does_ui_element_have__PLATFORM_sprite(
+                p_this_ui_element)) {
         PLATFORM_release_sprite(
                 get_p_PLATFORM_gfx_context_from__game(p_game), 
-                p_this_ui_element->p_PLATFORM_sprite); 
+                p_this_ui_element->ui_sprite_wrapper.p_sprite); 
     }
-    p_this_ui_element->p_PLATFORM_sprite = 0;
+    p_this_ui_element->
+        ui_sprite_wrapper
+        .p_sprite = 0;
     p_this_ui_element->p_parent = 0;
     p_this_ui_element->p_child = 0;
     p_this_ui_element->p_next = 0;
@@ -136,11 +146,6 @@ void set_position_3i32_of__ui_element(
     p_ui_element->ui_bounding_box__aabb
         .position__3i32F4 = 
             vector_3i32_to__vector_3i32F4(position__3i32);
-    if (p_ui_element->p_PLATFORM_sprite)
-        PLATFORM_set_sprite__position(
-                p_ui_element->p_PLATFORM_sprite, 
-                get_x_i32_from__p_ui_element(p_ui_element), 
-                get_y_i32_from__p_ui_element(p_ui_element));
     if (does_ui_element_have__child(p_ui_element)) {
         set_position_3i32_of__ui_element(
                 p_ui_element->p_child,
@@ -162,18 +167,14 @@ void set_ui_element__PLATFORM_sprite(
 #endif
     set_ui_element_as__using_sprite(
             p_ui_element);
-    p_ui_element->p_PLATFORM_sprite =
+    p_ui_element->ui_sprite_wrapper.p_sprite=
         p_PLATFORM_sprite;
-    PLATFORM_set_sprite__position(
-            p_PLATFORM_sprite, 
-            get_x_i32_from__p_ui_element(p_ui_element), 
-            get_y_i32_from__p_ui_element(p_ui_element));
 }
 
 void release_ui_element__PLATFORM_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         UI_Element *p_ui_element) {
-    if (!p_ui_element->p_PLATFORM_sprite) {
+    if (!does_ui_element_have__PLATFORM_sprite(p_ui_element)) {
 #ifndef NDEBUG
         debug_error("release_ui_element__PLATFORM_sprite, p_PLATFORM_sprite is null.");
 #endif
@@ -182,9 +183,11 @@ void release_ui_element__PLATFORM_sprite(
 
     PLATFORM_release_sprite(
             p_PLATFORM_gfx_context,
-            p_ui_element->p_PLATFORM_sprite);
+            p_ui_element->ui_sprite_wrapper.p_sprite);
 
-    p_ui_element->p_PLATFORM_sprite = 0;
+    p_ui_element
+        ->ui_sprite_wrapper
+        .p_sprite = 0;
 }
 
 void set_ui_tile_span_of__ui_element(
@@ -264,4 +267,16 @@ void m_ui_render__element__tile_span(
             height_of__ui_tile_span, 
             index_x__u32, 
             index_y__u32);
+}
+
+void m_ui_element__render_handler_for__sprite__default(
+        UI_Element *p_this_ui_element,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Game *p_game) {
+    PLATFORM_render_sprite(
+            p_PLATFORM_gfx_window,
+            &p_this_ui_element
+            ->ui_sprite_wrapper, 
+            get_position_3i32F4_from__p_ui_element(
+                p_this_ui_element));
 }

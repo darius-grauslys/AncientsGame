@@ -1715,7 +1715,7 @@ typedef struct UI_Element_t {
     Identifier__u16         ui_identifier;
     UI_Flags__u8            ui_flags;
     union {
-        PLATFORM_Sprite         *p_PLATFORM_sprite;
+        Sprite_Wrapper          ui_sprite_wrapper;
         UI_Tile_Span            ui_tile_span;
     };
     union {

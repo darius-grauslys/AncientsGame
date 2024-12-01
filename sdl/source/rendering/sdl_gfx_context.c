@@ -135,6 +135,9 @@ bool _SDL_link_opengl_3_0(
         ->f_SDL_initialize_sprite =
         GL_initialize_sprite;
     p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_render_sprite =
+        GL_render_sprite;
+    p_SDL_gfx_sub_context__wrapper
         ->f_SDL_release_sprite =
         GL_release_sprite;
 

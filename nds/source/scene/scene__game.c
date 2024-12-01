@@ -36,8 +36,6 @@
 #include <vectors.h>
 #include <rendering/gfx_context.h>
 
-#include <assets/ui/default/ui_tileset_default.h>
-
 Scene_Data__Game scene_data__game;
 
 void m_load_scene_as__game_handler(

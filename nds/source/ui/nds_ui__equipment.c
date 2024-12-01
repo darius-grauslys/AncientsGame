@@ -68,6 +68,9 @@ void NDS_load_ui_equipment_column_for__equipment(
                     set_ui_element__PLATFORM_sprite(
                             p_child, 
                             p_PLATFORM_sprite);
+                    set_ui_element__render_handler(
+                            p_child, 
+                            m_ui_element__render_handler_for__sprite__default);
                 }
             }
         }
