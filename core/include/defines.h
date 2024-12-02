@@ -1725,7 +1725,8 @@ typedef struct UI_Element_t {
         struct { // UI_Draggable
         };
         struct { // UI_Slider
-            u32      slider__distance__u32;
+            Vector__3i32    slider__spanning_length__3i32;
+            u32             slider__distance__u32;
         };
     };
 } UI_Element;

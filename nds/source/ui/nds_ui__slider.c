@@ -46,19 +46,6 @@ void m_NDS_ui_slider__dragged_handler_for__backgrounds(
                 p_this_draggable, 
                 spanning_length);
 
-    // debug_info("starting: %d, %d",
-    //         position_for__bgSetScroll.x__i32,
-    //         position_for__bgSetScroll.y__i32
-    //         );
-    // debug_info("spanning: %d, %d",
-    //         p_NDS_background
-    //         ->spanning_scroll_lengths__3i32.x__i32,
-    //         p_NDS_background
-    //         ->spanning_scroll_lengths__3i32.y__i32
-    //         );
-    // debug_info("offset: %d",
-    //         offset);
-
     *p_starting_distance -=
         offset;
 
@@ -77,9 +64,6 @@ void m_NDS_ui_slider__dragged_handler_for__backgrounds(
             24, 
             3, 
             28);
-    // debug_info("pos: %d, %d",
-    //             get_x_i32_from__vector_3i32(position_for__bgSetScroll), 
-    //             get_y_i32_from__vector_3i32(position_for__bgSetScroll));
 
     bgSetScroll(
             p_NDS_background

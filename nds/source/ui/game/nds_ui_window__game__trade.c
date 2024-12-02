@@ -1,6 +1,7 @@
 #include <ui/game/nds_ui_window__game__trade.h>
 #include <ui/game/nds_ui_window__game__hud.h>
 #include <nds.h>
+#include <rendering/gfx_context.h>
 #include <ui/ui_element.h>
 #include <ui/ui_button.h>
 #include <ui/ui_draggable.h>
@@ -33,26 +34,24 @@ NDS_allocate_ui_for__nds_ui_window__game__hud(p_game, p_ui_manager);
 
 
     UI_Element *p_slider_left = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__slider(p_slider_left, 16, 80, get_vector__3i32(28 + 0, 132 + 0, 0), m_NDS_ui_slider__dragged_handler_for__backgrounds, true);
+    initialize_ui_element_as__slider(p_slider_left, 16, 80, get_vector__3i32(28 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 NDS_allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_slider_left);
-    NDS_Background *p_NDS_background =
-    &get_p_PLATFORM_gfx_context_from__game(p_game)
-    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
-    p_slider_left->p_ui_data = p_NDS_background;
+    p_slider_left->p_ui_data = 
+    NDS_get_p_PLATFORM_gfx_window_of__UI__SCROLL(
+    get_p_PLATFORM_gfx_context_from__game(p_game));
 
     UI_Element *p_slider_right = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__slider(p_slider_right, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), m_NDS_ui_slider__dragged_handler_for__backgrounds, true);
+    initialize_ui_element_as__slider(p_slider_right, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 NDS_allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_slider_right);
-    p_NDS_background =
-    &get_p_PLATFORM_gfx_context_from__game(p_game)
-    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
-    p_slider_right->p_ui_data = p_NDS_background;
+    p_slider_right->p_ui_data = 
+    NDS_get_p_PLATFORM_gfx_window_of__UI__SCROLL_SECONDARY(
+    get_p_PLATFORM_gfx_context_from__game(p_game));
 
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {

@@ -35,6 +35,7 @@ typedef struct NDS_Background_t {
     PLATFORM_Texture *p_PLATFORM_texture__background_reserved;
     Vector__3i32 starting_position__3i32;
     Vector__3i32 spanning_scroll_lengths__3i32;
+    Vector__3i32 current_position__3i32;
     uint16_t *gfx_map;
     uint16_t *gfx_tileset;
     // uint16_t *gfx_palette;

@@ -89,6 +89,7 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 /// SECTION_rendering
 ///
 
+// TODO: remove
 PLATFORM_Graphics_Window 
 *PLATFORM_get_p_graphics_window_with__graphics_window_kind(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -281,6 +282,19 @@ UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+
+void PLATFORM_set_gfx_window__position(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Vector__3i32 position_of__window);
+
+///
+/// Returns the position of the PLATFORM_gfx_window at time of allocation.
+///
+Vector__3i32 PLATFORM_get_gfx_window__origin(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+
+Vector__3i32 PLATFORM_get_gfx_window__position(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 ///

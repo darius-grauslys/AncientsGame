@@ -4,6 +4,7 @@
         <include sub_dir="ui/game/">
             <header path="ui/game/nds_ui_window__game__hud.h"/>
             <header path="nds.h"/>
+            <header path="rendering/gfx_context.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
@@ -41,16 +42,15 @@
         </code>
         <group>
             <allocate_ui name="p_slider">
-                <slider x="228" y="132" width="16" height="80" m_Dragged_Handler="m_NDS_ui_slider__dragged_handler_for__backgrounds"/>
+                <slider x="228" y="132" width="16" height="80" spanning_height="176" m_Dragged_Handler="m_ui_slider__dragged_handler__gfx_window__default"/>
             </allocate_ui>
             <code>
                 NDS_allocate_sprite_for__ui_slider(
                         get_p_PLATFORM_gfx_context_from__game(p_game),
                         p_slider);
-                NDS_Background *p_NDS_background =
-                    &amp;get_p_PLATFORM_gfx_context_from__game(p_game)
-                    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
-                p_slider->p_ui_data = p_NDS_background;
+                p_slider->p_ui_data = 
+                    NDS_get_p_PLATFORM_gfx_window_of__UI__SCROLL(
+                        get_p_PLATFORM_gfx_context_from__game(p_game));
             </code>
             <allocate_ui_container x="140" y="100" size="3" stride__y="32" name="p_recipe_and_tools">
                 <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>

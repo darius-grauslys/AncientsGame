@@ -11,10 +11,15 @@ void initialize_ui_element_as__slider(
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,
         Vector__3i32 position__3i32,
+        Vector__3i32 spanning_length__3i32,
         m_UI_Dragged m_ui_dragged_handler,
         bool is_snapped_x_or_y__axis);
 
 void m_ui_slider__dragged_handler__default(
+        UI_Element *p_this_draggable,
+        Game *p_game);
+
+void m_ui_slider__dragged_handler__gfx_window__default(
         UI_Element *p_this_draggable,
         Game *p_game);
 
@@ -95,6 +100,14 @@ void allocate_sprite_for__ui_slider(
                 (is_ui_element__snapped_x_or_y_axis(p_ui_slider))
                 ? UI_Sprite_Kind__16x16__Slider__Horizontal
                 : UI_Sprite_Kind__16x16__Slider__Vertical));
+}
+
+static inline
+Vector__3i32 get_ui_slider__spanning_length(
+        UI_Element *p_ui_element) {
+    //TODO: validate ui_element enum
+    return p_ui_element
+        ->slider__spanning_length__3i32;
 }
 
 #endif

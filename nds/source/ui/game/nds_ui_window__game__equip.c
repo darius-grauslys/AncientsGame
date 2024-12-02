@@ -1,6 +1,7 @@
 #include <ui/game/nds_ui_window__game__equip.h>
 #include <ui/game/nds_ui_window__game__hud.h>
 #include <nds.h>
+#include <rendering/gfx_context.h>
 #include <ui/ui_element.h>
 #include <ui/ui_button.h>
 #include <ui/ui_drop_zone.h>
@@ -24,15 +25,14 @@ UI_Element *NDS_allocate_ui_for__nds_ui_window__game__equip(Game *p_game, UI_Man
 NDS_allocate_ui_for__nds_ui_window__game__hud(p_game, p_ui_manager);
     toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__slider(p_slider, 16, 80, get_vector__3i32(196 + 0, 132 + 0, 0), m_NDS_ui_slider__dragged_handler_for__backgrounds, true);
+    initialize_ui_element_as__slider(p_slider, 16, 80, get_vector__3i32(196 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 NDS_allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_slider);
-    NDS_Background *p_NDS_background =
-    &get_p_PLATFORM_gfx_context_from__game(p_game)
-    ->backgrounds__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
-    p_slider->p_ui_data = p_NDS_background;
+    p_slider->p_ui_data = 
+    NDS_get_p_PLATFORM_gfx_window_of__UI__SCROLL(
+    get_p_PLATFORM_gfx_context_from__game(p_game));
 
     UI_Element *p_button_filter__usable = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_button_filter__usable, 16, 16, get_vector__3i32(228 + 0, 104 + 0, 0), m_ui_button__clicked_handler__default, false, false);

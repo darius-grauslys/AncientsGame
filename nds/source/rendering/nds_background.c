@@ -210,6 +210,8 @@ void NDS_initialize_background_with__allocation_specification(
     p_background->starting_position__3i32 =
         p_background_allocation_specification
         ->starting_position__3i32;
+    p_background->current_position__3i32 =
+        p_background->starting_position__3i32;
     p_background->spanning_scroll_lengths__3i32 =
         p_background_allocation_specification
         ->spanning_scroll_lengths__3i32;

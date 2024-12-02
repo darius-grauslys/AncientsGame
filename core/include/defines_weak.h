@@ -845,6 +845,7 @@ typedef struct PLATFORM_Graphics_Window_t PLATFORM_Graphics_Window;
 /// given platform, while there is likely only
 /// one Graphics_Window_Kind__World window context.
 ///
+/// TODO: remove
 enum Graphics_Window_Kind {
     Graphics_Window_Kind__None,
     Graphics_Window_Kind__World,

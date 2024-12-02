@@ -475,6 +475,37 @@ def get_rect_spec_args(context_stack, rectangle_spec):
                 0)\
         ]
 
+def get_vector_3i32_argument(\
+        context_stack, xml_element, \
+        x_str, y_str, z_str,\
+        x_offset, y_offset, z_offset):
+    x = \
+            get_str_from_xml_or__use_this(\
+                xml_element, \
+                x_str, \
+                "0")
+    y = \
+            get_str_from_xml_or__use_this(\
+                xml_element, \
+                y_str, \
+                "0")
+    z = \
+            get_str_from_xml_or__use_this(\
+                xml_element, \
+                z_str, \
+                "0")
+    return "get_vector__3i32({}, {}, {})".format(\
+            "{} + {}".format(\
+                x, \
+                x_offset), \
+            "{} + {}".format(\
+                y, \
+                y_offset), \
+            "{} + {}".format(\
+                z, \
+                z_offset) \
+            )\
+
 def button(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
 
@@ -510,6 +541,13 @@ def slider(signature, xml_element, context_stack):
     args = []
     args.append(context_stack[-1].p_ui_element)
     args += get_rect_spec_args(context_stack, rectangle_spec)
+    args.append(get_vector_3i32_argument(\
+            context_stack,\
+            xml_element,\
+            "spanning_width",\
+            "spanning_height",\
+            "spanning_depth",\
+            "0", "0", "0"))
     args.append(\
             get_str_from_xml_or__use_this(\
                 xml_element, \

@@ -125,4 +125,18 @@ UI_Manager *NDS_get_p_ui_manager_from__PLATFORM_gfx_context(
         ->NDS_ui_manager;
 }
 
+static inline
+PLATFORM_Graphics_Window *NDS_get_p_PLATFORM_gfx_window_of__UI__SCROLL_SECONDARY(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context
+        ->graphics_windows__sub[NDS_BACKGROUND_SLOT__UI__SCROLL_SECONDARY];
+}
+
+static inline
+PLATFORM_Graphics_Window *NDS_get_p_PLATFORM_gfx_window_of__UI__SCROLL(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
+    return &p_PLATFORM_gfx_context
+        ->graphics_windows__sub[NDS_BACKGROUND_SLOT__UI__SCROLL];
+}
+
 #endif

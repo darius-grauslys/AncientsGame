@@ -18,7 +18,7 @@ void NDS_initialize_background_allocation_specification(
         Texture_Flags background_texture_flags,
         Index__u8 background_slot,
         Vector__3i32 starting_position__3i32,
-        Vector__3i32 spanning_length__3i32,
+        Vector__3i32 spanning_length__3i32, // TODO: remove spanning length
         const unsigned int *p_gfx_background,
         Quantity__u32 length_of__p_gfx_background,
         const uint16_t *p_map_background,
@@ -40,7 +40,7 @@ void NDS_initialize_background_allocation_specification(
         ->starting_position__3i32 =
         starting_position__3i32;
     p_NDS_background_allocation_specification
-        ->spanning_scroll_lengths__3i32 =
+        ->spanning_scroll_lengths__3i32 =  // TODO: remove spanning length
         spanning_length__3i32;
 
     p_NDS_background_allocation_specification
@@ -76,7 +76,7 @@ void NDS_initialize_background_allocation_specification_with__reservations(
         Texture_Flags background_texture_flags,
         Index__u8 background_slot,
         Vector__3i32 starting_position__3i32,
-        Vector__3i32 spanning_length__3i32,
+        Vector__3i32 spanning_length__3i32, // TODO: remove spanning length
         const unsigned int *p_gfx_background,
         Quantity__u32 length_of__p_gfx_background,
         Quantity__u32 length_of__p_gfx_background__reservation,
@@ -94,7 +94,7 @@ void NDS_initialize_background_allocation_specification_with__reservations(
             background_texture_flags,
             background_slot, 
             starting_position__3i32,
-            spanning_length__3i32,
+            spanning_length__3i32, // TODO: remove spanning length
             p_gfx_background, 
             length_of__p_gfx_background, 
             p_map_background, 
