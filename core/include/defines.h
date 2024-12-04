@@ -1642,7 +1642,7 @@ typedef void (*m_UI_Render)(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game);
 
-typedef uint8_t UI_Flags__u8;
+typedef uint16_t UI_Flags__u16;
 typedef uint8_t UI_Button_Flags__u8;
 
 #define UI_HUD_NOTIFICATION_LIFESPAN_IN__SECONDS 4
@@ -1651,8 +1651,10 @@ typedef uint8_t UI_Button_Flags__u8;
 #define UI_FLAGS__BIT_SHIFT_IS_ALLOCATED 0
 #define UI_FLAGS__BIT_SHIFT_IS_ENABLED \
     (UI_FLAGS__BIT_SHIFT_IS_ALLOCATED + 1)
-#define UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE \
+#define UI_FLAGS__BIT_SHIFT_IS_NON_INTERACTIVE \
     (UI_FLAGS__BIT_SHIFT_IS_ENABLED + 1)
+#define UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE \
+    (UI_FLAGS__BIT_SHIFT_IS_NON_INTERACTIVE + 1)
 #define UI_FLAGS__BIT_SHIFT_IS_BEING_HELD \
     (UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE + 1)
 #define UI_FLAGS__BIT_SHIFT_IS_BEING_DRAGGED \
@@ -1668,6 +1670,8 @@ typedef uint8_t UI_Button_Flags__u8;
     BIT(UI_FLAGS__BIT_SHIFT_IS_ALLOCATED)
 #define UI_FLAGS__BIT_IS_ENABLED \
     BIT(UI_FLAGS__BIT_SHIFT_IS_ENABLED)
+#define UI_FLAGS__BIT_IS_NON_INTERACTIVE \
+    BIT(UI_FLAGS__BIT_SHIFT_IS_NON_INTERACTIVE)
 #define UI_FLAGS__BIT_IS_NEEDING_UPDATE \
     BIT(UI_FLAGS__BIT_SHIFT_IS_NEEDING_UPDATE)
 #define UI_FLAGS__BIT_IS_BEING_HELD \
@@ -1713,7 +1717,7 @@ typedef struct UI_Element_t {
     Serialized_Field        s_serialized_field;
     UI_Element *p_parent,   *p_child, *p_next;
     Identifier__u16         ui_identifier;
-    UI_Flags__u8            ui_flags;
+    UI_Flags__u16            ui_flags;
     union {
         Sprite_Wrapper          ui_sprite_wrapper;
         UI_Tile_Span            ui_tile_span;

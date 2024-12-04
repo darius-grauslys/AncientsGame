@@ -7,11 +7,15 @@
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/texture.h"
+#include "ui/game/sdl_ui_window__game__equip.h"
+#include "ui/game/sdl_ui_window__game__trade.h"
+#include "ui/game/sdl_ui_window__game__station.h"
 #include "ui/sdl_ui__background.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
 #include "assets/ui/default/ui_map_trade.h"
 #include "assets/ui/default/ui_map_equip.h"
+#include "assets/ui/default/ui_map_station.h"
 
 ///
 /// Opens the specified UI. Depending on the backend this
@@ -47,70 +51,45 @@ void PLATFORM_open_ui(
         p_PLATFORM_gfx_window__ui
         ->SDL_graphics_window__ui_tile_map__wrapper;
 
-    memcpy(
-            ui_tile_map__wrapper.p_ui_tile_data,
-            ui_map_equipMap,
-            sizeof(ui_map_equipMap));
-
     UI_Manager *p_ui_manager =
         PLATFORM_get_p_ui_manager_from__gfx_window(
                 p_PLATFORM_gfx_window__ui);
 
-    UI_Element *p_ui_element =
-        allocate_ui_element_from__ui_manager(
-                p_ui_manager);
-
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__background =
-        SDL_allocate_gfx_window(
-                p_PLATFORM_gfx_context, 
-                &texture_alloc_spec);
-
-    if (!p_PLATFORM_gfx_window__background) {
-        release__ui_element_from__ui_manager(
-                p_ui_manager, 
-                p_ui_element, 
-                p_game);
-        debug_error("SDL::PLATFORM_open_ui, TMP");
-        return;
+    switch (the_kind_of__ui_window_to__open) {
+        default:
+        case UI_Window_Kind__Idle:
+            break;
+        case UI_Window_Kind__Equip:
+            memcpy(
+                    ui_tile_map__wrapper.p_ui_tile_data,
+                    ui_map_equipMap,
+                    sizeof(ui_map_equipMap));
+            SDL_allocate_ui_for__sdl_ui_window__game__equip(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_manager);
+            break;
+        case UI_Window_Kind__Trade:
+            memcpy(
+                    ui_tile_map__wrapper.p_ui_tile_data,
+                    ui_map_tradeMap,
+                    sizeof(ui_map_tradeMap));
+            SDL_allocate_ui_for__sdl_ui_window__game__trade(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_manager);
+            break;
+        case UI_Window_Kind__Station:
+            memcpy(
+                    ui_tile_map__wrapper.p_ui_tile_data,
+                    ui_map_stationMap,
+                    sizeof(ui_map_stationMap));
+            SDL_allocate_ui_for__sdl_ui_window__game__station(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_manager);
+            break;
     }
-
-    SDL_initialize_ui_element_as__background(
-            p_ui_element, 
-            64, 
-            64, 
-            get_vector__3i32(
-                22, 88, 0), 
-            p_PLATFORM_gfx_window__background);
-
-    ui_tile_map__wrapper =
-        p_PLATFORM_gfx_window__background
-        ->SDL_graphics_window__ui_tile_map__wrapper;
-
-    //TODO: remove
-    for (int y=0;y<32;y++) {
-        for (int x=0;x<32;x++) {
-            ui_tile_map__wrapper.p_ui_tile_data[
-                x
-                + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
-                12;
-            if (y==31) {
-                ui_tile_map__wrapper.p_ui_tile_data[
-                    x
-                    + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
-                    22;
-            }
-            if (x==0) {
-                ui_tile_map__wrapper.p_ui_tile_data[
-                    x
-                    + y * ui_tile_map__wrapper.width_of__ui_tile_map] =
-                    33;
-            }
-        }
-    }
-
-    SDL_compose_gfx_window(
-            p_game,
-            p_PLATFORM_gfx_window__background);
 
     SDL_compose_gfx_window(
             p_game,
@@ -134,16 +113,22 @@ void PLATFORM_update_ui(
     PLATFORM_Graphics_Window *ptr_array_of__gfx_windows[
         PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF];
 
-    SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
-            SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context), 
-            UI_Window_Kind__Unknown, 
-            ptr_array_of__gfx_windows, 
-            PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF);
+    Signed_Quantity__i32 quantity_of__windows =
+        SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
+                SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                    p_PLATFORM_gfx_context), 
+                UI_Window_Kind__Unknown, 
+                ptr_array_of__gfx_windows, 
+                PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF);
+
+    if (!quantity_of__windows)
+        return;
 
     for (Index__u32 index_of__gfx_window = 0;
             index_of__gfx_window
-            < PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF;
+            < PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF
+            && index_of__gfx_window
+            < quantity_of__windows;
             index_of__gfx_window++) {
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window =
             ptr_array_of__gfx_windows[
@@ -159,26 +144,15 @@ void PLATFORM_update_ui(
                 SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
                     p_PLATFORM_gfx_window),
                 p_game);
-        SDL_render_gfx_window(
-                p_game, 
-                p_PLATFORM_gfx_window);
-
-        UI_Element *p_ui_element =
-            get_p_ui_element_by__index_from__ui_manager(
-                    PLATFORM_get_p_ui_manager_from__gfx_window(
-                        p_PLATFORM_gfx_window), 
-                    0);
-
-        p_ui_element->ui_bounding_box__aabb
-            .position__3i32F4.x__i32F4++;
-        p_ui_element->ui_bounding_box__aabb
-            .position__3i32F4.y__i32F4++;
-
-
         SDL_compose_gfx_window(
                 p_game,
                 p_PLATFORM_gfx_window);
-        return;
+        SDL_render_gfx_window(
+                p_game, 
+                p_PLATFORM_gfx_window);
+        return; // TODO:    remove, and also only render/update windows
+                //          allocate as stand-alone windows, and not
+                //          sub-windows.
     }
 }
 

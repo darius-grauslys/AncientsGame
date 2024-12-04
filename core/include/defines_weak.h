@@ -1027,6 +1027,7 @@ enum UI_Element_Kind {
     UI_Element_Kind__Draggable,
     UI_Element_Kind__Slider,
     UI_Element_Kind__Drop_Zone,
+    UI_Element_Kind__Logical,
     UI_Element_Kind__Background,
     UI_Element_Kind__Unknown
 };

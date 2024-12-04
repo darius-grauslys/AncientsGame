@@ -9,6 +9,7 @@
 #include "ui/ui_manager.h"
 #include "ui/ui_tile_map_manager.h"
 #include <rendering/sdl_gfx_window.h>
+#include "vectors.h"
 
 void SDL_initialize_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -51,7 +52,7 @@ void SDL_compose_gfx_window(
 #ifndef NDEBUG
     if (!f_SDL_compose_gfx_window) {
         debug_warning("Did you forget to initialize a graphics backend?");
-        debug_abort("SDL_compose_gfx_window, f_SDL_render_gfx_window == 0.");
+        debug_abort("SDL_compose_gfx_window, f_SDL_compose_gfx_window == 0.");
         return;
     }
 #endif
@@ -96,3 +97,29 @@ UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(
     return SDL_get_tile_map__wrapper_from__PLATFORM_gfx_window(
             p_PLATFORM_gfx_window);
 } 
+
+void PLATFORM_set_gfx_window__position(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Vector__3i32 position_of__window) {
+    p_PLATFORM_gfx_window
+        ->SDL_position_of__graphics_window =
+        vector_3i32_to__vector_3i32F4(
+                position_of__window);
+}
+
+///
+/// Returns the position of the PLATFORM_gfx_window at time of allocation.
+///
+Vector__3i32 PLATFORM_get_gfx_window__origin(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    // TODO: impl
+    return VECTOR__3i32__0_0_0;
+}
+
+Vector__3i32 PLATFORM_get_gfx_window__position(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return 
+        vector_3i32F4_to__vector_3i32(
+                p_PLATFORM_gfx_window
+                ->SDL_position_of__graphics_window);
+}

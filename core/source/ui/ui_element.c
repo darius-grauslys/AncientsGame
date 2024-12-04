@@ -20,7 +20,7 @@ void initialize_ui_element(
         UI_Element *p_ui_element__child,
         UI_Element *p_ui_element__next,
         enum UI_Element_Kind kind_of_ui_element,
-        UI_Flags__u8 ui_flags,
+        UI_Flags__u16 ui_flags,
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,
         Vector__3i32 position__3i32) {

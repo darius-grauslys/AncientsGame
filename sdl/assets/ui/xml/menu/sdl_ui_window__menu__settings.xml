@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+    <config>
+        <include sub_dir="ui/menu/">
+            <header path="ui/sdl_ui.h"/>
+            <header path="ui/ui_element.h"/>
+            <header path="ui/ui_button.h"/>
+            <header path="ui/ui_manager.h"/>
+            <header path="vectors.h"/>
+            <header path="defines.h"/>
+            <header path="game.h"/>
+        </include>
+        <output base_dir="./" c_path="./sdl/source/ui/menu/sdl_ui_window__menu__settings.c" h_path="./sdl/include/ui/menu/sdl_ui_window__menu__settings.h"/>
+        <platform target="SDL" size="256,196"/>
+        <background layer="0" path="./core/assets/ui/default/ui_map_settings.png"/>
+        <ui_func_signature for="grid"/>
+        <ui_func_signature for="group"/>
+        <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
+        <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
+        <ui_func_signature for="code"/>
+        <ui_func_signature for="button" c_signatures="initialize_ui_element_as__button"/>
+        <ui_func_signature for="slider" c_signatures="initialize_ui_element_as__slider"/>
+        <ui_func_signature for="draggable" c_signatures="initialize_ui_element_as__draggable"/>
+        <ui_func_signature for="drop_zone" c_signatures="initialize_ui_element_as__drop_zone"/>
+    </config>
+    <ui>
+        <group x="52" y="72" stride__y="44">
+            <allocate_ui name="p_button__singleplayer">
+                <button width="80" height="24"/>
+            </allocate_ui>
+            <allocate_ui name="p_button__multiplayer">
+                <button width="80" height="24"/>
+            </allocate_ui>
+            <allocate_ui name="p_button__settings">
+                <button width="80" height="24"/>
+            </allocate_ui>
+        </group>
+    </ui>
+</root>

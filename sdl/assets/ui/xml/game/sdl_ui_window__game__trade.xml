@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<root>
+    <config>
+        <include sub_dir="ui/game/">
+            <header path="ui/game/sdl_ui_window__game__hud.h"/>
+            <header path="rendering/sdl_gfx_context.h"/>
+            <header path="ui/ui_element.h"/>
+            <header path="ui/ui_button.h"/>
+            <header path="ui/ui_draggable.h"/>
+            <header path="ui/ui_drop_zone.h"/>
+            <header path="ui/ui_slider.h"/>
+            <header path="ui/ui_manager.h"/>
+            <header path="ui/sdl_ui__background.h"/>
+            <header path="rendering/sdl_background.h"/>
+            <header path="vectors.h"/>
+            <header path="defines.h"/>
+            <header path="game.h"/>
+            <header path="ui/ui_drop_zone__inventory_slot.h"/>
+        </include>
+        <output base_dir="./" c_path="./sdl/source/ui/game/sdl_ui_window__game__trade.c" h_path="./sdl/include/ui/game/sdl_ui_window__game__trade.h"/>
+        <platform target="SDL" size="256,256"/>
+        <background layer="0" path="./core/assets/ui/default/ui_map_inventory_column.png" x="-46"/>
+        <background layer="1" path="./core/assets/ui/default/ui_map_inventory_column.png" x="46"/>
+        <background layer="2" path="./core/assets/ui/default/ui_map_trade.png"/>
+        <ui_func_signature for="grid"/>
+        <ui_func_signature for="group"/>
+        <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
+        <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
+        <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
+        <ui_func_signature for="code"/>
+        <ui_func_signature for="button" c_signatures="initialize_ui_element_as__button"/>
+        <ui_func_signature for="slider" c_signatures="initialize_ui_element_as__slider"/>
+        <ui_func_signature for="draggable" c_signatures="initialize_ui_element_as__draggable"/>
+        <ui_func_signature for="drop_zone" c_signatures="initialize_ui_element_as__drop_zone"/>
+    </config>
+    <ui offset_of__ui_index="3">
+        <code>
+            SDL_allocate_ui_for__sdl_ui_window__game__hud(p_game, p_PLATFORM_gfx_window, p_ui_manager);
+            toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 1));
+        </code>
+        <group x="14">
+            <group stride__x="24" x="46" y="176">
+                <allocate_ui name="p_filter_button__usables">
+                    <button width="16" height="12" color="64,196,64"/>
+                </allocate_ui>
+                <allocate_ui name="p_filter_button__wearables">
+                    <button width="16" height="12" color="64,196,64"/>
+                </allocate_ui>
+                <allocate_ui name="p_filter_button__consumables">
+                    <button width="16" height="12" color="64,196,64"/>
+                </allocate_ui>
+            </group>
+            <allocate_ui name="p_slider_left">
+                <slider x="14" y="132" width="16" height="80" spanning_height="176" m_Dragged_Handler="m_ui_slider__dragged_handler__gfx_window__default"/>
+            </allocate_ui>
+            <code>
+                allocate_sprite_for__ui_slider(
+                        get_p_PLATFORM_gfx_context_from__game(p_game),
+                        p_PLATFORM_gfx_window,
+                        p_slider_left);
+                p_slider_left->p_ui_data = 
+                    SDL_allocate_background_as__PLATFORM_Gfx_Window(
+                        p_game,
+                        p_PLATFORM_gfx_window,
+                        SDL_Background_Kind__Inventory_Column,
+                        get_vector__3i32(0,0,0));
+            </code>
+            <allocate_ui name="p_slider_right">
+                <slider x="214" y="132" width="16" height="80" spanning_height="176" m_Dragged_Handler="m_ui_slider__dragged_handler__gfx_window__default"/>
+            </allocate_ui>
+            <code>
+                allocate_sprite_for__ui_slider(
+                        get_p_PLATFORM_gfx_context_from__game(p_game),
+                        p_PLATFORM_gfx_window,
+                        p_slider_right);
+                p_slider_right->p_ui_data = 
+                    SDL_allocate_background_as__PLATFORM_Gfx_Window(
+                        p_game,
+                        p_PLATFORM_gfx_window,
+                        SDL_Background_Kind__Inventory_Column,
+                        get_vector__3i32(0,0,0));
+            </code>
+            <grid x="44" y="15" size="9" stride__y="28" name="p_inventory_column__left">
+                <allocate_ui_container size="3" stride__x="24">
+                    <drop_zone width="23" height="27" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot" />
+                    <alloc_child>
+                        <draggable width="18" height="22" color="196,64,64"/>
+                    </alloc_child>
+                </allocate_ui_container>
+            </grid>
+            <grid x="136" y="15" size="9" stride__y="28" name="p_inventory_column__right">
+                <allocate_ui_container size="3" stride__x="24">
+                    <drop_zone width="23" height="27" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot" />
+                    <alloc_child>
+                        <draggable width="18" height="22" color="196,64,64"/>
+                    </alloc_child>
+                </allocate_ui_container>
+            </grid>
+            <code>
+                set_ui_element_as__the_parent_of__this_ui_element(
+                    p_ui_manager,
+                    p_slider_left,
+                    get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8));
+                set_ui_element_as__the_parent_of__this_ui_element(
+                    p_ui_manager,
+                    p_slider_right, 
+                    get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62));
+            </code>
+        </group>
+    </ui>
+</root>
+
+

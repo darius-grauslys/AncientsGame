@@ -85,12 +85,26 @@ bool UNIX_get_path_to__assets(
                     buffer,
                     "assets/ui/log");
             break;
-        case Asset_Directory_Kind__UI__Sprites:
+        case Asset_Directory_Kind__UI__Sprite__8x8:
             snprintf(path,
                     1024,
                     "%s/%s",
                     buffer,
-                    "assets/ui/sprites");
+                    "assets/ui/sprites/ui_sprite__8x8");
+            break;
+        case Asset_Directory_Kind__UI__Sprite__16x16:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/sprites/ui_sprite__16x16");
+            break;
+        case Asset_Directory_Kind__UI__Sprite__32x32:
+            snprintf(path,
+                    1024,
+                    "%s/%s",
+                    buffer,
+                    "assets/ui/sprites/ui_sprite__32x32");
             break;
         case Asset_Directory_Kind__UI__Typer:
             snprintf(path,

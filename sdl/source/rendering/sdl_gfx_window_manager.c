@@ -281,9 +281,8 @@ Signed_Quantity__i32 SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
         }
 
         p_PLATFORM_gfx_windows[
-            quantity_of__gfx_windows] =
+            quantity_of__gfx_windows++] =
                 p_PLATFORM_gfx_window;
-        quantity_of__gfx_windows++;
     }
 
     return quantity_of__gfx_windows;

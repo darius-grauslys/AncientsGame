@@ -12,7 +12,9 @@ typedef enum {
     Asset_Directory_Kind__UI__Default,
     Asset_Directory_Kind__UI__Font,
     Asset_Directory_Kind__UI__Log,
-    Asset_Directory_Kind__UI__Sprites,
+    Asset_Directory_Kind__UI__Sprite__8x8,
+    Asset_Directory_Kind__UI__Sprite__16x16,
+    Asset_Directory_Kind__UI__Sprite__32x32,
     Asset_Directory_Kind__UI__Typer,
     Asset_Directory_Kind__World,
 } Asset_Directory_Kind;

@@ -157,6 +157,9 @@ UI_Element *get_highest_priority_ui_element_thats__under_the_cursor(
         if (!is_ui_element__enabled(p_ui_element)) {
             continue;
         }
+        if (is_ui_element__non_interactive(p_ui_element)) {
+            continue;
+        }
 
         //TODO: look into why using cursor old.
         if (is_vector_3i32_inside__hitbox(
@@ -698,6 +701,10 @@ void _f_render_ui_element_callback__ui_manager(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game,
         UI_Element *p_ui_element) {
+    if (!p_ui_element
+            || !is_ui_element__enabled(p_ui_element)) {
+        return;
+    }
     if (!does_ui_element_have__render_handler(
                 p_ui_element)) {
         return;

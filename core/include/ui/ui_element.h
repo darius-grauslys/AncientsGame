@@ -14,7 +14,7 @@ void initialize_ui_element(
         UI_Element *p_ui_element__child,
         UI_Element *p_ui_element__next,
         enum UI_Element_Kind kind_of_ui_element,
-        UI_Flags__u8 ui_flags,
+        UI_Flags__u16 ui_flags,
         Quantity__u8 width__u8,
         Quantity__u8 height__u8,
         Vector__3i32 position__3i32);
@@ -179,7 +179,7 @@ bool is_ui_element_of__this_kind(
 }
 
 static inline
-UI_Flags__u8 get_ui_element__flags(
+UI_Flags__u16 get_ui_element__flags(
         UI_Element *p_ui_element) {
     return p_ui_element
         ->ui_flags;
@@ -193,6 +193,11 @@ bool is_ui_element__allocated(UI_Element *p_ui_element) {
 static inline
 bool is_ui_element__enabled(UI_Element *p_ui_element) {
     return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_ENABLED);
+}
+
+static inline
+bool is_ui_element__non_interactive(UI_Element *p_ui_element) {
+    return (bool)(p_ui_element->ui_flags & UI_FLAGS__BIT_IS_NON_INTERACTIVE);
 }
 
 static inline
@@ -353,6 +358,29 @@ void set_ui_element_as__disabled(
         UI_Element *p_ui_element) {
     p_ui_element->ui_flags &=
         ~UI_FLAGS__BIT_IS_ENABLED;
+}
+
+///
+/// Different from disabled.
+/// Disabled will prevent rendering.
+/// Non-interactive will prevent user interaction
+/// but still allow for rendering.
+///
+/// Use this if you want to overlay a bunch of UIs
+/// with some render-only UI (such as a background.)
+///
+static inline
+void set_ui_element_as__non_interactive(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags |=
+        UI_FLAGS__BIT_IS_NON_INTERACTIVE;
+}
+
+static inline
+void set_ui_element_as__interactive(
+        UI_Element *p_ui_element) {
+    p_ui_element->ui_flags &=
+        ~UI_FLAGS__BIT_IS_NON_INTERACTIVE;
 }
 
 static inline

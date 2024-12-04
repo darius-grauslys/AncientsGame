@@ -144,6 +144,66 @@ bool SDL_load_textures(Game *p_game) {
     }
     result &= result__current;
 
+    if (!_SDL_load_texture(
+                p_PLATFORM_gfx_context,
+                p_SDL_texture_manager,
+                Asset_Directory_Kind__Entity_Sprite__8x8, 
+                path, 
+                SDL_texture_string__items, 
+                TEXTURE_FLAG__SIZE_256x256, 
+                TEXTURE_FLAG__RENDER_METHOD__0, 
+                TEXTURE_FLAG__FORMAT__RGBA8888, 
+                &texture_allocation_specification, 
+                &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
+    if (!_SDL_load_texture(
+                p_PLATFORM_gfx_context,
+                p_SDL_texture_manager,
+                Asset_Directory_Kind__UI__Sprite__8x8, 
+                path, 
+                SDL_texture_string__ui_sprites__8x8, 
+                TEXTURE_FLAG__SIZE_256x256, 
+                TEXTURE_FLAG__RENDER_METHOD__0, 
+                TEXTURE_FLAG__FORMAT__RGBA8888, 
+                &texture_allocation_specification, 
+                &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
+    if (!_SDL_load_texture(
+                p_PLATFORM_gfx_context,
+                p_SDL_texture_manager,
+                Asset_Directory_Kind__UI__Sprite__16x16, 
+                path, 
+                SDL_texture_string__ui_sprites__16x16, 
+                TEXTURE_FLAG__SIZE_256x256, 
+                TEXTURE_FLAG__RENDER_METHOD__0, 
+                TEXTURE_FLAG__FORMAT__RGBA8888, 
+                &texture_allocation_specification, 
+                &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
+    if (!_SDL_load_texture(
+                p_PLATFORM_gfx_context,
+                p_SDL_texture_manager,
+                Asset_Directory_Kind__UI__Sprite__32x32, 
+                path, 
+                SDL_texture_string__ui_sprites__32x32, 
+                TEXTURE_FLAG__SIZE_256x256, 
+                TEXTURE_FLAG__RENDER_METHOD__0, 
+                TEXTURE_FLAG__FORMAT__RGBA8888, 
+                &texture_allocation_specification, 
+                &result__current)) {
+        goto failure_to__allocate;
+    }
+    result &= result__current;
+
     return result;
 failure_to__allocate:
     debug_abort("SDL::SDL_load_textures, failed to allocate p_PLATFORM_texture.");

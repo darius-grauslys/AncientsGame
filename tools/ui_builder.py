@@ -506,6 +506,25 @@ def get_vector_3i32_argument(\
                 z_offset) \
             )\
 
+def background(signature, xml_element, context_stack):
+    rectangle_spec = RectangleSpec(xml_element, context_stack)
+
+    args = []
+    args.append(context_stack[-1].p_ui_element)
+    args += get_rect_spec_args(context_stack, rectangle_spec)
+    args.append(\
+            get_str_from_xml_or__use_this(\
+                xml_element, \
+                "p_gfx_window", \
+                "0"))
+
+    generate_source_c__signature(\
+            signature,\
+            args)
+    
+    generate_source_c__new_line()
+    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
+
 def button(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
 
@@ -533,7 +552,8 @@ def button(signature, xml_element, context_stack):
             args)
     
     generate_source_c__new_line()
-    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
+    # TODO: make a dotted line outline for logicals instead of opaque box
+    # allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def slider(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)
@@ -646,7 +666,7 @@ def generate_source__ui(xml_node__ui):
             "\nUI_Element *{}_allocate_ui_for__{}".format(\
             config.BACKEND,\
             config.source_name))
-    generate_source_h__arguments(["Game *p_game, UI_Manager *p_ui_manager"])
+    generate_source_h__arguments(["Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_h__with_literal(";\n")
 
     generate_source_c__with_literal(\
@@ -656,7 +676,7 @@ def generate_source__ui(xml_node__ui):
             "\nUI_Element *{}_allocate_ui_for__{}".format(\
             config.BACKEND,\
             config.source_name))
-    generate_source_c__arguments(["Game *p_game, UI_Manager *p_ui_manager"])
+    generate_source_c__arguments(["Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_c__with_literal("{\n")
 
     context_stack = deque()

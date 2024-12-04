@@ -1,5 +1,6 @@
 #include "ui/sdl_ui__background.h"
 #include "game.h"
+#include "platform.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_viewport.h"
 #include "rendering/sdl_gfx_window.h"
@@ -40,6 +41,15 @@ void SDL_initialize_ui_element_as__background(
     set_ui_element__dispose_handler(
             p_ui_background, 
             m_SDL_dispose__ui__background);
+
+    //
+    // This is done so a HUGE background overlayed
+    // ontop of interactive UIs does not stop
+    // the overlayed UIs from interacting with the
+    // cursor.
+    //
+    set_ui_element_as__non_interactive(
+            p_ui_background);
 }
 
 ///
@@ -69,12 +79,18 @@ void m_SDL_render__ui__background(
         ->p_ui_data
         ;
 
+    Vector__3i32 position_of__background__3i32 =
+        PLATFORM_get_gfx_window__position(
+                p_PLATFORM_gfx_window_from__data);
+
     int x =
-        get_x_i32_from__p_ui_element(
-                p_ui_element);
+        position_of__background__3i32.x__i32;
     int y =
-        get_y_i32_from__p_ui_element(
-                p_ui_element);
+        position_of__background__3i32.y__i32;
+
+    set_position_3i32_of__ui_element(
+            p_ui_element,
+            position_of__background__3i32);
 
     int width =
         get_width_from__p_ui_element(
