@@ -39,12 +39,14 @@ allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_PLATFORM_gfx_window,
     p_slider_left);
-    p_slider_left->p_ui_data = 
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__bg_left =
     SDL_allocate_background_as__PLATFORM_Gfx_Window(
     p_game,
     p_PLATFORM_gfx_window,
     SDL_Background_Kind__Inventory_Column,
     get_vector__3i32(0,0,0));
+    p_slider_left->p_ui_data = 
+    p_PLATFORM_gfx_window__bg_left;
 
     UI_Element *p_slider_right = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__slider(p_slider_right, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
@@ -53,12 +55,14 @@ allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_PLATFORM_gfx_window,
     p_slider_right);
-    p_slider_right->p_ui_data = 
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__bg_right =
     SDL_allocate_background_as__PLATFORM_Gfx_Window(
     p_game,
     p_PLATFORM_gfx_window,
     SDL_Background_Kind__Inventory_Column,
     get_vector__3i32(0,0,0));
+    p_slider_right->p_ui_data = 
+    p_PLATFORM_gfx_window__bg_right;
 
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -252,5 +256,11 @@ set_ui_element_as__the_parent_of__this_ui_element(
     get_p_ui_element_by__index_from__ui_manager(
     p_ui_manager,
     SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62));
+
+    UI_Element *p_bg_left = allocate_ui_element_from__ui_manager(p_ui_manager);
+    SDL_initialize_ui_element_as__background(p_bg_left, 256, 256, get_vector__3i32(41 + 0, 86 + 0, 0), p_PLATFORM_gfx_window__bg_left);
+
+    UI_Element *p_bg_right = allocate_ui_element_from__ui_manager(p_ui_manager);
+    SDL_initialize_ui_element_as__background(p_bg_right, 256, 256, get_vector__3i32(134 + 0, 86 + 0, 0), p_PLATFORM_gfx_window__bg_right);
 
 }

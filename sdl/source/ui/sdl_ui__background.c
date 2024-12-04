@@ -10,8 +10,8 @@
 
 void SDL_initialize_ui_element_as__background(
         UI_Element *p_ui_background,
-        Quantity__u8 width__u8,
-        Quantity__u8 height__u8,
+        Quantity__u16 width__u16,
+        Quantity__u16 height__u16,
         Vector__3i32 position__3i32,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     initialize_ui_element(
@@ -22,9 +22,13 @@ void SDL_initialize_ui_element_as__background(
             UI_Element_Kind__Background, 
             get_ui_element__flags(
                 p_ui_background), 
-            width__u8, 
-            height__u8, 
+            width__u16, 
+            height__u16, 
             position__3i32);
+
+   p_PLATFORM_gfx_window 
+        ->SDL_origin_of__graphics_window =
+        vector_3i32_to__vector_3i32F4(position__3i32);
 
     SDL_set_position_of__gfx_window(
             p_PLATFORM_gfx_window, 
@@ -104,13 +108,17 @@ void m_SDL_render__ui__background(
             get_p_PLATFORM_gfx_context_from__game(
                 p_game));
 
+    // TODO: HACK we are using gl in sdl context lol
     GL_push_viewport(
             p_GL_viewport_stack,
             x, 
-            y, 
+            -y, 
             width, 
             height);
 
+    SDL_compose_gfx_window(
+            p_game, 
+            p_PLATFORM_gfx_window_from__data);
     SDL_render_gfx_window(
             p_game, 
             p_PLATFORM_gfx_window_from__data);

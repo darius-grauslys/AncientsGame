@@ -147,17 +147,21 @@ void m_ui_slider__dragged_handler__gfx_window__default(
                 p_this_draggable, 
                 spanning_length);
 
+    debug_info("start: %d",
+            *p_starting_distance);
+
     *p_starting_distance -=
         offset;
 
     Vector__3i32 position_for__elements =
         position_for__bgSetScroll;
-    position_for__elements.x__i32 *= -1;
+    // TODO: this is -1 on nds
+    position_for__elements.x__i32 *= 1;
     position_for__elements.x__i32 += 
         (get_width_from__p_ui_element(p_this_draggable->p_child) >> 1)
         + 4
         ;
-    position_for__elements.y__i32 += 
+    position_for__elements.y__i32 -= 
         get_height_from__p_ui_element(p_this_draggable->p_child) >> 1;
     set_positions_of__ui_elements_in__succession(
             p_this_draggable->p_child, 

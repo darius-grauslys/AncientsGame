@@ -15,8 +15,8 @@ void initialize_ui_element(
         UI_Element *p_ui_element__next,
         enum UI_Element_Kind kind_of_ui_element,
         UI_Flags__u16 ui_flags,
-        Quantity__u8 width__u8,
-        Quantity__u8 height__u8,
+        Quantity__u16 width__u16,
+        Quantity__u16 height__u16,
         Vector__3i32 position__3i32);
 
 void m_ui_element__dispose_handler__default(

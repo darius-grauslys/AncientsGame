@@ -133,6 +133,28 @@ void GL_compose_gfx_window(
                 p_PLATFORM_gfx_context)
         ->GL_vertex_object__unit_square;
 
+    GL_push_viewport(
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context), 
+            0, 
+            0,
+            p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture
+            ->width,
+            p_PLATFORM_graphics_window
+            ->p_SDL_graphics_window__texture
+            ->height);
+
+    render_all_ui_elements_in__ui_manager(
+            SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
+                p_PLATFORM_graphics_window), 
+            p_PLATFORM_graphics_window,
+            p_game);
+
+    GL_pop_viewport(
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context));
+
     use_shader_2d(
             p_GL_shader__passthrough);
 
@@ -190,28 +212,6 @@ void GL_compose_gfx_window(
             GL_pop_viewport(p_GL_viewport_stack);
         }
     }
-
-    GL_push_viewport(
-            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context), 
-            0, 
-            0,
-            p_PLATFORM_graphics_window
-            ->p_SDL_graphics_window__texture
-            ->width,
-            p_PLATFORM_graphics_window
-            ->p_SDL_graphics_window__texture
-            ->height);
-
-    render_all_ui_elements_in__ui_manager(
-            SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
-                p_PLATFORM_graphics_window), 
-            p_PLATFORM_graphics_window,
-            p_game);
-
-    GL_pop_viewport(
-            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context));
 
     GL_pop_framebuffer_off_of__framebuffer_manager(
             p_GL_framebuffer_manager);

@@ -42,6 +42,9 @@ void SDL_initialize_gfx_window(
     p_PLATFORM_gfx_window
         ->SDL_position_of__graphics_window =
         position_of__graphics_window__3i32F4;
+    p_PLATFORM_gfx_window
+        ->SDL_origin_of__graphics_window =
+        position_of__graphics_window__3i32F4;
 }
 
 void SDL_compose_gfx_window(
@@ -118,7 +121,9 @@ void PLATFORM_set_gfx_window__position(
 Vector__3i32 PLATFORM_get_gfx_window__origin(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     // TODO: impl
-    return VECTOR__3i32__0_0_0;
+    return vector_3i32F4_to__vector_3i32(
+            p_PLATFORM_gfx_window
+            ->SDL_origin_of__graphics_window);
 }
 
 Vector__3i32 PLATFORM_get_gfx_window__position(

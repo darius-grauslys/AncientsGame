@@ -77,6 +77,7 @@ typedef struct PLATFORM_Graphics_Window_t {
     UI_Window_Kind the_kind_of__ui_window;
     UI_Tile_Map__Wrapper SDL_graphics_window__ui_tile_map__wrapper;
     Vector__3i32F4 SDL_position_of__graphics_window;
+    Vector__3i32F4 SDL_origin_of__graphics_window;
     bool is_allocated;
 } PLATFORM_Graphics_Window;
 

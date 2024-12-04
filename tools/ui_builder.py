@@ -523,7 +523,8 @@ def background(signature, xml_element, context_stack):
             args)
     
     generate_source_c__new_line()
-    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
+    # TODO: do a transparent rect that is opaque dotted outline
+    # allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def button(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)

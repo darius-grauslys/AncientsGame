@@ -21,8 +21,8 @@ void initialize_ui_element(
         UI_Element *p_ui_element__next,
         enum UI_Element_Kind kind_of_ui_element,
         UI_Flags__u16 ui_flags,
-        Quantity__u8 width__u8,
-        Quantity__u8 height__u8,
+        Quantity__u16 width__u16,
+        Quantity__u16 height__u16,
         Vector__3i32 position__3i32) {
     p_ui_element->p_ui_data = 0;
     p_ui_element->p_parent = p_ui_element__parent;
@@ -35,8 +35,8 @@ void initialize_ui_element(
     p_ui_element->ui_flags = ui_flags;
     initialize_hitbox(
             &p_ui_element->ui_bounding_box__aabb, 
-            width__u8, 
-            height__u8, 
+            width__u16, 
+            height__u16, 
             vector_3i32_to__vector_3i32F4(position__3i32));
     p_ui_element->m_ui_clicked_handler = 0;
     p_ui_element->m_ui_dragged_handler = 0;

@@ -1,5 +1,6 @@
 #include "align.h"
 #include "defines.h"
+#include "numerics.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_numerics.h"
 #include "rendering/opengl/gl_viewport.h"
@@ -181,8 +182,8 @@ void GL_link_camera_projection_to__shader(
         glm_ortho_lh_no(
                 (int)(-p_viewport->width / 2 / TILE_PIXEL_WIDTH) +16, 
                 (int)( p_viewport->width / 2 / TILE_PIXEL_WIDTH) +16,
+                (int)( p_viewport->height / 2 / TILE_PIXEL_WIDTH) + 16,
                 (int)( p_viewport->height / 2 / TILE_PIXEL_WIDTH) - 16, 
-                (int)(-p_viewport->height / 2 / TILE_PIXEL_WIDTH) - 16,
                 -1.0f,
                  1.0f,
                  *p_projection);
@@ -271,6 +272,11 @@ void GL_link_data_to__shader(
     }
     if (GL_does_shader_utilize__model_mat_4_4(
                 p_GL_shader)) {
+        // TODO: if statement here is a hack.
+        // if (!p_camera)
+        //     position__3i32F4.y__i32F4 =
+        //         i32_to__i32F4(256)
+        //         - position__3i32F4.y__i32F4;
         GL_link_model_data_to__shader(
                 p_GL_shader, 
                 position__3i32F4, 
