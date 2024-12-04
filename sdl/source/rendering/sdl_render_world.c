@@ -21,9 +21,13 @@ void SDL_render_world(Game *p_game) {
 }
 
 void f_SDL_render_world__default(Game *p_game) {
-    p_game->p_PLATFORM_gfx_context->p_active_camera
+    p_game->p_PLATFORM_gfx_context
+        ->SDL_graphics_window__main
+        .p_active_camera
         ->m_camera_handler(
-                p_game->p_PLATFORM_gfx_context->p_active_camera,
+                p_game->p_PLATFORM_gfx_context
+                ->SDL_graphics_window__main
+                .p_active_camera,
                 p_game);
 
     Chunk_Manager *p_chunk_manager =

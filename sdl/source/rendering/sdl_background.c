@@ -30,6 +30,7 @@ PLATFORM_Graphics_Window *SDL_allocate_background_as__PLATFORM_Gfx_Window(
             p_PLATFORM_gfx_window__child =
                 SDL_allocate_gfx_window(
                         get_p_PLATFORM_gfx_context_from__game(p_game), 
+                        0,
                         &texture_alloc_spec);
             UI_Tile_Map__Wrapper ui_tile_map__wrapper =
                 PLATFORM_get_tile_map__wrapper_from__gfx_window(

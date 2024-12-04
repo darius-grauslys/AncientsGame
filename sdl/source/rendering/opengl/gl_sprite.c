@@ -13,6 +13,25 @@
 #include <rendering/opengl/gl_gfx_sub_context.h>
 #include <sdl_defines.h>
 
+void GL_initialize_sprite_with__this_shader(
+        GL_Sprite *p_GL_sprite,
+        GL_Shader_2D *p_GL_shader) {
+    p_GL_sprite
+        ->p_GL_shader = p_GL_shader;
+    initialize_vertex_object_as__unit_square(
+            &p_GL_sprite->GL_vertex_object);
+
+    p_GL_sprite->location_of__sprite_frame_row_col
+        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
+                "spriteframe_row_col");
+    p_GL_sprite->location_of__sprite_frame_width_height
+        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
+                "spriteframe_width_height");
+    p_GL_sprite->location_of__sprite_flip
+        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
+                "sprite_flip");
+}
+
 void GL_initialize_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite) {
@@ -42,25 +61,6 @@ void GL_initialize_sprite(
     GL_initialize_sprite_with__this_shader(
             p_GL_sprite, 
             p_GL_shader);
-}
-
-void GL_initialize_sprite_with__this_shader(
-        GL_Sprite *p_GL_sprite,
-        GL_Shader_2D *p_GL_shader) {
-    p_GL_sprite
-        ->p_GL_shader = p_GL_shader;
-    initialize_vertex_object_as__unit_square(
-            &p_GL_sprite->GL_vertex_object);
-
-    p_GL_sprite->location_of__sprite_frame_row_col
-        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
-                "spriteframe_row_col");
-    p_GL_sprite->location_of__sprite_frame_width_height
-        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
-                "spriteframe_width_height");
-    p_GL_sprite->location_of__sprite_flip
-        = glGetUniformLocation(p_GL_sprite->p_GL_shader->handle, 
-                "sprite_flip");
 }
 
 void GL_release_sprite_vertext_object(
@@ -108,18 +108,17 @@ void GL_render_sprite(
         p_GL_sprite->p_GL_shader;
 
     Camera *p_SDL_camera__active =
-        p_PLATFORM_gfx_context
+        p_PLATFORM_gfx_window
         ->p_active_camera
         ;
 
     use_shader_2d(p_GL_shader__sprite);
-    if (p_SDL_camera__active) {
-        GL_link_data_to__shader(
-                p_GL_shader__sprite, 
-                p_SDL_camera__active, 
-                position__3i32F4, 
-                i32_to__i32F4(1));
-    }
+    GL_link_data_to__shader(
+            p_PLATFORM_gfx_context,
+            p_GL_shader__sprite, 
+            p_SDL_camera__active, 
+            position__3i32F4, 
+            i32_to__i32F4(1));
 
     use_vertex_object(&p_GL_sprite->GL_vertex_object);
     PLATFORM_use_texture(

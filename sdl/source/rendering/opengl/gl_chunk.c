@@ -19,6 +19,7 @@
 
 void GL_render_chunk(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
     GL_Chunk_Texture_Manager *p_GL_chunk_texture_manager =
         GL_get_p_chunk_texture_manager_from__PLATFORM_gfx_context(
@@ -54,7 +55,7 @@ void GL_render_chunk(
     // TODO: null checks
 
     Camera *p_camera =
-        p_PLATFORM_gfx_context
+        p_PLATFORM_gfx_window
         ->p_active_camera
         ;
 
@@ -66,6 +67,7 @@ void GL_render_chunk(
     use_shader_2d(p_GL_shader__chunk);
 
     GL_link_data_to__shader(
+            p_PLATFORM_gfx_context,
             p_GL_shader__chunk,
             p_camera,
             chunk_pos_in__world__3i32f4,

@@ -20,6 +20,7 @@
 #include <defines.h>
 #include <rendering/sdl_gfx_context.h>
 #include <sdl_defines.h>
+#include "input/opengl/gl_input.h"
 
 PLATFORM_Gfx_Context __SDL_Gfx_Context;
 
@@ -90,6 +91,10 @@ bool _SDL_link_opengl_3_0(
         debug_abort("SDL::SDL_initialize_gfx_context, failed to allocate sub context.");
         return true;
     }
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_process_input =
+        GL_process_input;
 
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_initialize_rendering__worldspace =

@@ -14,11 +14,16 @@
 void SDL_initialize_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Camera *p_camera,
         UI_Window_Kind the_kind_of__ui_window,
         Vector__3i32F4 position_of__graphics_window__3i32F4) {
     p_PLATFORM_gfx_window
         ->p_PLATFORM_gfx_context =
         p_PLATFORM_gfx_context
+        ;
+    p_PLATFORM_gfx_window
+        ->p_active_camera =
+        p_camera
         ;
 
     initialize_ui_manager(

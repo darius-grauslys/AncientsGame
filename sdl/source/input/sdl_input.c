@@ -1,5 +1,6 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "game.h"
 #include "input/input.h"
 #include "platform.h"
 #include "platform_defines.h"
@@ -7,6 +8,7 @@
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 #include <input/sdl_input.h>
+#include "sdl_defines.h"
 
 enum Input_Binding_Kind {
     Input_Binding_Kind__None,
@@ -116,7 +118,9 @@ void SDL_initialize_input_bindings() {
     };
 }
 
-void PLATFORM_poll_input(Input *p_input) {
+void PLATFORM_poll_input(
+        Game *p_game,
+        Input *p_input) {
     const u8 *p_keys = SDL_GetKeyboardState(0);
 
     p_input->input_flags__pressed_old =
@@ -162,4 +166,18 @@ void PLATFORM_poll_input(Input *p_input) {
         (~p_input->input_flags__pressed)
         & p_input->input_flags__pressed_old
         ;
+
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__game(p_game);
+    f_SDL_Process_Input f_SDL_process_input =
+        p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .f_SDL_process_input
+        ;
+    if (!f_SDL_process_input)
+        return;
+
+    f_SDL_process_input(
+            p_game,
+            p_input);
 }

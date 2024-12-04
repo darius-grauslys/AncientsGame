@@ -47,7 +47,10 @@ void m_enter_scene_handler_as__test(
         p_game->world.entity_manager
             .p_local_player;
     set_camera_to__track_this__entity(
-            p_game->p_PLATFORM_gfx_context->p_active_camera,
+            p_game
+            ->p_PLATFORM_gfx_context
+            ->SDL_graphics_window__main
+            .p_active_camera,
             p_player);
     teleport_player(
             p_game, 

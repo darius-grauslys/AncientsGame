@@ -92,6 +92,7 @@ void SDL_release_PLATFORM_gfx_window_from__manager(
 // that mngr as a pointer parameter
 PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Camera *p_camera,
         Texture_Allocation_Specification
             *p_texture_allocation_specification) {
 
@@ -122,6 +123,7 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
     SDL_initialize_gfx_window(
             p_PLATFORM_gfx_context, 
             p_PLATFORM_gfx_window, 
+            p_camera,
             UI_Window_Kind__Unknown, 
             VECTOR__3i32F4__0_0_0);
 

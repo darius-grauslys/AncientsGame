@@ -27,6 +27,7 @@ void GL_link_translation_to__shader(
         Vector__3i32F4 translation);
 
 void GL_link_camera_projection_to__shader(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Shader_2D *p_GL_shader,
         Camera *p_camera);
 
@@ -40,6 +41,7 @@ void GL_link_model_data_to__shader(
         i32F4 scale);
 
 void GL_link_data_to__shader(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Shader_2D *p_GL_shader,
         Camera *p_camera,
         Vector__3i32F4 position__3i32F4,

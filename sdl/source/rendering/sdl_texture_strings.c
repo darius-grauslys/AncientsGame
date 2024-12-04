@@ -54,11 +54,11 @@ SDL_Texture_String__Const
                 p_sprite_allocation_specification
                 ->the_kind_of__ui__this_sprite_is;
             if (the_kind_of__ui_sprite
-                    < UI_Sprite_Kind__16x16) {
+                    < UI_Sprite_Kind__8x8) {
                 return &SDL_texture_string__ui_sprites__8x8;
             }
             if (the_kind_of__ui_sprite
-                    < UI_Sprite_Kind__32x32) {
+                    < UI_Sprite_Kind__16x16) {
                 return &SDL_texture_string__ui_sprites__16x16;
             }
             if (the_kind_of__ui_sprite

@@ -2,15 +2,22 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "inventory/inventory.h"
+#include "inventory/inventory_manager.h"
+#include "inventory/station_inventory_map.h"
 #include "platform.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/texture.h"
+#include "serialization/serialized_field.h"
 #include "ui/game/sdl_ui_window__game__equip.h"
 #include "ui/game/sdl_ui_window__game__trade.h"
 #include "ui/game/sdl_ui_window__game__station.h"
 #include "ui/sdl_ui__background.h"
+#include "ui/ui_inventory_column.h"
+#include "ui/ui_inventory_equipment.h"
+#include "ui/ui_inventory_station.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
 #include "assets/ui/default/ui_map_trade.h"
@@ -40,6 +47,7 @@ void PLATFORM_open_ui(
     PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__ui =
         SDL_allocate_gfx_window(
                 p_PLATFORM_gfx_context, 
+                0,
                 &texture_alloc_spec);
 
     if (!p_PLATFORM_gfx_window__ui) {
@@ -55,6 +63,9 @@ void PLATFORM_open_ui(
         PLATFORM_get_p_ui_manager_from__gfx_window(
                 p_PLATFORM_gfx_window__ui);
 
+    Entity *p_entity__local_player =
+        get_p_local_player_from__game(p_game);
+
     switch (the_kind_of__ui_window_to__open) {
         default:
         case UI_Window_Kind__Idle:
@@ -68,6 +79,45 @@ void PLATFORM_open_ui(
                     p_game, 
                     p_PLATFORM_gfx_window__ui, 
                     p_ui_manager);
+
+            UI_Element *p_ui_element__inventory_column__equip =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14);
+
+            UI_Element *p_ui_element__equipment_column__equip =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_8);
+
+            if (!p_entity__local_player) {
+                debug_error("SDL::PLATFORM_open_ui, fail to get local player.");
+                return;
+            }
+            if (!resolve_s_inventory_ptr_to__inventory_manager(
+                        get_p_inventory_manager_from__game(p_game), 
+                        &p_entity__local_player->s_humanoid__inventory_ptr)) {
+                debug_error("SDL::PLATFORM_open_ui, fail to get inventory of local player.");
+                return;
+            }
+
+            Inventory *p_inventory__equip = 
+                p_entity__local_player
+                ->s_humanoid__inventory_ptr
+                .p_serialized_field__inventory
+                ;
+
+            allocate_ui_inventory_column_into__ui_element_container(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_element__inventory_column__equip, 
+                    p_inventory__equip);
+
+            allocate_ui_equipment_into__ui_element_container(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_element__equipment_column__equip, 
+                    &p_entity__local_player->equipment);
             break;
         case UI_Window_Kind__Trade:
             memcpy(
@@ -78,6 +128,58 @@ void PLATFORM_open_ui(
                     p_game, 
                     p_PLATFORM_gfx_window__ui, 
                     p_ui_manager);
+
+            UI_Element *p_ui_element__inventory_column__container__trade =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8);
+
+            UI_Element *p_ui_element__inventory_column__player__trade =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62);
+
+            if (!p_entity__local_player) {
+                debug_error("SDL::PLATFORM_open_ui, fail to get local player.");
+                return;
+            }
+            if (!resolve_s_inventory_ptr_to__inventory_manager(
+                        get_p_inventory_manager_from__game(p_game), 
+                        &p_entity__local_player->s_humanoid__inventory_ptr)) {
+                debug_error("SDL::PLATFORM_open_ui, fail to get inventory of local player.");
+                return;
+            }
+
+            if (!resolve_s_inventory_ptr_to__inventory_manager(
+                        get_p_inventory_manager_from__game(p_game), 
+                        &p_entity__local_player->s_humanoid__container_ptr)) {
+                debug_error("SDL::PLATFORM_open_ui, fail to get inventory of trade container.");
+                return;
+            }
+
+            Inventory *p_inventory__trade = 
+                p_entity__local_player
+                ->s_humanoid__inventory_ptr
+                .p_serialized_field__inventory
+                ;
+
+            Inventory *p_inventory__container__trade = 
+                p_entity__local_player
+                ->s_humanoid__container_ptr
+                .p_serialized_field__inventory
+                ;
+
+            allocate_ui_inventory_column_into__ui_element_container(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_element__inventory_column__player__trade, 
+                    p_inventory__trade);
+
+            allocate_ui_inventory_column_into__ui_element_container(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_element__inventory_column__container__trade, 
+                    p_inventory__container__trade);
             break;
         case UI_Window_Kind__Station:
             memcpy(
@@ -88,6 +190,84 @@ void PLATFORM_open_ui(
                     p_game, 
                     p_PLATFORM_gfx_window__ui, 
                     p_ui_manager);
+
+            if (!p_entity__local_player)
+                return;
+            if (!resolve_s_inventory_ptr_to__inventory_manager(
+                        get_p_inventory_manager_from__game(p_game), 
+                        &p_entity__local_player->s_humanoid__inventory_ptr)) {
+                return;
+            }
+            if (!resolve_s_inventory_ptr_to__inventory_manager(
+                        get_p_inventory_manager_from__game(p_game), 
+                        &p_entity__local_player->s_humanoid__container_ptr)) {
+                return;
+            }
+
+            Inventory *p_inventory__player = 
+                p_entity__local_player
+                ->s_humanoid__inventory_ptr
+                .p_serialized_field__inventory
+                ;
+
+            Tile_Vector__3i32 tile_vector_of__station__3i32 =
+                p_game_action
+                ->game_action__container__tile_vector_3i32
+                ;
+
+            Serialized_Field s_station_inventory;
+            initialize_serialized_field_as__unlinked(
+                    &s_station_inventory, 
+                    get_uuid_for__container(
+                        tile_vector_of__station__3i32));
+
+            Inventory *p_inventory__station = 
+                resolve_s_inventory(
+                        p_game,
+                        &s_station_inventory);
+
+            if (!p_inventory__station) {
+                PLATFORM_open_ui(
+                        p_game,
+                        UI_Window_Kind__Idle,
+                        0);
+                return;
+            }
+
+            Station_Inventory_Map station_inventory_map;
+            map_station_inventory(
+                    p_inventory__station, 
+                    &station_inventory_map);
+
+            UI_Element *p_ui_element__inventory_column__player__station =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11);
+
+            allocate_ui_inventory_column_into__ui_element_container(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui,
+                    p_ui_element__inventory_column__player__station, 
+                    p_inventory__player);
+
+            // load station items:
+
+            UI_Element *p_ui_element__inventory_slot__requirements =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__STATION_P_REQUIREMENTS_7);
+
+            UI_Element *p_ui_element__inventory_slot__recipe_and_tools =
+                get_p_ui_element_by__index_from__ui_manager(
+                        p_ui_manager,
+                        SDL_UI_WINDOW__GAME__STATION_P_RECIPE_AND_TOOLS_4);
+
+            allocate_ui_station_inventory_for__ui_element_container(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui,
+                    &station_inventory_map, 
+                    p_ui_element__inventory_slot__requirements, 
+                    p_ui_element__inventory_slot__recipe_and_tools);
             break;
     }
 

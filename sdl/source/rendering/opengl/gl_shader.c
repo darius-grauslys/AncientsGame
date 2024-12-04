@@ -1,6 +1,8 @@
 #include "align.h"
+#include "defines.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_numerics.h"
+#include "rendering/opengl/gl_viewport.h"
 #include "rendering/opengl/glad/glad.h"
 #include "sdl_numerics.h"
 #include <cglm/clipspace/ortho_lh_no.h>
@@ -136,9 +138,9 @@ void GL_link_translation_to__shader(
 
     ALIGN(16, mat4, translation);
 
-    vec3__translation[0] *= -(1.0/8);
-    vec3__translation[1] *= -(1.0/8);
-    vec3__translation[2] *= -(1.0/8);
+    vec3__translation[0] *= -(1.0/16);
+    vec3__translation[1] *= -(1.0/16);
+    vec3__translation[2] *= -(1.0/16);
 
     glm_translate_make(
             *p_translation, 
@@ -152,20 +154,39 @@ void GL_link_translation_to__shader(
 }
 
 void GL_link_camera_projection_to__shader(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Shader_2D *p_GL_shader,
         Camera *p_camera) {
 
     ALIGN(16, mat4, projection);
 
-    // TODO: magic numbers
-    glm_ortho_lh_no(
-            -(float)p_camera->width_of__fulcrum, 
-             (float)p_camera->width_of__fulcrum,
-            -(float)p_camera->height_of__fulcrum, 
-             (float)p_camera->height_of__fulcrum,
-             i32F20_to__float(p_camera->z_near),
-             i32F20_to__float(p_camera->z_far),
-             *p_projection);
+    if (p_camera) {
+        // TODO: magic numbers
+        glm_ortho_lh_no(
+                -(float)p_camera->width_of__fulcrum, 
+                 (float)p_camera->width_of__fulcrum,
+                -(float)p_camera->height_of__fulcrum, 
+                 (float)p_camera->height_of__fulcrum,
+                 i32F20_to__float(p_camera->z_near),
+                 i32F20_to__float(p_camera->z_far),
+                 *p_projection);
+    } else {
+        GL_Viewport_Stack *p_viewport_stack =
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                    p_PLATFORM_gfx_context);
+        GL_Viewport *p_viewport =
+            GL_peek_viewport_stack(
+                    p_viewport_stack);
+        // TODO: magic numbers
+        glm_ortho_lh_no(
+                (int)(-p_viewport->width / 2 / TILE_PIXEL_WIDTH) +16, 
+                (int)( p_viewport->width / 2 / TILE_PIXEL_WIDTH) +16,
+                (int)( p_viewport->height / 2 / TILE_PIXEL_WIDTH) - 16, 
+                (int)(-p_viewport->height / 2 / TILE_PIXEL_WIDTH) - 16,
+                -1.0f,
+                 1.0f,
+                 *p_projection);
+    }
 
     glUniformMatrix4fv(
             p_GL_shader->location_of__projection_mat_4_4,
@@ -180,19 +201,22 @@ void GL_link_camera_translation_to__shader(
 
     vec3 vec3__translation;
 
-    vector_3i32F4_to__vec3(
-            p_camera->position, 
-            vec3__translation);
-
     ALIGN(16, mat4, translation);
 
-    vec3__translation[0] *= -(1.0/8);
-    vec3__translation[1] *= -(1.0/8);
-    vec3__translation[2] *= -(1.0/8);
+    if (p_camera) {
+        vector_3i32F4_to__vec3(
+                p_camera->position, 
+                vec3__translation);
+        vec3__translation[0] *= -(1.0/8);
+        vec3__translation[1] *= -(1.0/8);
+        vec3__translation[2] *= -(1.0/8);
 
-    glm_translate_make(
-            *p_translation, 
-            vec3__translation);
+        glm_translate_make(
+                *p_translation, 
+                vec3__translation);
+    } else {
+        glm_mat4_identity(*p_translation);
+    }
 
     glUniformMatrix4fv(
             p_GL_shader->location_of__translation_mat_4_4,
@@ -227,6 +251,7 @@ void GL_link_model_data_to__shader(
 }
 
 void GL_link_data_to__shader(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Shader_2D *p_GL_shader,
         Camera *p_camera,
         Vector__3i32F4 position__3i32F4,
@@ -234,6 +259,7 @@ void GL_link_data_to__shader(
     if (GL_does_shader_utilize__projection_mat_4_4(
                 p_GL_shader)) {
         GL_link_camera_projection_to__shader(
+                p_PLATFORM_gfx_context,
                 p_GL_shader, 
                 p_camera);
     }

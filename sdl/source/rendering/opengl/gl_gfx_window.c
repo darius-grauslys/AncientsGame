@@ -109,7 +109,7 @@ void GL_compose_gfx_window(
     float clear_color[4];
     glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
 
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(1.0, 0.0, 1.0, 0.0);
     GL_push_framebuffer_onto__framebuffer_manager(
             p_GL_framebuffer_manager,
             p_GL_framebuffer);
@@ -194,14 +194,8 @@ void GL_compose_gfx_window(
     GL_push_viewport(
             GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context), 
-            i32F4_to__i32(
-                p_PLATFORM_graphics_window
-                ->SDL_position_of__graphics_window
-                .x__i32F4), 
-            i32F4_to__i32(
-                p_PLATFORM_graphics_window
-                ->SDL_position_of__graphics_window
-                .y__i32F4), 
+            0, 
+            0,
             p_PLATFORM_graphics_window
             ->p_SDL_graphics_window__texture
             ->width,

@@ -73,6 +73,7 @@ typedef struct PLATFORM_Graphics_Window_t {
     PLATFORM_Texture *p_SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    Camera *p_active_camera;
     UI_Window_Kind the_kind_of__ui_window;
     UI_Tile_Map__Wrapper SDL_graphics_window__ui_tile_map__wrapper;
     Vector__3i32F4 SDL_position_of__graphics_window;
@@ -90,6 +91,14 @@ typedef union SDL_Event SDL_Event;
 typedef void (*f_SDL_Event_Handler)(
         Game *p_game,
         SDL_Event *p_event);
+
+///
+/// After SDL handles input, give backend
+/// a chance to if needed.
+///
+typedef void (*f_SDL_Process_Input)(
+        Game *p_game,
+        Input *p_input);
 
 typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
@@ -158,6 +167,7 @@ typedef void (*f_SDL_Render_Entity)(
 
 typedef void (*f_SDL_Render_Chunk)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 typedef void (*f_SDL_Update_Chunk)(
@@ -223,6 +233,8 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     SDL_Texture_Manager                 SDL_texture_manager;
     void                                *p_SDL_gfx_sub_context;
 
+    f_SDL_Process_Input                 f_SDL_process_input;
+
     f_SDL_Initialize_Rendering__Worldspace
                                         f_SDL_initialize_rendering__worldspace;
     f_SDL_Render_World                  f_SDL_render_world;
@@ -264,7 +276,6 @@ typedef struct PLATFORM_Gfx_Context_t {
     PLATFORM_Graphics_Window SDL_graphics_window__main;
 
     SDL_Window *p_SDL_window;
-    Camera *p_active_camera;
 
     i32 width_of__sdl_window;
     i32 height_of__sdl_window;

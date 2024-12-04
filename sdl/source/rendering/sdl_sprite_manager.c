@@ -195,6 +195,34 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
     p_PLATFORM_sprite->quantity_of__sprite_frame__rows = 16;
     p_PLATFORM_sprite->sprite_frame__width = 1.0 / 16.0;
     p_PLATFORM_sprite->sprite_frame__height = 1.0 / 16.0;
+    switch (p_sprite_allocation_specification
+            ->the_kind_of__sprite_allocation) {
+        default:
+            break;
+        case Sprite_Allocation_Kind__Item:
+            p_PLATFORM_sprite->quantity_of__sprite_frame__columns = 32;
+            p_PLATFORM_sprite->quantity_of__sprite_frame__rows = 32;
+            p_PLATFORM_sprite->sprite_frame__width = 1.0 / 32.0;
+            p_PLATFORM_sprite->sprite_frame__height = 1.0 / 32.0;
+            break;
+        case Sprite_Allocation_Kind__UI:
+            if (p_sprite_allocation_specification
+                    ->the_kind_of__ui__this_sprite_is
+                    < UI_Sprite_Kind__8x8) {
+                p_PLATFORM_sprite->quantity_of__sprite_frame__columns = 32;
+                p_PLATFORM_sprite->quantity_of__sprite_frame__rows = 32;
+                p_PLATFORM_sprite->sprite_frame__width = 1.0 / 32.0;
+                p_PLATFORM_sprite->sprite_frame__height = 1.0 / 32.0;
+            } else if (p_sprite_allocation_specification
+                    ->the_kind_of__ui__this_sprite_is
+                    >= UI_Sprite_Kind__16x16) {
+                p_PLATFORM_sprite->quantity_of__sprite_frame__columns = 8;
+                p_PLATFORM_sprite->quantity_of__sprite_frame__rows = 8;
+                p_PLATFORM_sprite->sprite_frame__width = 1.0 / 8.0;
+                p_PLATFORM_sprite->sprite_frame__height = 1.0 / 8.0;
+            }
+            break;
+    }
 
     return p_PLATFORM_sprite;
 }

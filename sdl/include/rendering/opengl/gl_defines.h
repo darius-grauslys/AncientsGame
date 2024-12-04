@@ -202,6 +202,13 @@ GL_Viewport_Stack *GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
 }
 
 static inline
+GL_Viewport *GL_get_p_viewport__base_from__viewport_stack(
+        GL_Viewport_Stack *p_GL_viewport_stack) {
+    return p_GL_viewport_stack
+        ->p_GL_viewport__base;
+}
+
+static inline
 GL_Framebuffer_Manager *GL_get_p_framebuffer_manager_from__PLATFORM_gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
     return &((GL_Gfx_Sub_Context*)p_PLATFORM_gfx_context

@@ -9,6 +9,7 @@
 void SDL_initialize_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Camera *p_camera,
         UI_Window_Kind the_kind_of__ui_window,
         Vector__3i32F4 position_of__graphics_window__3i32F4);
 
@@ -26,6 +27,7 @@ void SDL_initialize_gfx_window_as__deallocated(
     SDL_initialize_gfx_window(
             0, 
             p_PLATFORM_gfx_window,
+            0,
             UI_Window_Kind__None,
             VECTOR__3i32F4__OUT_OF_BOUNDS);
 }

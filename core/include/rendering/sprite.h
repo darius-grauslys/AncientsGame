@@ -225,7 +225,7 @@ PLATFORM_Sprite *allocate_sprite_for__item(
 
     initialize_sprite_allocation_specification_for__item(
             &sprite_allocation_specification, 
-            TEXTURE_FLAGS__NONE, 
+            TEXTURE_FLAG__SIZE_8x8, 
             p_PLATFORM_graphics_window, 
             the_kind_of__item);
 

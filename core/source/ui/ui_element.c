@@ -126,7 +126,8 @@ void set_positions_of__ui_elements_in__succession(
         }
     } while (
             iterate_to_next__ui_element(
-                &p_ui_element__succession_collection));
+                &p_ui_element__succession_collection)
+            && p_ui_element__succession_collection);
 }
 
 void set_position_3i32_of__ui_element(

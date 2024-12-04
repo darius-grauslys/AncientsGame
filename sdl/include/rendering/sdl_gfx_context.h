@@ -42,7 +42,9 @@ static inline
 void SDL_set_active_camera(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Camera *p_camera) {
-    p_PLATFORM_gfx_context->p_active_camera =
+    p_PLATFORM_gfx_context
+        ->SDL_graphics_window__main
+        .p_active_camera =
         p_camera;
 }
 

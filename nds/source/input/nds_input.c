@@ -2,7 +2,9 @@
 #include <nds.h>
 #include <input/input.h>
 
-void PLATFORM_poll_input(Input *p_input) {
+void PLATFORM_poll_input(
+        Game *p_game,
+        Input *p_input) {
     scanKeys();
     int keys_held = keysHeld();
     int keys_pressed = keysDown();

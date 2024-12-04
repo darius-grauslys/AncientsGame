@@ -17,6 +17,8 @@ void PLATFORM_render_chunk(
 
     f_SDL_render_chunk(
             p_PLATFORM_gfx_context,
+            &p_PLATFORM_gfx_context
+            ->SDL_graphics_window__main,
             p_chunk_map_node);
 }
 
