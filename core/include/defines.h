@@ -388,6 +388,7 @@ typedef struct Collision_Manager__t {
 ///
 
 typedef uint8_t Sprite_Frame_Index__u8;
+typedef uint16_t Sprite_Frame_Index__u16;
 
 #define ANIMATION_BIT_MASK__TICK_RATE MASK(4)
 
@@ -396,9 +397,9 @@ typedef struct Sprite_Wrapper_t {
     Timer__u32 animation_timer__u32;
     Direction__u8 direction;
     Direction__u8 direction__requested;
-    Sprite_Frame_Index__u8 frame__initial;
-    Sprite_Frame_Index__u8 frame__current;
-    Sprite_Frame_Index__u8 frame__final;
+    Sprite_Frame_Index__u16 frame__initial;
+    Sprite_Frame_Index__u16 frame__current;
+    Sprite_Frame_Index__u16 frame__final;
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
 } Sprite_Wrapper;
 

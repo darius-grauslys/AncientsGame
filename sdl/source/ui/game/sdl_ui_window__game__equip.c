@@ -39,9 +39,6 @@ allocate_sprite_for__ui_slider(
     p_slider->p_ui_data = 
     p_PLATFORM_gfx_window__inv_column;
 
-    UI_Element *p_background__inv_column = allocate_ui_element_from__ui_manager(p_ui_manager);
-    SDL_initialize_ui_element_as__background(p_background__inv_column, 256, 256, get_vector__3i32(0 + 0, 0 + 0, 0), p_PLATFORM_gfx_window__inv_column);
-
     UI_Element *p_button_filter__usable = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_button_filter__usable, 16, 16, get_vector__3i32(228 + 0, 104 + 0, 0), m_ui_button__clicked_handler__default, false, false);
 
@@ -59,7 +56,7 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_8));
+        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
     }
 
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
@@ -71,10 +68,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_8));
+        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,10);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,9);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 2);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -84,10 +81,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_8));
+        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,12);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,11);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
 
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
@@ -98,7 +95,7 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
@@ -110,10 +107,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,17);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,16);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -123,10 +120,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,20);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,19);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -136,10 +133,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,23);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,22);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -149,10 +146,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,26);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,25);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -162,10 +159,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,29);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,28);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -175,10 +172,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,32);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,31);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -188,10 +185,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,35);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,34);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__3=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__3++) {
@@ -201,10 +198,10 @@ allocate_sprite_for__ui_slider(
         p_ui_iterator,
         get_p_ui_element_by__index_from__ui_manager(
         p_ui_manager,
-        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
     }
 
-    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,38);
+    p_ui_iterator_previous_previous->p_next = get_p_ui_element_by__index_from__ui_manager(p_ui_manager,37);
     p_ui_iterator_previous_previous = p_ui_iterator_previous;
 
 set_ui_element_as__the_parent_of__this_ui_element(
@@ -212,6 +209,9 @@ set_ui_element_as__the_parent_of__this_ui_element(
     p_slider,
     get_p_ui_element_by__index_from__ui_manager(
     p_ui_manager,
-    SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+    SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
+
+    UI_Element *p_background__inv_column = allocate_ui_element_from__ui_manager(p_ui_manager);
+    SDL_initialize_ui_element_as__background(p_background__inv_column, 256, 256, get_vector__3i32(88 + 0, 74 + 0, 0), p_PLATFORM_gfx_window__inv_column);
 
 }

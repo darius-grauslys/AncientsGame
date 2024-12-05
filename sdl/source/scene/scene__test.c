@@ -5,15 +5,18 @@
 #include "game.h"
 #include "game_action/game_action.h"
 #include "input/input.h"
+#include "input/sdl_input.h"
 #include "inventory/item_manager.h"
 #include "numerics.h"
 #include "platform.h"
+#include "platform_defaults.h"
 #include "platform_defines.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_vertex_object.h"
 #include "rendering/sdl_chunk.h"
 #include "rendering/sdl_gfx_context.h"
+#include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/sdl_render_world.h"
 #include "sdl_defines.h"
 #include "vectors.h"
@@ -98,17 +101,39 @@ void m_enter_scene_handler_as__test(
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         manage_game__pre_render(p_game);
+
+        /// --- do better --- TODO:
+        PLATFORM_Graphics_Window *ptr_array_of__gfx_windows[
+            PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF];
+        Signed_Quantity__i32 quantity_of__windows =
+            SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
+                    SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                        get_p_PLATFORM_gfx_context_from__game(
+                            p_game)), 
+                    UI_Window_Kind__Unknown, 
+                    ptr_array_of__gfx_windows, 
+                    PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF);
+        if (quantity_of__windows) {
+            consume_input(
+                    get_p_input_from__game(p_game),
+                    INPUT_USE);
+        }
+        // --- up to here ---
+
         SDL_render_world(p_game);
 
-        if (is_input__consume_released(
-                    get_p_input_from__game(p_game))) {
-            save_world(p_game);
-        }
         if (is_input__game_settings_released(
                     get_p_input_from__game(p_game))) {
             PLATFORM_close_ui(
                     p_game, 
                     UI_Window_Kind__Unknown);
+        }
+        if (SDL_is_input__equip_released(
+                    get_p_input_from__game(p_game))) {
+            PLATFORM_open_ui(
+                    p_game, 
+                    UI_Window_Kind__Equip, 
+                    0);
         }
         manage_game__post_render(p_game);
     }

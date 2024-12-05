@@ -27,7 +27,7 @@ typedef struct {
     };
 } Input_Binding;
 
-Input_Binding __SDL_INPUT_BINDINGS[QUANTITY_OF__INPUTS];
+Input_Binding __SDL_INPUT_BINDINGS[SDL_QUANTITY_OF__INPUTS];
 
 void SDL_initialize_input_bindings() {
     __SDL_INPUT_BINDINGS[INPUT_CODE_NONE] = (Input_Binding){
@@ -116,6 +116,12 @@ void SDL_initialize_input_bindings() {
         Input_Binding_Kind__Mouse,
         SDL_BUTTON(1)
     };
+    __SDL_INPUT_BINDINGS[SDL_INPUT_CODE_EQUIP] = (Input_Binding){
+        SDL_INPUT_CODE_EQUIP,
+        SDL_INPUT_EQUIP,
+        Input_Binding_Kind__Keyboard,
+        SDL_SCANCODE_TAB
+    };
 }
 
 void PLATFORM_poll_input(
@@ -134,7 +140,7 @@ void PLATFORM_poll_input(
                 &p_input->cursor__3i32.y__i32);
 
     for (Index__u8 index=0;
-            index<QUANTITY_OF__INPUTS;
+            index<SDL_QUANTITY_OF__INPUTS;
             index++) {
         Input_Binding *p_input_binding =
             &__SDL_INPUT_BINDINGS[index];

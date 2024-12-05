@@ -29,12 +29,14 @@ allocate_sprite_for__ui_slider(
     get_p_PLATFORM_gfx_context_from__game(p_game),
     p_PLATFORM_gfx_window,
     p_slider);
-    p_slider->p_ui_data = 
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__inv_column =
     SDL_allocate_background_as__PLATFORM_Gfx_Window(
     p_game,
     p_PLATFORM_gfx_window,
     SDL_Background_Kind__Inventory_Column,
     get_vector__3i32(0,0,0));
+    p_slider->p_ui_data = 
+    p_PLATFORM_gfx_window__inv_column;
 
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 3);
     for (Index__u32 index_of__iteration__2=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__2++) {
@@ -199,4 +201,5 @@ set_ui_element_as__the_parent_of__this_ui_element(
 
     p_ui_iterator = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_ui_iterator, 32, 16, get_vector__3i32(100 + 0, 164 + 0, 0), m_ui_button__held_handler__default, false, false);
-}
+    UI_Element *p_bg_left = allocate_ui_element_from__ui_manager(p_ui_manager);
+    }

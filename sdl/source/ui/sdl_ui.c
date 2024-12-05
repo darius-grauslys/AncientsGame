@@ -2,10 +2,12 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "input/input.h"
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/station_inventory_map.h"
 #include "platform.h"
+#include "platform_defaults.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_gfx_window.h"
 #include "rendering/sdl_gfx_window_manager.h"
@@ -83,12 +85,12 @@ void PLATFORM_open_ui(
             UI_Element *p_ui_element__inventory_column__equip =
                 get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14);
+                        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13);
 
             UI_Element *p_ui_element__equipment_column__equip =
                 get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_8);
+                        SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7);
 
             if (!p_entity__local_player) {
                 debug_error("SDL::PLATFORM_open_ui, fail to get local player.");

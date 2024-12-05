@@ -159,4 +159,19 @@ static bool inline is_input__click_dragged(Input *p_input) {
                 ;
 }
 
+static inline
+void consume_input(
+        Input *p_input,
+        Input_Flags__u32 input_flags) {
+    p_input
+        ->input_flags__released &=
+        ~input_flags;
+    p_input
+        ->input_flags__pressed &=
+        ~input_flags;
+    p_input
+        ->input_flags__held &=
+        ~input_flags;
+}
+
 #endif

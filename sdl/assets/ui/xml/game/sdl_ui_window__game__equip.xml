@@ -58,9 +58,6 @@
                 p_slider->p_ui_data = 
                     p_PLATFORM_gfx_window__inv_column;
             </code>
-            <allocate_ui name="p_background__inv_column">
-                <background x="0" y="0" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
-            </allocate_ui>
             <allocate_ui name="p_button_filter__usable">
                 <button x="228" y="104" width="16" height="16" color="64,196,64"/>
             </allocate_ui>
@@ -78,7 +75,7 @@
                             p_ui_iterator,
                             get_p_ui_element_by__index_from__ui_manager(
                                 p_ui_manager,
-                                SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_8));
+                                SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
                     </code>
                 </allocate_ui_container>
             </grid>
@@ -90,7 +87,7 @@
                             p_ui_iterator,
                             get_p_ui_element_by__index_from__ui_manager(
                                 p_ui_manager,
-                                SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+                                SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
                     </code>
                 </allocate_ui_container>
             </grid>
@@ -100,8 +97,11 @@
                     p_slider,
                     get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_14));
+                        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
             </code>
+            <allocate_ui name="p_background__inv_column">
+                <background x="88" y="74" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
+            </allocate_ui>
         </group>
     </ui>
 </root>
