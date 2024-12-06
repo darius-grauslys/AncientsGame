@@ -3,6 +3,7 @@
 #include "game.h"
 #include "input/input.h"
 #include "platform.h"
+#include "platform_defaults.h"
 #include "platform_defines.h"
 #include <SDL2/SDL_keyboard.h>
 #include <SDL2/SDL_mouse.h>
@@ -115,6 +116,12 @@ void SDL_initialize_input_bindings() {
         INPUT_CLICK,
         Input_Binding_Kind__Mouse,
         SDL_BUTTON(1)
+    };
+    __SDL_INPUT_BINDINGS[INPUT_CODE_LOCKON] = (Input_Binding){
+        INPUT_CODE_LOCKON,
+        INPUT_LOCKON,
+        Input_Binding_Kind__Keyboard,
+        SDL_SCANCODE_CAPSLOCK
     };
     __SDL_INPUT_BINDINGS[SDL_INPUT_CODE_EQUIP] = (Input_Binding){
         SDL_INPUT_CODE_EQUIP,

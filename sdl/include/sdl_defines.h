@@ -70,6 +70,7 @@ typedef struct PLATFORM_Texture_t {
 
 typedef struct PLATFORM_Graphics_Window_t {
     UI_Manager SDL_graphics_window__ui_manager;
+    Game_Action associated_game_action;
     PLATFORM_Texture *p_SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;

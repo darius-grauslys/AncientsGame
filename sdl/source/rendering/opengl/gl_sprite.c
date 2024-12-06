@@ -112,6 +112,9 @@ void GL_render_sprite(
         ->p_active_camera
         ;
 
+    position__3i32F4.z__i32F4 = 
+        i32_to__i32F4(2);
+
     use_shader_2d(p_GL_shader__sprite);
     GL_link_data_to__shader(
             p_PLATFORM_gfx_context,

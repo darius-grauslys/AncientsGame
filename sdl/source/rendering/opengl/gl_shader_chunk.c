@@ -27,6 +27,8 @@ out vec4 color;\n\
 void main()\n\
 {\n\
     color = texture(_sample, TexCoord);\n\
+    if (color.w == 0)\n\
+        discard;\n\
 }";
 
 void initialize_shader_2d_as__shader_chunk(

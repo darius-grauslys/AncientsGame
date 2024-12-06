@@ -80,6 +80,7 @@ void GL_initialize_gfx_sub_context(
     glClearColor(0,0,0,1);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void GL_dispose_gfx_sub_context(

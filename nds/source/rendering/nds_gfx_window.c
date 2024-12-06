@@ -77,3 +77,8 @@ Vector__3i32 PLATFORM_get_gfx_window__position(
     return VECTOR__3i32__OUT_OF_BOUNDS;
 }
 
+Game_Action PLATFORM_get_gfx_window__game_action(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return p_PLATFORM_gfx_window
+        ->associated_game_action;
+}

@@ -63,27 +63,24 @@ void set_item_tool_mode_to__next_tool_mode(
                 Tool_Mode__None;
             break;
         case Tool_Mode__Labor:
-            if (is_item_possessing__secondary_labor(p_item)) {
-                p_item->item_tool_mode =
-                    Tool_Mode__Labor_Secondary;
+            if (set_item_tool_mode(
+                        p_item, 
+                        Tool_Mode__Labor_Secondary)) {
                 break;
             }
-            // deliberate fallthrough right here.
         case Tool_Mode__Labor_Secondary:
-            if (is_item_usable_for__combat(p_item)) {
-                p_item->item_tool_mode =
-                    Tool_Mode__Combat;
+            if (set_item_tool_mode(
+                        p_item, 
+                        Tool_Mode__Combat)) {
+                break;
             }
-            break;
         case Tool_Mode__Combat:
         case Tool_Mode__Combat_Lockon:
-            if (is_item_usable_for__labor(p_item)) {
-                p_item->item_tool_mode =
-                    Tool_Mode__Labor;
+            if (set_item_tool_mode(
+                        p_item, 
+                        Tool_Mode__Labor)) {
+                break;
             }
-            p_item->item_tool_mode =
-                Tool_Mode__Combat;
-            break;
     }
 }
 
@@ -125,5 +122,23 @@ bool set_item_tool_mode(
     }
     p_item->item_tool_mode =
         tool_mode;
+    // TODO: remove, this is here out of a lack of UI
+    switch (tool_mode) {
+        default:
+            debug_info("TOOL MODE: Unknown");
+            break;
+        case Tool_Mode__Labor:
+            debug_info("TOOL MODE: Labor");
+            break;
+        case Tool_Mode__Labor_Secondary:
+            debug_info("TOOL MODE: Labor Secondary");
+            break;
+        case Tool_Mode__Combat:
+            debug_info("TOOL MODE: Combat");
+            break;
+        case Tool_Mode__Combat_Lockon:
+            debug_info("TOOL MODE: Combat Lockon");
+            break;
+    }
     return true;
 }

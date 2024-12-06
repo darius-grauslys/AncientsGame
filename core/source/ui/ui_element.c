@@ -274,6 +274,9 @@ void m_ui_element__render_handler_for__sprite__default(
         UI_Element *p_this_ui_element,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game) {
+    if (!p_this_ui_element->ui_sprite_wrapper.p_sprite) {
+        return;
+    }
     PLATFORM_render_sprite(
             p_PLATFORM_gfx_window,
             &p_this_ui_element

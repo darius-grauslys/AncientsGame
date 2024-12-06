@@ -61,6 +61,10 @@ void allocate_ui_equipment_into__ui_element_container(
                     set_ui_element__PLATFORM_sprite(
                             p_child, 
                             p_PLATFORM_sprite);
+                    p_child->ui_sprite_wrapper
+                        .frame__current =
+                        p_item_stack
+                        ->item.the_kind_of_item__this_item_is - 1;
                     set_ui_element__render_handler(
                             p_child, 
                             m_ui_element__render_handler_for__sprite__default);

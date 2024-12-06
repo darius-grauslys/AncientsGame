@@ -13,6 +13,7 @@
 #include <defines.h>
 #include <game.h>
 #include <ui/ui_drop_zone__inventory_slot.h>
+#include <ui/handlers/inventory/ui_handler__station__button_craft.h>
 // THIS CODE IS AUTO GENERATED. Go to ./sdl/assets/ui/xml/ instead of modifying this file.
 
 UI_Element *SDL_allocate_ui_for__sdl_ui_window__game__station(Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager){
@@ -200,6 +201,7 @@ set_ui_element_as__the_parent_of__this_ui_element(
     SDL_UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11));
 
     p_ui_iterator = allocate_ui_element_from__ui_manager(p_ui_manager);
-    initialize_ui_element_as__button(p_ui_iterator, 32, 16, get_vector__3i32(100 + 0, 164 + 0, 0), m_ui_button__held_handler__default, false, false);
-    UI_Element *p_bg_left = allocate_ui_element_from__ui_manager(p_ui_manager);
-    }
+    initialize_ui_element_as__button(p_ui_iterator, 32, 16, get_vector__3i32(100 + 0, 164 + 0, 0), m_ui_button__click_handler__station_craft, false, false);
+    UI_Element *p_bg_right = allocate_ui_element_from__ui_manager(p_ui_manager);
+    SDL_initialize_ui_element_as__background(p_bg_right, 256, 256, get_vector__3i32(158 + 0, 74 + 0, 0), p_PLATFORM_gfx_window__inv_column);
+}

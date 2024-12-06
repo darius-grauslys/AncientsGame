@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "game_action/game_action.h"
 #include "input/input.h"
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
@@ -25,6 +26,7 @@
 #include "assets/ui/default/ui_map_trade.h"
 #include "assets/ui/default/ui_map_equip.h"
 #include "assets/ui/default/ui_map_station.h"
+#include <GL/gl.h>
 
 ///
 /// Opens the specified UI. Depending on the backend this
@@ -34,6 +36,22 @@ void PLATFORM_open_ui(
         Game *p_game,
         enum UI_Window_Kind the_kind_of__ui_window_to__open,
         Game_Action *p_game_action) {
+    PLATFORM_Graphics_Window *ptr_array_of__gfx_windows[
+        PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF];
+
+    Signed_Quantity__i32 quantity_of__windows =
+        SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
+                SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                    get_p_PLATFORM_gfx_context_from__game(
+                        p_game)), 
+                the_kind_of__ui_window_to__open, 
+                ptr_array_of__gfx_windows, 
+                PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF);
+
+    if (quantity_of__windows) {
+        return;
+    }
+
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__game(
                 p_game);
@@ -55,6 +73,19 @@ void PLATFORM_open_ui(
     if (!p_PLATFORM_gfx_window__ui) {
         debug_error("SDL::PLATFORM_open_ui, failed to open ui.");
         return;
+    }
+
+    p_PLATFORM_gfx_window__ui->the_kind_of__ui_window =
+        the_kind_of__ui_window_to__open;
+    
+    if (p_game_action) {
+        p_PLATFORM_gfx_window__ui
+            ->associated_game_action =
+            *p_game_action;
+    } else {
+        initialize_p_game_action(
+                &p_PLATFORM_gfx_window__ui
+                ->associated_game_action); 
     }
 
     UI_Tile_Map__Wrapper ui_tile_map__wrapper =
@@ -306,6 +337,9 @@ void PLATFORM_update_ui(
     if (!quantity_of__windows)
         return;
 
+    // TODO: make gl_ui.h, and gl_ui.c
+    glDisable(GL_DEPTH_TEST);
+
     for (Index__u32 index_of__gfx_window = 0;
             index_of__gfx_window
             < PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF
@@ -325,17 +359,21 @@ void PLATFORM_update_ui(
         poll_ui_manager__update(
                 SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
                     p_PLATFORM_gfx_window),
-                p_game);
+                p_game,
+                p_PLATFORM_gfx_window);
         SDL_compose_gfx_window(
                 p_game,
                 p_PLATFORM_gfx_window);
         SDL_render_gfx_window(
                 p_game, 
                 p_PLATFORM_gfx_window);
-        return; // TODO:    remove, and also only render/update windows
+        break; // TODO:    remove, and also only render/update windows
                 //          allocate as stand-alone windows, and not
                 //          sub-windows.
     }
+
+    // TODO: make gl_ui.h, and gl_ui.c
+    glEnable(GL_DEPTH_TEST);
 }
 
 ///

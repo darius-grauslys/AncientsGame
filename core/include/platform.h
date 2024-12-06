@@ -278,7 +278,13 @@ void PLATFORM_post_render(Game *game);
 /// SECTION_ui
 ///
 
+// TODO: A lot of Gfx_Window PLATFORM functions as well as
+// other PLATFORM objects need Core wrapper varients.
+// Having such will elivate the PLATFORM API.
 UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+
+Game_Action PLATFORM_get_gfx_window__game_action(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(

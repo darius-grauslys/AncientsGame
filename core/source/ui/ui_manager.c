@@ -299,7 +299,8 @@ void poll_ui_manager__update_for__drop(
 
 void poll_ui_manager__update_for__clicked(
         UI_Manager *p_ui_manager,
-        Game *p_game) {
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     UI_Element *p_ui_element__focused =
         get_highest_priority_ui_element_thats__under_the_cursor(
                 p_ui_manager, 
@@ -311,12 +312,14 @@ void poll_ui_manager__update_for__clicked(
         return;
     p_ui_element__focused->m_ui_clicked_handler(
             p_ui_element__focused,
-            p_game);
+            p_game,
+            p_PLATFORM_gfx_window);
 }
 
 void poll_ui_manager__update(
         UI_Manager *p_ui_manager,
-        Game *p_game) {
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     Input *p_input = &p_game->input;
 
     bool has_ui_element__focus =
@@ -326,7 +329,8 @@ void poll_ui_manager__update(
         if (!has_ui_element__focus) {
             poll_ui_manager__update_for__clicked(
                     p_ui_manager, 
-                    p_game);
+                    p_game,
+                    p_PLATFORM_gfx_window);
             return;
         }
         poll_ui_manager__update_for__drop(

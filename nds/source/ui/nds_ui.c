@@ -482,7 +482,10 @@ void PLATFORM_refresh_ui(
 void PLATFORM_update_ui(Game *p_game) {
     // TODO: use gfx_context sub_window
     poll_ui_manager__update(
-            NDS_get_p_ui_manager_from__game(p_game), p_game);
+            NDS_get_p_ui_manager_from__game(p_game), 
+            p_game,
+            &get_p_PLATFORM_gfx_context_from__game(p_game)
+            ->graphics_window__sub);
     render_all_ui_elements_in__ui_manager(
             NDS_get_p_ui_manager_from__game(p_game), 
             &get_p_PLATFORM_gfx_context_from__game(

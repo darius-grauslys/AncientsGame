@@ -1,6 +1,7 @@
 #include "defines.h"
 #include "defines_weak.h"
 #include "game.h"
+#include "game_action/game_action.h"
 #include "platform.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_sprite.h"
@@ -17,6 +18,10 @@ void SDL_initialize_gfx_window(
         Camera *p_camera,
         UI_Window_Kind the_kind_of__ui_window,
         Vector__3i32F4 position_of__graphics_window__3i32F4) {
+    initialize_p_game_action(
+            &p_PLATFORM_gfx_window
+            ->associated_game_action);
+
     p_PLATFORM_gfx_window
         ->p_PLATFORM_gfx_context =
         p_PLATFORM_gfx_context
@@ -132,4 +137,10 @@ Vector__3i32 PLATFORM_get_gfx_window__position(
         vector_3i32F4_to__vector_3i32(
                 p_PLATFORM_gfx_window
                 ->SDL_position_of__graphics_window);
+}
+
+Game_Action PLATFORM_get_gfx_window__game_action(
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+    return p_PLATFORM_gfx_window
+        ->associated_game_action;
 }

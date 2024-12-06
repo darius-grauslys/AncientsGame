@@ -1623,7 +1623,8 @@ typedef void (*m_UI_Dispose)(
 
 typedef void (*m_UI_Clicked)(
         UI_Element *p_this_ui_element,
-        Game *p_game);
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 typedef void (*m_UI_Dragged)(
         UI_Element *p_this_ui_element,
         Game *p_game);

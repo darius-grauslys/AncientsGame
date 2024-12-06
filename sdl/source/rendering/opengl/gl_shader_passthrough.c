@@ -14,9 +14,9 @@ void main()\n\
 {\n\
     gl_Position = vec4(position, 1);\n\
     TexCoord = vec2((uv_dimensions.x * \n\
-            (abs(uv_flip.x-uv.x)) + uv_index.x),\n\
+            (abs(uv_flip.x - uv.x)) + uv_index.x),\n\
             (uv_dimensions.y * \n\
-            (abs(uv_flip.y-uv.y)) + uv_index.y));\n\
+            (abs(uv_flip.y - uv.y)) + uv_index.y));\n\
 }";
 
 const char *_source_shader_passthrough__fragment = " \n\
@@ -31,7 +31,7 @@ void main()\n\
     color = texture(_sample, TexCoord);\n\
     color.a = 1.0;\n\
     if (color.r == 1.0 && color.g == 0.0 && color.b == 1.0) {\n\
-        discard;\n\
+        color.a = 0.0;\n\
     }\n\
 }";
 

@@ -44,7 +44,8 @@ void GL_render_chunk(
     chunk_pos_in__world__3i32f4.y__i32F4 *= 64;
     chunk_pos_in__world__3i32f4.x__i32F4 += i32_to__i32F4(32);
     chunk_pos_in__world__3i32f4.y__i32F4 += i32_to__i32F4(28);
-    chunk_pos_in__world__3i32f4.z__i32F4 = 0;
+    chunk_pos_in__world__3i32f4.z__i32F4 = 
+        i32_to__i32F4(10);
 
     GL_Shader_2D *p_GL_shader__chunk =
         GL_get_shader_from__shader_manager(
@@ -80,7 +81,8 @@ void GL_render_chunk(
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     chunk_pos_in__world__3i32f4.y__i32F4 += i32_to__i32F4(8);
-    chunk_pos_in__world__3i32f4.z__i32F4 = BIT(4);
+    chunk_pos_in__world__3i32f4.z__i32F4 = 
+        i32_to__i32F4(0);
 
     if (GL_does_shader_utilize__model_mat_4_4(
                 p_GL_shader__chunk)) {
@@ -93,7 +95,6 @@ void GL_render_chunk(
     PLATFORM_use_texture(
             p_PLATFORM_gfx_context, 
             p_GL_chunk_texture->p_GL_chunk_texture__sprite_cover);
-
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
@@ -252,8 +253,10 @@ void GL_update_chunk(
                 default:
                     ;
                     int index = 
-                        render_result.tile_index__cover
-                        - 1;
+                        (render_result.tile_index__cover
+                        & MASK(10))
+                        - 1
+                        ;
                     GL_bind_texture_to__framebuffer(
                             p_GL_framebuffer, 
                             p_GL_chunk_texture
@@ -280,8 +283,10 @@ void GL_update_chunk(
                 default:
                     ;
                     int index = 
-                        render_result.tile_index__sprite_cover
-                        - 1;
+                        (render_result.tile_index__sprite_cover
+                        & MASK(10))
+                        - 1
+                        ;
                     GL_bind_texture_to__framebuffer(
                             p_GL_framebuffer, 
                             p_GL_chunk_texture

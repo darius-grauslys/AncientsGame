@@ -12,7 +12,8 @@ void initialize_ui_manager(
 
 void poll_ui_manager__update(
         UI_Manager *p_ui_manager,
-        Game *p_game);
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 static inline
 Index__u16 get_index_of__p_ui_element_in__ui_manager(
