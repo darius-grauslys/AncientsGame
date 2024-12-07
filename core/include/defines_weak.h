@@ -897,6 +897,14 @@ typedef struct Serialized_Field_t Serialized_Chunk_Ptr;
 typedef struct Serialization_Request_t Serialization_Request;
 typedef struct Serializer_t Serializer;
 
+typedef enum IO_Access_Kind {
+    IO_Access_Kind__None,
+    IO_Access_Kind__File,
+    IO_Access_Kind__Unknown,
+} IO_Access_Kind;
+
+typedef struct PLATFORM_Directory_t PLATFORM_Directory;
+
 ///
 /// SECTION_sort
 ///

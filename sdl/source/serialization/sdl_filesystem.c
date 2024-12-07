@@ -7,42 +7,151 @@
 
 PLATFORM_File_System_Context __SDL_file_system_context;
 
-#ifdef __unix__
-#include <serialization/unix/unix_filesystem.h>
-#endif
-
-bool SDL_get_path_to__the_game(char path[1024]) {
-#ifdef __unix__
-    return UNIX_get_path_to__the_game(path);
-#elif
-    return false;
-#endif
-}
-
 bool SDL_get_path_to__assets(
         Asset_Directory_Kind the_kind_of__asset_directory,
         char path[1024]) {
-#ifdef __unix__
-    return UNIX_get_path_to__assets(
-            the_kind_of__asset_directory,
-            path);
-#elif
-    return false;
-#endif
+    char buffer[1024];
+    if (!SDL_get_path_to__the_game(buffer)) {
+        return false;
+    }
+    switch (the_kind_of__asset_directory) {
+        default:
+            break;
+        case Asset_Directory_Kind__Assets:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets");
+            break;
+        case Asset_Directory_Kind__Audio:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/audio");
+            break;
+        case Asset_Directory_Kind__Entities:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/entities");
+            break;
+        case Asset_Directory_Kind__Entity_Sprite__16x16:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/entities/entity_sprite__16x16");
+            break;
+        case Asset_Directory_Kind__Entity_Sprite__8x8:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/entities/entity_sprite__8x8");
+            break;
+        case Asset_Directory_Kind__UI:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui");
+            break;
+        case Asset_Directory_Kind__UI__Default:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/default");
+            break;
+        case Asset_Directory_Kind__UI__Font:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/font");
+            break;
+        case Asset_Directory_Kind__UI__Log:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/log");
+            break;
+        case Asset_Directory_Kind__UI__Sprite__8x8:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/sprites/ui_sprite__8x8");
+            break;
+        case Asset_Directory_Kind__UI__Sprite__16x16:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/sprites/ui_sprite__16x16");
+            break;
+        case Asset_Directory_Kind__UI__Sprite__32x32:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/sprites/ui_sprite__32x32");
+            break;
+        case Asset_Directory_Kind__UI__Typer:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/ui/typer");
+            break;
+        case Asset_Directory_Kind__World:
+            snprintf(path,
+                    1024,
+                    "%s%c%s",
+                    buffer,
+                    PATH_SEPERATOR,
+                    "assets/world");
+            break;
+    }
+    return PLATFORM_access(path, IO_Access_Kind__File) == 0;
 }
 
 bool SDL_get_path_to__texture_file(
         Asset_Directory_Kind the_kind_of__asset_directory,
         char path[1024],
         SDL_Texture_String__Const p_SDL_texture_string) {
-#ifdef __unix__
-    return UNIX_get_path_to__texture_file(
-            the_kind_of__asset_directory,
-            path,
-            p_SDL_texture_string);
-#elif
-    return false;
-#endif
+    char buffer[1024];
+    if (!SDL_get_path_to__assets(
+                the_kind_of__asset_directory,
+                buffer)) {
+        return false;
+    }
+
+    snprintf(path,
+            1024,
+            "%s%c%s",
+            buffer,
+            PATH_SEPERATOR,
+            (char*)p_SDL_texture_string);
+
+    return PLATFORM_access(path, IO_Access_Kind__File) == 0;
 }
 
 void PLATFORM_initialize_file_system_context(

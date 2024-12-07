@@ -315,6 +315,11 @@ void PLATFORM_initialize_file_system_context(
         Game *p_game,
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
 
+int PLATFORM_access(const char *p_c_str, IO_Access_Kind io_access_kind);
+PLATFORM_Directory *PLATFORM_opendir(const char *p_c_str);
+void PLATFORM_closedir(PLATFORM_Directory *p_dir);
+bool PLATFORM_mkdir(const char *p_c_str, uint32_t file_code);
+
 void PLATFORM_append_base_directory_to__path(
         PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
         char *p_c_str_path,

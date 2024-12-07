@@ -7,11 +7,8 @@
 #include "world/region.h"
 #include "sys/stat.h"
 #include "sys/types.h"
-#include <stdio.h>
-#include <dirent.h>
 #include <string.h>
 #include "world/region.h"
-#include <unistd.h>
 
 void append_hex_value_to__path(
         Index__u32 *p_index_of__path_append,
@@ -65,14 +62,14 @@ Index__u32 stat_chunk_directory(
     index_of__path_append += 
         get_p_world_from__game(p_game)->length_of__world_name;
 
-    DIR *p_dir;
-    if (!(p_dir = opendir(buffer))) {
-        if (mkdir(buffer, 0777)) {
+    PLATFORM_Directory *p_dir;
+    if (!(p_dir = PLATFORM_opendir(buffer))) {
+        if (PLATFORM_mkdir(buffer, 0777)) {
             debug_error("stat_chunk_directory, failed default_world");
             return 0;
         }
     } else {
-        closedir(p_dir);
+        PLATFORM_closedir(p_dir);
     }
 
     buffer[index_of__path_append++] = '/';
@@ -95,13 +92,13 @@ Index__u32 stat_chunk_directory(
             8,
             buffer);
 
-    if (!(p_dir = opendir(buffer))) {
-        if (mkdir(buffer, 0777)) {
+    if (!(p_dir = PLATFORM_opendir(buffer))) {
+        if (PLATFORM_mkdir(buffer, 0777)) {
             debug_error("stat_chunk_directory, failed region");
             return 0;
         }
     } else {
-        closedir(p_dir);
+        PLATFORM_closedir(p_dir);
     }
     
     Chunk_Vector__3i32 chunk_vector__3i32 =
@@ -149,15 +146,15 @@ Index__u32 stat_chunk_directory(
                 chunk_vector_descend__3i32.y__i32, 
                 2,
                 buffer);
-        if (!(p_dir = opendir(buffer))) {
-            if (mkdir(buffer, 0777)) {
+        if (!(p_dir = PLATFORM_opendir(buffer))) {
+            if (PLATFORM_mkdir(buffer, 0777)) {
             debug_error("stat_chunk_directory, failed recur: %d, %d",
                     chunk_vector_descend__3i32.x__i32,
                     chunk_vector_descend__3i32.y__i32);
                 return 0;
             }
         } else {
-            closedir(p_dir);
+            PLATFORM_closedir(p_dir);
         }
         chunk_vector_quad__3i32.x__i32 >>= 1;
         chunk_vector_quad__3i32.y__i32 >>= 1;
@@ -177,13 +174,13 @@ Index__u32 stat_chunk_directory(
             chunk_vector__3i32.y__i32, 
             2,
             buffer);
-    if (!(p_dir = opendir(buffer))) {
-        if (mkdir(buffer, 0777)) {
+    if (!(p_dir = PLATFORM_opendir(buffer))) {
+        if (PLATFORM_mkdir(buffer, 0777)) {
             debug_error("stat_chunk_directory, leaf directory");
             return 0;
         }
     } else {
-        closedir(p_dir);
+        PLATFORM_closedir(p_dir);
     }
 
     //TODO: recur by Z-axis
@@ -210,7 +207,7 @@ Index__u32 stat_chunk_file(
     buffer[end_of__path] = '/';
     buffer[end_of__path+1] = file_character;
 
-    if (access(buffer, F_OK)) {
+    if (PLATFORM_access(buffer, IO_Access_Kind__File)) {
         return false;
     }
 
@@ -238,19 +235,19 @@ Index__u32 stat_world_header_file(
     index_of__path_append += 
         get_p_world_from__game(p_game)->length_of__world_name;
 
-    DIR *p_dir;
-    if (!(p_dir = opendir(buffer))) {
-        if (mkdir(buffer, 0777)) {
+    PLATFORM_Directory *p_dir;
+    if (!(p_dir = PLATFORM_opendir(buffer))) {
+        if (PLATFORM_mkdir(buffer, 0777)) {
             return 0;
         }
     } else {
-        closedir(p_dir);
+        PLATFORM_closedir(p_dir);
     }
 
     buffer[index_of__path_append++] = '/';
     buffer[index_of__path_append++] = 'h';
 
-    if (access(buffer, F_OK)) {
+    if (PLATFORM_access(buffer, IO_Access_Kind__File)) {
         return false;
     }
     
