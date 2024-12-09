@@ -13,7 +13,7 @@
 
 #define BIT(n) (1 << (n))
 #define NEXT_BIT(symbol) (symbol << 1)
-#define MASK(n) (BIT(n) - 1)
+#define MASK(n) ((u32)BIT(n) - 1)
 
 
 typedef int32_t     i32;

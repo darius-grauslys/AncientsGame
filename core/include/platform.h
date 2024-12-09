@@ -268,6 +268,10 @@ int abs(int x);
 void srand(unsigned int seed);
 int rand(void);
 
+i32F20 PLATFORM_get_time_elapsed(
+        Timer__u32 *p_timer__seconds__u32,
+        Timer__u32 *p_timer__nanoseconds__u32);
+
 int PLATFORM_main(Game *p_game);
 
 void PLATFORM_pre_render(Game *game);

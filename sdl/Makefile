@@ -23,7 +23,7 @@ export OFILES := $(SPRITE_FILES:.png=.o) \
 export CFLAGS := -march=$(shell uname -m | sed "s/_/-/")
 
 export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/sdl/include
-export LIBS		:= -lm -lopengl32 -lglew32 -lSDL2 -lcglm
+export LIBS		:= -lm -lGL -lGLEW -lSDL2 -lcglm
 
 export DEPSDIR := $(BUILD)
 

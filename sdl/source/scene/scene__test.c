@@ -19,6 +19,8 @@
 #include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/sdl_render_world.h"
 #include "sdl_defines.h"
+#include "sdl_numerics.h"
+#include "timer.h"
 #include "vectors.h"
 #include "world/serialization/world_directory.h"
 #include "world/world.h"
@@ -98,8 +100,19 @@ void m_enter_scene_handler_as__test(
             get_p_PLATFORM_gfx_context_from__game(p_game),
             get_p_chunk_manager_from__game(p_game));
 
+    Timer__u32 timer__seconds__u32;
+    Timer__u32 timer__nanoseconds__u32;
+
+    initialize_timer_u32(
+            &timer__seconds__u32, 
+            (u32)-1);
+    initialize_timer_u32(
+            &timer__nanoseconds__u32, 
+            999999999);
+
     while (p_game->scene_manager.p_active_scene
-            == p_this_scene) {
+            == p_this_scene
+            && await_game_tick(p_game)) {
         manage_game__pre_render(p_game);
 
         /// --- do better --- TODO:

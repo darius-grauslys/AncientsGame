@@ -15,6 +15,18 @@
 #include <defines.h>
 #include <world/world.h>
 
+void initialize_game(
+        Game *p_game,
+        m_Game_Action_Handler m_game_action_handler);
+int run_game(Game *p_game);
+
+bool await_game_tick(Game *p_game);
+
+void manage_game(Game *p_game);
+
+void manage_game__pre_render(Game *p_game);
+void manage_game__post_render(Game *p_game);
+
 static inline
 Quantity__u32 get_time_elapsed__game(Game *p_game) {
     return get_time_elapsed_from__timer_u32(&p_game->tick__timer_u32);
@@ -168,15 +180,5 @@ static inline
 Entity *get_p_local_player_from__game(Game *p_game) {
     return get_p_local_player_from__world(&p_game->world);
 }
-
-void initialize_game(
-        Game *p_game,
-        m_Game_Action_Handler m_game_action_handler);
-int run_game(Game *p_game);
-
-void manage_game(Game *p_game);
-
-void manage_game__pre_render(Game *p_game);
-void manage_game__post_render(Game *p_game);
 
 #endif

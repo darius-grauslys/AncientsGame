@@ -2246,6 +2246,10 @@ typedef struct Game_t {
     m_Game_Action_Handler m_game_action_handler;
 
     Timer__u32 tick__timer_u32;
+    Timer__u32 time__seconds__u32;
+    Timer__u32 time__nanoseconds__u32;
+    i32F20 time_elapsed__i32F20;
+    i32F20 tick_accumilator__i32F20;
     bool is_world__initialized;
 } Game;
 

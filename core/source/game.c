@@ -66,8 +66,32 @@ void initialize_game(
     initialize_log(get_p_log__local_from__game(p_game));
     initialize_log(get_p_log__system_from__game(p_game));
 
+    initialize_timer_u32(
+            &p_game->time__seconds__u32, 
+            (u32)-1);
+    initialize_timer_u32(
+            &p_game->time__nanoseconds__u32, 
+            999999999);
+    p_game->tick_accumilator__i32F20 = 0;
+
     p_game->is_world__initialized = false;
     p_game->m_game_action_handler = m_game_action_handler;
+}
+
+bool await_game_tick(Game *p_game) {
+    p_game->time_elapsed__i32F20 =
+        PLATFORM_get_time_elapsed(
+                &p_game->time__seconds__u32, 
+                &p_game->time__nanoseconds__u32);
+    p_game->tick_accumilator__i32F20 +=
+        p_game->time_elapsed__i32F20;
+    if (p_game->tick_accumilator__i32F20
+            < BIT(14)) {
+        return false;
+    }
+    p_game->tick_accumilator__i32F20 -=
+        BIT(14);
+    return true;
 }
 
 bool print_log__global(Game *p_game, char *cstr) {

@@ -83,6 +83,27 @@ static void inline reset_timer_u8(
         timer__u8->start__u8;
 }
 
+static inline
+bool progress_timer__u32(
+        Timer__u32 *p_timer__u32,
+        Quantity__u32 quantity_of__ticks__u32) {
+    if (quantity_of__ticks__u32
+> p_timer__u32->remaining__u32) {
+        quantity_of__ticks__u32 -=
+            p_timer__u32->remaining__u32;
+        if (quantity_of__ticks__u32
+                > p_timer__u32->start__u32) {
+            quantity_of__ticks__u32 %=
+                p_timer__u32->start__u32;
+        }
+        reset_timer_u32(p_timer__u32);
+        p_timer__u32->remaining__u32 -= quantity_of__ticks__u32;
+        return true;
+    }
+    p_timer__u32->remaining__u32 -= quantity_of__ticks__u32;
+    return false;
+}
+
 static bool inline is_timer_u8__elapsed(Timer__u8 *timer__u8) {
     return timer__u8->remaining__u8 == 0;
 }
