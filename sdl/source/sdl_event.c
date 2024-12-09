@@ -3,7 +3,6 @@
 #include "platform_defines.h"
 #include "scene/scene_manager.h"
 #include <SDL2/SDL_events.h>
-#include <SDL2/SDL_video.h>
 #include <sdl_event.h>
 #include <sdl_defines.h>
 

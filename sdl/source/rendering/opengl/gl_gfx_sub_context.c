@@ -12,7 +12,6 @@
 #include "rendering/opengl/gl_viewport.h"
 #include "rendering/opengl/glad/glad.h"
 #include "rendering/sdl_gfx_context.h"
-#include <SDL2/SDL_video.h>
 #include <rendering/opengl/gl_gfx_sub_context.h>
 #include <rendering/opengl/gl_shader_manager.h>
 #include <rendering/opengl/gl_sprite_manager.h>

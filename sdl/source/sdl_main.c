@@ -9,7 +9,6 @@
 #include "serialization/sdl_filesystem.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
-#include <SDL2/SDL_video.h>
 #include <platform.h>
 #include <SDL2/SDL.h>
 #include <game.h>

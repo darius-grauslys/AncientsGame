@@ -16,7 +16,6 @@
 #include "rendering/sdl_texture_manager.h"
 #include "ui/ui_tile_map_manager.h"
 #include <SDL2/SDL_render.h>
-#include <SDL2/SDL_video.h>
 #include <defines.h>
 #include <rendering/sdl_gfx_context.h>
 #include <sdl_defines.h>

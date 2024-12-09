@@ -3,7 +3,6 @@
 
 #include "platform_defines.h"
 #include "rendering/opengl/glad/glad.h"
-#include <SDL2/SDL_video.h>
 #include <cglm/types.h>
 #include <defines.h>
 #include <cglm/mat4.h>

@@ -3,7 +3,6 @@
 #include "serialization/sdl_filesystem.h"
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
-#include <SDL2/SDL_video.h>
 #include <platform.h>
 #include <game.h>
 #include <sdl_defines.h>

@@ -16,7 +16,6 @@ bool SDL_get_path_to__the_game(char path[1024]) {
     return access(path, F_OK) == 0;
 }
 
-
 typedef struct PLATFORM_Directory_t {
     DIR *p_UNIX_dir;
 } PLATFORM_Directory;

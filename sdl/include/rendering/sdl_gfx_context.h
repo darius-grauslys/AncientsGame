@@ -4,7 +4,6 @@
 #include "defines_weak.h"
 #include "rendering/sdl_gfx_window.h"
 #include "sdl_defines.h"
-#include <SDL2/SDL_video.h>
 
 extern PLATFORM_Gfx_Context __SDL_Gfx_Context;
 
