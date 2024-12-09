@@ -51,7 +51,7 @@ Index__u32 stat_chunk_directory(
             buffer, 
             &index_of__path_append);
 
-    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = PATH_SEPERATOR[0];
 
     // TODO: bounds check index_of__path_append + WORLD_NAME_MAX_SIZE_OF
     //                      < MAX_LENGTH_OF__IO_PATH
@@ -72,7 +72,7 @@ Index__u32 stat_chunk_directory(
         PLATFORM_closedir(p_dir);
     }
 
-    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = PATH_SEPERATOR[0];
     buffer[index_of__path_append++] = 'r';
     buffer[index_of__path_append++] = '_';
     
@@ -132,7 +132,7 @@ Index__u32 stat_chunk_directory(
                 chunk_vector_quad__3i32.y__i32;
         }
 
-        buffer[index_of__path_append++] = '/';
+        buffer[index_of__path_append++] = PATH_SEPERATOR[0];
         buffer[index_of__path_append++] = 'c';
         buffer[index_of__path_append++] = '_';
         append_hex_value_to__path(
@@ -160,7 +160,7 @@ Index__u32 stat_chunk_directory(
         chunk_vector_quad__3i32.y__i32 >>= 1;
     }
 
-    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = PATH_SEPERATOR[0];
     buffer[index_of__path_append++] = 'c';
     buffer[index_of__path_append++] = '_';
     append_hex_value_to__path(
@@ -204,7 +204,7 @@ Index__u32 stat_chunk_file(
                 buffer);
         return false;
     }
-    buffer[end_of__path] = '/';
+    buffer[end_of__path] = PATH_SEPERATOR[0];
     buffer[end_of__path+1] = file_character;
 
     if (PLATFORM_access(buffer, IO_Access_Kind__File)) {
@@ -224,7 +224,7 @@ Index__u32 stat_world_header_file(
             buffer, 
             &index_of__path_append);
 
-    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = PATH_SEPERATOR[0];
 
     // TODO: bounds check index_of__path_append + WORLD_NAME_MAX_SIZE_OF
     //                      < MAX_LENGTH_OF__IO_PATH
@@ -244,7 +244,7 @@ Index__u32 stat_world_header_file(
         PLATFORM_closedir(p_dir);
     }
 
-    buffer[index_of__path_append++] = '/';
+    buffer[index_of__path_append++] = PATH_SEPERATOR[0];
     buffer[index_of__path_append++] = 'h';
 
     if (PLATFORM_access(buffer, IO_Access_Kind__File)) {

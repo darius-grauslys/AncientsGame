@@ -6,6 +6,11 @@
 #ifndef PLATFORM__IO
 #define PLATFORM__IO
 #define MAX_LENGTH_OF__IO_PATH 1024
+#ifdef _WIN32
+#define PATH_SEPERATOR "\\"
+#else
+#define PATH_SEPERATOR "/"
+#endif
 #endif
 
 #ifndef PLATFORM__CAMERA

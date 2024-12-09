@@ -23,7 +23,7 @@ export OFILES := $(SPRITE_FILES:.png=.o) \
 export CFLAGS := -march=$(shell uname -m | sed "s/_/-/")
 
 export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/sdl/include
-export LIBS		:= -lm -lGL -lGLEW -lSDL2 -lcglm
+export LIBS		:= -lm -lopengl32 -lglew32 -lSDL2 -lcglm
 
 export DEPSDIR := $(BUILD)
 
@@ -68,15 +68,17 @@ include $(BASE_DIR)/core/Makefile.build
 $(SPRITE_DIRS): 
 	@mkdir -p $@
 	@cd $@ && grit $(shell find $(BASE_DIR)/core/$@ -iname *.png | sort) \
-		-ff$(BASE_DIR)/nds/$@/$(shell basename $@).grit
+		-ff $(BASE_DIR)/nds/$@/$(shell basename $@).grit
 $(SHARED_SPRITE_FILES):
 	@sed -i "s/@.*$$/\n/g" $(basename $@).s     # TODO: these sed calls are a HACK.
+	@sed -i "s/\.hidden.*$$/\n/g" $(basename $@).s
 	@sed -i "s/\.word/.long/g" $(basename $@).s
 	@cd $(shell dirname $@) && $(CC) $(CFLAGS) -c $(shell basename $(basename $@)).s -o $(shell basename $(basename $@)).o
 
 #---------------------------------------------------------------------------------
 $(SPRITE_FILES:.png=.o) : $(SPRITE_DIRS) $(foreach file,$(SPRITE_FILES),$(BASE_DIR)/core/$(file)) 
 	@sed -i "s/@.*$$/\n/g" $(basename $@).s
+	@sed -i "s/\.hidden.*$$/\n/g" $(basename $@).s
 	@sed -i "s/\.word/.long/g" $(basename $@).s
 	@$(CC) $(CFLAGS) -c $(basename $@).s -o $(basename $@).o
 	@$(ADD_COMPILE_COMMAND) add $(CC) "$(CFLAGS) -x assembler-with-cpp $(ASFLAGS) \

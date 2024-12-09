@@ -4,6 +4,7 @@
 #ifndef PLATFORM__IO
 #define PLATFORM__IO
 #define MAX_LENGTH_OF__IO_PATH 128
+#define PATH_SEPERATOR "/"
 #endif
 
 #ifndef PLATFORM__CAMERA

@@ -20,114 +20,164 @@ bool SDL_get_path_to__assets(
         case Asset_Directory_Kind__Assets:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
+                    PATH_SEPERATOR
                     "assets");
             break;
         case Asset_Directory_Kind__Audio:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/audio");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "audio");
             break;
         case Asset_Directory_Kind__Entities:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/entities");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "entities");
             break;
         case Asset_Directory_Kind__Entity_Sprite__16x16:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/entities/entity_sprite__16x16");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "entities" 
+                    PATH_SEPERATOR 
+                    "entity_sprite__16x16");
             break;
         case Asset_Directory_Kind__Entity_Sprite__8x8:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/entities/entity_sprite__8x8");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "entities" 
+                    PATH_SEPERATOR 
+                    "entity_sprite__8x8");
             break;
         case Asset_Directory_Kind__UI:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui");
             break;
         case Asset_Directory_Kind__UI__Default:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/default");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "default");
             break;
         case Asset_Directory_Kind__UI__Font:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/font");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "font");
             break;
         case Asset_Directory_Kind__UI__Log:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/log");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "log");
             break;
         case Asset_Directory_Kind__UI__Sprite__8x8:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/sprites/ui_sprite__8x8");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "sprites" 
+                    PATH_SEPERATOR 
+                    "ui_sprite__8x8");
             break;
         case Asset_Directory_Kind__UI__Sprite__16x16:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/sprites/ui_sprite__16x16");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "sprites" 
+                    PATH_SEPERATOR 
+                    "ui_sprite__16x16");
             break;
         case Asset_Directory_Kind__UI__Sprite__32x32:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/sprites/ui_sprite__32x32");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "sprites" 
+                    PATH_SEPERATOR 
+                    "ui_sprite__32x32");
             break;
         case Asset_Directory_Kind__UI__Typer:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/ui/typer");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "ui" 
+                    PATH_SEPERATOR 
+                    "typer");
             break;
         case Asset_Directory_Kind__World:
             snprintf(path,
                     1024,
-                    "%s%c%s",
+                    "%s%s",
                     buffer,
-                    PATH_SEPERATOR,
-                    "assets/world");
+                    PATH_SEPERATOR
+                    "assets" 
+                    PATH_SEPERATOR 
+                    "world");
             break;
     }
     return PLATFORM_access(path, IO_Access_Kind__File) == 0;
@@ -146,7 +196,7 @@ bool SDL_get_path_to__texture_file(
 
     snprintf(path,
             1024,
-            "%s%c%s",
+            "%s%s%s",
             buffer,
             PATH_SEPERATOR,
             (char*)p_SDL_texture_string);

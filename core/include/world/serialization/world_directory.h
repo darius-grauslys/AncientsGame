@@ -51,7 +51,7 @@ bool append_chunk_file__tiles_to__path(
     if (length_of__path + 2 > max_length_of__path)
         return false;
 
-    buffer[length_of__path] = '/';
+    buffer[length_of__path] = PATH_SEPERATOR[0];
     buffer[length_of__path+1] = 't';
     return true;
 }
@@ -64,7 +64,7 @@ bool append_chunk_file__tiles_to__path(
 //     if (length_of__path + 2 > max_length_of__path)
 //         return false;
 // 
-//     buffer[length_of__path] = '/';
+//     buffer[length_of__path] = PATH_SEPERATOR[0];
 //     buffer[length_of__path+1] = 'e';
 //     return true;
 // }
@@ -77,7 +77,7 @@ bool append_chunk_file__tiles_to__path(
 //     if (length_of__path + 2 > max_length_of__path)
 //         return false;
 // 
-//     buffer[length_of__path] = '/';
+//     buffer[length_of__path] = PATH_SEPERATOR[0];
 //     buffer[length_of__path+1] = 'i';
 //     return true;
 // }

@@ -19,13 +19,6 @@ typedef enum {
     Asset_Directory_Kind__World,
 } Asset_Directory_Kind;
 
-
 bool SDL_get_path_to__the_game(char path[1024]);
-
-#ifdef __unix__
-#define PATH_SEPERATOR '/'
-#elif
-#define PATH_SEPERATOR '\\'
-#endif
 
 #endif

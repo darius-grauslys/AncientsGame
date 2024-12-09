@@ -25,7 +25,7 @@ int PLATFORM_access(const char *p_c_str, IO_Access_Kind io_access_kind) {
             DWORD fileAttr = GetFileAttributes(p_c_str);
 
             if (fileAttr == INVALID_FILE_ATTRIBUTES) {
-                return 0;
+                return INVALID_FILE_ATTRIBUTES;
             }
             
             return 0;
@@ -55,7 +55,7 @@ void PLATFORM_closedir(PLATFORM_Directory *p_dir) {
 }
 
 bool PLATFORM_mkdir(const char *p_c_str, uint32_t file_code) {
-    return CreateDirectory(p_c_str, 0);
+    return !CreateDirectory(p_c_str, 0);
 }
 
 #endif
