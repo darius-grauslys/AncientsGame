@@ -3,6 +3,7 @@
 
 #include "defines_weak.h"
 #include <defines.h>
+#include <SDL2/SDL_render.h>
 #include <platform_defines.h>
 
 #define TO_STRING(x) #x
