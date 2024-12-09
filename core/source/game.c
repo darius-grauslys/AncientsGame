@@ -87,11 +87,11 @@ bool await_game_tick(Game *p_game) {
         p_game->time_elapsed__i32F20;
     if (p_game->tick_accumilator__i32F20
             < BIT(14)) {
-        return false;
+        return true;
     }
     p_game->tick_accumilator__i32F20 -=
         BIT(14);
-    return true;
+    return false;
 }
 
 bool print_log__global(Game *p_game, char *cstr) {

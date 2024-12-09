@@ -111,8 +111,8 @@ void m_enter_scene_handler_as__test(
             999999999);
 
     while (p_game->scene_manager.p_active_scene
-            == p_this_scene
-            && await_game_tick(p_game)) {
+            == p_this_scene) {
+        while (await_game_tick(p_game));
         manage_game__pre_render(p_game);
 
         /// --- do better --- TODO:
