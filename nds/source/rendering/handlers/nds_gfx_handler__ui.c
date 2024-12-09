@@ -22,7 +22,7 @@ void f_sprite_gfx_allocator__handler_for__ui(
             .texture_flags;
 
     u8* p_gfx_source = 0;
-    uint offset = SPRITE_FRAME__8x8__OFFSET;
+    uint32_t offset = SPRITE_FRAME__8x8__OFFSET;
 
     if (UI_Sprite_Kind__8x8 >
             the_kind_of__ui_sprite) {

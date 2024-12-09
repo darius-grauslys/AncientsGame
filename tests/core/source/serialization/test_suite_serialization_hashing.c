@@ -35,7 +35,7 @@ void initialize_test_serialization_header__contiguous_array_for__hashing_tests(
 }
 
 TEST_FUNCTION(poll_for__uuid_collision__no_collision) {
-    const uint length_of__headers = 256;
+    const uint32_t length_of__headers = 256;
     Test_Serialization_Header headers[length_of__headers];
     initialize_test_serialization_header__contiguous_array_for__hashing_tests(
             headers, 
@@ -57,7 +57,7 @@ TEST_FUNCTION(poll_for__uuid_collision__no_collision) {
 }
 
 TEST_FUNCTION(poll_for__uuid_collision__deliberate_collision) {
-    const uint length_of__headers = 256;
+    const uint32_t length_of__headers = 256;
     Test_Serialization_Header headers[length_of__headers];
     initialize_test_serialization_header__contiguous_array_for__hashing_tests(
             headers, 
@@ -88,7 +88,7 @@ TEST_FUNCTION(poll_for__uuid_collision__deliberate_collision) {
 }
 
 TEST_FUNCTION(has_uuid_in__contiguous_array) {
-    const uint length_of__headers = 256;
+    const uint32_t length_of__headers = 256;
     Test_Serialization_Header headers[length_of__headers];
     initialize_test_serialization_header__contiguous_array_for__hashing_tests(
             headers, 

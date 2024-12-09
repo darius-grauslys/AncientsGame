@@ -3,7 +3,6 @@
 
 #include "defines_weak.h"
 #include <defines.h>
-#include <SDL2/SDL_render.h>
 #include <platform_defines.h>
 
 #define TO_STRING(x) #x
@@ -56,6 +55,14 @@ typedef char Texture_String[
 typedef const char SDL_Texture_String__Const[
     MAX_LENGTH_OF__SDL_TEXTURE_STRING];
 
+typedef enum SDL_Texture_Access_Kind {
+    SDL_Texture_Access_Kind__None,
+    SDL_Texture_Access_Kind__Static,
+    SDL_Texture_Access_Kind__Streaming,
+    SDL_Texture_Access_Kind__Target,
+    SDL_Texture_Access_Kind__Unknown,
+} SDL_Texture_Access_Kind;
+
 typedef struct PLATFORM_Texture_t {
     Texture_String SDL_texture_string;
     union {
@@ -63,7 +70,7 @@ typedef struct PLATFORM_Texture_t {
     };
     Texture_Flags texture_flags;
     SDL_Texture_Format__u32 SDL_texture_format__u32;
-    SDL_TextureAccess SDL_texture_access;
+    SDL_Texture_Access_Kind SDL_texture_access;
     Quantity__u16 width;
     Quantity__u16 height;
 } PLATFORM_Texture;

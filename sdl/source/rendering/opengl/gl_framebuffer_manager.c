@@ -93,7 +93,7 @@ void GL_push_framebuffer_onto__framebuffer_manager(
         GL_Framebuffer_Manager *p_GL_framebuffer_manager,
         GL_Framebuffer *p_GL_framebuffer) {
 #ifndef NDEBUG
-    uint index = 
+    uint32_t index = 
         p_GL_framebuffer
         - p_GL_framebuffer_manager
         ->GL_framebuffers

@@ -74,7 +74,7 @@ void SDL_release_PLATFORM_gfx_window_from__manager(
         SDL_Gfx_Window_Manager *p_SDL_gfx_window_manager,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
 #ifndef NDEBUG
-    uint index = p_PLATFORM_gfx_window
+    uint32_t index = p_PLATFORM_gfx_window
         - p_SDL_gfx_window_manager->SDL_gfx_windows
         ;
     if (index 
