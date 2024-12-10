@@ -50,11 +50,17 @@ bool use_hammer__place_offhand(
 
     if (!p_tile)
         return false;
+
+    bool is_placing__ground_or_cover =
+        get_tool_mode_of__item(p_item_self)
+        == Tool_Mode__Labor_Secondary;
     return attempt_tile_placement(
             p_game,
-            p_item_stack__offhand
+            is_placing__ground_or_cover
+            ? p_item_stack__offhand
                 ->item
-                .the_kind_of__ground__this_item_builds,
+                .the_kind_of__ground__this_item_builds
+            : Tile_Kind__None,
             p_item_stack__offhand
                 ->item
                 .the_kind_of__tile_cover__this_item_builds,
