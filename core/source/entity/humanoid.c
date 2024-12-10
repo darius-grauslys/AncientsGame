@@ -3,6 +3,7 @@
 #include "entity/handlers/serialization/serialization_handler__humanoid__default.h"
 #include "game.h"
 #include "inventory/item.h"
+#include "inventory/implemented/tool.h"
 #include "inventory/equipment.h"
 #include "inventory/inventory_manager.h"
 #include "rendering/animate_humanoid.h"

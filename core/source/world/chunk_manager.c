@@ -289,11 +289,14 @@ void save_chunk(
         PLATFORM_release_serialization_request(
                 get_p_PLATFORM_file_system_context_from__game(p_game), 
                 p_serialization_request);
-        debug_error("save_chunk, error opening file: %d", 
-                error);
+        debug_error("save_chunk, error opening file: %d, %s", 
+                error,
+                p_file_path_to__chunk);
         return;
     }
 
+    set_serialization_request_as__fire_and_forget(
+            p_serialization_request);
     set_serialization_request_as__using_serializer(
             p_serialization_request);
     set_serialization_request_as__write(
@@ -337,11 +340,14 @@ void load_chunk(
         PLATFORM_release_serialization_request(
                 get_p_PLATFORM_file_system_context_from__game(p_game), 
                 p_serialization_request);
-        debug_error("load_chunk, error opening file: %d", 
-                error);
+        debug_error("save_chunk, error opening file: %d, %s", 
+                error,
+                p_file_path_to__chunk);
         return;
     }
 
+    set_serialization_request_as__fire_and_forget(
+            p_serialization_request);
     set_serialization_request_as__using_serializer(
             p_serialization_request);
     set_serialization_request_as__read(

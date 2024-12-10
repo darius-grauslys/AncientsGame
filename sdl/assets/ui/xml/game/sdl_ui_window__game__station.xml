@@ -53,7 +53,7 @@
                     SDL_allocate_background_as__PLATFORM_Gfx_Window(
                         p_game,
                         p_PLATFORM_gfx_window,
-                        SDL_Background_Kind__Inventory_Column,
+                        SDL_Background_Kind__Inventory_Column__Small,
                         get_vector__3i32(0,0,0));
                 p_slider->p_ui_data = 
                     p_PLATFORM_gfx_window__inv_column;
@@ -107,6 +107,17 @@
         <allocate_ui name="p_bg_right">
             <background x="158" y="74" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
         </allocate_ui>
+            <code>
+                PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__station =
+                    SDL_allocate_background_as__PLATFORM_Gfx_Window(
+                        p_game,
+                        p_PLATFORM_gfx_window,
+                        SDL_Background_Kind__Station_Items,
+                        get_vector__3i32(0,0,0));
+            </code>
+            <allocate_ui name="p_background__station_items">
+                <background x="0" y="0" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__station"/>
+            </allocate_ui>
     </ui>
 </root>
 

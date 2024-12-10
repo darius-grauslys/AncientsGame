@@ -28,7 +28,7 @@ void manage_game__pre_render(Game *p_game);
 void manage_game__post_render(Game *p_game);
 
 static inline
-Quantity__u32 get_time_elapsed__game(Game *p_game) {
+Quantity__u32 get_ticks_elapsed__game(Game *p_game) {
     return get_time_elapsed_from__timer_u32(&p_game->tick__timer_u32);
 }
 

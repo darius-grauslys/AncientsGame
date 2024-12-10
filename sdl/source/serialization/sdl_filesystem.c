@@ -1,6 +1,8 @@
 #include "defines_weak.h"
 #include "game.h"
 #include "platform_defines.h"
+#include "process/process.h"
+#include "process/process_manager.h"
 #include "sdl_defines.h"
 #include "serialization/serialization_request.h"
 #include <serialization/sdl_filesystem.h>
@@ -228,6 +230,22 @@ void PLATFORM_initialize_file_system_context(
         strnlen(
                 p_PLATOFRM_file_system_context->path_to__base_directory,
                 MAX_LENGTH_OF__IO_PATH);
+
+    Process *p_serialization_process =
+        allocate_process_forcefully_in__process_manager(
+                get_p_process_manager_from__game(p_game),
+                p_game);
+    if (!p_serialization_process) {
+        debug_abort("SDL::PLATFORM_initialize_file_system_context, failed to allocate p_serialization_process.");
+        return;
+    }
+    register_process_as__critical_in__process_manager(
+            get_p_process_manager_from__game(p_game), 
+            p_game, 
+            p_serialization_process);
+    p_serialization_process
+        ->m_process_run__handler =
+        m_SDL_process__serialization;
 }
 
 void PLATFORM_append_base_directory_to__path(
@@ -402,10 +420,40 @@ bool PLATFORM_set_position_in__file(
     return !fseek(p_file, position_in__file_u32, SEEK_SET);
 }
 
-void SDL_poll_serialization_requests(
+Quantity__u32 PLATFORM_get_quantity_of__active_serialization_requests(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context) {
+    Quantity__u32 quantity_of__active_serialization_requests = 0;
+    for (Index__u32 index_of__serialization_request = 0;
+            index_of__serialization_request
+            < MAX_QUANTITY_OF__SERIALIZATION_REQUESTS;
+            index_of__serialization_request++ ){
+        Serialization_Request *p_serialization_request =
+            &p_PLATFORM_file_system_context
+            ->SDL_serialization_requests[
+                index_of__serialization_request];
+
+        if (is_serialization_request__active(
+                    p_serialization_request)) {
+            quantity_of__active_serialization_requests++;
+        }
+    }
+    return quantity_of__active_serialization_requests;
+}
+
+void m_SDL_process__serialization(
+        Process *p_this_process,
         Game *p_game) {
     PLATFORM_File_System_Context *p_PLATFORM_file_system_context =
         get_p_PLATFORM_file_system_context_from__game(p_game);
+
+#ifndef NDEBUG
+    if (!p_PLATFORM_file_system_context) {
+        debug_error("m_SDL_process__serialization, p_PLATOFRM_file_system_context is null.");
+        fail_process(p_this_process);
+        return;
+    }
+#endif
+
     for (Index__u32 index_of__serialization_request = 0;
             index_of__serialization_request
             < MAX_QUANTITY_OF__SERIALIZATION_REQUESTS;

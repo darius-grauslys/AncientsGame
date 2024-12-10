@@ -178,6 +178,25 @@ Item_Stack *get_p_item_stack_from__inventory_by__index(
     return &p_inventory->items[index_of__item];
 }
 
+bool is_inventory__empty(Inventory *p_inventory) {
+    for (Index__u32 index_of__item_stack = 0;
+            index_of__item_stack 
+            < INVENTORY_ITEM_MAXIMUM_QUANTITY_OF;
+            index_of__item_stack++) {
+        Item_Stack *p_item_stack = 
+            get_p_item_stack_from__inventory_by__index(
+                    p_inventory, 
+                    index_of__item_stack);
+
+        if (!is_p_item_stack__empty(
+                    p_item_stack)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 Index__u8 get_next_available_item_stack_by___index_from__inventory(
         Inventory *p_inventory) {
     for (Index__u8 index_of__item=0;

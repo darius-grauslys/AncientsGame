@@ -32,6 +32,13 @@ bool f_tile_handler__place__table(
         Tile_Cover_Kind the_kind_of__tile_cover,
         Tile_Vector__3i32 tile_vector__3i32);
 
+bool f_tile_handler__destroy__table(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32);
+
 void register_tile_handlers_for__table(
         Tile_Logic_Manager *p_tile_logic_managers);
 

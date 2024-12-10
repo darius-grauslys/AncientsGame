@@ -34,7 +34,7 @@ allocate_sprite_for__ui_slider(
     SDL_allocate_background_as__PLATFORM_Gfx_Window(
     p_game,
     p_PLATFORM_gfx_window,
-    SDL_Background_Kind__Inventory_Column,
+    SDL_Background_Kind__Inventory_Column__Small,
     get_vector__3i32(0,0,0));
     p_slider->p_ui_data = 
     p_PLATFORM_gfx_window__inv_column;
@@ -204,4 +204,12 @@ set_ui_element_as__the_parent_of__this_ui_element(
     initialize_ui_element_as__button(p_ui_iterator, 32, 16, get_vector__3i32(100 + 0, 164 + 0, 0), m_ui_button__click_handler__station_craft, false, false);
     UI_Element *p_bg_right = allocate_ui_element_from__ui_manager(p_ui_manager);
     SDL_initialize_ui_element_as__background(p_bg_right, 256, 256, get_vector__3i32(158 + 0, 74 + 0, 0), p_PLATFORM_gfx_window__inv_column);
+PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__station =
+    SDL_allocate_background_as__PLATFORM_Gfx_Window(
+    p_game,
+    p_PLATFORM_gfx_window,
+    SDL_Background_Kind__Station_Items,
+    get_vector__3i32(0,0,0));
+    UI_Element *p_background__station_items = allocate_ui_element_from__ui_manager(p_ui_manager);
+    SDL_initialize_ui_element_as__background(p_background__station_items, 256, 256, get_vector__3i32(0 + 0, 0 + 0, 0), p_PLATFORM_gfx_window__station);
 }

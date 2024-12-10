@@ -7,4 +7,7 @@ void set_tile_cover_as__tree(
         Tile *p_tile,
         u8 variation);
 
+void register_tile_handlers_for__trees(
+        Tile_Logic_Manager *p_tile_logic_manager);
+
 #endif

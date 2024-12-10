@@ -4,6 +4,7 @@
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/item.h"
+#include "inventory/implemented/tool.h"
 #include "inventory/item_stack.h"
 #include "platform.h"
 #include "raycast/ray.h"

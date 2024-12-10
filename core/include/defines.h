@@ -812,6 +812,7 @@ typedef struct Item_t {
             Quantity__u16 tool__quantity_of__durability;
             Quantity__u16 tool__max_quantity_of__durability;
             Tool_Mode item_tool_mode;
+            Tool_Kind the_kind_of__tool;
         };
         struct { // Item Recipe
             Item_Kind   the_kind_of_item__this_recipe_produces :10;
@@ -2062,10 +2063,27 @@ typedef bool (*f_Tile_Handler__Place)(
         Tile_Cover_Kind the_kind_of__tile_cover,
         Tile_Vector__3i32 tile_vector__3i32);
 
+typedef bool (*f_Tile_Handler__Destroy)(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32);
+
+typedef uint8_t Tile_Logic_Flags__u8;
+#define TILE_LOGIC_FLAGS__NONE 0
+#define TILE_LOGIC_FLAG__IS_UNPASSABLE BIT(0)
+#define TILE_LOGIC_FLAG__IS_SIGHT_BLOCKING BIT(1)
+
 typedef struct Tile_Logic_Record_t {
     f_Tile_Handler__Interact    f_tile_handler__interact;
     f_Tile_Handler__Touch       f_tile_handler__touch;
     f_Tile_Handler__Place       f_tile_handler__place;
+    f_Tile_Handler__Destroy     f_tile_handler__destroy;
+    Tile_Logic_Flags__u8        tile_logic_flags__u8;
+    Tool_Kind                   the_kind_of__tool_for__harvesting;
+    Item_Kind                   the_kind_of__resource_when__harvested;
+    Quantity__u32               quantity_of__resources_harvested;
 } Tile_Logic_Record;
 
 ///

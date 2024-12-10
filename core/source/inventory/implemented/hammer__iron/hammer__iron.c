@@ -7,6 +7,7 @@
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "inventory/item.h"
+#include "inventory/implemented/tool.h"
 #include "inventory/item_manager.h"
 #include "inventory/item_stack.h"
 #include "numerics.h"
@@ -25,13 +26,13 @@ void register_into__item_manager__hammer__iron_into__item_manager(
     register_item_in__item_manager(
             p_item_manager, 
             Item_Kind__Hammer__Iron, 
-            get_item(
+            get_tool(
                 Item_Kind__Hammer__Iron, 
                 ITEM_USAGE_FLAG__IS_LABOR
                 | ITEM_USAGE_FLAG__IS_LABOR__SECONDARY
                 | ITEM_USAGE_FLAG__IS_COMBAT,
-                ITEM_FILTER_FLAGS__NONE, 
                 i32_to__i32F20(4), 
+                Tool_Kind__Hammer, 
                 m_item_use_handler__hammer, 
                 0, 
                 0));
@@ -49,31 +50,15 @@ bool use_hammer__place_offhand(
 
     if (!p_tile)
         return false;
-
-    if (is_item_tool_mode__labor(p_item_self)) {
-        bool result__wall = 
-            attempt_tile_placement(
-                    p_game,
-                    Tile_Kind__None,
-                    p_item_stack__offhand
-                        ->item
-                        .the_kind_of__tile_cover__this_item_builds,
-                    tile_vector__3i32);
-        if (result__wall) {
-            set_tile__is_unpassable(p_tile, true);
-        }
-        return result__wall;
-    } else if (is_item_tool_mode__labor_secondary(p_item_self)) {
-        return attempt_tile_placement(
-                    p_game,
-                    p_item_stack__offhand
-                        ->item
-                        .the_kind_of__ground__this_item_builds,
-                    Tile_Cover_Kind__None,
-                    tile_vector__3i32);
-    }
-
-    return false;
+    return attempt_tile_placement(
+            p_game,
+            p_item_stack__offhand
+                ->item
+                .the_kind_of__ground__this_item_builds,
+            p_item_stack__offhand
+                ->item
+                .the_kind_of__tile_cover__this_item_builds,
+            tile_vector__3i32);
 }
 
 void m_item_use_handler__hammer(

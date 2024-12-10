@@ -8,6 +8,7 @@
             <header path="vectors.h"/>
             <header path="defines.h"/>
             <header path="game.h"/>
+            <header path="ui/handlers/in_game__settings/ui_handler__in_game__settings__button_save_and_quit.h"/>
         </include>
         <output base_dir="./" c_path="./sdl/source/ui/game/sdl_ui_window__game__settings.c" h_path="./sdl/include/ui/game/sdl_ui_window__game__settings.h"/>
         <platform target="SDL" size="256,256"/>
@@ -38,8 +39,8 @@
             <allocate_ui x="128" y="116" name="p_button_setting__main_menu">
                 <button width="104" height="32" color="64,196,64"/>
             </allocate_ui>
-            <allocate_ui x="128" y="160" name="p_button_setting__quit">
-                <button width="104" height="32" color="64,196,64"/>
+            <allocate_ui x="128" y="160" name="p_button_setting__save_and_quit">
+                <button width="104" height="32" color="64,196,64"  m_Clicked_Handler="m_ui_button__click_handler__save_and_quit"/>
             </allocate_ui>
         </group>
     </ui>

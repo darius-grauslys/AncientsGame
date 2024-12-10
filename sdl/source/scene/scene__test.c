@@ -45,8 +45,10 @@ void m_enter_scene_handler_as__test(
             SDL_get_main_graphics_window_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
     load_world(p_game);
-    while(!get_p_local_player_from__game(p_game)) {
-        manage_game__pre_render(p_game); // handle loading first.
+    while(!get_p_local_player_from__game(p_game)
+            && PLATFORM_get_quantity_of__active_serialization_requests(
+                get_p_PLATFORM_file_system_context_from__game(p_game))) {
+        manage_game__post_render(p_game); // handle loading first.
     }
     Entity *p_player = 
         p_game->world.entity_manager
@@ -62,53 +64,14 @@ void m_enter_scene_handler_as__test(
             get_p_local_player_from__game(p_game)
             ->hitbox.position__3i32F4);
 
-    get_p_local_player_from__game(p_game)
-        ->equipment
-        .item_stack__main_hand
-        .item =
-            get_item_from__item_manager(
-                get_p_item_manager_from__game(p_game), 
-                Item_Kind__Hammer__Iron);
-
-    get_p_local_player_from__game(p_game)
-        ->equipment
-        .item_stack__main_hand
-        .quantity_of__items = 1;
-    get_p_local_player_from__game(p_game)
-        ->equipment
-        .item_stack__main_hand
-        .max_quantity_of__items = 1;
-
-    get_p_local_player_from__game(p_game)
-        ->equipment
-        .item_stack__off_hand
-        .item =
-            get_item_from__item_manager(
-                get_p_item_manager_from__game(p_game), 
-                Item_Kind__Pile__Dirt__Plenty);
-
-    get_p_local_player_from__game(p_game)
-        ->equipment
-        .item_stack__main_hand
-        .quantity_of__items = 1;
-    get_p_local_player_from__game(p_game)
-        ->equipment
-        .item_stack__main_hand
-        .max_quantity_of__items = 1;
+    while(PLATFORM_get_quantity_of__active_serialization_requests(
+                get_p_PLATFORM_file_system_context_from__game(p_game))) {
+        manage_game__post_render(p_game); // handle loading first.
+    }
 
     PLATFORM_update_chunks(
             get_p_PLATFORM_gfx_context_from__game(p_game),
             get_p_chunk_manager_from__game(p_game));
-
-    Timer__u32 timer__seconds__u32;
-    Timer__u32 timer__nanoseconds__u32;
-
-    initialize_timer_u32(
-            &timer__seconds__u32, 
-            (u32)-1);
-    initialize_timer_u32(
-            &timer__nanoseconds__u32, 
-            999999999);
 
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
@@ -137,9 +100,16 @@ void m_enter_scene_handler_as__test(
 
         if (is_input__game_settings_released(
                     get_p_input_from__game(p_game))) {
-            PLATFORM_close_ui(
-                    p_game, 
-                    UI_Window_Kind__Unknown);
+            if (!quantity_of__windows) {
+                PLATFORM_open_ui(
+                        p_game, 
+                        UI_Window_Kind__In_Game_Settings, 
+                        0);
+            } else {
+                PLATFORM_close_ui(
+                        p_game, 
+                        UI_Window_Kind__Unknown);
+            }
         }
         if (SDL_is_input__equip_released(
                     get_p_input_from__game(p_game))) {

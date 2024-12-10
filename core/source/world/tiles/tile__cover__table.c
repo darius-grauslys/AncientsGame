@@ -1,6 +1,8 @@
+#include "defines.h"
 #include "defines_weak.h"
 #include "entity/entity_manager.h"
 #include "game.h"
+#include "inventory/container.h"
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "platform.h"
@@ -166,5 +168,142 @@ void register_tile_handlers_for__table(
             TILE_LOGIC_RECORD(
                 f_tile_interact_handler__table,
                 0,
-                f_tile_handler__place__table));
+                f_tile_handler__place__table,
+                f_tile_handler__destroy__table,
+                TILE_LOGIC_FLAG__IS_UNPASSABLE,
+                Tool_Kind__Hatchet,
+                Item_Kind__Table,
+                1));
+
+    register_tile_logic_record_for__cover_kind(
+            p_tile_logic_manager, 
+            Tile_Cover_Kind__Table__Bottom__Left, 
+            TILE_LOGIC_RECORD(
+                0,
+                0,
+                0,
+                f_tile_handler__destroy__table,
+                TILE_LOGIC_FLAG__IS_UNPASSABLE,
+                Tool_Kind__Hatchet,
+                Item_Kind__Table,
+                1));
+
+    register_tile_logic_record_for__cover_kind(
+            p_tile_logic_manager, 
+            Tile_Cover_Kind__Table__Bottom__Right, 
+            TILE_LOGIC_RECORD(
+                0,
+                0,
+                0,
+                f_tile_handler__destroy__table,
+                TILE_LOGIC_FLAG__IS_UNPASSABLE,
+                Tool_Kind__Hatchet,
+                Item_Kind__Table,
+                1));
+}
+
+bool f_tile_handler__destroy__table(
+        Game *p_game,
+        Tile *p_tile,
+        Tile_Kind the_kind_of__tile,
+        Tile_Cover_Kind the_kind_of__tile_cover,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    Tile *p_tile__left;
+    Tile *p_tile__middle;
+    Tile *p_tile__right;
+    switch (the_kind_of__tile_cover) {
+        default:
+            return false;
+        case Tile_Cover_Kind__Table__Bottom__Left:
+            p_tile__left = p_tile;
+            p_tile__middle =
+                get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                        get_p_chunk_manager_from__game(
+                            p_game), 
+                        add_vectors__3i32(
+                            tile_vector__3i32,
+                            VECTOR__3i32__1_0_0));
+            p_tile__right =
+                get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                        get_p_chunk_manager_from__game(
+                            p_game), 
+                        add_vectors__3i32(
+                            tile_vector__3i32,
+                            get_vector__3i32(2,0,0)));
+            break;
+        case Tile_Cover_Kind__Table__Bottom__Middle:
+            p_tile__middle = p_tile;
+            p_tile__left =
+                get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                        get_p_chunk_manager_from__game(
+                            p_game), 
+                        add_vectors__3i32(
+                            tile_vector__3i32,
+                            VECTOR__3i32__n1_0_0));
+            p_tile__right =
+                get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                        get_p_chunk_manager_from__game(
+                            p_game), 
+                        add_vectors__3i32(
+                            tile_vector__3i32,
+                            VECTOR__3i32__1_0_0));
+            break;
+        case Tile_Cover_Kind__Table__Bottom__Right:
+            p_tile__right = p_tile;
+            p_tile__left =
+                get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                        get_p_chunk_manager_from__game(
+                            p_game), 
+                        add_vectors__3i32(
+                            tile_vector__3i32,
+                            get_vector__3i32(-2,0,0)));
+            p_tile__middle =
+                get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+                        get_p_chunk_manager_from__game(
+                            p_game), 
+                        add_vectors__3i32(
+                            tile_vector__3i32,
+                            VECTOR__3i32__n1_0_0));
+            break;
+    }
+
+    if (!is_tile_with__this_kind_of__tile_cover(
+                p_tile__left, 
+                Tile_Cover_Kind__Table__Bottom__Left)) {
+        return false;
+    }
+    if (!is_tile_with__this_kind_of__tile_cover(
+                p_tile__middle, 
+                Tile_Cover_Kind__Table__Bottom__Middle)) {
+        return false;
+    }
+    if (!is_tile_with__this_kind_of__tile_cover(
+                p_tile__right, 
+                Tile_Cover_Kind__Table__Bottom__Right)) {
+        return false;
+    }
+
+    if (!p_tile__left || !p_tile__right || !p_tile__middle) {
+        return false;
+    }
+
+    Inventory *p_inventory =
+        get_inventory_of__container(
+                p_game, 
+                tile_vector__3i32);
+
+    if (!p_inventory
+            || !is_inventory__empty(p_inventory)) {
+        return false;
+    }
+
+    release_p_inventory_in__inventory_manager(
+            get_p_inventory_manager_from__game(
+                p_game), 
+            p_inventory);
+
+    clear_tile_cover(p_tile__left);
+    clear_tile_cover(p_tile__middle);
+    clear_tile_cover(p_tile__right);
+    return true;
 }

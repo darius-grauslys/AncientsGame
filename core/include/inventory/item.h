@@ -20,13 +20,6 @@ void initialize_item_as__empty(
 
 Item get_item__empty();
 
-void set_item_tool_mode_to__next_tool_mode(
-        Item *p_item);
-
-bool set_item_tool_mode(
-        Item *p_item,
-        Tool_Mode tool_mode);
-
 static inline
 Item_Kind get_item_kind_of__item(
         Item *p_item) {

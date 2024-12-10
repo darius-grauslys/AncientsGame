@@ -214,4 +214,14 @@ set_ui_element_as__the_parent_of__this_ui_element(
     UI_Element *p_background__inv_column = allocate_ui_element_from__ui_manager(p_ui_manager);
     SDL_initialize_ui_element_as__background(p_background__inv_column, 256, 256, get_vector__3i32(88 + 0, 74 + 0, 0), p_PLATFORM_gfx_window__inv_column);
 
+PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__equipment =
+    SDL_allocate_background_as__PLATFORM_Gfx_Window(
+    p_game,
+    p_PLATFORM_gfx_window,
+    SDL_Background_Kind__Equipment,
+    get_vector__3i32(0,0,0));
+
+    UI_Element *p_background__equipment = allocate_ui_element_from__ui_manager(p_ui_manager);
+    SDL_initialize_ui_element_as__background(p_background__equipment, 256, 256, get_vector__3i32(0 + 0, 0 + 0, 0), p_PLATFORM_gfx_window__equipment);
+
 }

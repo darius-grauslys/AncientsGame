@@ -65,14 +65,14 @@ void PLATFORM_initialize_file_system_context(
         allocate_process_forcefully_in__process_manager(
                 get_p_process_manager_from__game(p_game),
                 p_game);
-    register_process_as__critical_in__process_manager(
-            get_p_process_manager_from__game(p_game), 
-            p_game, 
-            p_serialization_process);
     if (!p_serialization_process) {
         debug_abort("NDS::PLATFORM_initialize_file_system_context, failed to allocate p_serialization_process.");
         return;
     }
+    register_process_as__critical_in__process_manager(
+            get_p_process_manager_from__game(p_game), 
+            p_game, 
+            p_serialization_process);
     p_serialization_process
         ->m_process_run__handler =
         m_NDS_process__serialization;

@@ -348,6 +348,9 @@ enum PLATFORM_Read_File_Error {
     PLATFORM_Read_File_Error__Unknown
 };
 
+Quantity__u32 PLATFORM_get_quantity_of__active_serialization_requests(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context);
+
 Serialization_Request *PLATFORM_allocate_serialization_request(
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
 

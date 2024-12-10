@@ -272,13 +272,13 @@ void poll_process_manager(
         Process *p_process =
             &p_process_manager->processes[index_of__process];
         u32 time_elapsed__low =
-            get_time_elapsed__game(p_game)
+            get_ticks_elapsed__game(p_game)
             & MASK(8);
         u32 time_elapsed__medium =
-            get_time_elapsed__game(p_game)
+            get_ticks_elapsed__game(p_game)
             & MASK(7);
         u32 time_elapsed__high =
-            get_time_elapsed__game(p_game)
+            get_ticks_elapsed__game(p_game)
             & MASK(6);
 
         if (is_process__complete(p_process)) {

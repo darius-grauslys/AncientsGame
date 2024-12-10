@@ -313,6 +313,16 @@ typedef struct Item_t Item;
 typedef struct Item_Stack_t Item_Stack;
 typedef struct Inventory_t Inventory;
 
+typedef enum Tool_Kind {
+    Tool_Kind__None,
+    Tool_Kind__Pickaxe,
+    Tool_Kind__Shovel,
+    Tool_Kind__Scythe,
+    Tool_Kind__Hammer,
+    Tool_Kind__Hatchet,
+    Tool_Kind__Unknown
+} Tool_Kind;
+
 typedef enum Item_Kind {
     Item_Kind__None = 0,
     Item_Kind__Stick,

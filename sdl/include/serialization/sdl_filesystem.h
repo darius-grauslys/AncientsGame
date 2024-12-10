@@ -20,4 +20,8 @@ bool SDL_get_path_to__texture_file(
 void SDL_poll_serialization_requests(
         Game *p_game);
 
+void m_SDL_process__serialization(
+        Process *p_this_process,
+        Game *p_game);
+
 #endif

@@ -553,8 +553,7 @@ def button(signature, xml_element, context_stack):
             args)
     
     generate_source_c__new_line()
-    # TODO: make a dotted line outline for logicals instead of opaque box
-    # allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
+    allocate_many_squares_with__context_stack(rectangle_spec, context_stack)
 
 def slider(signature, xml_element, context_stack):
     rectangle_spec = RectangleSpec(xml_element, context_stack)

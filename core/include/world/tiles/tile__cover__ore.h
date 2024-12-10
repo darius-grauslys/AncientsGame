@@ -17,4 +17,7 @@ void set_tile_cover_as__ore(
         u8 variation,
         bool is_large);
 
+void register_tile_handlers_for__ore(
+        Tile_Logic_Manager *p_tile_logic_manager);
+
 #endif

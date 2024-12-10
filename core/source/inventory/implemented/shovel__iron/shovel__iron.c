@@ -21,34 +21,14 @@ void register_into__item_manager__shovel__iron_into__item_manager(
     register_item_in__item_manager(
             p_item_manager, 
             Item_Kind__Shovel__Iron, 
-            get_item(
+            get_tool(
                 Item_Kind__Shovel__Iron, 
                 ITEM_USAGE_FLAG__IS_LABOR
                 | ITEM_USAGE_FLAG__IS_LABOR__SECONDARY
                 | ITEM_USAGE_FLAG__IS_COMBAT,
-                ITEM_FILTER_FLAGS__NONE, 
                 i32_to__i32F20(4), 
-                m_item_use_handler__shovel, 
+                Tool_Kind__Shovel, 
+                m_item_use_handler__harvest, 
                 0, 
                 0));
-}
-
-void m_item_use_handler__shovel(
-        Item *p_item_self,
-        Entity *p_entity_user,
-        Game_Action *p_game_action,
-        Game *p_game) {
-    if (is_item_tool_mode_a__combat_mode(p_item_self)) {
-        m_item_use_handler__weapon(
-                p_item_self, 
-                p_entity_user, 
-                p_game_action, 
-                p_game);
-        return;
-    }
-
-    use_tool__harvest_soil(
-            p_game, 
-            p_entity_user, 
-            is_item_tool_mode__labor(p_item_self));
 }

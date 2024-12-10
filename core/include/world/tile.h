@@ -85,6 +85,12 @@ void set_tile__is_unpassable(Tile *tile, bool value) {
 }
 
 static inline 
+void set_tile__is_sight_blocking(Tile *tile, bool value) {
+    tile->tile_flags &= ~TILE_FLAGS__BIT_IS_SIGHT_BLOCKING;
+    tile->tile_flags |= (value << TILE_FLAGS__BIT_SHIFT_IS_SIGHT_BLOCKING);
+}
+
+static inline 
 bool is_tile__sight_blocking(Tile *tile) {
     return (bool)(tile->tile_flags & TILE_FLAGS__BIT_IS_SIGHT_BLOCKING); 
 }
@@ -198,11 +204,11 @@ bool attempt_tile_placement(
         Tile_Cover_Kind the_kind_of__tile_cover,
         Tile_Vector__3i32 tile_vector__3i32);
 
-void remove_tile__cover(
+bool remove_tile__cover(
         Game *p_game,
         Tile_Vector__3i32 tile_vector__3i32);
 
-void remove_tile__ground(
+bool remove_tile__ground(
         Game *p_game,
         Tile_Vector__3i32 tile_vector__3i32);
 

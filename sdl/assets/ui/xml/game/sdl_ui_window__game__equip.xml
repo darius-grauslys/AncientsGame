@@ -102,6 +102,17 @@
             <allocate_ui name="p_background__inv_column">
                 <background x="88" y="74" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
             </allocate_ui>
+            <code>
+                PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__equipment =
+                    SDL_allocate_background_as__PLATFORM_Gfx_Window(
+                        p_game,
+                        p_PLATFORM_gfx_window,
+                        SDL_Background_Kind__Equipment,
+                        get_vector__3i32(0,0,0));
+            </code>
+            <allocate_ui name="p_background__equipment">
+                <background x="0" y="0" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__equipment"/>
+            </allocate_ui>
         </group>
     </ui>
 </root>

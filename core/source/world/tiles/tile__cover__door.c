@@ -404,49 +404,65 @@ bool f_tile_handler__place__door(
 static inline
 void register_default_tile_handlers_for__door(
         Tile_Logic_Manager *p_tile_logic_manager,
-        Tile_Cover_Kind the_kind_of__door) {
+        Tile_Cover_Kind the_kind_of__door,
+        Item_Kind the_kind_of__item_for__door) {
     register_tile_logic_record_for__cover_kind(
             p_tile_logic_manager, 
             the_kind_of__door, 
             TILE_LOGIC_RECORD(
                 f_tile_interact_handler__door,
                 0,
-                f_tile_handler__place__door));
+                f_tile_handler__place__door,
+                0,
+                TILE_LOGIC_FLAG__IS_UNPASSABLE,
+                Tool_Kind__Hatchet,
+                the_kind_of__item_for__door,
+                1));
 }
 
 void register_tile_handlers_for__door(
         Tile_Logic_Manager *p_tile_logic_managers) {
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Wood);
+            Tile_Cover_Kind__Door__Horizontal__Wood,
+            Item_Kind__Door__Wood);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Gold);
+            Tile_Cover_Kind__Door__Horizontal__Gold,
+            Item_Kind__Door__Gold);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Iron);
+            Tile_Cover_Kind__Door__Horizontal__Iron,
+            Item_Kind__Door__Iron);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Diamond);
+            Tile_Cover_Kind__Door__Horizontal__Diamond,
+            Item_Kind__Door__Diamond);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Amethyst);
+            Tile_Cover_Kind__Door__Horizontal__Amethyst,
+            Item_Kind__Door__Amethyst);
     
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Open__Wood);
+            Tile_Cover_Kind__Door__Horizontal__Open__Wood,
+            Item_Kind__Door__Wood);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Open__Gold);
+            Tile_Cover_Kind__Door__Horizontal__Open__Gold,
+            Item_Kind__Door__Gold);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Open__Iron);
+            Tile_Cover_Kind__Door__Horizontal__Open__Iron,
+            Item_Kind__Door__Iron);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Open__Diamond);
+            Tile_Cover_Kind__Door__Horizontal__Open__Diamond,
+            Item_Kind__Door__Diamond);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Horizontal__Open__Amethyst);
+            Tile_Cover_Kind__Door__Horizontal__Open__Amethyst,
+            Item_Kind__Door__Amethyst);
 
 
 
@@ -454,33 +470,43 @@ void register_tile_handlers_for__door(
 
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Wood);
+            Tile_Cover_Kind__Door__Vertical__Wood,
+            Item_Kind__Door__Wood);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Gold);
+            Tile_Cover_Kind__Door__Vertical__Gold,
+            Item_Kind__Door__Gold);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Iron);
+            Tile_Cover_Kind__Door__Vertical__Iron,
+            Item_Kind__Door__Iron);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Diamond);
+            Tile_Cover_Kind__Door__Vertical__Diamond,
+            Item_Kind__Door__Diamond);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Amethyst);
+            Tile_Cover_Kind__Door__Vertical__Amethyst,
+            Item_Kind__Door__Amethyst);
     
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Open__Wood);
+            Tile_Cover_Kind__Door__Vertical__Open__Wood,
+            Item_Kind__Door__Wood);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Open__Gold);
+            Tile_Cover_Kind__Door__Vertical__Open__Gold,
+            Item_Kind__Door__Gold);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Open__Iron);
+            Tile_Cover_Kind__Door__Vertical__Open__Iron,
+            Item_Kind__Door__Iron);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Open__Diamond);
+            Tile_Cover_Kind__Door__Vertical__Open__Diamond,
+            Item_Kind__Door__Diamond);
     register_default_tile_handlers_for__door(
             p_tile_logic_managers, 
-            Tile_Cover_Kind__Door__Vertical__Open__Amethyst);
+            Tile_Cover_Kind__Door__Vertical__Open__Amethyst,
+            Item_Kind__Door__Amethyst);
 }

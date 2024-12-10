@@ -2,6 +2,7 @@
 #define TILE_LOGIC_MANAGER_H
 
 #include "defines_weak.h"
+#include "world/tile_logic_record.h"
 #include <defines.h>
 
 void initialize_tile_logic_manager(
@@ -29,5 +30,9 @@ Tile_Logic_Record
 
 void register_core_tile_logic_handlers(
         Tile_Logic_Manager *p_tile_logic_manager);
+
+void determine_tile_flags(
+        Tile_Logic_Manager *p_tile_logic_manager,
+        Tile *p_tile);
 
 #endif

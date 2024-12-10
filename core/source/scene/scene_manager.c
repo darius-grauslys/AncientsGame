@@ -37,7 +37,7 @@ void set_p_active_scene_for__scene_manager(
     Scene *p_scene =
         get_p_scene_from__scene_manager(
                 p_scene_manager, identifier);
-    if (!p_scene_manager->p_active_scene) {
+    if (p_scene_manager->p_active_scene) {
         p_scene_manager->p_active_scene->is_active = false;
     }
     if (p_scene) {

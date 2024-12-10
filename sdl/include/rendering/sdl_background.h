@@ -8,6 +8,7 @@ typedef enum SDL_Background_Kind {
     SDL_Background_Kind__None = 0,
     SDL_Background_Kind__Inventory_Column = 1,
     SDL_Background_Kind__Inventory_Column__Small,
+    SDL_Background_Kind__Station_Items,
     SDL_Background_Kind__Equipment,
     SDL_Background_Kind__Equipment_Divider,
     SDL_Background_Kind__Unknown

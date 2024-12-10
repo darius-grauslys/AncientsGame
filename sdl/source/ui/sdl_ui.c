@@ -14,6 +14,7 @@
 #include "rendering/sdl_gfx_window_manager.h"
 #include "rendering/texture.h"
 #include "serialization/serialized_field.h"
+#include "ui/game/sdl_ui_window__game__settings.h"
 #include "ui/game/sdl_ui_window__game__equip.h"
 #include "ui/game/sdl_ui_window__game__trade.h"
 #include "ui/game/sdl_ui_window__game__station.h"
@@ -23,6 +24,7 @@
 #include "ui/ui_inventory_station.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
+#include "assets/ui/default/ui_map_ingame_settings.h"
 #include "assets/ui/default/ui_map_trade.h"
 #include "assets/ui/default/ui_map_equip.h"
 #include "assets/ui/default/ui_map_station.h"
@@ -102,6 +104,16 @@ void PLATFORM_open_ui(
     switch (the_kind_of__ui_window_to__open) {
         default:
         case UI_Window_Kind__Idle:
+            break;
+        case UI_Window_Kind__In_Game_Settings:
+            memcpy(
+                    ui_tile_map__wrapper.p_ui_tile_data,
+                    ui_map_ingame_settingsMap,
+                    sizeof(ui_map_ingame_settingsMap));
+            SDL_allocate_ui_for__sdl_ui_window__game__settings(
+                    p_game, 
+                    p_PLATFORM_gfx_window__ui, 
+                    p_ui_manager);
             break;
         case UI_Window_Kind__Equip:
             memcpy(

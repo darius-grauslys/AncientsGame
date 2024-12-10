@@ -21,6 +21,8 @@ void m_deserialize__inventory(
         Serialization_Request *p_serialization_request,
         Serializer *p_inventory__serializer);
 
+bool is_inventory__empty(Inventory *p_inventory);
+
 ///
 /// Calls initialize_item_stack to
 /// an empty spot in inventory. Does nothing

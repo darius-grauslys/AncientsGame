@@ -26,7 +26,7 @@ export INCLUDES := $(INCLUDE_CORE) $(BASE_DIR)/sdl/include
 ifeq ($(OS),Windows_NT)
 export LIBS		:= -lm -lopengl32 -lglew32 -lSDL2 -lcglm -lwinmm
 else
-export LIBS		:= -lm -lGL -lGLEW -lSDL2 -lcglm -lwinmm
+export LIBS		:= -lm -lGL -lGLEW -lSDL2 -lcglm
 endif
 
 export DEPSDIR := $(BUILD)
