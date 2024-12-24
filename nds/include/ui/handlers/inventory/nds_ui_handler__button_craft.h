@@ -5,6 +5,7 @@
 
 void m_NDS_ui_button__click_handler__craft(
         UI_Element *p_this_slider,
-        Game *p_game);
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 #endif

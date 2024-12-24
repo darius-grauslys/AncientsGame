@@ -5,6 +5,7 @@
 
 void m_NDS_ui_button__clicked_handler__hud(
         UI_Element *p_this_button,
-        Game *p_game);
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 #endif

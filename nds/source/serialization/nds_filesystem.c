@@ -11,8 +11,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <nds_defines.h>
+#include <dirent.h>
 
 PLATFORM_File_System_Context _NDS_file_system_context;
+
+typedef struct PLATFORM_Directory_t {
+    DIR *p_UNIX_dir;
+} PLATFORM_Directory;
+
+int PLATFORM_access(const char *p_c_str, IO_Access_Kind io_access_kind) {
+    switch (io_access_kind) {
+        default:
+            // TODO: impl the cases
+            return access(p_c_str, F_OK);
+    }
+}
+
+PLATFORM_Directory *PLATFORM_opendir(const char *p_c_str) {
+    DIR *p_UNIX_dir = opendir(p_c_str);
+    if (!p_UNIX_dir)
+        return 0;
+    PLATFORM_Directory *p_dir = malloc(sizeof(PLATFORM_Directory));
+    p_dir->p_UNIX_dir = p_UNIX_dir;
+    return p_dir;
+}
+
+void PLATFORM_closedir(PLATFORM_Directory *p_dir) {
+    if (!p_dir)
+        return;
+
+    closedir(p_dir->p_UNIX_dir);
+
+    free(p_dir);
+}
+
+bool PLATFORM_mkdir(const char *p_c_str, uint32_t file_code) {
+    return mkdir(p_c_str, file_code);
+}
 
 void m_NDS_process__serialization(
         Process *p_this_process,
@@ -34,6 +69,27 @@ void m_NDS_process__serialization(
 ///         SLOT_1 cards on hand. Further work is needed
 ///         based on the write speed of other cards.
 ///
+
+Quantity__u32 PLATFORM_get_quantity_of__active_serialization_requests(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context) {
+    Quantity__u32 quantity_of__requests = 0;
+
+    for (Index__u32 index_of__request = 0;
+            index_of__request
+            < FILE_SYSTEM_CONTEXT__QUANTITY_OF__SERIALIZAITON_REQUESTS;
+            index_of__request++) {
+        Serialization_Request *p_serialization_request =
+            &p_PLATFORM_file_system_context
+            ->serialization_requests[index_of__request];
+
+        if (is_serialization_request__active(
+                    p_serialization_request)) {
+            quantity_of__requests++;
+        }
+    }
+
+    return quantity_of__requests;
+}
 
 void PLATFORM_initialize_file_system_context(
         Game *p_game,
