@@ -685,13 +685,25 @@ typedef struct Font_Letter_t {
 
 #define FONT_LETTER_MAX_QUANTITY_OF 256
 
+typedef u8 Font_Flags;
+
+#define FONT_FLAGS__NONE 0
+#define FONT_FLAG__IS_ALLOCATED BIT(0)
+
 typedef struct Font_t {
     Font_Letter font_lookup_table[
         FONT_LETTER_MAX_QUANTITY_OF];
     PLATFORM_Texture *p_PLATFORM_texture_of__font;
     Quantity__u8 max_width_of__font_letter;
     Quantity__u8 max_height_of__font_letter;
+    Font_Flags font_flags;
 } Font;
+
+#define MAX_QUANTITY_OF__FONT 8
+
+typedef struct Font_Manager_t {
+    Font fonts[MAX_QUANTITY_OF__FONT];
+} Font_Manager;
 
 #define FONT_SMALL__MAX_WIDTH 4
 #define FONT_SMALL__MAX_HEIGHT 6
