@@ -160,6 +160,10 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Sprite_Allocation_Specification *p_sprite_allocation_specification);
 
+PLATFORM_Sprite_Data *PLATFORM_allocate_sprite_data(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags);
+
 void PLATFORM_release_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite);
@@ -201,6 +205,15 @@ PLATFORM_Texture *PLATFORM_allocate_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Allocation_Specification
             *p_texture_allocation_specification);
+
+PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags);
+
+PLATFORM_Texture *PLATFORM_allocate_texture_with__path__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags,
+        const char *c_str__path);
 
 ///
 /// This is currently no-op on NDS. Later, if we need to,
@@ -263,6 +276,7 @@ void PLATFORM_update_chunks(
 /// SECTION_core
 ///
 
+void *memset(void *, int, unsigned long);
 int abs(int x);
 void srand(unsigned int seed);
 int rand(void);

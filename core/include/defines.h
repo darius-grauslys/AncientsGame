@@ -403,11 +403,9 @@ typedef struct Sprite_Wrapper_t {
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
 } Sprite_Wrapper;
 
-typedef void (*f_Sprite_Gfx_Allocator)(
+typedef PLATFORM_Sprite *(*f_Sprite_Gfx_Allocator)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Sprite *p_PLATFORM_sprite,
-        Sprite_Allocation_Specification 
-            *p_sprite_allocation_specification);
+        u32 enum_value);
 
 typedef f_Sprite_Gfx_Allocator 
     F_Sprite_Gfx_Allocator__Lookup_Table_For__Entities[
@@ -416,6 +414,17 @@ typedef f_Sprite_Gfx_Allocator
 typedef f_Sprite_Gfx_Allocator 
     F_Sprite_Gfx_Allocator__Lookup_Table_For__Particles[
     Particle_Kind__Unknown];
+
+typedef struct Sprite_Gfx_Allocation_Manager_t {
+    f_Sprite_Gfx_Allocator F_sprite_gfx_allocators_for__entities[
+        Entity_Kind__Unknown];
+    f_Sprite_Gfx_Allocator F_sprite_gfx_allocators_for__particles[
+        Particle_Kind__Unknown];
+    f_Sprite_Gfx_Allocator F_sprite_gfx_allocators_for__ui[
+        UI_Sprite_Kind__Unknown];
+    f_Sprite_Gfx_Allocator F_sprite_gfx_allocators_for__items[
+        Item_Kind__Unknown];
+} Sprite_Gfx_Allocation_Manager;
 
 #define SPRITE_FRAME__32x32__OFFSET (32 * 32)
 #define SPRITE_FRAME__16x16__OFFSET (16 * 16)

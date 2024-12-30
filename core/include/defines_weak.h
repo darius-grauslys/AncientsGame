@@ -292,10 +292,10 @@ typedef enum Entity_Kind {
     Entity_Kind__Unknown
 } Entity_Kind;
 
-enum Particle_Kind {
+typedef enum Particle_Kind {
     Particle_Kind__None = 0,
     Particle_Kind__Unknown
-};
+} Particle_Kind;
 
 typedef struct Entity_t Entity;
 
@@ -942,7 +942,7 @@ typedef enum UI_Tile_Kind {
     UI_Tile_Kind__Unknown = 1023
 } UI_Tile_Kind;
 
-enum UI_Sprite_Kind {
+typedef enum UI_Sprite_Kind {
     UI_Sprite_Kind__None = 0,
     UI_Sprite_Kind__8x8__Nav__Indicator__Close__Hostile,
     UI_Sprite_Kind__8x8__Nav__Indicator__Near__Hostile,
@@ -1014,7 +1014,7 @@ enum UI_Sprite_Kind {
     UI_Sprite_Kind__32x32__Keyboard_Button__Down__12px,
     UI_Sprite_Kind__32x32,
     UI_Sprite_Kind__Unknown = UI_Sprite_Kind__32x32
-};
+} UI_Sprite_Kind;
 
 typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;
@@ -1793,5 +1793,6 @@ typedef struct PLATFORM_Audio_Context_t PLATFORM_Audio_Context;
 typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
 typedef struct PLATFORM_Texture_t PLATFORM_Texture;
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
+typedef struct PLATFORM_Sprite_Data_t PLATFORM_Sprite_Data;
 
 #endif
