@@ -2,8 +2,11 @@
 #include "defines_weak.h"
 #include "entity/handlers/ai/ai_handler__debug.h"
 #include "entity/humanoid.h"
+#include "game.h"
 #include "platform.h"
+#include "rendering/aliased_texture_manager.h"
 #include "rendering/sprite.h"
+#include "rendering/texture_strings.h"
 #include <entity/implemented/player/entity__player.h>
 #include <entity/implemented/player/ai/ai_handler__player.h>
 #include <entity/entity.h>
@@ -67,4 +70,28 @@ void initialize_entity_as__player(
     p_entity->humanoid__homeostasis__i8 = 0;
 
     // set_entity__is_not_updating_position(p_entity);
+}
+
+PLATFORM_Sprite *f_sprite_gfx_allocator__player(
+        Game *p_game,
+        u32 enum_value) {
+    // assume enum value is player.
+
+    Aliased_Texture_Manager *p_aliased_texture_manager =
+        get_p_aliased_texture_manager_from__game(p_game);
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__game(p_game);
+
+    PLATFORM_Texture *p_PLATFORM_texture_for__player =
+        get_p_PLATFORM_texture_by__alias(
+                p_aliased_texture_manager, 
+                name_of__texture__player__c_str);
+
+    if (!p_PLATFORM_texture_for__player)
+        return 0;
+    
+    return PLATFORM_allocate_sprite__TMP(
+            p_PLATFORM_gfx_context, 
+            p_PLATFORM_texture_for__player, 
+            TEXTURE_FLAG__SIZE_16x16);
 }

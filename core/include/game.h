@@ -88,6 +88,17 @@ World *get_p_world_from__game(Game *p_game) {
     return &p_game->world;
 }
 
+static inline 
+Sprite_Gfx_Allocation_Manager *get_p_sprite_gfx_allocation_manager_from__game(
+        Game *p_game) {
+    return &p_game->sprite_gfx_allocation_manager;
+}
+
+static inline 
+Aliased_Texture_Manager *get_p_aliased_texture_manager_from__game(Game *p_game) {
+    return &p_game->aliased_texture_manager;
+}
+
 static inline
 Camera *get_p_camera_from__game(Game *p_game) {
     return get_p_camera_from__world(&p_game->world);

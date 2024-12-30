@@ -83,6 +83,14 @@ void SDL_dispose_sprite_manager(
     }
 }
 
+PLATFORM_Sprite *PLATFORM_allocate_sprite__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
+        Texture_Flags texture_flags_for__sprite) {
+    // TODO: impl
+    return 0;
+}
+
 PLATFORM_Sprite *PLATFORM_allocate_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context, 
         Sprite_Allocation_Specification *p_sprite_allocation_specification) {

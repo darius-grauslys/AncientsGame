@@ -160,6 +160,11 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Sprite_Allocation_Specification *p_sprite_allocation_specification);
 
+PLATFORM_Sprite *PLATFORM_allocate_sprite__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
+        Texture_Flags texture_flags_for__sprite);
+
 PLATFORM_Sprite_Data *PLATFORM_allocate_sprite_data(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
