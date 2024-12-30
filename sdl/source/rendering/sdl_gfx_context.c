@@ -125,6 +125,14 @@ bool _SDL_link_opengl_3_0(
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_allocate_texture__with_path =
         GL_allocate_texture__with_path;
+
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_allocate_texture__TMP =
+        GL_allocate_texture__TMP;
+    p_SDL_gfx_sub_context__wrapper
+        ->f_SDL_allocate_texture__with_path__TMP =
+        GL_allocate_texture__with_path__TMP;
+
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_use_texture =
         GL_use_texture;

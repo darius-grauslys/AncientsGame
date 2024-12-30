@@ -20,6 +20,15 @@ PLATFORM_Texture *GL_allocate_texture__with_path(
             *p_texture_allocation_specification,
         const char *path);
 
+PLATFORM_Texture *GL_allocate_texture__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags);
+
+PLATFORM_Texture *GL_allocate_texture__with_path__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags,
+        const char *path);
+
 void GL_use_texture(PLATFORM_Texture *texture);
 
 void GL_release_texture(PLATFORM_Texture *texture);

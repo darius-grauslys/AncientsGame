@@ -58,19 +58,6 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 /// SECTION_rendering
 ///
 
-PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Flags texture_flags) {
-    return 0;
-}
-
-PLATFORM_Texture *PLATFORM_allocate_texture_with__path__TMP(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Flags texture_flags,
-        const char *c_str__path) {
-    return 0;
-}
-
 PLATFORM_Graphics_Window 
 *PLATFORM_get_p_graphics_window_with__graphics_window_kind(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,

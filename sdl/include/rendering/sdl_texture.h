@@ -10,8 +10,7 @@ void SDL_initialize_texture_as__deallocated(
 
 void SDL_update_texture_format_and__access(
         PLATFORM_Texture *p_PLATFORM_texture,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
+        Texture_Flags texture_flags);
 
 static inline
 bool SDL_is_texture__allocated(

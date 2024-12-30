@@ -144,6 +144,28 @@ PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
                 path);
 }
 
+PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags) {
+    return __SDL_Gfx_Context
+        .SDL_gfx_sub_context__wrapper
+        .f_SDL_allocate_texture__TMP(
+                p_PLATFORM_gfx_context,
+                texture_flags);
+}
+
+PLATFORM_Texture *PLATFORM_allocate_texture__with_path__TMP(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Texture_Flags texture_flags,
+        const char *path) {
+    return __SDL_Gfx_Context
+        .SDL_gfx_sub_context__wrapper
+        .f_SDL_allocate_texture__with_path__TMP(
+                p_PLATFORM_gfx_context,
+                texture_flags,
+                path);
+}
+
 void PLATFORM_use_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Texture *texture) {
