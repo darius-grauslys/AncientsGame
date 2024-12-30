@@ -276,6 +276,7 @@ void PLATFORM_update_chunks(
 /// SECTION_core
 ///
 
+void *memcpy(void *, const void *, unsigned long);
 void *memset(void *, int, unsigned long);
 int abs(int x);
 void srand(unsigned int seed);

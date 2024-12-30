@@ -654,6 +654,23 @@ typedef struct Texture_Allocation_Specification_t {
     Texture_Flags texture_flags;
 } Texture_Allocation_Specification;
 
+#define MAX_LENGTH_OF__TEXTURE_NAME 32
+typedef char Texture_Name__c_str[MAX_LENGTH_OF__TEXTURE_NAME];
+
+typedef struct Aliased_Texture_t {
+    Texture_Name__c_str name_of__texture__c_str;
+    PLATFORM_Texture *P_PLATFORM_texture;
+} Aliased_Texture;
+
+#define MAX_QUANTITY_OF__ALIASED_TEXTURES 128
+
+///
+/// Takes ownership of named textures.
+///
+typedef struct Aliased_Texture_Manager_t {
+    Aliased_Texture aliased_textures[MAX_QUANTITY_OF__ALIASED_TEXTURES];
+} Aliased_Texture_Manager;
+
 typedef uint8_t Sprite_Flags;
 
 #define SPRITE_FLAGS__NONE 0
