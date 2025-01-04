@@ -3,6 +3,7 @@
 
 #include "defines_weak.h"
 #include "world/chunk_vectors.h"
+#include "world/tile_vectors.h"
 #include <defines.h>
 
 void initialize_chunk_manager(
@@ -19,45 +20,6 @@ get_p_chunk_map_node_from__chunk_manager_using__i32(
         Signed_Index__i32 x__chunk, 
         Signed_Index__i32 y__chunk, 
         Signed_Index__i32 z__chunk);
-
-Chunk *get_p_chunk_from__chunk_manager_using__i32(
-        Chunk_Manager *p_chunk_manager, 
-        Signed_Index__i32 x__i32,
-        Signed_Index__i32 y__i32,
-        Signed_Index__i32 z__i32);
-
-static inline 
-Chunk_Manager__Chunk_Map_Node *get_p_chunk_map_node_from__chunk_manager(
-        Chunk_Manager *p_chunk_manager, 
-        Chunk_Vector__3i32 chunk_vector__3i32) {
-    return get_p_chunk_map_node_from__chunk_manager_using__i32(
-            p_chunk_manager,
-            chunk_vector__3i32.x__i32, 
-            chunk_vector__3i32.y__i32, 
-            chunk_vector__3i32.z__i32);
-}
-
-static inline 
-Chunk *get_p_chunk_from__chunk_manager(
-        Chunk_Manager *p_chunk_manager, 
-        Chunk_Vector__3i32 chunk_vector__3i32) {
-    return get_p_chunk_from__chunk_manager_using__i32(
-            p_chunk_manager,
-            chunk_vector__3i32.x__i32, 
-            chunk_vector__3i32.y__i32, 
-            chunk_vector__3i32.z__i32);
-}
-
-static inline
-Chunk_Manager__Chunk_Map_Node* 
-get_p_chunk_map_node_from__chunk_manager_using__tile_vector__3i32(
-        Chunk_Manager *p_chunk_manager, 
-        Tile_Vector__3i32 tile_vector__3i32) {
-    return get_p_chunk_map_node_from__chunk_manager(
-            p_chunk_manager, 
-            tile_vector_3i32_to__chunk_vector_3i32(
-                tile_vector__3i32));
-}
 
 void update_chunk_at__tile_vector__3i32(
         Game *p_game,
@@ -105,6 +67,19 @@ void move_chunk_manager_to__chunk_position(
         Chunk_Manager *p_chunk_manager,
         Chunk_Vector__3i32 chunk_vector__3i32);
 
+Tile *get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+        Chunk_Manager *p_chunk_manager,
+        Tile_Vector__3i32 tile_vector__3i32);
+
+static inline
+Tile *get_p_tile_from__chunk_manager_with__3i32F4(
+        Chunk_Manager *p_chunk_manager,
+        Vector__3i32F4 position) {
+    return get_p_tile_from__chunk_manager_with__tile_vector_3i32(
+            p_chunk_manager, 
+            vector_3i32F4_to__tile_vector(position));
+}
+
 static inline 
 Tile *get_p_tile_from__chunk_node(
         Chunk_Manager__Chunk_Map_Node *p_chunk_node,
@@ -145,20 +120,57 @@ Tile *get_p_tile_from__chunk_node_using__u8(
             + x__u8];
 }
 
-Tile *get_p_tile_from__chunk_manager_with__tile_vector_3i32(
-        Chunk_Manager *p_chunk_manager,
-        Tile_Vector__3i32 tile_vector__3i32);
 
-Tile *get_p_tile_from__chunk_manager_with__3i32F4(
-        Chunk_Manager *p_chunk_manager,
-        Vector__3i32F4 position);
+static inline
+Chunk *get_p_chunk_from__chunk_manager_using__i32(
+        Chunk_Manager *p_chunk_manager, 
+        Signed_Index__i32 x__i32,
+        Signed_Index__i32 y__i32,
+        Signed_Index__i32 z__i32) {
+    Chunk_Manager__Chunk_Map_Node *p_node = 
+        get_p_chunk_map_node_from__chunk_manager_using__i32(
+            p_chunk_manager, 
+            x__i32, 
+            y__i32, 
+            z__i32);
+    return
+        ((bool)p_node)
+        ? p_node->p_chunk__here
+        : 0
+        ;
+}
 
-///
-/// Returns a pointer to a tile if the end of the
-/// ray is on a tile, otherwise returns nullptr.
-///
-Tile *get_p_tile_from__chunk_manager_with__ray_3i32F20(
-        Chunk_Manager *p_chunk_manager,
-        Ray__3i32F20 *p_ray__3i32F20);
+static inline 
+Chunk_Manager__Chunk_Map_Node *get_p_chunk_map_node_from__chunk_manager(
+        Chunk_Manager *p_chunk_manager, 
+        Chunk_Vector__3i32 chunk_vector__3i32) {
+    return get_p_chunk_map_node_from__chunk_manager_using__i32(
+            p_chunk_manager,
+            chunk_vector__3i32.x__i32, 
+            chunk_vector__3i32.y__i32, 
+            chunk_vector__3i32.z__i32);
+}
+
+static inline 
+Chunk *get_p_chunk_from__chunk_manager(
+        Chunk_Manager *p_chunk_manager, 
+        Chunk_Vector__3i32 chunk_vector__3i32) {
+    return get_p_chunk_from__chunk_manager_using__i32(
+            p_chunk_manager,
+            chunk_vector__3i32.x__i32, 
+            chunk_vector__3i32.y__i32, 
+            chunk_vector__3i32.z__i32);
+}
+
+static inline
+Chunk_Manager__Chunk_Map_Node* 
+get_p_chunk_map_node_from__chunk_manager_using__tile_vector__3i32(
+        Chunk_Manager *p_chunk_manager, 
+        Tile_Vector__3i32 tile_vector__3i32) {
+    return get_p_chunk_map_node_from__chunk_manager(
+            p_chunk_manager, 
+            tile_vector_3i32_to__chunk_vector_3i32(
+                tile_vector__3i32));
+}
 
 #endif

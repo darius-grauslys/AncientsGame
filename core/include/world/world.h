@@ -42,29 +42,23 @@ static Entity inline
 }
 
 ///
-/// Returns tile ptr if ray is on a tile
-/// otherwise returns nullptr.
+/// TODO: remove:
 ///
 static inline
 Tile *get_p_tile_from__world_using__ray_3i32F20(
         World *p_world,
         Ray__3i32F20 *p_ray__3i32F20) {
-    return get_p_tile_from__chunk_manager_with__ray_3i32F20(
-            get_p_chunk_manager_from__world(p_world),
-            p_ray__3i32F20);
+    return 0;
 }
 
 ///
-/// Returns entity ptr if ray is on entity
-/// otherwise returns nullptr.
+/// TODO: remove:
 ///
 static inline
 Entity *get_p_entity_from__world_using__ray_3i32F20(
         World *p_world,
         Ray__3i32F20 *p_ray__3i32F20) {
-    return get_p_entity_from__collision_manager_with__ray_3i32F20(
-            get_p_collision_manager_from__world(p_world),
-            p_ray__3i32F20);
+    return 0;
 }
 
 static inline

@@ -221,7 +221,7 @@ get_p_chunk_map_node_from__chunk_manager_using__i32(
         debug_info("bounds are: (%d, %d) - (%d, %d)",
                 south_west__x, south_west__y,
                 north_east__x, north_east__y);
-        debug_error("get_p_chunk_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
+        debug_error("get_p_chunk_map_node_from__chunk_manager_using__i32, chunk index out of bounds: (%d, %d, %d)",
                 x__chunk, y__chunk, z__chunk);
         return 0;
     }
@@ -236,24 +236,6 @@ get_p_chunk_map_node_from__chunk_manager_using__i32(
     }
 
     return p_node;
-}
-
-Chunk* get_p_chunk_from__chunk_manager_using__i32(
-        Chunk_Manager *p_chunk_manager, 
-        Signed_Index__i32 x__chunk, 
-        Signed_Index__i32 y__chunk, 
-        Signed_Index__i32 z__chunk) {
-    Chunk_Manager__Chunk_Map_Node *p_node = 
-        get_p_chunk_map_node_from__chunk_manager_using__i32(
-            p_chunk_manager, 
-            x__chunk, 
-            y__chunk, 
-            z__chunk);
-    return
-        ((bool)p_node)
-        ? p_node->p_chunk__here
-        : 0
-        ;
 }
 
 void save_chunk(
@@ -1038,58 +1020,6 @@ Tile *get_p_tile_from__chunk_manager_with__tile_vector_3i32(
                 local_position);
 
     return p_tile;
-}
-
-Tile *get_p_tile_from__chunk_manager_with__3i32F4(
-        Chunk_Manager *p_chunk_manager,
-        Vector__3i32F4 position) {
-
-    Vector__3i32 chunk_index =
-        vector_3i32F4_to__chunk_vector_3i32(position);
-    Vector__3u8 local_position =
-        vector_3i32F4_to__local_tile_vector_3u8(
-                position);
-
-    Chunk *p_chunk =
-        get_p_chunk_from__chunk_manager(
-                p_chunk_manager, 
-                chunk_index);
-#ifndef NDEBUG
-    if (!p_chunk) {
-        debug_warning("nullptr: get_p_tile_from__chunk_manager_with__3i32F4");
-        return 0;
-    }
-#endif
-    Tile *p_tile =
-        get_p_tile_from__chunk(
-                p_chunk, 
-                local_position);
-
-    return p_tile;
-}
-
-Tile *get_p_tile_from__chunk_manager_with__ray_3i32F20(
-        Chunk_Manager *p_chunk_manager,
-        Ray__3i32F20 *p_ray__3i32F20) {
-    Vector__3i32F4 tile_pos = 
-        vector_3i32F20_to__vector_3i32F4(
-                p_ray__3i32F20->ray_current_vector__3i32F20);
-    Chunk *p_chunk =
-        get_p_chunk_from__chunk_manager_using__i32(
-                p_chunk_manager,
-                get_chunk_x_i32_from__vector_3i32F4(tile_pos),
-                get_chunk_y_i32_from__vector_3i32F4(tile_pos),
-                0);
-
-    if (!p_chunk) {
-        return 0;
-    }
-    return
-        get_p_tile_from__chunk_using__u8(
-                p_chunk,
-                get_tile_x_u8_from__vector_3i32F4(tile_pos),
-                get_tile_y_u8_from__vector_3i32F4(tile_pos),
-                0);
 }
 
 bool is_chunk_manager__resolving_chunks(
