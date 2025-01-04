@@ -36,7 +36,7 @@ SDL_allocate_ui_for__sdl_ui_window__game__hud(p_game, p_PLATFORM_gfx_window, p_u
     initialize_ui_element_as__slider(p_slider_left, 16, 80, get_vector__3i32(28 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 allocate_sprite_for__ui_slider(
-    get_p_PLATFORM_gfx_context_from__game(p_game),
+    p_game,
     p_PLATFORM_gfx_window,
     p_slider_left);
     PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__bg_left =
@@ -52,7 +52,7 @@ allocate_sprite_for__ui_slider(
     initialize_ui_element_as__slider(p_slider_right, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 allocate_sprite_for__ui_slider(
-    get_p_PLATFORM_gfx_context_from__game(p_game),
+    p_game,
     p_PLATFORM_gfx_window,
     p_slider_right);
     PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__bg_right =

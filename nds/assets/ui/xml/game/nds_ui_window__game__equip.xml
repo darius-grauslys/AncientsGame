@@ -45,6 +45,7 @@
                 <slider x="196" y="132" width="16" height="80" spanning_height="176" m_Dragged_Handler="m_ui_slider__dragged_handler__gfx_window__default"/>
             </allocate_ui>
             <code>
+                // MODIFY IN XML, need to pass first arg as p_game.
                 NDS_allocate_sprite_for__ui_slider(
                         get_p_PLATFORM_gfx_context_from__game(p_game),
                         p_slider);

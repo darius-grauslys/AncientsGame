@@ -54,10 +54,6 @@ void initialize_entity_as__skeleton(
     p_entity->goal__position__3i32F4 =
         position__3i32F4;
 
-    initialize_sprite_wrapper_for__entity_with__sprite_allocation(
-            p_PLATFORM_graphics_window,
-            p_entity);
-
     p_entity->hearts.resource_symbols[0] = Heart_Kind__Full_Normal;
 
     p_entity->hearts.max_quantity_of__resource_overflow = 0;

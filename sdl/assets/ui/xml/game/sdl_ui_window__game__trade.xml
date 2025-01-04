@@ -56,7 +56,7 @@
             </allocate_ui>
             <code>
                 allocate_sprite_for__ui_slider(
-                        get_p_PLATFORM_gfx_context_from__game(p_game),
+                        p_game,
                         p_PLATFORM_gfx_window,
                         p_slider_left);
                 PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__bg_left =
@@ -73,7 +73,7 @@
             </allocate_ui>
             <code>
                 allocate_sprite_for__ui_slider(
-                        get_p_PLATFORM_gfx_context_from__game(p_game),
+                        p_game,
                         p_PLATFORM_gfx_window,
                         p_slider_right);
                 PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__bg_right =

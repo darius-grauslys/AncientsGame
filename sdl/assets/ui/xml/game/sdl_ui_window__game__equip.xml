@@ -46,7 +46,7 @@
             </allocate_ui>
             <code>
                 allocate_sprite_for__ui_slider(
-                        get_p_PLATFORM_gfx_context_from__game(p_game),
+                        p_game,
                         p_PLATFORM_gfx_window,
                         p_slider);
                 PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__inv_column =

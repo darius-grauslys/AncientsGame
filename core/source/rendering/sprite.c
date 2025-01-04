@@ -3,36 +3,20 @@
 #include <rendering/sprite.h>
 #include <defines.h>
 
-void initialize_sprite_gfx_allocator__lookup_table_for__entities(
-        F_Sprite_Gfx_Allocator__Lookup_Table_For__Entities 
-            sprite_gfx_allocator__lookup_table) {
-    for (Index__u32 index_of__entity_type = 0;
-            index_of__entity_type
-            < (Index__u32)Entity_Kind__Unknown;
-            index_of__entity_type++) {
-        debug_info("~hit");
-        sprite_gfx_allocator__lookup_table[index_of__entity_type] =
-            f_sprite_gfx_allocator__handler__default;
-    }
-}
-
-void initialize_sprite_gfx_allocator__lookup_table_for__particles(
-        F_Sprite_Gfx_Allocator__Lookup_Table_For__Particles
-            sprite_gfx_allocator__lookup_table) {
-#warning need to impl for particle enum:
-    for (Index__u32 index_of__entity_type = 0;
-            index_of__entity_type
-            < (Index__u32)Entity_Kind__Unknown;
-            index_of__entity_type++) {
-        sprite_gfx_allocator__lookup_table[index_of__entity_type] =
-            f_sprite_gfx_allocator__handler__default;
-    }
-}
-
-void f_sprite_gfx_allocator__handler__default(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Sprite *p_PLATFORM_sprite, 
-        Sprite_Allocation_Specification
-            *p_sprite_allocation_specification) {
-    debug_warning("sprite allocator not implemented.");
+void initialize_sprite_wrapper(
+        Sprite_Wrapper *sprite_wrapper,
+        Texture_Flags texture_flags_for__sprite) {
+    sprite_wrapper->p_sprite = 0;
+    sprite_wrapper->direction =
+        DIRECTION__EAST;
+    sprite_wrapper->
+        the_kind_of_animation__this_sprite_has =
+        Sprite_Animation_Kind__Idle;
+    
+    sprite_wrapper->
+        frame__initial = 0;
+    sprite_wrapper->
+        frame__current = 0;
+    sprite_wrapper->
+        frame__final = 1;
 }

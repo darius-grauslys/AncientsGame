@@ -1,7 +1,9 @@
 #ifndef UI_SLIDER_H
 #define UI_SLIDER_H
 #include "defines_weak.h"
+#include "game.h"
 #include "rendering/sprite.h"
+#include "rendering/sprite_gfx_allocator_manager.h"
 #include "ui/ui_element.h"
 #include "vectors.h"
 #include <defines.h>
@@ -89,17 +91,17 @@ void set_ui_slider_at__this_distance_u32(
 
 static inline
 void allocate_sprite_for__ui_slider(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
         UI_Element *p_ui_slider) {
-    set_ui_element__PLATFORM_sprite(
-            p_ui_slider, 
-            allocate_sprite_for__ui(
-                p_PLATFORM_gfx_context, 
-                p_PLATFORM_graphics_window, 
-                (is_ui_element__snapped_x_or_y_axis(p_ui_slider))
-                ? UI_Sprite_Kind__16x16__Slider__Horizontal
-                : UI_Sprite_Kind__16x16__Slider__Vertical));
+    allocate_sprite__ui(
+        p_game, 
+        p_PLATFORM_graphics_window, 
+        get_p_sprite_gfx_allocation_manager_from__game(p_game),
+        &p_ui_slider->ui_sprite_wrapper,
+        (is_ui_element__snapped_x_or_y_axis(p_ui_slider))
+        ? UI_Sprite_Kind__16x16__Slider__Horizontal
+        : UI_Sprite_Kind__16x16__Slider__Vertical);
 }
 
 static inline
