@@ -12,7 +12,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Stone__Plenty, 
                 1));
@@ -24,7 +24,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Amethyst__Plenty, 
                 1));
@@ -36,7 +36,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Diamond__Plenty, 
                 1));
@@ -48,7 +48,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Gold__Plenty, 
                 1));
@@ -60,7 +60,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Iron__Plenty, 
                 1));
@@ -72,7 +72,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Stone__Plenty, 
                 1));
@@ -84,7 +84,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Stone_Brick__Plenty, 
                 1));
@@ -96,7 +96,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Pickaxe, 
                 Item_Kind__Pile__Sandstone__Plenty, 
                 1));
@@ -108,7 +108,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Shovel, 
                 Item_Kind__Pile__Dirt__Plenty, 
                 1));
@@ -120,7 +120,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Shovel, 
                 Item_Kind__Pile__Sand__Plenty, 
                 1));
@@ -132,7 +132,7 @@ void register_tile_handlers_for__walls(
                 0, 
                 0, 
                 0, 
-                TILE_LOGIC_FLAGS__NONE, 
+                TILE_LOGIC_FLAG__IS_UNPASSABLE, 
                 Tool_Kind__Hatchet, 
                 Item_Kind__Pile__Wood__Plenty, 
                 1));
