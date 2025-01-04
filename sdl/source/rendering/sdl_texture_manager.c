@@ -146,6 +146,7 @@ PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
 
 PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags) {
     return __SDL_Gfx_Context
         .SDL_gfx_sub_context__wrapper
@@ -154,8 +155,9 @@ PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
                 texture_flags);
 }
 
-PLATFORM_Texture *PLATFORM_allocate_texture__with_path__TMP(
+PLATFORM_Texture *PLATFORM_allocate_texture_with__path__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags,
         const char *path) {
     return __SDL_Gfx_Context

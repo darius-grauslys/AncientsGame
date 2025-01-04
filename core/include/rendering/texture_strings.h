@@ -11,4 +11,12 @@ extern Texture_Name__c_str name_of__texture__ui_32x32__c_str;
 extern Texture_Name__c_str name_of__texture__items__c_str;
 extern Texture_Name__c_str name_of__texture__particles__c_str;
 
+extern IO_path path_to__texture__player__c_str;
+extern IO_path path_to__texture__skeleton__c_str;
+extern IO_path path_to__texture__ui_8x8__c_str;
+extern IO_path path_to__texture__ui_16x16__c_str;
+extern IO_path path_to__texture__ui_32x32__c_str;
+extern IO_path path_to__texture__items__c_str;
+extern IO_path path_to__texture__particles__c_str;
+
 #endif

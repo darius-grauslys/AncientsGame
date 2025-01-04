@@ -10,6 +10,8 @@
 
 #include <defines_weak.h>
 
+typedef char IO_path[MAX_LENGTH_OF__IO_PATH];
+
 ///
 /// This file contains all function signatures
 /// which are NOT implemented in core.
@@ -162,6 +164,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite);
 
@@ -213,10 +216,12 @@ PLATFORM_Texture *PLATFORM_allocate_texture(
 
 PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags);
 
 PLATFORM_Texture *PLATFORM_allocate_texture_with__path__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags,
         const char *c_str__path);
 
@@ -338,6 +343,11 @@ void PLATFORM_initialize_file_system_context(
         Game *p_game,
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context);
 
+///
+/// Returns length of the path
+///
+Quantity__u32 PLATFORM_get_base_directory(IO_path path);
+
 int PLATFORM_access(const char *p_c_str, IO_Access_Kind io_access_kind);
 PLATFORM_Directory *PLATFORM_opendir(const char *p_c_str);
 void PLATFORM_closedir(PLATFORM_Directory *p_dir);
@@ -441,7 +451,5 @@ bool PLATFORM_clear_log__system(Game *p_game);
 typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
 typedef struct PLATFORM_Texture_t PLATFORM_Texture_t;
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
-
-typedef char IO_path[MAX_LENGTH_OF__IO_PATH];
 
 #endif

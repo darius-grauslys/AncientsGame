@@ -7,25 +7,29 @@ void initialize_sprite_gfx_allocator_manager(
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager);
 
 bool allocate_sprite__entity(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Entity_Kind the_kind_of__entity);
 
 bool allocate_sprite__particle(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Particle_Kind the_kind_of__particle);
 
 bool allocate_sprite__ui(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         UI_Sprite_Kind the_kind_of__ui);
 
 bool allocate_sprite__item(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Item_Kind the_kind_of__item);
@@ -49,5 +53,8 @@ void register_sprite_gfx_allocator_for__item(
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Item_Kind the_kind_of__item,
         f_Sprite_Gfx_Allocator f_sprite_gfx_allocator);
+
+void register_sprite_gfx_allocators_in__sprite_gfx_allocator_manager(
+        Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocation_manager);
 
 #endif

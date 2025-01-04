@@ -131,7 +131,7 @@ bool _SDL_link_opengl_3_0(
         GL_allocate_texture__TMP;
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_allocate_texture__with_path__TMP =
-        GL_allocate_texture__with_path__TMP;
+        GL_allocate_texture_with__path__TMP;
 
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_use_texture =

@@ -24,7 +24,7 @@ PLATFORM_Texture *GL_allocate_texture__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
 
-PLATFORM_Texture *GL_allocate_texture__with_path__TMP(
+PLATFORM_Texture *GL_allocate_texture_with__path__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags,
         const char *path);

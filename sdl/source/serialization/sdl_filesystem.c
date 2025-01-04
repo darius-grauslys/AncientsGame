@@ -4,10 +4,17 @@
 #include "process/process.h"
 #include "process/process_manager.h"
 #include "sdl_defines.h"
+#include "serialization/sdl_filesystem_defines.h"
 #include "serialization/serialization_request.h"
 #include <serialization/sdl_filesystem.h>
 
 PLATFORM_File_System_Context __SDL_file_system_context;
+
+Quantity__u32 PLATFORM_get_base_directory(IO_path path) {
+    memset(path, 0, sizeof(IO_path));
+    SDL_get_path_to__the_game(path);
+    return strnlen(path, MAX_LENGTH_OF__IO_PATH);
+}
 
 bool SDL_get_path_to__assets(
         Asset_Directory_Kind the_kind_of__asset_directory,

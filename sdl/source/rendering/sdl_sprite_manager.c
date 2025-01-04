@@ -6,6 +6,7 @@
 #include "rendering/sdl_sprite.h"
 #include "rendering/sdl_texture_manager.h"
 #include "rendering/sdl_texture_strings.h"
+#include "rendering/texture.h"
 #include "sdl_defines.h"
 #include <rendering/sdl_sprite_manager.h>
 #include <defines.h>
@@ -85,10 +86,59 @@ void SDL_dispose_sprite_manager(
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite__TMP(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite) {
-    // TODO: impl
-    return 0;
+    SDL_Sprite_Manager *p_SDL_sprite_manager =
+        SDL_get_p_sprite_manager_from__gfx_context(
+                p_PLATFORM_gfx_context);
+
+    PLATFORM_Sprite *p_PLATFORM_sprite =
+        SDL_allocate_sprite_with__sprite_manager(
+                p_SDL_sprite_manager);
+
+    if (!p_PLATFORM_sprite) {
+        debug_error("SDL::PLATFORM_allocate_sprite, failed to allocate sprite.");
+        return 0;
+    }
+
+    p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .f_SDL_allocate_sprite(
+                p_PLATFORM_gfx_context,
+                p_PLATFORM_sprite);
+
+    if (!p_PLATFORM_sprite->p_SDL_sprite) {
+        SDL_release_sprite_from__sprite_manager(
+                p_SDL_sprite_manager,
+                p_PLATFORM_sprite);
+        return 0;
+    }
+
+    p_PLATFORM_sprite->p_PLATFORM_texture =
+        p_PLATFORM_texture_to__sample_by__sprite;
+    p_PLATFORM_sprite->is_sprite_with__anonymous_texture = false;
+
+    SDL_initialize_sprite(
+            p_PLATFORM_gfx_context,
+            p_PLATFORM_sprite);
+
+    p_PLATFORM_sprite->quantity_of__sprite_frame__columns = 
+        p_PLATFORM_texture_to__sample_by__sprite
+        ->width
+        / get_texture_flags__width(texture_flags_for__sprite);
+    p_PLATFORM_sprite->quantity_of__sprite_frame__rows =
+        p_PLATFORM_texture_to__sample_by__sprite
+        ->height
+        / get_texture_flags__height(texture_flags_for__sprite);
+    p_PLATFORM_sprite->sprite_frame__width = 
+        1.0 
+        / (float)p_PLATFORM_sprite->quantity_of__sprite_frame__columns;
+    p_PLATFORM_sprite->sprite_frame__height = 
+        1.0 
+        / (float)p_PLATFORM_sprite->quantity_of__sprite_frame__rows;
+    
+    return p_PLATFORM_sprite;
 }
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite(

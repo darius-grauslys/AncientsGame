@@ -405,6 +405,7 @@ typedef struct Sprite_Wrapper_t {
 
 typedef PLATFORM_Sprite *(*f_Sprite_Gfx_Allocator)(
         Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         u32 enum_value);
 
 typedef f_Sprite_Gfx_Allocator 

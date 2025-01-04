@@ -8,6 +8,8 @@
 #include "platform_defines.h"
 #include "process/process_manager.h"
 #include "random.h"
+#include "rendering/aliased_texture_manager.h"
+#include "rendering/sprite_gfx_allocator_manager.h"
 #include "scene/scene_manager.h"
 #include "sort/sort_list/sort_list_manager.h"
 #include "world/path_finding/path_list_manager.h"
@@ -59,8 +61,18 @@ void initialize_game(
             get_p_item_manager_from__game(p_game));
     register_core_item_recipes_into__item_recipe_manager(
             get_p_item_recipe_manager_from__game(p_game));
+    initialize_station_manager(
+            get_p_station_manager_from__game(p_game));
     register_core_stations_into__station_manager(
             get_p_station_manager_from__game(p_game));
+
+    initialize_sprite_gfx_allocator_manager(
+            get_p_sprite_gfx_allocation_manager_from__game(p_game));
+    register_sprite_gfx_allocators_in__sprite_gfx_allocator_manager(
+            get_p_sprite_gfx_allocation_manager_from__game(p_game));
+
+    initialize_aliased_texture_manager(
+            get_p_aliased_texture_manager_from__game(p_game));
 
     initialize_log(get_p_log__global_from__game(p_game));
     initialize_log(get_p_log__local_from__game(p_game));

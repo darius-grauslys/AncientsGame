@@ -3,6 +3,8 @@
 #include "defines_weak.h"
 #include "platform.h"
 
+#include "entity/implemented/player/entity__player.h"
+
 static inline
 f_Sprite_Gfx_Allocator *get_pf_sprite_gfx_allocator_for__entity_by__index_in__manager(
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
@@ -95,7 +97,8 @@ void initialize_sprite_gfx_allocator_manager(
 }
 
 bool allocate_sprite__entity(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Entity_Kind the_kind_of__entity) {
@@ -107,16 +110,18 @@ bool allocate_sprite__entity(
     if (!pf_sprite_gfx_allocator || !*pf_sprite_gfx_allocator)
         return false;
     
-    PLATFORM_Sprite *p_PLATFORM_sprite_data =
+    p_sprite_wrapper->p_sprite =
         (*pf_sprite_gfx_allocator)(
-                p_PLATFORM_gfx_context,
+                p_game,
+                p_PLATFORM_gfx_window,
                 the_kind_of__entity);
     
     return true;
 }
 
 bool allocate_sprite__particle(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Particle_Kind the_kind_of__particle) {
@@ -128,16 +133,18 @@ bool allocate_sprite__particle(
     if (!pf_sprite_gfx_allocator || !*pf_sprite_gfx_allocator)
         return false;
     
-    PLATFORM_Sprite *p_PLATFORM_sprite_data =
+    p_sprite_wrapper->p_sprite =
         (*pf_sprite_gfx_allocator)(
-                p_PLATFORM_gfx_context,
+                p_game,
+                p_PLATFORM_gfx_window,
                 the_kind_of__particle);
     
     return true;
 }
 
 bool allocate_sprite__ui(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         UI_Sprite_Kind the_kind_of__ui) {
@@ -149,16 +156,18 @@ bool allocate_sprite__ui(
     if (!pf_sprite_gfx_allocator || !*pf_sprite_gfx_allocator)
         return false;
     
-    PLATFORM_Sprite *p_PLATFORM_sprite_data =
+    p_sprite_wrapper->p_sprite =
         (*pf_sprite_gfx_allocator)(
-                p_PLATFORM_gfx_context,
+                p_game,
+                p_PLATFORM_gfx_window,
                 the_kind_of__ui);
     
     return true;
 }
 
 bool allocate_sprite__item(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Item_Kind the_kind_of__item) {
@@ -170,9 +179,10 @@ bool allocate_sprite__item(
     if (!pf_sprite_gfx_allocator || !*pf_sprite_gfx_allocator)
         return false;
     
-    PLATFORM_Sprite *p_PLATFORM_sprite_data =
+    p_sprite_wrapper->p_sprite =
         (*pf_sprite_gfx_allocator)(
-                p_PLATFORM_gfx_context,
+                p_game,
+                p_PLATFORM_gfx_window,
                 the_kind_of__item);
     
     return true;
@@ -268,4 +278,12 @@ void register_sprite_gfx_allocator_for__item(
 
     *pf_sprite_gfx_allocator = 
         f_sprite_gfx_allocator;
+}
+
+void register_sprite_gfx_allocators_in__sprite_gfx_allocator_manager(
+        Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocation_manager) {
+    register_sprite_gfx_allocator_for__entity(
+            p_sprite_gfx_allocation_manager, 
+            Entity_Kind__Player, 
+            f_sprite_gfx_allocator__player);   
 }

@@ -11,6 +11,7 @@
 #include "platform.h"
 #include "platform_defaults.h"
 #include "platform_defines.h"
+#include "rendering/aliased_texture_manager.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_vertex_object.h"
@@ -33,6 +34,10 @@ void m_load_scene_as__test_handler(
 
     PLATFORM_initialize_rendering__game(
             p_PLATFORM_gfx_context);
+
+    load_aliased_textures(
+            p_game, 
+            get_p_aliased_texture_manager_from__game(p_game));
 }
 
 void m_enter_scene_handler_as__test(

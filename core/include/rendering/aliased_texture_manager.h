@@ -13,9 +13,18 @@ void initialize_aliased_texture_manager(
 ///
 PLATFORM_Texture *allocate_p_PLATFORM_texture_with__alias(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Aliased_Texture_Manager *p_aliased_texture_manager,
         Texture_Name__c_str name_of__texture__c_str,
         Texture_Flags texture_flags);
+
+PLATFORM_Texture *load_p_PLATFORM_texture_from__path_with__alias(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Aliased_Texture_Manager *p_aliased_texture_manager,
+        Texture_Name__c_str name_of__texture__c_str,
+        Texture_Flags texture_flags,
+        const char *c_str__path);
 
 PLATFORM_Texture *get_p_PLATFORM_texture_by__alias(
         Aliased_Texture_Manager *p_aliased_texture_manager,
@@ -23,6 +32,10 @@ PLATFORM_Texture *get_p_PLATFORM_texture_by__alias(
 
 void release_all_aliased_textures(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Aliased_Texture_Manager *p_aliased_texture_manager);
+
+void load_aliased_textures(
+        Game *p_game,
         Aliased_Texture_Manager *p_aliased_texture_manager);
 
 #endif
