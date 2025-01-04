@@ -299,7 +299,7 @@ bool f_sprite_gfx_allocator__item(
         return 0;
     
     p_sprite_wrapper->p_sprite =
-        PLATFORM_allocate_sprite__TMP(
+        PLATFORM_allocate_sprite(
             p_PLATFORM_gfx_context, 
             p_PLATFORM_gfx_window,
             p_PLATFORM_texture_for__items, 

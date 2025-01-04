@@ -122,47 +122,23 @@ void SDL_dispose_texture_manager(
 
 PLATFORM_Texture *PLATFORM_allocate_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification) {
-    return __SDL_Gfx_Context
-        .SDL_gfx_sub_context__wrapper
-        .f_SDL_allocate_texture(
-                p_PLATFORM_gfx_context,
-                p_texture_allocation_specification);
-}
-
-PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification,
-        const char *path) {
-    return __SDL_Gfx_Context
-        .SDL_gfx_sub_context__wrapper
-        .f_SDL_allocate_texture__with_path(
-                p_PLATFORM_gfx_context,
-                p_texture_allocation_specification,
-                path);
-}
-
-PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags) {
     return __SDL_Gfx_Context
         .SDL_gfx_sub_context__wrapper
-        .f_SDL_allocate_texture__TMP(
+        .f_SDL_allocate_texture(
                 p_PLATFORM_gfx_context,
                 texture_flags);
 }
 
-PLATFORM_Texture *PLATFORM_allocate_texture_with__path__TMP(
+PLATFORM_Texture *PLATFORM_allocate_texture_with__path(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags,
         const char *path) {
     return __SDL_Gfx_Context
         .SDL_gfx_sub_context__wrapper
-        .f_SDL_allocate_texture__with_path__TMP(
+        .f_SDL_allocate_texture_with__path(
                 p_PLATFORM_gfx_context,
                 texture_flags,
                 path);

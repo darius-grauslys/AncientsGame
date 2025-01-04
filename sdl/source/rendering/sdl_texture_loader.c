@@ -30,15 +30,14 @@ bool _SDL_load_texture(
                 (char*)p_path, 
                 p_SDL_texture_name);
     if (*p_result__current) {
-        p_texture_allocation_specification
-            ->texture_flags = TEXTURE_FLAGS(
-                    size_of__texture, 
-                    render_method_of__texture, 
-                    format_of__texture);
         PLATFORM_Texture *p_PLATFORM_texture =
-            PLATFORM_allocate_texture__with_path(
+            PLATFORM_allocate_texture_with__path(
                     p_PLATFORM_gfx_context, 
-                    p_texture_allocation_specification, 
+                    0, // should not be null, but this whole file is gonna be rm
+                    TEXTURE_FLAGS(
+                        size_of__texture, 
+                        render_method_of__texture, 
+                        format_of__texture), 
                     p_path);
         if (!p_PLATFORM_texture)
             return false;

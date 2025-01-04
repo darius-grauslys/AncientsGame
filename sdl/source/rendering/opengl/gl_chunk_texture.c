@@ -15,24 +15,24 @@ void GL_initialize_chunk_texture_as__deallocated(
 void GL_allocate_chunk_texture__texture_data(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         GL_Chunk_Texture *p_GL_chunk_texture) {
-    Texture_Allocation_Specification texture_alloc_spec;
-
-    texture_alloc_spec.texture_flags =
-        TEXTURE_FLAGS(
-                TEXTURE_FLAG__SIZE_64x64, 
-                TEXTURE_FLAG__RENDER_METHOD__0, 
-                TEXTURE_FLAG__FORMAT__RGBA8888);
-
     p_GL_chunk_texture
         ->p_GL_chunk_texture =
             PLATFORM_allocate_texture(
                     p_PLATFORM_gfx_context,
-                    &texture_alloc_spec);
+                    0, // TODO: don't pass null, route a gfx_window here.
+                    TEXTURE_FLAGS(
+                        TEXTURE_FLAG__SIZE_64x64, 
+                        TEXTURE_FLAG__RENDER_METHOD__0, 
+                        TEXTURE_FLAG__FORMAT__RGBA8888));
     p_GL_chunk_texture
         ->p_GL_chunk_texture__sprite_cover =
             PLATFORM_allocate_texture(
                     p_PLATFORM_gfx_context,
-                    &texture_alloc_spec);
+                    0, // TODO: don't pass null, route a gfx_window here.
+                    TEXTURE_FLAGS(
+                        TEXTURE_FLAG__SIZE_64x64, 
+                        TEXTURE_FLAG__RENDER_METHOD__0, 
+                        TEXTURE_FLAG__FORMAT__RGBA8888));
 }
 
 void GL_deallocate_chunk_texture__texture_data(

@@ -7,8 +7,7 @@
 void GL_allocate_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
+        Texture_Flags texture_flags);
 
 void GL_compose_gfx_window(
         Game *p_game,

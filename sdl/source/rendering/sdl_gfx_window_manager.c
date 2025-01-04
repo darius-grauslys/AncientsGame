@@ -93,8 +93,7 @@ void SDL_release_PLATFORM_gfx_window_from__manager(
 PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Camera *p_camera,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification) {
+        Texture_Flags texture_flags) {
 
     f_SDL_Allocate_Gfx_Window f_SDL_allocate_gfx_window =
         p_PLATFORM_gfx_context
@@ -130,12 +129,12 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
     f_SDL_allocate_gfx_window(
             p_PLATFORM_gfx_context,
             p_PLATFORM_gfx_window,
-            p_texture_allocation_specification);
+            texture_flags);
 
     // TODO:    maybe we can do this better, issue being is what if
     //          we change the engine profile such that these cases no longer hold?
-    switch (get_texture_size_from__texture_allocation_specification(
-                p_texture_allocation_specification)) {
+    switch (get_texture_flags__size(
+                texture_flags)) {
         default:
             debug_error("SDL_allocate_gfx_window, unknown texture size.");
             break;
@@ -176,10 +175,6 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
                         UI_Tile_Map_Size__Large);
             break;
     }
-
-    Texture_Flags texture_flags =
-        get_texture_flags_from__texture_allocation_specification(
-                p_texture_allocation_specification);
 
     set_ui_tile_map__wrapper__utilized_size(
             &p_PLATFORM_gfx_window

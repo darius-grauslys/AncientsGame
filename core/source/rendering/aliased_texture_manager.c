@@ -80,7 +80,7 @@ PLATFORM_Texture *allocate_p_PLATFORM_texture_with__alias(
     }
 
     PLATFORM_Texture *P_PLATFORM_texture =
-        PLATFORM_allocate_texture__TMP(
+        PLATFORM_allocate_texture(
                 p_PLATFORM_gfx_context, 
                 p_PLATFORM_gfx_window,
                 texture_flags);
@@ -137,7 +137,7 @@ PLATFORM_Texture *load_p_PLATFORM_texture_from__path_with__alias(
             - length_of__base_directory);
 
     PLATFORM_Texture *P_PLATFORM_texture =
-        PLATFORM_allocate_texture_with__path__TMP(
+        PLATFORM_allocate_texture_with__path(
                 p_PLATFORM_gfx_context,
                 p_PLATFORM_gfx_window,
                 texture_flags,

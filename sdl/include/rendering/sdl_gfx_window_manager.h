@@ -18,8 +18,7 @@ void SDL_release_PLATFORM_gfx_window_from__manager(
 PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Camera *p_camera,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
+        Texture_Flags texture_flags);
 
 void SDL_release_gfx_window(
         Game *p_game,

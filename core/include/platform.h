@@ -160,10 +160,6 @@ Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Sprite_Allocation_Specification *p_sprite_allocation_specification);
-
-PLATFORM_Sprite *PLATFORM_allocate_sprite__TMP(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite);
@@ -211,29 +207,14 @@ void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context);
 
 PLATFORM_Texture *PLATFORM_allocate_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
-
-PLATFORM_Texture *PLATFORM_allocate_texture__TMP(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags);
 
-PLATFORM_Texture *PLATFORM_allocate_texture_with__path__TMP(
+PLATFORM_Texture *PLATFORM_allocate_texture_with__path(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Texture_Flags texture_flags,
         const char *c_str__path);
-
-///
-/// This is currently no-op on NDS. Later, if we need to,
-/// we can to nitroFS along with this.
-///
-PLATFORM_Texture *PLATFORM_allocate_texture__with_path(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification,
-        const char *path);
 
 void PLATFORM_update_texture(
         PLATFORM_Texture *texture);

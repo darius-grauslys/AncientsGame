@@ -25,13 +25,13 @@
 void GL_allocate_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification) {
+        Texture_Flags texture_flags) {
     p_PLATFORM_graphics_window
         ->p_SDL_graphics_window__texture =
             PLATFORM_allocate_texture(
                     p_PLATFORM_gfx_context,
-                    p_texture_allocation_specification);
+                    p_PLATFORM_graphics_window,
+                    texture_flags);
 
     if (!SDL_is_texture__allocated(
                 p_PLATFORM_graphics_window

@@ -118,8 +118,7 @@ typedef void (*f_SDL_Render_World)(
 typedef void (*f_SDL_Allocate_Gfx_Window)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
+        Texture_Flags texture_flags);
 typedef void (*f_SDL_Release_Gfx_Window)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
@@ -133,20 +132,9 @@ typedef void (*f_SDL_Render_Gfx_Window)(
 
 typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Allocation_Specification
-            *p_texture_allocation_specification);
-
-typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture__With_Path)(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Allocation_Specification 
-            *p_texture_allocation_specification,
-        const char *path);
-
-typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture__TMP)(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
 
-typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture__With_Path__TMP)(
+typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture__With_Path)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags,
         const char *path);
@@ -269,9 +257,7 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
     f_SDL_Release_Camera_Data           f_SDL_release_camera_data;
 
     f_SDL_Allocate_Texture              f_SDL_allocate_texture;
-    f_SDL_Allocate_Texture__With_Path   f_SDL_allocate_texture__with_path;
-    f_SDL_Allocate_Texture__TMP              f_SDL_allocate_texture__TMP;
-    f_SDL_Allocate_Texture__With_Path__TMP   f_SDL_allocate_texture__with_path__TMP;
+    f_SDL_Allocate_Texture__With_Path   f_SDL_allocate_texture_with__path;
     f_SDL_Use_Texture                   f_SDL_use_texture;
     f_SDL_Release_Texture               f_SDL_release_texture;
 
