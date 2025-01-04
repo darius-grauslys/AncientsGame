@@ -25,6 +25,7 @@ void initialize_entity_as__player(
         Vector__3i32F4 position__3i32F4) {
     initialize_entity_as__humanoid(
             p_game,
+            p_PLATFORM_graphics_window,
             p_entity,
             Entity_Kind__Player,
             position__3i32F4,
@@ -52,20 +53,6 @@ void initialize_entity_as__player(
 			p_entity,
             m_entity_animation_handler__humanoid);
 
-    // initialize_sprite_wrapper_for__entity_with__sprite_allocation(
-    //         p_PLATFORM_graphics_window,
-    //         p_entity);
-
-    initialize_sprite_wrapper(
-            &p_entity->sprite_wrapper, 
-            TEXTURE_FLAGS__NONE);
-    allocate_sprite__entity(
-            p_game, 
-            p_PLATFORM_graphics_window,
-            get_p_sprite_gfx_allocation_manager_from__game(p_game), 
-            &p_entity->sprite_wrapper, 
-            Entity_Kind__Player);
-
     p_entity->hearts.resource_symbols[0] = Heart_Kind__Full_Normal;
 
     p_entity->hearts.max_quantity_of__resource_overflow = 0;
@@ -83,9 +70,10 @@ void initialize_entity_as__player(
     // set_entity__is_not_updating_position(p_entity);
 }
 
-PLATFORM_Sprite *f_sprite_gfx_allocator__player(
+bool f_sprite_gfx_allocator__player(
         Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value) {
     // assume enum value is player.
 
@@ -102,9 +90,11 @@ PLATFORM_Sprite *f_sprite_gfx_allocator__player(
     if (!p_PLATFORM_texture_for__player)
         return 0;
     
-    return PLATFORM_allocate_sprite__TMP(
-            p_PLATFORM_gfx_context, 
-            p_PLATFORM_gfx_window,
-            p_PLATFORM_texture_for__player, 
-            TEXTURE_FLAG__SIZE_16x16);
+    p_sprite_wrapper->p_sprite =
+        PLATFORM_allocate_sprite__TMP(
+                p_PLATFORM_gfx_context, 
+                p_PLATFORM_gfx_window,
+                p_PLATFORM_texture_for__player, 
+                TEXTURE_FLAG__SIZE_16x16);
+    return p_sprite_wrapper->p_sprite;
 }

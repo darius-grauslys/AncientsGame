@@ -403,9 +403,10 @@ typedef struct Sprite_Wrapper_t {
     enum Sprite_Animation_Kind the_kind_of_animation__this_sprite_has;
 } Sprite_Wrapper;
 
-typedef PLATFORM_Sprite *(*f_Sprite_Gfx_Allocator)(
+typedef bool (*f_Sprite_Gfx_Allocator)(
         Game *p_game,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value);
 
 typedef f_Sprite_Gfx_Allocator 

@@ -212,7 +212,20 @@ bool is_entity_of__this_kind(
         == the_kind_of__entity;
 }
 
+void initialize_entity_as__deallocated(
+        Entity *p_entity);
+
 void initialize_entity(
+        Entity *p_entity, 
+        enum Entity_Kind kind_of_entity,
+        Vector__3i32F4 position__3i32F4,
+        Quantity__u32 width,
+        Quantity__u32 height);
+
+void initialize_entity_with__sprite(
+        Game *p_game,
+        PLATFORM_Graphics_Window 
+            *p_PLATFORM_graphics_window,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,

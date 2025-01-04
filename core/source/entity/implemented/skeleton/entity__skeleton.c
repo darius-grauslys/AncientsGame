@@ -1,7 +1,9 @@
 #include "defines_weak.h"
 #include "entity/handlers/ai/ai_handler__chase_melee.h"
 #include "entity/humanoid.h"
+#include "rendering/aliased_texture_manager.h"
 #include "rendering/sprite.h"
+#include "rendering/texture_strings.h"
 #include "world/tile_vectors.h"
 #include <entity/implemented/skeleton/entity__skeleton.h>
 #include <entity/entity.h>
@@ -20,6 +22,7 @@ void initialize_entity_as__skeleton(
         Vector__3i32F4 position__3i32F4) {
     initialize_entity_as__humanoid(
             p_game,
+            p_PLATFORM_graphics_window,
             p_entity,
             Entity_Kind__Skeleton,
             position__3i32F4,
@@ -68,4 +71,33 @@ void initialize_entity_as__skeleton(
     p_entity->humanoid__secondary_sustenance__u8 = 128;
 
     p_entity->humanoid__homeostasis__i8 = 0;
+}
+
+bool f_sprite_gfx_allocator__skeleton(
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *p_sprite_wrapper,
+        u32 enum_value) {
+    // assume enum value is skeleton.
+
+    Aliased_Texture_Manager *p_aliased_texture_manager =
+        get_p_aliased_texture_manager_from__game(p_game);
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__game(p_game);
+
+    PLATFORM_Texture *p_PLATFORM_texture_for__skeleton =
+        get_p_PLATFORM_texture_by__alias(
+                p_aliased_texture_manager, 
+                name_of__texture__skeleton__c_str);
+
+    if (!p_PLATFORM_texture_for__skeleton)
+        return 0;
+    
+    p_sprite_wrapper->p_sprite = 
+        PLATFORM_allocate_sprite__TMP(
+            p_PLATFORM_gfx_context, 
+            p_PLATFORM_gfx_window,
+            p_PLATFORM_texture_for__skeleton, 
+            TEXTURE_FLAG__SIZE_16x16);
+    return p_sprite_wrapper->p_sprite;
 }

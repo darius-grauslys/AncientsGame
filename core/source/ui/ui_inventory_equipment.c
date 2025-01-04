@@ -4,6 +4,7 @@
 #include "inventory/item_stack.h"
 #include "platform.h"
 #include "rendering/sprite.h"
+#include "rendering/sprite_gfx_allocator_manager.h"
 #include "serialization/serialized_field.h"
 #include "ui/ui_draggable.h"
 #include "ui/ui_element.h"
@@ -51,20 +52,16 @@ void allocate_ui_equipment_into__ui_element_container(
                     m_ui_draggable__dragged_handler__default);
 
             if (!is_p_item_stack__empty(p_item_stack)) {
-                PLATFORM_Sprite *p_PLATFORM_sprite =
-                    allocate_sprite_for__item(
-                            get_p_PLATFORM_gfx_context_from__game(p_game),
+                bool result_of__sprite_allocation =
+                    allocate_sprite__item(
+                            p_game,
                             p_PLATFORM_gfx_window,
+                            get_p_sprite_gfx_allocation_manager_from__game(
+                                p_game),
+                            &p_child->ui_sprite_wrapper,
                             p_item_stack
                             ->item.the_kind_of_item__this_item_is);
-                if (p_PLATFORM_sprite) {
-                    set_ui_element__PLATFORM_sprite(
-                            p_child, 
-                            p_PLATFORM_sprite);
-                    p_child->ui_sprite_wrapper
-                        .frame__current =
-                        p_item_stack
-                        ->item.the_kind_of_item__this_item_is - 1;
+                if (result_of__sprite_allocation) {
                     set_ui_element__render_handler(
                             p_child, 
                             m_ui_element__render_handler_for__sprite__default);
