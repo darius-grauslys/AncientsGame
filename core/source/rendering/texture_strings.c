@@ -8,19 +8,32 @@ Texture_Name__c_str name_of__texture__skeleton__c_str = {
 };
 Texture_Name__c_str name_of__texture__ui_8x8__c_str = {
     "ui_8x8"
-};;
+};
 Texture_Name__c_str name_of__texture__ui_16x16__c_str = {
     "ui_16x16"
-};;
+};
 Texture_Name__c_str name_of__texture__ui_32x32__c_str = {
     "ui_32x32"
-};;
+};
 Texture_Name__c_str name_of__texture__items__c_str = {
     "items"
-};;
+};
 Texture_Name__c_str name_of__texture__particles__c_str = {
     "particles"
-};;
+};
+
+Texture_Name__c_str name_of__texture__tilesheet_ground__c_str = {
+    "tilesheet_ground"
+};
+
+Texture_Name__c_str name_of__texture__tilesheet_cover__c_str = {
+    "tilesheet_cover"
+};
+
+Texture_Name__c_str name_of__texture__tilesheet_ui__c_str = {
+    "tilesheet_ui"
+};
+
 
 IO_path path_to__texture__player__c_str = {
     "assets/entities/entity_sprite__16x16/player.png"
@@ -48,5 +61,18 @@ IO_path path_to__texture__items__c_str = {
 
 IO_path path_to__texture__particles__c_str = {
     "assets/entities/entity_sprite__16x16/particles.png"
+};
+
+
+IO_path path_to__texture__tilesheet_ground__c_str = {
+    "assets/world/tilesheet_ground.png"
+};
+
+IO_path path_to__texture__tilesheet_cover__c_str = {
+    "assets/world/tilesheet_cover.png"
+};
+
+IO_path path_to__texture__tilesheet_ui__c_str = {
+    "assets/ui/default/_ui_tileset_default.png"
 };
 

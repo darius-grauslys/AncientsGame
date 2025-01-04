@@ -126,11 +126,11 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite__TMP(
     p_PLATFORM_sprite->quantity_of__sprite_frame__columns = 
         p_PLATFORM_texture_to__sample_by__sprite
         ->width
-        / get_texture_flags__width(texture_flags_for__sprite);
+        / get_length_of__texture_flag__width(texture_flags_for__sprite);
     p_PLATFORM_sprite->quantity_of__sprite_frame__rows =
         p_PLATFORM_texture_to__sample_by__sprite
         ->height
-        / get_texture_flags__height(texture_flags_for__sprite);
+        / get_length_of__texture_flag__height(texture_flags_for__sprite);
     p_PLATFORM_sprite->sprite_frame__width = 
         1.0 
         / (float)p_PLATFORM_sprite->quantity_of__sprite_frame__columns;
