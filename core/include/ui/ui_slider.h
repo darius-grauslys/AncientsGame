@@ -34,6 +34,12 @@ void m_ui_slider__render_handler__default(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game);
 
+bool f_sprite_gfx_allocator__ui_slider(
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *p_sprite_wrapper,
+        u32 enum_value);
+
 static inline
 i32F20 get_percentage_i32F20_from__ui_slider(
         UI_Element *p_ui_slider) {

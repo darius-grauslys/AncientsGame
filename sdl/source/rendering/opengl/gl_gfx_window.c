@@ -1,5 +1,6 @@
 #include "rendering/opengl/gl_gfx_window.h"
 #include "defines.h"
+#include "rendering/aliased_texture_manager.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
 #include "defines_weak.h"
 #include "game.h"
@@ -19,6 +20,7 @@
 #include "rendering/sdl_texture_strings.h"
 #include "rendering/texture.h"
 #include "rendering/sdl_texture.h"
+#include "rendering/texture_strings.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
 
@@ -101,10 +103,9 @@ void GL_compose_gfx_window(
                 p_PLATFORM_gfx_context);
 
     PLATFORM_Texture *p_PLATFORM_texture__ui_tilesheet =
-        SDL_get_texture_from__texture_manager(
-                SDL_get_p_texture_manager_from__gfx_context(
-                    p_PLATFORM_gfx_context), 
-                SDL_texture_string__tilesheet_ui);
+        get_p_PLATFORM_texture_by__alias(
+                get_p_aliased_texture_manager_from__game(p_game), 
+                name_of__texture__tilesheet_ui__c_str);
 
     float clear_color[4];
     glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);

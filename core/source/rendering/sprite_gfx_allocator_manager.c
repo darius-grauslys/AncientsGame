@@ -8,6 +8,7 @@
 #include "entity/implemented/player/entity__player.h"
 #include "rendering/aliased_texture_manager.h"
 #include "rendering/texture_strings.h"
+#include "ui/ui_slider.h"
 
 static inline
 f_Sprite_Gfx_Allocator *get_pf_sprite_gfx_allocator_for__entity_by__index_in__manager(
@@ -311,6 +312,10 @@ bool f_sprite_gfx_allocator__item(
 
 void register_sprite_gfx_allocators_in__sprite_gfx_allocator_manager(
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocation_manager) {
+    ///
+    /// ENTITIES
+    ///
+
     register_sprite_gfx_allocator_for__entity(
             p_sprite_gfx_allocation_manager, 
             Entity_Kind__Player, 
@@ -320,6 +325,10 @@ void register_sprite_gfx_allocators_in__sprite_gfx_allocator_manager(
             Entity_Kind__Skeleton, 
             f_sprite_gfx_allocator__skeleton);   
 
+    ///
+    /// ITEMS
+    ///
+
     for (Index__u32 index_of__item = 0;
             index_of__item < Item_Kind__Unknown;
             index_of__item++) {
@@ -327,4 +336,17 @@ void register_sprite_gfx_allocators_in__sprite_gfx_allocator_manager(
             ->F_sprite_gfx_allocators_for__items[index_of__item] =
             f_sprite_gfx_allocator__item;
     }
+
+    ///
+    /// UI
+    ///
+
+    register_sprite_gfx_allocator_for__ui(
+            p_sprite_gfx_allocation_manager, 
+            UI_Sprite_Kind__16x16__Slider__Horizontal, 
+            f_sprite_gfx_allocator__ui_slider);
+    register_sprite_gfx_allocator_for__ui(
+            p_sprite_gfx_allocation_manager, 
+            UI_Sprite_Kind__16x16__Slider__Vertical, 
+            f_sprite_gfx_allocator__ui_slider);
 }

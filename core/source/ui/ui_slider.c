@@ -3,6 +3,8 @@
 #include "game.h"
 #include "numerics.h"
 #include "platform.h"
+#include "rendering/aliased_texture_manager.h"
+#include "rendering/texture_strings.h"
 #include "ui/ui_element.h"
 #include "vectors.h"
 #include <ui/ui_slider.h>
@@ -176,4 +178,37 @@ void m_ui_slider__dragged_handler__gfx_window__default(
                 position_for__bgSetScroll.x__i32, 
                 position_for__bgSetScroll.y__i32,
                 0));
+}
+
+bool f_sprite_gfx_allocator__ui_slider(
+        Game *p_game,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Sprite_Wrapper *p_sprite_wrapper,
+        u32 enum_value) {
+    Aliased_Texture_Manager *p_aliased_texture_manager =
+        get_p_aliased_texture_manager_from__game(p_game);
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__game(p_game);
+
+    PLATFORM_Texture *p_PLATFORM_texture_for__items =
+        get_p_PLATFORM_texture_by__alias(
+                p_aliased_texture_manager, 
+                name_of__texture__ui_16x16__c_str);
+
+    if (!p_PLATFORM_texture_for__items)
+        return 0;
+    
+    p_sprite_wrapper->p_sprite =
+        PLATFORM_allocate_sprite(
+            p_PLATFORM_gfx_context, 
+            p_PLATFORM_gfx_window,
+            p_PLATFORM_texture_for__items, 
+            TEXTURE_FLAG__SIZE_16x16);
+
+    p_sprite_wrapper->frame__current = 
+        (UI_Sprite_Kind__16x16__Slider__Horizontal == enum_value)
+        ? 1
+        : 2
+        ;
+    return p_sprite_wrapper->p_sprite;
 }

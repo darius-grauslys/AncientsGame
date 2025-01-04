@@ -58,19 +58,15 @@ void PLATFORM_open_ui(
         get_p_PLATFORM_gfx_context_from__game(
                 p_game);
 
-    Texture_Allocation_Specification texture_alloc_spec;
-
-    initialize_texture_allocation_specification(
-            &texture_alloc_spec, 
-            TEXTURE_FLAG__SIZE_256x256, 
-            SDL_get_main_graphics_window_from__gfx_context(
-                p_PLATFORM_gfx_context));
+    // TODO: use the following to route gfx_window
+    //         SDL_get_main_graphics_window_from__gfx_context(
+    //             p_PLATFORM_gfx_context));
 
     PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__ui =
         SDL_allocate_gfx_window(
                 p_PLATFORM_gfx_context, 
                 0,
-                &texture_alloc_spec);
+                TEXTURE_FLAG__SIZE_256x256);
 
     if (!p_PLATFORM_gfx_window__ui) {
         debug_error("SDL::PLATFORM_open_ui, failed to open ui.");
