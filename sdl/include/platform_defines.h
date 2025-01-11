@@ -1,8 +1,6 @@
 #ifndef PLATFORM_DEFINES_H
 #define PLATFORM_DEFINES_H
 
-#include "defines_weak.h"
-
 #ifndef PLATFORM__IO
 #define PLATFORM__IO
 #define MAX_LENGTH_OF__IO_PATH 1024

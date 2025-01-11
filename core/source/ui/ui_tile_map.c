@@ -44,6 +44,22 @@ void initialize_ui_tile_map__large_as__deallocated(
             * UI_TILE_MAP__LARGE__HEIGHT);
 }
 
+void initialize_ui_tile_map__wrapper(
+        UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper,
+        UI_Tile_Raw *p_ui_tile_data,
+        Quantity__u32 width_of__tile_map,
+        Quantity__u32 height_of__tile_map,
+        UI_Tile_Map_Size catagory_size_of__ui_tile_map) {
+    p_ui_tile_map__wrapper->p_ui_tile_data =
+        p_ui_tile_data;
+    p_ui_tile_map__wrapper->height_of__ui_tile_map =
+        height_of__tile_map;
+    p_ui_tile_map__wrapper->width_of__ui_tile_map =
+        width_of__tile_map;
+    p_ui_tile_map__wrapper->catagory_size_of__ui_tile_map =
+        catagory_size_of__ui_tile_map;
+}
+
 void set_ui_tile_map__wrapper__utilized_size(
         UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper,
         Quantity__u32 width__u32,

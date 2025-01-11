@@ -1,0 +1,29 @@
+
+    
+        Okay honestly, the engine isn't in such a weird state.
+
+        (( ready to migrate, need ui_tool update. ))
+        1) Remove all asset utilization in backend. For now just do SDL, and then
+        do NDS afterwards. This is mainly in sdl_ui.h and sdl_gfx_window_manager.h
+        as they use the grit ui_tile indices. Make PLATFORM_ functions to set
+        UI_Tile_Maps of the PLATFORM_gfx_windows. On NDS this will just result in
+        modifying the graphics memory directly.
+
+        (( ready for modification ))
+        2) f_tile_render_kernel(Chunk_Map_Node *p.., Local_Vec3);
+           PLATFORM_render_tile(gfx_context, gfx_window, Camera p.., u16 tile_texture_index, Tile_Vec3);
+
+            f_tile_render_kernel - gives core a kernel means to manipulate tile rendering
+                for example: walls.
+            PLATFORM_render_tile - puts a tile into a gfx window at the given position
+                relative to the camera.
+            
+            This gives CORE an agnostic means to control tile rendering. Can also add:
+            PLATFORM_render_voxel(...); at a future date.
+
+        (( not ready. Finish (1) and (2) first. )
+        3) Move all serialization to m_process functions. Implement a process blocking chain.
+
+        4) Whenever possible, don't take Game as an argument and use helpers, instead take the
+            actual hierarchy object as argument, and any other hierarchy arguments. Helpers should
+            be left to the game-dev as they decide the Game_t composition.

@@ -45,6 +45,14 @@ void SDL_initialize_gfx_window_manager(
     }
 }
 
+PLATFORM_Graphics_Window *PLATFORM_allocate_gfx_window(
+        Game *p_game,
+        Texture_Flags texture_flags_for__gfx_window) {
+    return SDL_allocate_PLATFORM_gfx_window_from__manager(
+            SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                get_p_PLATFORM_gfx_context_from__game(p_game)));
+}
+
 PLATFORM_Graphics_Window *SDL_allocate_PLATFORM_gfx_window_from__manager(
         SDL_Gfx_Window_Manager *p_SDL_gfx_window_manager) {
     for (Index__u32 index_of__gfx_window = 0;

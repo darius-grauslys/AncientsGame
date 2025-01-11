@@ -349,3 +349,4 @@ void GL_release_gfx_window(
     SDL_set_gfx_window_as__deallocated(
             p_PLATFORM_graphics_window);
 }
+

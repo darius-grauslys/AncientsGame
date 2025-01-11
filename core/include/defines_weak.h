@@ -847,6 +847,7 @@ typedef struct Typer_t Typer;
 /// This is an abstraction for a "sub-context" for graphics.
 ///
 typedef struct PLATFORM_Graphics_Window_t PLATFORM_Graphics_Window;
+typedef struct Graphics_Window__Wrapper_t Graphics_Window__Wrapper;
 
 ///
 /// Types of graphical window abstractions
@@ -855,12 +856,50 @@ typedef struct PLATFORM_Graphics_Window_t PLATFORM_Graphics_Window;
 /// given platform, while there is likely only
 /// one Graphics_Window_Kind__World window context.
 ///
-/// TODO: remove
-enum Graphics_Window_Kind {
+typedef enum Graphics_Window_Kind {
     Graphics_Window_Kind__None,
-    Graphics_Window_Kind__World,
-    Graphics_Window_Kind__UI
-};
+    _UI_Window_Kind__Idle,
+    _UI_Window_Kind__Equip,
+    _UI_Window_Kind__Trade,
+    _UI_Window_Kind__Labor,
+    _UI_Window_Kind__Typer,
+
+    _UI_Window_Kind__Main_Menu,
+    _UI_Window_Kind__Singleplayer,
+    _UI_Window_Kind__Multiplayer,
+    _UI_Window_Kind__Settings,
+
+    _UI_Window_Kind__In_Game_Settings,
+    _UI_Window_Kind__Loading,
+    _UI_Window_Kind__Station,
+
+    World_Window_Kind__Ground,
+    World_Window_Kind__Cover,
+    World_Window_Kind__Cover__Upper,
+    World_Window_Kind__HUD,
+
+    Graphics_Window_Kind__Unknown
+} Graphics_Window_Kind;
+
+typedef enum UI_Window_Kind {
+    UI_Window_Kind__None = 0,
+    UI_Window_Kind__Idle,
+    UI_Window_Kind__Equip,
+    UI_Window_Kind__Trade,
+    UI_Window_Kind__Labor,
+    UI_Window_Kind__Typer,
+
+    UI_Window_Kind__Main_Menu,
+    UI_Window_Kind__Singleplayer,
+    UI_Window_Kind__Multiplayer,
+    UI_Window_Kind__Settings,
+
+    UI_Window_Kind__In_Game_Settings,
+    UI_Window_Kind__Loading,
+    UI_Window_Kind__Station,
+
+    UI_Window_Kind__Unknown
+} UI_Window_Kind;
 
 enum Sprite_Animation_Kind {
     Sprite_Animation_Kind__None,
@@ -925,6 +964,7 @@ typedef struct PLATFORM_Directory_t PLATFORM_Directory;
 
 typedef uint8_t UI_Tile_Map__Flags;
 typedef struct UI_Tile_Map__Wrapper_t UI_Tile_Map__Wrapper;
+typedef struct UI_Tile_Span_t UI_Tile_Span;
 typedef struct UI_Tile_Map__Small_t UI_Tile_Map__Small;
 typedef struct UI_Tile_Map__Medium_t UI_Tile_Map__Medium;
 typedef struct UI_Tile_Map__Large_t UI_Tile_Map__Large;
@@ -1018,26 +1058,6 @@ typedef enum UI_Sprite_Kind {
 
 typedef struct UI_Element_t UI_Element;
 typedef struct UI_Manager_t UI_Manager;
-
-typedef enum UI_Window_Kind {
-    UI_Window_Kind__None = 0,
-    UI_Window_Kind__Idle,
-    UI_Window_Kind__Equip,
-    UI_Window_Kind__Trade,
-    UI_Window_Kind__Labor,
-    UI_Window_Kind__Typer,
-
-    UI_Window_Kind__Main_Menu,
-    UI_Window_Kind__Singleplayer,
-    UI_Window_Kind__Multiplayer,
-    UI_Window_Kind__Settings,
-
-    UI_Window_Kind__In_Game_Settings,
-    UI_Window_Kind__Loading,
-    UI_Window_Kind__Station,
-
-    UI_Window_Kind__Unknown
-} UI_Window_Kind;
 
 enum UI_Element_Kind {
     UI_Element_Kind__None,
@@ -1778,6 +1798,25 @@ typedef struct Chunk_Manager__Chunk_Map_Node_t Chunk_Manager__Chunk_Map_Node;
 typedef struct Tile_t Tile;
 
 ///
+/// Examines area local, possibly changing the tile to be rendered.
+///
+typedef Index__u16 (*f_Tile_Render_Kernel)(
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
+        u8 x__local,
+        u8 y__local,
+        u8 z__local);
+
+///
+/// Examines area local, possibly changing the tile to be rendered.
+///
+typedef void (*f_Voxel_Render_Kernel)(
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
+        u8 x__local,
+        u8 y__local,
+        u8 z__local,
+        Index__u16 texture_indices[6]);
+
+///
 /// SECTION_core
 ///
 
@@ -1794,5 +1833,7 @@ typedef struct PLATFORM_Gfx_Context_t PLATFORM_Gfx_Context;
 typedef struct PLATFORM_Texture_t PLATFORM_Texture;
 typedef struct PLATFORM_Sprite_t PLATFORM_Sprite;
 typedef struct PLATFORM_Sprite_Data_t PLATFORM_Sprite_Data;
+
+typedef struct Gfx_Context_t Gfx_Context;
 
 #endif

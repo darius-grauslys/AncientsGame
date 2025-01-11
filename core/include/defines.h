@@ -703,6 +703,24 @@ typedef struct Sprite_Allocation_Specification_t {
     };
 } Sprite_Allocation_Specification;
 
+#define MAX_QUANTITY_OF__GRAPHICS_WINDOWS 8
+
+typedef struct Graphics_Window__Wrapper_t {
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window;
+    Vector__3i32 origin_of__gfx_window;
+    Vector__3i32 position_of__gfx_window;
+    Vector__3i32 position_of__gfx_window__minimum;
+    Vector__3i32 position_of__gfx_window__maximum;
+    Graphics_Window_Kind the_kind_of__window;
+    Index__u8 priority_of__window;
+    Index__u8 index_of__child_window;
+} Graphics_Window__Wrapper;
+
+typedef struct Graphics_Window_Manager_t {
+    Graphics_Window__Wrapper graphics_windows[
+        MAX_QUANTITY_OF__GRAPHICS_WINDOWS];
+} Graphics_Window_Manager;
+
 typedef struct Font_Letter_t {
     Quantity__u8 width_of__font_letter       :4;
     Quantity__u8 height_of__font_letter      :4;
@@ -1608,6 +1626,7 @@ typedef struct UI_Tile_Span_t {
     UI_Tile ui_tile__fill;
 } UI_Tile_Span;
 
+// TODO: remove
 typedef uint8_t UI_Tile_Map__Flags;
 
 #define UI_TILE_MAP__FLAGS__NONE 0
@@ -1615,7 +1634,6 @@ typedef uint8_t UI_Tile_Map__Flags;
 
 typedef struct UI_Tile_Map__Wrapper_t {
     UI_Tile_Raw *p_ui_tile_data;
-    UI_Tile_Map__Flags *p_ui_tile_map__flags;
     Quantity__u32 width_of__ui_tile_map;
     Quantity__u32 height_of__ui_tile_map;
     UI_Tile_Map_Size catagory_size_of__ui_tile_map;
@@ -1816,6 +1834,28 @@ typedef struct UI_Manager_t {
     PLATFORM_Graphics_Window 
         *p_PLATFORM_graphics_window_for__ui_manager;
 } UI_Manager;
+
+typedef struct UI_Context_t UI_Context;
+
+typedef bool (*f_UI_Window__Load)(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window_Kind the_kind_of__window);
+
+typedef bool (*f_UI_Window__Close)(
+        Gfx_Context *p_gfx_context,
+        PLATFORM_Graphics_Window p_PLATFORM_gfx_window,
+        Graphics_Window_Kind the_kind_of__window);
+
+typedef struct UI_Window_Record_t {
+    f_UI_Window__Load f_ui_window__load;
+    f_UI_Window__Close f_ui_window__close;
+} UI_Window_Record;
+
+typedef struct UI_Context_t {
+    UI_Manager ui_manager;
+    UI_Window_Record ui_window_records[
+        Graphics_Window_Kind__Unknown];
+} UI_Context;
 
 ///
 /// SECTION_world
@@ -2081,6 +2121,25 @@ typedef struct Tile_t Tile;
 
 typedef uint8_t Tile_Flags__u8;
 
+///
+/// Examines area local, possibly changing the tile to be rendered.
+///
+typedef Index__u16 (*f_Tile_Render_Kernel)(
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
+        u8 x__local,
+        u8 y__local,
+        u8 z__local);
+
+///
+/// Examines area local, possibly changing the tile to be rendered.
+///
+typedef void (*f_Voxel_Render_Kernel)(
+        Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
+        u8 x__local,
+        u8 y__local,
+        u8 z__local,
+        Index__u16 texture_indices[6]);
+
 typedef void (*f_Tile_Handler__Interact)(
         Game *p_game,
         Tile *p_tile,
@@ -2271,6 +2330,16 @@ typedef struct World_t {
 ///
 /// SECTION_core
 ///
+
+typedef struct Gfx_Context_t {
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    Graphics_Window_Manager graphics_window_manager;
+    Sprite_Gfx_Allocation_Manager sprite_gfx_allocation_manager;
+    Aliased_Texture_Manager aliased_texture_manager;
+    UI_Context ui_context;
+    UI_Manager ui_manager;
+    UI_Tile_Map_Manager ui_tile_map_manager;
+} Gfx_Context;
 
 typedef struct Game_Action_t Game_Action;
 typedef void (*m_Game_Action_Handler)(

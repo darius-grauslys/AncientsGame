@@ -15,6 +15,13 @@ void initialize_ui_tile_map__medium_as__deallocated(
 void initialize_ui_tile_map__large_as__deallocated(
         UI_Tile_Map__Large *p_ui_tile_map__large);
 
+void initialize_ui_tile_map__wrapper(
+        UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper,
+        UI_Tile_Raw *p_ui_tile_data,
+        Quantity__u32 width_of__tile_map,
+        Quantity__u32 height_of__tile_map,
+        UI_Tile_Map_Size catagory_size_of__ui_tile_map);
+
 void generate_ui_span_in__ui_tile_map(
         UI_Tile_Map__Wrapper ui_tile_map__wrapper,
         const UI_Tile_Span *p_ui_tile_span,

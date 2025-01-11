@@ -144,3 +144,37 @@ Game_Action PLATFORM_get_gfx_window__game_action(
     return p_PLATFORM_gfx_window
         ->associated_game_action;
 }
+
+void PLATFORM_render_ui_tile_map__wrapper_to__gfx_window(
+        Game *p_game,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper) {
+    memcpy(
+            p_ui_tile_map__wrapper->p_ui_tile_data,
+            p_PLATFORM_gfx_window
+                ->SDL_graphics_window__ui_tile_map__wrapper
+                .p_ui_tile_data,
+            sizeof(u16)
+            * p_ui_tile_map__wrapper->width_of__ui_tile_map
+            * p_ui_tile_map__wrapper->height_of__ui_tile_map);
+}
+
+void PLATFORM_render_chunk_as__tiles_into__gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        f_Tile_Render_Kernel f_tile_render_kernel,
+        Camera *p_camera,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        Index__u16 index_of__tile_in__texture,
+        Tile_Vector__3i32 tile_vector__3i32) {
+    debug_abort("SDL::PLATFORM_render_chunk_as__tiles_into__gfx_window, impl");
+}
+
+void PLATFORM_update_gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window__Wrapper *p_graphics_window_wrapper) {
+    debug_abort("SDL::PLATFORM_update_gfx_window, impl");
+}

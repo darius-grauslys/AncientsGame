@@ -82,6 +82,7 @@ void PLATFORM_render_entity(
 /// SECTION_game_actions
 ///
 
+// TODO: remove, make PLATFORM_tcp PLATFORM_udp
 void m_PLATFORM_game_action_handler_for__multiplayer(
         Game *p_this_game,
         Game_Action *p_game_action);
@@ -106,36 +107,20 @@ void PLATFORM_put_char_in__typer(
         unsigned char letter);
 
 ///
-/// Opens the specified UI. Depending on the backend this
-/// might close all other UI's.
-///
-/// p_game_action can be null, this however might cause
-/// the ui to fail in opening depending on the ui and
-/// it's implementation. It's recommended to keep a COPY
-/// of p_game_action in PLATFORM_Graphics_Window.
-///
-/// TODO: backend impl note
-/// If you are implementing a backend, its recommended to
-/// store this copy in PLATFORM_Graphics_Window.
-///
-void PLATFORM_open_ui(
-        Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__open,
-        Game_Action *p_game_action);
-
-///
 /// Depending on some implementations, this might be no-op,
 /// but nonetheless it is routinely invoked each tick to
 /// provide a render loop from core.
 ///
 /// This is invoked RIGHT BEFORE PLATFORM_post_render.
 ///
+// TODO: remove
 void PLATFORM_update_ui(
         Game *p_game);
 
 ///
 /// TODO: this will be called on game_action
 ///
+// TODO: remove
 void PLATFORM_refresh_ui(
         Game *p_game,
         UI_Window_Kind the_kind_of__ui_window_to__refresh);
@@ -146,15 +131,19 @@ void PLATFORM_refresh_ui(
 /// this will close the specified UI Window, and transition
 /// to the UI Idle window.
 ///
+// TODO: remove
 void PLATFORM_close_ui(
         Game *p_game,
         enum UI_Window_Kind the_kind_of__ui_window_to__close);
 
+// TODO: remove
 enum UI_Window_Kind PLATFORM_get_last_opened_ui(void);
+// TODO: remove
 Quantity__u8 PLATFORM_get_all_opened_ui(
         enum UI_Window_Kind *p_ui_window_kind__buffer,
         Quantity__u8 size_of__buffer);
 
+// TODO: remove
 Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
@@ -164,6 +153,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite);
 
+// TODO: remove
 PLATFORM_Sprite_Data *PLATFORM_allocate_sprite_data(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
@@ -175,35 +165,45 @@ void PLATFORM_release_sprite(
 void PLATFORM_release_all__sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
+// TODO: remove
 void PLATFORM_release_all__sprites_using__this_graphics_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
+// TODO: include gfx_context
 void PLATFORM_render_sprite(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *sprite,
         Vector__3i32F4 position_of__sprite__3i32F4);
 
+// TODO: remove
 void PLATFORM_update_sprite_gfx__to_current_frame(
         Sprite_Wrapper *sprite_wrapper);
 
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
+// TODO: remove
 Quantity__u32 PLATFORM_get_quantity_of__allocated_sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
+// TODO: remove, make a Profile_t struct, and populate
 Quantity__u32 PLATFORM_get_max_quantity_of__allocated_sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
 ///
 /// On NDS, this will init both main and sub.
 ///
+// TODO: remove
 void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
 /// 
 /// On NDS, this will init both main and sub.
 ///
+// TODO: remove
 void PLATFORM_initialize_rendering__game(PLATFORM_Gfx_Context *gfx_context);
+
+void PLATFORM_initialize_gfx_context(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
 PLATFORM_Texture *PLATFORM_allocate_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -216,9 +216,11 @@ PLATFORM_Texture *PLATFORM_allocate_texture_with__path(
         Texture_Flags texture_flags,
         const char *c_str__path);
 
+// TODO: update to take Texture__Wrapper *p_
 void PLATFORM_update_texture(
         PLATFORM_Texture *texture);
 
+// TODO: remove
 void PLATFORM_use_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Texture *texture);
@@ -227,17 +229,21 @@ void PLATFORM_release_texture(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Texture *texture);
 
+// TODO: remove
 Texture_Flags *PLATFORM_get_p_texture_flags_from__PLATFORM_texture(
         PLATFORM_Texture *texture);
 
+// TODO: remove
 Quantity__u32 PLATFORM_get_max_quantity_of__allocations_for__texture_flags(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
 
+// TODO: remove
 Quantity__u32 PLATFORM_get_quantity_of__available_allocations_for__texture_flags(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
 
+// TODO: remove, make a Profile_t struct, and populate
 bool PLATFORM_has_support_for__texture_flag__render_method(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Texture_Flags texture_flags);
@@ -246,19 +252,23 @@ bool PLATFORM_has_support_for__texture_flag__render_method(
 /// SECTION_world
 ///
 
+// TODO: remove
 void PLATFORM_render_chunk(
         PLATFORM_Gfx_Context *context,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
+// TODO: remove
 void PLATFORM_render_tile(
         PLATFORM_Gfx_Context *context,
         Tile *tile);
 
+// TODO: remove
 void PLATFORM_update_chunk(
         PLATFORM_Gfx_Context *p_gfx_context,
         Chunk_Manager *p_chunk_manager,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
+// TODO: remove
 void PLATFORM_update_chunks(
         PLATFORM_Gfx_Context *gfx_context,
         Chunk_Manager *chunk_manager);
@@ -287,18 +297,19 @@ void PLATFORM_post_render(Game *game);
 /// SECTION_ui
 ///
 
-// TODO: A lot of Gfx_Window PLATFORM functions as well as
-// other PLATFORM objects need Core wrapper varients.
-// Having such will elivate the PLATFORM API.
+// TODO: remove
 UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
+// TODO: remove
 Game_Action PLATFORM_get_gfx_window__game_action(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
+// TODO: remove
 UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
+// TODO: remove
 void PLATFORM_set_gfx_window__position(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Vector__3i32 position_of__window);
@@ -306,11 +317,52 @@ void PLATFORM_set_gfx_window__position(
 ///
 /// Returns the position of the PLATFORM_gfx_window at time of allocation.
 ///
+// TODO: remove
 Vector__3i32 PLATFORM_get_gfx_window__origin(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
+// TODO: remove
 Vector__3i32 PLATFORM_get_gfx_window__position(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+
+PLATFORM_Graphics_Window *PLATFORM_allocate_gfx_window(
+        Game *p_game,
+        Texture_Flags texture_flags_for__gfx_window);
+
+void PLATFORM_render_ui_tile_map__wrapper_to__gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper);
+
+void PLATFORM_render_ui_tile_span_to__gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        UI_Tile_Span *p_ui_tile_span);
+
+void PLATFORM_render_chunk_as__tiles_into__gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        f_Tile_Render_Kernel f_tile_render_kernel,
+        Camera *p_camera,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        Index__u16 index_of__tile_in__texture,
+        Tile_Vector__3i32 tile_vector__3i32);
+
+void PLATFORM_render_chunk_as__voxels_into__gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        f_Voxel_Render_Kernel f_voxel_render_kernel,
+        Camera *p_camera,
+        PLATFORM_Texture *p_PLATFORM_texture,
+        Index__u16 index_of__tile_in__texture,
+        Tile_Vector__3i32 tile_vector__3i32);
+
+void PLATFORM_update_gfx_window(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window__Wrapper *p_graphics_window_wrapper);
 
 ///
 /// SECTION_scene
@@ -418,12 +470,18 @@ void PLATFORM_poll_input(
 ///
 /// SECTION_log
 ///
+// TODO: remove
 bool PLATFORM_update_log__global(Game *p_game);
+// TODO: remove
 bool PLATFORM_update_log__local(Game *p_game);
+// TODO: remove
 bool PLATFORM_update_log__system(Game *p_game);
 
+// TODO: remove
 bool PLATFORM_clear_log__global(Game *p_game);
+// TODO: remove
 bool PLATFORM_clear_log__local(Game *p_game);
+// TODO: remove
 bool PLATFORM_clear_log__system(Game *p_game);
 
 /// 
