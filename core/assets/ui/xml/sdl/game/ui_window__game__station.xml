@@ -1,36 +1,33 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
     <config>
-        <include sub_dir="ui/game/">
-            <header path="ui/game/sdl_ui_window__game__hud.h"/>
-            <header path="rendering/sdl_gfx_context.h"/>
+        <include sub_dir="ui/implemented/generated/game/">
+            <header path="ui/implemented/generated/game/ui_window__game__hud.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
             <header path="ui/ui_draggable.h"/>
             <header path="ui/ui_slider.h"/>
             <header path="ui/ui_manager.h"/>
-            <header path="ui/sdl_ui__background.h"/>
-            <header path="rendering/sdl_background.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>
             <header path="game.h"/>
             <header path="ui/ui_drop_zone__inventory_slot.h"/>
-            <header path="ui/ui_drop_zone__equipment_slot.h"/>
+            <header path="ui/handlers/inventory/ui_handler__station__button_craft.h"/>
         </include>
-        <output base_dir="./" c_path="./sdl/source/ui/game/sdl_ui_window__game__equip.c" h_path="./sdl/include/ui/game/sdl_ui_window__game__equip.h"/>
+        <output base_dir="./" c_path="./core/source/ui/implemented/generated/game/ui_window__game__station.c" h_path="./core/include/ui/implemented/generated/game/ui_window__game__station.h"/>
         <platform target="SDL" size="256,256"/>
-        <background layer="0" x="88" y="88" path="./core/assets/ui/default/ui_map_inventory_column.png"/>
-        <background layer="1" path="./core/assets/ui/default/ui_map_equipment.png"/>
-        <background layer="2" path="./core/assets/ui/default/ui_map_equip.png"/>
+        <background layer="0" x="158" y="88" path="./core/assets/ui/default/ui_map_short_inventory_column.png"/>
+        <background layer="1" path="./core/assets/ui/default/ui_map_station_items.png"/>
+        <background layer="2" path="./core/assets/ui/default/ui_map_station.png"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
         <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
         <ui_func_signature for="allocate_ui" c_signatures="allocate_ui_element_from__ui_manager"/>
         <ui_func_signature for="allocate_ui_container" c_signatures="allocate_many_ui_elements_from__ui_manager_in__succession"/>
         <ui_func_signature for="code"/>
-        <ui_func_signature for="background" c_signatures="SDL_initialize_ui_element_as__background"/>
         <ui_func_signature for="button" c_signatures="initialize_ui_element_as__button"/>
+        <ui_func_signature for="background" c_signatures="SDL_initialize_ui_element_as__background"/>
         <ui_func_signature for="slider" c_signatures="initialize_ui_element_as__slider"/>
         <ui_func_signature for="draggable" c_signatures="initialize_ui_element_as__draggable"/>
         <ui_func_signature for="drop_zone" c_signatures="initialize_ui_element_as__drop_zone"/>
@@ -42,7 +39,7 @@
         </code>
         <group>
             <allocate_ui name="p_slider">
-                <slider x="196" y="132" width="16" height="80" spanning_height="176" m_Dragged_Handler="m_ui_slider__dragged_handler__gfx_window__default"/>
+                <slider x="228" y="132" width="16" height="80" spanning_height="176" m_Dragged_Handler="m_ui_slider__dragged_handler__gfx_window__default"/>
             </allocate_ui>
             <code>
                 allocate_sprite_for__ui_slider(
@@ -53,41 +50,42 @@
                     SDL_allocate_background_as__PLATFORM_Gfx_Window(
                         p_game,
                         p_PLATFORM_gfx_window,
-                        SDL_Background_Kind__Inventory_Column,
+                        SDL_Background_Kind__Inventory_Column__Small,
                         get_vector__3i32(0,0,0));
                 p_slider->p_ui_data = 
                     p_PLATFORM_gfx_window__inv_column;
             </code>
-            <allocate_ui name="p_button_filter__usable">
-                <button x="228" y="104" width="16" height="16" color="64,196,64"/>
-            </allocate_ui>
-            <allocate_ui name="p_button_filter__wearable">
-                <button x="228" y="132" width="16" height="16" color="64,196,64"/>
-            </allocate_ui>
-            <allocate_ui name="p_button_filter__consumable">
-                <button x="228" y="160" width="16" height="16" color="64,196,64"/>
-            </allocate_ui>
-            <grid x="32" y="100" size="3" stride__y="32" name="p_equipment">
-                <allocate_ui_container size="2" stride__x="28">
-                    <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__equipment_slot"/>
+            <allocate_ui_container x="140" y="100" size="3" stride__y="32" name="p_recipe_and_tools">
+                <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
+                <code>
+                    set_ui_element__p_data(
+                        p_ui_iterator,
+                        get_p_ui_element_by__index_from__ui_manager(
+                            p_ui_manager,
+                            UI_WINDOW__GAME__STATION_P_RECIPE_AND_TOOLS_4));
+                </code>
+            </allocate_ui_container>
+            <grid x="28" y="124" size="2" stride__y="32" name="p_requirements">
+                <allocate_ui_container size="2" stride__x="32">
+                    <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
                     <code>
                         set_ui_element__p_data(
                             p_ui_iterator,
                             get_p_ui_element_by__index_from__ui_manager(
                                 p_ui_manager,
-                                SDL_UI_WINDOW__GAME__EQUIP_P_EQUIPMENT_7));
+                                UI_WINDOW__GAME__STATION_P_RECIPE_AND_TOOLS_4));
                     </code>
                 </allocate_ui_container>
             </grid>
-            <grid x="104" y="103" size="9" stride__y="28" name="p_inventory_column">
-                <allocate_ui_container size="3" stride__x="24">
+            <grid x="174" y="103" size="9" stride__y="28" name="p_inventory_column">
+                <allocate_ui_container size="2" stride__x="24">
                     <drop_zone width="23" height="27" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
                     <code>
                         set_ui_element__p_data(
                             p_ui_iterator,
                             get_p_ui_element_by__index_from__ui_manager(
                                 p_ui_manager,
-                                SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
+                                UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11));
                     </code>
                 </allocate_ui_container>
             </grid>
@@ -97,23 +95,26 @@
                     p_slider,
                     get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        SDL_UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
+                        UI_WINDOW__GAME__STATION_P_INVENTORY_COLUMN_11));
             </code>
-            <allocate_ui name="p_background__inv_column">
-                <background x="88" y="74" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
-            </allocate_ui>
+        </group>
+        <allocate_ui>
+            <button x="100" y="164" width="32" height="16" name="p_button_craft" m_Clicked_Handler="m_ui_button__click_handler__station_craft"/>
+        </allocate_ui>
+        <allocate_ui name="p_bg_right">
+            <background x="158" y="74" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
+        </allocate_ui>
             <code>
-                PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__equipment =
+                PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__station =
                     SDL_allocate_background_as__PLATFORM_Gfx_Window(
                         p_game,
                         p_PLATFORM_gfx_window,
-                        SDL_Background_Kind__Equipment,
+                        SDL_Background_Kind__Station_Items,
                         get_vector__3i32(0,0,0));
             </code>
-            <allocate_ui name="p_background__equipment">
-                <background x="0" y="0" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__equipment"/>
+            <allocate_ui name="p_background__station_items">
+                <background x="0" y="0" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__station"/>
             </allocate_ui>
-        </group>
     </ui>
 </root>
 

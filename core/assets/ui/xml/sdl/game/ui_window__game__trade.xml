@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
     <config>
-        <include sub_dir="ui/game/">
-            <header path="ui/game/sdl_ui_window__game__hud.h"/>
-            <header path="rendering/sdl_gfx_context.h"/>
+        <include sub_dir="ui/implemented/generated/game/">
+            <header path="ui/implemented/generated/game/ui_window__game__hud.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_draggable.h"/>
             <header path="ui/ui_drop_zone.h"/>
             <header path="ui/ui_slider.h"/>
             <header path="ui/ui_manager.h"/>
-            <header path="ui/sdl_ui__background.h"/>
-            <header path="rendering/sdl_background.h"/>
             <header path="vectors.h"/>
             <header path="defines.h"/>
             <header path="game.h"/>
             <header path="ui/ui_drop_zone__inventory_slot.h"/>
         </include>
-        <output base_dir="./" c_path="./sdl/source/ui/game/sdl_ui_window__game__trade.c" h_path="./sdl/include/ui/game/sdl_ui_window__game__trade.h"/>
+        <output base_dir="./" c_path="./core/source/ui/implemented/generated/game/ui_window__game__trade.c" h_path="./core/include/ui/implemented/generated/game/ui_window__game__trade.h"/>
         <platform target="SDL" size="256,256"/>
         <background layer="0" path="./core/assets/ui/default/ui_map_inventory_column.png" x="27"/>
         <background layer="1" path="./core/assets/ui/default/ui_map_inventory_column.png" x="120"/>
@@ -107,13 +104,13 @@
                     p_slider_left,
                     get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8));
+                        UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__LEFT_8));
                 set_ui_element_as__the_parent_of__this_ui_element(
                     p_ui_manager,
                     p_slider_right, 
                     get_p_ui_element_by__index_from__ui_manager(
                         p_ui_manager,
-                        SDL_UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62));
+                        UI_WINDOW__GAME__TRADE_P_INVENTORY_COLUMN__RIGHT_62));
             </code>
             <allocate_ui name="p_bg_left">
                 <background x="27" y="86" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__bg_left"/>

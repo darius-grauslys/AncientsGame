@@ -660,21 +660,17 @@ def generate_source__ui(xml_node__ui):
     generate_source_h__with_literal(\
             "\n#include <defines.h>\n".format(config.BACKEND.upper(), config.source_name.upper()))
     generate_source_h__with_literal(\
-            "// THIS CODE IS AUTO GENERATED. Go to ./{}/assets/ui/xml/ instead of modifying this file.\n".format(\
-            config.BACKEND.lower()))
+            "// THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.\n")
     generate_source_h__with_literal(\
-            "\nUI_Element *{}_allocate_ui_for__{}".format(\
-            config.BACKEND,\
+            "\nUI_Element *allocate_ui_for__{}".format(\
             config.source_name))
     generate_source_h__arguments(["Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_h__with_literal(";\n")
 
     generate_source_c__with_literal(\
-            "// THIS CODE IS AUTO GENERATED. Go to ./{}/assets/ui/xml/ instead of modifying this file.\n".format(\
-            config.BACKEND.lower()))
+            "// THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.\n")
     generate_source_c__with_literal(\
-            "\nUI_Element *{}_allocate_ui_for__{}".format(\
-            config.BACKEND,\
+            "\nUI_Element *allocate_ui_for__{}".format(\
             config.source_name))
     generate_source_c__arguments(["Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_c__with_literal("{\n")

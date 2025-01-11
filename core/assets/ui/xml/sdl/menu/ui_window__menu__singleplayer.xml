@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
     <config>
-        <include sub_dir="ui/menu/">
-            <header path="ui/sdl_ui.h"/>
+        <include sub_dir="ui/implemented/generated/menu/">
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_manager.h"/>
@@ -10,9 +9,9 @@
             <header path="defines.h"/>
             <header path="game.h"/>
         </include>
-        <output base_dir="./" c_path="./sdl/source/ui/menu/sdl_ui_window__menu__multiplayer.c" h_path="./sdl/include/ui/menu/sdl_ui_window__menu__multiplayer.h"/>
-        <platform target="SDL" size="256,192"/>
-        <background layer="0" path="./core/assets/ui/default/ui_map_multiplayer.png"/>
+        <output base_dir="./" c_path="./core/source/ui/implemented/generated/menu/ui_window__menu__singleplayer.c" h_path="./core/include/ui/implemented/generated/menu/ui_window__menu__singleplayer.h"/>
+        <platform target="SDL" size="256,196"/>
+        <background layer="0" path="./core/assets/ui/default/ui_map_singleplayer.png"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
         <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
@@ -34,6 +33,9 @@
             </allocate_ui>
             <allocate_ui name="p_button__settings">
                 <button width="80" height="24"/>
+            </allocate_ui>
+            <allocate_ui x="132" y="-88" name="p_button__play">
+                <button width="104" height="96"/>
             </allocate_ui>
         </group>
     </ui>

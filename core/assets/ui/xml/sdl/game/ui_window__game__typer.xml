@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
     <config>
-        <include sub_dir="ui/game/">
-            <header path="ui/game/sdl_ui_window__game__hud.h"/>
+        <include sub_dir="ui/implemented/generated/game/">
+            <header path="ui/implemented/generated/game/ui_window__game__hud.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
@@ -12,7 +12,7 @@
             <header path="defines.h"/>
             <header path="game.h"/>
         </include>
-        <output base_dir="./" c_path="./sdl/source/ui/game/sdl_ui_window__game__typer.c" h_path="./sdl/include/ui/game/sdl_ui_window__game__typer.h"/>
+        <output base_dir="./" c_path="./core/source/ui/implemented/generated/game/ui_window__game__typer.c" h_path="./core/include/ui/implemented/generated/game/ui_window__game__typer.h"/>
         <platform target="SDL" size="256,192"/>
         <background layer="0" path="./core/assets/ui/default/ui_map_idle.png"/>
         <background layer="1" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" x="8"/>

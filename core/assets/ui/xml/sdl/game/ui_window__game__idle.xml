@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
     <config>
-        <include sub_dir="ui/game/">
-            <header path="ui/game/sdl_ui_window__game__hud.h"/>
+        <include sub_dir="ui/implemented/generated/game/">
+            <header path="ui/implemented/generated/game/ui_window__game__hud.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
@@ -12,9 +12,11 @@
             <header path="defines.h"/>
             <header path="game.h"/>
         </include>
-        <output base_dir="./" c_path="./sdl/source/ui/game/sdl_ui_window__game__labor.c" h_path="./sdl/include/ui/game/sdl_ui_window__game__labor.h"/>
+        <output base_dir="./" c_path="./core/source/ui/implemented/generated/game/ui_window__game__idle.c" h_path="./core/include/ui/implemented/generated/game/ui_window__game__idle.h"/>
         <platform target="SDL" size="256,192"/>
-        <background layer="0" path="./core/assets/ui/default/ui_map_labor.png"/>
+        <background layer="0" path="./core/assets/ui/log/ui_map_log.png"/>
+        <background layer="1" path="./core/assets/ui/default/ui_map_idle.png"/>
+        <background layer="2" path="./core/assets/ui/typer/ui_map_typer__lowercase.png" x="8" y="118"/>
         <ui_func_signature for="grid"/>
         <ui_func_signature for="group"/>
         <ui_func_signature for="alloc_child" c_signatures="allocate_ui_element_from__ui_manager_as__child"/>
@@ -29,13 +31,16 @@
     <ui offset_of__ui_index="3">
         <code>
             SDL_allocate_ui_for__sdl_ui_window__game__hud(p_game, p_PLATFORM_gfx_window, p_ui_manager);
-            toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 2));
         </code>
-        <grid size="5" x="64" y="104" stride__x="16">
-            <allocate_ui_container size="5" stride__y="16">
-                <button width="8" height="8"/>
-            </allocate_ui_container>
-        </grid>
+        <allocate_ui name="p_slider">
+            <button x="228" y="132" width="16" height="80"/>
+        </allocate_ui>
+        <allocate_ui name="p_button__chat">
+            <button x="220" y="186" width="32" height="16" color="64,64,196"/>
+        </allocate_ui>
+        <allocate_ui_container x="28" y="96" size="4" stride__y="24">
+            <button width="16" height="12" color="64,196,64"/>
+        </allocate_ui_container>
     </ui>
 </root>
 

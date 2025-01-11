@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <root>
     <config>
-        <include sub_dir="ui/menu/">
-            <header path="ui/sdl_ui.h"/>
+        <include sub_dir="ui/implemented/generated/menu/">
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_manager.h"/>
@@ -10,7 +9,7 @@
             <header path="defines.h"/>
             <header path="game.h"/>
         </include>
-        <output base_dir="./" c_path="./sdl/source/ui/menu/sdl_ui_window__menu__settings.c" h_path="./sdl/include/ui/menu/sdl_ui_window__menu__settings.h"/>
+        <output base_dir="./" c_path="./core/source/ui/implemented/generated/menu/ui_window__menu__settings.c" h_path="./core/include/ui/implemented/generated/menu/ui_window__menu__settings.h"/>
         <platform target="SDL" size="256,196"/>
         <background layer="0" path="./core/assets/ui/default/ui_map_settings.png"/>
         <ui_func_signature for="grid"/>

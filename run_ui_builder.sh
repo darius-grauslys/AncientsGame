@@ -41,7 +41,7 @@ BASENAME=$(basename $FILE_SEARCH)
 
 BACKEND=$(echo $BACKEND | tr '[:upper:]' '[:lower:]')
 
-XML=$(find ./$BACKEND -iname $BASENAME.xml)
+XML=$(find ./core/assets/ui/xml/$BACKEND -iname $BASENAME.xml)
 
 if [ -z "$XML" ]; then
     echo Could not find $BASENAME.xml
