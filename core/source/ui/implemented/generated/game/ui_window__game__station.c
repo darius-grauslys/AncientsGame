@@ -13,7 +13,7 @@
 #include <ui/handlers/inventory/ui_handler__station__button_craft.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-UI_Element *allocate_ui_for__ui_window__game__station(Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager){
+UI_Element *allocate_ui_for__ui_window__game__station(Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;

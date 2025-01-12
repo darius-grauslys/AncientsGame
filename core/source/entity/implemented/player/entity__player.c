@@ -5,6 +5,7 @@
 #include "game.h"
 #include "platform.h"
 #include "rendering/aliased_texture_manager.h"
+#include "rendering/gfx_context.h"
 #include "rendering/sprite.h"
 #include "rendering/sprite_gfx_allocator_manager.h"
 #include "rendering/texture_strings.h"
@@ -71,16 +72,16 @@ void initialize_entity_as__player(
 }
 
 bool f_sprite_gfx_allocator__player(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value) {
     // assume enum value is player.
 
     Aliased_Texture_Manager *p_aliased_texture_manager =
-        get_p_aliased_texture_manager_from__game(p_game);
+        get_p_aliased_texture_manager_from__gfx_context(p_gfx_context);
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__game(p_game);
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 
     PLATFORM_Texture *p_PLATFORM_texture_for__player =
         get_p_PLATFORM_texture_by__alias(

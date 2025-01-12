@@ -181,14 +181,14 @@ void m_ui_slider__dragged_handler__gfx_window__default(
 }
 
 bool f_sprite_gfx_allocator__ui_slider(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value) {
     Aliased_Texture_Manager *p_aliased_texture_manager =
-        get_p_aliased_texture_manager_from__game(p_game);
+        get_p_aliased_texture_manager_from__gfx_context(p_gfx_context);
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__game(p_game);
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 
     PLATFORM_Texture *p_PLATFORM_texture_for__items =
         get_p_PLATFORM_texture_by__alias(

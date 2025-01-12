@@ -9,6 +9,10 @@
         UI_Tile_Maps of the PLATFORM_gfx_windows. On NDS this will just result in
         modifying the graphics memory directly.
 
+            Need to update the .xml files to gen buildable code.
+            Need to add ui_background to core.
+            Need to make sure built code works
+
         (( ready for modification ))
         2) f_tile_render_kernel(Chunk_Map_Node *p.., Local_Vec3);
            PLATFORM_render_tile(gfx_context, gfx_window, Camera p.., u16 tile_texture_index, Tile_Vec3);
@@ -20,6 +24,22 @@
             
             This gives CORE an agnostic means to control tile rendering. Can also add:
             PLATFORM_render_voxel(...); at a future date.
+
+                For this we want good spacial locality. Currently, on NDS and SDL the following occurs:
+                For each tile in chunk, get a tile_render_result, and use that to update all three
+                graphics windows at the same time. If we looped over each individual window we would
+                get bad spacial locality.
+
+                here is an idea:
+                typedef struct Tile_Render__Command_t {
+                    PLATFORM_Gfx_Window *p_..;
+                    f_Tile_Render_Kernel f_tile_render_kernel;
+                } Tile_Render__Command;
+                PLATFORM_render_chunks_as__tiles(
+                        Gfx_Context*,
+                        Camera*,
+                        Tile_Render__Comand[],
+                        u8 quant_of_commands);
 
         (( not ready. Finish (1) and (2) first. )
         3) Move all serialization to m_process functions. Implement a process blocking chain.

@@ -404,7 +404,7 @@ typedef struct Sprite_Wrapper_t {
 } Sprite_Wrapper;
 
 typedef bool (*f_Sprite_Gfx_Allocator)(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value);

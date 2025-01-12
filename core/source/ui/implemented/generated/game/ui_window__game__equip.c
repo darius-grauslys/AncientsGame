@@ -13,18 +13,18 @@
 #include <ui/ui_drop_zone__equipment_slot.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-UI_Element *allocate_ui_for__ui_window__game__equip(Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager){
+UI_Element *allocate_ui_for__ui_window__game__equip(Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-SDL_allocate_ui_for__sdl_ui_window__game__hud(p_game, p_PLATFORM_gfx_window, p_ui_manager);
+allocate_ui_for__ui_window__game__hud(p_gfx_context, p_PLATFORM_gfx_window, p_ui_manager);
     toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__slider(p_slider, 16, 80, get_vector__3i32(196 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 allocate_sprite_for__ui_slider(
-    p_game,
+    p_gfx_context,
     p_PLATFORM_gfx_window,
     p_slider);
     PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__inv_column =

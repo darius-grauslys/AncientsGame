@@ -664,7 +664,7 @@ def generate_source__ui(xml_node__ui):
     generate_source_h__with_literal(\
             "\nUI_Element *allocate_ui_for__{}".format(\
             config.source_name))
-    generate_source_h__arguments(["Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
+    generate_source_h__arguments(["Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_h__with_literal(";\n")
 
     generate_source_c__with_literal(\
@@ -672,7 +672,7 @@ def generate_source__ui(xml_node__ui):
     generate_source_c__with_literal(\
             "\nUI_Element *allocate_ui_for__{}".format(\
             config.source_name))
-    generate_source_c__arguments(["Game *p_game, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
+    generate_source_c__arguments(["Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_c__with_literal("{\n")
 
     context_stack = deque()

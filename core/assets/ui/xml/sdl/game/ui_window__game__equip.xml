@@ -34,7 +34,7 @@
     </config>
     <ui offset_of__ui_index="3">
         <code>
-            SDL_allocate_ui_for__sdl_ui_window__game__hud(p_game, p_PLATFORM_gfx_window, p_ui_manager);
+            allocate_ui_for__ui_window__game__hud(p_gfx_context, p_PLATFORM_gfx_window, p_ui_manager);
             toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
         </code>
         <group>
