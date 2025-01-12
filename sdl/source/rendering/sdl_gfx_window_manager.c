@@ -11,6 +11,7 @@
 #include "ui/ui_manager.h"
 #include "ui/ui_tile_map.h"
 #include "ui/ui_tile_map_manager.h"
+#include "rendering/gfx_context.h"
 #include "vectors.h"
 
 static inline
@@ -46,11 +47,20 @@ void SDL_initialize_gfx_window_manager(
 }
 
 PLATFORM_Graphics_Window *PLATFORM_allocate_gfx_window(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         Texture_Flags texture_flags_for__gfx_window) {
     return SDL_allocate_PLATFORM_gfx_window_from__manager(
             SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
-                get_p_PLATFORM_gfx_context_from__game(p_game)));
+                get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context)));
+}
+
+void PLATFORM_release_gfx_window(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window) {
+    SDL_release_PLATFORM_gfx_window_from__manager(
+            SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
+                get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context)),
+            p_gfx_window->p_PLATFORM_gfx_window);
 }
 
 PLATFORM_Graphics_Window *SDL_allocate_PLATFORM_gfx_window_from__manager(

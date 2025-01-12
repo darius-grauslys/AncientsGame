@@ -8,28 +8,28 @@ void initialize_sprite_gfx_allocator_manager(
 
 bool allocate_sprite__entity(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Entity_Kind the_kind_of__entity);
 
 bool allocate_sprite__particle(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Particle_Kind the_kind_of__particle);
 
 bool allocate_sprite__ui(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         UI_Sprite_Kind the_kind_of__ui);
 
 bool allocate_sprite__item(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Gfx_Allocation_Manager *p_sprite_gfx_allocator_manager,
         Sprite_Wrapper *p_sprite_wrapper,
         Item_Kind the_kind_of__item);

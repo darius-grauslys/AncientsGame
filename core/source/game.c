@@ -200,7 +200,8 @@ void manage_game__post_render(Game *p_game) {
     PLATFORM_poll_audio_effects(
             get_p_PLATFORM_audio_context_from__game(p_game));
 
-    PLATFORM_update_ui(p_game);
+#warning TODO: resolve update_ui
+    // PLATFORM_update_ui(p_game);
     PLATFORM_post_render(p_game);
     loop_timer_u32(&p_game->tick__timer_u32);
 }

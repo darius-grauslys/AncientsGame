@@ -97,10 +97,7 @@ static inline
 bool is_ui_tile_map__wrapper__valid(
         UI_Tile_Map__Wrapper ui_tile_map__wrapper) {
     return 
-        is_ui_tile_map_flags__allocated(
-                *ui_tile_map__wrapper
-                .p_ui_tile_map__flags)
-        && is_ui_tile_map__wrapper_with__data(
+        is_ui_tile_map__wrapper_with__data(
                 ui_tile_map__wrapper)
         && is_ui_tile_map__wrapper_with__valid_size(
                 ui_tile_map__wrapper)
@@ -116,7 +113,6 @@ UI_Tile_Map__Wrapper get_ui_tile_map__wrapper(
         UI_Tile_Map_Size catagory_size_of__ui_tile_map) {
     return (UI_Tile_Map__Wrapper) {
         p_ui_tile_data,
-        p_ui_tile_map__flags,
         width_of__tile_map,
         height_of__tile_map,
         catagory_size_of__ui_tile_map
@@ -154,13 +150,6 @@ UI_Tile_Map__Wrapper ui_tile_map__large_to__ui_tile_map_wrapper(
             UI_TILE_MAP__LARGE__WIDTH, 
             UI_TILE_MAP__LARGE__HEIGHT,
             UI_Tile_Map_Size__Large);
-}
-
-static inline
-UI_Tile_Map__Flags *get_p_ui_tile_map_flags_of__ui_tile_map__wrapper(
-        UI_Tile_Map__Wrapper ui_tile_map__wrapper) {
-    return ui_tile_map__wrapper
-        .p_ui_tile_map__flags;
 }
 
 static inline

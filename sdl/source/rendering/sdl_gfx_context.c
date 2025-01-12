@@ -173,7 +173,7 @@ void SDL_initialize_gfx_context(
         SDL_Gfx_Sub_Context__Kind the_kind_of__sub_context) {
     
     if (!get_p_PLATFORM_gfx_context_from__game(p_game)) {
-        p_game->p_PLATFORM_gfx_context =
+        p_game->gfx_context.p_PLATFORM_gfx_context =
             &__SDL_Gfx_Context;
     }
 

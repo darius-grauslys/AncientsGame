@@ -13,7 +13,7 @@ void initialize_entity_as__player(
 
 bool f_sprite_gfx_allocator__player(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value);
 

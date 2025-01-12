@@ -60,7 +60,7 @@ void m_enter_scene_handler_as__test(
             .p_local_player;
     set_camera_to__track_this__entity(
             p_game
-            ->p_PLATFORM_gfx_context
+            ->gfx_context.p_PLATFORM_gfx_context
             ->SDL_graphics_window__main
             .p_active_camera,
             p_player);
@@ -83,46 +83,8 @@ void m_enter_scene_handler_as__test(
         while (await_game_tick(p_game));
         manage_game__pre_render(p_game);
 
-        /// --- do better --- TODO:
-        PLATFORM_Graphics_Window *ptr_array_of__gfx_windows[
-            PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF];
-        Signed_Quantity__i32 quantity_of__windows =
-            SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
-                    SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
-                        get_p_PLATFORM_gfx_context_from__game(
-                            p_game)), 
-                    UI_Window_Kind__Unknown, 
-                    ptr_array_of__gfx_windows, 
-                    PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF);
-        if (quantity_of__windows) {
-            consume_input(
-                    get_p_input_from__game(p_game),
-                    INPUT_USE);
-        }
-        // --- up to here ---
-
         SDL_render_world(p_game);
 
-        if (is_input__game_settings_released(
-                    get_p_input_from__game(p_game))) {
-            if (!quantity_of__windows) {
-                PLATFORM_open_ui(
-                        p_game, 
-                        UI_Window_Kind__In_Game_Settings, 
-                        0);
-            } else {
-                PLATFORM_close_ui(
-                        p_game, 
-                        UI_Window_Kind__Unknown);
-            }
-        }
-        if (SDL_is_input__equip_released(
-                    get_p_input_from__game(p_game))) {
-            PLATFORM_open_ui(
-                    p_game, 
-                    UI_Window_Kind__Equip, 
-                    0);
-        }
         manage_game__post_render(p_game);
     }
 }

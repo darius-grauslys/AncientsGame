@@ -39,4 +39,10 @@ Sprite_Gfx_Allocation_Manager
     return &p_gfx_context->sprite_gfx_allocation_manager;
 }
 
+static inline
+Graphics_Window_Manager *get_p_graphics_window_manager_from__gfx_context(
+        Gfx_Context *p_gfx_context) {
+    return &p_gfx_context->graphics_window_manager;
+}
+
 #endif

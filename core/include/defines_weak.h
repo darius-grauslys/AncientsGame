@@ -847,7 +847,7 @@ typedef struct Typer_t Typer;
 /// This is an abstraction for a "sub-context" for graphics.
 ///
 typedef struct PLATFORM_Graphics_Window_t PLATFORM_Graphics_Window;
-typedef struct Graphics_Window__Wrapper_t Graphics_Window__Wrapper;
+typedef struct Graphics_Window_t Graphics_Window;
 
 ///
 /// Types of graphical window abstractions
@@ -872,6 +872,12 @@ typedef enum Graphics_Window_Kind {
     _UI_Window_Kind__In_Game_Settings,
     _UI_Window_Kind__Loading,
     _UI_Window_Kind__Station,
+
+    UI_Window_Kind__Inventory_Column,
+    UI_Window_Kind__Inventory_Column__Small,
+
+    UI_Window_Kind__Equipment,
+    UI_Window_Kind__Station_Items,
 
     World_Window_Kind__Ground,
     World_Window_Kind__Cover,

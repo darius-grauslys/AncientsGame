@@ -14,6 +14,7 @@
 #include "world/tile_logic_record.h"
 #include "world/world.h"
 #include <world/tiles/tile__cover__table.h>
+#include "ui/ui_context.h"
 
 static inline
 void set_tile_cover_as__table__horizontal(
@@ -93,10 +94,10 @@ void f_tile_interact_handler__table(
             &game_action_for__station
             .s_game_action__inventory__entity_source);
 
-    PLATFORM_open_ui(
-            p_game, 
-            UI_Window_Kind__Station,
-            &game_action_for__station);
+    open_ui(
+            &p_game->gfx_context, 
+            &p_game->gfx_context.ui_manager,
+            _UI_Window_Kind__Station);
 }
 
 bool f_tile_handler__place__table(

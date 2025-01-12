@@ -146,7 +146,6 @@ Game_Action PLATFORM_get_gfx_window__game_action(
 }
 
 void PLATFORM_render_ui_tile_map__wrapper_to__gfx_window(
-        Game *p_game,
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture,
@@ -175,6 +174,6 @@ void PLATFORM_render_chunk_as__tiles_into__gfx_window(
 void PLATFORM_update_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Graphics_Window__Wrapper *p_graphics_window_wrapper) {
+        Graphics_Window *p_graphics_window) {
     debug_abort("SDL::PLATFORM_update_gfx_window, impl");
 }

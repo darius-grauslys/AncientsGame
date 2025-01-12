@@ -3,6 +3,7 @@
     <config>
         <include sub_dir="ui/implemented/generated/game/">
             <header path="ui/implemented/generated/game/ui_window__game__hud.h"/>
+            <header path="ui/ui_context.h"/>
             <header path="ui/ui_element.h"/>
             <header path="ui/ui_button.h"/>
             <header path="ui/ui_drop_zone.h"/>
@@ -34,7 +35,7 @@
     </config>
     <ui offset_of__ui_index="3">
         <code>
-            SDL_allocate_ui_for__sdl_ui_window__game__hud(p_game, p_PLATFORM_gfx_window, p_ui_manager);
+            allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_ui_manager);
             toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
         </code>
         <group>
@@ -43,17 +44,16 @@
             </allocate_ui>
             <code>
                 allocate_sprite_for__ui_slider(
-                        p_game,
-                        p_PLATFORM_gfx_window,
+                        p_gfx_context,
+                        p_gfx_window,
                         p_slider);
-                PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__inv_column =
-                    SDL_allocate_background_as__PLATFORM_Gfx_Window(
-                        p_game,
-                        p_PLATFORM_gfx_window,
-                        SDL_Background_Kind__Inventory_Column__Small,
-                        get_vector__3i32(0,0,0));
+                Graphics_Window *p_gfx_window__inv_column =
+                    open_ui(
+                        p_gfx_context,
+                        p_ui_manager,
+                        UI_Window_Kind__Inventory_Column__Small);
                 p_slider->p_ui_data = 
-                    p_PLATFORM_gfx_window__inv_column;
+                    p_gfx_window__inv_column;
             </code>
             <allocate_ui_container x="140" y="100" size="3" stride__y="32" name="p_recipe_and_tools">
                 <drop_zone width="20" height="20" color="55,55,96" m_Receive_Drop_Handler="m_ui_drop_zone__receive_drop_handler__inventory_slot"/>
@@ -101,20 +101,13 @@
         <allocate_ui>
             <button x="100" y="164" width="32" height="16" name="p_button_craft" m_Clicked_Handler="m_ui_button__click_handler__station_craft"/>
         </allocate_ui>
-        <allocate_ui name="p_bg_right">
-            <background x="158" y="74" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__inv_column"/>
-        </allocate_ui>
             <code>
-                PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__station =
-                    SDL_allocate_background_as__PLATFORM_Gfx_Window(
-                        p_game,
-                        p_PLATFORM_gfx_window,
-                        SDL_Background_Kind__Station_Items,
-                        get_vector__3i32(0,0,0));
+                Graphics_Window *p_gfx_window__station =
+                    open_ui(
+                        p_gfx_context,
+                        p_ui_manager,
+                        UI_Window_Kind__Station_Items);
             </code>
-            <allocate_ui name="p_background__station_items">
-                <background x="0" y="0" width="256" height="256" p_gfx_window="p_PLATFORM_gfx_window__station"/>
-            </allocate_ui>
     </ui>
 </root>
 

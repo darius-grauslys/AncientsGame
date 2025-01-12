@@ -405,7 +405,7 @@ typedef struct Sprite_Wrapper_t {
 
 typedef bool (*f_Sprite_Gfx_Allocator)(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value);
 
@@ -705,19 +705,19 @@ typedef struct Sprite_Allocation_Specification_t {
 
 #define MAX_QUANTITY_OF__GRAPHICS_WINDOWS 8
 
-typedef struct Graphics_Window__Wrapper_t {
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window;
+typedef struct Graphics_Window_t {
     Vector__3i32 origin_of__gfx_window;
     Vector__3i32 position_of__gfx_window;
     Vector__3i32 position_of__gfx_window__minimum;
     Vector__3i32 position_of__gfx_window__maximum;
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window;
+    struct Graphics_Window_t *p_child__graphics_window;
     Graphics_Window_Kind the_kind_of__window;
     Index__u8 priority_of__window;
-    Index__u8 index_of__child_window;
-} Graphics_Window__Wrapper;
+} Graphics_Window;
 
 typedef struct Graphics_Window_Manager_t {
-    Graphics_Window__Wrapper graphics_windows[
+    Graphics_Window graphics_windows[
         MAX_QUANTITY_OF__GRAPHICS_WINDOWS];
 } Graphics_Window_Manager;
 
@@ -1839,12 +1839,13 @@ typedef struct UI_Context_t UI_Context;
 
 typedef bool (*f_UI_Window__Load)(
         Gfx_Context *p_gfx_context,
-        Graphics_Window_Kind the_kind_of__window);
+        Graphics_Window *p_gfx_window,
+        UI_Manager *p_ui_manager);
 
 typedef bool (*f_UI_Window__Close)(
         Gfx_Context *p_gfx_context,
         PLATFORM_Graphics_Window p_PLATFORM_gfx_window,
-        Graphics_Window_Kind the_kind_of__window);
+        UI_Manager *p_ui_manager);
 
 typedef struct UI_Window_Record_t {
     f_UI_Window__Load f_ui_window__load;
@@ -2369,7 +2370,7 @@ typedef struct Game_t {
     Log log__local;
     Log log__system;
 
-    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+    Gfx_Context gfx_context;
     PLATFORM_Audio_Context *p_PLATFORM_audio_context;
     PLATFORM_File_System_Context *p_PLATFORM_file_system_context;
 

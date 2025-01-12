@@ -1,5 +1,6 @@
 #include <ui/implemented/generated/game/ui_window__game__equip.h>
 #include <ui/implemented/generated/game/ui_window__game__hud.h>
+#include <ui/ui_context.h>
 #include <ui/ui_element.h>
 #include <ui/ui_button.h>
 #include <ui/ui_drop_zone.h>
@@ -13,28 +14,27 @@
 #include <ui/ui_drop_zone__equipment_slot.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-UI_Element *allocate_ui_for__ui_window__game__equip(Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager){
+bool allocate_ui_for__ui_window__game__equip(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-allocate_ui_for__ui_window__game__hud(p_gfx_context, p_PLATFORM_gfx_window, p_ui_manager);
+allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_ui_manager);
     toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__slider(p_slider, 16, 80, get_vector__3i32(196 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
 
 allocate_sprite_for__ui_slider(
     p_gfx_context,
-    p_PLATFORM_gfx_window,
+    p_gfx_window,
     p_slider);
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__inv_column =
-    SDL_allocate_background_as__PLATFORM_Gfx_Window(
-    p_game,
-    p_PLATFORM_gfx_window,
-    SDL_Background_Kind__Inventory_Column,
-    get_vector__3i32(0,0,0));
+    Graphics_Window *p_gfx_window__inv_column =
+    open_ui(
+    p_gfx_context,
+    p_ui_manager,
+    UI_Window_Kind__Inventory_Column);
     p_slider->p_ui_data = 
-    p_PLATFORM_gfx_window__inv_column;
+    p_gfx_window__inv_column;
 
     UI_Element *p_button_filter__usable = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_button_filter__usable, 16, 16, get_vector__3i32(228 + 0, 104 + 0, 0), m_ui_button__clicked_handler__default, false, false);
@@ -208,17 +208,12 @@ set_ui_element_as__the_parent_of__this_ui_element(
     p_ui_manager,
     UI_WINDOW__GAME__EQUIP_P_INVENTORY_COLUMN_13));
 
-    UI_Element *p_background__inv_column = allocate_ui_element_from__ui_manager(p_ui_manager);
-    SDL_initialize_ui_element_as__background(p_background__inv_column, 256, 256, get_vector__3i32(88 + 0, 74 + 0, 0), p_PLATFORM_gfx_window__inv_column);
+Graphics_Window *p_gfx_window__equipment =
+    open_ui(
+    p_gfx_context,
+    p_ui_manager,
+    UI_Window_Kind__Equipment);
 
-PLATFORM_Graphics_Window *p_PLATFORM_gfx_window__equipment =
-    SDL_allocate_background_as__PLATFORM_Gfx_Window(
-    p_game,
-    p_PLATFORM_gfx_window,
-    SDL_Background_Kind__Equipment,
-    get_vector__3i32(0,0,0));
-
-    UI_Element *p_background__equipment = allocate_ui_element_from__ui_manager(p_ui_manager);
-    SDL_initialize_ui_element_as__background(p_background__equipment, 256, 256, get_vector__3i32(0 + 0, 0 + 0, 0), p_PLATFORM_gfx_window__equipment);
-
+return true;
+;
 }

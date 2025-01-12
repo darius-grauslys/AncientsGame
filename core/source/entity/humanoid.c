@@ -152,15 +152,16 @@ void humanoid__poll_player_update_inventory(
             break;
         case Entity_Kind__Player:
             // TODO: dispatch to player via game_action
-            PLATFORM_refresh_ui(
-                    p_game, 
-                    UI_Window_Kind__Equip);
-            PLATFORM_refresh_ui(
-                    p_game, 
-                    UI_Window_Kind__Trade);
-            PLATFORM_refresh_ui(
-                    p_game, 
-                    UI_Window_Kind__Station);
+#warning TODO: impl
+            // PLATFORM_refresh_ui(
+            //         p_game, 
+            //         UI_Window_Kind__Equip);
+            // PLATFORM_refresh_ui(
+            //         p_game, 
+            //         UI_Window_Kind__Trade);
+            // PLATFORM_refresh_ui(
+            //         p_game, 
+            //         UI_Window_Kind__Station);
             break;
     }
 }

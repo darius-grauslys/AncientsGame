@@ -11,6 +11,7 @@
 #include "world/tile_logic_record.h"
 #include <world/tiles/tile__cover__chest.h>
 #include <serialization/serialized_field.h>
+#include "ui/ui_context.h"
 
 bool set_tile_cover_as__chest(
         Game *p_game,
@@ -91,10 +92,10 @@ void f_tile_interact_handler__chest(
             p_inventory, 
             uuid);
 
-    PLATFORM_open_ui(
-            p_game, 
-            UI_Window_Kind__Trade,
-            0);
+    open_ui(
+            &p_game->gfx_context, 
+            &p_game->gfx_context.ui_manager,
+            _UI_Window_Kind__Trade);
 }
 
 bool f_tile_handler__place__chest(

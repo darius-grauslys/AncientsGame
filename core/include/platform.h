@@ -106,50 +106,13 @@ void PLATFORM_put_char_in__typer(
         Typer *p_typer,
         unsigned char letter);
 
-///
-/// Depending on some implementations, this might be no-op,
-/// but nonetheless it is routinely invoked each tick to
-/// provide a render loop from core.
-///
-/// This is invoked RIGHT BEFORE PLATFORM_post_render.
-///
-// TODO: remove
-void PLATFORM_update_ui(
-        Game *p_game);
-
-///
-/// TODO: this will be called on game_action
-///
-// TODO: remove
-void PLATFORM_refresh_ui(
-        Game *p_game,
-        UI_Window_Kind the_kind_of__ui_window_to__refresh);
-
-///
-/// Closes the specified UI. Depending on the backend this
-/// might cause a UI window to open. For example, on NDS
-/// this will close the specified UI Window, and transition
-/// to the UI Idle window.
-///
-// TODO: remove
-void PLATFORM_close_ui(
-        Game *p_game,
-        enum UI_Window_Kind the_kind_of__ui_window_to__close);
-
-// TODO: remove
-enum UI_Window_Kind PLATFORM_get_last_opened_ui(void);
-// TODO: remove
-Quantity__u8 PLATFORM_get_all_opened_ui(
-        enum UI_Window_Kind *p_ui_window_kind__buffer,
-        Quantity__u8 size_of__buffer);
-
 // TODO: remove
 Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite);
 
@@ -326,8 +289,12 @@ Vector__3i32 PLATFORM_get_gfx_window__position(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 PLATFORM_Graphics_Window *PLATFORM_allocate_gfx_window(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         Texture_Flags texture_flags_for__gfx_window);
+
+void PLATFORM_release_gfx_window(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_graphics_window);
 
 void PLATFORM_render_ui_tile_map__wrapper_to__gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -362,7 +329,7 @@ void PLATFORM_render_chunk_as__voxels_into__gfx_window(
 void PLATFORM_update_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Graphics_Window__Wrapper *p_graphics_window_wrapper);
+        Graphics_Window *p_graphics_window);
 
 ///
 /// SECTION_scene

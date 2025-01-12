@@ -72,15 +72,13 @@ void initialize_entity_as__skeleton(
 
 bool f_sprite_gfx_allocator__skeleton(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value) {
     // assume enum value is skeleton.
 
     Aliased_Texture_Manager *p_aliased_texture_manager =
         get_p_aliased_texture_manager_from__gfx_context(p_gfx_context);
-    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 
     PLATFORM_Texture *p_PLATFORM_texture_for__skeleton =
         get_p_PLATFORM_texture_by__alias(
@@ -92,8 +90,8 @@ bool f_sprite_gfx_allocator__skeleton(
     
     p_sprite_wrapper->p_sprite = 
         PLATFORM_allocate_sprite(
-            p_PLATFORM_gfx_context, 
-            p_PLATFORM_gfx_window,
+            p_gfx_context, 
+            p_gfx_window,
             p_PLATFORM_texture_for__skeleton, 
             TEXTURE_FLAG__SIZE_16x16);
     return p_sprite_wrapper->p_sprite;

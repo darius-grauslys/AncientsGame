@@ -179,7 +179,7 @@ PLATFORM_Audio_Context *get_p_PLATFORM_audio_context_from__game(
 
 static inline
 PLATFORM_Gfx_Context *get_p_PLATFORM_gfx_context_from__game(Game *p_game) {
-    return p_game->p_PLATFORM_gfx_context;
+    return p_game->gfx_context.p_PLATFORM_gfx_context;
 }
 
 static inline

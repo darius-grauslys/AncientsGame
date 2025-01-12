@@ -22,7 +22,7 @@ int PLATFORM_main(Game *p_game) {
             | SDL_INIT_AUDIO
             | SDL_INIT_EVENTS);
 
-    p_game->p_PLATFORM_gfx_context =
+    p_game->gfx_context.p_PLATFORM_gfx_context =
         &__SDL_Gfx_Context;
     p_game->p_PLATFORM_file_system_context =
         &__SDL_file_system_context;

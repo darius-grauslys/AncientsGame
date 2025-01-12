@@ -37,7 +37,7 @@ void m_ui_slider__render_handler__default(
 
 bool f_sprite_gfx_allocator__ui_slider(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         u32 enum_value);
 
@@ -99,11 +99,11 @@ void set_ui_slider_at__this_distance_u32(
 static inline
 void allocate_sprite_for__ui_slider(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        Graphics_Window *p_graphics_window,
         UI_Element *p_ui_slider) {
     allocate_sprite__ui(
         p_gfx_context, 
-        p_PLATFORM_graphics_window, 
+        p_graphics_window, 
         get_p_ui_sprite_gfx_allocation_manager_from__gfx_context(
             p_gfx_context),
         &p_ui_slider->ui_sprite_wrapper,

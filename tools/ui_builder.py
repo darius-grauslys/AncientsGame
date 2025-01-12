@@ -662,17 +662,17 @@ def generate_source__ui(xml_node__ui):
     generate_source_h__with_literal(\
             "// THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.\n")
     generate_source_h__with_literal(\
-            "\nUI_Element *allocate_ui_for__{}".format(\
+            "\nbool allocate_ui_for__{}".format(\
             config.source_name))
-    generate_source_h__arguments(["Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
+    generate_source_h__arguments(["Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_h__with_literal(";\n")
 
     generate_source_c__with_literal(\
             "// THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.\n")
     generate_source_c__with_literal(\
-            "\nUI_Element *allocate_ui_for__{}".format(\
+            "\nbool allocate_ui_for__{}".format(\
             config.source_name))
-    generate_source_c__arguments(["Gfx_Context *p_gfx_context, PLATFORM_Graphics_Window *p_PLATFORM_gfx_window, UI_Manager *p_ui_manager"])
+    generate_source_c__arguments(["Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager"])
     generate_source_c__with_literal("{\n")
 
     context_stack = deque()
@@ -697,6 +697,8 @@ def generate_source__ui(xml_node__ui):
     current_element_id = get_int_from_xml_or__use_this(xml_node__ui, "offset_of__ui_index", 0)
     for element in xml_node__ui:
         construct_ui_from__xml_element(element, context_stack)
+    generate_source_c__with_literal("return true;\n")
+    generate_source_c__new_line()
     generate_source_c__with_literal("}\n")
     generate_source_h__with_literal("#endif\n")
 

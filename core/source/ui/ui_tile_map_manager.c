@@ -5,7 +5,6 @@
 #include "ui/ui_tile_map.h"
 
 const UI_Tile_Map__Wrapper UI_TILE_MAP__WRAPPER__INVALID = {
-    UI_TILE_MAP__FLAGS__NONE,
     0,
     0,
     0,

@@ -9,6 +9,7 @@
 #include "rendering/texture.h"
 #include "sdl_defines.h"
 #include <rendering/sdl_sprite_manager.h>
+#include "rendering/gfx_context.h"
 #include <defines.h>
 
 void SDL_initialize_sprite_manager(
@@ -85,13 +86,15 @@ void SDL_dispose_sprite_manager(
 }
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite) {
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
+
     SDL_Sprite_Manager *p_SDL_sprite_manager =
-        SDL_get_p_sprite_manager_from__gfx_context(
-                p_PLATFORM_gfx_context);
+        SDL_get_p_sprite_manager_from__gfx_context(p_PLATFORM_gfx_context);
 
     PLATFORM_Sprite *p_PLATFORM_sprite =
         SDL_allocate_sprite_with__sprite_manager(
