@@ -22,6 +22,7 @@
 #include "sdl_defines.h"
 #include "sdl_numerics.h"
 #include "timer.h"
+#include "ui/implemented/ui_registrar__implemented.h"
 #include "vectors.h"
 #include "world/serialization/world_directory.h"
 #include "world/world.h"
@@ -38,6 +39,9 @@ void m_load_scene_as__test_handler(
     load_aliased_textures(
             p_game, 
             get_p_aliased_texture_manager_from__game(p_game));
+    
+    register_ui_windows(
+            get_p_gfx_context_from__game(p_game));
 }
 
 void m_enter_scene_handler_as__test(

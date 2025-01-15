@@ -858,37 +858,6 @@ typedef struct Graphics_Window_t Graphics_Window;
 ///
 typedef enum Graphics_Window_Kind {
     Graphics_Window_Kind__None,
-    _UI_Window_Kind__Idle,
-    _UI_Window_Kind__Equip,
-    _UI_Window_Kind__Trade,
-    _UI_Window_Kind__Labor,
-    _UI_Window_Kind__Typer,
-
-    _UI_Window_Kind__Main_Menu,
-    _UI_Window_Kind__Singleplayer,
-    _UI_Window_Kind__Multiplayer,
-    _UI_Window_Kind__Settings,
-
-    _UI_Window_Kind__In_Game_Settings,
-    _UI_Window_Kind__Loading,
-    _UI_Window_Kind__Station,
-
-    UI_Window_Kind__Inventory_Column,
-    UI_Window_Kind__Inventory_Column__Small,
-
-    UI_Window_Kind__Equipment,
-    UI_Window_Kind__Station_Items,
-
-    World_Window_Kind__Ground,
-    World_Window_Kind__Cover,
-    World_Window_Kind__Cover__Upper,
-    World_Window_Kind__HUD,
-
-    Graphics_Window_Kind__Unknown
-} Graphics_Window_Kind;
-
-typedef enum UI_Window_Kind {
-    UI_Window_Kind__None = 0,
     UI_Window_Kind__Idle,
     UI_Window_Kind__Equip,
     UI_Window_Kind__Trade,
@@ -904,8 +873,19 @@ typedef enum UI_Window_Kind {
     UI_Window_Kind__Loading,
     UI_Window_Kind__Station,
 
-    UI_Window_Kind__Unknown
-} UI_Window_Kind;
+    UI_Window_Kind__Inventory_Column,
+    UI_Window_Kind__Inventory_Column__Small,
+
+    UI_Window_Kind__Equipment,
+    UI_Window_Kind__Station_Items,
+
+    World_Window_Kind__Ground,
+    World_Window_Kind__Cover,
+    World_Window_Kind__Cover__Upper,
+    World_Window_Kind__HUD,
+
+    Graphics_Window_Kind__Unknown
+} Graphics_Window_Kind;
 
 enum Sprite_Animation_Kind {
     Sprite_Animation_Kind__None,
@@ -1079,6 +1059,8 @@ enum UI_Element_Kind {
 ///
 /// SECTION_world
 ///
+
+typedef struct World_t World;
 
 // TODO: change this to reflect new tileset
 typedef enum Tile_Kind {

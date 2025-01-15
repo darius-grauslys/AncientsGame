@@ -1,0 +1,52 @@
+    
+        
+            Alright so what would be nice is to move the engine to /opt/lavender
+            Here we will have core, backends, and tools.
+
+            The engine will have a CLI tool "./lavender"
+
+                lavender new Bubbles_Game
+
+            This will make Bubbles_Game directory, copy the base directory Makefile
+            and produce the following:
+            ./bubbles_game
+            |_ include
+            |_ source
+            |_ Makefile.build
+            |_ Makefile.include
+            ./profile
+            |_ Makefile.profile
+
+                lavender build
+
+            this will build the game with all platforms in Makefile.profile.
+            By default this is just SDL.
+
+                lavender run
+
+            this will run the build, only works if there is only one platform.
+            If there are multiple the user must specify
+
+                lavender run --platform sdl
+
+            default launchers are found in Makefile.profile
+
+                run_sdl:
+                    ./build/sdl/${GAME_EXECUTABLE}
+
+                run_nds:
+                    melonDS ./build/nds/${GAME_EXECUTABLE}.nds
+
+            ..
+
+                lavender tool ui_builder
+
+            tool sub-command runs tools from ./tools
+
+            Eventually, will be nice to have:
+
+                lavender-gui
+
+            which will be the GUI editor of the engine!
+
+

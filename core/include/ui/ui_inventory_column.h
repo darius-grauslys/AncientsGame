@@ -2,10 +2,11 @@
 #define UI_INVENTORY_COLUMN_H
 
 #include "defines.h"
+#include "defines_weak.h"
 
 bool allocate_ui_item_stack(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_graphics_window,
         UI_Manager *p_ui_manager,
         Item_Stack *p_item_stack,
         UI_Element *p_ui_element__inventory_slot);
@@ -22,8 +23,8 @@ bool allocate_ui_item_stack(
 /// to relay state modification.
 ///
 void allocate_ui_inventory_column_into__ui_element_container(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         UI_Element *p_ui_element,
         Inventory *p_inventory);
 

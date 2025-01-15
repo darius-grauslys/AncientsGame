@@ -77,13 +77,16 @@ typedef struct PLATFORM_Texture_t {
 } PLATFORM_Texture;
 
 typedef struct PLATFORM_Graphics_Window_t {
+#warning TODO: remove ui_manager here.
     UI_Manager SDL_graphics_window__ui_manager;
+#warning TODO: remove ui_associated game action here.
     Game_Action associated_game_action;
     PLATFORM_Texture *p_SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
+#warning TODO: gfx_context here.
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
+#warning TODO: remove active camera here.
     Camera *p_active_camera;
-    UI_Window_Kind the_kind_of__ui_window;
     UI_Tile_Map__Wrapper SDL_graphics_window__ui_tile_map__wrapper;
     Vector__3i32F4 SDL_position_of__graphics_window;
     Vector__3i32F4 SDL_origin_of__graphics_window;

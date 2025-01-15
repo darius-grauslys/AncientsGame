@@ -1840,21 +1840,21 @@ typedef struct UI_Context_t UI_Context;
 typedef bool (*f_UI_Window__Load)(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
+        World *p_world,
         UI_Manager *p_ui_manager);
 
 typedef bool (*f_UI_Window__Close)(
         Gfx_Context *p_gfx_context,
-        PLATFORM_Graphics_Window p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
         UI_Manager *p_ui_manager);
 
-typedef struct UI_Window_Record_t {
-    f_UI_Window__Load f_ui_window__load;
-    f_UI_Window__Close f_ui_window__close;
-} UI_Window_Record;
 
 typedef struct UI_Context_t {
     UI_Manager ui_manager;
-    UI_Window_Record ui_window_records[
+    f_UI_Window__Load F_ui_window__loaders[
+        Graphics_Window_Kind__Unknown];
+    f_UI_Window__Close F_ui_window__closers[
         Graphics_Window_Kind__Unknown];
 } UI_Context;
 
@@ -2321,6 +2321,11 @@ typedef struct World_t {
     Tile_Logic_Manager tile_logic_manager;
     World_Parameters world_parameters;
 
+    Inventory_Manager   inventory_manager;
+    Item_Manager        item_manager;
+    Item_Recipe_Manager item_recipe_manager;
+    Station_Manager     station_manager;
+
     Camera camera;
     PLATFORM_Graphics_Window *p_PLATFORM_graphics_window_for__world;
 
@@ -2353,14 +2358,6 @@ typedef struct Game_t {
 
     World world;
     Repeatable_Psuedo_Random repeatable_pseudo_random;
-
-    Inventory_Manager   inventory_manager;
-    Item_Manager        item_manager;
-    Item_Recipe_Manager item_recipe_manager;
-    Station_Manager     station_manager;
-
-    Sprite_Gfx_Allocation_Manager sprite_gfx_allocation_manager;
-    Aliased_Texture_Manager aliased_texture_manager;
 
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;

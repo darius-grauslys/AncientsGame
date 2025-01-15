@@ -95,7 +95,9 @@ void f_tile_interact_handler__chest(
     open_ui(
             &p_game->gfx_context, 
             &p_game->gfx_context.ui_manager,
-            _UI_Window_Kind__Trade);
+#warning take p_world instead here.
+            get_p_world_from__game(p_game),
+            UI_Window_Kind__Trade);
 }
 
 bool f_tile_handler__place__chest(

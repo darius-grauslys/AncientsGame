@@ -1,4 +1,5 @@
 #include "ui/ui_inventory_column.h"
+#include "defines_weak.h"
 #include "game.h"
 #include "inventory/inventory.h"
 #include "inventory/item_stack.h"
@@ -11,8 +12,8 @@
 #include "ui/ui_slider.h"
 
 bool allocate_ui_item_stack(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_graphics_window,
         UI_Manager *p_ui_manager,
         Item_Stack *p_item_stack,
         UI_Element *p_ui_element__inventory_slot) {
@@ -22,7 +23,8 @@ bool allocate_ui_item_stack(
                 p_ui_manager,
                 p_ui_element__inventory_slot
                 ->p_child, 
-                p_game);
+#warning do not pass null here
+                0);
     }
     point_serialized_field_to__this_serialized_struct(
             &p_ui_element__inventory_slot->s_serialized_field, 
@@ -49,9 +51,10 @@ bool allocate_ui_item_stack(
 
     bool result_of__sprite_allocation =
         allocate_sprite__item(
-                p_game,
-                p_PLATFORM_graphics_window,
-                get_p_sprite_gfx_allocation_manager_from__game(p_game),
+                p_gfx_context,
+                p_graphics_window,
+                get_p_sprite_gfx_allocation_manager_from__gfx_context(
+                    p_gfx_context),
                 &p_child->ui_sprite_wrapper,
                 p_item_stack
                 ->item.the_kind_of_item__this_item_is);
@@ -66,16 +69,17 @@ bool allocate_ui_item_stack(
 
 
 void allocate_ui_inventory_column_into__ui_element_container(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         UI_Element *p_ui_element__inventory_column,
         Inventory *p_inventory) {
     if (!p_inventory)
         return;
 
     UI_Manager *p_ui_manager =
+#warning TODO: remove PLATFORM_ func here, and take ui_manager from p_gfx_window
         PLATFORM_get_p_ui_manager_from__gfx_window(
-                p_PLATFORM_gfx_window);
+                p_gfx_window->p_PLATFORM_gfx_window);
     UI_Element *p_ui_element__current_inventory_slot =
         p_ui_element__inventory_column;
     Index__u32 index_of__inventory_column_slot = 0;
@@ -87,11 +91,11 @@ void allocate_ui_inventory_column_into__ui_element_container(
         if (!p_item_stack) 
             break;
         if (allocate_ui_item_stack(
-                p_game,
-                p_PLATFORM_gfx_window,
-                p_ui_manager,
-                p_item_stack,
-                p_ui_element__current_inventory_slot)) {
+                    p_gfx_context,
+                    p_gfx_window,
+                    p_ui_manager,
+                    p_item_stack,
+                    p_ui_element__current_inventory_slot)) {
             break;
         }
         index_of__inventory_column_slot++;

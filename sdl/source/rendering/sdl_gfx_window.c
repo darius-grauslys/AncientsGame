@@ -16,7 +16,6 @@ void SDL_initialize_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Camera *p_camera,
-        UI_Window_Kind the_kind_of__ui_window,
         Vector__3i32F4 position_of__graphics_window__3i32F4) {
     initialize_p_game_action(
             &p_PLATFORM_gfx_window
@@ -41,9 +40,6 @@ void SDL_initialize_gfx_window(
         ->p_SDL_graphics_window__data = 0;
     p_PLATFORM_gfx_window
         ->is_allocated = false;
-    p_PLATFORM_gfx_window
-        ->the_kind_of__ui_window =
-        the_kind_of__ui_window;
     p_PLATFORM_gfx_window
         ->SDL_position_of__graphics_window =
         position_of__graphics_window__3i32F4;

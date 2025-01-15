@@ -16,8 +16,8 @@
 
 void initialize_entity_as__humanoid(
         Game *p_game,
-        PLATFORM_Graphics_Window 
-            *p_PLATFORM_gfx_window,
+        Graphics_Window 
+            *p_gfx_window,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
@@ -25,7 +25,7 @@ void initialize_entity_as__humanoid(
         Quantity__u32 height) {
     initialize_entity_with__sprite(
             p_game,
-            p_PLATFORM_gfx_window,
+            p_gfx_window,
             p_entity, 
             kind_of_entity, 
             position__3i32F4, 

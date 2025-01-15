@@ -12,12 +12,13 @@
 
 void allocate_ui_equipment_into__ui_element_container(
         Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         UI_Element *p_ui_element,
         Equipment *p_equipment) {
     UI_Manager *p_ui_manager =
+#warning TODO: remove PLATFORM_ func here, and take ui_manager from p_gfx_window
         PLATFORM_get_p_ui_manager_from__gfx_window(
-                p_PLATFORM_gfx_window);
+                p_gfx_window->p_PLATFORM_gfx_window);
     UI_Element *p_ui_element__current_equipment_slot =
         p_ui_element;
     Index__u32 index_of__inventory_column_slot = 0;
@@ -54,8 +55,8 @@ void allocate_ui_equipment_into__ui_element_container(
             if (!is_p_item_stack__empty(p_item_stack)) {
                 bool result_of__sprite_allocation =
                     allocate_sprite__item(
-                            p_game,
-                            p_PLATFORM_gfx_window,
+                            get_p_gfx_context_from__game(p_game),
+                            p_gfx_window,
                             get_p_sprite_gfx_allocation_manager_from__game(
                                 p_game),
                             &p_child->ui_sprite_wrapper,

@@ -32,6 +32,7 @@ allocate_sprite_for__ui_slider(
     open_ui(
     p_gfx_context,
     p_ui_manager,
+    0,
     UI_Window_Kind__Inventory_Column__Small);
     p_slider->p_ui_data = 
     p_gfx_window__inv_column;
@@ -203,6 +204,7 @@ Graphics_Window *p_gfx_window__station =
     open_ui(
     p_gfx_context,
     p_ui_manager,
+    0,
     UI_Window_Kind__Station_Items);
 return true;
 ;

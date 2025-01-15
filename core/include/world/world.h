@@ -11,6 +11,26 @@ Camera *get_p_camera_from__world(World *p_world) {
     return &p_world->camera;
 }
 
+static inline
+Inventory_Manager *get_p_inventory_manager_from__world(World *p_world) {
+    return &p_world->inventory_manager;
+}
+
+static inline
+Item_Manager *get_p_item_manager_from__world(World *p_world) {
+    return &p_world->item_manager;
+}
+
+static inline
+Item_Recipe_Manager *get_p_item_recipe_manager_from__world(World *p_world) {
+    return &p_world->item_recipe_manager;
+}
+
+static inline
+Station_Manager *get_p_station_manager_from__world(World *p_world) {
+    return &p_world->station_manager;
+}
+
 static inline 
 Entity_Manager *get_p_entity_manager_from__world(World *p_world) {
     return &p_world->entity_manager;

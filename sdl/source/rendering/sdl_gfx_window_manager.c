@@ -141,7 +141,6 @@ PLATFORM_Graphics_Window *SDL_allocate_gfx_window(
             p_PLATFORM_gfx_context, 
             p_PLATFORM_gfx_window, 
             p_camera,
-            UI_Window_Kind__Unknown, 
             VECTOR__3i32F4__0_0_0);
 
     f_SDL_allocate_gfx_window(
@@ -257,48 +256,3 @@ void SDL_release_gfx_window(
             p_PLATFORM_gfx_window);
 }
 
-Signed_Quantity__i32 SDL_get_p_PLATFORM_gfx_windows_by__type_from__manager(
-        SDL_Gfx_Window_Manager *p_SDL_gfx_window_manager,
-        UI_Window_Kind the_kind_of__window_to__get,
-        PLATFORM_Graphics_Window **p_PLATFORM_gfx_windows,
-        Quantity__u32 size_of__ptr_buffer) {
-    Signed_Quantity__i32 quantity_of__gfx_windows = 0;
-    memset(
-            p_PLATFORM_gfx_windows,
-            0,
-            sizeof(PLATFORM_Graphics_Window*)
-            * size_of__ptr_buffer);
-    for (Index__u32 index_of__gfx_window = 0;
-            index_of__gfx_window
-            < PLATFORM__GFX_WINDOW__MAX_QUANTITY_OF;
-            index_of__gfx_window++) {
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window =
-            SDL_get_p_PLATFORM_gfx_window_by__index_from__manager(
-                    p_SDL_gfx_window_manager, 
-                    index_of__gfx_window);
-
-        if (!SDL_is_gfx_window__allocated(
-                    p_PLATFORM_gfx_window)) {
-            continue;
-        }
-
-        if (!SDL_is_gfx_window_of__this_ui_window_kind(
-                    p_PLATFORM_gfx_window, 
-                    the_kind_of__window_to__get)
-            && the_kind_of__window_to__get
-            != UI_Window_Kind__Unknown) {
-            continue;
-        }
-
-        if (quantity_of__gfx_windows
-                >= size_of__ptr_buffer) {
-            return -1;
-        }
-
-        p_PLATFORM_gfx_windows[
-            quantity_of__gfx_windows++] =
-                p_PLATFORM_gfx_window;
-    }
-
-    return quantity_of__gfx_windows;
-}

@@ -6,7 +6,7 @@
 
 void allocate_ui_equipment_into__ui_element_container(
         Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Graphics_Window *p_gfx_window,
         UI_Element *p_ui_element,
         Equipment *p_equipment);
 

@@ -346,8 +346,8 @@ void m_deserialize__chunk(
                     get_p_entity_manager_from__game(p_game), 
                     Entity_Kind__None, 
                     VECTOR__3i32F4__OUT_OF_BOUNDS, 
-                    get_p_world_from__game(p_game)
-                    ->p_PLATFORM_graphics_window_for__world);
+#warning TODO: make gfx window not null here
+                    0); // TODO <- not null
         if (!p_entity) {
             debug_error("m_deserialize__chunk, p_entity is null. EM full?");
             break;

@@ -16,8 +16,8 @@ Entity *allocate_entity_in__entity_manager(
         Entity_Manager *p_entity_manager,
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position,
-        PLATFORM_Graphics_Window
-            *p_PLATFORM_graphics_window);
+        Graphics_Window
+            *p_graphics_window);
 
 ///
 /// Release entity from the entity_manager object pool.

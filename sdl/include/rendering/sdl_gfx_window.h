@@ -10,7 +10,6 @@ void SDL_initialize_gfx_window(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Camera *p_camera,
-        UI_Window_Kind the_kind_of__ui_window,
         Vector__3i32F4 position_of__graphics_window__3i32F4);
 
 void SDL_compose_gfx_window(
@@ -28,7 +27,6 @@ void SDL_initialize_gfx_window_as__deallocated(
             0, 
             p_PLATFORM_gfx_window,
             0,
-            UI_Window_Kind__None,
             VECTOR__3i32F4__OUT_OF_BOUNDS);
 }
 
@@ -54,13 +52,6 @@ void SDL_set_gfx_window_as__deallocated(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     p_PLATFORM_gfx_window
         ->is_allocated = false;
-}
-
-static inline
-UI_Window_Kind SDL_get_ui_window_kind_of__gfx_window(
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
-    return p_PLATFORM_gfx_window
-        ->the_kind_of__ui_window;
 }
 
 static inline

@@ -214,7 +214,8 @@ Entity *allocate_entity_into__world(
                 get_p_entity_manager_from__world(p_world),
                 the_kind_of_entity,
                 position__3i32F4,
-                p_world->p_PLATFORM_graphics_window_for__world);
+#warning TODO: make gfx window not null here
+                0); // TODO: gfx window needs to not be null.
     add_entity_to__world(
             p_world,
             p_entity);

@@ -54,15 +54,6 @@ PLATFORM_Graphics_Window *SDL_get_main_graphics_window_from__gfx_context(
 }
 
 static inline
-bool SDL_is_gfx_window_of__this_ui_window_kind(
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        UI_Window_Kind the_kind_of_window) {
-    return SDL_get_ui_window_kind_of__gfx_window(
-            p_PLATFORM_gfx_window)
-        == the_kind_of_window;
-}
-
-static inline
 UI_Tile_Map_Manager *SDL_get_p_ui_tile_map_manager_from__PLATFORM_gfx_context(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context) {
     return &p_PLATFORM_gfx_context

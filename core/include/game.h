@@ -91,12 +91,12 @@ World *get_p_world_from__game(Game *p_game) {
 static inline 
 Sprite_Gfx_Allocation_Manager *get_p_sprite_gfx_allocation_manager_from__game(
         Game *p_game) {
-    return &p_game->sprite_gfx_allocation_manager;
+    return &p_game->gfx_context.sprite_gfx_allocation_manager;
 }
 
 static inline 
 Aliased_Texture_Manager *get_p_aliased_texture_manager_from__game(Game *p_game) {
-    return &p_game->aliased_texture_manager;
+    return &p_game->gfx_context.aliased_texture_manager;
 }
 
 static inline
@@ -121,22 +121,26 @@ Path_List_Manager *get_p_path_list_manager_from__game(Game *p_game) {
 
 static inline
 Inventory_Manager *get_p_inventory_manager_from__game(Game *p_game) {
-    return &p_game->inventory_manager;
+    return get_p_inventory_manager_from__world(
+            get_p_world_from__game(p_game));
 }
 
 static inline
 Item_Manager *get_p_item_manager_from__game(Game *p_game) {
-    return &p_game->item_manager;
+    return get_p_item_manager_from__world(
+            get_p_world_from__game(p_game));
 }
 
 static inline
 Item_Recipe_Manager *get_p_item_recipe_manager_from__game(Game *p_game) {
-    return &p_game->item_recipe_manager;
+    return get_p_item_recipe_manager_from__world(
+            get_p_world_from__game(p_game));
 }
 
 static inline
 Station_Manager *get_p_station_manager_from__game(Game *p_game) {
-    return &p_game->station_manager;
+    return get_p_station_manager_from__world(
+            get_p_world_from__game(p_game));
 }
 
 static inline 
@@ -175,6 +179,11 @@ static inline
 PLATFORM_Audio_Context *get_p_PLATFORM_audio_context_from__game(
         Game *p_game) {
     return p_game->p_PLATFORM_audio_context;
+}
+
+static inline
+Gfx_Context *get_p_gfx_context_from__game(Game *p_game) {
+    return &p_game->gfx_context;
 }
 
 static inline

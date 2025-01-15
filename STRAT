@@ -9,9 +9,9 @@
         UI_Tile_Maps of the PLATFORM_gfx_windows. On NDS this will just result in
         modifying the graphics memory directly.
 
-            Need to update the .xml files to gen buildable code.
-            Need to add ui_background to core.
-            Need to make sure built code works
+            Need to update the .xml files to gen buildable code.    (done)
+            Need to add ui_background to core.                      (skip, don't use)
+            Need to make sure built code works                      (almost, needs ui_windows to all be registered)
 
         (( ready for modification ))
         2) f_tile_render_kernel(Chunk_Map_Node *p.., Local_Vec3);
@@ -47,3 +47,7 @@
         4) Whenever possible, don't take Game as an argument and use helpers, instead take the
             actual hierarchy object as argument, and any other hierarchy arguments. Helpers should
             be left to the game-dev as they decide the Game_t composition.
+
+        Once 1-4 is done, game engine is essentially extractible.
+        Demonstrate this by extracting AG out of the engine, building, and showing it works.
+        Demonstrate further by making a new project using engine.

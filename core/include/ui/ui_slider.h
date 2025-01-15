@@ -104,7 +104,7 @@ void allocate_sprite_for__ui_slider(
     allocate_sprite__ui(
         p_gfx_context, 
         p_graphics_window, 
-        get_p_ui_sprite_gfx_allocation_manager_from__gfx_context(
+        get_p_sprite_gfx_allocation_manager_from__gfx_context(
             p_gfx_context),
         &p_ui_slider->ui_sprite_wrapper,
         (is_ui_element__snapped_x_or_y_axis(p_ui_slider))

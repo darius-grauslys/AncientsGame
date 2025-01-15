@@ -41,6 +41,7 @@ allocate_sprite_for__ui_slider(
     open_ui(
     p_gfx_context,
     p_ui_manager,
+    0,
     UI_Window_Kind__Inventory_Column);
     p_slider_left->p_ui_data = 
     p_gfx_window__bg_left;
@@ -56,6 +57,7 @@ allocate_sprite_for__ui_slider(
     open_ui(
     p_gfx_context,
     p_ui_manager,
+    0,
     UI_Window_Kind__Inventory_Column);
     p_slider_right->p_ui_data = 
     p_gfx_window__bg_right;
