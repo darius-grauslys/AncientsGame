@@ -22,6 +22,7 @@ void PLATFORM_render_entity(
     p_PLATFORM_gfx_context
         ->SDL_gfx_sub_context__wrapper
         .f_SDL_render_entity(
+                p_PLATFORM_gfx_context,
                 &p_PLATFORM_gfx_context
                 ->SDL_graphics_window__main,
                 p_entity);

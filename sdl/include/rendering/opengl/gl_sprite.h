@@ -25,6 +25,7 @@ GL_Sprite *GL_get_p_sprite_from__PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
 void GL_render_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         Vector__3i32F4 position_of__sprite__3i32F4);

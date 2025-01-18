@@ -12,6 +12,7 @@
 #include "platform_defaults.h"
 #include "platform_defines.h"
 #include "rendering/aliased_texture_manager.h"
+#include "rendering/gfx_context.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_vertex_object.h"
@@ -23,6 +24,7 @@
 #include "sdl_numerics.h"
 #include "timer.h"
 #include "ui/implemented/ui_registrar__implemented.h"
+#include "ui/ui_manager.h"
 #include "vectors.h"
 #include "world/serialization/world_directory.h"
 #include "world/world.h"
@@ -82,12 +84,26 @@ void m_enter_scene_handler_as__test(
             get_p_PLATFORM_gfx_context_from__game(p_game),
             get_p_chunk_manager_from__game(p_game));
 
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__gfx_context(
+                get_p_gfx_context_from__game(p_game));
+
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
         while (await_game_tick(p_game));
         manage_game__pre_render(p_game);
 
         SDL_render_world(p_game);
+
+        poll_ui_manager__update(
+                &p_game->gfx_context.ui_manager, 
+                p_game, 
+                &p_PLATFORM_gfx_context->SDL_graphics_window__main);
+
+        render_all_ui_elements_in__ui_manager(
+                &p_game->gfx_context.ui_manager, 
+                p_PLATFORM_gfx_context,
+                &p_PLATFORM_gfx_context->SDL_graphics_window__main);
 
         manage_game__post_render(p_game);
     }

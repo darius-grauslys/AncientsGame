@@ -1700,8 +1700,8 @@ typedef void (*m_UI_Held)(
         Game *p_game);
 typedef void (*m_UI_Render)(
         UI_Element *p_this_ui_element,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game);
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 typedef uint16_t UI_Flags__u16;
 typedef uint8_t UI_Button_Flags__u8;
@@ -1804,8 +1804,8 @@ typedef UI_Element UI_Container_Entries[
 
 typedef void (*f_Foreach_UI_Element)(
         UI_Manager *p_ui_manager,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game,
         UI_Element *p_ui_element);
 
 ///

@@ -135,6 +135,7 @@ void PLATFORM_release_all__sprites_using__this_graphics_window(
 
 // TODO: include gfx_context
 void PLATFORM_render_sprite(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *sprite,
         Vector__3i32F4 position_of__sprite__3i32F4);

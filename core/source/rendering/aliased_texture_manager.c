@@ -266,12 +266,12 @@ void load_aliased_textures(
             p_PLATFORM_gfx_context, 
             0, 
             p_aliased_texture_manager, 
-            name_of__texture__player__c_str, 
+            name_of__texture__skeleton__c_str, 
             TEXTURE_FLAGS(
                 TEXTURE_FLAG__SIZE_256x256,
                 TEXTURE_FLAG__RENDER_METHOD__0,
                 TEXTURE_FLAG__FORMAT__RGBA8888),
-            path_to__texture__player__c_str);
+            path_to__texture__skeleton__c_str);
     load_p_PLATFORM_texture_from__path_with__alias(
             p_PLATFORM_gfx_context, 
             0, 

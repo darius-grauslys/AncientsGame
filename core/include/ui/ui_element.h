@@ -55,6 +55,7 @@ void set_position_3i32_of__ui_element(
 
 void m_ui_element__render_handler_for__sprite__default(
         UI_Element *p_this_ui_element,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game);
 

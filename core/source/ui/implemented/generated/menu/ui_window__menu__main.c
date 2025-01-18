@@ -7,7 +7,7 @@
 #include <game.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-bool allocate_ui_for__ui_window__menu__main(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager){
+bool allocate_ui_for__ui_window__menu__main(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, World *p_world, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;

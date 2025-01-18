@@ -10,12 +10,12 @@
 #include <game.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-bool allocate_ui_for__ui_window__game__idle(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager){
+bool allocate_ui_for__ui_window__game__idle(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, World *p_world, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_ui_manager);
+allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_world, p_ui_manager);
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__button(p_slider, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), m_ui_button__clicked_handler__default, false, false);
     UI_Element *p_button__chat = allocate_ui_element_from__ui_manager(p_ui_manager);

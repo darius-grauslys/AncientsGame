@@ -10,12 +10,12 @@
 #include <game.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-bool allocate_ui_for__ui_window__game__labor(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager){
+bool allocate_ui_for__ui_window__game__labor(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, World *p_world, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_ui_manager);
+allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_world, p_ui_manager);
     toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 2));
     p_ui_iterator = allocate_many_ui_elements_from__ui_manager_in__succession(p_ui_manager, 5);
     for (Index__u32 index_of__iteration__2=0;p_ui_iterator;iterate_to_next__ui_element(&p_ui_iterator),index_of__iteration__2++) {

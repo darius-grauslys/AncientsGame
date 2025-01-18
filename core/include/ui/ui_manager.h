@@ -116,13 +116,13 @@ void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
 
 void foreach_ui_element_in__ui_manager(
         UI_Manager *p_ui_manager,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game,
         f_Foreach_UI_Element f_foreach_ui_element);
 
 void render_all_ui_elements_in__ui_manager(
         UI_Manager *p_ui_manager,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game);
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
 
 #endif

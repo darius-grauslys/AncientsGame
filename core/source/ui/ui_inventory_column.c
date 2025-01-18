@@ -71,15 +71,12 @@ bool allocate_ui_item_stack(
 void allocate_ui_inventory_column_into__ui_element_container(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
+        UI_Manager *p_ui_manager,
         UI_Element *p_ui_element__inventory_column,
         Inventory *p_inventory) {
     if (!p_inventory)
         return;
 
-    UI_Manager *p_ui_manager =
-#warning TODO: remove PLATFORM_ func here, and take ui_manager from p_gfx_window
-        PLATFORM_get_p_ui_manager_from__gfx_window(
-                p_gfx_window->p_PLATFORM_gfx_window);
     UI_Element *p_ui_element__current_inventory_slot =
         p_ui_element__inventory_column;
     Index__u32 index_of__inventory_column_slot = 0;

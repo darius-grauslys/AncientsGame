@@ -32,6 +32,7 @@ void m_ui_slider__dispose_handler__default(
 
 void m_ui_slider__render_handler__default(
         UI_Element *p_this_ui_element,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Game *p_game);
 

@@ -157,6 +157,7 @@ typedef void (*f_SDL_Initialize_Sprite)(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
 typedef void (*f_SDL_Render_Sprite)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         Vector__3i32F4 position_of__sprite__3i32F4);
@@ -169,6 +170,7 @@ typedef void (*f_SDL_Release_Sprite)(
 
 
 typedef void (*f_SDL_Render_Entity)(
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Entity *p_entity);
 

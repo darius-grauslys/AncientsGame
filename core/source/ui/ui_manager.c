@@ -678,8 +678,8 @@ void swap_ui_element__children(
 
 void foreach_ui_element_in__ui_manager(
         UI_Manager *p_ui_manager,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game,
         f_Foreach_UI_Element f_foreach_ui_element) {
     for (Index__u32 index_of__ui_element = 0;
             index_of__ui_element
@@ -693,8 +693,8 @@ void foreach_ui_element_in__ui_manager(
         if (is_ui_element__allocated(p_ui_element)) {
             f_foreach_ui_element(
                     p_ui_manager,
+                    p_PLATFORM_gfx_context,
                     p_PLATFORM_gfx_window,
-                    p_game,
                     p_ui_element);
         }
     }
@@ -702,8 +702,8 @@ void foreach_ui_element_in__ui_manager(
 
 void _f_render_ui_element_callback__ui_manager(
         UI_Manager *p_ui_manager,
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game,
         UI_Element *p_ui_element) {
     if (!p_ui_element
             || !is_ui_element__enabled(p_ui_element)) {
@@ -717,17 +717,17 @@ void _f_render_ui_element_callback__ui_manager(
     get_ui_element__render_handler(
             p_ui_element)(
                 p_ui_element,
-                p_PLATFORM_gfx_window,
-                p_game);
+                p_PLATFORM_gfx_context,
+                p_PLATFORM_gfx_window);
 }
 
 void render_all_ui_elements_in__ui_manager(
         UI_Manager *p_ui_manager,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game) {
+        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     foreach_ui_element_in__ui_manager(
             p_ui_manager, 
+            p_PLATFORM_gfx_context,
             p_PLATFORM_gfx_window,
-            p_game, 
             _f_render_ui_element_callback__ui_manager);
 }

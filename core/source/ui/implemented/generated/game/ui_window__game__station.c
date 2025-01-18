@@ -14,12 +14,12 @@
 #include <ui/handlers/inventory/ui_handler__station__button_craft.h>
 // THIS CODE IS AUTO GENERATED. Go to ./core/assets/ui/xml/ instead of modifying this file.
 
-bool allocate_ui_for__ui_window__game__station(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, UI_Manager *p_ui_manager){
+bool allocate_ui_for__ui_window__game__station(Gfx_Context *p_gfx_context, Graphics_Window *p_gfx_window, World *p_world, UI_Manager *p_ui_manager){
     UI_Element *p_ui_iterator = 0;
     UI_Element *p_ui_iterator_previous_previous = 0;
     UI_Element *p_ui_iterator_previous = 0;
     UI_Element *p_ui_iterator_child = 0;
-allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_ui_manager);
+allocate_ui_for__ui_window__game__hud(p_gfx_context, p_gfx_window, p_world, p_ui_manager);
     toggle_ui_button(get_p_ui_element_by__index_from__ui_manager(p_ui_manager, 0));
     UI_Element *p_slider = allocate_ui_element_from__ui_manager(p_ui_manager);
     initialize_ui_element_as__slider(p_slider, 16, 80, get_vector__3i32(228 + 0, 132 + 0, 0), get_vector__3i32(0 + 0, 176 + 0, 0 + 0), m_ui_slider__dragged_handler__gfx_window__default, true);
