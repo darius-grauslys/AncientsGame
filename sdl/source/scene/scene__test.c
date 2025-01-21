@@ -13,6 +13,7 @@
 #include "platform_defines.h"
 #include "rendering/aliased_texture_manager.h"
 #include "rendering/gfx_context.h"
+#include "rendering/graphics_window_manager.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_vertex_object.h"
@@ -84,9 +85,11 @@ void m_enter_scene_handler_as__test(
             get_p_PLATFORM_gfx_context_from__game(p_game),
             get_p_chunk_manager_from__game(p_game));
 
+    Gfx_Context *p_gfx_context =
+        get_p_gfx_context_from__game(p_game);
+
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__gfx_context(
-                get_p_gfx_context_from__game(p_game));
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 
     while (p_game->scene_manager.p_active_scene
             == p_this_scene) {
@@ -100,10 +103,15 @@ void m_enter_scene_handler_as__test(
                 p_game, 
                 &p_PLATFORM_gfx_context->SDL_graphics_window__main);
 
-        render_all_ui_elements_in__ui_manager(
-                &p_game->gfx_context.ui_manager, 
-                p_PLATFORM_gfx_context,
-                &p_PLATFORM_gfx_context->SDL_graphics_window__main);
+        render_graphic_windows_in__graphics_window_manager(
+                get_p_gfx_context_from__game(p_game), 
+                get_p_graphics_window_manager_from__gfx_context(p_gfx_context), 
+                get_p_world_from__game(p_game));
+
+        // render_all_ui_elements_in__ui_manager(
+        //         &p_game->gfx_context.ui_manager, 
+        //         p_PLATFORM_gfx_context,
+        //         &p_PLATFORM_gfx_context->SDL_graphics_window__main);
 
         manage_game__post_render(p_game);
     }

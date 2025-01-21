@@ -3,6 +3,7 @@
 #include "defines_weak.h"
 #include "platform.h"
 #include "rendering/graphics_window.h"
+#include "util/bitmap/bitmap.h"
 
 static inline
 Graphics_Window *get_p_graphics_window_by__index_from__manager(
@@ -203,3 +204,54 @@ Quantity__u8 get_graphics_windows_from__graphics_window_manager(
     return index_of__gfx_window_in__ptr_array;
 }
 
+void render_graphic_windows_in__graphics_window_manager(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window_Manager *p_graphics_window__manager,
+        World *p_world) {
+    BITMAP(bitmap__gfx_windows__visited, MAX_QUANTITY_OF__GRAPHICS_WINDOWS);
+    memset(
+            bitmap__gfx_windows__visited, 
+            0, 
+            sizeof(bitmap__gfx_windows__visited));
+
+    for (Index__u32 index_of__graphics_window = 0;
+            index_of__graphics_window 
+            < MAX_QUANTITY_OF__GRAPHICS_WINDOWS;
+            index_of__graphics_window++) {
+        Graphics_Window *p_gfx_window =
+            get_p_graphics_window_by__index_from__manager(
+                    p_graphics_window__manager, 
+                    index_of__graphics_window);
+        if (!is_graphics_window__allocated(
+                    p_gfx_window)) {
+            continue;
+        }
+        if (is_bit_set_in__bitmap(
+                    bitmap__gfx_windows__visited, 
+                    MAX_QUANTITY_OF__GRAPHICS_WINDOWS, 
+                    index_of__graphics_window)) {
+            continue;
+        }
+
+        PLATFORM_render_gfx_window(
+                p_gfx_context, 
+                p_gfx_window, 
+                0, 
+                p_world);
+
+        if (is_graphics_window_possessing__a_child(
+                    p_gfx_window)) {
+            set_bit_in__bitmap(
+                    bitmap__gfx_windows__visited, 
+                    MAX_QUANTITY_OF__GRAPHICS_WINDOWS, 
+                    p_gfx_window->p_child__graphics_window
+                    - p_graphics_window__manager->graphics_windows, 
+                    true);
+            PLATFORM_render_gfx_window(
+                    p_gfx_context, 
+                    p_gfx_window->p_child__graphics_window, 
+                    p_gfx_window, 
+                    p_world);
+        }
+    }
+}

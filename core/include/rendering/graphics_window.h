@@ -12,6 +12,39 @@ void initialize_graphics_window_as__allocated(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
         Graphics_Window_Kind the_kind_of__graphics_window);
 
+void update_graphics_window__ui_tiles(
+        Graphics_Window *p_gfx_window,
+        const UI_Tile_Raw *p_ui_tiles,
+        Quantity__u32 size_of__p_ui_tiles);
+
+void set_graphics_window__ui_tile_map(
+        Graphics_Window *p_gfx_window,
+        UI_Tile_Map__Wrapper ui_tile_map_wrapper);
+
+static inline
+bool is_graphics_window__ui_tile_map__dirty(
+        Graphics_Window *p_gfx_window) {
+    return p_gfx_window->graphics_window__flags
+        & GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY
+        ;
+}
+
+static inline
+void set_graphics_window__ui_tile_map_as__dirty(
+        Graphics_Window *p_gfx_window) {
+    p_gfx_window->graphics_window__flags |=
+        GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY
+        ;
+}
+
+static inline
+void set_graphics_window__ui_tile_map_as__clean(
+        Graphics_Window *p_gfx_window) {
+    p_gfx_window->graphics_window__flags &=
+        ~GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY
+        ;
+}
+
 static inline
 bool is_graphics_window__allocated(
         Graphics_Window *p_graphics_window) {
@@ -70,6 +103,30 @@ bool is_graphics_window_of__this_kind(
         Graphics_Window_Kind the_kind_of__graphics_window) {
     return p_graphics_window->the_kind_of__window
         == the_kind_of__graphics_window;
+}
+
+static inline
+bool is_graphics_window__rendering_world(
+        Graphics_Window *p_gfx_window) {
+    return p_gfx_window->graphics_window__flags
+        & GRAPHICS_WINDOW__FLAG__IS_RENDERING_WORLD
+        ;
+}
+
+static inline
+void set_graphics_window_as__rendering_world(
+        Graphics_Window *p_gfx_window) {
+    p_gfx_window->graphics_window__flags |=
+        GRAPHICS_WINDOW__FLAG__IS_RENDERING_WORLD
+        ;
+}
+
+static inline
+void set_graphics_window_as__NOT_rendering_world(
+        Graphics_Window *p_gfx_window) {
+    p_gfx_window->graphics_window__flags &=
+        ~GRAPHICS_WINDOW__FLAG__IS_RENDERING_WORLD
+        ;
 }
 
 #endif

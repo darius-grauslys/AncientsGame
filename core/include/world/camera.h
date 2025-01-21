@@ -9,7 +9,6 @@ void m_camera_handler__default(
         Camera *p_camera,
         Game *p_game);
 
-static inline
 void initialize_camera(
         Camera *p_camera,
         Vector__3i32F4 position,
@@ -17,20 +16,22 @@ void initialize_camera(
         Quantity__u32 width_of__fulcrum,
         Quantity__u32 height_of__fulcrum,
         i32F20 z_near,
-        i32F20 z_far) {
-    p_camera->position = 
-        position;
-    p_camera->m_camera_handler =
-        (m_camera_handler)
-        ? m_camera_handler
-        : m_camera_handler__default
-        ;
-    p_camera->height_of__fulcrum =
-        height_of__fulcrum;
-    p_camera->width_of__fulcrum =
-        width_of__fulcrum;
-    p_camera->z_near = z_near;
-    p_camera->z_far = z_far;
+        i32F20 z_far);
+
+bool is_camera__active(
+        Camera *p_camera);
+
+static inline
+void initialize_camera_as__inactive(
+        Camera *p_camera) {
+    initialize_camera(
+            p_camera,
+            VECTOR__3i32F4__OUT_OF_BOUNDS,
+            0,
+            QUANTITY__UNKNOWN__u32,
+            QUANTITY__UNKNOWN__u32,
+            0,
+            0);
 }
 
 static inline

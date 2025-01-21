@@ -13,12 +13,13 @@ void SDL_initialize_gfx_window(
         Vector__3i32F4 position_of__graphics_window__3i32F4);
 
 void SDL_compose_gfx_window(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window);
 
 void SDL_render_gfx_window(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 static inline
 void SDL_initialize_gfx_window_as__deallocated(

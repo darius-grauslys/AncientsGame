@@ -49,9 +49,31 @@ void SDL_initialize_gfx_window_manager(
 PLATFORM_Graphics_Window *PLATFORM_allocate_gfx_window(
         Gfx_Context *p_gfx_context,
         Texture_Flags texture_flags_for__gfx_window) {
-    return SDL_allocate_PLATFORM_gfx_window_from__manager(
+    f_SDL_Allocate_Gfx_Window f_sdl_allocate_gfx_window =
+        p_gfx_context
+        ->p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .f_SDL_allocate_gfx_window;
+
+    if (!f_sdl_allocate_gfx_window) {
+        debug_error("SDL::PLATFORM_allocate_gfx_window, f_sdl_allocate_gfx_window == 0.");
+        return 0;
+    }
+    
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window = 
+        SDL_allocate_PLATFORM_gfx_window_from__manager(
             SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
                 get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context)));
+    if (!p_PLATFORM_gfx_window)
+        return p_PLATFORM_gfx_window;
+
+    f_sdl_allocate_gfx_window(
+            p_gfx_context
+            ->p_PLATFORM_gfx_context,
+            p_PLATFORM_gfx_window,
+            texture_flags_for__gfx_window);
+
+    return p_PLATFORM_gfx_window;
 }
 
 void PLATFORM_release_gfx_window(

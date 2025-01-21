@@ -1,4 +1,5 @@
 #include "ui/ui_context.h"
+#include "defines.h"
 #include "rendering/gfx_context.h"
 #include "rendering/graphics_window_manager.h"
 
@@ -54,7 +55,7 @@ Graphics_Window *open_ui(
                 p_gfx_context, 
                 get_p_graphics_window_manager_from__gfx_context(
                     p_gfx_context),
-                the_kind_of__window_to__open);
+                TEXTURE_FLAG__SIZE_256x256);
 
     if (!p_graphics_window) {
         debug_error("open_ui, p_PLATFORM_gfx_window == 0.");

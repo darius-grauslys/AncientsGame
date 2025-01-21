@@ -3,6 +3,7 @@
 #include "game.h"
 #include "game_action/game_action.h"
 #include "platform.h"
+#include "rendering/graphics_window.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_sprite.h"
 #include "rendering/texture.h"
@@ -49,11 +50,11 @@ void SDL_initialize_gfx_window(
 }
 
 void SDL_compose_gfx_window(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window) {
     f_SDL_Compose_Gfx_Window f_SDL_compose_gfx_window =
-        get_p_PLATFORM_gfx_context_from__game(
-                p_game)
+        p_gfx_context
+        ->p_PLATFORM_gfx_context
         ->SDL_gfx_sub_context__wrapper
         .f_SDL_compose_gfx_window
         ;
@@ -67,17 +68,18 @@ void SDL_compose_gfx_window(
 #endif
 
     f_SDL_compose_gfx_window(
-            p_game,
-            p_PLATFORM_gfx_window);
+            p_gfx_context,
+            p_gfx_window);
 }
 
 void SDL_render_gfx_window(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
 
     f_SDL_Render_Gfx_Window f_SDL_render_gfx_window =
-        get_p_PLATFORM_gfx_context_from__game(
-                p_game)
+        p_gfx_context
+        ->p_PLATFORM_gfx_context
         ->SDL_gfx_sub_context__wrapper
         .f_SDL_render_gfx_window
         ;
@@ -91,8 +93,9 @@ void SDL_render_gfx_window(
 #endif
 
     f_SDL_render_gfx_window(
-            p_game,
-            p_PLATFORM_gfx_window);
+            p_gfx_context,
+            p_gfx_window,
+            p_world);
 }
 
 UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
@@ -141,35 +144,22 @@ Game_Action PLATFORM_get_gfx_window__game_action(
         ->associated_game_action;
 }
 
-void PLATFORM_render_ui_tile_map__wrapper_to__gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        PLATFORM_Texture *p_PLATFORM_texture,
-        UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper) {
-    memcpy(
-            p_ui_tile_map__wrapper->p_ui_tile_data,
-            p_PLATFORM_gfx_window
-                ->SDL_graphics_window__ui_tile_map__wrapper
-                .p_ui_tile_data,
-            sizeof(u16)
-            * p_ui_tile_map__wrapper->width_of__ui_tile_map
-            * p_ui_tile_map__wrapper->height_of__ui_tile_map);
-}
+void PLATFORM_render_gfx_window(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        Graphics_Window *p_gfx_window__parent,
+        World *p_world) {
+    if (is_graphics_window__ui_tile_map__dirty(
+                p_gfx_window)) {
+        SDL_compose_gfx_window(
+                p_gfx_context,
+                p_gfx_window);
+        set_graphics_window__ui_tile_map_as__clean(
+                p_gfx_window);
+    }
 
-void PLATFORM_render_chunk_as__tiles_into__gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        f_Tile_Render_Kernel f_tile_render_kernel,
-        Camera *p_camera,
-        PLATFORM_Texture *p_PLATFORM_texture,
-        Index__u16 index_of__tile_in__texture,
-        Tile_Vector__3i32 tile_vector__3i32) {
-    debug_abort("SDL::PLATFORM_render_chunk_as__tiles_into__gfx_window, impl");
-}
-
-void PLATFORM_update_gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Graphics_Window *p_graphics_window) {
-    debug_abort("SDL::PLATFORM_update_gfx_window, impl");
+    SDL_render_gfx_window(
+            p_gfx_context, 
+            p_gfx_window,
+            p_world);
 }

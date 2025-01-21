@@ -703,24 +703,6 @@ typedef struct Sprite_Allocation_Specification_t {
     };
 } Sprite_Allocation_Specification;
 
-#define MAX_QUANTITY_OF__GRAPHICS_WINDOWS 8
-
-typedef struct Graphics_Window_t {
-    Vector__3i32 origin_of__gfx_window;
-    Vector__3i32 position_of__gfx_window;
-    Vector__3i32 position_of__gfx_window__minimum;
-    Vector__3i32 position_of__gfx_window__maximum;
-    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window;
-    struct Graphics_Window_t *p_child__graphics_window;
-    Graphics_Window_Kind the_kind_of__window;
-    Index__u8 priority_of__window;
-} Graphics_Window;
-
-typedef struct Graphics_Window_Manager_t {
-    Graphics_Window graphics_windows[
-        MAX_QUANTITY_OF__GRAPHICS_WINDOWS];
-} Graphics_Window_Manager;
-
 typedef struct Font_Letter_t {
     Quantity__u8 width_of__font_letter       :4;
     Quantity__u8 height_of__font_letter      :4;
@@ -2332,6 +2314,38 @@ typedef struct World_t {
     World_Name_String name;
     Quantity__u8 length_of__world_name;
 } World;
+
+///
+/// SECTION_gfx_window
+///
+
+#define MAX_QUANTITY_OF__GRAPHICS_WINDOWS 8
+
+typedef uint8_t Graphics_Window_Flags__u8;
+
+#define GRAPHICS_WINDOW__FLAG__IS_RENDERING_WORLD BIT(0)
+#define GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY BIT(1)
+
+#define GRAPHICS_WINDOW__FLAGS__NONE 0
+
+typedef struct Graphics_Window_t {
+    Camera camera;
+    UI_Tile_Map__Wrapper ui_tile_map__wrapper;
+    Vector__3i32 origin_of__gfx_window;
+    Vector__3i32 position_of__gfx_window;
+    Vector__3i32 position_of__gfx_window__minimum;
+    Vector__3i32 position_of__gfx_window__maximum;
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window;
+    struct Graphics_Window_t *p_child__graphics_window;
+    Graphics_Window_Kind the_kind_of__window;
+    Index__u8 priority_of__window;
+    Graphics_Window_Flags__u8 graphics_window__flags;
+} Graphics_Window;
+
+typedef struct Graphics_Window_Manager_t {
+    Graphics_Window graphics_windows[
+        MAX_QUANTITY_OF__GRAPHICS_WINDOWS];
+} Graphics_Window_Manager;
 
 ///
 /// SECTION_core

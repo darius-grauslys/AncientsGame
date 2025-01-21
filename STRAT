@@ -9,9 +9,32 @@
         UI_Tile_Maps of the PLATFORM_gfx_windows. On NDS this will just result in
         modifying the graphics memory directly.
 
-            Need to update the .xml files to gen buildable code.    (done)
-            Need to add ui_background to core.                      (skip, don't use)
-            Need to make sure built code works                      (almost, needs ui_windows to all be registered)
+            Need to update the .xml files to gen buildable code.    
+                done
+            Need to add ui_background to core.                      
+                skip
+            Need to make sure built code works                      
+                gfx_windows are registered
+                ui is buggy (needs manual driving by scene, which I think is good.)
+                    need to leverage Graphics_Window (CORE wrapper type) whenever
+                    possible to keep window position consistent, that means
+                    forwarding the wrapper types through platform.h API.
+
+                    All PLATFORM_XYZ pointers should be wrapped in this regard.
+                    Would be great if PLATFORM can specify a default gfx_window
+                    and default gfx_windows for:
+                        World
+                        UI
+                    
+                    1.1) Set UI_Tiles for gfx_windows, make ./tools/ui_builder.py do this.
+                        (done, don't nede to update the tool atm, just write the code in .xml)
+                        NOTE:   Don't worry about it for right now, but eventually
+                                have the gen'd output be the f_openers for gfx_windows.
+                                This is an AG issue, and not a Lavender issue.
+                    1,2) Register Misc backgrounds.
+                        (still need to do)
+                    1.3) Render world as a gfx_window, use render priority for layering.
+                    1.4) Fix all the bugs
 
         (( ready for modification ))
         2) f_tile_render_kernel(Chunk_Map_Node *p.., Local_Vec3);

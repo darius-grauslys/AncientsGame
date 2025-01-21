@@ -15,9 +15,6 @@ void PLATFORM_pre_render(Game *p_game) {
 }
 
 void PLATFORM_post_render(Game *p_game) {
-    Camera *p_camera =
-        &p_game->world.camera;
-
     SDL_GL_SwapWindow(
             get_p_PLATFORM_gfx_context_from__game(
                 p_game)

@@ -39,9 +39,6 @@ void SDL_initialize_ui_element_as__background(
             p_ui_background, 
             p_PLATFORM_gfx_window);
 
-    set_ui_element__render_handler(
-            p_ui_background, 
-            m_SDL_render__ui__background);
     set_ui_element__dispose_handler(
             p_ui_background, 
             m_SDL_dispose__ui__background);
@@ -107,22 +104,4 @@ void m_SDL_render__ui__background(
         GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
             get_p_PLATFORM_gfx_context_from__game(
                 p_game));
-
-    // TODO: HACK we are using gl in sdl context lol
-    GL_push_viewport(
-            p_GL_viewport_stack,
-            x, 
-            -y, 
-            width, 
-            height);
-
-    SDL_compose_gfx_window(
-            p_game, 
-            p_PLATFORM_gfx_window_from__data);
-    SDL_render_gfx_window(
-            p_game, 
-            p_PLATFORM_gfx_window_from__data);
-
-    GL_pop_viewport(
-            p_GL_viewport_stack);
 }

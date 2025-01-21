@@ -26,6 +26,24 @@ bool is_index_u32__out_of_bounds(
     return index__u32 == INDEX__UNKNOWN__u32;
 }
 
+static inline
+bool is_quantity_u8__out_of_bounds(
+        Index__u8 quantity__u8) {
+    return quantity__u8 == QUANTITY__UNKNOWN__u8;
+}
+
+static inline
+bool is_quantity_u16__out_of_bounds(
+        Index__u16 quantity__u16) {
+    return quantity__u16 == QUANTITY__UNKNOWN__u16;
+}
+
+static inline
+bool is_quantity_u32__out_of_bounds(
+        Index__u32 quantity__u32) {
+    return quantity__u32 == QUANTITY__UNKNOWN__u32;
+}
+
 static inline 
 i32F4 i32_to__i32F4(Signed_Index__i32 x) {
     return x << FRACTIONAL_PERCISION_4__BIT_SIZE;

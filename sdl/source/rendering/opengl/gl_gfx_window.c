@@ -1,6 +1,7 @@
 #include "rendering/opengl/gl_gfx_window.h"
 #include "defines.h"
 #include "rendering/aliased_texture_manager.h"
+#include "rendering/gfx_context.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
 #include "defines_weak.h"
 #include "game.h"
@@ -67,11 +68,10 @@ void GL_allocate_gfx_window(
 }
 
 void GL_compose_gfx_window(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window) {
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__game(
-                p_game);
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 
     GL_Shader_2D *p_GL_shader__passthrough=
         GL_get_shader_from__shader_manager(
@@ -86,11 +86,11 @@ void GL_compose_gfx_window(
     }
 
     UI_Tile_Map__Wrapper ui_tile_map__wrapper =
-        p_PLATFORM_graphics_window
-        ->SDL_graphics_window__ui_tile_map__wrapper;
+        p_gfx_window->ui_tile_map__wrapper;
 
     GL_Framebuffer *p_GL_framebuffer =
-        (GL_Framebuffer*)p_PLATFORM_graphics_window
+        (GL_Framebuffer*)p_gfx_window
+        ->p_PLATFORM_gfx_window
         ->p_SDL_graphics_window__data;
 
     if (!p_GL_framebuffer) {
@@ -104,7 +104,7 @@ void GL_compose_gfx_window(
 
     PLATFORM_Texture *p_PLATFORM_texture__ui_tilesheet =
         get_p_PLATFORM_texture_by__alias(
-                get_p_aliased_texture_manager_from__game(p_game), 
+                get_p_aliased_texture_manager_from__gfx_context(p_gfx_context), 
                 name_of__texture__tilesheet_ui__c_str);
 
     float clear_color[4];
@@ -116,7 +116,8 @@ void GL_compose_gfx_window(
             p_GL_framebuffer);
     GL_bind_texture_to__framebuffer(
             p_GL_framebuffer, 
-            p_PLATFORM_graphics_window
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
             ->p_SDL_graphics_window__texture);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(
@@ -139,18 +140,24 @@ void GL_compose_gfx_window(
                 p_PLATFORM_gfx_context), 
             0, 
             0,
-            p_PLATFORM_graphics_window
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
             ->p_SDL_graphics_window__texture
             ->width,
-            p_PLATFORM_graphics_window
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
             ->p_SDL_graphics_window__texture
             ->height);
 
+#warning TODO: remove this, and get ui_manager as parameter
     render_all_ui_elements_in__ui_manager(
             SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
-                p_PLATFORM_graphics_window), 
-            p_PLATFORM_graphics_window,
-            p_game);
+                p_gfx_window
+                ->p_PLATFORM_gfx_window), 
+            p_gfx_context
+            ->p_PLATFORM_gfx_context,
+            p_gfx_window
+            ->p_PLATFORM_gfx_window);
 
     GL_pop_viewport(
             GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
@@ -219,25 +226,28 @@ void GL_compose_gfx_window(
 }
 
 void GL_render_gfx_window(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
+#warning TODO: render the world here if needed. (check gfx_window flag)
 
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__game(
-                p_game);
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 
     // TODO: make and use shader_string__ui along with it's shader.
     GL_Shader_2D *p_GL_shader__passthrough =
         GL_get_shader_from__shader_manager(
                 GL_get_p_shader_manager_from__PLATFORM_gfx_context(
-                    get_p_PLATFORM_gfx_context_from__game(
-                        p_game)), 
+                    p_PLATFORM_gfx_context),
                 shader_string__passthrough);
 
     if (!p_GL_shader__passthrough) {
         debug_error("GL_render_gfx_window, p_GL_shader == 0.");
         return;
     }
+
+    PLATFORM_Graphics_Window *p_PLATFORM_graphics_window =
+        p_gfx_window->p_PLATFORM_gfx_window;
 
     use_shader_2d(p_GL_shader__passthrough);
     PLATFORM_use_texture(

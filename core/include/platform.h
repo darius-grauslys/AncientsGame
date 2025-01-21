@@ -98,6 +98,7 @@ PLATFORM_Graphics_Window
         enum Graphics_Window_Kind the_kind_of__graphics_window,
         Identifier__u32 identifier_of__graphics_window);
 
+// TODO: remove
 PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
@@ -297,40 +298,11 @@ void PLATFORM_release_gfx_window(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_graphics_window);
 
-void PLATFORM_render_ui_tile_map__wrapper_to__gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        PLATFORM_Texture *p_PLATFORM_texture,
-        UI_Tile_Map__Wrapper *p_ui_tile_map__wrapper);
-
-void PLATFORM_render_ui_tile_span_to__gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        PLATFORM_Texture *p_PLATFORM_texture,
-        UI_Tile_Span *p_ui_tile_span);
-
-void PLATFORM_render_chunk_as__tiles_into__gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        f_Tile_Render_Kernel f_tile_render_kernel,
-        Camera *p_camera,
-        PLATFORM_Texture *p_PLATFORM_texture,
-        Index__u16 index_of__tile_in__texture,
-        Tile_Vector__3i32 tile_vector__3i32);
-
-void PLATFORM_render_chunk_as__voxels_into__gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        f_Voxel_Render_Kernel f_voxel_render_kernel,
-        Camera *p_camera,
-        PLATFORM_Texture *p_PLATFORM_texture,
-        Index__u16 index_of__tile_in__texture,
-        Tile_Vector__3i32 tile_vector__3i32);
-
-void PLATFORM_update_gfx_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Graphics_Window *p_graphics_window);
+void PLATFORM_render_gfx_window(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        Graphics_Window *p_gfx_window__parent,
+        World *p_world);
 
 ///
 /// SECTION_scene

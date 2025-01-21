@@ -127,11 +127,12 @@ typedef void (*f_SDL_Release_Gfx_Window)(
         PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
 
 typedef void (*f_SDL_Compose_Gfx_Window)(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window);
 typedef void (*f_SDL_Render_Gfx_Window)(
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 typedef PLATFORM_Texture *(*f_SDL_Allocate_Texture)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
