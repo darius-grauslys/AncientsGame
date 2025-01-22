@@ -7,7 +7,7 @@
 
 void m_camera_handler__default(
         Camera *p_camera,
-        Game *p_game);
+        World *p_world);
 
 void initialize_camera(
         Camera *p_camera,

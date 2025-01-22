@@ -2,6 +2,7 @@
 #include "defines.h"
 #include "rendering/aliased_texture_manager.h"
 #include "rendering/gfx_context.h"
+#include "rendering/graphics_window.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
 #include "defines_weak.h"
 #include "game.h"
@@ -15,8 +16,10 @@
 #include "rendering/opengl/gl_shader_passthrough.h"
 #include "rendering/opengl/gl_viewport.h"
 #include "rendering/opengl/glad/glad.h"
+#include "rendering/sdl_chunk.h"
 #include "rendering/sdl_gfx_context.h"
 #include "rendering/sdl_gfx_window.h"
+#include "rendering/sdl_render_world.h"
 #include "rendering/sdl_texture_manager.h"
 #include "rendering/sdl_texture_strings.h"
 #include "rendering/texture.h"
@@ -229,7 +232,41 @@ void GL_render_gfx_window(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
         World *p_world) {
-#warning TODO: render the world here if needed. (check gfx_window flag)
+    if (p_gfx_window->camera.m_camera_handler) {
+        p_gfx_window->camera.m_camera_handler(
+                &p_gfx_window->camera,
+                p_world);
+    }
+    if (is_graphics_window__rendering_world(
+                p_gfx_window)) {
+        GL_Framebuffer *p_GL_framebuffer =
+            (GL_Framebuffer*)p_gfx_window
+            ->p_PLATFORM_gfx_window
+            ->p_SDL_graphics_window__data;
+
+        float clear_color[4];
+        glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
+
+        glClearColor(0.0, 0.0, 0.0, 0.0);
+        GL_use_framebuffer_as__target(
+                p_GL_framebuffer);
+        GL_bind_texture_to__framebuffer(
+                p_GL_framebuffer, 
+                p_gfx_window
+                ->p_PLATFORM_gfx_window
+                ->p_SDL_graphics_window__texture);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(
+                clear_color[0],
+                clear_color[1],
+                clear_color[2],
+                clear_color[3]);
+        SDL_render_world(
+                p_gfx_context, 
+                p_gfx_window, 
+                p_world);
+        GL_unbind_framebuffer();
+    }
 
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
@@ -268,56 +305,56 @@ void GL_render_gfx_window(
                     GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
                         p_PLATFORM_gfx_context));
 
-        if (p_GL_viewport->width
-                < p_PLATFORM_graphics_window
-                ->p_SDL_graphics_window__texture
-                ->width) {
-            width_of__uv =
-                (float)p_GL_viewport
-                ->width 
-                / (float)p_PLATFORM_graphics_window
-                ->p_SDL_graphics_window__texture
-                ->width
-                ;
-        }
+        // if (p_GL_viewport->width
+        //         < p_PLATFORM_graphics_window
+        //         ->p_SDL_graphics_window__texture
+        //         ->width) {
+        //     width_of__uv =
+        //         (float)p_GL_viewport
+        //         ->width 
+        //         / (float)p_PLATFORM_graphics_window
+        //         ->p_SDL_graphics_window__texture
+        //         ->width
+        //         ;
+        // }
 
-        if (p_GL_viewport->height
-                < p_PLATFORM_graphics_window
-                ->p_SDL_graphics_window__texture
-                ->height) {
-            height_of__uv =
-                (float)p_GL_viewport
-                ->height 
-                / (float)p_PLATFORM_graphics_window
-                ->p_SDL_graphics_window__texture
-                ->height
-                ;
-        }
+        // if (p_GL_viewport->height
+        //         < p_PLATFORM_graphics_window
+        //         ->p_SDL_graphics_window__texture
+        //         ->height) {
+        //     height_of__uv =
+        //         (float)p_GL_viewport
+        //         ->height 
+        //         / (float)p_PLATFORM_graphics_window
+        //         ->p_SDL_graphics_window__texture
+        //         ->height
+        //         ;
+        // }
 
-        x = p_GL_viewport->x;
+        x = 
+            (p_PLATFORM_graphics_window
+                ->p_SDL_graphics_window__texture
+                ->width / 2.0f)
+            + (subtract_u32__clamped(
+                    p_GL_viewport->width,
+                    p_PLATFORM_graphics_window
+                    ->p_SDL_graphics_window__texture
+                    ->width,
+                    0) / 2.0f)
+            + p_GL_viewport->x
+            ;
         y = 
-            p_PLATFORM_graphics_window
+            (p_PLATFORM_graphics_window
                 ->p_SDL_graphics_window__texture
-                ->height
-            - p_GL_viewport->y
-            - p_GL_viewport->height
+                ->height / 2.0f)
+            + (subtract_u32__clamped(
+                    p_GL_viewport->height,
+                    p_PLATFORM_graphics_window
+                    ->p_SDL_graphics_window__texture
+                    ->height,
+                    0) / 2.0f)
+            + p_GL_viewport->y
             ;
-
-        x /= (float)p_PLATFORM_graphics_window
-            ->p_SDL_graphics_window__texture
-            ->width
-            ;
-        y /= (float)p_PLATFORM_graphics_window
-            ->p_SDL_graphics_window__texture
-            ->height
-            ;
-
-        // TODO:    this makes the most sense right now
-        //          as the above manipulations although deemed
-        //          necessary (from lack of planning... rushing...)
-        //          are not usable for our purposes in UI.
-        x = 0;
-        y = 0;
     }
 
     GL_render_with__shader__passthrough_using__coordinate_sampling(

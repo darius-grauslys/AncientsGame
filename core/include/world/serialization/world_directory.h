@@ -5,12 +5,14 @@
 #include <defines.h>
 
 Index__u32 stat_chunk_directory(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer);
 
 Index__u32 stat_chunk_file__tiles(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *buffer);
 
@@ -18,20 +20,9 @@ Index__u32 stat_chunk_file__tiles(
 /// This holds data such as world seed, and player entity data.
 ///
 Index__u32 stat_world_header_file(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        World *p_world,
         char *buffer);
-
-///
-/// Only call this when leaving the world and returning to main menu.
-///
-void save_world(
-        Game *p_game);
-
-///
-/// Only call this from the main menu.
-///
-void load_world(
-        Game *p_game);
 
 // Index__u32 stat_chunk_file__entities(
 //         Game *p_game,

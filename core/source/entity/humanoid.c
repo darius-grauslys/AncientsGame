@@ -15,16 +15,17 @@
 #include <inventory/item_stack.h>
 
 void initialize_entity_as__humanoid(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         Graphics_Window 
             *p_gfx_window,
+        World *p_world,
         Entity *p_entity, 
         enum Entity_Kind kind_of_entity,
         Vector__3i32F4 position__3i32F4,
         Quantity__u32 width,
         Quantity__u32 height) {
     initialize_entity_with__sprite(
-            p_game,
+            p_gfx_context,
             p_gfx_window,
             p_entity, 
             kind_of_entity, 
@@ -47,7 +48,7 @@ void initialize_entity_as__humanoid(
             Entity_Armor_Modification_Kind__None);
     Inventory *p_inventory =
         allocate_p_inventory_in__inventory_manager(
-                get_p_inventory_manager_from__game(p_game));
+                get_p_inventory_manager_from__world(p_world));
     if (p_inventory) {
         point_serialized_field_to__this_serialized_struct(
                 &p_entity->s_humanoid__inventory_ptr, 

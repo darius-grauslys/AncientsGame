@@ -18,7 +18,7 @@ void m_entity_dispose_handler__default(
 
 void m_camera_handler_for__entity_tracking(
         Camera *p_this_camera,
-        Game *p_game) {
+        World *p_world) {
     if (!p_this_camera->p_camera_data) {
         return;
     }

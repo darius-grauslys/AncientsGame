@@ -9,7 +9,7 @@ void m_entity_dispose_handler__default(
 
 void m_camera_handler_for__entity_tracking(
         Camera *p_this_camera,
-        Game *p_game);
+        World *p_world);
 
 static inline
 void set_camera_to__track_this__entity(

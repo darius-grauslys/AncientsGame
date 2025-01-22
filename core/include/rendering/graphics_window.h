@@ -46,6 +46,12 @@ void set_graphics_window__ui_tile_map_as__clean(
 }
 
 static inline
+Camera *get_p_camera_from__graphics_window(
+        Graphics_Window *p_graphics_window) {
+    return &p_graphics_window->camera;
+}
+
+static inline
 bool is_graphics_window__allocated(
         Graphics_Window *p_graphics_window) {
     return (bool)p_graphics_window->p_PLATFORM_gfx_window;

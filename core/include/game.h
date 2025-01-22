@@ -33,20 +33,6 @@ Quantity__u32 get_ticks_elapsed__game(Game *p_game) {
 }
 
 static inline
-Psuedo_Random__i32 get_pseudo_random_i32_from__game(Game *p_game) {
-    return get_pseudo_random_i32__intrusively(&p_game->repeatable_pseudo_random);
-}
-
-static inline
-Psuedo_Random__i32 get_pseudo_random_i32_with__xy_from__game(
-        Game *p_game,
-        i32 x, i32 y) {
-    return get_pseudo_random_i32_with__xy__intrusively(
-            &p_game->repeatable_pseudo_random, 
-            x, y);
-}
-
-static inline
 Log *get_p_log__global_from__game(Game *p_game) {
     return &p_game->log__global;
 }

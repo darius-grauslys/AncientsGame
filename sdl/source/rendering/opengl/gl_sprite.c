@@ -1,7 +1,9 @@
 #include "defines.h"
 #include "defines_weak.h"
+#include "game.h"
 #include "numerics.h"
 #include "platform.h"
+#include "rendering/gfx_context.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_numerics.h"
 #include "rendering/opengl/gl_shader.h"
@@ -87,13 +89,14 @@ GL_Sprite *GL_get_p_sprite_from__sprite_wrapper(
 }
 
 void GL_render_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         Vector__3i32F4 position__3i32F4) {
     GL_Gfx_Sub_Context *p_GL_gfx_sub_context =
         GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context);
+                get_p_PLATFORM_gfx_context_from__gfx_context(
+                    p_gfx_context));
     PLATFORM_Sprite *p_PLATFORM_sprite =
         p_sprite_wrapper
         ->p_sprite
@@ -106,16 +109,16 @@ void GL_render_sprite(
         p_GL_sprite->p_GL_shader;
 
     Camera *p_SDL_camera__active =
-        p_PLATFORM_gfx_window
-        ->p_active_camera
-        ;
+        &p_gfx_window
+        ->camera;
 
     position__3i32F4.z__i32F4 = 
         i32_to__i32F4(2);
 
     use_shader_2d(p_GL_shader__sprite);
     GL_link_data_to__shader(
-            p_PLATFORM_gfx_context,
+            p_gfx_context
+            ->p_PLATFORM_gfx_context,
             p_GL_shader__sprite, 
             p_SDL_camera__active, 
             position__3i32F4, 
@@ -123,7 +126,8 @@ void GL_render_sprite(
 
     use_vertex_object(&p_GL_sprite->GL_vertex_object);
     PLATFORM_use_texture(
-            p_PLATFORM_gfx_context,
+            p_gfx_context
+            ->p_PLATFORM_gfx_context,
             p_PLATFORM_sprite
             ->p_PLATFORM_texture);
     glUniform2f(

@@ -6,6 +6,61 @@
 #include "world/chunk_manager.h"
 #include <defines.h>
 
+void initialize_world(
+        Game *p_game,
+        World *p_world,
+        PLATFORM_Graphics_Window 
+            *p_PLATFORM_graphics_window_for__world);
+void manage_world(Game *p_game);
+void manage_world__entities(Game *p_game);
+
+void add_entity_to__world(
+        World *p_world,
+        Entity *p_entity);
+
+Entity *allocate_entity_into__world(
+        Gfx_Context *p_gfx_context,
+        World *p_world,
+        enum Entity_Kind the_kind_of_entity,
+        Vector__3i32F4 position__3i32F4);
+
+void render_entities_in__world(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
+
+void remove_entity_from__world(
+        World *p_world,
+        Entity *p_entity);
+
+void release_entity_from__world(
+        Game *p_game,
+        Entity *p_entity);
+
+bool poll_world_for__scrolling(
+        Game *p_game,
+        World *p_world);
+
+void teleport_player(
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
+        Vector__3i32F4 position__3i32F4);
+
+///
+/// Only call this when leaving the world and returning to main menu.
+///
+void save_world(
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        World *p_world);
+
+///
+/// Only call this from the main menu.
+///
+void load_world(
+        Gfx_Context *p_gfx_context,
+        PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
+        World *p_world);
+
 static inline
 Camera *get_p_camera_from__world(World *p_world) {
     return &p_world->camera;
@@ -90,38 +145,10 @@ Entity *get_p_entity_from__world_using__3i32F4(
             position__3i32F4);
 }
 
-void initialize_world(
-        Game *p_game,
-        World *p_world,
-        PLATFORM_Graphics_Window 
-            *p_PLATFORM_graphics_window_for__world);
-void manage_world(Game *p_game);
-void manage_world__entities(Game *p_game);
-
-void add_entity_to__world(
-        World *p_world,
-        Entity *p_entity);
-
-Entity *allocate_entity_into__world(
-        Game *p_game,
-        World *p_world,
-        enum Entity_Kind the_kind_of_entity,
-        Vector__3i32F4 position__3i32F4);
-
-void remove_entity_from__world(
-        World *p_world,
-        Entity *p_entity);
-
-void release_entity_from__world(
-        Game *p_game,
-        Entity *p_entity);
-
-bool poll_world_for__scrolling(
-        Game *p_game,
-        World *p_world);
-
-void teleport_player(
-        Game *p_game,
-        Vector__3i32F4 position__3i32F4);
+static inline
+Repeatable_Psuedo_Random *get_p_repeatable_psuedo_random_from__world(
+        World *p_world) {
+    return &p_world->repeatable_pseudo_random;
+}
 
 #endif

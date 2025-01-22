@@ -56,14 +56,16 @@ bool is_chunk_manager__resolving_chunks(
 /// This will flush all loaded chunks to the file system.
 ///
 void save_all_chunks(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager *p_chunk_manager);
 
 ///
 /// This will flush all loaded chunks to the file system.
 ///
 void move_chunk_manager_to__chunk_position(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager *p_chunk_manager,
         Chunk_Vector__3i32 chunk_vector__3i32);
 

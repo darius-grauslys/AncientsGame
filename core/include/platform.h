@@ -74,6 +74,7 @@ void PLATFORM_abort(void);
 ///
 /// SECTION_entity
 ///
+// TODO: remove
 void PLATFORM_render_entity(
         Entity *entity,
         Game *game);
@@ -91,36 +92,16 @@ void m_PLATFORM_game_action_handler_for__multiplayer(
 /// SECTION_rendering
 ///
 
-// TODO: remove
-PLATFORM_Graphics_Window 
-*PLATFORM_get_p_graphics_window_with__graphics_window_kind(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        enum Graphics_Window_Kind the_kind_of__graphics_window,
-        Identifier__u32 identifier_of__graphics_window);
-
-// TODO: remove
-PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
-
 void PLATFORM_put_char_in__typer(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
         Typer *p_typer,
         unsigned char letter);
-
-// TODO: remove
-Sprite_Flags *PLATFORM_get_p_sprite_flags__from_PLATFORM_sprite(
-        PLATFORM_Sprite *p_PLATFORM_sprite);
 
 PLATFORM_Sprite *PLATFORM_allocate_sprite(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
         PLATFORM_Texture *p_PLATFORM_texture_to__sample_by__sprite,
         Texture_Flags texture_flags_for__sprite);
-
-// TODO: remove
-PLATFORM_Sprite_Data *PLATFORM_allocate_sprite_data(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        Texture_Flags texture_flags);
 
 void PLATFORM_release_sprite(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -129,15 +110,10 @@ void PLATFORM_release_sprite(
 void PLATFORM_release_all__sprites(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 
-// TODO: remove
-void PLATFORM_release_all__sprites_using__this_graphics_window(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window);
-
-// TODO: include gfx_context
+// TODO: use wrapper types
 void PLATFORM_render_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *sprite,
         Vector__3i32F4 position_of__sprite__3i32F4);
 
@@ -148,19 +124,6 @@ void PLATFORM_update_sprite_gfx__to_current_frame(
 void PLATFORM_update_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
-// TODO: remove
-Quantity__u32 PLATFORM_get_quantity_of__allocated_sprites(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
-
-// TODO: remove, make a Profile_t struct, and populate
-Quantity__u32 PLATFORM_get_max_quantity_of__allocated_sprites(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
-
-///
-/// On NDS, this will init both main and sub.
-///
-// TODO: remove
-void PLATFORM_initialize_rendering__menu(PLATFORM_Gfx_Context *gfx_context);
 /// 
 /// On NDS, this will init both main and sub.
 ///

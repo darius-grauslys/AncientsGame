@@ -2,7 +2,8 @@
 #define GENERATOR_FLAT_WORLD_H
 
 void f_chunk_generator__flat_world(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 

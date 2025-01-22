@@ -7,7 +7,6 @@
 #include "platform.h"
 #include "platform_defines.h"
 #include "process/process_manager.h"
-#include "random.h"
 #include "rendering/aliased_texture_manager.h"
 #include "rendering/sprite_gfx_allocator_manager.h"
 #include "scene/scene_manager.h"
@@ -43,9 +42,6 @@
 void initialize_game(
         Game *p_game,
         m_Game_Action_Handler m_game_action_handler) {
-    initialize_repeatable_psuedo_random(
-            &p_game->repeatable_pseudo_random, 
-            (u32)p_game);
     initialize_scene_manager(&p_game->scene_manager);
     initialize_process_manager(
             get_p_process_manager_from__game(p_game));

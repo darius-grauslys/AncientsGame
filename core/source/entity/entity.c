@@ -7,6 +7,7 @@
 #include "inventory/inventory.h"
 #include "inventory/inventory_manager.h"
 #include "platform.h"
+#include "rendering/gfx_context.h"
 #include "rendering/sprite_gfx_allocator_manager.h"
 #include "serialization/serialized_field.h"
 #include "vectors.h"
@@ -70,7 +71,7 @@ void initialize_entity_as__deallocated(
 }
 
 void initialize_entity_with__sprite(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         Graphics_Window 
             *p_graphics_window,
         Entity *p_entity, 
@@ -89,9 +90,9 @@ void initialize_entity_with__sprite(
             &p_entity->sprite_wrapper, 
             TEXTURE_FLAGS__NONE);
     allocate_sprite__entity(
-            get_p_gfx_context_from__game(p_game), 
+            p_gfx_context,
             p_graphics_window,
-            get_p_sprite_gfx_allocation_manager_from__game(p_game), 
+            get_p_sprite_gfx_allocation_manager_from__gfx_context(p_gfx_context), 
             &p_entity->sprite_wrapper, 
             kind_of_entity);
 }

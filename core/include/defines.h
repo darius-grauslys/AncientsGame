@@ -1846,7 +1846,7 @@ typedef struct UI_Context_t {
 
 typedef void (*m_Camera_Handler)(
         Camera *p_this_camera,
-        Game *p_game);
+        World *p_world);
 
 typedef struct Camera_t {
     Vector__3i32F4 position;
@@ -2218,7 +2218,8 @@ typedef struct World_Parameters_t World_Parameters;
 typedef struct Chunk_t Chunk;
 
 typedef void (*f_Chunk_Generator)(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 typedef struct World_Parameters_t {
@@ -2302,6 +2303,7 @@ typedef struct World_t {
     Structure_Manager structure_manager;
     Tile_Logic_Manager tile_logic_manager;
     World_Parameters world_parameters;
+    Repeatable_Psuedo_Random repeatable_pseudo_random;
 
     Inventory_Manager   inventory_manager;
     Item_Manager        item_manager;
@@ -2371,7 +2373,6 @@ typedef struct Game_t {
     Scene_Manager scene_manager;
 
     World world;
-    Repeatable_Psuedo_Random repeatable_pseudo_random;
 
     Process_Manager process_manager;
     Sort_List_Manager sort_list_manager;

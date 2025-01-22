@@ -1,6 +1,7 @@
 #include "defines_weak.h"
 #include "entity/handlers/ai/ai_handler__chase_melee.h"
 #include "entity/humanoid.h"
+#include "platform_defines.h"
 #include "rendering/aliased_texture_manager.h"
 #include "rendering/gfx_context.h"
 #include "rendering/sprite.h"
@@ -16,14 +17,16 @@
 #include <entity/handlers/collision/collision_handler__default.h>
 
 void initialize_entity_as__skeleton(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         Graphics_Window 
             *p_graphics_window,
+        World *p_world,
         Entity *p_entity, 
         Vector__3i32F4 position__3i32F4) {
     initialize_entity_as__humanoid(
-            p_game,
+            p_gfx_context,
             p_graphics_window,
+            p_world,
             p_entity,
             Entity_Kind__Skeleton,
             position__3i32F4,

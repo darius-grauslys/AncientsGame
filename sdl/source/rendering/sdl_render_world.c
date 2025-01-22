@@ -1,10 +1,15 @@
 #include "rendering/sdl_render_world.h"
-#include "game.h"
+#include "rendering/gfx_context.h"
+#include "sdl_defines.h"
+#include "world/world.h"
 
-void SDL_render_world(Game *p_game) {
+void SDL_render_world(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
     f_SDL_Render_World f_SDL_render_world =
-        get_p_PLATFORM_gfx_context_from__game(
-                p_game)
+        get_p_PLATFORM_gfx_context_from__gfx_context(
+                p_gfx_context)
         ->SDL_gfx_sub_context__wrapper
         .f_SDL_render_world
         ;
@@ -17,23 +22,29 @@ void SDL_render_world(Game *p_game) {
     }
 #endif
 
-    f_SDL_render_world(p_game);
+    f_SDL_render_world(
+            p_gfx_context,
+            p_gfx_window,
+            p_world);
 }
 
-void f_SDL_render_world__default(Game *p_game) {
+void f_SDL_render_world__default(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
-        get_p_PLATFORM_gfx_context_from__game(p_game);
-    p_PLATFORM_gfx_context
-        ->SDL_graphics_window__main
-        .p_active_camera
-        ->m_camera_handler(
-                p_PLATFORM_gfx_context
-                ->SDL_graphics_window__main
-                .p_active_camera,
-                p_game);
+        get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
+    f_SDL_Render_Chunk f_SDL_render_chunk =
+        p_PLATFORM_gfx_context
+        ->SDL_gfx_sub_context__wrapper
+        .f_SDL_render_chunk;
+    if (!f_SDL_render_chunk) {
+        debug_abort("f_SDL_render_world__default, f_SDL_render_chunk == 0.");
+        return;
+    }
 
     Chunk_Manager *p_chunk_manager =
-        get_p_chunk_manager_from__game(p_game);
+        get_p_chunk_manager_from__world(p_world);
 
     Chunk_Manager__Chunk_Map_Node *p_current__chunk_map_node =
         p_chunk_manager->p_most_north_western__chunk_map_node;
@@ -49,8 +60,9 @@ void f_SDL_render_world__default(Game *p_game) {
                 x 
                 < GFX_CONTEXT__RENDERING_WIDTH__IN_CHUNKS;
                 x++) {
-            PLATFORM_render_chunk(
-                    get_p_PLATFORM_gfx_context_from__game(p_game),
+            f_SDL_render_chunk(
+                    p_gfx_context,
+                    p_gfx_window,
                     p_current_sub__chunk_map_node);
 
             p_current_sub__chunk_map_node =
@@ -59,6 +71,4 @@ void f_SDL_render_world__default(Game *p_game) {
         p_current__chunk_map_node =
             p_current__chunk_map_node->p_south__chunk_map_node;
     }
-
-    manage_world(p_game);
 }

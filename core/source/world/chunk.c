@@ -335,36 +335,6 @@ void m_deserialize__chunk(
         return;
     }
 
-    for (Index__u8 index_of__serialized_entity = 0;
-            index_of__serialized_entity < quantity_of__serialized__entities;
-            index_of__serialized_entity++) {
-        // TODO: impl
-        break;
-        Entity *p_entity =
-            allocate_entity_in__entity_manager(
-                    p_game, 
-                    get_p_entity_manager_from__game(p_game), 
-                    Entity_Kind__None, 
-                    VECTOR__3i32F4__OUT_OF_BOUNDS, 
-#warning TODO: make gfx window not null here
-                    0); // TODO <- not null
-        if (!p_entity) {
-            debug_error("m_deserialize__chunk, p_entity is null. EM full?");
-            break;
-        }
-
-        initialize_entity(
-                p_entity, 
-                Entity_Kind__None, 
-                VECTOR__3i32F4__OUT_OF_BOUNDS, 
-                1, 
-                1);
-        p_entity->_serializer.m_deserialize_handler(
-                p_game,
-                p_serialization_request,
-                (Serializer*)p_entity);
-    }
-
     set_chunk_as__active(p_chunk);
 }
 

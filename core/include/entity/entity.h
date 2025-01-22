@@ -223,7 +223,7 @@ void initialize_entity(
         Quantity__u32 height);
 
 void initialize_entity_with__sprite(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
         Graphics_Window 
             *p_graphics_window,
         Entity *p_entity, 

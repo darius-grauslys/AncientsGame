@@ -4,9 +4,9 @@
 
 void m_camera_handler__default(
         Camera *p_this_camera,
-        Game *p_game) {
+        World *p_world) {
     Entity *p_local_player =
-        p_game->world.entity_manager.p_local_player;
+        p_world->entity_manager.p_local_player;
     if (!p_local_player) {
         return;
     }

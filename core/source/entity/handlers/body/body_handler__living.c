@@ -335,7 +335,9 @@ void m_entity_body_handler__living(
                         m_entity_ai_handler__player;
                     animate_humanoid__idle(p_this_humanoid);
                     teleport_player(
-                            p_game, 
+                            get_p_PLATFORM_file_system_context_from__game(
+                                p_game), 
+                            get_p_world_from__game(p_game),
                             VECTOR__3i32F4__0_0_0);
                     break;
             }

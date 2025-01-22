@@ -4,6 +4,7 @@
 #include "platform.h"
 #include "rendering/graphics_window.h"
 #include "util/bitmap/bitmap.h"
+#include "world/world.h"
 
 static inline
 Graphics_Window *get_p_graphics_window_by__index_from__manager(
@@ -238,6 +239,14 @@ void render_graphic_windows_in__graphics_window_manager(
                 p_gfx_window, 
                 0, 
                 p_world);
+
+        if (is_graphics_window__rendering_world(
+                    p_gfx_window)) {
+            render_entities_in__world(
+                    p_gfx_context,
+                    p_gfx_window,
+                    p_world);
+        }
 
         if (is_graphics_window_possessing__a_child(
                     p_gfx_window)) {

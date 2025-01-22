@@ -13,6 +13,7 @@
 #include "platform_defines.h"
 #include "rendering/aliased_texture_manager.h"
 #include "rendering/gfx_context.h"
+#include "rendering/graphics_window.h"
 #include "rendering/graphics_window_manager.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_passthrough.h"
@@ -51,12 +52,25 @@ void m_enter_scene_handler_as__test(
         Scene *p_this_scene,
         Game *p_game) {
 
+    Graphics_Window *p_gfx_window__world =
+        allocate_graphics_window_with__graphics_window_manager(
+                get_p_gfx_context_from__game(p_game), 
+                get_p_graphics_window_manager_from__gfx_context(
+                    get_p_gfx_context_from__game(p_game)), 
+                TEXTURE_FLAG__SIZE_256x256);
+
+    set_graphics_window_as__rendering_world(
+            p_gfx_window__world);
+
     initialize_world(
             p_game,
             get_p_world_from__game(p_game),
             SDL_get_main_graphics_window_from__gfx_context(
                 get_p_PLATFORM_gfx_context_from__game(p_game)));
-    load_world(p_game);
+    load_world(
+            get_p_gfx_context_from__game(p_game),
+            get_p_PLATFORM_file_system_context_from__game(p_game),
+            get_p_world_from__game(p_game));
     while(!get_p_local_player_from__game(p_game)
             && PLATFORM_get_quantity_of__active_serialization_requests(
                 get_p_PLATFORM_file_system_context_from__game(p_game))) {
@@ -72,7 +86,8 @@ void m_enter_scene_handler_as__test(
             .p_active_camera,
             p_player);
     teleport_player(
-            p_game, 
+            get_p_PLATFORM_file_system_context_from__game(p_game), 
+            get_p_world_from__game(p_game),
             get_p_local_player_from__game(p_game)
             ->hitbox.position__3i32F4);
 
@@ -95,8 +110,7 @@ void m_enter_scene_handler_as__test(
             == p_this_scene) {
         while (await_game_tick(p_game));
         manage_game__pre_render(p_game);
-
-        SDL_render_world(p_game);
+        manage_world(p_game);
 
         poll_ui_manager__update(
                 &p_game->gfx_context.ui_manager, 
@@ -107,11 +121,6 @@ void m_enter_scene_handler_as__test(
                 get_p_gfx_context_from__game(p_game), 
                 get_p_graphics_window_manager_from__gfx_context(p_gfx_context), 
                 get_p_world_from__game(p_game));
-
-        // render_all_ui_elements_in__ui_manager(
-        //         &p_game->gfx_context.ui_manager, 
-        //         p_PLATFORM_gfx_context,
-        //         &p_PLATFORM_gfx_context->SDL_graphics_window__main);
 
         manage_game__post_render(p_game);
     }

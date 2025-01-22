@@ -3,6 +3,7 @@
 #include "numerics.h"
 #include "platform.h"
 #include "platform_defines.h"
+#include "rendering/gfx_context.h"
 #include "rendering/opengl/gl_chunk_texture_manager.h"
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_framebuffer.h"
@@ -18,9 +19,14 @@
 #include <rendering/opengl/gl_chunk.h>
 
 void GL_render_chunk(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
+        get_p_PLATFORM_gfx_context_from__gfx_context(
+                p_gfx_context);
+    PLATFORM_Graphics_Window *p_PLATFORM_gfx_window =
+        p_gfx_window->p_PLATFORM_gfx_window;
     GL_Chunk_Texture_Manager *p_GL_chunk_texture_manager =
         GL_get_p_chunk_texture_manager_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context);

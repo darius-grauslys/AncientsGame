@@ -28,7 +28,8 @@
 /// Either loads or generates the chunk
 ///
 void resolve_chunk(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 void enqueue_chunk_map_node_for__serialization(
@@ -239,15 +240,16 @@ get_p_chunk_map_node_from__chunk_manager_using__i32(
 }
 
 void save_chunk(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        Chunk_Manager *p_chunk_manager,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *p_file_path_to__chunk) {
     enqueue_chunk_map_node_for__serialization(
-            get_p_chunk_manager_from__game(p_game), 
+            p_chunk_manager,
             p_chunk_map_node);
     Serialization_Request *p_serialization_request =
         PLATFORM_allocate_serialization_request(
-                get_p_PLATFORM_file_system_context_from__game(p_game));
+                p_PLATFORM_file_system_context);
     if (!p_serialization_request) {
         debug_error("save_chunk failed to allocate serialization request.");
         clear_chunk_flags(p_chunk_map_node->p_chunk__here);
@@ -261,7 +263,7 @@ void save_chunk(
 
     enum PLATFORM_Open_File_Error error =
         PLATFORM_open_file(
-                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_PLATFORM_file_system_context,
                 p_file_path_to__chunk, 
                 "wb", 
                 p_serialization_request);
@@ -269,7 +271,7 @@ void save_chunk(
     set_serialization_request_as__fire_and_forget(p_serialization_request);
     if (error) {
         PLATFORM_release_serialization_request(
-                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_PLATFORM_file_system_context,
                 p_serialization_request);
         debug_error("save_chunk, error opening file: %d, %s", 
                 error,
@@ -291,12 +293,12 @@ void save_chunk(
 }
 
 void load_chunk(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         char *p_file_path_to__chunk) {
     Serialization_Request *p_serialization_request =
         PLATFORM_allocate_serialization_request(
-                get_p_PLATFORM_file_system_context_from__game(p_game));
+                p_PLATFORM_file_system_context);
     if (!p_serialization_request) {
         debug_error("load_chunk, failed to allocate serialization request (%d, %d).",
                 p_chunk_map_node->position_of__chunk_3i32.x__i32,
@@ -312,7 +314,7 @@ void load_chunk(
 
     enum PLATFORM_Open_File_Error error =
         PLATFORM_open_file(
-                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_PLATFORM_file_system_context,
                 p_file_path_to__chunk, 
                 "rb", 
                 p_serialization_request);
@@ -320,7 +322,7 @@ void load_chunk(
     set_serialization_request_as__fire_and_forget(p_serialization_request);
     if (error) {
         PLATFORM_release_serialization_request(
-                get_p_PLATFORM_file_system_context_from__game(p_game), 
+                p_PLATFORM_file_system_context,
                 p_serialization_request);
         debug_error("save_chunk, error opening file: %d, %s", 
                 error,
@@ -342,7 +344,8 @@ void load_chunk(
 }
 
 void resolve_chunk(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
     Chunk *p_chunk =
         p_chunk_map_node->p_chunk__here;
@@ -369,13 +372,13 @@ void resolve_chunk(
                         vector__3i32));
 
             if (!resolve_s_inventory_ptr_to__inventory_manager(
-                        get_p_inventory_manager_from__game(p_game),
+                        get_p_inventory_manager_from__world(p_world),
                         &s_inventory)) {
                 continue;
             }
 
             release_p_inventory_in__inventory_manager(
-                    get_p_inventory_manager_from__game(p_game), 
+                    get_p_inventory_manager_from__world(p_world), 
                     s_inventory.p_serialized_field__inventory);
         }
     }
@@ -383,20 +386,22 @@ void resolve_chunk(
     char file_path_to__chunk[MAX_LENGTH_OF__IO_PATH];
     memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
     if (stat_chunk_file__tiles(
-                p_game,
+                p_PLATFORM_file_system_context,
+                p_world,
                 p_chunk_map_node,
                 file_path_to__chunk)) {
         load_chunk(
-                p_game, 
+                p_PLATFORM_file_system_context, 
                 p_chunk_map_node,
                 file_path_to__chunk);
         return;
     }
 
-    get_p_world_parameters_from__game(p_game)
-        ->f_chunk_generator(
-            p_game, 
-            p_chunk_map_node);
+    p_world->world_parameters
+        .f_chunk_generator(
+                0, 
+                p_world,
+                p_chunk_map_node);
     // TODO: uncomment this and shit breaks:
     set_chunk_as__updated(p_chunk_map_node->p_chunk__here);
 }
@@ -477,7 +482,8 @@ skip:
             (*p_chunk_map_node_ptr)->p_chunk__here;
         if (!is_chunk__awaiting_serialization(p_chunk)) {
             resolve_chunk(
-                    p_game, 
+                    get_p_PLATFORM_file_system_context_from__game(p_game), 
+                    get_p_world_from__game(p_game),
                     *p_chunk_map_node_ptr);
             PLATFORM_update_chunk(
                     get_p_PLATFORM_gfx_context_from__game(p_game),
@@ -496,7 +502,8 @@ skip:
 }
 
 void replace_chunk(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node,
         i32 x__new,
         i32 y__new) {
@@ -506,7 +513,8 @@ void replace_chunk(
         memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
         Quantity__u32 length_of__path_to__chunk =
             stat_chunk_directory(
-                    p_game,
+                    p_PLATFORM_file_system_context,
+                    p_world,
                     p_chunk_map_node,
                     file_path_to__chunk);
         if (length_of__path_to__chunk) {
@@ -515,7 +523,8 @@ void replace_chunk(
                     length_of__path_to__chunk, 
                     sizeof(file_path_to__chunk))) {
                 save_chunk(
-                        p_game, 
+                        p_PLATFORM_file_system_context, 
+                        get_p_chunk_manager_from__world(p_world),
                         p_chunk_map_node,
                         file_path_to__chunk);
             } else {
@@ -533,7 +542,8 @@ fail_save:
 
     if (!is_chunk__updated(p_chunk_map_node->p_chunk__here)) {
         resolve_chunk(
-                p_game, 
+                p_PLATFORM_file_system_context,
+                p_world,
                 p_chunk_map_node);
     }
 }
@@ -575,7 +585,8 @@ void move_chunk_manager__chunks_north(
                 != y__new_most_north_western_chunk) {
 
             replace_chunk(
-                    p_game,
+                    get_p_PLATFORM_file_system_context_from__game(p_game),
+                    get_p_world_from__game(p_game),
                     p_current__chunk_map_node,
                     x__old_most_north_western_chunk + step,
                     y__new_most_north_western_chunk
@@ -624,7 +635,8 @@ void move_chunk_manager__chunks_east(
                     y__old_most_south_eastern_chunk + step)) {
 
             replace_chunk(
-                    p_game,
+                    get_p_PLATFORM_file_system_context_from__game(p_game),
+                    get_p_world_from__game(p_game),
                     p_current__chunk_map_node,
                     x__new_most_north_eastern_chunk,
                     y__old_most_south_eastern_chunk + step
@@ -672,7 +684,8 @@ void move_chunk_manager__chunks_south(
                 != y__new_most_south_western_chunk) {
 
             replace_chunk(
-                    p_game,
+                    get_p_PLATFORM_file_system_context_from__game(p_game),
+                    get_p_world_from__game(p_game),
                     p_current__chunk_map_node,
                     x__old_most_south_western_chunk + step,
                     y__new_most_south_western_chunk
@@ -721,7 +734,8 @@ void move_chunk_manager__chunks_west(
                     y__old_most_south_western_chunk + step)) {
 
             replace_chunk(
-                    p_game,
+                    get_p_PLATFORM_file_system_context_from__game(p_game),
+                    get_p_world_from__game(p_game),
                     p_current__chunk_map_node,
                     x__new_most_north_western_chunk,
                     y__old_most_south_western_chunk + step
@@ -763,7 +777,8 @@ void move_chunk_manager(
 }
 
 void save_all_chunks(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager *p_chunk_manager) {
     Chunk_Manager__Chunk_Map_Node *p_chunk_map_node__beginning =
         p_chunk_manager
@@ -778,7 +793,8 @@ void save_all_chunks(
             memset(file_path_to__chunk, 0, sizeof(file_path_to__chunk));
             Quantity__u32 length_of__path_to__chunk =
                 stat_chunk_directory(
-                        p_game,
+                        p_PLATFORM_file_system_context,
+                        p_world,
                         p_chunk_map_node__current_column,
                         file_path_to__chunk);
             if (length_of__path_to__chunk) {
@@ -787,7 +803,8 @@ void save_all_chunks(
                         length_of__path_to__chunk, 
                         sizeof(file_path_to__chunk))) {
                     save_chunk(
-                            p_game,
+                            p_PLATFORM_file_system_context,
+                            p_chunk_manager,
                             p_chunk_map_node__current_column,
                             file_path_to__chunk);
                 }
@@ -806,7 +823,8 @@ void save_all_chunks(
 }
 
 void move_chunk_manager_to__chunk_position(
-        Game *p_game,
+        PLATFORM_File_System_Context *p_PLATFORM_file_system_context,
+        World *p_world,
         Chunk_Manager *p_chunk_manager,
         Chunk_Vector__3i32 chunk_vector__3i32) {
 
@@ -832,7 +850,8 @@ void move_chunk_manager_to__chunk_position(
         x = chunk_vector__3i32.x__i32 - 2;
         do {
             replace_chunk(
-                    p_game,
+                    p_PLATFORM_file_system_context,
+                    p_world,
                     p_chunk_map_node__current_column,
                     x, y);
             p_chunk_map_node__current_column =

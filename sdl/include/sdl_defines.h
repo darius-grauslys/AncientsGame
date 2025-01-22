@@ -116,7 +116,9 @@ typedef void (*f_SDL_Process_Input)(
 typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
 typedef void (*f_SDL_Render_World)(
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 typedef void (*f_SDL_Allocate_Gfx_Window)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -158,8 +160,8 @@ typedef void (*f_SDL_Initialize_Sprite)(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
 typedef void (*f_SDL_Render_Sprite)(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         Sprite_Wrapper *p_sprite_wrapper,
         Vector__3i32F4 position_of__sprite__3i32F4);
 
@@ -179,8 +181,8 @@ typedef void (*f_SDL_Render_Entity)(
 
 
 typedef void (*f_SDL_Render_Chunk)(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_PLATFORM_gfx_context,
+        Graphics_Window *p_PLATFORM_gfx_window,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node);
 
 typedef void (*f_SDL_Update_Chunk)(

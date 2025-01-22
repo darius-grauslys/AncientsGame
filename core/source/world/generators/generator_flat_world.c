@@ -441,8 +441,11 @@ enum Item_Kind loot_table__sandstone[] = {
 };
 
 void f_chunk_generator__flat_world(
-        Game *p_game,
+        Gfx_Context *p_gfx_context,
+        World *p_world,
         Chunk_Manager__Chunk_Map_Node *p_chunk_map_node) {
+    Repeatable_Psuedo_Random *p_repeatable_psuedo_random =
+        get_p_repeatable_psuedo_random_from__world(p_world);
     Chunk *p_chunk =
         p_chunk_map_node
         ->p_chunk__here;
@@ -464,8 +467,8 @@ void f_chunk_generator__flat_world(
     Local_Parameters random_results[9];
 
     u32 chance_for__shrine =
-        get_pseudo_random_i32_with__xy_from__game(
-                p_game, 
+        get_pseudo_random_i32_with__xy__intrusively(
+                p_repeatable_psuedo_random, 
                 x__index, 
                 y__index) & 127;
     if (is_chunk__0_0)
@@ -477,8 +480,8 @@ void f_chunk_generator__flat_world(
             && (y__index < 0
                 || y__index >= 8)) {
         chance_for__shrine =
-            get_pseudo_random_i32_with__xy_from__game(
-                    p_game, 
+            get_pseudo_random_i32_with__xy__intrusively(
+                    p_repeatable_psuedo_random, 
                     ~x__index, 
                     ~y__index) % 7;
         for (Index__u8 y=0;y<8;y++) {
@@ -504,7 +507,7 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Stick);
                 armor = get_item__empty();
                 break;
@@ -515,11 +518,11 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Sword__Rusted);
                 armor = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Armor__Cloth);
                 break;
             case 2:
@@ -529,11 +532,11 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Scimitar__Iron);
                 armor = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Armor__Gold);
                 break;
             case 3:
@@ -543,11 +546,11 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Scimitar__Iron);
                 armor = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Armor__Iron);
                 break;
             case 4:
@@ -557,11 +560,11 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Scimitar__Steel);
                 armor = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Armor__Steel);
                 break;
             case 5:
@@ -571,11 +574,11 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Scimitar__Steel);
                 armor = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Armor__Steel);
                 break;
             case 6:
@@ -585,7 +588,7 @@ void f_chunk_generator__flat_world(
                     / sizeof(enum Item_Kind);
                 weapon = 
                     get_item_from__item_manager(
-                            get_p_item_manager_from__game(p_game), 
+                            get_p_item_manager_from__world(p_world), 
                             Item_Kind__Scimitar__Steel);
                 armor = 
                     get_item__empty();
@@ -619,8 +622,8 @@ void f_chunk_generator__flat_world(
                 step++) {
             Entity *p_skeleton = 
                 allocate_entity_into__world(
-                        p_game, 
-                        get_p_world_from__game(p_game), 
+                        p_gfx_context, 
+                        p_world,
                         Entity_Kind__Skeleton, 
                         positions[step]);
             if (!p_skeleton)
@@ -629,13 +632,13 @@ void f_chunk_generator__flat_world(
                 weapon;
             p_skeleton->equipment.item_stack__armor.item =
                 armor;
-            if (armor.m_item_equip_handler) {
-                armor.m_item_equip_handler(
-                        &armor,
-                        p_skeleton,
-                        Entity_Equipment_Slot_Kind__Armor,
-                        p_game);
-            }
+            // if (armor.m_item_equip_handler) {
+            //     armor.m_item_equip_handler(
+            //             &armor,
+            //             p_skeleton,
+            //             Entity_Equipment_Slot_Kind__Armor,
+            //             p_game);
+            // }
         }
 
         Tile *p_tile =
@@ -654,13 +657,13 @@ void f_chunk_generator__flat_world(
                     tile_vector__3i32);
         Inventory *p_inventory =
             allocate_p_inventory_using__this_uuid_in__inventory_manager(
-                    get_p_inventory_manager_from__game(p_game), 
+                    get_p_inventory_manager_from__world(p_world), 
                     container_uuid__u32);
 
         u32 quantity_of__items = 
             add_u32__clamped(
-                    get_pseudo_random_i32_with__xy_from__game(
-                        p_game, 
+                    get_pseudo_random_i32_with__xy__intrusively(
+                        p_repeatable_psuedo_random, 
                         x__index, 
                         y__index) % size_of__p_loot_table,
                     1,
@@ -669,14 +672,14 @@ void f_chunk_generator__flat_world(
                 step < quantity_of__items;
                 step++) {
             chance_for__shrine =
-                get_pseudo_random_i32_with__xy_from__game(
-                        p_game, 
+                get_pseudo_random_i32_with__xy__intrusively(
+                        p_repeatable_psuedo_random, 
                         step % 3 + x__index,
                         step / 3 + y__index) % size_of__p_loot_table;
             add_item_to__inventory(
                     p_inventory, 
                     get_item_from__item_manager(
-                        get_p_item_manager_from__game(p_game), 
+                        get_p_item_manager_from__world(p_world), 
                         p_loot_table[chance_for__shrine]), 
                     1, 1);
         }
@@ -691,14 +694,14 @@ void f_chunk_generator__flat_world(
             Index__u32 index = (x+1) + (3*(2 - (y+1)));
             random_results[index]
                 .random_result__local__u32 =
-                get_pseudo_random_i32_with__xy_from__game(
-                        p_game, 
+                get_pseudo_random_i32_with__xy__intrusively(
+                        p_repeatable_psuedo_random, 
                         x__index + x, 
                         y__index + y);
             random_results[index]
                 .random_result__greater__u32 =
-                get_pseudo_random_i32_with__xy_from__game(
-                        p_game,
+                get_pseudo_random_i32_with__xy__intrusively(
+                        p_repeatable_psuedo_random, 
                         (x__index + x) >> 4, 
                         (y__index + y) >> 4);
 
@@ -765,8 +768,8 @@ void f_chunk_generator__flat_world(
                     TILE_FLAGS__NONE);
 
             Psuedo_Random__u32 chance_plant =
-                get_pseudo_random_i32_from__game(
-                        p_game)
+                get_pseudo_random_i32__intrusively(
+                        p_repeatable_psuedo_random)
                 % 10000;
             p_tile->the_kind_of_tile_cover__this_tile_has =
                 Tile_Cover_Kind__None;
@@ -891,34 +894,34 @@ void f_chunk_generator__flat_world(
 
         Inventory *p_inventory =
             allocate_p_inventory_using__this_uuid_in__inventory_manager(
-                    get_p_inventory_manager_from__game(p_game), 
+                    get_p_inventory_manager_from__world(p_world), 
                     get_uuid_for__container(
                         get_vector__3i32(0,3,0)));
 
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
+                    get_p_item_manager_from__world(p_world), 
                     Item_Kind__Stick), 1, 1);
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
+                    get_p_item_manager_from__world(p_world), 
                     Item_Kind__Hammer__Iron), 1, 1);
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
+                    get_p_item_manager_from__world(p_world), 
                     Item_Kind__Hatchet__Iron), 1, 1);
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
+                    get_p_item_manager_from__world(p_world), 
                     Item_Kind__Pickaxe__Iron), 1, 1);
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
+                    get_p_item_manager_from__world(p_world), 
                     Item_Kind__Shovel__Iron), 1, 1);
         add_item_to__inventory(
                 p_inventory, 
@@ -930,7 +933,7 @@ void f_chunk_generator__flat_world(
         add_item_to__inventory(
                 p_inventory, 
                 get_item_from__item_manager(
-                    get_p_item_manager_from__game(p_game), 
+                    get_p_item_manager_from__world(p_world), 
                     Item_Kind__Table), 1, 1);
     }
 }
