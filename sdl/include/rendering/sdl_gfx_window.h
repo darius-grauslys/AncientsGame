@@ -14,7 +14,8 @@ void SDL_initialize_gfx_window(
 
 void SDL_compose_gfx_window(
         Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window);
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 void SDL_render_gfx_window(
         Gfx_Context *p_gfx_context,
@@ -69,13 +70,6 @@ Vector__3i32F4 SDL_get_position_of__gfx_window(
         PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
     return p_PLATFORM_gfx_window
         ->SDL_position_of__graphics_window;
-}
-
-static inline
-UI_Manager *SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
-    return &p_PLATFORM_gfx_window
-        ->SDL_graphics_window__ui_manager;
 }
 
 static inline

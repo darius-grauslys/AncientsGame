@@ -62,8 +62,8 @@ void GL_render_chunk(
     // TODO: null checks
 
     Camera *p_camera =
-        p_PLATFORM_gfx_window
-        ->p_active_camera
+        &p_gfx_window
+        ->camera
         ;
 
     GL_Gfx_Sub_Context *p_GL_gfx_sub_context =

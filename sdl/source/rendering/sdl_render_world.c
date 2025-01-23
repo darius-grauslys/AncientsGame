@@ -3,32 +3,7 @@
 #include "sdl_defines.h"
 #include "world/world.h"
 
-void SDL_render_world(
-        Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window,
-        World *p_world) {
-    f_SDL_Render_World f_SDL_render_world =
-        get_p_PLATFORM_gfx_context_from__gfx_context(
-                p_gfx_context)
-        ->SDL_gfx_sub_context__wrapper
-        .f_SDL_render_world
-        ;
-
-#ifndef NDEBUG
-    if (!f_SDL_render_world) {
-        debug_warning("Did you forget to initialize a graphics backend?");
-        debug_abort("SDL_render_world, f_SDL_render_world == 0.");
-        return;
-    }
-#endif
-
-    f_SDL_render_world(
-            p_gfx_context,
-            p_gfx_window,
-            p_world);
-}
-
-void f_SDL_render_world__default(
+void SDL_compose_world(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
         World *p_world) {

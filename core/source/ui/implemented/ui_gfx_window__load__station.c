@@ -59,6 +59,7 @@ bool f_ui_window_load__station(
     allocate_ui_inventory_column_into__ui_element_container(
             p_gfx_context,
             p_gfx_window,
+            p_world,
             p_ui_manager,
             p_ui_element__inventory_column__player, 
             p_inventory__player);
@@ -78,6 +79,7 @@ bool f_ui_window_load__station(
     allocate_ui_station_inventory_for__ui_element_container(
             p_gfx_context, 
             p_gfx_window,
+            p_world,
             &station_inventory_map, 
             p_ui_manager,
             p_ui_element__inventory_slot__requirements, 

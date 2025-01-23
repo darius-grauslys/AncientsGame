@@ -8,7 +8,8 @@ bool f_ui_window__close__default(
         UI_Manager *p_ui_manager) {
     release_all__ui_elements_from__ui_manager(
             p_ui_manager, 
-#warning TODO: not null here, and refactor signature.
-            0);
+            p_gfx_context,
+            p_gfx_window,
+            p_world);
     return true;
 }

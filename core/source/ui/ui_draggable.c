@@ -30,9 +30,12 @@ void initialize_ui_element_as__draggable(
 
 void m_ui_draggable__dragged_handler__default(
         UI_Element *p_this_draggable,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input) {
     Vector__3i32 position =
-        p_game->input.cursor__3i32;
+        p_input->cursor__3i32;
     position.x__i32 -= 
       p_this_draggable->ui_bounding_box__aabb.width__quantity_u32 >> 1;
     position.y__i32 -= 
@@ -45,7 +48,10 @@ void m_ui_draggable__dragged_handler__default(
 
 void m_ui_draggable__dropped_handler__default(
         UI_Element *p_this_draggable,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input) {
     debug_info("dropped");
     if (!p_this_draggable->p_parent) {
         debug_info("no parent");

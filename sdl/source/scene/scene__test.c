@@ -28,6 +28,7 @@
 #include "ui/implemented/ui_registrar__implemented.h"
 #include "ui/ui_manager.h"
 #include "vectors.h"
+#include "world/camera.h"
 #include "world/serialization/world_directory.h"
 #include "world/world.h"
 
@@ -57,7 +58,7 @@ void m_enter_scene_handler_as__test(
                 get_p_gfx_context_from__game(p_game), 
                 get_p_graphics_window_manager_from__gfx_context(
                     get_p_gfx_context_from__game(p_game)), 
-                TEXTURE_FLAG__SIZE_256x256);
+                TEXTURE_FLAG__SIZE_512x512);
 
     set_graphics_window_as__rendering_world(
             p_gfx_window__world);
@@ -65,8 +66,19 @@ void m_enter_scene_handler_as__test(
     initialize_world(
             p_game,
             get_p_world_from__game(p_game),
-            SDL_get_main_graphics_window_from__gfx_context(
-                get_p_PLATFORM_gfx_context_from__game(p_game)));
+            p_gfx_window__world);
+
+    initialize_camera(
+            &p_gfx_window__world->camera,
+            get_vector__3i32F4_using__i32(
+                0, 0, 0),
+            0, //nullptr handler
+            CAMERA_FULCRUM__WIDTH,
+            CAMERA_FULCRUM__HEIGHT,
+            -BIT(18),
+            i32_to__i32F20(100)
+            );
+
     load_world(
             get_p_gfx_context_from__game(p_game),
             get_p_PLATFORM_file_system_context_from__game(p_game),
@@ -80,10 +92,8 @@ void m_enter_scene_handler_as__test(
         p_game->world.entity_manager
             .p_local_player;
     set_camera_to__track_this__entity(
-            p_game
-            ->gfx_context.p_PLATFORM_gfx_context
-            ->SDL_graphics_window__main
-            .p_active_camera,
+            &p_gfx_window__world
+            ->camera,
             p_player);
     teleport_player(
             get_p_PLATFORM_file_system_context_from__game(p_game), 
@@ -114,8 +124,20 @@ void m_enter_scene_handler_as__test(
 
         poll_ui_manager__update(
                 &p_game->gfx_context.ui_manager, 
-                p_game, 
-                &p_PLATFORM_gfx_context->SDL_graphics_window__main);
+                p_gfx_context,
+                0,
+                &p_game->world,
+                &p_game->input);
+
+        compose_graphic_windows_in__graphics_window_manager(
+                get_p_gfx_context_from__game(p_game), 
+                get_p_graphics_window_manager_from__gfx_context(p_gfx_context), 
+                get_p_world_from__game(p_game));
+        
+        render_entities_in__world(
+                get_p_gfx_context_from__game(p_game), 
+                p_gfx_window__world,
+                get_p_world_from__game(p_game));
 
         render_graphic_windows_in__graphics_window_manager(
                 get_p_gfx_context_from__game(p_game), 

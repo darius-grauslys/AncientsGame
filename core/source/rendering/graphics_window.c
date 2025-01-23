@@ -62,7 +62,7 @@ void update_graphics_window__ui_tiles(
                 .p_ui_tile_data,
             p_ui_tiles,
             size_of__p_ui_tiles);
-    set_graphics_window__ui_tile_map_as__dirty(p_gfx_window);
+    set_graphics_window_as__in_need_of__composition(p_gfx_window);
 }
 
 void set_graphics_window__ui_tile_map(

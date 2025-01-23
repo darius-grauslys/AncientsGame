@@ -104,7 +104,7 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
         Texture_Flags texture_flags_for__sprite);
 
 void PLATFORM_release_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Gfx_Context *p_gfx_context,
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
 void PLATFORM_release_all__sprites(
@@ -260,6 +260,11 @@ PLATFORM_Graphics_Window *PLATFORM_allocate_gfx_window(
 void PLATFORM_release_gfx_window(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_graphics_window);
+
+void PLATFORM_compose_gfx_window(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 void PLATFORM_render_gfx_window(
         Gfx_Context *p_gfx_context,

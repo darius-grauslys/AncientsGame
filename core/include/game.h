@@ -86,11 +86,6 @@ Aliased_Texture_Manager *get_p_aliased_texture_manager_from__game(Game *p_game) 
 }
 
 static inline
-Camera *get_p_camera_from__game(Game *p_game) {
-    return get_p_camera_from__world(&p_game->world);
-}
-
-static inline
 Process_Manager *get_p_process_manager_from__game(Game *p_game) {
     return &p_game->process_manager;
 }

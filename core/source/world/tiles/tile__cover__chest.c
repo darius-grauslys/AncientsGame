@@ -79,7 +79,7 @@ void f_tile_interact_handler__chest(
 
     Inventory *p_inventory =
         resolve_s_inventory(
-                p_game, 
+                get_p_world_from__game(p_game), 
                 &s_inventory_ptr);
 
     if (!p_inventory) {
@@ -95,7 +95,6 @@ void f_tile_interact_handler__chest(
     open_ui(
             &p_game->gfx_context, 
             &p_game->gfx_context.ui_manager,
-#warning take p_world instead here.
             get_p_world_from__game(p_game),
             UI_Window_Kind__Trade);
 }
@@ -189,7 +188,7 @@ bool f_tile_handler__destroy__chest(
 
     Inventory *p_inventory =
         resolve_s_inventory(
-                p_game, 
+                get_p_world_from__game(p_game),
                 &s_inventory_ptr);
 
     if (p_inventory

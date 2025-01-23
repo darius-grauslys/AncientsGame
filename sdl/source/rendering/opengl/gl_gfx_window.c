@@ -72,9 +72,61 @@ void GL_allocate_gfx_window(
 
 void GL_compose_gfx_window(
         Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window) {
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
+    if (p_gfx_window->camera.m_camera_handler) {
+        p_gfx_window->camera.m_camera_handler(
+                &p_gfx_window->camera,
+                p_world);
+    }
+
+    GL_Framebuffer *p_GL_framebuffer =
+        (GL_Framebuffer*)p_gfx_window
+        ->p_PLATFORM_gfx_window
+        ->p_SDL_graphics_window__data;
+
+    if (!p_GL_framebuffer) {
+        debug_error("GL_compose_gfx_window, missing framebuffer.");
+        return;
+    }
+
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
+     
+    GL_Viewport_Stack *p_GL_viewport_stack =
+        GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context);
+
+    if (is_graphics_window__rendering_world(
+                p_gfx_window)) {
+        GL_use_framebuffer_as__target(
+                p_GL_framebuffer);
+        GL_bind_texture_to__framebuffer(
+                p_GL_framebuffer, 
+                p_gfx_window
+                ->p_PLATFORM_gfx_window
+                ->p_SDL_graphics_window__texture);
+        glClear(GL_COLOR_BUFFER_BIT);
+        GL_push_viewport(
+                p_GL_viewport_stack, 
+                0, 0,
+                p_gfx_window
+                ->p_PLATFORM_gfx_window
+                ->p_SDL_graphics_window__texture
+                ->width,
+                p_gfx_window
+                ->p_PLATFORM_gfx_window
+                ->p_SDL_graphics_window__texture
+                ->height);
+        SDL_compose_world(
+                p_gfx_context, 
+                p_gfx_window, 
+                p_world);
+        GL_pop_viewport(p_GL_viewport_stack);
+        GL_unbind_framebuffer();
+
+        return;
+    }
 
     GL_Shader_2D *p_GL_shader__passthrough=
         GL_get_shader_from__shader_manager(
@@ -91,16 +143,6 @@ void GL_compose_gfx_window(
     UI_Tile_Map__Wrapper ui_tile_map__wrapper =
         p_gfx_window->ui_tile_map__wrapper;
 
-    GL_Framebuffer *p_GL_framebuffer =
-        (GL_Framebuffer*)p_gfx_window
-        ->p_PLATFORM_gfx_window
-        ->p_SDL_graphics_window__data;
-
-    if (!p_GL_framebuffer) {
-        debug_error("GL_composite_gfx_window_from__ui_tiles, missing framebuffer.");
-        return;
-    }
-
     GL_Framebuffer_Manager *p_GL_framebuffer_manager =
         GL_get_p_framebuffer_manager_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context);
@@ -110,10 +152,6 @@ void GL_compose_gfx_window(
                 get_p_aliased_texture_manager_from__gfx_context(p_gfx_context), 
                 name_of__texture__tilesheet_ui__c_str);
 
-    float clear_color[4];
-    glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
-
-    glClearColor(1.0, 0.0, 1.0, 0.0);
     GL_push_framebuffer_onto__framebuffer_manager(
             p_GL_framebuffer_manager,
             p_GL_framebuffer);
@@ -122,6 +160,11 @@ void GL_compose_gfx_window(
             p_gfx_window
             ->p_PLATFORM_gfx_window
             ->p_SDL_graphics_window__texture);
+
+    float clear_color[4];
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
+
+    glClearColor(1.0, 0.0, 1.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(
             clear_color[0],
@@ -129,42 +172,10 @@ void GL_compose_gfx_window(
             clear_color[2],
             clear_color[3]);
 
-    GL_Viewport_Stack *p_GL_viewport_stack =
-        GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context);
-
     GL_Vertex_Object *p_GL_vertex_object =
         &GL_get_p_gfx_sub_context_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context)
         ->GL_vertex_object__unit_square;
-
-    GL_push_viewport(
-            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context), 
-            0, 
-            0,
-            p_gfx_window
-            ->p_PLATFORM_gfx_window
-            ->p_SDL_graphics_window__texture
-            ->width,
-            p_gfx_window
-            ->p_PLATFORM_gfx_window
-            ->p_SDL_graphics_window__texture
-            ->height);
-
-#warning TODO: remove this, and get ui_manager as parameter
-    render_all_ui_elements_in__ui_manager(
-            SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
-                p_gfx_window
-                ->p_PLATFORM_gfx_window), 
-            p_gfx_context
-            ->p_PLATFORM_gfx_context,
-            p_gfx_window
-            ->p_PLATFORM_gfx_window);
-
-    GL_pop_viewport(
-            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
-                p_PLATFORM_gfx_context));
 
     use_shader_2d(
             p_GL_shader__passthrough);
@@ -224,6 +235,32 @@ void GL_compose_gfx_window(
         }
     }
 
+    GL_push_viewport(
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context), 
+            0, 
+            0,
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
+            ->p_SDL_graphics_window__texture
+            ->width,
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
+            ->p_SDL_graphics_window__texture
+            ->height);
+
+    render_all_ui_elements_in__ui_manager(
+#warning TODO: remove this, and get ui_manager as parameter
+            &p_gfx_context
+            ->ui_manager,
+            p_gfx_context,
+            p_gfx_window);
+
+    GL_pop_viewport(
+            GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_PLATFORM_gfx_context));
+
+
     GL_pop_framebuffer_off_of__framebuffer_manager(
             p_GL_framebuffer_manager);
 }
@@ -232,42 +269,6 @@ void GL_render_gfx_window(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
         World *p_world) {
-    if (p_gfx_window->camera.m_camera_handler) {
-        p_gfx_window->camera.m_camera_handler(
-                &p_gfx_window->camera,
-                p_world);
-    }
-    if (is_graphics_window__rendering_world(
-                p_gfx_window)) {
-        GL_Framebuffer *p_GL_framebuffer =
-            (GL_Framebuffer*)p_gfx_window
-            ->p_PLATFORM_gfx_window
-            ->p_SDL_graphics_window__data;
-
-        float clear_color[4];
-        glGetFloatv(GL_COLOR_CLEAR_VALUE, clear_color);
-
-        glClearColor(0.0, 0.0, 0.0, 0.0);
-        GL_use_framebuffer_as__target(
-                p_GL_framebuffer);
-        GL_bind_texture_to__framebuffer(
-                p_GL_framebuffer, 
-                p_gfx_window
-                ->p_PLATFORM_gfx_window
-                ->p_SDL_graphics_window__texture);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glClearColor(
-                clear_color[0],
-                clear_color[1],
-                clear_color[2],
-                clear_color[3]);
-        SDL_render_world(
-                p_gfx_context, 
-                p_gfx_window, 
-                p_world);
-        GL_unbind_framebuffer();
-    }
-
     PLATFORM_Gfx_Context *p_PLATFORM_gfx_context =
         get_p_PLATFORM_gfx_context_from__gfx_context(p_gfx_context);
 

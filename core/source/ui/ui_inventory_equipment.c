@@ -14,6 +14,7 @@
 void allocate_ui_equipment_into__ui_element_container(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
+        World *p_world,
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element,
         Equipment *p_equipment) {
@@ -27,7 +28,9 @@ void allocate_ui_equipment_into__ui_element_container(
                     p_ui_manager,
                     p_ui_element__current_equipment_slot
                     ->p_child, 
-                    0);
+                    p_gfx_context,
+                    p_gfx_window,
+                    p_world);
         }
         if (p_equipment) {
             Item_Stack *p_item_stack =

@@ -13,10 +13,16 @@ void initialize_ui_element_as__draggable(
 
 void m_ui_draggable__dragged_handler__default(
         UI_Element *p_this_draggable,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 void m_ui_draggable__dropped_handler__default(
         UI_Element *p_this_draggable,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 #endif

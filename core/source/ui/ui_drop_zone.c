@@ -31,7 +31,10 @@ void m_ui_drop_zone__receive_drop_handler__default(
         UI_Manager *p_ui_manager,
         UI_Element *p_this_drop_zone,
         UI_Element *p_ui_element__dropped,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input) {
 
     UI_Element *p_ui_element__parent_of__dropped =
         p_ui_element__dropped->p_parent;
@@ -49,6 +52,9 @@ void m_ui_drop_zone__receive_drop_handler__default(
             ->m_ui_dropped_handler(
                     p_ui_element__parent_of__dropped
                     ->p_child,
-                    p_game);
+                    p_gfx_context,
+                    p_gfx_window,
+                    p_world,
+                    p_input);
     }
 }

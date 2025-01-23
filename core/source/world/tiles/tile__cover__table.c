@@ -73,7 +73,7 @@ void f_tile_interact_handler__table(
             uuid);
 
     if (!resolve_s_inventory(
-                p_game, 
+                get_p_world_from__game(p_game),
                 &p_entity->s_humanoid__container_ptr)) {
         return;
     }

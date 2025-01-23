@@ -77,16 +77,10 @@ typedef struct PLATFORM_Texture_t {
 } PLATFORM_Texture;
 
 typedef struct PLATFORM_Graphics_Window_t {
-#warning TODO: remove ui_manager here.
-    UI_Manager SDL_graphics_window__ui_manager;
 #warning TODO: remove ui_associated game action here.
     Game_Action associated_game_action;
     PLATFORM_Texture *p_SDL_graphics_window__texture;
     void *p_SDL_graphics_window__data;
-#warning TODO: gfx_context here.
-    PLATFORM_Gfx_Context *p_PLATFORM_gfx_context;
-#warning TODO: remove active camera here.
-    Camera *p_active_camera;
     UI_Tile_Map__Wrapper SDL_graphics_window__ui_tile_map__wrapper;
     Vector__3i32F4 SDL_position_of__graphics_window;
     Vector__3i32F4 SDL_origin_of__graphics_window;
@@ -115,10 +109,6 @@ typedef void (*f_SDL_Process_Input)(
 
 typedef void (*f_SDL_Initialize_Rendering__Worldspace)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context);
-typedef void (*f_SDL_Render_World)(
-        Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window,
-        World *p_world);
 
 typedef void (*f_SDL_Allocate_Gfx_Window)(
         PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
@@ -130,7 +120,8 @@ typedef void (*f_SDL_Release_Gfx_Window)(
 
 typedef void (*f_SDL_Compose_Gfx_Window)(
         Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window);
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 typedef void (*f_SDL_Render_Gfx_Window)(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
@@ -252,7 +243,6 @@ typedef struct SDL_Gfx_Sub_Context__Wrapper_t {
 
     f_SDL_Initialize_Rendering__Worldspace
                                         f_SDL_initialize_rendering__worldspace;
-    f_SDL_Render_World                  f_SDL_render_world;
 
     f_SDL_Allocate_Gfx_Window           f_SDL_allocate_gfx_window;
     f_SDL_Release_Gfx_Window            f_SDL_release_gfx_window;

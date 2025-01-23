@@ -55,23 +55,6 @@ void GL_initialize_gfx_sub_context(
             SDL_WINDOWEVENT_RESIZED,
             f_SDL_event_handler__GL_resize);
 
-    Camera *p_GL_camera__default =
-        &p_GL_gfx_sub_context
-        ->GL_camera__default;
-
-    initialize_camera(
-            p_GL_camera__default, 
-            VECTOR__3i32F4__0_0_0, 
-            0, 
-            16,
-            12, 
-            -BIT(18), 
-            i32_to__i32F20(100));
-
-    SDL_set_active_camera(
-            p_PLATFORM_gfx_context, 
-            p_GL_camera__default);
-
     initialize_vertex_object_as__unit_square(
             &p_GL_gfx_sub_context
             ->GL_vertex_object__unit_square);

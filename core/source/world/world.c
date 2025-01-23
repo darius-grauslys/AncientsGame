@@ -36,8 +36,8 @@ void m_deserialize_handler__world(
 void initialize_world(
         Game *p_game,
         World *p_world,
-        PLATFORM_Graphics_Window 
-            *p_PLATFORM_graphics_window_for__world) {
+        Graphics_Window 
+            *p_graphics_window_for__world) {
 
     intialize_serializer(
             &p_world->_serializer, 
@@ -54,8 +54,6 @@ void initialize_world(
     strncpy(p_world->name, "default_world", WORLD_NAME_MAX_SIZE_OF);
     p_world->length_of__world_name = strnlen(p_world->name, WORLD_NAME_MAX_SIZE_OF);
 
-    p_world->p_PLATFORM_graphics_window_for__world =
-        p_PLATFORM_graphics_window_for__world;
     // TODO: modularize this better:
     initialize_weight_map();
     // initialize_world_parameters(
@@ -75,16 +73,6 @@ void initialize_world(
     initialize_chunk_manager(
             p_game,
             get_p_chunk_manager_from__world(p_world));
-    initialize_camera(
-            &p_world->camera,
-            get_vector__3i32F4_using__i32(
-                0, 0, 0),
-            0, //nullptr handler
-            CAMERA_FULCRUM__WIDTH,
-            CAMERA_FULCRUM__HEIGHT,
-            -BIT(18),
-            i32_to__i32F20(100)
-            );
     register_core_tile_logic_handlers(
             get_p_tile_logic_manager_from__world(p_world));
 }
@@ -282,7 +270,11 @@ bool poll_world_for__scrolling(
         poll_chunk_manager_for__chunk_movement(
                 p_game,
                 &p_world->chunk_manager,
-                p_world->camera.position);
+                p_world
+                ->entity_manager
+                .p_local_player
+                ->hitbox
+                .position__3i32F4);
 
     return is_chunks_moved;
 }
@@ -483,9 +475,10 @@ void m_deserialize_handler__world(
     p_world->entity_manager.p_local_player =
         p_player;
 
-    set_camera_to__track_this__entity(
-            &p_game->world.camera, 
-            p_player);
+#warning route gfx_window to here, and track entity. Or find other solution.
+    // set_camera_to__track_this__entity(
+    //         &p_game->world.camera, 
+    //         p_player);
 
     Quantity__u32 length_of__read = WORLD_NAME_MAX_SIZE_OF;
     PLATFORM_read_file(

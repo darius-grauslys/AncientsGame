@@ -20,21 +20,28 @@ void initialize_ui_element_as__slider(
 
 void m_ui_slider__dragged_handler__default(
         UI_Element *p_this_draggable,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 void m_ui_slider__dragged_handler__gfx_window__default(
         UI_Element *p_this_draggable,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 void m_ui_slider__dispose_handler__default(
         UI_Element *p_this_slider,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 void m_ui_slider__render_handler__default(
         UI_Element *p_this_ui_element,
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window);
 
 bool f_sprite_gfx_allocator__ui_slider(
         Gfx_Context *p_gfx_context,

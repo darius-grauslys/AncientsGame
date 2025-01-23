@@ -267,11 +267,6 @@ void SDL_release_gfx_window(
             p_PLATFORM_gfx_window
             ->SDL_graphics_window__ui_tile_map__wrapper);
 
-    release_all__ui_elements_from__ui_manager(
-            PLATFORM_get_p_ui_manager_from__gfx_window(
-                p_PLATFORM_gfx_window), 
-            p_game);
-
     SDL_release_PLATFORM_gfx_window_from__manager(
             SDL_get_p_gfx_window_manager_from__PLATFORM_gfx_context(
                 p_PLATFORM_gfx_context), 

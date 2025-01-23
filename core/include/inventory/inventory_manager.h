@@ -66,10 +66,10 @@ bool resolve_s_item_stack_ptr_to__inventory_manager(
 
 static inline
 Inventory *resolve_s_inventory(
-        Game *p_game,
+        World *p_world,
         Serialized_Inventory_Ptr *s_inventory_ptr) {
     if (resolve_s_inventory_ptr_to__inventory_manager(
-                get_p_inventory_manager_from__game(p_game), 
+                get_p_inventory_manager_from__world(p_world), 
                 s_inventory_ptr)) {
         return s_inventory_ptr->p_serialized_field__inventory;
     }

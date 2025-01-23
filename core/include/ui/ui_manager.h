@@ -6,14 +6,14 @@
 #include <defines.h>
 
 void initialize_ui_manager(
-        UI_Manager *p_ui_manager,
-        PLATFORM_Graphics_Window
-            *p_PLATFORM_graphics_window_for__ui_manager);
+        UI_Manager *p_ui_manager);
 
 void poll_ui_manager__update(
         UI_Manager *p_ui_manager,
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 static inline
 Index__u16 get_index_of__p_ui_element_in__ui_manager(
@@ -91,11 +91,15 @@ UI_Element *allocate_many_ui_elements_from__ui_manager_as__recursive_children(
 void release__ui_element_from__ui_manager(
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 void release_all__ui_elements_from__ui_manager(
         UI_Manager *p_ui_manager,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 ///
 /// You will want to call this whenever you're implementing a
@@ -116,13 +120,13 @@ void set_ui_element_priority_higher_than__this_ui_element_in__ui_manager(
 
 void foreach_ui_element_in__ui_manager(
         UI_Manager *p_ui_manager,
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
         f_Foreach_UI_Element f_foreach_ui_element);
 
 void render_all_ui_elements_in__ui_manager(
         UI_Manager *p_ui_manager,
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window);
 
 #endif

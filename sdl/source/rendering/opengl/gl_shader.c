@@ -164,10 +164,10 @@ void GL_link_camera_projection_to__shader(
     if (p_camera) {
         // TODO: magic numbers
         glm_ortho_lh_no(
-                -(float)p_camera->width_of__fulcrum, 
-                 (float)p_camera->width_of__fulcrum,
-                -(float)p_camera->height_of__fulcrum, 
-                 (float)p_camera->height_of__fulcrum,
+                -(float)p_camera->width_of__fulcrum / 16.0f, 
+                 (float)p_camera->width_of__fulcrum / 16.0f,
+                -(float)p_camera->height_of__fulcrum / 16.0f, 
+                 (float)p_camera->height_of__fulcrum / 16.0f,
                  i32F20_to__float(p_camera->z_near),
                  i32F20_to__float(p_camera->z_far),
                  *p_projection);

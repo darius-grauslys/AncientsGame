@@ -22,26 +22,26 @@ void set_graphics_window__ui_tile_map(
         UI_Tile_Map__Wrapper ui_tile_map_wrapper);
 
 static inline
-bool is_graphics_window__ui_tile_map__dirty(
+bool is_graphics_window_in_need_of__composition(
         Graphics_Window *p_gfx_window) {
     return p_gfx_window->graphics_window__flags
-        & GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY
+        & GRAPHICS_WINDOW__FLAG__COMPOSE__DIRTY
         ;
 }
 
 static inline
-void set_graphics_window__ui_tile_map_as__dirty(
+void set_graphics_window_as__in_need_of__composition(
         Graphics_Window *p_gfx_window) {
     p_gfx_window->graphics_window__flags |=
-        GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY
+        GRAPHICS_WINDOW__FLAG__COMPOSE__DIRTY
         ;
 }
 
 static inline
-void set_graphics_window__ui_tile_map_as__clean(
+void set_graphics_window_as__no_longer_needing__composition(
         Graphics_Window *p_gfx_window) {
     p_gfx_window->graphics_window__flags &=
-        ~GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY
+        ~GRAPHICS_WINDOW__FLAG__COMPOSE__DIRTY
         ;
 }
 

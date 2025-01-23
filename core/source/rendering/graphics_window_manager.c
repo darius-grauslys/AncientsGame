@@ -4,6 +4,7 @@
 #include "platform.h"
 #include "rendering/graphics_window.h"
 #include "util/bitmap/bitmap.h"
+#include "world/camera.h"
 #include "world/world.h"
 
 static inline
@@ -76,6 +77,17 @@ Graphics_Window *allocate_graphics_window_with__graphics_window_manager(
     p_graphics_window__available
         ->p_PLATFORM_gfx_window = 
         p_PLATFORM_gfx_window;
+
+    initialize_camera(
+            &p_graphics_window__available->camera,
+            get_vector__3i32F4_using__i32(
+                0, 0, 0),
+            0, //nullptr handler
+            CAMERA_FULCRUM__WIDTH,
+            CAMERA_FULCRUM__HEIGHT,
+            -BIT(18),
+            i32_to__i32F20(100)
+            );
 
     return p_graphics_window__available;
 }
@@ -215,10 +227,10 @@ void render_graphic_windows_in__graphics_window_manager(
             0, 
             sizeof(bitmap__gfx_windows__visited));
 
-    for (Index__u32 index_of__graphics_window = 0;
+    for (Index__u32 index_of__graphics_window = MAX_QUANTITY_OF__GRAPHICS_WINDOWS - 1;
             index_of__graphics_window 
             < MAX_QUANTITY_OF__GRAPHICS_WINDOWS;
-            index_of__graphics_window++) {
+            index_of__graphics_window--) {
         Graphics_Window *p_gfx_window =
             get_p_graphics_window_by__index_from__manager(
                     p_graphics_window__manager, 
@@ -240,14 +252,6 @@ void render_graphic_windows_in__graphics_window_manager(
                 0, 
                 p_world);
 
-        if (is_graphics_window__rendering_world(
-                    p_gfx_window)) {
-            render_entities_in__world(
-                    p_gfx_context,
-                    p_gfx_window,
-                    p_world);
-        }
-
         if (is_graphics_window_possessing__a_child(
                     p_gfx_window)) {
             set_bit_in__bitmap(
@@ -260,6 +264,68 @@ void render_graphic_windows_in__graphics_window_manager(
                     p_gfx_context, 
                     p_gfx_window->p_child__graphics_window, 
                     p_gfx_window, 
+                    p_world);
+        }
+    }
+}
+
+void compose_graphic_windows_in__graphics_window_manager(
+        Gfx_Context *p_gfx_context,
+        Graphics_Window_Manager *p_graphics_window__manager,
+        World *p_world) {
+    BITMAP(bitmap__gfx_windows__visited, MAX_QUANTITY_OF__GRAPHICS_WINDOWS);
+    memset(
+            bitmap__gfx_windows__visited, 
+            0, 
+            sizeof(bitmap__gfx_windows__visited));
+
+    for (Index__u32 index_of__graphics_window = 0;
+            index_of__graphics_window 
+            < MAX_QUANTITY_OF__GRAPHICS_WINDOWS;
+            index_of__graphics_window++) {
+        Graphics_Window *p_gfx_window =
+            get_p_graphics_window_by__index_from__manager(
+                    p_graphics_window__manager, 
+                    index_of__graphics_window);
+        if (!is_graphics_window__allocated(
+                    p_gfx_window)) {
+            continue;
+        }
+        if (!is_graphics_window_in_need_of__composition(
+                    p_gfx_window)) {
+            // --- TODO: remove this, and
+            // only compose the world if updates have been made.
+            if (!is_graphics_window__rendering_world(
+                        p_gfx_window)) {
+                continue;
+            }
+            // ---
+        }
+        set_graphics_window_as__no_longer_needing__composition(
+                p_gfx_window);
+        if (is_bit_set_in__bitmap(
+                    bitmap__gfx_windows__visited, 
+                    MAX_QUANTITY_OF__GRAPHICS_WINDOWS, 
+                    index_of__graphics_window)) {
+            continue;
+        }
+
+        PLATFORM_compose_gfx_window(
+                p_gfx_context, 
+                p_gfx_window, 
+                p_world);
+
+        if (is_graphics_window_possessing__a_child(
+                    p_gfx_window)) {
+            set_bit_in__bitmap(
+                    bitmap__gfx_windows__visited, 
+                    MAX_QUANTITY_OF__GRAPHICS_WINDOWS, 
+                    p_gfx_window->p_child__graphics_window
+                    - p_graphics_window__manager->graphics_windows, 
+                    true);
+            PLATFORM_compose_gfx_window(
+                    p_gfx_context, 
+                    p_gfx_window->p_child__graphics_window, 
                     p_world);
         }
     }

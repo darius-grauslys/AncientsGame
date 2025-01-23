@@ -50,6 +50,7 @@ bool f_ui_window_load__equip(
     allocate_ui_inventory_column_into__ui_element_container(
             p_gfx_context,
             p_gfx_window,
+            p_world,
             p_ui_manager,
             p_ui_element__inventory_column, 
             p_inventory);
@@ -57,6 +58,7 @@ bool f_ui_window_load__equip(
     allocate_ui_equipment_into__ui_element_container(
             p_gfx_context,
             p_gfx_window,
+            p_world,
             p_ui_manager,
             p_ui_element__equipment_column, 
             &p_entity__local_player->equipment);

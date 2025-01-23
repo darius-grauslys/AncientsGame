@@ -9,8 +9,8 @@
 void initialize_world(
         Game *p_game,
         World *p_world,
-        PLATFORM_Graphics_Window 
-            *p_PLATFORM_graphics_window_for__world);
+        Graphics_Window 
+            *p_graphics_window_for__world);
 void manage_world(Game *p_game);
 void manage_world__entities(Game *p_game);
 
@@ -60,11 +60,6 @@ void load_world(
         Gfx_Context *p_gfx_context,
         PLATFORM_File_System_Context *p_PLATOFRM_file_system_context,
         World *p_world);
-
-static inline
-Camera *get_p_camera_from__world(World *p_world) {
-    return &p_world->camera;
-}
 
 static inline
 Inventory_Manager *get_p_inventory_manager_from__world(World *p_world) {

@@ -12,11 +12,14 @@
 
 void m_ui_button__click_handler__station_craft(
         UI_Element *p_this_slider,
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input) {
     Game_Action game_action_for__station =
         PLATFORM_get_gfx_window__game_action(
-                p_PLATFORM_gfx_window);
+                p_gfx_window
+                ->p_PLATFORM_gfx_window);
 
     Serialized_Field s_station_inventory;
 
@@ -29,7 +32,7 @@ void m_ui_button__click_handler__station_craft(
 
     Inventory *p_inventory_of__station =
         resolve_s_inventory(
-                p_game,
+                p_world,
                 &s_station_inventory);
 
     if (!p_inventory_of__station) {
@@ -38,7 +41,7 @@ void m_ui_button__click_handler__station_craft(
     }
 
     if (!resolve_p_serialized_entity_ptr_with__entity_manager(
-            get_p_entity_manager_from__game(p_game), 
+            get_p_entity_manager_from__world(p_world), 
             &game_action_for__station
             .s_game_action__inventory__entity_source)) {
         debug_error("NDS::m_NDS_ui_button__click_handler__craft, failed to get entity using station.");
@@ -53,7 +56,7 @@ void m_ui_button__click_handler__station_craft(
 
     Inventory *p_inventory_of__entity =
         resolve_s_inventory(
-                p_game,
+                p_world,
                 &p_entity
                 ->s_humanoid__inventory_ptr);
 
@@ -82,7 +85,7 @@ void m_ui_button__click_handler__station_craft(
 
     bool is_crafting__successful =
         make_item_with__this_inventory(
-                get_p_item_recipe_manager_from__game(p_game), 
+                get_p_item_recipe_manager_from__world(p_world), 
                 p_inventory_of__entity, 
                 the_kind_of__item_to__craft, 
                 item_recipe_flags);
@@ -94,7 +97,7 @@ void m_ui_button__click_handler__station_craft(
     add_item_to__inventory(
             p_inventory_of__entity, 
             get_item_from__item_manager(
-                get_p_item_manager_from__game(p_game), 
+                get_p_item_manager_from__world(p_world), 
                 the_kind_of__item_to__craft), 
             1, 
             1); // TODO: determine max item stack count by item.

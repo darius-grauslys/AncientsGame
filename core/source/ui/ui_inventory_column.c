@@ -14,6 +14,7 @@
 bool allocate_ui_item_stack(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_graphics_window,
+        World *p_world,
         UI_Manager *p_ui_manager,
         Item_Stack *p_item_stack,
         UI_Element *p_ui_element__inventory_slot) {
@@ -23,8 +24,9 @@ bool allocate_ui_item_stack(
                 p_ui_manager,
                 p_ui_element__inventory_slot
                 ->p_child, 
-#warning do not pass null here
-                0);
+                p_gfx_context,
+                p_graphics_window,
+                p_world);
     }
     point_serialized_field_to__this_serialized_struct(
             &p_ui_element__inventory_slot->s_serialized_field, 
@@ -71,6 +73,7 @@ bool allocate_ui_item_stack(
 void allocate_ui_inventory_column_into__ui_element_container(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
+        World *p_world,
         UI_Manager *p_ui_manager,
         UI_Element *p_ui_element__inventory_column,
         Inventory *p_inventory) {
@@ -90,6 +93,7 @@ void allocate_ui_inventory_column_into__ui_element_container(
         if (allocate_ui_item_stack(
                     p_gfx_context,
                     p_gfx_window,
+                    p_world,
                     p_ui_manager,
                     p_item_stack,
                     p_ui_element__current_inventory_slot)) {

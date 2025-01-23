@@ -22,20 +22,6 @@ void SDL_initialize_gfx_window(
             &p_PLATFORM_gfx_window
             ->associated_game_action);
 
-    p_PLATFORM_gfx_window
-        ->p_PLATFORM_gfx_context =
-        p_PLATFORM_gfx_context
-        ;
-    p_PLATFORM_gfx_window
-        ->p_active_camera =
-        p_camera
-        ;
-
-    initialize_ui_manager(
-            SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
-                p_PLATFORM_gfx_window),
-            p_PLATFORM_gfx_window);
-
     // TODO: initialize texture as deallocated
     p_PLATFORM_gfx_window
         ->p_SDL_graphics_window__data = 0;
@@ -51,7 +37,8 @@ void SDL_initialize_gfx_window(
 
 void SDL_compose_gfx_window(
         Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window) {
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
     f_SDL_Compose_Gfx_Window f_SDL_compose_gfx_window =
         p_gfx_context
         ->p_PLATFORM_gfx_context
@@ -69,7 +56,8 @@ void SDL_compose_gfx_window(
 
     f_SDL_compose_gfx_window(
             p_gfx_context,
-            p_gfx_window);
+            p_gfx_window,
+            p_world);
 }
 
 void SDL_render_gfx_window(
@@ -96,12 +84,6 @@ void SDL_render_gfx_window(
             p_gfx_context,
             p_gfx_window,
             p_world);
-}
-
-UI_Manager *PLATFORM_get_p_ui_manager_from__gfx_window(
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window) {
-    return SDL_get_p_ui_manager_from__PLATFORM_gfx_window(
-            p_PLATFORM_gfx_window);
 }
 
 UI_Tile_Map__Wrapper PLATFORM_get_tile_map__wrapper_from__gfx_window(
@@ -144,20 +126,21 @@ Game_Action PLATFORM_get_gfx_window__game_action(
         ->associated_game_action;
 }
 
+void PLATFORM_compose_gfx_window(
+        Gfx_Context *p_gfx_context, 
+        Graphics_Window *p_gfx_window, 
+        World *p_world) {
+    SDL_compose_gfx_window(
+            p_gfx_context, 
+            p_gfx_window,
+            p_world);
+}
+
 void PLATFORM_render_gfx_window(
         Gfx_Context *p_gfx_context,
         Graphics_Window *p_gfx_window,
         Graphics_Window *p_gfx_window__parent,
         World *p_world) {
-    if (is_graphics_window__ui_tile_map__dirty(
-                p_gfx_window)) {
-        SDL_compose_gfx_window(
-                p_gfx_context,
-                p_gfx_window);
-        set_graphics_window__ui_tile_map_as__clean(
-                p_gfx_window);
-    }
-
     SDL_render_gfx_window(
             p_gfx_context, 
             p_gfx_window,

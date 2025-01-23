@@ -11,7 +11,8 @@ void GL_allocate_gfx_window(
 
 void GL_compose_gfx_window(
         Gfx_Context *p_gfx_context,
-        Graphics_Window *p_gfx_window);
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 void GL_render_gfx_window(
         Gfx_Context *p_gfx_context,

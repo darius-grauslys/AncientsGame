@@ -5,7 +5,9 @@
 
 void m_ui_button__click_handler__station_craft(
         UI_Element *p_this_slider,
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 #endif

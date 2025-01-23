@@ -56,7 +56,9 @@ void initialize_ui_element(
 
 void m_ui_element__dispose_handler__default(
         UI_Element *p_this_ui_element,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
     set_ui_element_as__deallocated(p_this_ui_element);
     if (does_ui_element_have__child(p_this_ui_element)) {
         UI_Element *p_child =
@@ -64,13 +66,15 @@ void m_ui_element__dispose_handler__default(
         if (does_ui_element_have__dispose_handler(p_child)) {
             p_child->m_ui_dispose_handler(
                     p_child,
-                    p_game);
+                    p_gfx_context,
+                    p_gfx_window,
+                    p_world);
         }
     }
     if (does_ui_element_have__PLATFORM_sprite(
                 p_this_ui_element)) {
         PLATFORM_release_sprite(
-                get_p_PLATFORM_gfx_context_from__game(p_game), 
+                p_gfx_context,
                 p_this_ui_element->ui_sprite_wrapper.p_sprite); 
     }
     p_this_ui_element->
@@ -83,10 +87,14 @@ void m_ui_element__dispose_handler__default(
 
 void m_ui_element__dispose_handler__default_collection(
         UI_Element *p_this_ui_element,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world) {
     m_ui_element__dispose_handler__default(
             p_this_ui_element, 
-            p_game);
+            p_gfx_context,
+            p_gfx_window,
+            p_world);
     UI_Element *p_next =
         get_next__ui_element(p_this_ui_element);
     if (!p_next) return;
@@ -97,7 +105,9 @@ void m_ui_element__dispose_handler__default_collection(
         if (does_ui_element_have__dispose_handler(p_disposing_element)) {
             p_disposing_element->m_ui_dispose_handler(
                     p_disposing_element, 
-                    p_game);
+                    p_gfx_context,
+                    p_gfx_window,
+                    p_world);
         }
     } while (p_next);
 }
@@ -173,7 +183,7 @@ void set_ui_element__PLATFORM_sprite(
 }
 
 void release_ui_element__PLATFORM_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Gfx_Context *p_gfx_context,
         UI_Element *p_ui_element) {
     if (!does_ui_element_have__PLATFORM_sprite(p_ui_element)) {
 #ifndef NDEBUG
@@ -183,7 +193,7 @@ void release_ui_element__PLATFORM_sprite(
     }
 
     PLATFORM_release_sprite(
-            p_PLATFORM_gfx_context,
+            p_gfx_context,
             p_ui_element->ui_sprite_wrapper.p_sprite);
 
     p_ui_element
@@ -272,15 +282,14 @@ void m_ui_render__element__tile_span(
 
 void m_ui_element__render_handler_for__sprite__default(
         UI_Element *p_this_ui_element,
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window) {
     if (!p_this_ui_element->ui_sprite_wrapper.p_sprite) {
         return;
     }
     PLATFORM_render_sprite(
-            p_PLATFORM_gfx_context,
-            p_PLATFORM_gfx_window,
+            p_gfx_context,
+            p_gfx_window,
             &p_this_ui_element
             ->ui_sprite_wrapper, 
             get_position_3i32F4_from__p_ui_element(

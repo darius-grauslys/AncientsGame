@@ -14,6 +14,9 @@ void m_ui_drop_zone__receive_drop_handler__default(
         UI_Manager *p_ui_manager,
         UI_Element *p_this_draggable,
         UI_Element *p_ui_element__dropped,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 #endif

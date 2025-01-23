@@ -21,7 +21,9 @@ void initialize_ui_element(
 
 void m_ui_element__dispose_handler__default(
         UI_Element *p_this_ui_element,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 void set_positions_of__ui_elements_in__succession(
         UI_Element *p_ui_element__succession_collection,
@@ -35,7 +37,7 @@ void set_ui_element__PLATFORM_sprite(
         PLATFORM_Sprite *p_PLATFORM_sprite);
 
 void release_ui_element__PLATFORM_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
+        Gfx_Context *p_gfx_context,
         UI_Element *p_ui_element);
 
 void set_ui_tile_span_of__ui_element(
@@ -55,9 +57,8 @@ void set_position_3i32_of__ui_element(
 
 void m_ui_element__render_handler_for__sprite__default(
         UI_Element *p_this_ui_element,
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window);
 
 static inline 
 Signed_Index__i32 get_x_i32_from__p_ui_element(
@@ -427,7 +428,7 @@ void set_ui_element__receive_drop_handler(
 static inline
 void set_ui_element__held_handler(
         UI_Element *p_ui_element,
-        m_UI_Dragged m_ui_held_handler) {
+        m_UI_Held m_ui_held_handler) {
     p_ui_element->m_ui_held_handler =
         m_ui_held_handler;
 }

@@ -5,7 +5,6 @@
 #include "rendering/opengl/gl_defines.h"
 #include "rendering/opengl/gl_entity.h"
 #include "rendering/opengl/gl_gfx_sub_context.h"
-#include "rendering/opengl/gl_render_world.h"
 #include "rendering/opengl/gl_sprite.h"
 #include "rendering/opengl/gl_sprite_manager.h"
 #include "rendering/opengl/gl_texture.h"
@@ -98,9 +97,6 @@ bool _SDL_link_opengl_3_0(
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_initialize_rendering__worldspace =
         GL_initialize_rendering__worldspace;
-    p_SDL_gfx_sub_context__wrapper
-        ->f_SDL_render_world =
-        GL_render_world;
 
     p_SDL_gfx_sub_context__wrapper
         ->f_SDL_allocate_gfx_window =
@@ -191,15 +187,7 @@ void SDL_initialize_gfx_context(
     SDL_set_gfx_window_as__allocated(
             &p_PLATFORM_gfx_context
             ->SDL_graphics_window__main);
-    p_PLATFORM_gfx_context
-        ->SDL_graphics_window__main
-        .p_PLATFORM_gfx_context =
-        p_PLATFORM_gfx_context;
     // up to here.
-
-    SDL_set_active_camera(
-            p_PLATFORM_gfx_context, 
-            0);
 
     SDL_Gfx_Sub_Context__Wrapper *p_SDL_gfx_sub_context__wrapper =
         &p_PLATFORM_gfx_context->SDL_gfx_sub_context__wrapper;
@@ -303,10 +291,4 @@ void PLATFORM_initialize_rendering__game(
 
     f_SDL_initialize_rendering__worldspace(
             p_PLATFORM_gfx_context);
-}
-
-PLATFORM_Gfx_Context *PLATFORM_get_p_gfx_context_from__graphics_window(
-        PLATFORM_Graphics_Window *p_PLATFORM_graphics_window) {
-    return p_PLATFORM_graphics_window
-        ->p_PLATFORM_gfx_context;
 }

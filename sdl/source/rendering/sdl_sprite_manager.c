@@ -145,22 +145,26 @@ PLATFORM_Sprite *PLATFORM_allocate_sprite(
 }
 
 void PLATFORM_release_sprite(
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context, 
+        Gfx_Context *p_gfx_context, 
         PLATFORM_Sprite *p_PLATFORM_sprite) {
     if (p_PLATFORM_sprite->is_sprite_with__anonymous_texture) {
         PLATFORM_release_texture(
-                p_PLATFORM_gfx_context,
+                p_gfx_context
+                ->p_PLATFORM_gfx_context,
                 p_PLATFORM_sprite
                 ->p_PLATFORM_texture);
     }
-    p_PLATFORM_gfx_context
+    p_gfx_context
+        ->p_PLATFORM_gfx_context
         ->SDL_gfx_sub_context__wrapper
         .f_SDL_release_sprite(
-                p_PLATFORM_gfx_context,
+                p_gfx_context
+                ->p_PLATFORM_gfx_context,
                 p_PLATFORM_sprite);
     SDL_release_sprite_from__sprite_manager(
             SDL_get_p_sprite_manager_from__gfx_context(
-                p_PLATFORM_gfx_context), 
+                p_gfx_context
+                ->p_PLATFORM_gfx_context), 
             p_PLATFORM_sprite);
 
     SDL_initialize_sprite_as__deallocated(

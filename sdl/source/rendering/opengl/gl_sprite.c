@@ -5,11 +5,13 @@
 #include "platform.h"
 #include "rendering/gfx_context.h"
 #include "rendering/opengl/gl_defines.h"
+#include "rendering/opengl/gl_framebuffer.h"
 #include "rendering/opengl/gl_numerics.h"
 #include "rendering/opengl/gl_shader.h"
 #include "rendering/opengl/gl_shader_manager.h"
 #include "rendering/opengl/gl_shader_sprite.h"
 #include "rendering/opengl/gl_vertex_object.h"
+#include "rendering/opengl/gl_viewport.h"
 #include "rendering/opengl/glad/glad.h"
 #include <rendering/opengl/gl_sprite.h>
 #include <rendering/opengl/gl_gfx_sub_context.h>
@@ -115,6 +117,36 @@ void GL_render_sprite(
     position__3i32F4.z__i32F4 = 
         i32_to__i32F4(2);
 
+    GL_Framebuffer *p_GL_framebuffer =
+        (GL_Framebuffer*)p_gfx_window
+        ->p_PLATFORM_gfx_window
+        ->p_SDL_graphics_window__data
+        ;
+    GL_Viewport_Stack *p_GL_viewport_stack =
+        GL_get_p_viewport_stack_from__PLATFORM_gfx_context(
+                p_gfx_context
+                ->p_PLATFORM_gfx_context);
+    GL_push_viewport(
+            p_GL_viewport_stack, 
+            0, 0,
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
+            ->p_SDL_graphics_window__texture
+            ->width,
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
+            ->p_SDL_graphics_window__texture
+            ->height);
+
+    GL_use_framebuffer_as__target(
+            p_GL_framebuffer);
+    GL_bind_texture_to__framebuffer(
+            p_GL_framebuffer, 
+            p_gfx_window
+            ->p_PLATFORM_gfx_window
+            ->p_SDL_graphics_window__texture
+            );
+
     use_shader_2d(p_GL_shader__sprite);
     GL_link_data_to__shader(
             p_gfx_context
@@ -150,4 +182,7 @@ void GL_render_sprite(
             : 0.0, 
             0.0);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    GL_pop_viewport(p_GL_viewport_stack);
+    GL_unbind_framebuffer();
 }

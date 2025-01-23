@@ -14,12 +14,17 @@ void initialize_ui_element_as__button(
 
 void m_ui_button__clicked_handler__default(
         UI_Element *p_this_button,
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 void m_ui_button__held_handler__default(
         UI_Element *p_this_button,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 
 static inline
 bool is_ui_button__toggleable(UI_Element *p_ui_button) {

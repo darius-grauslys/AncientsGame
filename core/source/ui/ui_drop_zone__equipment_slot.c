@@ -30,12 +30,15 @@ void m_ui_drop_zone__receive_drop_handler__equipment_slot(
         UI_Manager *p_ui_manager,
         UI_Element *p_this_drop_zone,
         UI_Element *p_ui_element__dropped,
-        Game *p_game) {
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input) {
     // TODO:    consolidate the below logic
     //          and that found in ui_drop_zone__inventory_slot
     //          into a single helper.
     Inventory_Manager *p_inventory_manager =
-        get_p_inventory_manager_from__game(p_game);
+        get_p_inventory_manager_from__world(p_world);
 
     if (!resolve_s_item_stack_ptr_to__inventory_manager(
                 p_inventory_manager,
@@ -102,24 +105,27 @@ void m_ui_drop_zone__receive_drop_handler__equipment_slot(
             p_item__original_equipment
                 ->m_item_unequip_handler(
                         p_item__original_equipment,
-                        get_p_local_player_from__game(p_game),
+                        get_p_local_player_from__world(p_world),
                         slot_kind,
-                        p_game);
+                        p_world);
         }
         if (does_item_have__equip_handler(p_item__new_equipment)) {
             p_item__new_equipment
                 ->m_item_equip_handler(
                         p_item__new_equipment,
-                        get_p_local_player_from__game(p_game),
+                        get_p_local_player_from__world(p_world),
                         slot_kind,
-                        p_game);
+                        p_world);
         }
         // reflect the swap on the ui via the default handler.
         m_ui_drop_zone__receive_drop_handler__default(
                 p_ui_manager,
                 p_this_drop_zone, 
                 p_ui_element__dropped, 
-                p_game);
+                p_gfx_context,
+                p_gfx_window,
+                p_world,
+                p_input);
     } else {
         // check for empty item_stacks, and if empty, release
         // associated sprites.
@@ -133,7 +139,7 @@ void m_ui_drop_zone__receive_drop_handler__equipment_slot(
                     && does_ui_element_have__PLATFORM_sprite(
                             p_this_drop_zone->p_child)) {
                 release_ui_element__PLATFORM_sprite(
-                        get_p_PLATFORM_gfx_context_from__game(p_game), 
+                        p_gfx_context,
                         p_this_drop_zone->p_child);
             }
         }
@@ -147,7 +153,7 @@ void m_ui_drop_zone__receive_drop_handler__equipment_slot(
                     && does_ui_element_have__PLATFORM_sprite(
                         p_ui_element__parent_of__dropped->p_child)) {
                 release_ui_element__PLATFORM_sprite(
-                        get_p_PLATFORM_gfx_context_from__game(p_game), 
+                        p_gfx_context,
                         p_ui_element__parent_of__dropped->p_child);
             }
         }

@@ -116,7 +116,6 @@ typedef struct GL_Gfx_Sub_Context_t {
     GL_Chunk_Texture_Manager GL_chunk_texture_manager;
     GL_Framebuffer_Manager GL_framebuffer_manager;
     GL_Viewport_Stack GL_viewport_stack;
-    Camera GL_camera__default;
     GL_Vertex_Object GL_vertex_object__unit_square;
 } GL_Gfx_Sub_Context;
 

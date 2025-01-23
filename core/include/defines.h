@@ -797,7 +797,7 @@ typedef void (*m_Item_Use)(
         Item *p_item_self, 
         Entity *p_entity_user, 
         Game_Action *p_game_action,
-        Game *p_game);
+        World *p_world);
 
 ///
 /// Returns false if the event failed.
@@ -807,14 +807,14 @@ typedef bool (*m_Item_Equip_Event)(
         Item *p_item_self, 
         Entity *p_entity_user,
         enum Entity_Equipment_Slot_Kind the_kind_of__slot,
-        Game *p_game);
+        World *p_world);
 
 typedef struct Hearts_Damaging_Specifier_t Hearts_Damaging_Specifier;
 typedef uint8_t Hearts_Damaging_Flags;
 typedef void (*m_Item_Protect)(
         Item *p_item_self, 
         Entity *p_entity_user, 
-        Game *p_game,
+        World *p_world,
         Hearts_Damaging_Specifier *p_hearts_damage);
 
 typedef uint8_t Item_Recipe_Flags;
@@ -1660,30 +1660,46 @@ typedef struct UI_Tile_Map_Manager_t {
 
 typedef void (*m_UI_Dispose)(
         UI_Element *p_this_ui_element,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world);
 
 typedef void (*m_UI_Clicked)(
         UI_Element *p_this_ui_element,
-        Game *p_game,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 typedef void (*m_UI_Dragged)(
         UI_Element *p_this_ui_element,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 typedef void (*m_UI_Receive_Drop)(
         UI_Manager *p_ui_manager,
         UI_Element *p_this_ui_element,
         UI_Element *p_ui_element__dropped,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 typedef void (*m_UI_Dropped)(
         UI_Element *p_this_ui_element,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 typedef void (*m_UI_Held)(
         UI_Element *p_this_ui_element,
-        Game *p_game);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window,
+        World *p_world,
+        Input *p_input);
 typedef void (*m_UI_Render)(
         UI_Element *p_this_ui_element,
-        PLATFORM_Gfx_Context *p_PLATFORM_gfx_context,
-        PLATFORM_Graphics_Window *p_PLATFORM_gfx_window);
+        Gfx_Context *p_gfx_context,
+        Graphics_Window *p_gfx_window);
 
 typedef uint16_t UI_Flags__u16;
 typedef uint8_t UI_Button_Flags__u8;
@@ -1812,9 +1828,6 @@ typedef struct UI_Manager_t {
     UI_Element ui_elements[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
     UI_Element *ui_element_ptrs[UI_ELEMENT_MAXIMUM_QUANTITY_OF];
     UI_Element *p_ui_element__focused;
-
-    PLATFORM_Graphics_Window 
-        *p_PLATFORM_graphics_window_for__ui_manager;
 } UI_Manager;
 
 typedef struct UI_Context_t UI_Context;
@@ -2310,7 +2323,6 @@ typedef struct World_t {
     Item_Recipe_Manager item_recipe_manager;
     Station_Manager     station_manager;
 
-    Camera camera;
     PLATFORM_Graphics_Window *p_PLATFORM_graphics_window_for__world;
 
     World_Name_String name;
@@ -2326,7 +2338,7 @@ typedef struct World_t {
 typedef uint8_t Graphics_Window_Flags__u8;
 
 #define GRAPHICS_WINDOW__FLAG__IS_RENDERING_WORLD BIT(0)
-#define GRAPHICS_WINDOW__FLAG__UI_TILE_MAP__DIRTY BIT(1)
+#define GRAPHICS_WINDOW__FLAG__COMPOSE__DIRTY BIT(1)
 
 #define GRAPHICS_WINDOW__FLAGS__NONE 0
 
